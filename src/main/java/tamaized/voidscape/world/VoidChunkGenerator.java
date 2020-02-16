@@ -2,15 +2,18 @@ package tamaized.voidscape.world;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.NoiseChunkGenerator;
+
+import java.util.Random;
 
 public class VoidChunkGenerator extends NoiseChunkGenerator<GenerationSettings> {
 
 	private final double[] field_222573_h = this.func_222572_j();
 
 	public VoidChunkGenerator(IWorld world, BiomeProvider biomeProvider, GenerationSettings settings) {
-		super(world, biomeProvider, 4, 8, 128, settings, false);
+		super(world, biomeProvider, 2, 8, 256, settings, false);
 	}
 
 	@Override
@@ -31,18 +34,8 @@ public class VoidChunkGenerator extends NoiseChunkGenerator<GenerationSettings> 
 	private double[] func_222572_j() {
 		double[] lvt_1_1_ = new double[this.noiseSizeY()];
 
-		for(int lvt_2_1_ = 0; lvt_2_1_ < this.noiseSizeY(); ++lvt_2_1_) {
-			lvt_1_1_[lvt_2_1_] = Math.cos((double)lvt_2_1_ * 3.141592653589793D * 6.0D / (double)this.noiseSizeY()) * 2.0D;
-			double lvt_3_1_ = lvt_2_1_;
-			if (lvt_2_1_ > this.noiseSizeY() / 2) {
-				lvt_3_1_ = this.noiseSizeY() - 1 - lvt_2_1_;
-			}
-
-			if (lvt_3_1_ < 4.0D) {
-				lvt_3_1_ = 4.0D - lvt_3_1_;
-				lvt_1_1_[lvt_2_1_] -= lvt_3_1_ * lvt_3_1_ * lvt_3_1_ * 10.0D;
-			}
-		}
+		for (int lvt_2_1_ = 0; lvt_2_1_ < this.noiseSizeY(); ++lvt_2_1_)
+			lvt_1_1_[lvt_2_1_] = Math.sin((double) lvt_2_1_ * 3.141592653589793D * 6.0D / (double) this.noiseSizeY()) * 2.0D;
 
 		return lvt_1_1_;
 	}
@@ -55,5 +48,10 @@ public class VoidChunkGenerator extends NoiseChunkGenerator<GenerationSettings> 
 	@Override
 	public int getSeaLevel() {
 		return 0;
+	}
+
+	@Override
+	protected void makeBedrock(IChunk p_222555_1_, Random p_222555_2_) {
+		// NO-OP
 	}
 }
