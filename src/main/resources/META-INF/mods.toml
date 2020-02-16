@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://github.com/Tamaized/Voidscape/issues"
+[[mods]]
+modId="voidscape"
+version="${version}"
+displayName="Voidscape"
+credits=""
+authors="Tamaized"
+description='''
+
+'''
