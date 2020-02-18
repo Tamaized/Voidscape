@@ -31,8 +31,10 @@ public class RenderTurmoil {
 			if (Turmoil.STATE == Turmoil.State.CLOSED) {
 				if (fade > 0) {
 					fade -= delta * rate * 2F;
-					if (fade < 0.1F)
+					if (fade <= 0.1F) {
 						fade = 0.1F;
+						return;
+					}
 				}
 			} else {
 				if (fade < 1F) {
@@ -65,10 +67,30 @@ public class RenderTurmoil {
 
 		Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
 
-		RenderSystem.enableBlend();
-		RenderSystem.alphaFunc(GL11.GL_LESS, fade);
-		Tessellator.getInstance().draw();
-		RenderSystem.defaultAlphaFunc();
+		final int stencilIndex = 10;
+
+		StencilBufferUtil.setup(stencilIndex);
+		{
+			RenderSystem.alphaFunc(GL11.GL_LESS, fade);
+			Tessellator.getInstance().draw();
+			RenderSystem.defaultAlphaFunc();
+		}
+		StencilBufferUtil.finish();
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
+		r = 0;
+		buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
+		buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
+		buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
+		buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+
+		StencilBufferUtil.startRender(stencilIndex);
+		{
+			RenderSystem.disableTexture();
+			Tessellator.getInstance().draw();
+			RenderSystem.enableTexture();
+		}
+		StencilBufferUtil.endRenderAndFinish(stencilIndex);
 	}
 
 }
