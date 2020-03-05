@@ -10,6 +10,8 @@ import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
@@ -54,6 +56,17 @@ public class VoidDimension extends Dimension {
 	@Override
 	public Vec3d getFogColor(float p_76562_1_, float p_76562_2_) {
 		return Vec3d.ZERO;
+	}
+
+	@Nullable
+	@OnlyIn(Dist.CLIENT)
+	public float[] calcSunriseSunsetColors(float p_76560_1_, float p_76560_2_) {
+		return null;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public double getVoidFogYFactor() {
+		return 0;
 	}
 
 	@Override

@@ -7,12 +7,15 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.turmoil.Turmoil;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
@@ -20,11 +23,21 @@ public class RenderTurmoil {
 
 	private static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	private static float fade = 0F;
+	private static DimensionType dimCache;
 
 	@SubscribeEvent
-	public static void render(RenderGameOverlayEvent.Post event) {
+	public static void render(RenderGameOverlayEvent.Pre event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
+		World world = Minecraft.getInstance().world;
+		if (world != null) {
+			if (dimCache != null && dimCache != world.dimension.getType()) {
+				Turmoil.STATE = Turmoil.State.CLOSED;
+				if(dimCache == Voidscape.getDimensionType())
+					fade = 1F;
+			}
+			dimCache = world.dimension.getType();
+		}
 		final float rate = 0.0025F;
 		final float delta = 60F / Minecraft.debugFPS;
 		if (!Minecraft.getInstance().isGamePaused()) {
@@ -39,58 +52,71 @@ public class RenderTurmoil {
 			} else {
 				if (fade < 1F) {
 					fade += delta * rate;
-					if (fade > 1F)
+					if (fade > 1F) {
 						fade = 1F;
+						if (Turmoil.STATE != Turmoil.State.TELEPORTING) {
+							Turmoil.STATE = Turmoil.State.TELEPORTING;
+							Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilTeleport());
+						}
+					}
 				}
 			}
 		}
-		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
 
-		MainWindow window = Minecraft.getInstance().getWindow();
-
-		float x = 0F;
-		float y = 0F;
-		float w = window.getScaledWidth();
-		float h = window.getScaledHeight();
-		float z = 0F;
-
-		float r = 1F;
-		float g = 1F;
-		float b = 1F;
-		float a = 1F;
-
-		buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
-		buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
-		buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
-		buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
-
-		Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
-
-		final int stencilIndex = 10;
-
-		StencilBufferUtil.setup(stencilIndex);
+		RenderSystem.enableBlend();
+		RenderSystem.enableAlphaTest();
 		{
-			RenderSystem.alphaFunc(GL11.GL_LESS, fade);
-			Tessellator.getInstance().draw();
-			RenderSystem.defaultAlphaFunc();
-		}
-		StencilBufferUtil.finish();
 
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
-		r = 0;
-		buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
-		buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
-		buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
-		buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+			BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
 
-		StencilBufferUtil.startRender(stencilIndex);
-		{
-			RenderSystem.disableTexture();
-			Tessellator.getInstance().draw();
-			RenderSystem.enableTexture();
+			MainWindow window = Minecraft.getInstance().getWindow();
+
+			float x = 0F;
+			float y = 0F;
+			float w = window.getScaledWidth();
+			float h = window.getScaledHeight();
+			float z = 0F;
+
+			float r = 1F;
+			float g = 1F;
+			float b = 1F;
+			float a = 1F;
+
+			buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
+			buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
+			buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
+			buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+
+			Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
+
+			final int stencilIndex = 10;
+
+			StencilBufferUtil.setup(stencilIndex);
+			{
+				RenderSystem.alphaFunc(GL11.GL_LESS, fade);
+				Tessellator.getInstance().draw();
+				RenderSystem.defaultAlphaFunc();
+			}
+			StencilBufferUtil.finish();
+
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
+			r = g = b = 0;
+			buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
+			buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
+			buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
+			buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+
+			StencilBufferUtil.startRender(stencilIndex);
+			{
+				RenderSystem.disableTexture();
+				Tessellator.getInstance().draw();
+				RenderSystem.enableTexture();
+			}
+			StencilBufferUtil.endRenderAndFinish(stencilIndex);
 		}
-		StencilBufferUtil.endRenderAndFinish(stencilIndex);
+		RenderSystem.disableAlphaTest();
+		RenderSystem.disableBlend();
 	}
 
 }
