@@ -46,9 +46,6 @@ public final class VoidTeleporter implements ITeleporter {
 							)
 								continue;
 							pos.setPos(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
-							if(pos.getX() == -127 && pos.getY() == 60 && pos.getZ() == -156){
-								System.out.println("bruh");
-							}
 							if (destWorld.getBlockState(pos).isTopSolid(destWorld, pos, oldEntity)) {
 								final int height = (int) (oldEntity.getHeight() + 1);
 								for(int c = 1; c < height; c++) {
