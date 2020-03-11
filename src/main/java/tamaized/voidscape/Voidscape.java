@@ -65,6 +65,7 @@ public class Voidscape {
 	private static final DeferredRegister<ChunkGeneratorType<?, ?>> REGISTRY_CHUNK_GENERATOR_TYPE = create(new DeferredRegister<>(ForgeRegistries.CHUNK_GENERATOR_TYPES, MODID));
 	public static final RegistryObject<ChunkGeneratorType<GenerationSettings, VoidChunkGenerator>> CHUNK_GENERATOR_TYPE = REGISTRY_CHUNK_GENERATOR_TYPE.
 			register("void", () -> new ChunkGeneratorType<>(VoidChunkGenerator::new, false, GenerationSettings::new));
+	private static DimensionType DIMENSION_TYPE;
 
 	public Voidscape() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -72,11 +73,11 @@ public class Voidscape {
 		for (DeferredRegister register : REGISTERS)
 			register.register(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
-			getDimensionType();
+			getUpdatedDimensionType();
 			NetworkMessages.register(NETWORK);
 		});
 		busForge.addListener((Consumer<LivingDeathEvent>) event -> {
-			if(event.getEntity() instanceof PlayerEntity && event.getEntity().world.dimension.getType() == getDimensionType()) {
+			if (event.getEntity() instanceof PlayerEntity && event.getEntity().world.dimension.getType().getId() == getDimensionType().getId()) {
 				event.setCanceled(true);
 				((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth());
 				event.getEntity().changeDimension(DimensionType.OVERWORLD, VoidTeleporter.INSTANCE);
@@ -90,6 +91,10 @@ public class Voidscape {
 	}
 
 	public static DimensionType getDimensionType() {
-		return DimensionManager.registerOrGetDimension(new ResourceLocation(MODID, "void"), DIMENSION.get(), new PacketBuffer(Unpooled.buffer()), false);
+		return DIMENSION_TYPE;
+	}
+
+	public static DimensionType getUpdatedDimensionType() {
+		return DIMENSION_TYPE = DimensionManager.registerOrGetDimension(new ResourceLocation(MODID, "void"), DIMENSION.get(), new PacketBuffer(Unpooled.buffer()), false);
 	}
 }

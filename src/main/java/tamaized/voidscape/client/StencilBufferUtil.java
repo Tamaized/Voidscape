@@ -22,6 +22,12 @@ public final class StencilBufferUtil {
 		RenderSystem.defaultBlendFunc();
 	}
 
+	public static void setup(int index, Runnable run) {
+		setup(index);
+		run.run();
+		finish();
+	}
+
 	public static void startRender(int index) {
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		RenderSystem.stencilFunc(GL11.GL_EQUAL, index, 0xFF);
@@ -30,6 +36,20 @@ public final class StencilBufferUtil {
 	public static void endRenderAndFinish(int index) {
 		endRender(index);
 		finishRender();
+	}
+
+	public static void render(int index, Runnable run) {
+		render(index, run, false);
+	}
+
+	public static void render(int index, Runnable run, boolean flush) {
+		startRender(index);
+		run.run();
+		if (flush)
+			endRenderAndFinish(index);
+		else
+			endRender(index);
+
 	}
 
 	public static void endRender(int index) {

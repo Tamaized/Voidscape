@@ -18,10 +18,13 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.turmoil.Turmoil;
 
+import java.util.function.Consumer;
+
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
 
 	private static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
+	private static final Color24 colorHolder = new Color24();
 	private static float fade = 0F;
 	private static DimensionType dimCache;
 
@@ -31,9 +34,9 @@ public class RenderTurmoil {
 			return;
 		World world = Minecraft.getInstance().world;
 		if (world != null) {
-			if (dimCache != null && dimCache != world.dimension.getType()) {
+			if (dimCache != null && dimCache.getId() != world.dimension.getType().getId()) {
 				Turmoil.STATE = Turmoil.State.CLOSED;
-				if(dimCache == Voidscape.getDimensionType())
+				if (dimCache.getId() == Voidscape.getDimensionType().getId())
 					fade = 1F;
 			}
 			dimCache = world.dimension.getType();
@@ -78,45 +81,87 @@ public class RenderTurmoil {
 			float h = window.getScaledHeight();
 			float z = 0F;
 
-			float r = 1F;
-			float g = 1F;
-			float b = 1F;
-			float a = 1F;
-
-			buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
-			buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
-			buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
-			buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+			Consumer<Color24> verticies = color -> {
+				final float r = Color24.asFloat(color.bit24);
+				final float g = Color24.asFloat(color.bit16);
+				final float b = Color24.asFloat(color.bit8);
+				final float a = Color24.asFloat(color.bit0);
+				buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+				buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
+				buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
+				buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
+			};
+			verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
 
 			Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
 
 			final int stencilIndex = 10;
 
-			StencilBufferUtil.setup(stencilIndex);
-			{
+			StencilBufferUtil.setup(stencilIndex, () -> {
 				RenderSystem.alphaFunc(GL11.GL_LESS, fade);
 				Tessellator.getInstance().draw();
 				RenderSystem.defaultAlphaFunc();
-			}
-			StencilBufferUtil.finish();
+			});
 
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEXTURE);
-			r = g = b = 0;
-			buffer.vertex(x, y, z).color(r, g, b, a).texture(0F, 0F).endVertex();
-			buffer.vertex(x + w, y, z).color(r, g, b, a).texture(1F, 0F).endVertex();
-			buffer.vertex(x + w, y + h, z).color(r, g, b, a).texture(1F, 1F).endVertex();
-			buffer.vertex(x, y + h, z).color(r, g, b, a).texture(0F, 1F).endVertex();
+			verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
 
-			StencilBufferUtil.startRender(stencilIndex);
-			{
+			StencilBufferUtil.render(stencilIndex, () -> {
 				RenderSystem.disableTexture();
 				Tessellator.getInstance().draw();
 				RenderSystem.enableTexture();
-			}
-			StencilBufferUtil.endRenderAndFinish(stencilIndex);
+			}, true);
 		}
 		RenderSystem.disableAlphaTest();
 		RenderSystem.disableBlend();
+	}
+
+	private static class Color24 {
+
+		public int bit24;
+		public int bit16;
+		public int bit8;
+		public int bit0;
+
+		public static float asFloat(int value) {
+			return value / 255F;
+		}
+
+		public static int asInt(float value) {
+			return (int) (value * 255);
+		}
+
+		public int packed() {
+			return (bit24 << 24) | (bit16 << 16) | (bit8 << 8) | bit0;
+		}
+
+		public Color24 unpack(int packed) {
+			return set(
+
+					(packed >> 24) & 0xFF,
+
+					(packed >> 16) & 0xFF,
+
+					(packed >> 8) & 0xFF,
+
+					packed & 0xFF
+
+			);
+		}
+
+		public Color24 set(int b24, int b16, int b8, int b0) {
+			bit0 = b0;
+			bit8 = b8;
+			bit16 = b16;
+			bit24 = b24;
+			return this;
+		}
+
+		public Color24 set(float b24, float b16, float b8, float b0) {
+			set(asInt(b24), asInt(b16), asInt(b8), asInt(b0));
+			return this;
+		}
+
 	}
 
 }

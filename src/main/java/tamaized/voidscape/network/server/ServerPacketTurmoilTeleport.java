@@ -10,9 +10,9 @@ public class ServerPacketTurmoilTeleport implements NetworkMessages.IMessage<Ser
 
 	@Override
 	public void handle(PlayerEntity player) {
-		if(player.dimension == Voidscape.getDimensionType())
+		if (player.dimension.getId() == Voidscape.getDimensionType().getId())
 			return;
-		player.changeDimension(Voidscape.getDimensionType(), VoidTeleporter.INSTANCE);
+		player.changeDimension(Voidscape.getUpdatedDimensionType(), VoidTeleporter.INSTANCE);
 	}
 
 	@Override
