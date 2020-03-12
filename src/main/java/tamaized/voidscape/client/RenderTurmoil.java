@@ -35,6 +35,8 @@ public class RenderTurmoil {
 	public static void tick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isGamePaused() || Minecraft.getInstance().world == null)
 			return;
+		if(Minecraft.getInstance().world.dimension.getType().getId() == Voidscape.getDimensionTypeID())
+			Turmoil.STATE = Turmoil.State.CLOSED;
 		if (Turmoil.STATE == Turmoil.State.CLOSED) {
 			if (tick > 0)
 				tick--;
