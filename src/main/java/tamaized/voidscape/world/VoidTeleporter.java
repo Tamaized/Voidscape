@@ -20,7 +20,7 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		if (destWorld.dimension.getType().getId() != Voidscape.getDimensionType().getId()) {
+		if (destWorld.dimension.getType().getId() != Voidscape.getDimensionTypeID()) {
 			BlockPos pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSpawnPoint());
 			if (oldEntity instanceof PlayerEntity)
 				pos = ((PlayerEntity) oldEntity).getBedLocation(destWorld.dimension.getType());

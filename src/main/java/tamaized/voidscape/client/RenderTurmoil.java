@@ -7,10 +7,12 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
@@ -25,45 +27,38 @@ public class RenderTurmoil {
 
 	private static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	private static final Color24 colorHolder = new Color24();
-	private static float fade = 0F;
+	private static long tick = 0L;
+	private static long maxTick = 20 * 7 + 10;
 	private static DimensionType dimCache;
+
+	@SubscribeEvent
+	public static void tick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isGamePaused() || Minecraft.getInstance().world == null)
+			return;
+		if (Turmoil.STATE == Turmoil.State.CLOSED) {
+			if (tick > 0)
+				tick--;
+		} else {
+			if (tick < maxTick - 1)
+				tick++;
+		}
+	}
 
 	@SubscribeEvent
 	public static void render(RenderGameOverlayEvent.Pre event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		World world = Minecraft.getInstance().world;
-		if (world != null) {
-			if (dimCache != null && dimCache.getId() != world.dimension.getType().getId()) {
-				Turmoil.STATE = Turmoil.State.CLOSED;
-				if (dimCache.getId() == Voidscape.getDimensionType().getId())
-					fade = 1F;
-			}
-			dimCache = world.dimension.getType();
-		}
-		final float rate = 0.0025F;
-		final float delta = 60F / Minecraft.debugFPS;
-		if (!Minecraft.getInstance().isGamePaused()) {
-			if (Turmoil.STATE == Turmoil.State.CLOSED) {
-				if (fade > 0) {
-					fade -= delta * rate * 2F;
-					if (fade <= 0.1F) {
-						fade = 0.1F;
-						return;
-					}
-				}
-			} else {
-				if (fade < 1F) {
-					fade += delta * rate;
-					if (fade > 1F) {
-						fade = 1F;
-						if (Turmoil.STATE != Turmoil.State.TELEPORTING) {
-							Turmoil.STATE = Turmoil.State.TELEPORTING;
-							Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilTeleport());
-						}
-					}
-				}
-			}
+		if (world == null)
+			return;
+		if (dimCache != null && dimCache.getId() != world.dimension.getType().getId())
+			Turmoil.STATE = Turmoil.State.CLOSED;
+		dimCache = world.dimension.getType();
+		float perc = MathHelper.clamp((tick + event.getPartialTicks() * (Turmoil.STATE == Turmoil.State.CLOSED ? -1 : 1)) / maxTick, 0F, 1F);
+		if (!Minecraft.getInstance().isGamePaused() && Turmoil.STATE != Turmoil.State.CLOSED && tick >= maxTick - 1 && Turmoil.STATE != Turmoil.State.TELEPORTING) {
+			Turmoil.STATE = Turmoil.State.TELEPORTING;
+			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilTeleport());
+			return;
 		}
 
 		RenderSystem.enableBlend();
@@ -98,7 +93,7 @@ public class RenderTurmoil {
 			final int stencilIndex = 10;
 
 			StencilBufferUtil.setup(stencilIndex, () -> {
-				RenderSystem.alphaFunc(GL11.GL_LESS, fade);
+				RenderSystem.alphaFunc(GL11.GL_LESS, perc);
 				Tessellator.getInstance().draw();
 				RenderSystem.defaultAlphaFunc();
 			});

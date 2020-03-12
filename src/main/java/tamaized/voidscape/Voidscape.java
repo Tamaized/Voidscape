@@ -73,11 +73,11 @@ public class Voidscape {
 		for (DeferredRegister register : REGISTERS)
 			register.register(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
-			getUpdatedDimensionType();
+			getDimensionType();
 			NetworkMessages.register(NETWORK);
 		});
 		busForge.addListener((Consumer<LivingDeathEvent>) event -> {
-			if (event.getEntity() instanceof PlayerEntity && event.getEntity().world.dimension.getType().getId() == getDimensionType().getId()) {
+			if (event.getEntity() instanceof PlayerEntity && event.getEntity().world.dimension.getType().getId() == getDimensionTypeID()) {
 				event.setCanceled(true);
 				((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth());
 				event.getEntity().changeDimension(DimensionType.OVERWORLD, VoidTeleporter.INSTANCE);
@@ -90,11 +90,11 @@ public class Voidscape {
 		return register;
 	}
 
-	public static DimensionType getDimensionType() {
-		return DIMENSION_TYPE;
+	public static int getDimensionTypeID() {
+		return DIMENSION_TYPE.getId();
 	}
 
-	public static DimensionType getUpdatedDimensionType() {
+	public static DimensionType getDimensionType() {
 		return DIMENSION_TYPE = DimensionManager.registerOrGetDimension(new ResourceLocation(MODID, "void"), DIMENSION.get(), new PacketBuffer(Unpooled.buffer()), false);
 	}
 }
