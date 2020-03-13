@@ -2,6 +2,8 @@ package tamaized.voidscape.client;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,7 +42,8 @@ public class ClientListener {
 				return;
 			if (KEY.isPressed()) {
 				if (Turmoil.STATE == Turmoil.State.CLOSED)
-					Turmoil.STATE = Turmoil.State.OPEN;
+					//Turmoil.STATE = Turmoil.State.OPEN;
+					OverlayMessageHandler.queueMessage(new TranslationTextComponent("test").setStyle(new Style().setObfuscated(true)));
 				else
 					Turmoil.STATE = Turmoil.State.CLOSED;
 			}
