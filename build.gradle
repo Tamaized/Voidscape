@@ -22,14 +22,14 @@ repositories {
     }
 }
 
-version = "${minecraftVersionMajor}-${modVersion}${modVersionValue}"
+version = "1.${minecraftVersionMajor}-${modVersion}${modVersionValue}"
 group = "tamaized.voidscape"
 archivesBaseName = "Voidscape"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings("${project.mappingType}", "${project.mappingVersion}-${project.minecraftVersionMajor}.${project.minecraftVersionMinor}")
+    mappings("${project.mappingType}", "${project.mappingVersion}")
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -68,7 +68,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
+    minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
 
     //runtime fg.deobf("mezz.jei:${project.jeiVersion}")
 }
