@@ -20,10 +20,6 @@ repositories {
         name 'tterrag\'s Maven' // Mappings
         url 'https://maven.tterrag.com/'
     }
-    maven {
-        name 'Unofficial Mappings'
-        url 'https://www.dogforce-games.com/maven/'
-    }
 }
 
 version = "1.${minecraftVersionMajor}-${modVersion}${modVersionValue}"
