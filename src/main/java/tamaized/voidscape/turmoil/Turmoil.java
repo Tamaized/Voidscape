@@ -1,38 +1,6 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.PacketDistributor;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.common.CommonPacketTurmoilData;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-public class Turmoil {
+public class Turmoil {/*
 
 	public static State STATE = State.CLOSED;
 
@@ -76,7 +44,7 @@ public class Turmoil {
 
 	public interface ITurmoilData {
 
-		@CapabilityInject(ITurmoil.class)
+		@CapabilityInject(ITurmoilData.class)
 		Capability<ITurmoilData> CAPABILITY = Voidscape.getNull();
 
 		Optional<ITurmoil> get(ResourceLocation id);
@@ -189,6 +157,6 @@ public class Turmoil {
 		public Optional<ITurmoil.INetworkHandler> network(ResourceLocation id) {
 			return instances.values().stream().filter(o -> o instanceof ITurmoil.INetworkHandler && o.id().equals(id)).map(ITurmoil.INetworkHandler.class::cast).findAny();
 		}
-	}
+	}*/
 
 }

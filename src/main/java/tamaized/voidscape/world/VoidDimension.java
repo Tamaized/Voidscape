@@ -1,24 +1,8 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.provider.BiomeProviderType;
-import net.minecraft.world.dimension.Dimension;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import tamaized.voidscape.Voidscape;
+public class VoidDimension /*extends Dimension*/ {
 
-import javax.annotation.Nullable;
-
-public class VoidDimension extends Dimension {
-
-	public VoidDimension(World world, DimensionType dimensionType) {
+	/*public VoidDimension(World world, DimensionType dimensionType) {
 		super(world, dimensionType, 0.0F);
 	}
 
@@ -77,5 +61,5 @@ public class VoidDimension extends Dimension {
 	@Override
 	public boolean doesXZShowFog(int p_76568_1_, int p_76568_2_) {
 		return true;
-	}
+	}*/
 }

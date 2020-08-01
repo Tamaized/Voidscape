@@ -1,29 +1,11 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
-import tamaized.voidscape.turmoil.Turmoil;
-
-import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
-public class RenderTurmoil {
+public class RenderTurmoil {/*
 
 	private static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	private static final Color24 colorHolder = new Color24();
@@ -159,6 +141,6 @@ public class RenderTurmoil {
 			return this;
 		}
 
-	}
+	}*/
 
 }

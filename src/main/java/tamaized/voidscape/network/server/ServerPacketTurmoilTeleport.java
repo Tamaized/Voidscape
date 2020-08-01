@@ -2,9 +2,7 @@ package tamaized.voidscape.network.server;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
-import tamaized.voidscape.world.VoidTeleporter;
 
 import java.util.function.Supplier;
 
@@ -12,10 +10,10 @@ public class ServerPacketTurmoilTeleport implements NetworkMessages.IMessage<Ser
 
 	@Override
 	public void handle(Supplier<Supplier<PlayerEntity>> sup) {
-		PlayerEntity player = sup.get().get();
+		/*PlayerEntity player = sup.get().get();
 		if (player.dimension.getId() == Voidscape.getDimensionTypeID())
 			return;
-		player.changeDimension(Voidscape.getDimensionType(), VoidTeleporter.INSTANCE);
+		player.changeDimension(Voidscape.getDimensionType(), VoidTeleporter.INSTANCE);*/
 	}
 
 	@Override

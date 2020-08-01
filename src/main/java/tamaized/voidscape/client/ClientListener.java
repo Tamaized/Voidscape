@@ -1,28 +1,14 @@
 package tamaized.voidscape.client;
 
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import org.lwjgl.glfw.GLFW;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.turmoil.Turmoil;
 
-import java.util.Locale;
-import java.util.function.Consumer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
+import tamaized.voidscape.Voidscape;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientListener {
 
-	public static final KeyBinding KEY = new KeyBinding(
+	/*public static final KeyBinding KEY = new KeyBinding(
 
 			"Summon forth your inner turmoil",
 
@@ -53,6 +39,6 @@ public class ClientListener {
 	@SubscribeEvent
 	public static void setup(FMLClientSetupEvent event) {
 		ClientRegistry.registerKeyBinding(KEY);
-	}
+	}*/
 
 }

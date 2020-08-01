@@ -1,20 +1,10 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 
 import java.util.ArrayList;
@@ -27,7 +17,7 @@ public class OverlayMessageHandler {
 
 	@SubscribeEvent
 	public static void render(RenderGameOverlayEvent.Pre event) {
-		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
+		/*if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		World world = Minecraft.getInstance().world;
 		if (world == null) {
@@ -78,6 +68,7 @@ public class OverlayMessageHandler {
 		if (alpha > 0x15)
 			fontRenderer.drawString(message.text.getFormattedText(), x + w * 0.5F - fontRenderer.sizeStringToWidth(message.text.getFormattedText(), (int) w - 1) * 0.5F, y + h * 0.5F - fontRenderer.FONT_HEIGHT * 0.5F, 0x00FFAAFF | ((alpha > 0x40 ? alpha : 0x41) << 24));
 
+	*/
 	}
 
 

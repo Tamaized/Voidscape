@@ -1,12 +1,8 @@
 package tamaized.voidscape.world;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
-import tamaized.voidscape.Voidscape;
 
 import java.util.function.Function;
 
@@ -20,7 +16,7 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		if (destWorld.dimension.getType().getId() != Voidscape.getDimensionTypeID()) {
+		/*if (destWorld.dimension.getType().getId() != Voidscape.getDimensionTypeID()) {
 			BlockPos pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSpawnPoint());
 			if (oldEntity instanceof PlayerEntity)
 				pos = ((PlayerEntity) oldEntity).getBedLocation(destWorld.dimension.getType());
@@ -66,7 +62,7 @@ public final class VoidTeleporter implements ITeleporter {
 					break;
 				}
 			}
-		}
+		}*/
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}

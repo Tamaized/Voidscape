@@ -1,15 +1,6 @@
 package tamaized.voidscape.network.common;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
-import tamaized.voidscape.network.NetworkMessages;
-import tamaized.voidscape.turmoil.Turmoil;
-
-import java.util.function.Supplier;
-
-public class CommonPacketTurmoilData implements NetworkMessages.IMessage<CommonPacketTurmoilData> {
+public class CommonPacketTurmoilData {/* implements NetworkMessages.IMessage<CommonPacketTurmoilData> {
 
 	private Turmoil.ITurmoilData.ITurmoil.INetworkHandler cap;
 	private ResourceLocation id;
@@ -39,6 +30,6 @@ public class CommonPacketTurmoilData implements NetworkMessages.IMessage<CommonP
 		id = packet.readResourceLocation();
 		data = packet;
 		return this;
-	}
+	}*/
 
 }
