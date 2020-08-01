@@ -1,5 +1,6 @@
 package tamaized.voidscape;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -7,6 +8,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -70,24 +72,29 @@ public class Voidscape {
 			NetworkMessages.register(NETWORK);
 			Registry.register(Registry.field_239690_aB_, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 		});
-		busMod.addListener((Consumer<FMLClientSetupEvent>) event -> {
-			DimensionRenderInfo.field_239208_a_.put(getDimensionType(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
-				@Override
-				public Vector3d func_230494_a_(Vector3d p_230494_1_, float p_230494_2_) {
-					return Vector3d.ZERO;
-				}
+		busMod.addListener((Consumer<FMLClientSetupEvent>) event -> DimensionRenderInfo.field_239208_a_.put(getDimensionType(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
+			@Override
+			public Vector3d func_230494_a_(Vector3d p_230494_1_, float p_230494_2_) {
+				return Vector3d.ZERO;
+			}
 
-				@Override
-				public boolean func_230493_a_(int p_230493_1_, int p_230493_2_) {
-					return true;
-				}
+			@Override
+			public boolean func_230493_a_(int p_230493_1_, int p_230493_2_) {
+				return true;
+			}
 
-				@Override
-				@Nullable
-				public float[] func_230492_a_(float p_230492_1_, float p_230492_2_) {
-					return null;
-				}
-			});
+			@Override
+			@Nullable
+			public float[] func_230492_a_(float p_230492_1_, float p_230492_2_) {
+				return null;
+			}
+		}));
+		busForge.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
+			if (Minecraft.getInstance().world != null && Minecraft.getInstance().world.func_234922_V_().func_240901_a_().equals(getDimensionType().func_240901_a_())) {
+				event.setRed(0.05F);
+				event.setGreen(0.05F);
+				event.setBlue(0.05F);
+			}
 		});
 		/*busForge.addListener((Consumer<LivingDeathEvent>) event -> {
 			if (event.getEntity() instanceof PlayerEntity && event.getEntity().world.dimension.getType().getId() == getDimensionTypeID()) {
