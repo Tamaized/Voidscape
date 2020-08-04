@@ -1,8 +1,14 @@
 package tamaized.voidscape.world;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
+import tamaized.voidscape.Voidscape;
 
 import java.util.function.Function;
 
@@ -16,11 +22,13 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		/*if (destWorld.dimension.getType().getId() != Voidscape.getDimensionTypeID()) {
-			BlockPos pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSpawnPoint());
+		if (!Voidscape.checkForVoidDimension(destWorld)) {
+			BlockPos pos = null;
 			if (oldEntity instanceof PlayerEntity)
-				pos = ((PlayerEntity) oldEntity).getBedLocation(destWorld.dimension.getType());
-			oldEntity.positAfterTeleport(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
+				pos = ((ServerPlayerEntity) oldEntity).func_241140_K_();
+			if (pos == null)
+				pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.func_241135_u_());
+			oldEntity.setPositionAndUpdate(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 		} else {
 			int scan = 2;
 			int lastScan = 0;
@@ -41,16 +49,16 @@ public final class VoidTeleporter implements ITeleporter {
 
 									)
 										continue;
-									pos.setPos(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
-									if (destWorld.getBlockState(pos).isTopSolid(destWorld, pos, oldEntity)) {
+									pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y, oldEntity.getPosZ() + z);
+									if (destWorld.getBlockState(pos).isTopSolid(destWorld, pos, oldEntity, Direction.UP)) {
 										final int height = (int) (oldEntity.getHeight() + 1);
 										for (int c = 1; c < height; c++) {
-											pos.setPos(oldEntity.getX() + x, oldEntity.getY() + y + c, oldEntity.getZ() + z);
+											pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y + c, oldEntity.getPosZ() + z);
 											if (!destWorld.isAirBlock(pos))
 												continue scan;
 										}
-										pos.setPos(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
-										oldEntity.positAfterTeleport(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
+										pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y, oldEntity.getPosZ() + z);
+										oldEntity.moveForced(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 										break loop;
 									}
 								}
@@ -62,7 +70,7 @@ public final class VoidTeleporter implements ITeleporter {
 					break;
 				}
 			}
-		}*/
+		}
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}

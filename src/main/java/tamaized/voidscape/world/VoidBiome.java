@@ -28,7 +28,7 @@ public class VoidBiome extends Biome {
 						category(Category.NONE).
 						depth(-3.0F).
 						scale(1.8F).
-						temperature(0.0F).
+						temperature(0.15F).
 						downfall(0.0F).
 						parent(null).
 						func_235098_a_(ImmutableList.of(new Biome.Attributes(-0.5F, -0.5F, 0.0F, 0.0F, 1.0F))).

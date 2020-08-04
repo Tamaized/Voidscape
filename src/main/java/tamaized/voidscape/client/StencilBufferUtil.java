@@ -12,6 +12,7 @@ public final class StencilBufferUtil {
 	}
 
 	public static void setup(int index) {
+		Minecraft.getInstance().getFramebuffer().enableStencil();
 		RenderSystem.enableBlend();
 		invisibleBlend();
 		enableStencil(index);
@@ -64,6 +65,7 @@ public final class StencilBufferUtil {
 	}
 
 	public static void enableStencil(int index) {
+		Minecraft.getInstance().getFramebuffer().enableStencil();
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		RenderSystem.stencilMask(0xFF);
 		RenderSystem.stencilFunc(GL11.GL_ALWAYS, index, 0xFF);
