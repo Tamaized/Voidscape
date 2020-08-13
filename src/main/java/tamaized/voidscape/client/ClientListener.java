@@ -1,6 +1,7 @@
 package tamaized.voidscape.client;
 
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
+import tamaized.voidscape.turmoil.SubCapability;
 
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -39,14 +40,9 @@ public class ClientListener {
 		MinecraftForge.EVENT_BUS.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
 			if (event.phase == TickEvent.Phase.START)
 				return;
-			if (KEY.isPressed()) {
-				Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
-				//if (Turmoil.STATE == Turmoil.State.CLOSED)
-				//	Turmoil.STATE = Turmoil.State.OPEN;
-				//OverlayMessageHandler.queueMessage(new TranslationTextComponent("test").func_230530_a_(Style.EMPTY.setObfuscated(true)));
-				//else
-				//	Turmoil.STATE = Turmoil.State.CLOSED;
-			}
+			if (KEY.isPressed() && Minecraft.getInstance().player != null && Minecraft.getInstance().world != null)
+				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> data.action()));
+
 		});
 	}
 

@@ -24,10 +24,10 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
 
-	private static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
-	private static final Color24 colorHolder = new Color24();
-	private static long tick = 0L;
-	private static long maxTick = 20 * 7 + 10;
+	static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
+	static final Color24 colorHolder = new Color24();
+	private static float deltaTick;
+	private static Boolean deltaPos;
 
 	@SubscribeEvent
 	public static void tick(TickEvent.ClientTickEvent event) {
@@ -35,13 +35,21 @@ public class RenderTurmoil {
 			return;
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				if (data.getState() != Turmoil.State.TELEPORTING) {
-					if (tick > 0)
-						tick--;
-				} else {
-					if (tick < maxTick - 1)
-						tick++;
-				}
+				if (data.getTick() <= 0)
+					deltaTick = 0;
+				else if (data.getTick() > deltaTick)
+					deltaPos = true;
+				else if (data.getTick() < deltaTick)
+					deltaPos = false;
+				if (deltaPos != null && data.getState() == Turmoil.State.CONSUME) {
+					if (deltaPos)
+						deltaTick++;
+					else {
+						deltaPos = null;
+						deltaTick = data.getTick();
+					}
+				} else
+					deltaTick = data.getTick();
 			}));
 	}
 
@@ -50,62 +58,77 @@ public class RenderTurmoil {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		World world = Minecraft.getInstance().world;
-		if (world == null)
-			return;
-		Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-			float perc = MathHelper.clamp((tick + event.getPartialTicks() * (data.getState() == Turmoil.State.CLOSED ? -1 : 1)) / maxTick, 0F, 1F);
-			RenderSystem.enableBlend();
-			RenderSystem.enableAlphaTest();
-			{
+		if (world != null && Minecraft.getInstance().player != null) {
+			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				float perc = MathHelper.clamp(
 
-				BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+						(deltaTick + event.getPartialTicks() *
 
-				MainWindow window = Minecraft.getInstance().getMainWindow();
+								(deltaPos == null ?
 
-				float x = 0F;
-				float y = 0F;
-				float w = window.getScaledWidth();
-				float h = window.getScaledHeight();
-				float z = 0F;
+										data.getState() == Turmoil.State.CONSUME ? -0.01F : 0 :
 
-				Consumer<Color24> verticies = color -> {
-					final float r = Color24.asFloat(color.bit24);
-					final float g = Color24.asFloat(color.bit16);
-					final float b = Color24.asFloat(color.bit8);
-					final float a = Color24.asFloat(color.bit0);
-					buffer.pos(x, y + h, z).color(r, g, b, a).tex(0F, 1F).endVertex();
-					buffer.pos(x + w, y + h, z).color(r, g, b, a).tex(1F, 1F).endVertex();
-					buffer.pos(x + w, y, z).color(r, g, b, a).tex(1F, 0F).endVertex();
-					buffer.pos(x, y, z).color(r, g, b, a).tex(0F, 0F).endVertex();
-				};
-				verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
+										deltaPos ? -1 : 1)
 
-				Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
+						) / data.getMaxTick(),
 
-				final int stencilIndex = 10;
+						0F, 1F);
+				if (perc > 0) {
+					RenderSystem.enableBlend();
+					RenderSystem.enableAlphaTest();
+					{
 
-				StencilBufferUtil.setup(stencilIndex, () -> {
-					RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-					Tessellator.getInstance().draw();
-					RenderSystem.defaultAlphaFunc();
-				});
+						BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
 
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-				verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
+						MainWindow window = Minecraft.getInstance().getMainWindow();
 
-				StencilBufferUtil.render(stencilIndex, () -> {
-					RenderSystem.disableTexture();
-					Tessellator.getInstance().draw();
-					RenderSystem.enableTexture();
-				}, true);
-			}
-			RenderSystem.disableAlphaTest();
-			RenderSystem.disableBlend();
-		}));
+						float x = 0F;
+						float y = 0F;
+						float w = window.getScaledWidth();
+						float h = window.getScaledHeight();
+						float z = 0F;
+
+						Consumer<Color24> verticies = color -> {
+							final float r = Color24.asFloat(color.bit24);
+							final float g = Color24.asFloat(color.bit16);
+							final float b = Color24.asFloat(color.bit8);
+							final float a = Color24.asFloat(color.bit0);
+							buffer.pos(x, y + h, z).color(r, g, b, a).tex(0F, 1F).endVertex();
+							buffer.pos(x + w, y + h, z).color(r, g, b, a).tex(1F, 1F).endVertex();
+							buffer.pos(x + w, y, z).color(r, g, b, a).tex(1F, 0F).endVertex();
+							buffer.pos(x, y, z).color(r, g, b, a).tex(0F, 0F).endVertex();
+						};
+						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
+
+						Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
+
+						final int stencilIndex = 10;
+
+						StencilBufferUtil.setup(stencilIndex, () -> {
+							RenderSystem.alphaFunc(GL11.GL_LESS, perc);
+							Tessellator.getInstance().draw();
+							RenderSystem.defaultAlphaFunc();
+						});
+
+						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
+
+						StencilBufferUtil.render(stencilIndex, () -> {
+							RenderSystem.disableTexture();
+							Tessellator.getInstance().draw();
+							RenderSystem.enableTexture();
+						}, true);
+					}
+					RenderSystem.disableAlphaTest();
+					RenderSystem.disableBlend();
+				}
+			}));
+		}
+		OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
 	}
 
-	private static class Color24 {
+	static class Color24 {
 
 		public int bit24;
 		public int bit16;

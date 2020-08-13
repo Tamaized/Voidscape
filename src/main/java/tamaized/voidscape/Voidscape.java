@@ -1,7 +1,9 @@
 package tamaized.voidscape;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -56,15 +59,13 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-
-	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
-
-	private static final DeferredRegister<Biome> REGISTRY_BIOME = create(DeferredRegister.create(ForgeRegistries.BIOMES, MODID));
-	public static final RegistryObject<Biome> BIOME = REGISTRY_BIOME.register("void", VoidBiome::new);
 	public static final RegistryKey<DimensionType> DIMENSION_TYPE = RegistryKey.func_240903_a_(Registry.DIMENSION_TYPE_KEY, new ResourceLocation(MODID, "void"));
 	public static final RegistryKey<World> WORLD_KEY = RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
+	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
+	private static final DeferredRegister<Biome> REGISTRY_BIOME = create(DeferredRegister.create(ForgeRegistries.BIOMES, MODID));
+	public static final RegistryObject<Biome> BIOME = REGISTRY_BIOME.register("void", VoidBiome::new);
 
 	public Voidscape() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -96,6 +97,11 @@ public class Voidscape {
 				}
 			});
 		});
+		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
+
+				event.getServer().getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").then(VoidCommands.Debug.register()))
+
+		);
 		busForge.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
 			if (Minecraft.getInstance().world != null && checkForVoidDimension(Minecraft.getInstance().world)) {
 				event.setRed(0.04F);

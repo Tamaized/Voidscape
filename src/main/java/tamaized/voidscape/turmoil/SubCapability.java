@@ -2,6 +2,7 @@ package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
@@ -18,7 +19,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.common.CommonPacketSubCapSync;
+import tamaized.voidscape.network.common.ClientPacketSubCapSync;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -113,12 +114,12 @@ public class SubCapability {
 					return side == LogicalSide.CLIENT;
 				}
 
-				default void sendToServer() {
-					Voidscape.NETWORK.sendToServer(new CommonPacketSubCapSync(this));
+				default void sendToClient(ServerPlayerEntity parent) {
+					Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> parent), new ClientPacketSubCapSync(this));
 				}
 
 				default void sendToClients(Entity parent) {
-					Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> parent), new CommonPacketSubCapSync(this));
+					Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> parent), new ClientPacketSubCapSync(this));
 				}
 
 			}

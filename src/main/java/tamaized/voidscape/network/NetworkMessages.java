@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import tamaized.voidscape.network.common.CommonPacketSubCapSync;
+import tamaized.voidscape.network.common.ClientPacketSubCapSync;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 
 import java.util.function.Supplier;
@@ -16,7 +16,7 @@ public class NetworkMessages {
 
 	public static void register(SimpleChannel network) {
 		registerMessage(network, ServerPacketTurmoilAction.class, ServerPacketTurmoilAction::new);
-		registerMessage(network, CommonPacketSubCapSync.class, () -> new CommonPacketSubCapSync(null));
+		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 	}
 
 	private static <M extends IMessage<M>> void registerMessage(SimpleChannel network, Class<M> type, Supplier<M> factory) {
