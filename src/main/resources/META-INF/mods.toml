@@ -1,6 +1,7 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[33,)"
 issueTrackerURL="https://github.com/Tamaized/Voidscape/issues"
+license="All Rights Reserved"
 [[mods]]
 modId="voidscape"
 version="${version}"

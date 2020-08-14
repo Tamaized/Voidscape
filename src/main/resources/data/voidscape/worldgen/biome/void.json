@@ -1,0 +1,67 @@
+{
+  "precipitation": "none",
+  "temperature": 0.15,
+  "downfall": 0.0,
+  "category": "none",
+  "depth": -3.0,
+  "scale": 1.8,
+  "effects": {
+	"fog_color": 655628,
+	"water_color": 655628,
+	"water_fog_color": 655628,
+	"sky_color": 655628,
+	"foliage_color": 655628,
+	"grass_color": 655628,
+	"particle": {
+	  "options": {
+		"type": "falling_dust",
+		"Name": "bedrock"
+	  },
+	  "probability": 0.8
+	},
+	"ambient_sound": "ambient.underwater.loop.additions.ultra_rare",
+	"music": {
+	  "sound": "music.end",
+	  "min_delay": 6000,
+	  "max_delay": 12000,
+	  "replace_current_music": true
+	}
+  },
+  "surface_builder": {
+	"type": "default",
+	"config": {
+	  "top_material": {
+		"Name": "bedrock"
+	  },
+	  "under_material": {
+		"Name": "bedrock"
+	  },
+	  "underwater_material": {
+		"Name": "bedrock"
+	  }
+	}
+  },
+  "carvers": {
+	"air": [
+	  {
+		"type": "nether_cave",
+		"config": {
+		  "probability": 0.2
+		}
+	  }
+	]
+  },
+  "features": [
+
+  ],
+  "starts": [
+
+  ],
+  "creature_spawn_probability": 0.0,
+  "spawners": {
+
+  },
+  "spawn_costs": {
+
+  }
+}

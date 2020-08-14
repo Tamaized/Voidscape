@@ -24,7 +24,7 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 	public void handle(Supplier<Supplier<PlayerEntity>> sup) {
 		PlayerEntity player = sup.get().get();
 		if (player.world == null || !player.world.isRemote) {
-			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player.getDisplayNameAndUUID());
+			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player.getDisplayName());
 			return;
 		}
 		player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.network(id).ifPresent(data -> {

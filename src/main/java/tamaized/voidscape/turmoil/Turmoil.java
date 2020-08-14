@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -32,7 +33,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void tick(Entity parent) {
 		maxTick = 300;
-		if (parent == null || parent.world == null)
+		if (!(parent instanceof PlayerEntity) || parent.world == null)
 			return;
 		if (!parent.world.isRemote() && dirty && parent instanceof ServerPlayerEntity) {
 			sendToClient((ServerPlayerEntity) parent);

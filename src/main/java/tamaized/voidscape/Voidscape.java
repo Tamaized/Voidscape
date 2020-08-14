@@ -11,14 +11,12 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -27,7 +25,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +32,6 @@ import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
-import tamaized.voidscape.world.VoidBiome;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
 
@@ -59,13 +55,13 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-	public static final RegistryKey<DimensionType> DIMENSION_TYPE = RegistryKey.func_240903_a_(Registry.DIMENSION_TYPE_KEY, new ResourceLocation(MODID, "void"));
 	public static final RegistryKey<World> WORLD_KEY = RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
+	private static final ResourceLocation DIMENSION_TYPE = new ResourceLocation(MODID, "void");
 	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
-	private static final DeferredRegister<Biome> REGISTRY_BIOME = create(DeferredRegister.create(ForgeRegistries.BIOMES, MODID));
-	public static final RegistryObject<Biome> BIOME = REGISTRY_BIOME.register("void", VoidBiome::new);
+	//	private static final DeferredRegister<Biome> REGISTRY_BIOME = create(DeferredRegister.create(ForgeRegistries.BIOMES, MODID));
+	//	public static final RegistryObject<Biome> BIOME = REGISTRY_BIOME.register("void", VoidBiome::new);
 
 	public Voidscape() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -99,7 +95,8 @@ public class Voidscape {
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
-				event.getServer().getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").then(VoidCommands.Debug.register()))
+				event.getServer().getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
+						then(VoidCommands.Debug.register()))
 
 		);
 		busForge.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
@@ -123,16 +120,16 @@ public class Voidscape {
 		return register;
 	}
 
-	public static RegistryKey<DimensionType> getDimensionType() {
+	public static ResourceLocation getDimensionType() {
 		return DIMENSION_TYPE;
 	}
 
 	public static boolean checkForVoidDimension(World world) {
-		return checkForVoidDimension(world.func_234922_V_());
+		return checkForVoidDimension(world.func_230315_m_());
 	}
 
-	public static boolean checkForVoidDimension(RegistryKey<DimensionType> type) {
-		return type.func_240901_a_().equals(getDimensionType().func_240901_a_());
+	public static boolean checkForVoidDimension(DimensionType type) {
+		return type.func_242725_p().equals(getDimensionType());
 	}
 
 	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {

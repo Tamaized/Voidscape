@@ -10,6 +10,7 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class VoidChunkGenerator extends NoiseChunkGenerator {
 
@@ -20,16 +21,16 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 					forGetter(VoidChunkGenerator::getDimensionSettings)).
 			apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
 
-	private VoidChunkGenerator(BiomeProvider biomeProvider1, long seed, DimensionSettings dimensionSettings) {
+	private VoidChunkGenerator(BiomeProvider biomeProvider1, long seed, Supplier<DimensionSettings> dimensionSettings) {
 		super(biomeProvider1, seed, dimensionSettings);
-		int horizontalNoiseGranularity = dimensionSettings.func_236113_b_().func_236174_e_() * 2;
+		int horizontalNoiseGranularity = dimensionSettings.get().func_236113_b_().func_236174_e_() * 2;
 		ObfuscationReflectionHelper.setPrivateValue(NoiseChunkGenerator.class, this, horizontalNoiseGranularity, "field_222564_k");
 		int noise = 16 / horizontalNoiseGranularity;
 		ObfuscationReflectionHelper.setPrivateValue(NoiseChunkGenerator.class, this, noise, "field_222565_l");
 		ObfuscationReflectionHelper.setPrivateValue(NoiseChunkGenerator.class, this, noise, "field_222567_n");
 	}
 
-	private VoidChunkGenerator(BiomeProvider biomeProvider, DimensionSettings dimensionSettings) {
+	private VoidChunkGenerator(BiomeProvider biomeProvider, Supplier<DimensionSettings> dimensionSettings) {
 		this(biomeProvider, new Random().nextLong(), dimensionSettings);
 	}
 
@@ -43,7 +44,7 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 		return new VoidChunkGenerator(biomeProvider.func_230320_a_(seed), seed, getDimensionSettings());
 	}
 
-	private DimensionSettings getDimensionSettings() {
+	private Supplier<DimensionSettings> getDimensionSettings() {
 		return field_236080_h_;
 	}
 

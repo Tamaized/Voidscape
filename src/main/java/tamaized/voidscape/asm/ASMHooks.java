@@ -1,19 +1,23 @@
 package tamaized.voidscape.asm;
 
+import net.minecraft.block.PortalInfo;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.server.ServerWorld;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.world.VoidTeleporter;
+
+@SuppressWarnings({"JavadocReference", "unused"})
 public class ASMHooks {
 
-	/*
+	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.shader.Framebuffer#func_216492_b}<br>
-	 * [BEFORE] {@link net.minecraft.client.shader.Framebuffer#checkFramebufferComplete}
+	 * {@link net.minecraft.entity.Entity#func_241829_a}<br>
+	 * First [ARETURN] (return null)
 	 */
-	/*public static void enableStencilBuffer(Framebuffer fbo) {
-		if (fbo.useDepth) {
-			GlStateManager.bindRenderbuffer(FramebufferConstants.renderBufferTarget, fbo.depthBuffer);
-			GlStateManager.renderbufferStorage(FramebufferConstants.renderBufferTarget, /*GL14.GL_DEPTH_COMPONENT24*//*org.lwjgl.opengl.EXTPackedDepthStencil.GL_DEPTH24_STENCIL8_EXT, fbo.framebufferTextureWidth, fbo.framebufferTextureHeight);
-			GlStateManager.framebufferRenderbuffer(FramebufferConstants.target, FramebufferConstants.attachment, FramebufferConstants.renderBufferTarget, fbo.depthBuffer);
-			GlStateManager.framebufferRenderbuffer(FramebufferConstants.target, org.lwjgl.opengl.EXTFramebufferObject.GL_STENCIL_ATTACHMENT_EXT, FramebufferConstants.renderBufferTarget, fbo.depthBuffer);
-		}
-	}*/
+	public static PortalInfo portalInfo(Entity entity, ServerWorld world) {
+		if (Voidscape.checkForVoidDimension(entity.world) || Voidscape.checkForVoidDimension(world))
+			return VoidTeleporter.position(entity, world);
+		return null;
+	}
 
 }

@@ -1,0 +1,33 @@
+function initializeCoreMod() {
+    return {
+        'portalinfo': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.entity.Entity',
+                'methodName': 'func_241829_a',
+                'methodDesc': '(Lnet/minecraft/world/server/ServerWorld;)Lnet/minecraft/block/PortalInfo;'
+            },
+            'transformer': function (methodNode) {
+                if (methodNode instanceof org.objectweb.asm.tree.MethodNode) { // Stupid way to cast in JS to avoid warnings and fix autocomplete
+                    var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+                    var Opcodes = Java.type('org.objectweb.asm.Opcodes');
+                    methodNode.instructions.insertBefore(
+                        ASM.findFirstInstruction(methodNode, Opcodes.ARETURN),
+                        ASM.listOf(
+                            new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0), // PUSH this TO THE STACK
+                            new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1), // PUSH ServerWorld param TO THE STACK
+                            new org.objectweb.asm.tree.MethodInsnNode( // INVOKE tamaized.voidscape.asm.ASMHooks#portalInfo(Entity, ServerWorld)
+                                Opcodes.INVOKESTATIC,
+                                'tamaized/voidscape/asm/ASMHooks',
+                                'portalInfo',
+                                '(Lnet/minecraft/entity/Entity;Lnet/minecraft/world/server/ServerWorld;)Lnet/minecraft/block/PortalInfo;',
+                                false
+                            )
+                        )
+                    );
+                }
+                return methodNode;
+            }
+        }
+    }
+}

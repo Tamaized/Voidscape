@@ -1,10 +1,12 @@
 package tamaized.voidscape.world;
 
+import net.minecraft.block.PortalInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
@@ -22,18 +24,22 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+		oldEntity.fallDistance = 0;
+		return repositionEntity.apply(false);
+	}
+
+	public static PortalInfo position(Entity oldEntity, ServerWorld destWorld) {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
 			BlockPos pos = null;
 			if (oldEntity instanceof PlayerEntity)
 				pos = ((ServerPlayerEntity) oldEntity).func_241140_K_();
 			if (pos == null)
 				pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.func_241135_u_());
-			oldEntity.setPositionAndUpdate(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
+			return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
 		} else {
 			int scan = 2;
 			int lastScan = 0;
 			final BlockPos.Mutable pos = new BlockPos.Mutable();
-			loop:
 			while (true) {
 				for (int y = -scan; y < scan; y++)
 					for (int x = -scan; x < scan; x++)
@@ -58,8 +64,7 @@ public final class VoidTeleporter implements ITeleporter {
 												continue scan;
 										}
 										pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y, oldEntity.getPosZ() + z);
-										oldEntity.moveForced(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
-										break loop;
+										return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
 									}
 								}
 				lastScan = scan;
@@ -71,7 +76,6 @@ public final class VoidTeleporter implements ITeleporter {
 				}
 			}
 		}
-		oldEntity.fallDistance = 0;
-		return repositionEntity.apply(false);
+		return new PortalInfo(oldEntity.getPositionVec(), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
 	}
 }
