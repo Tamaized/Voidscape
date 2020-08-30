@@ -19,7 +19,10 @@
 	  },
 	  "probability": 0.8
 	},
-	"ambient_sound": "ambient.underwater.loop.additions.ultra_rare",
+	"additions_sound": {
+	  "sound": "voidscape:ambience",
+	  "tick_chance": 0.001
+	},
 	"music": {
 	  "sound": "music.end",
 	  "min_delay": 6000,

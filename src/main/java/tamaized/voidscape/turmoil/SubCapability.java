@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -41,7 +41,8 @@ public class SubCapability {
 	static {
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
 			if (event.getObject() instanceof LivingEntity)
-				event.addCapability(AttachedSubCap.ID, new ICapabilityProvider() {
+				event.addCapability(AttachedSubCap.ID, new ICapabilitySerializable() {
+
 					private LazyOptional<?> instance;
 
 					@Nonnull
@@ -56,6 +57,16 @@ public class SubCapability {
 										instance.cast() :
 
 								LazyOptional.empty();
+					}
+
+					@Override
+					public INBT serializeNBT() {
+						return new CompoundNBT();
+					}
+
+					@Override
+					public void deserializeNBT(INBT nbt) {
+
 					}
 				});
 		});

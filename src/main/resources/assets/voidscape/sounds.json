@@ -1,0 +1,19 @@
+{
+  "ambience": {
+	"sounds": [
+	  "ambient/underwater/additions/dark1",
+	  {
+		"name": "ambient/underwater/additions/dark2",
+		"volume": 0.7
+	  },
+	  "ambient/underwater/additions/dark3",
+	  "ambient/underwater/additions/dark4",
+	  "ambient/underwater/additions/earth_crack",
+	  {
+		"name": "ambient/underwater/additions/crackles1",
+		"volume": 0.7
+	  },
+	  "ambient/underwater/additions/crackles2"
+	]
+  }
+}

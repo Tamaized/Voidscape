@@ -7,6 +7,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -25,6 +27,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,8 +64,7 @@ public class Voidscape {
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	private static final ResourceLocation DIMENSION_TYPE = new ResourceLocation(MODID, "void");
 	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
-	//	private static final DeferredRegister<Biome> REGISTRY_BIOME = create(DeferredRegister.create(ForgeRegistries.BIOMES, MODID));
-	//	public static final RegistryObject<Biome> BIOME = REGISTRY_BIOME.register("void", VoidBiome::new);
+	public static final RegistryObject<SoundEvent> AMBIENCE = create(ForgeRegistries.SOUND_EVENTS).register("ambience", () -> new SoundEvent(new ResourceLocation(MODID, "ambience")));
 
 	public Voidscape() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -115,9 +118,10 @@ public class Voidscape {
 		});
 	}
 
-	private static <R extends IForgeRegistryEntry<R>> DeferredRegister<R> create(DeferredRegister<R> register) {
-		REGISTERS.add(register);
-		return register;
+	private static <R extends IForgeRegistryEntry<R>> DeferredRegister<R> create(IForgeRegistry<R> type) {
+		DeferredRegister<R> def = DeferredRegister.create(type, MODID);
+		REGISTERS.add(def);
+		return def;
 	}
 
 	public static ResourceLocation getDimensionType() {
