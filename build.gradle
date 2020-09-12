@@ -70,7 +70,7 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
 
-    //runtime fg.deobf("mezz.jei:${project.jeiVersion}")
+    runtime fg.deobf("mezz.jei:${project.jeiVersion}")
 }
 
 processResources {
