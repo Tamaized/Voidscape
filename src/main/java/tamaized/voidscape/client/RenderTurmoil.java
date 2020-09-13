@@ -62,13 +62,13 @@ public class RenderTurmoil {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				float perc = MathHelper.clamp(
 
-						(deltaTick + event.getPartialTicks() *
+						(deltaTick + (deltaPos == null ?
 
-								(deltaPos == null ?
+								data.getState() == Turmoil.State.CONSUME ? -0.01F : 0 :
 
-										data.getState() == Turmoil.State.CONSUME ? -0.01F : 0 :
+								deltaPos ? 1F - event.getPartialTicks() : event.getPartialTicks())
 
-										deltaPos ? -1 : 1)
+
 
 						) / data.getMaxTick(),
 

@@ -14,14 +14,13 @@
 	"grass_color": 655628,
 	"particle": {
 	  "options": {
-		"type": "falling_dust",
-		"Name": "bedrock"
+		"type": "ash"
 	  },
-	  "probability": 0.8
+	  "probability": 0.025
 	},
 	"additions_sound": {
 	  "sound": "voidscape:ambience",
-	  "tick_chance": 0.001
+	  "tick_chance": 0.0015
 	},
 	"music": {
 	  "sound": "music.end",

@@ -20,11 +20,11 @@ public class Talk {
 
 							"Do not be afraid\n" +
 
-							"Allow the void to consume you" +
+							"Allow the void to consume you\n" +
 
-							"Everything will be alright" +
+							"Everything will be alright\n" +
 
-							"Summon me when you're ready",
+							"Summon me when you're ready\n",
 
 					"($voidscape:keybind)"),
 
