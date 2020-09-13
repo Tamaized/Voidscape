@@ -8,26 +8,42 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.Talk;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 public class OverlayMessageHandler {
 
+	public static final ResourceLocation FORMAT_KEYBIND = new ResourceLocation(Voidscape.MODID, "keybind");
+	private static final Map<ResourceLocation, Supplier<String>> FORMAT_MAP = new HashMap<>();
 	private static String remainder = "";
 	private static String currentText = "";
 	private static String captureText = "";
 	private static long captureTick;
 	private static long maxTick = 20 * 3;
 
+	static {
+		FORMAT_MAP.put(FORMAT_KEYBIND, () -> ClientListener.KEY.func_238171_j_().getString());
+	}
+
+	public static String format(ResourceLocation key) {
+		return "($".concat(key.toString()).concat(")");
+	}
+
 	public static boolean process() {
 		currentText = remainder.substring(0, Minecraft.getInstance().fontRenderer.func_238420_b_().
-				func_238352_a_(remainder, (int) (Minecraft.getInstance().getMainWindow().getScaledWidth() * 0.5F - 1), Style.EMPTY));
+				func_238352_a_(remainder, Minecraft.getInstance().getMainWindow().getScaledWidth() - 2, Style.EMPTY));
 		remainder = remainder.substring(currentText.length());
 		if (currentText.contains("\n")) {
 			String[] temp = currentText.split("\n", 2);
@@ -43,7 +59,8 @@ public class OverlayMessageHandler {
 
 	public static void start(Talk.Entry entry) {
 		remainder = entry.getMessage().getString();
-		remainder = remainder.replaceAll("\\(\\$voidscape:keybind\\)", ClientListener.KEY.func_238171_j_().getString());
+		for (Map.Entry<ResourceLocation, Supplier<String>> format : FORMAT_MAP.entrySet())
+			remainder = remainder.replaceAll(Pattern.quote(format(format.getKey())), format.getValue().get());
 		process();
 		captureTick = Objects.requireNonNull(Minecraft.getInstance().player).ticksExisted;
 	}
@@ -58,9 +75,9 @@ public class OverlayMessageHandler {
 		}
 
 		MainWindow window = Minecraft.getInstance().getMainWindow();
-		float w = window.getScaledWidth() * 0.5F;
+		float w = window.getScaledWidth() - 1;
 		float h = window.getScaledHeight() * 0.1F;
-		float x = window.getScaledWidth() * 0.5F - w * 0.5F;
+		float x = 1;
 		float y = window.getScaledHeight() * 0.75F - h * 0.5F;
 		float z = 0F;
 
