@@ -1,0 +1,7 @@
+{
+  "parent": "voidscape:block/overlay/full",
+  "textures": {
+	"base": "block/bedrock",
+	"overlay": "voidscape:blocks/voidic_crystal_ore"
+  }
+}
