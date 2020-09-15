@@ -73,7 +73,7 @@ public class Voidscape {
 		busForge.addListener((Consumer<LivingDeathEvent>) event -> {
 			if (event.getEntity() instanceof PlayerEntity && checkForVoidDimension(event.getEntity().world)) {
 				event.setCanceled(true);
-				((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth());
+				((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth() * 0.1F);
 				event.getEntity().changeDimension(getWorld(event.getEntity().world, World.field_234918_g_), VoidTeleporter.INSTANCE);
 			}
 		});
