@@ -8,7 +8,6 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,10 +50,9 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-	public static final RegistryKey<World> WORLD_KEY = RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(MODID, "void"));
+	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
-	private static final ResourceLocation DIMENSION_TYPE = new ResourceLocation(MODID, "void");
 
 	public Voidscape() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -91,16 +89,8 @@ public class Voidscape {
 		});
 	}
 
-	public static ResourceLocation getDimensionType() {
-		return DIMENSION_TYPE;
-	}
-
 	public static boolean checkForVoidDimension(World world) {
-		return checkForVoidDimension(world.func_230315_m_());
-	}
-
-	public static boolean checkForVoidDimension(DimensionType type) {
-		return type.func_242725_p().equals(getDimensionType());
+		return world.func_234923_W_().func_240901_a_().equals(WORLD_KEY_VOID.func_240901_a_());
 	}
 
 	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {

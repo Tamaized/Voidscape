@@ -1,13 +1,14 @@
 package tamaized.voidscape.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.common.ClientPacketSubCapSync;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class NetworkMessages {
@@ -38,11 +39,12 @@ public class NetworkMessages {
 			context.get().setPacketHandled(true);
 		}
 
-		static Supplier<Supplier<PlayerEntity>> getSidedPlayer(PlayerEntity test) {
-			return () -> test == null ? () -> Minecraft.getInstance().player : () -> test;
+		@Nullable
+		static PlayerEntity getSidedPlayer(@Nullable PlayerEntity test) {
+			return test == null ? ClientUtil.getClientPlayerSafely() : test;
 		}
 
-		void handle(Supplier<Supplier<PlayerEntity>> sup);
+		void handle(@Nullable PlayerEntity sup);
 
 		void toBytes(PacketBuffer packet);
 

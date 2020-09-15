@@ -67,7 +67,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				state = State.TELEPORT;
 				if (parent.world.isRemote || Voidscape.checkForVoidDimension(parent.world))
 					return;
-				parent.changeDimension(Voidscape.getWorld(parent.world, Voidscape.WORLD_KEY), VoidTeleporter.INSTANCE);
+				parent.changeDimension(Voidscape.getWorld(parent.world, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 			}
 		}
 	}

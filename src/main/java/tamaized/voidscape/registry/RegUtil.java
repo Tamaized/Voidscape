@@ -238,6 +238,7 @@ public class RegUtil {
 		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlotType slot, Item.Properties properties) {
 			return tier.fullbright ? () -> new ArmorItem(tier, slot, properties) {
 				@Override
+				@OnlyIn(Dist.CLIENT)
 				public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
 					return (A) new BipedModel(slot == EquipmentSlotType.LEGS ? 0.5F : 1.0F) {
 						@Override

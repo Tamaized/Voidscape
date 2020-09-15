@@ -65,7 +65,7 @@ public class ClientListener {
 	public static void setup(FMLClientSetupEvent event) {
 		ClientRegistry.registerKeyBinding(KEY);
 		RenderTypeLookup.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.getCutoutMipped());
-		DimensionRenderInfo.field_239208_a_.put(Voidscape.getDimensionType(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
+		DimensionRenderInfo.field_239208_a_.put(Voidscape.WORLD_KEY_VOID.func_240901_a_(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
 			@Override
 			public Vector3d func_230494_a_(Vector3d p_230494_1_, float p_230494_2_) {
 				return Vector3d.ZERO;

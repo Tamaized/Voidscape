@@ -8,7 +8,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.SubCapability;
 
-import java.util.function.Supplier;
+import javax.annotation.Nullable;
 
 public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPacketSubCapSync> {
 
@@ -16,15 +16,14 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 	private ResourceLocation id;
 	private PacketBuffer data;
 
-	public ClientPacketSubCapSync(SubCapability.ISubCap.ISubCapData.INetworkHandler cap) {
+	public ClientPacketSubCapSync(@Nullable SubCapability.ISubCap.ISubCapData.INetworkHandler cap) {
 		this.cap = cap;
 	}
 
 	@Override
-	public void handle(Supplier<Supplier<PlayerEntity>> sup) {
-		PlayerEntity player = sup.get().get();
-		if (player.world == null || !player.world.isRemote) {
-			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player.getDisplayName());
+	public void handle(@Nullable PlayerEntity player) {
+		if (player == null || player.world == null || !player.world.isRemote) {
+			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
 		player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.network(id).ifPresent(data -> {
