@@ -75,7 +75,7 @@ public class RegUtil {
 	}
 
 	enum ItemTier implements IItemTier {
-		VOIDIC_CRYSTAL(5, 2538, 9.5F, 4.5F, 17, () -> {
+		VOIDIC_CRYSTAL(5, 2538, 9.5F, 5F, 17, () -> {
 			return Ingredient.fromItems(ModItems.VOIDIC_CRYSTAL.get());
 		});
 
@@ -127,7 +127,7 @@ public class RegUtil {
 	}
 
 	enum ArmorMaterial implements IArmorMaterial {
-		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3.5F, 0.2F, () -> {
+		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4F, 0.2F, () -> {
 			return Ingredient.fromItems(ModItems.VOIDIC_CRYSTAL.get());
 		}, true);
 
