@@ -14,7 +14,9 @@ import net.minecraft.util.text.Style;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Talk;
+import tamaized.voidscape.turmoil.Turmoil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,6 @@ import java.util.regex.Pattern;
 
 public class OverlayMessageHandler {
 
-	public static final ResourceLocation FORMAT_KEYBIND = new ResourceLocation(Voidscape.MODID, "keybind");
 	private static final Map<ResourceLocation, Supplier<String>> FORMAT_MAP = new HashMap<>();
 	private static String remainder = "";
 	private static String currentText = "";
@@ -34,11 +35,7 @@ public class OverlayMessageHandler {
 	private static long maxTick = 20 * 3;
 
 	static {
-		FORMAT_MAP.put(FORMAT_KEYBIND, () -> ClientListener.KEY.func_238171_j_().getString());
-	}
-
-	public static String format(ResourceLocation key) {
-		return "($".concat(key.toString()).concat(")");
+		FORMAT_MAP.put(Talk.FORMAT_KEYBIND, () -> ClientListener.KEY.func_238171_j_().getString());
 	}
 
 	public static boolean process() {
@@ -60,20 +57,26 @@ public class OverlayMessageHandler {
 	public static void start(Talk.Entry entry) {
 		remainder = entry.getMessage().getString();
 		for (Map.Entry<ResourceLocation, Supplier<String>> format : FORMAT_MAP.entrySet())
-			remainder = remainder.replaceAll(Pattern.quote(format(format.getKey())), format.getValue().get());
+			remainder = remainder.replaceAll(Pattern.quote(Talk.format(format.getKey())), format.getValue().get());
 		process();
 		captureTick = Objects.requireNonNull(Minecraft.getInstance().player).ticksExisted;
 	}
 
 	public static void render(MatrixStack stack, float partialTicks) {
 		World world = Minecraft.getInstance().world;
-		if (world == null || Minecraft.getInstance().player == null) {
+		Runnable reset = () -> {
 			currentText = "";
 			captureText = "";
 			captureTick = 0;
+		};
+		if (world == null || Minecraft.getInstance().player == null) {
+			reset.run();
 			return;
 		}
-
+		Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+			if ((!data.hasStarted() && data.getState() != Turmoil.State.CONSUME) || !data.talk().isPresent())
+				reset.run();
+		}));
 		MainWindow window = Minecraft.getInstance().getMainWindow();
 		float w = window.getScaledWidth() - 1;
 		float h = window.getScaledHeight() * 0.1F;

@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.OverlayMessageHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +11,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class Talk {
+
+	public static final ResourceLocation FORMAT_KEYBIND = new ResourceLocation(Voidscape.MODID, "keybind");
 
 	public static Entry TEST = new Entry(new ResourceLocation(Voidscape.MODID, "test"),
 
@@ -59,9 +60,13 @@ public class Talk {
 
 							"(You may enter at any time with [%1$s])",
 
-					OverlayMessageHandler.format(OverlayMessageHandler.FORMAT_KEYBIND)),
+					format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start)));
+
+	public static String format(ResourceLocation key) {
+		return "($".concat(key.toString()).concat(")");
+	}
 
 	public static class Entry {
 
@@ -75,6 +80,13 @@ public class Talk {
 			this.finish = finish;
 			this.message = message;
 			REGISTRY.put(id, this);
+		}
+
+		public static Optional<Entry> findOrExec(ResourceLocation id, Runnable exec) {
+			Optional<Entry> e = find(id);
+			if (!e.isPresent())
+				exec.run();
+			return e;
 		}
 
 		public static Optional<Entry> find(ResourceLocation id) {

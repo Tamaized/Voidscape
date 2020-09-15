@@ -13,6 +13,7 @@ import tamaized.voidscape.client.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.world.VoidTeleporter;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
@@ -112,6 +113,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void write(PacketBuffer buffer) {
 		buffer.writeVarInt(state.ordinal());
+		buffer.writeFloat(tick);
 		if (talk != null) {
 			buffer.writeBoolean(true);
 			buffer.writeResourceLocation(talk.getId());
@@ -122,18 +124,30 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void read(PacketBuffer buffer) {
 		state = State.VALUES[buffer.readVarInt()];
+		tick = buffer.readFloat();
 		if (buffer.readBoolean())
-			Talk.Entry.find(buffer.readResourceLocation()).ifPresent(e -> {
+			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> {
+				talk = null;
+			}).ifPresent(e -> {
 				if (talk != e) {
 					talk = e;
 					OverlayMessageHandler.start(talk);
 				}
 			});
+		else
+			talk = null;
 	}
 
 	public void start() {
-		reset();
-		started = true;
+		if (!started && state == State.CONSUME && tick >= maxTick) {
+			reset();
+			started = true;
+			state = State.TELEPORTING;
+		}
+	}
+
+	public boolean hasStarted() {
+		return started;
 	}
 
 	public void reset() {
@@ -144,9 +158,15 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void debug() {
-		if (started || state != State.CLOSED)
+		if (started || state != State.CLOSED && state != State.CONSUME)
 			reset();
-		else
+		else if (state == State.CONSUME) {
+			if (tick == maxTick)
+				reset();
+			else
+				tick = maxTick;
+			dirty = true;
+		} else
 			setState(State.CONSUME);
 	}
 
@@ -171,7 +191,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		return Optional.ofNullable(talk);
 	}
 
-	public void talk(Talk.Entry entry) {
+	public void talk(@Nullable Talk.Entry entry) {
 		talk = entry;
 		dirty = true;
 	}
