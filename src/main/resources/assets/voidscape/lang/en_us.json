@@ -1,5 +1,15 @@
 {
   "voidscape.item_group": "Voidscape",
+
+  "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
+
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
-  "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore"
+  "item.voidscape.voidic_crystal": "Voidic Crystal",
+  "item.voidscape.voidic_crystal_sword": "Voidic Crystal Sword",
+  "item.voidscape.voidic_crystal_axe": "Voidic Crystal Axe",
+  "item.voidscape.voidic_crystal_pickaxe": "Voidic Crystal Pickaxe",
+  "item.voidscape.voidic_crystal_helmet": "Voidic Crystal Helmet",
+  "item.voidscape.voidic_crystal_chest": "Voidic Crystal Chestplate",
+  "item.voidscape.voidic_crystal_legs": "Voidic Crystal Leggings",
+  "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots"
 }
