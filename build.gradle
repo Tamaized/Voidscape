@@ -3,6 +3,7 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -15,10 +16,6 @@ apply plugin: 'maven-publish'
 repositories {
     maven {
         url = "https://dvs1.progwml6.com/files/maven/" // JEI
-    }
-    maven {
-        name 'tterrag\'s Maven' // Mappings
-        url 'https://maven.tterrag.com/'
     }
 }
 
