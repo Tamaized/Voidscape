@@ -40,43 +40,54 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
-		if (!started && !parent.world.isRemote()) {
-			if (state == State.CLOSED && parent.getPosY() < 5 && parent.ticksExisted % 100 == 0 && parent.world.getRandom().nextInt(25) == 0)
-				setState(State.CONSUME);
-			else if (state == State.CONSUME && parent.getPosY() >= 5 && talk == null)
-				setState(State.CLOSED);
-		}
-		if ((state == State.TELEPORTING || state == State.TELEPORT) && Voidscape.checkForVoidDimension(parent.world))
-			state = Turmoil.State.CLOSED;
-		if (state == State.CONSUME) {
-			if (talk == null && tick > 0)
-				tick -= 0.01F;
-			if (tick < maxTick && parent.ticksExisted % 400 == 0) {
-				tick += 30;
-				if (parent.world.isRemote())
-					parent.playSound(SoundEvents.BLOCK_CONDUIT_AMBIENT_SHORT, 1F, 1F);
-			}
-			if (talk == null && tick >= maxTick && !parent.world.isRemote())
-				talk(Talk.TEST);
-		} else if (state != Turmoil.State.TELEPORTING && state != State.TELEPORT) {
-			if (tick > 0)
-				tick -= 2;
-		} else {
-			if (tick < maxTick)
-				tick += 2;
-			else if (started && state != State.TELEPORT) {
-				state = State.TELEPORT;
-				if (parent.world.isRemote || Voidscape.checkForVoidDimension(parent.world))
-					return;
-				parent.changeDimension(Voidscape.getWorld(parent.world, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
-			}
+		switch (getState()) {
+			default:
+			case CLOSED:
+				if (!started)
+					if (!parent.world.isRemote && parent.getPosY() < 5 && parent.ticksExisted % 100 == 0 && parent.world.getRandom().nextInt(25) == 0)
+						setState(State.CONSUME);
+					else if (tick > 0)
+						tick -= Math.min(2, tick);
+				break;
+			case OPEN:
+				if (tick < maxTick)
+					tick += Math.min(4, maxTick - tick);
+				break;
+			case CONSUME:
+				if (!talk().isPresent()) {
+					if (parent.getPosY() >= 5)
+						setState(State.CLOSED);
+					else {
+						if (tick > 0)
+							tick -= Math.min(0.01F, tick);
+						if (tick < maxTick && parent.ticksExisted % 400 == 0) {
+							tick += Math.min(30, maxTick - tick);
+							if (parent.world.isRemote())
+								parent.playSound(SoundEvents.BLOCK_CONDUIT_AMBIENT_SHORT, 1F, 1F);
+						}
+						if (tick >= maxTick && !parent.world.isRemote())
+							talk(Talk.TEST);
+					}
+				}
+				break;
+			case TELEPORTING:
+				if (tick < maxTick)
+					tick += Math.min(2, maxTick - tick);
+				else
+					setState(State.TELEPORT);
+				break;
+			case TELEPORT:
+				if (!parent.world.isRemote && !Voidscape.checkForVoidDimension(parent.world)) {
+					parent.changeDimension(Voidscape.getWorld(parent.world, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
+					setState(State.CLOSED);
+				}
+				break;
 		}
 	}
 
 	public void action() {
-		if (talk == null || OverlayMessageHandler.process()) {
-			if (talk != null)
-				talk = null;
+		if (!talk().isPresent() || OverlayMessageHandler.process()) {
+			talk(null);
 			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
 		}
 	}
@@ -92,9 +103,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			talk.finish(parent);
 			talk(null);
 		} else if (started) {
-			if (state == State.CLOSED && !Voidscape.checkForVoidDimension(parent.world))
-				setState(State.TELEPORTING);
-			else if (state == State.TELEPORTING)
+			if (getState() == State.CLOSED)
+				setState(State.OPEN);
+			else if (getState() == State.OPEN)
 				setState(State.CLOSED);
 		}
 	}
@@ -170,6 +181,11 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			setState(State.CONSUME);
 	}
 
+	public void forceStart() {
+		reset();
+		started = true;
+	}
+
 	public float getTick() {
 		return tick;
 	}
@@ -183,8 +199,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void setState(State state) {
+		dirty = this.state != state;
 		this.state = state;
-		dirty = true;
 	}
 
 	public Optional<Talk.Entry> talk() {
@@ -192,8 +208,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void talk(@Nullable Talk.Entry entry) {
+		dirty = talk != entry;
 		talk = entry;
-		dirty = true;
 	}
 
 	public enum State {

@@ -28,6 +28,8 @@ public class RenderTurmoil {
 	static final Color24 colorHolder = new Color24();
 	private static float deltaTick;
 	private static Boolean deltaPos;
+	public static final int STENCIL_INDEX = 10;
+	private static Turmoil.State lastState = Turmoil.State.CLOSED;
 
 	@SubscribeEvent
 	public static void tick(TickEvent.ClientTickEvent event) {
@@ -35,6 +37,10 @@ public class RenderTurmoil {
 			return;
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				if (data.getState() != Turmoil.State.CLOSED)
+					lastState = data.getState();
+				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().currentScreen == null)
+					Minecraft.getInstance().displayGuiScreen(new TurmoilScreen());
 				if (data.getTick() <= 0)
 					deltaTick = 0;
 				else if (data.getTick() > deltaTick)
@@ -103,22 +109,22 @@ public class RenderTurmoil {
 
 						Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
 
-						final int stencilIndex = 10;
-
-						StencilBufferUtil.setup(stencilIndex, () -> {
+						StencilBufferUtil.setup(STENCIL_INDEX, () -> {
 							RenderSystem.alphaFunc(GL11.GL_LESS, perc);
 							Tessellator.getInstance().draw();
 							RenderSystem.defaultAlphaFunc();
 						});
 
-						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
+						if (lastState != Turmoil.State.OPEN || true) {
+							buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+							verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
 
-						StencilBufferUtil.render(stencilIndex, () -> {
-							RenderSystem.disableTexture();
-							Tessellator.getInstance().draw();
-							RenderSystem.enableTexture();
-						}, true);
+							StencilBufferUtil.render(STENCIL_INDEX, () -> {
+								RenderSystem.disableTexture();
+								Tessellator.getInstance().draw();
+								RenderSystem.enableTexture();
+							}, true);
+						}
 					}
 					RenderSystem.disableAlphaTest();
 					RenderSystem.disableBlend();

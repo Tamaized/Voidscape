@@ -25,6 +25,11 @@ public final class VoidCommands {
 							executes(context -> {
 								context.getSource().asPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start));
 								return 0;
+							})).
+					then(Commands.literal("force_start").
+							executes(context -> {
+								context.getSource().asPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::forceStart));
+								return 0;
 							}));
 		}
 	}
