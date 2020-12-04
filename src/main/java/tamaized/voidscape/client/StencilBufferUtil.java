@@ -12,7 +12,7 @@ public final class StencilBufferUtil {
 	}
 
 	public static void setup(int index) {
-		Minecraft.getInstance().getFramebuffer().enableStencil();
+		Minecraft.getInstance().getMainRenderTarget().enableStencil();
 		RenderSystem.enableBlend();
 		invisibleBlend();
 		enableStencil(index);
@@ -59,13 +59,13 @@ public final class StencilBufferUtil {
 
 	public static void finishRender() {
 		RenderSystem.stencilMask(0xFF);
-		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.IS_RUNNING_ON_MAC);
+		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, Minecraft.ON_OSX);
 		RenderSystem.stencilMask(0x00);
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}
 
 	public static void enableStencil(int index) {
-		Minecraft.getInstance().getFramebuffer().enableStencil();
+		Minecraft.getInstance().getMainRenderTarget().enableStencil();
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		RenderSystem.stencilMask(0xFF);
 		RenderSystem.stencilFunc(GL11.GL_ALWAYS, index, 0xFF);

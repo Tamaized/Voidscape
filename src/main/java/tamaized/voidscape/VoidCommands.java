@@ -15,20 +15,20 @@ public final class VoidCommands {
 	public static class Debug {
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("debug").
-					requires(cs -> cs.hasPermissionLevel(2)).
+					requires(cs -> cs.hasPermission(2)).
 					then(Commands.literal("reset").
 							executes(context -> {
-								context.getSource().asPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::debug));
+								context.getSource().getPlayerOrException().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::debug));
 								return 0;
 							})).
 					then(Commands.literal("intro").
 							executes(context -> {
-								context.getSource().asPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start));
+								context.getSource().getPlayerOrException().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start));
 								return 0;
 							})).
 					then(Commands.literal("force_start").
 							executes(context -> {
-								context.getSource().asPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::forceStart));
+								context.getSource().getPlayerOrException().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::forceStart));
 								return 0;
 							}));
 		}

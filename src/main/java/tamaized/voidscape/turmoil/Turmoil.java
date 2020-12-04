@@ -34,9 +34,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void tick(Entity parent) {
 		maxTick = 300;
-		if (!(parent instanceof PlayerEntity) || parent.world == null)
+		if (!(parent instanceof PlayerEntity) || parent.level == null)
 			return;
-		if (!parent.world.isRemote() && dirty && parent instanceof ServerPlayerEntity) {
+		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayerEntity) {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
@@ -44,7 +44,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			default:
 			case CLOSED:
 				if (!started)
-					if (!parent.world.isRemote && parent.getPosY() < 5 && parent.ticksExisted % 100 == 0 && parent.world.getRandom().nextInt(25) == 0)
+					if (!parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
 						setState(State.CONSUME);
 					else if (tick > 0)
 						tick -= Math.min(2, tick);
@@ -55,17 +55,17 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				break;
 			case CONSUME:
 				if (!talk().isPresent()) {
-					if (parent.getPosY() >= 5)
+					if (parent.getY() >= 5)
 						setState(State.CLOSED);
 					else {
 						if (tick > 0)
 							tick -= Math.min(0.01F, tick);
-						if (tick < maxTick && parent.ticksExisted % 400 == 0) {
+						if (tick < maxTick && parent.tickCount % 400 == 0) {
 							tick += Math.min(30, maxTick - tick);
-							if (parent.world.isRemote())
-								parent.playSound(SoundEvents.BLOCK_CONDUIT_AMBIENT_SHORT, 1F, 1F);
+							if (parent.level.isClientSide())
+								parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 1F, 1F);
 						}
-						if (tick >= maxTick && !parent.world.isRemote())
+						if (tick >= maxTick && !parent.level.isClientSide())
 							talk(Talk.TEST);
 					}
 				}
@@ -77,8 +77,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 					setState(State.TELEPORT);
 				break;
 			case TELEPORT:
-				if (!parent.world.isRemote && !Voidscape.checkForVoidDimension(parent.world)) {
-					parent.changeDimension(Voidscape.getWorld(parent.world, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
+				if (!parent.level.isClientSide() && !Voidscape.checkForVoidDimension(parent.level)) {
+					parent.changeDimension(Voidscape.getWorld(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 					setState(State.CLOSED);
 				}
 				break;

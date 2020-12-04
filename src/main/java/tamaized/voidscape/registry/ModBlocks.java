@@ -20,15 +20,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModBlocks {
 
 	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
-	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.create(Material.ROCK, MaterialColor.BLACK).
+	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			harvestTool(ToolType.PICKAXE).
-			hardnessAndResistance(3F, 3F).
-			setRequiresTool().
-			harvestLevel(ItemTier.DIAMOND.getHarvestLevel())) {
+			strength(3F, 3F).
+			requiresCorrectToolForDrops().
+			harvestLevel(ItemTier.DIAMOND.getLevel())) {
 		@Override
 		public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
 			boolean flag = super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
-			world.setBlockState(pos, Blocks.BEDROCK.getDefaultState(), world.isRemote ? 11 : 3);
+			world.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), world.isClientSide() ? 11 : 3);
 			return flag;
 		}
 	});

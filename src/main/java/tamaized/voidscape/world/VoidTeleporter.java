@@ -43,10 +43,10 @@ public final class VoidTeleporter implements ITeleporter {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
 			BlockPos pos = null;
 			if (oldEntity instanceof PlayerEntity)
-				pos = ((ServerPlayerEntity) oldEntity).func_241140_K_();
+				pos = ((ServerPlayerEntity) oldEntity).getRespawnPosition();
 			if (pos == null)
-				pos = destWorld.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.func_241135_u_());
-			return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
+				pos = destWorld.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());
+			return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
 		} else {
 			int scan = 2;
 			int lastScan = 0;
@@ -66,16 +66,16 @@ public final class VoidTeleporter implements ITeleporter {
 
 									)
 										continue;
-									pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y, oldEntity.getPosZ() + z);
-									if (destWorld.getBlockState(pos).isTopSolid(destWorld, pos, oldEntity, Direction.UP)) {
-										final int height = (int) (oldEntity.getHeight() + 1);
+									pos.set(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
+									if (destWorld.getBlockState(pos).entityCanStandOnFace(destWorld, pos, oldEntity, Direction.UP)) {
+										final int height = (int) (oldEntity.getBbHeight() + 1);
 										for (int c = 1; c < height; c++) {
-											pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y + c, oldEntity.getPosZ() + z);
-											if (!destWorld.isAirBlock(pos))
+											pos.set(oldEntity.getX() + x, oldEntity.getY() + y + c, oldEntity.getZ() + z);
+											if (!destWorld.isEmptyBlock(pos))
 												continue scan;
 										}
-										pos.setPos(oldEntity.getPosX() + x, oldEntity.getPosY() + y, oldEntity.getPosZ() + z);
-										return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
+										pos.set(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
+										return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
 									}
 								}
 				lastScan = scan;
@@ -87,6 +87,6 @@ public final class VoidTeleporter implements ITeleporter {
 				}
 			}
 		}
-		return new PortalInfo(oldEntity.getPositionVec(), Vector3d.ZERO, oldEntity.rotationYaw, oldEntity.rotationPitch);
+		return new PortalInfo(oldEntity.position(), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
 	}
 }

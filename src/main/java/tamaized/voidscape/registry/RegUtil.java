@@ -38,7 +38,7 @@ public class RegUtil {
 
 	public static final ItemGroup CREATIVE_TAB = new ItemGroup(Voidscape.MODID.concat(".item_group")) {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.VOIDIC_CRYSTAL.get());
 		}
 	};
@@ -61,7 +61,7 @@ public class RegUtil {
 	}
 
 	enum ItemProps {
-		VOIDIC_CRYSTAL(new Item.Properties().group(RegUtil.CREATIVE_TAB).func_234689_a_());
+		VOIDIC_CRYSTAL(new Item.Properties().tab(RegUtil.CREATIVE_TAB).fireResistant());
 
 		private final Item.Properties properties;
 
@@ -76,7 +76,7 @@ public class RegUtil {
 
 	enum ItemTier implements IItemTier {
 		VOIDIC_CRYSTAL(5, 2538, 9.5F, 5F, 17, () -> {
-			return Ingredient.fromItems(ModItems.VOIDIC_CRYSTAL.get());
+			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		});
 
 		private final int harvestLevel;
@@ -96,39 +96,39 @@ public class RegUtil {
 		}
 
 		@Override
-		public int getMaxUses() {
+		public int getUses() {
 			return this.maxUses;
 		}
 
 		@Override
-		public float getEfficiency() {
+		public float getSpeed() {
 			return this.efficiency;
 		}
 
 		@Override
-		public float getAttackDamage() {
+		public float getAttackDamageBonus() {
 			return this.attackDamage;
 		}
 
 		@Override
-		public int getHarvestLevel() {
+		public int getLevel() {
 			return this.harvestLevel;
 		}
 
 		@Override
-		public int getEnchantability() {
+		public int getEnchantmentValue() {
 			return this.enchantability;
 		}
 
 		@Override
-		public Ingredient getRepairMaterial() {
-			return this.repairMaterial.getValue();
+		public Ingredient getRepairIngredient() {
+			return this.repairMaterial.get();
 		}
 	}
 
 	enum ArmorMaterial implements IArmorMaterial {
-		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4F, 0.2F, () -> {
-			return Ingredient.fromItems(ModItems.VOIDIC_CRYSTAL.get());
+		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.2F, () -> {
+			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		}, true);
 
 		private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -155,28 +155,28 @@ public class RegUtil {
 		}
 
 		@Override
-		public int getDurability(EquipmentSlotType slotIn) {
+		public int getDurabilityForSlot(EquipmentSlotType slotIn) {
 			return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
 		}
 
 		@Override
-		public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+		public int getDefenseForSlot(EquipmentSlotType slotIn) {
 			return this.damageReductionAmountArray[slotIn.getIndex()];
 		}
 
 		@Override
-		public int getEnchantability() {
+		public int getEnchantmentValue() {
 			return this.enchantability;
 		}
 
 		@Override
-		public SoundEvent getSoundEvent() {
+		public SoundEvent getEquipSound() {
 			return this.soundEvent;
 		}
 
 		@Override
-		public Ingredient getRepairMaterial() {
-			return this.repairMaterial.getValue();
+		public Ingredient getRepairIngredient() {
+			return this.repairMaterial.get();
 		}
 
 		@Override
@@ -191,7 +191,7 @@ public class RegUtil {
 		}
 
 		@Override
-		public float func_230304_f_() {
+		public float getKnockbackResistance() {
 			return this.knockbackResistance;
 		}
 	}
@@ -242,8 +242,8 @@ public class RegUtil {
 				public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
 					return (A) new BipedModel(slot == EquipmentSlotType.LEGS ? 0.5F : 1.0F) {
 						@Override
-						public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-							super.render(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
+						public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+							super.renderToBuffer(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
 						}
 					};
 				}

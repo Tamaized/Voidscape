@@ -35,12 +35,12 @@ public class OverlayMessageHandler {
 	private static long maxTick = 20 * 3;
 
 	static {
-		FORMAT_MAP.put(Talk.FORMAT_KEYBIND, () -> ClientListener.KEY.func_238171_j_().getString());
+		FORMAT_MAP.put(Talk.FORMAT_KEYBIND, () -> ClientListener.KEY.getTranslatedKeyMessage().getString());
 	}
 
 	public static boolean process() {
-		currentText = remainder.substring(0, Minecraft.getInstance().fontRenderer.func_238420_b_().
-				func_238352_a_(remainder, Minecraft.getInstance().getMainWindow().getScaledWidth() - 2, Style.EMPTY));
+		currentText = remainder.substring(0, Minecraft.getInstance().font.getSplitter().
+				plainIndexAtWidth(remainder, Minecraft.getInstance().getWindow().getGuiScaledWidth() - 2, Style.EMPTY));
 		remainder = remainder.substring(currentText.length());
 		if (currentText.contains("\n")) {
 			String[] temp = currentText.split("\n", 2);
@@ -48,7 +48,7 @@ public class OverlayMessageHandler {
 			remainder = temp[1].concat(remainder);
 		}
 		if (currentText.isEmpty())
-			captureTick = Objects.requireNonNull(Minecraft.getInstance().player).ticksExisted;
+			captureTick = Objects.requireNonNull(Minecraft.getInstance().player).tickCount;
 		else
 			captureText = currentText;
 		return currentText.isEmpty();
@@ -59,11 +59,11 @@ public class OverlayMessageHandler {
 		for (Map.Entry<ResourceLocation, Supplier<String>> format : FORMAT_MAP.entrySet())
 			remainder = remainder.replaceAll(Pattern.quote(Talk.format(format.getKey())), format.getValue().get());
 		process();
-		captureTick = Objects.requireNonNull(Minecraft.getInstance().player).ticksExisted;
+		captureTick = Objects.requireNonNull(Minecraft.getInstance().player).tickCount;
 	}
 
 	public static void render(MatrixStack stack, float partialTicks) {
-		World world = Minecraft.getInstance().world;
+		World world = Minecraft.getInstance().level;
 		Runnable reset = () -> {
 			currentText = "";
 			captureText = "";
@@ -77,14 +77,14 @@ public class OverlayMessageHandler {
 			if ((!data.hasStarted() && data.getState() != Turmoil.State.CONSUME) || !data.talk().isPresent())
 				reset.run();
 		}));
-		MainWindow window = Minecraft.getInstance().getMainWindow();
-		float w = window.getScaledWidth() - 1;
-		float h = window.getScaledHeight() * 0.1F;
+		MainWindow window = Minecraft.getInstance().getWindow();
+		float w = window.getGuiScaledWidth() - 1;
+		float h = window.getGuiScaledHeight() * 0.1F;
 		float x = 1;
-		float y = window.getScaledHeight() * 0.75F - h * 0.5F;
+		float y = window.getGuiScaledHeight() * 0.75F - h * 0.5F;
 		float z = 0F;
 
-		int tick = Minecraft.getInstance().player.ticksExisted;
+		int tick = Minecraft.getInstance().player.tickCount;
 		float val = captureTick == 0 ? 1 : MathHelper.clamp((tick - captureTick + partialTicks) / maxTick, 0F, 1F);
 		if (currentText.isEmpty())
 			val = 1F - val;
@@ -99,7 +99,7 @@ public class OverlayMessageHandler {
 		RenderSystem.enableAlphaTest();
 		{
 
-			BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
 
 			Consumer<RenderTurmoil.Color24> verticies = color -> {
@@ -107,20 +107,20 @@ public class OverlayMessageHandler {
 				final float g = RenderTurmoil.Color24.asFloat(color.bit16);
 				final float b = RenderTurmoil.Color24.asFloat(color.bit8);
 				final float a = RenderTurmoil.Color24.asFloat(color.bit0);
-				buffer.pos(x, y + h, z).color(r, g, b, a).tex(0F, 1F).endVertex();
-				buffer.pos(x + w, y + h, z).color(r, g, b, a).tex(1F, 1F).endVertex();
-				buffer.pos(x + w, y, z).color(r, g, b, a).tex(1F, 0F).endVertex();
-				buffer.pos(x, y, z).color(r, g, b, a).tex(0F, 0F).endVertex();
+				buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
+				buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
+				buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
+				buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
 			};
 			verticies.accept(RenderTurmoil.colorHolder.set(1F, 1F, 1F, 1F));
 
-			Minecraft.getInstance().getTextureManager().bindTexture(RenderTurmoil.TEXTURE_MASK);
+			Minecraft.getInstance().getTextureManager().bind(RenderTurmoil.TEXTURE_MASK);
 
 			final int stencilIndex = 11;
 
 			StencilBufferUtil.setup(stencilIndex, () -> {
 				RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-				Tessellator.getInstance().draw();
+				Tessellator.getInstance().end();
 				RenderSystem.defaultAlphaFunc();
 			});
 
@@ -129,16 +129,16 @@ public class OverlayMessageHandler {
 
 			StencilBufferUtil.render(stencilIndex, () -> {
 				RenderSystem.disableTexture();
-				Tessellator.getInstance().draw();
+				Tessellator.getInstance().end();
 				RenderSystem.enableTexture();
-				FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-				fontRenderer.drawString(stack,
+				FontRenderer fontRenderer = Minecraft.getInstance().font;
+				fontRenderer.draw(stack,
 
 						captureText,
 
-						x + w * 0.5F - fontRenderer.getStringWidth(captureText) * 0.5F,
+						x + w * 0.5F - fontRenderer.width(captureText) * 0.5F,
 
-						y + h * 0.5F - fontRenderer.FONT_HEIGHT * 0.5F, 0x00FFAAFF);
+						y + h * 0.5F - fontRenderer.lineHeight * 0.5F, 0x00FFAAFF);
 
 			}, true);
 		}

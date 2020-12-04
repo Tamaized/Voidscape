@@ -22,12 +22,12 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 
 	@Override
 	public void handle(@Nullable PlayerEntity player) {
-		if (player == null || player.world == null || !player.world.isRemote) {
+		if (player == null || player.level == null || !player.level.isClientSide()) {
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
 		player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.network(id).ifPresent(data -> {
-			if (data.handle(player.world.isRemote ? LogicalSide.CLIENT : LogicalSide.SERVER))
+			if (data.handle(player.level.isClientSide() ? LogicalSide.CLIENT : LogicalSide.SERVER))
 				data.read(this.data);
 		}));
 	}

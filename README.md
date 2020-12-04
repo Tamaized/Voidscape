@@ -11,5 +11,5 @@ Use the `--version` flag with the current mcp mappings version shown in `gradle.
 ## Downloads/Curseforge
 https://www.curseforge.com/minecraft/mc-mods/voidscape
 
-## Support
+## Patreon
 https://www.patreon.com/Tamaized

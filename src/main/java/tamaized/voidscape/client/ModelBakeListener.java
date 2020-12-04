@@ -101,8 +101,8 @@ public class ModelBakeListener {
 		}
 
 		@Override
-		public boolean isAmbientOcclusion() {
-			return model.isAmbientOcclusion();
+		public boolean useAmbientOcclusion() {
+			return model.useAmbientOcclusion();
 		}
 
 		@Override
@@ -111,19 +111,19 @@ public class ModelBakeListener {
 		}
 
 		@Override
-		public boolean func_230044_c_() {
-			return model.func_230044_c_();
+		public boolean usesBlockLight() {
+			return model.usesBlockLight();
 		}
 
 		@Override
-		public boolean isBuiltInRenderer() {
-			return model.isBuiltInRenderer();
+		public boolean isCustomRenderer() {
+			return model.isCustomRenderer();
 		}
 
 		@Nonnull
 		@Override
-		public TextureAtlasSprite getParticleTexture() {
-			return model.getParticleTexture();
+		public TextureAtlasSprite getParticleIcon() {
+			return model.getParticleIcon();
 		}
 
 		@Nonnull
@@ -135,8 +135,8 @@ public class ModelBakeListener {
 		@Nonnull
 		@Override
 		@SuppressWarnings("deprecation")
-		public net.minecraft.client.renderer.model.ItemCameraTransforms getItemCameraTransforms() {
-			return model.getItemCameraTransforms();
+		public net.minecraft.client.renderer.model.ItemCameraTransforms getTransforms() {
+			return model.getTransforms();
 		}
 
 

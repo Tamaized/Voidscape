@@ -15,7 +15,7 @@ public class ASMHooks {
 	 * First [ARETURN] (return null)
 	 */
 	public static PortalInfo portalInfo(Entity entity, ServerWorld world) {
-		if (Voidscape.checkForVoidDimension(entity.world) || Voidscape.checkForVoidDimension(world))
+		if (Voidscape.checkForVoidDimension(entity.level) || Voidscape.checkForVoidDimension(world))
 			return VoidTeleporter.position(entity, world);
 		return null;
 	}

@@ -33,14 +33,14 @@ public class RenderTurmoil {
 
 	@SubscribeEvent
 	public static void tick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isGamePaused() || Minecraft.getInstance().world == null)
+		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isPaused() || Minecraft.getInstance().level == null)
 			return;
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.getState() != Turmoil.State.CLOSED)
 					lastState = data.getState();
-				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().currentScreen == null)
-					Minecraft.getInstance().displayGuiScreen(new TurmoilScreen());
+				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null)
+					Minecraft.getInstance().setScreen(new TurmoilScreen());
 				if (data.getTick() <= 0)
 					deltaTick = 0;
 				else if (data.getTick() > deltaTick)
@@ -63,7 +63,7 @@ public class RenderTurmoil {
 	public static void render(RenderGameOverlayEvent.Pre event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
-		World world = Minecraft.getInstance().world;
+		World world = Minecraft.getInstance().level;
 		if (world != null && Minecraft.getInstance().player != null) {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				float perc = MathHelper.clamp(
@@ -84,15 +84,15 @@ public class RenderTurmoil {
 					RenderSystem.enableAlphaTest();
 					{
 
-						BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+						BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
 
-						MainWindow window = Minecraft.getInstance().getMainWindow();
+						MainWindow window = Minecraft.getInstance().getWindow();
 
 						float x = 0F;
 						float y = 0F;
-						float w = window.getScaledWidth();
-						float h = window.getScaledHeight();
+						float w = window.getGuiScaledWidth();
+						float h = window.getGuiScaledHeight();
 						float z = 0F;
 
 						Consumer<Color24> verticies = color -> {
@@ -100,18 +100,18 @@ public class RenderTurmoil {
 							final float g = Color24.asFloat(color.bit16);
 							final float b = Color24.asFloat(color.bit8);
 							final float a = Color24.asFloat(color.bit0);
-							buffer.pos(x, y + h, z).color(r, g, b, a).tex(0F, 1F).endVertex();
-							buffer.pos(x + w, y + h, z).color(r, g, b, a).tex(1F, 1F).endVertex();
-							buffer.pos(x + w, y, z).color(r, g, b, a).tex(1F, 0F).endVertex();
-							buffer.pos(x, y, z).color(r, g, b, a).tex(0F, 0F).endVertex();
+							buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
+							buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
+							buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
+							buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
 						};
 						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
 
-						Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_MASK);
+						Minecraft.getInstance().getTextureManager().bind(TEXTURE_MASK);
 
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> {
 							RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-							Tessellator.getInstance().draw();
+							Tessellator.getInstance().end();
 							RenderSystem.defaultAlphaFunc();
 						});
 
@@ -121,7 +121,7 @@ public class RenderTurmoil {
 
 							StencilBufferUtil.render(STENCIL_INDEX, () -> {
 								RenderSystem.disableTexture();
-								Tessellator.getInstance().draw();
+								Tessellator.getInstance().end();
 								RenderSystem.enableTexture();
 							}, true);
 						}

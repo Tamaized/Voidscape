@@ -50,7 +50,7 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(MODID, "void"));
+	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 
@@ -60,41 +60,41 @@ public class Voidscape {
 		RegUtil.register(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
-			Registry.register(Registry.field_239690_aB_, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
 			}, SubCapability.AttachedSubCap::new);
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
-				event.getServer().getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
+				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
 						then(VoidCommands.Debug.register()))
 
 		);
 		busForge.addListener((Consumer<LivingDeathEvent>) event -> {
-			if (event.getEntity() instanceof PlayerEntity && checkForVoidDimension(event.getEntity().world)) {
+			if (event.getEntity() instanceof PlayerEntity && checkForVoidDimension(event.getEntity().level)) {
 				event.setCanceled(true);
 				((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth() * 0.1F);
-				event.getEntity().changeDimension(getWorld(event.getEntity().world, World.field_234918_g_), VoidTeleporter.INSTANCE);
+				event.getEntity().changeDimension(getWorld(event.getEntity().level, World.OVERWORLD), VoidTeleporter.INSTANCE);
 			}
 		});
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			if (event.player.world != null && checkForVoidDimension(event.player.world) && event.player.ticksExisted % 30 == 0 && event.player.getRNG().nextFloat() <= 0.10F) {
+			if (event.player.level != null && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.10F) {
 				final int dist = 64;
 				final int rad = dist / 2;
-				final Supplier<Integer> exec = () -> event.player.getRNG().nextInt(dist) - rad;
-				BlockPos dest = event.player.func_233580_cy_().add(exec.get(), exec.get(), exec.get());
-				if (event.player.world.getBlockState(dest).equals(Blocks.BEDROCK.getDefaultState()))
-					event.player.world.setBlockState(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().getDefaultState());
+				final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
+				BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
+				if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
+					event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
 			}
 		});
 	}
 
 	public static boolean checkForVoidDimension(World world) {
-		return world.func_234923_W_().func_240901_a_().equals(WORLD_KEY_VOID.func_240901_a_());
+		return world.dimension().getRegistryName().equals(WORLD_KEY_VOID.getRegistryName());
 	}
 
 	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {
-		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getWorld(dest));
+		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
 	}
 
 	@Nonnull

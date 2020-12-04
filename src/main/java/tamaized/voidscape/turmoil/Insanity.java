@@ -16,8 +16,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
-		if (Voidscape.checkForVoidDimension(parent.world)) {
-			if (parent.world.rand.nextInt(50) == 0)
+		if (Voidscape.checkForVoidDimension(parent.level)) {
+			if (parent.level.random.nextInt(50) == 0)
 				paranoia++;
 		} else
 			paranoia--;

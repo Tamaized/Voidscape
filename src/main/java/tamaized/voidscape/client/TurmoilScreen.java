@@ -23,14 +23,14 @@ public class TurmoilScreen extends Screen {
 		super.init();
 		if (minecraft == null)
 			return;
-		MainWindow window = minecraft.getMainWindow();
+		MainWindow window = minecraft.getWindow();
 		final int buttonWidth = 50;
 		final int buttonHeight = 25;
 		buttons.add(new Button(
 
-				(int) (window.getScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
-				(int) (window.getScaledHeight() / 4F - buttonHeight / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
 
 				buttonWidth,
 
