@@ -22,24 +22,14 @@ public final class VoidTeleporter implements ITeleporter {
 
 	}
 
-	/**
-	 * To the dude who submitted https://github.com/MinecraftForge/MinecraftForge/pull/7296
-	 * You're a fucking dumbass
-	 * Fuck you.
-	 * Lets hope https://github.com/MinecraftForge/MinecraftForge/pull/7317 gets merged
-	 */
-	@Override
-	public boolean isVanilla() {
-		return true;
-	}
-
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}
 
-	public static PortalInfo position(Entity oldEntity, ServerWorld destWorld) {
+	@Override
+	public PortalInfo getPortalInfo(Entity oldEntity, ServerWorld destWorld, Function<ServerWorld, PortalInfo> defaultPortalInfo) {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
 			BlockPos pos = null;
 			if (oldEntity instanceof PlayerEntity)
