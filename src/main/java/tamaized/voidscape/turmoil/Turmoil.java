@@ -43,15 +43,19 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		switch (getState()) {
 			default:
 			case CLOSED:
-				if (!started)
-					if (!parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
-						setState(State.CONSUME);
-					else if (tick > 0)
-						tick -= Math.min(2, tick);
+				if (!started && !parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
+					setState(State.CONSUME);
+				if (tick > 0)
+					tick -= Math.min(2, tick);
+				break;
+			case OPENING:
+				if (tick < maxTick)
+					tick += Math.min(3, maxTick - tick);
+				else
+					setState(State.OPEN);
 				break;
 			case OPEN:
-				if (tick < maxTick)
-					tick += Math.min(4, maxTick - tick);
+				tick = maxTick;
 				break;
 			case CONSUME:
 				if (!talk().isPresent()) {
@@ -85,14 +89,17 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
-	public void action() {
-		if (!talk().isPresent() || OverlayMessageHandler.process()) {
+	public void clientAction() {
+		final boolean flag = !talk().isPresent();
+		if (flag || OverlayMessageHandler.process()) {
 			talk(null);
 			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
+			if (flag)
+				commonAction();
 		}
 	}
 
-	public void doAction(Entity parent) {
+	public void serverAction(Entity parent) {
 		if (!parent.isAlive()) {
 			boolean cache = started;
 			reset();
@@ -103,10 +110,28 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			talk.finish(parent);
 			talk(null);
 		} else if (started) {
-			if (getState() == State.CLOSED)
-				setState(State.OPEN);
-			else if (getState() == State.OPEN)
+			commonAction();
+		}
+	}
+
+	private void commonAction() {
+		switch (getState()) {
+			case CLOSED:
+				setState(State.OPENING);
+				break;
+			case OPEN:
+			case OPENING:
 				setState(State.CLOSED);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void clientHandleNewState() {
+		switch (state) {
+			default:
+				break;
 		}
 	}
 
@@ -134,7 +159,10 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void read(PacketBuffer buffer) {
+		State old = state;
 		state = State.VALUES[buffer.readVarInt()];
+		if (state != old)
+			clientHandleNewState();
 		tick = buffer.readFloat();
 		if (buffer.readBoolean())
 			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> {
@@ -213,7 +241,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public enum State {
-		CONSUME, CLOSED, OPEN, TELEPORTING, TELEPORT;
+		CONSUME, CLOSED, OPENING, OPEN, TELEPORTING, TELEPORT;
 
 		static final State[] VALUES = values();
 	}

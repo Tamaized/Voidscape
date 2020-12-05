@@ -13,7 +13,7 @@ public class ServerPacketTurmoilAction implements NetworkMessages.IMessage<Serve
 	@Override
 	public void handle(@Nullable PlayerEntity player) {
 		if (player != null)
-			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> data.doAction(player)));
+			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> data.serverAction(player)));
 	}
 
 	@Override

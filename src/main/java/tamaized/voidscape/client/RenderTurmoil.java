@@ -39,7 +39,7 @@ public class RenderTurmoil {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.getState() != Turmoil.State.CLOSED)
 					lastState = data.getState();
-				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null)
+				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null && data.getTick() >= data.getMaxTick())
 					Minecraft.getInstance().setScreen(new TurmoilScreen());
 				if (data.getTick() <= 0)
 					deltaTick = 0;
@@ -60,7 +60,7 @@ public class RenderTurmoil {
 	}
 
 	@SubscribeEvent
-	public static void render(RenderGameOverlayEvent.Pre event) {
+	public static void render(RenderGameOverlayEvent.Post event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 			return;
 		World world = Minecraft.getInstance().level;

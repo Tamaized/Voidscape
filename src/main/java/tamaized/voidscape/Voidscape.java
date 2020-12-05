@@ -90,7 +90,7 @@ public class Voidscape {
 	}
 
 	public static boolean checkForVoidDimension(World world) {
-		return world.dimension().getRegistryName().equals(WORLD_KEY_VOID.getRegistryName());
+		return world.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
 	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {

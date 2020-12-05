@@ -48,7 +48,7 @@ public class TurmoilScreen extends Screen {
 		super.onClose();
 		if (minecraft != null && minecraft.player != null)
 			minecraft.player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.action();
+				data.clientAction();
 				data.setState(Turmoil.State.CLOSED);
 			}));
 	}

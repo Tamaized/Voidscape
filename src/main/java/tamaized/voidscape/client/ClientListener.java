@@ -30,6 +30,8 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientListener {
 
+	private static boolean down = false;
+
 	public static final KeyBinding KEY = new KeyBinding(
 
 			"Summon forth your inner turmoil",
@@ -48,9 +50,12 @@ public class ClientListener {
 		MinecraftForge.EVENT_BUS.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
 			if (event.phase == TickEvent.Phase.START)
 				return;
-			if (KEY.isDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().level != null)
-				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::action));
-
+			if (!down && KEY.isDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
+				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::clientAction));
+				down = true;
+			}
+			if (!KEY.isDown())
+				down = false;
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
@@ -65,7 +70,7 @@ public class ClientListener {
 	public static void setup(FMLClientSetupEvent event) {
 		ClientRegistry.registerKeyBinding(KEY);
 		RenderTypeLookup.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
-		DimensionRenderInfo.EFFECTS.put(Voidscape.WORLD_KEY_VOID.getRegistryName(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
+		DimensionRenderInfo.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
 			@Override
 			public Vector3d getBrightnessDependentFogColor(Vector3d p_230494_1_, float p_230494_2_) {
 				return Vector3d.ZERO;
