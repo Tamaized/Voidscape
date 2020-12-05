@@ -11,6 +11,7 @@ import net.minecraft.util.SoundEvents;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
+import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.world.VoidTeleporter;
 
 import javax.annotation.Nullable;
@@ -46,11 +47,11 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				if (!started && !parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
 					setState(State.CONSUME);
 				if (tick > 0)
-					tick -= Math.min(2, tick);
+					tick -= Math.min(3, tick);
 				break;
 			case OPENING:
 				if (tick < maxTick)
-					tick += Math.min(3, maxTick - tick);
+					tick += Math.min(2.25F, maxTick - tick);
 				else
 					setState(State.OPEN);
 				break;
@@ -75,6 +76,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				}
 				break;
 			case TELEPORTING:
+				if (Voidscape.checkForVoidDimension(parent.level))
+					setState(State.CLOSED);
 				if (tick < maxTick)
 					tick += Math.min(2, maxTick - tick);
 				else
@@ -83,10 +86,14 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			case TELEPORT:
 				if (!parent.level.isClientSide() && !Voidscape.checkForVoidDimension(parent.level)) {
 					parent.changeDimension(Voidscape.getWorld(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
-					setState(State.CLOSED);
 				}
+				setState(State.CLOSED);
 				break;
 		}
+	}
+
+	public void clientTeleport() {
+		Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilTeleport());
 	}
 
 	public void clientAction() {
@@ -94,7 +101,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		if (flag || OverlayMessageHandler.process()) {
 			talk(null);
 			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
-			if (flag)
+			if (flag && started)
 				commonAction();
 		}
 	}

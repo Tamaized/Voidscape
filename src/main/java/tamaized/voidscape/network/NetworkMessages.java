@@ -7,6 +7,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.common.ClientPacketSubCapSync;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
+import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -17,6 +18,7 @@ public class NetworkMessages {
 
 	public static void register(SimpleChannel network) {
 		registerMessage(network, ServerPacketTurmoilAction.class, ServerPacketTurmoilAction::new);
+		registerMessage(network, ServerPacketTurmoilTeleport.class, ServerPacketTurmoilTeleport::new);
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 	}
 

@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -43,30 +42,23 @@ public class SubCapability {
 			if (event.getObject() instanceof LivingEntity)
 				event.addCapability(AttachedSubCap.ID, new ICapabilitySerializable() {
 
-					private LazyOptional<?> instance;
+					private ISubCap instance = CAPABILITY.getDefaultInstance();
 
 					@Nonnull
 					@Override
 					public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-						return cap == SubCapability.CAPABILITY ?
-
-								instance == null ?
-
-										(instance = LazyOptional.of(() -> Objects.requireNonNull(cap.getDefaultInstance()))).cast() :
-
-										instance.cast() :
-
-								LazyOptional.empty();
+						return CAPABILITY.orEmpty(cap, LazyOptional.of(() -> instance));
 					}
 
 					@Override
 					public INBT serializeNBT() {
-						return new CompoundNBT();
+						INBT tag = CAPABILITY.getStorage().writeNBT(CAPABILITY, instance, null);
+						return tag == null ? new CompoundNBT() : tag;
 					}
 
 					@Override
 					public void deserializeNBT(INBT nbt) {
-
+						CAPABILITY.getStorage().readNBT(CAPABILITY, instance, null, nbt);
 					}
 				});
 		});
@@ -147,7 +139,7 @@ public class SubCapability {
 			@Override
 			default INBT writeNBT(Capability<ISubCap> capability, ISubCap instance, Direction side) {
 				CompoundNBT nbt = new CompoundNBT();
-				Arrays.stream(instance.storage()).forEach(h -> nbt.put(h.id().toString(), h.write(nbt, side)));
+				Arrays.stream(instance.storage()).forEach(h -> nbt.put(h.id().toString(), h.write(new CompoundNBT(), side)));
 				return nbt;
 			}
 
