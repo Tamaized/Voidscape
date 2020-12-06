@@ -40,7 +40,7 @@ public class RenderTurmoil {
 				if (data.getState() != Turmoil.State.CLOSED)
 					lastState = data.getState();
 				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null && data.getTick() >= data.getMaxTick())
-					Minecraft.getInstance().setScreen(new TurmoilScreen());
+					Minecraft.getInstance().setScreen(new MainScreen());
 				if (data.getTick() <= 0)
 					deltaTick = 0;
 				else if (data.getTick() > deltaTick)
