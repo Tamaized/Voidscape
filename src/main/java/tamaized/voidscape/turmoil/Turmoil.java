@@ -23,9 +23,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	private float tick = 0F;
 	private float maxTick = 400;
 	private boolean dirty = false;
-	private boolean started = false;
 	private State state = State.CLOSED;
 	private Talk.Entry talk;
+	private Progression progression = Progression.None;
 
 	@Override
 	public ResourceLocation id() {
@@ -41,13 +41,17 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
+		if (!hasStarted() && isTalking())
+			talk(null);
 		switch (getState()) {
 			default:
 			case CLOSED:
-				if (!started && !parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
+				if (!hasStarted() && !parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
 					setState(State.CONSUME);
 				if (tick > 0)
 					tick -= Math.min(3, tick);
+				if (!parent.level.isClientSide() && progression == Progression.Started && Voidscape.checkForVoidDimension(parent.level) && !isTalking())
+					talk(Talk.TUTORIAL);
 				break;
 			case OPENING:
 				if (tick < maxTick)
@@ -59,7 +63,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				tick = maxTick;
 				break;
 			case CONSUME:
-				if (!talk().isPresent()) {
+				if (!isTalking()) {
 					if (parent.getY() >= 5)
 						setState(State.CLOSED);
 					else {
@@ -71,7 +75,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 								parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 1F, 1F);
 						}
 						if (tick >= maxTick && !parent.level.isClientSide())
-							talk(Talk.TEST);
+							talk(Talk.INTRO);
 					}
 				}
 				break;
@@ -97,26 +101,26 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void clientAction() {
-		final boolean flag = !talk().isPresent();
+		final boolean flag = !isTalking();
 		if (flag || OverlayMessageHandler.process()) {
 			talk(null);
 			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
-			if (flag && started)
+			if (flag && hasStarted())
 				commonAction();
 		}
 	}
 
 	public void serverAction(Entity parent) {
 		if (!parent.isAlive()) {
-			boolean cache = started;
+			Progression cache = progression;
 			reset();
-			started = cache;
+			setProgression(cache);
 			return;
 		}
 		if (talk != null) {
 			talk.finish(parent);
 			talk(null);
-		} else if (started) {
+		} else if (hasStarted()) {
 			commonAction();
 		}
 	}
@@ -135,41 +139,32 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
-	private void clientHandleNewState() {
-		switch (state) {
-			default:
-				break;
-		}
-	}
-
 	@Override
 	public CompoundNBT write(CompoundNBT nbt, Direction side) {
-		nbt.putBoolean("started", started);
+		nbt.putInt("progression", progression.ordinal());
 		return nbt;
 	}
 
 	@Override
 	public void read(CompoundNBT nbt, Direction side) {
-		started = nbt.getBoolean("started");
+		setProgression(Progression.get(nbt.getInt("progression")));
 	}
 
 	@Override
 	public void write(PacketBuffer buffer) {
+		buffer.writeVarInt(progression.ordinal());
 		buffer.writeVarInt(state.ordinal());
 		buffer.writeFloat(tick);
-		if (talk != null) {
-			buffer.writeBoolean(true);
+		boolean flag = talk != null;
+		buffer.writeBoolean(flag);
+		if (flag)
 			buffer.writeResourceLocation(talk.getId());
-		} else
-			buffer.writeBoolean(false);
 	}
 
 	@Override
 	public void read(PacketBuffer buffer) {
-		State old = state;
-		state = State.VALUES[buffer.readVarInt()];
-		if (state != old)
-			clientHandleNewState();
+		progression = Progression.get(buffer.readVarInt());
+		state = State.get(buffer.readVarInt());
 		tick = buffer.readFloat();
 		if (buffer.readBoolean())
 			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> {
@@ -185,26 +180,35 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void start() {
-		if (!started && state == State.CONSUME && tick >= maxTick) {
+		if (!hasStarted() && state == State.CONSUME && tick >= maxTick) {
 			reset();
-			started = true;
+			setProgression(Progression.Started);
 			state = State.TELEPORTING;
 		}
 	}
 
+	public Progression getProgression() {
+		return progression;
+	}
+
+	public void setProgression(Progression progression) {
+		this.progression = progression;
+		dirty = true;
+	}
+
 	public boolean hasStarted() {
-		return started;
+		return progression.ordinal() > Progression.None.ordinal();
 	}
 
 	public void reset() {
-		started = false;
+		setProgression(Progression.None);
 		talk = null;
 		state = State.CLOSED;
 		dirty = true;
 	}
 
 	public void debug() {
-		if (started || state != State.CLOSED && state != State.CONSUME)
+		if (hasStarted() || state != State.CLOSED && state != State.CONSUME)
 			reset();
 		else if (state == State.CONSUME) {
 			if (tick == maxTick)
@@ -218,7 +222,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	public void forceStart() {
 		reset();
-		started = true;
+		setProgression(Progression.Started);
 	}
 
 	public float getTick() {
@@ -242,14 +246,25 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		return Optional.ofNullable(talk);
 	}
 
+	public boolean isTalking() {
+		return talk != null;
+	}
+
 	public void talk(@Nullable Talk.Entry entry) {
 		dirty = talk != entry;
 		talk = entry;
 	}
 
 	public enum State {
-		CONSUME, CLOSED, OPENING, OPEN, TELEPORTING, TELEPORT;
+		CLOSED, CONSUME, OPENING, OPEN, TELEPORTING, TELEPORT;
 
 		static final State[] VALUES = values();
+
+		public static State get(int ordinal) {
+			if (ordinal < 0 | ordinal >= VALUES.length)
+				return CLOSED;
+			else
+				return VALUES[ordinal];
+		}
 	}
 }

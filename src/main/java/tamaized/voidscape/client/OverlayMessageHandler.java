@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 
 public class OverlayMessageHandler {
 
+	static final ResourceLocation TEXTURE_TEXT_BG = new ResourceLocation(Voidscape.MODID, "textures/ui/text.png");
+
 	private static final Map<ResourceLocation, Supplier<String>> FORMAT_MAP = new HashMap<>();
 	private static String remainder = "";
 	private static String currentText = "";
@@ -74,12 +76,12 @@ public class OverlayMessageHandler {
 			return;
 		}
 		Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-			if ((!data.hasStarted() && data.getState() != Turmoil.State.CONSUME) || !data.talk().isPresent())
+			if ((!data.hasStarted() && data.getState() != Turmoil.State.CONSUME) || (!data.isTalking() && Minecraft.getInstance().player.tickCount >= captureTick + maxTick))
 				reset.run();
 		}));
 		MainWindow window = Minecraft.getInstance().getWindow();
 		float w = window.getGuiScaledWidth() - 1;
-		float h = window.getGuiScaledHeight() * 0.1F;
+		float h = window.getGuiScaledHeight() * 0.25F;
 		float x = 1;
 		float y = window.getGuiScaledHeight() * 0.75F - h * 0.5F;
 		float z = 0F;
@@ -127,10 +129,10 @@ public class OverlayMessageHandler {
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
 			verticies.accept(RenderTurmoil.colorHolder.set(0F, 0F, 0F, 1F));
 
+			Minecraft.getInstance().getTextureManager().bind(TEXTURE_TEXT_BG);
+
 			StencilBufferUtil.render(stencilIndex, () -> {
-				RenderSystem.disableTexture();
 				Tessellator.getInstance().end();
-				RenderSystem.enableTexture();
 				FontRenderer fontRenderer = Minecraft.getInstance().font;
 				fontRenderer.draw(stack,
 

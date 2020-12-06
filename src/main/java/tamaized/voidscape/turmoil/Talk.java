@@ -14,7 +14,7 @@ public class Talk {
 
 	public static final ResourceLocation FORMAT_KEYBIND = new ResourceLocation(Voidscape.MODID, "keybind");
 
-	public static Entry TEST = new Entry(new ResourceLocation(Voidscape.MODID, "test"),
+	public static Entry INTRO = new Entry(new ResourceLocation(Voidscape.MODID, "intro"),
 
 			new TranslationTextComponent(
 
@@ -63,6 +63,18 @@ public class Talk {
 					format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start)));
+
+	public static Entry TUTORIAL = new Entry(new ResourceLocation(Voidscape.MODID, "tutorial"),
+
+			new TranslationTextComponent(
+
+					"Welcome to the Void\n" +
+
+							"Press [%1$s] to open the UI at any time",
+
+					format(FORMAT_KEYBIND)),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> data.setProgression(Progression.EnteredVoid))));
 
 	public static String format(ResourceLocation key) {
 		return "($".concat(key.toString()).concat(")");
