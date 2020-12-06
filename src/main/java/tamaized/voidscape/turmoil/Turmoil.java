@@ -128,7 +128,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	private void commonAction() {
 		switch (getState()) {
 			case CLOSED:
-				setState(State.OPENING);
+				setState(progression.ordinal() >= Progression.EnteredVoid.ordinal() ? State.OPENING : State.TELEPORTING);
 				break;
 			case OPEN:
 			case OPENING:
