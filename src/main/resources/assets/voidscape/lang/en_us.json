@@ -11,5 +11,8 @@
   "item.voidscape.voidic_crystal_helmet": "Voidic Crystal Helmet",
   "item.voidscape.voidic_crystal_chest": "Voidic Crystal Chestplate",
   "item.voidscape.voidic_crystal_legs": "Voidic Crystal Leggings",
-  "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots"
+  "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots",
+
+  "voidscape.gui.skills.level": "Level: %s",
+  "voidscape.gui.skills.points": "Points: %s"
 }

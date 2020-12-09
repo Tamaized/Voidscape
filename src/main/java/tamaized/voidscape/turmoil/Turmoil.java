@@ -1,5 +1,6 @@
 package tamaized.voidscape.turmoil;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -12,20 +13,25 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
+import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.world.VoidTeleporter;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "turmoil");
+	private final List<TurmoilSkill> skills = new ArrayList<>();
 	private float tick = 0F;
 	private float maxTick = 400;
 	private boolean dirty = false;
 	private State state = State.CLOSED;
 	private Talk.Entry talk;
 	private Progression progression = Progression.None;
+	private int level;
 
 	@Override
 	public ResourceLocation id() {
@@ -112,9 +118,10 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	public void serverAction(Entity parent) {
 		if (!parent.isAlive()) {
-			Progression cache = progression;
-			reset();
-			setProgression(cache);
+			setProgression(Progression.None);
+			talk = null;
+			state = State.CLOSED;
+			dirty = true;
 			return;
 		}
 		if (talk != null) {
@@ -142,19 +149,31 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public CompoundNBT write(CompoundNBT nbt, Direction side) {
 		nbt.putInt("progression", progression.ordinal());
+		nbt.putInt("level", level);
+		nbt.putIntArray("skills", skills.stream().mapToInt(TurmoilSkill::getID).toArray());
 		return nbt;
 	}
 
 	@Override
 	public void read(CompoundNBT nbt, Direction side) {
 		setProgression(Progression.get(nbt.getInt("progression")));
+		level = nbt.getInt("level");
+		skills.clear();
+		for (int id : nbt.getIntArray("skills")) {
+			TurmoilSkill skill = TurmoilSkill.getFromID(id);
+			if (skill != null)
+				skills.add(skill);
+		}
 	}
 
 	@Override
 	public void write(PacketBuffer buffer) {
+		buffer.writeVarInt(level);
 		buffer.writeVarInt(progression.ordinal());
 		buffer.writeVarInt(state.ordinal());
 		buffer.writeFloat(tick);
+		buffer.writeVarInt(skills.size());
+		skills.forEach(skill -> buffer.writeVarInt(skill.getID()));
 		boolean flag = talk != null;
 		buffer.writeBoolean(flag);
 		if (flag)
@@ -163,9 +182,17 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void read(PacketBuffer buffer) {
+		level = buffer.readVarInt();
 		progression = Progression.get(buffer.readVarInt());
 		state = State.get(buffer.readVarInt());
 		tick = buffer.readFloat();
+		int len = buffer.readVarInt();
+		skills.clear();
+		for (int index = 0; index < len; index++) {
+			TurmoilSkill skill = TurmoilSkill.getFromID(buffer.readVarInt());
+			if (skill != null)
+				skills.add(skill);
+		}
 		if (buffer.readBoolean())
 			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> {
 				talk = null;
@@ -204,6 +231,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		setProgression(Progression.None);
 		talk = null;
 		state = State.CLOSED;
+		level = 0;
+		skills.clear();
 		dirty = true;
 	}
 
@@ -253,6 +282,42 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	public void talk(@Nullable Talk.Entry entry) {
 		dirty = talk != entry;
 		talk = entry;
+	}
+
+	public void levelUp() {
+		level++;
+		dirty = true;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public int getPoints() {
+		return level - skills.stream().mapToInt(TurmoilSkill::getCost).sum();
+	}
+
+	public void claimSkill(@Nullable TurmoilSkill skill) {
+		if (canClaim(skill)) {
+			skills.add(skill);
+			dirty = true;
+		}
+	}
+
+	public List<TurmoilSkill> getSkills() {
+		return ImmutableList.copyOf(skills);
+	}
+
+	public boolean hasSkill(TurmoilSkill skill) {
+		return skills.contains(skill);
+	}
+
+	public boolean canClaim(@Nullable TurmoilSkill skill) {
+		if (skill == null)
+			return false;
+		int spent = skills.stream().mapToInt(TurmoilSkill::getCost).sum();
+		int points = level - spent;
+		return !skills.contains(skill) && (skill.isCore() && spent == 0 && points > 0) || (!skill.isCore() && points > skill.getCost() && skill.hasRequired(skills));
 	}
 
 	public enum State {

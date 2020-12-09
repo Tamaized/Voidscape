@@ -74,7 +74,10 @@ public class Talk {
 
 					format(FORMAT_KEYBIND)),
 
-			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> data.setProgression(Progression.EnteredVoid))));
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.setProgression(Progression.EnteredVoid);
+				data.levelUp();
+			})));
 
 	public static String format(ResourceLocation key) {
 		return "($".concat(key.toString()).concat(")");

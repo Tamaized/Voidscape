@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.progress.StartupMessageManager;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +30,7 @@ import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
+import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
 
@@ -55,6 +57,8 @@ public class Voidscape {
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 
 	public Voidscape() {
+		StartupMessageManager.addModMessage("Loading Turmoil");
+		TurmoilSkill.classload();
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus busForge = MinecraftForge.EVENT_BUS;
 		RegUtil.register(busMod);
