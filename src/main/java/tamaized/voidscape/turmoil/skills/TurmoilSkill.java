@@ -1,5 +1,6 @@
 package tamaized.voidscape.turmoil.skills;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -71,6 +72,10 @@ public class TurmoilSkill {
 
 	public boolean hasRequired(List<TurmoilSkill> others) {
 		return others.containsAll(required);
+	}
+
+	public List<TurmoilSkill> getRequired() {
+		return ImmutableList.copyOf(required);
 	}
 
 	public int getID() {
