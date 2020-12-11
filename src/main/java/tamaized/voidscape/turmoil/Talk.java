@@ -68,9 +68,7 @@ public class Talk {
 
 			new TranslationTextComponent(
 
-					"Welcome to the Void",
-
-					format(FORMAT_KEYBIND)),
+					"Welcome to the Void"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.EnteredVoid);
@@ -122,9 +120,7 @@ public class Talk {
 
 							"(As of now, there are two types of DPS, Melee Physical and a Ranged Magical)\n" +
 
-							"(You can come back to this screen at any time to spend your points)",
-
-					format(FORMAT_KEYBIND)),
+							"(You can come back to this screen at any time to spend your points)"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.PostTutorial);
