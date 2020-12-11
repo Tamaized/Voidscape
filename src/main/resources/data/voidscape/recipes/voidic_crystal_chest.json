@@ -3,7 +3,7 @@
 	"item": "voidscape:voidic_crystal_chest"
   },
   "pattern": [
-	"C C",
+	"CAC",
 	"CCC",
 	"CCC"
   ],
@@ -11,6 +11,9 @@
   "key": {
 	"C": {
 	  "item": "voidscape:voidic_crystal"
+	},
+	"A": {
+	  "item": "netherite_chestplate"
 	}
   }
 }

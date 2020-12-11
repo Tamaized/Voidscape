@@ -3,6 +3,7 @@
 	"item": "voidscape:voidic_crystal_boots"
   },
   "pattern": [
+	" A ",
 	"C C",
 	"C C"
   ],
@@ -10,6 +11,9 @@
   "key": {
 	"C": {
 	  "item": "voidscape:voidic_crystal"
+	},
+	"A": {
+	  "item": "netherite_boots"
 	}
   }
 }

@@ -4,13 +4,16 @@
   },
   "pattern": [
 	"CCC",
-	"C C",
+	"CAC",
 	"C C"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
 	"C": {
 	  "item": "voidscape:voidic_crystal"
+	},
+	"A": {
+	  "item": "netherite_leggings"
 	}
   }
 }
