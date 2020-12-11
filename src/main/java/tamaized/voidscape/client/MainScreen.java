@@ -12,6 +12,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.LazyOptional;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
+import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 
@@ -68,7 +70,12 @@ public class MainScreen extends TurmoilScreen {
 
 				new TranslationTextComponent("Voidic Powers"),
 
-				button -> minecraft.setScreen(new SkillsScreen())
+				button -> {
+					Turmoil data = getData();
+					if (data != null && data.getProgression() == Progression.MidTutorial)
+						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilProgressTutorial());
+					minecraft.setScreen(new SkillsScreen());
+				}
 
 		));
 		addButton(new Button(

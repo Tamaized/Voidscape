@@ -84,7 +84,7 @@ public class OverlayMessageHandler {
 		float h = window.getGuiScaledHeight() * 0.25F;
 		float x = 1;
 		float y = window.getGuiScaledHeight() * 0.75F - h * 0.5F;
-		float z = 0F;
+		float z = 402F; // Catch All
 
 		int tick = Minecraft.getInstance().player.tickCount;
 		float val = captureTick == 0 ? 1 : MathHelper.clamp((tick - captureTick + partialTicks) / maxTick, 0F, 1F);
@@ -127,13 +127,15 @@ public class OverlayMessageHandler {
 			});
 
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-			verticies.accept(RenderTurmoil.colorHolder.set(0F, 0F, 0F, 1F));
+			verticies.accept(RenderTurmoil.colorHolder.set(0F, 0F, 0F, 0.9F));
 
 			Minecraft.getInstance().getTextureManager().bind(TEXTURE_TEXT_BG);
 
 			StencilBufferUtil.render(stencilIndex, () -> {
 				Tessellator.getInstance().end();
 				FontRenderer fontRenderer = Minecraft.getInstance().font;
+				stack.pushPose();
+				stack.translate(0, 0, z);
 				fontRenderer.draw(stack,
 
 						captureText,
@@ -141,6 +143,7 @@ public class OverlayMessageHandler {
 						x + w * 0.5F - fontRenderer.width(captureText) * 0.5F,
 
 						y + h * 0.5F - fontRenderer.lineHeight * 0.5F, 0x00FFAAFF);
+				stack.popPose();
 
 			}, true);
 		}

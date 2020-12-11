@@ -68,15 +68,66 @@ public class Talk {
 
 			new TranslationTextComponent(
 
-					"Welcome to the Void\n" +
-
-							"Press [%1$s] to open the UI at any time",
+					"Welcome to the Void",
 
 					format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.EnteredVoid);
 				data.levelUp();
+				data.setState(Turmoil.State.OPENING);
+			})));
+
+	public static Entry TUTORIAL_GUI = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialgui"),
+
+			new TranslationTextComponent(
+
+					"This is where we can look into our inner turmoil\n" +
+
+							"We may call upon our turmoil to do various tasks\n" +
+
+							"One such task is to call upon the Void to consume us and take us back here at any time\n" +
+
+							"Another is the ability to shape our own power to our liking\n" +
+
+							"Let us shape our Voidic Powers now...\n" +
+
+							"(Press [%1$s] to open the UI at any time)",
+
+					format(FORMAT_KEYBIND)),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.setProgression(Progression.MidTutorial);
+			})));
+
+	public static Entry TUTORIAL_SKILLS = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialskills"),
+
+			new TranslationTextComponent(
+
+					"Here we can shape our power how we wish\n" +
+
+							"We can only go down a single path at a time\n" +
+
+							"Let us make our choices wisely\n" +
+
+							"(Be sure to hover over each skill and read what it does)\n" +
+
+							"(Your choices for now are permanent)\n" +
+
+							"(they can be reset at a later time as you advance through the mod)\n" +
+
+							"(You may only go down a single path at a time, there are 3 specific types of classes)\n" +
+
+							"(Damage Dealer (DPS), Tank, or a Healer)\n" +
+
+							"(As of now, there are two types of DPS, Melee Physical and a Ranged Magical)\n" +
+
+							"(You can come back to this screen at any time to spend your points)",
+
+					format(FORMAT_KEYBIND)),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.setProgression(Progression.PostTutorial);
 			})));
 
 	public static String format(ResourceLocation key) {

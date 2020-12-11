@@ -15,16 +15,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
-import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class SkillsScreen extends TurmoilScreen {
 
@@ -44,7 +41,7 @@ public class SkillsScreen extends TurmoilScreen {
 
 	@Override
 	public boolean mouseClicked(double p_231044_1_, double p_231044_3_, int p_231044_5_) {
-		setDragging(true);
+		setDragging(!isTalking());
 		return super.mouseClicked(p_231044_1_, p_231044_3_, p_231044_5_);
 	}
 
@@ -136,25 +133,6 @@ public class SkillsScreen extends TurmoilScreen {
 						forEach(b -> lines.add(Pair.of(new MutableVec2i(button.x + buttonHeight / 2, button.y + buttonHeight / 2), new MutableVec2i(b.x + buttonHeight / 2, b.y + buttonHeight / 2))));
 			}
 		});
-	}
-
-	@Nullable
-	protected final Turmoil getData() {
-		if (minecraft == null || minecraft.player == null) {
-			onClose();
-			return null;
-		}
-		Optional<SubCapability.ISubCap> cap = minecraft.player.getCapability(SubCapability.CAPABILITY).resolve();
-		if (!cap.isPresent()) {
-			onClose();
-			return null;
-		}
-		Optional<Turmoil> data = cap.get().get(Voidscape.subCapTurmoilData);
-		if (!data.isPresent()) {
-			onClose();
-			return null;
-		}
-		return data.get();
 	}
 
 	public void addSkill(Turmoil data, TurmoilSkill skill, int x, int y) {

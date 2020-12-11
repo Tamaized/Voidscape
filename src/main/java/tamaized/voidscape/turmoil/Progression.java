@@ -2,11 +2,7 @@ package tamaized.voidscape.turmoil;
 
 public enum Progression {
 
-	None,
-
-	Started,
-
-	EnteredVoid;
+	None, Started, EnteredVoid, MidTutorial, PostTutorial;
 
 	private static final Progression[] VALUES = values();
 

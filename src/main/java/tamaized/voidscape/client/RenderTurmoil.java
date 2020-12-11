@@ -24,11 +24,11 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
 
+	public static final int STENCIL_INDEX = 10;
 	static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	static final Color24 colorHolder = new Color24();
 	private static float deltaTick;
 	private static Boolean deltaPos;
-	public static final int STENCIL_INDEX = 10;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
 
 	@SubscribeEvent
@@ -75,7 +75,6 @@ public class RenderTurmoil {
 								deltaPos ? 1F - event.getPartialTicks() : event.getPartialTicks())
 
 
-
 						) / data.getMaxTick(),
 
 						0F, 1F);
@@ -93,7 +92,7 @@ public class RenderTurmoil {
 						float y = 0F;
 						float w = window.getGuiScaledWidth();
 						float h = window.getGuiScaledHeight();
-						float z = 0F;
+						float z = 401F; // Catch All
 
 						Consumer<Color24> verticies = color -> {
 							final float r = Color24.asFloat(color.bit24);
@@ -131,7 +130,8 @@ public class RenderTurmoil {
 				}
 			}));
 		}
-		OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
+		if (!(Minecraft.getInstance().screen instanceof TurmoilScreen))
+			OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
 	}
 
 	static class Color24 {

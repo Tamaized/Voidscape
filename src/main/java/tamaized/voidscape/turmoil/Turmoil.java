@@ -67,6 +67,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				break;
 			case OPEN:
 				tick = maxTick;
+				if (!parent.level.isClientSide() && getProgression() == Progression.EnteredVoid && talk == null)
+					talk(Talk.TUTORIAL_GUI);
 				break;
 			case CONSUME:
 				if (!isTalking()) {
@@ -194,9 +196,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				skills.add(skill);
 		}
 		if (buffer.readBoolean())
-			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> {
-				talk = null;
-			}).ifPresent(e -> {
+			Talk.Entry.findOrExec(buffer.readResourceLocation(), () -> talk = null).ifPresent(e -> {
 				if (talk != e) {
 					talk = e;
 					OverlayMessageHandler.start(talk);
