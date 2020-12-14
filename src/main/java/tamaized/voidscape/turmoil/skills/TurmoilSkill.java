@@ -1,7 +1,9 @@
 package tamaized.voidscape.turmoil.skills;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -16,23 +18,25 @@ public class TurmoilSkill {
 
 	private final TranslationTextComponent title;
 	private final TranslationTextComponent description;
+	private final ResourceLocation texture;
 	private final int spentPoints;
 	private final int cost;
 	private final boolean core;
 	private final List<TurmoilSkill> required = new ArrayList<>();
+	private final List<TurmoilAbility> abilities = new ArrayList<>();
+	private final boolean disabled;
 
-	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, int spentPoints, int cost, TurmoilSkill... required) {
-		this(title, desc, spentPoints, cost, false, required);
-	}
-
-	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, int spentPoints, int cost, boolean core, TurmoilSkill... required) {
+	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, ResourceLocation texture, int spentPoints, int cost, boolean core, TurmoilSkill[] required, TurmoilAbility[] abilities, boolean disabled) {
 		this.title = title;
 		this.description = desc;
+		this.texture = texture;
 		this.spentPoints = spentPoints;
 		this.cost = cost;
 		this.core = core;
 		Collections.addAll(this.required, required);
+		Collections.addAll(this.abilities, abilities);
 		id = register(this);
+		this.disabled = disabled;
 	}
 
 	private static int register(TurmoilSkill skill) {
@@ -42,7 +46,7 @@ public class TurmoilSkill {
 
 	@Nullable
 	public static TurmoilSkill getFromID(int id) {
-		return REGISTRY.get(id);
+		return id < 0 || id >= REGISTRY.size() ? null : REGISTRY.get(id);
 	}
 
 	@SuppressWarnings("unused")
@@ -56,6 +60,10 @@ public class TurmoilSkill {
 
 	public TranslationTextComponent getDescription() {
 		return description;
+	}
+
+	public ResourceLocation getTexture() {
+		return texture;
 	}
 
 	public int getSpentPoints() {
@@ -76,6 +84,10 @@ public class TurmoilSkill {
 
 	public List<TurmoilSkill> getRequired() {
 		return ImmutableList.copyOf(required);
+	}
+
+	public boolean disabled() {
+		return disabled;
 	}
 
 	public int getID() {

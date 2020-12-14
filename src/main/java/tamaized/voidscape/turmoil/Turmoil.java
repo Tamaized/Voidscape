@@ -313,7 +313,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public boolean canClaim(@Nullable TurmoilSkill skill) {
-		if (skill == null)
+		if (skill == null || skill.disabled())
 			return false;
 		int spent = skills.stream().mapToInt(TurmoilSkill::getCost).sum();
 		int points = level - spent;

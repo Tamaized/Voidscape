@@ -8,22 +8,42 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.layout.HealerSkillLayout;
+import tamaized.voidscape.client.layout.ISkillLayout;
+import tamaized.voidscape.client.layout.MeleeSkillLayout;
+import tamaized.voidscape.client.layout.TankSkillLayout;
+import tamaized.voidscape.client.layout.VoidmancerSkillLayout;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
-import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class SkillsScreen extends TurmoilScreen {
+
+	private static final List<ISkillLayout> LAYOUTS = new ArrayList<>();
+
+	static {
+		registerLayout(new TankSkillLayout());
+		registerLayout(new HealerSkillLayout());
+		registerLayout(new MeleeSkillLayout());
+		registerLayout(new VoidmancerSkillLayout());
+	}
+
+	public static void registerLayout(ISkillLayout... layouts) {
+		Collections.addAll(LAYOUTS, layouts);
+	}
 
 	private final Button.ITooltip tooltip = (button, matrixStack, x, y) -> {
 		if (button instanceof SkillButton)
@@ -59,7 +79,8 @@ public class SkillsScreen extends TurmoilScreen {
 			button.y += dragY;
 			button.active = data.canClaim(button.getSkill());
 		});
-		lines.forEach(line -> {
+		for (int offset = 0; offset < lines.size(); offset++) {
+			Pair<MutableVec2i, MutableVec2i> line = lines.get(offset);
 			line.getLeft().x += dragX;
 			line.getLeft().y += dragY;
 			line.getRight().x += dragX;
@@ -74,17 +95,17 @@ public class SkillsScreen extends TurmoilScreen {
 			float dist = MathHelper.sqrt(MathHelper.square(p2.x - p1.x) + MathHelper.square(p2.y - p1.y));
 			//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
 			for (float t = 0; t < dist + 1; t += 1F) {
-				float y = 8F * MathHelper.sin((float) Math.toRadians(t * Math.PI * 2F - minecraft.level.getGameTime() * 3F));
+				float y = 8F * MathHelper.sin((float) Math.toRadians(2F * Math.PI + offset + minecraft.level.getGameTime())) * MathHelper.sin((float) Math.toRadians(t * Math.PI * 2F - minecraft.level.getGameTime() * 3F));
 				float xRot = t * cos - y * sin + p2.x;
 				float yRot = t * sin + y * cos + p2.y;
-				buffer.vertex(xRot, yRot, 0).color(1f, 0, 0, 1f).endVertex();
+				buffer.vertex(xRot, yRot, 0).color(0.4F, 0F, 1F, 1F).endVertex();
 			}
 			//buffer.vertex(p2.x, p2.y, 0).color(1f, 0, 0, 1f).endVertex();
 			RenderSystem.disableTexture();
 			RenderSystem.lineWidth(5F);
 			Tessellator.getInstance().end();
 			RenderSystem.enableTexture();
-		});
+		}
 		dragX = dragY = 0;
 		lastX = mouseX;
 		lastY = mouseY;
@@ -104,10 +125,11 @@ public class SkillsScreen extends TurmoilScreen {
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 
-		addSkill(data, TurmoilSkills.VOIDMANCER_SKILLS.CORE, (int) (window.getGuiScaledWidth() / 2F - buttonHeight / 2F), window.getGuiScaledHeight() - buttonHeight * 2 - 10);
-		addSkill(data, TurmoilSkills.VOIDMANCER_SKILLS.TEST, (int) (window.getGuiScaledWidth() / 2F - buttonHeight / 2F + 50), window.getGuiScaledHeight() - buttonHeight * 2 - 60);
-		addSkill(data, TurmoilSkills.VOIDMANCER_SKILLS.TEST2A, (int) (window.getGuiScaledWidth() / 2F - buttonHeight / 2F + 20), window.getGuiScaledHeight() - buttonHeight * 2 - 90);
-		addSkill(data, TurmoilSkills.VOIDMANCER_SKILLS.TEST2B, (int) (window.getGuiScaledWidth() / 2F - buttonHeight / 2F + 70), window.getGuiScaledHeight() - buttonHeight * 2 - 90);
+		final int centerX = window.getGuiScaledWidth() / 2 - buttonHeight / 2;
+		final int centerY = window.getGuiScaledHeight() / 2 - buttonHeight / 2;
+
+		TriConsumer<TurmoilSkill, Integer, Integer> add = (skill, x, y) -> addSkill(data, skill, x, y);
+		LAYOUTS.forEach(layout -> layout.fill(centerX, centerY, add));
 
 		addButton(new Button(
 
@@ -142,6 +164,7 @@ public class SkillsScreen extends TurmoilScreen {
 	class SkillButton extends Button {
 
 		private final TurmoilSkill skill;
+		private final Turmoil data;
 
 		public SkillButton(Turmoil data, TurmoilSkill skill, int x, int y, int s) {
 			super(x, y, s, s, new StringTextComponent(""), button -> {
@@ -149,6 +172,8 @@ public class SkillsScreen extends TurmoilScreen {
 				Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilSkillClaim(skill.getID()));
 			}, tooltip);
 			this.skill = skill;
+			this.data = data;
+			active = !skill.disabled();
 		}
 
 		public TurmoilSkill getSkill() {
@@ -160,12 +185,29 @@ public class SkillsScreen extends TurmoilScreen {
 		}
 
 		@Override
-		public void renderButton(MatrixStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
-			super.renderButton(p_230431_1_, p_230431_2_, p_230431_3_, p_230431_4_);
+		public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+			if (minecraft == null)
+				return;
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+			final float color = isHovered() && !skill.disabled() && data.canClaim(skill) ? 1.0F : 0.25F;
+			final float activeColor = active || data.hasSkill(skill) ? color : 0.0F;
+			final float alpha = 1.0F;
+			minecraft.getTextureManager().bind(skill.getTexture());
+			Matrix4f matrix = stack.last().pose();
+			buffer.vertex(matrix, x, y, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(0, 0).endVertex();
+			buffer.vertex(matrix, x, y + height, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(0, 1).endVertex();
+			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(1, 1).endVertex();
+			buffer.vertex(matrix, x + width, y, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(1, 0).endVertex();
+			RenderSystem.enableDepthTest();
+			Tessellator.getInstance().end();
+			RenderSystem.disableDepthTest();
+			if (this.isHovered())
+				this.renderToolTip(stack, mouseX, mouseY);
 		}
 	}
 
-	class MutableVec2i {
+	static class MutableVec2i {
 		int x;
 		int y;
 
