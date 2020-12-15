@@ -289,6 +289,13 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		dirty = true;
 	}
 
+	public void setLevel(int level) {
+		if (this.level > level)
+			skills.clear();
+		this.level = level;
+		dirty = true;
+	}
+
 	public int getLevel() {
 		return level;
 	}
@@ -313,11 +320,11 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public boolean canClaim(@Nullable TurmoilSkill skill) {
-		if (skill == null || skill.disabled())
+		if (skill == null || skill.disabled() || hasSkill(skill))
 			return false;
 		int spent = skills.stream().mapToInt(TurmoilSkill::getCost).sum();
 		int points = level - spent;
-		return !skills.contains(skill) && (skill.isCore() && spent == 0 && points > 0) || (!skill.isCore() && points > skill.getCost() && skill.hasRequired(skills));
+		return (skill.isCore() && spent == 0 && points > 0) || (!skill.isCore() && points >= skill.getCost() && skill.hasRequired(skills));
 	}
 
 	public enum State {
