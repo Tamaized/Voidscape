@@ -3,6 +3,7 @@ package tamaized.voidscape.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -61,11 +62,37 @@ public class RenderTurmoil {
 
 	@SubscribeEvent
 	public static void render(RenderGameOverlayEvent.Post event) {
-		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
-			return;
 		World world = Minecraft.getInstance().level;
 		if (world != null && Minecraft.getInstance().player != null) {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE && data.hasCoreSkill()) {
+					cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
+						if (stats.getVoidicPower() < 1000) {
+							Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
+							MainWindow window = event.getWindow();
+							int x = window.getGuiScaledWidth() / 2 - 91;
+							int k = (int) (stats.getVoidicPower() / 1000F * 183.0F);
+							int l = window.getGuiScaledHeight() - 45;
+							RenderSystem.color4f(0.5F, 0F, 1F, 1F);
+							Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 64, 182, 5);
+							if (k > 0) {
+								Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 69, k, 5);
+							}
+							RenderSystem.color4f(1F, 1F, 1F, 1F);
+
+							String s = stats.getVoidicPower() + "";
+							int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2;
+							int j1 = l - 6;
+							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 + 1), (float) j1, 0);
+							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 - 1), (float) j1, 0);
+							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 + 1), 0);
+							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 - 1), 0);
+							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0x7700FF);
+						}
+					});
+				}
+				if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
+					return;
 				float perc = MathHelper.clamp(
 
 						(deltaTick + (deltaPos == null ?
@@ -114,16 +141,14 @@ public class RenderTurmoil {
 							RenderSystem.defaultAlphaFunc();
 						});
 
-						if (lastState != Turmoil.State.OPEN || true) {
-							buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-							verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
+						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
 
-							StencilBufferUtil.render(STENCIL_INDEX, () -> {
-								RenderSystem.disableTexture();
-								Tessellator.getInstance().end();
-								RenderSystem.enableTexture();
-							}, true);
-						}
+						StencilBufferUtil.render(STENCIL_INDEX, () -> {
+							RenderSystem.disableTexture();
+							Tessellator.getInstance().end();
+							RenderSystem.enableTexture();
+						}, true);
 					}
 					RenderSystem.disableAlphaTest();
 					RenderSystem.disableBlend();
