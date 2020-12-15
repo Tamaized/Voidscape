@@ -22,6 +22,10 @@ public class TurmoilAbility {
 		return cooldown;
 	}
 
+	public int getCost() {
+		return cost;
+	}
+
 	public void execute(LivingEntity caster) {
 		execute.accept(caster);
 	}

@@ -30,6 +30,7 @@ import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
+import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
@@ -55,6 +56,7 @@ public class Voidscape {
 	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
+	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
 
 	public Voidscape() {
 		StartupMessageManager.addModMessage("Loading Turmoil");
