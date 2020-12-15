@@ -47,12 +47,12 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
-		if (!hasStarted() && isTalking())
+		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
 			talk(null);
 		switch (getState()) {
 			default:
 			case CLOSED:
-				if (!hasStarted() && !parent.level.isClientSide() && parent.getY() < 5 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
+				if (!hasStarted() && !parent.level.isClientSide() && parent.getY() < 12 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
 					setState(State.CONSUME);
 				if (tick > 0)
 					tick -= Math.min(3, tick);
@@ -72,7 +72,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				break;
 			case CONSUME:
 				if (!isTalking()) {
-					if (parent.getY() >= 5)
+					if (parent.getY() >= 12)
 						setState(State.CLOSED);
 					else {
 						if (tick > 0)
