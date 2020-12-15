@@ -112,7 +112,7 @@ public class Talk {
 
 							"(Your choices for now are permanent)\n" +
 
-							"(they can be reset at a later time as you advance through the mod)\n" +
+							"(They can be reset at a later time as you advance through the mod)\n" +
 
 							"(You may only go down a single path at a time, there are 3 specific types of classes)\n" +
 
