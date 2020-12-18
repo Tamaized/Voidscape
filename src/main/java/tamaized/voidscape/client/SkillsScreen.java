@@ -69,7 +69,7 @@ public class SkillsScreen extends TurmoilScreen {
 
 	@Override
 	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
-		Turmoil data = getData();
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (data == null || minecraft == null || minecraft.level == null)
 			return;
 		if (isDragging()) {
@@ -120,7 +120,7 @@ public class SkillsScreen extends TurmoilScreen {
 	@Override
 	protected void init() {
 		super.init();
-		Turmoil data = getData();
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (minecraft == null || data == null)
 			return;
 		MainWindow window = minecraft.getWindow();

@@ -70,8 +70,8 @@ public class TurmoilScreen extends Screen {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		boolean talking = isTalking();
-		if ((keyCode == 256 || ClientListener.KEY.matches(keyCode, scanCode)) && talking) {
-			Turmoil data = getData();
+		if ((keyCode == 256 || ClientListener.KEY_TURMOIL.matches(keyCode, scanCode)) && talking) {
+			Turmoil data = getData(Voidscape.subCapTurmoilData);
 			if (data != null)
 				data.clientAction();
 		}
@@ -84,12 +84,12 @@ public class TurmoilScreen extends Screen {
 	}
 
 	protected boolean isTalking() {
-		Turmoil data = getData();
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		return data != null && data.isTalking();
 	}
 
 	@Nullable
-	protected final Turmoil getData() {
+	protected final <T extends SubCapability.ISubCap.ISubCapData> T getData(SubCapability.ISubCap.SubCapKey<T> key) {
 		if (minecraft == null || minecraft.player == null) {
 			onClose();
 			return null;
@@ -99,7 +99,7 @@ public class TurmoilScreen extends Screen {
 			onClose();
 			return null;
 		}
-		Optional<Turmoil> data = cap.get().get(Voidscape.subCapTurmoilData);
+		Optional<T> data = cap.get().get(key);
 		if (!data.isPresent()) {
 			onClose();
 			return null;

@@ -7,7 +7,9 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.common.ClientPacketSubCapSync;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
+import tamaized.voidscape.network.server.ServerPacketTurmoilActivateAbility;
 import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
+import tamaized.voidscape.network.server.ServerPacketTurmoilSetSpellBar;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 
@@ -22,6 +24,8 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketTurmoilAction.class, ServerPacketTurmoilAction::new);
 		registerMessage(network, ServerPacketTurmoilProgressTutorial.class, ServerPacketTurmoilProgressTutorial::new);
 		registerMessage(network, ServerPacketTurmoilSkillClaim.class, () -> new ServerPacketTurmoilSkillClaim(0));
+		registerMessage(network, ServerPacketTurmoilSetSpellBar.class, ServerPacketTurmoilSetSpellBar::new);
+		registerMessage(network, ServerPacketTurmoilActivateAbility.class, () -> new ServerPacketTurmoilActivateAbility(0));
 		registerMessage(network, ServerPacketTurmoilTeleport.class, ServerPacketTurmoilTeleport::new);
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 	}

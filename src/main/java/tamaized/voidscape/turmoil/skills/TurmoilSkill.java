@@ -86,6 +86,10 @@ public class TurmoilSkill {
 		return ImmutableList.copyOf(required);
 	}
 
+	public List<TurmoilAbility> getAbilities() {
+		return ImmutableList.copyOf(abilities);
+	}
+
 	public boolean disabled() {
 		return disabled;
 	}

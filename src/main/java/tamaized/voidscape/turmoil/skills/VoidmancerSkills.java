@@ -1,8 +1,10 @@
 package tamaized.voidscape.turmoil.skills;
 
+import tamaized.voidscape.turmoil.abilities.mage.MageAbilities;
+
 public class VoidmancerSkills implements ITurmoilSkills {
 
-	public final TurmoilSkill CORE = builder("core").core().build();
+	public final TurmoilSkill CORE = builder("core").core().abilities(MageAbilities.BOLT).build();
 
 	public final TurmoilSkill VOIDIC_BOND = builder("voidic_bond").required(CORE).build();
 	public final TurmoilSkill SPELLPOWER_1 = builder("spellpower_1").required(VOIDIC_BOND).build();

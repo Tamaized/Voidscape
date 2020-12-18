@@ -71,13 +71,31 @@ public class MainScreen extends TurmoilScreen {
 				new TranslationTextComponent("Voidic Powers"),
 
 				button -> {
-					Turmoil data = getData();
+					Turmoil data = getData(Voidscape.subCapTurmoilData);
 					if (data != null && data.getProgression() == Progression.MidTutorial)
 						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilProgressTutorial());
 					minecraft.setScreen(new SkillsScreen());
 				}
 
 		));
+		Button spells = new Button(
+
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
+
+				buttonWidth,
+
+				buttonHeight,
+
+				new TranslationTextComponent("Configure Voidic Spells"),
+
+				button -> minecraft.setScreen(new SpellsScreen())
+
+		);
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
+		spells.active = data != null && data.hasCoreSkill();
+		addButton(spells);
 		addButton(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),

@@ -1,5 +1,6 @@
 package tamaized.voidscape.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -19,7 +21,10 @@ import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
+import tamaized.voidscape.turmoil.TurmoilStats;
+import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
@@ -65,29 +70,43 @@ public class RenderTurmoil {
 		World world = Minecraft.getInstance().level;
 		if (world != null && Minecraft.getInstance().player != null) {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE && data.hasCoreSkill()) {
+				if (data.hasCoreSkill()) {
 					cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-						if (stats.getVoidicPower() < 1000) {
-							Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
-							MainWindow window = event.getWindow();
-							int x = window.getGuiScaledWidth() / 2 - 91;
-							int k = (int) (stats.getVoidicPower() / 1000F * 183.0F);
-							int l = window.getGuiScaledHeight() - 45;
-							RenderSystem.color4f(0.5F, 0F, 1F, 1F);
-							Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 64, 182, 5);
-							if (k > 0) {
-								Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 69, k, 5);
+						switch (event.getType()) {
+							case HOTBAR: {
+								renderSpellBar(event.getMatrixStack(), 0);
+								renderAbilityInstances(event.getMatrixStack(), stats);
+								renderAbilityActivates(event.getMatrixStack());
+								renderAbilityCooldowns(event.getMatrixStack(), stats);
 							}
-							RenderSystem.color4f(1F, 1F, 1F, 1F);
+							break;
+							case EXPERIENCE: {
+								if (stats.getVoidicPower() < 1000) {
+									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
+									MainWindow window = event.getWindow();
+									int x = window.getGuiScaledWidth() / 2 - 91;
+									int k = (int) (stats.getVoidicPower() / 1000F * 183.0F);
+									int l = window.getGuiScaledHeight() - 45;
+									RenderSystem.color4f(0.5F, 0F, 1F, 1F);
+									Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 64, 182, 5);
+									if (k > 0) {
+										Minecraft.getInstance().gui.blit(event.getMatrixStack(), x, l, 0, 69, k, 5);
+									}
+									RenderSystem.color4f(1F, 1F, 1F, 1F);
 
-							String s = stats.getVoidicPower() + "";
-							int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2;
-							int j1 = l - 6;
-							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 + 1), (float) j1, 0);
-							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 - 1), (float) j1, 0);
-							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 + 1), 0);
-							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 - 1), 0);
-							Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0x7700FF);
+									String s = stats.getVoidicPower() + "";
+									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2;
+									int j1 = l - 6;
+									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 + 1), (float) j1, 0);
+									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) (i1 - 1), (float) j1, 0);
+									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 + 1), 0);
+									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) (j1 - 1), 0);
+									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0x7700FF);
+								}
+							}
+							break;
+							default:
+								break;
 						}
 					});
 				}
@@ -157,6 +176,102 @@ public class RenderTurmoil {
 		}
 		if (!(Minecraft.getInstance().screen instanceof TurmoilScreen))
 			OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
+	}
+
+	public static void renderSpellBar(MatrixStack matrixStack, int z) {
+		Minecraft.getInstance().getTextureManager().bind(HackyInGameGUIAccessor.WIDGETS_LOCATION());
+		int w = 61;
+		int h = 22;
+		int x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - w - 2;
+		int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - ((h - 2) / 2 * 3);
+		Minecraft.getInstance().gui.setBlitOffset(-90 + z);
+		RenderSystem.color4f(1F, 1F, 1F, 0.25F);
+		RenderSystem.enableBlend();
+		for (int i = 0; i < 3; i++)
+			Minecraft.getInstance().gui.blit(matrixStack, x, y + (h - 2) * i, 0, 1, w, h);
+		RenderSystem.disableBlend();
+		RenderSystem.color4f(1F, 1F, 1F, 1F);
+	}
+
+	private static void renderAbilityInstances(MatrixStack stack, TurmoilStats stats) {
+		int s = 16;
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		for (int i = 0; i < 9; i++) {
+			TurmoilAbilityInstance instance = stats.getAbility(i);
+			if (instance == null)
+				continue;
+			int x = ox + (20) * (i % 3);
+			int y = oy + (20) * (i / 3);
+			Minecraft.getInstance().getTextureManager().bind(instance.ability().getTexture());
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			buffer.vertex(x, y, 0F).uv(0, 0).endVertex();
+			buffer.vertex(x, y + s, 0F).uv(0, 1).endVertex();
+			buffer.vertex(x + s, y + s, 0F).uv(1, 1).endVertex();
+			buffer.vertex(x + s, y, 0F).uv(1, 0).endVertex();
+			Tessellator.getInstance().end();
+		}
+	}
+
+	private static void renderAbilityActivates(MatrixStack stack) {
+		int s = 16;
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		List<KeyBinding> list = ClientListener.getAbilityKeys();
+		for (int i = 0; i < list.size(); i++) {
+			if (!list.get(i).isDown())
+				continue;
+			int x = ox + (20) * (i % 3);
+			int y = oy + (20) * (i / 3);
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			buffer.vertex(x, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
+			buffer.vertex(x, y + s, 0F).color(0F, 1F, 1F, 1F).endVertex();
+			buffer.vertex(x + s, y + s, 0F).color(0F, 1F, 1F, 1F).endVertex();
+			buffer.vertex(x + s, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
+			RenderSystem.enableBlend();
+			RenderSystem.disableTexture();
+			RenderSystem.shadeModel(GL11.GL_SMOOTH);
+			Tessellator.getInstance().end();
+			RenderSystem.shadeModel(GL11.GL_FLAT);
+			RenderSystem.enableTexture();
+			RenderSystem.disableBlend();
+		}
+	}
+
+	private static void renderAbilityCooldowns(MatrixStack stack, TurmoilStats stats) {
+		if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
+			return;
+		int s = 16;
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		for (int i = 0; i < 9; i++) {
+			TurmoilAbilityInstance instance = stats.getAbility(i);
+			if (instance == null)
+				continue;
+			float perc = instance.canAfford(Minecraft.getInstance().player) ? instance.cooldownPercent(Minecraft.getInstance().level) : 1F;
+			if (perc <= 0)
+				continue;
+			int x = ox + (20) * (i % 3);
+			int y = oy + (20) * (i / 3);
+			float offset = y + s * (1F - perc);
+			Minecraft.getInstance().getTextureManager().bind(instance.ability().getTexture());
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			buffer.vertex(x, offset, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
+			buffer.vertex(x, y + s, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
+			buffer.vertex(x + s, y + s, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
+			buffer.vertex(x + s, offset, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
+			RenderSystem.enableBlend();
+			RenderSystem.disableTexture();
+			Tessellator.getInstance().end();
+			RenderSystem.enableTexture();
+			RenderSystem.disableBlend();
+			boolean flag;
+			String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
+			Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : 0xFF7700FF);
+		}
 	}
 
 	static class Color24 {

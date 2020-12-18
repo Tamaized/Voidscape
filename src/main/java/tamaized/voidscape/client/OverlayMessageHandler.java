@@ -37,7 +37,7 @@ public class OverlayMessageHandler {
 	private static long maxTick = 20 * 3;
 
 	static {
-		FORMAT_MAP.put(Talk.FORMAT_KEYBIND, () -> ClientListener.KEY.getTranslatedKeyMessage().getString());
+		FORMAT_MAP.put(Talk.FORMAT_KEYBIND, () -> ClientListener.KEY_TURMOIL.getTranslatedKeyMessage().getString());
 	}
 
 	public static boolean process() {
