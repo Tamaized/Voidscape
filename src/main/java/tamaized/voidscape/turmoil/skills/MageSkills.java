@@ -2,7 +2,7 @@ package tamaized.voidscape.turmoil.skills;
 
 import tamaized.voidscape.turmoil.abilities.mage.MageAbilities;
 
-public class VoidmancerSkills implements ITurmoilSkills {
+public class MageSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill CORE = builder("core").core().abilities(MageAbilities.BOLT).build();
 
@@ -84,6 +84,6 @@ public class VoidmancerSkills implements ITurmoilSkills {
 
 	@Override
 	public String location() {
-		return "voidmancer";
+		return "mage";
 	}
 }

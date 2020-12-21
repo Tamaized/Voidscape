@@ -14,5 +14,9 @@
   "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots",
 
   "voidscape.gui.skills.level": "Level: %s",
-  "voidscape.gui.skills.points": "Points: %s"
+  "voidscape.gui.skills.points": "Points: %s",
+
+  "voidscape.skills.mage.core.title": "Voidmancer",
+
+  "voidscape.abilities.mage.bolt.title": "Voidic Bolt"
 }

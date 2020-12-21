@@ -20,9 +20,9 @@ import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.layout.HealerSkillLayout;
 import tamaized.voidscape.client.layout.ISkillLayout;
+import tamaized.voidscape.client.layout.MageSkillLayout;
 import tamaized.voidscape.client.layout.MeleeSkillLayout;
 import tamaized.voidscape.client.layout.TankSkillLayout;
-import tamaized.voidscape.client.layout.VoidmancerSkillLayout;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -40,7 +40,7 @@ public class SkillsScreen extends TurmoilScreen {
 		registerLayout(new TankSkillLayout());
 		registerLayout(new HealerSkillLayout());
 		registerLayout(new MeleeSkillLayout());
-		registerLayout(new VoidmancerSkillLayout());
+		registerLayout(new MageSkillLayout());
 	}
 
 	public static void registerLayout(ISkillLayout... layouts) {

@@ -1,16 +1,16 @@
 package tamaized.voidscape.client.layout;
 
 import org.apache.logging.log4j.util.TriConsumer;
+import tamaized.voidscape.turmoil.skills.MageSkills;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
-import tamaized.voidscape.turmoil.skills.VoidmancerSkills;
 
-public class VoidmancerSkillLayout implements ISkillLayout {
+public class MageSkillLayout implements ISkillLayout {
 
 	@Override
 	public void fill(int x, int y, TriConsumer<TurmoilSkill, Integer, Integer> add) {
 		y -= 50;
-		VoidmancerSkills skills = TurmoilSkills.VOIDMANCER_SKILLS;
+		MageSkills skills = TurmoilSkills.VOIDMANCER_SKILLS;
 
 		add.accept(skills.CORE, x, y);
 

@@ -82,9 +82,9 @@ public class Talk {
 
 					"This is where we can look into our inner turmoil\n" +
 
-							"We may call upon our turmoil to do various tasks\n" +
+							"We may call upon our turmoil to accomplish various tasks\n" +
 
-							"One such task is to call upon the Void to consume us and take us back here at any time\n" +
+							"One such task is to have the Void consume us and take us back here at any time\n" +
 
 							"Another is the ability to shape our own power to our liking\n" +
 
@@ -108,19 +108,19 @@ public class Talk {
 
 							"Let us make our choices wisely\n" +
 
-							"(Be sure to hover over each skill and read what it does)\n" +
+							"(This entire section is a majorly work in progress)\n" +
 
-							"(Your choices for now are permanent)\n" +
+							"(You can only claim one skill)\n" +
 
-							"(They can be reset at a later time as you advance through the mod)\n" +
+							"(This skill comes with an ability)\n" +
 
-							"(You may only go down a single path at a time, there are 3 specific types of classes)\n" +
+							"(You must slot this ability into your spell bar)\n" +
 
-							"(Damage Dealer (DPS), Tank, or a Healer)\n" +
+							"(You can find the spell bar configuration on the main ui)\n" +
 
-							"(As of now, there are two types of DPS, Melee Physical and a Ranged Magical)\n" +
+							"(Simply click, hold, and drag the ability onto any slot on the bar)\n" +
 
-							"(You can come back to this screen at any time to spend your points)"),
+							"(Check Controls for what keybinds to use or configure in order to use the spell bar)"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.PostTutorial);
