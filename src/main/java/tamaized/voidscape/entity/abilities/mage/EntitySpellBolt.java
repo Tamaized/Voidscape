@@ -32,7 +32,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	private int ticksInAir;
 
 	private float damage = 1F;
-	private double speed = 0.5D;
+	private double speed = 1D;
 	private float range = 32.0F;
 	private int maxRange = -1;
 	private Vector3d startingPoint;
@@ -147,7 +147,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		if (maxRange >= 0) {
 			if (startingPoint.distanceTo(position()) >= maxRange)
 				remove();
-		} else if (ticksInAir > 20 * 10)
+		} else if (ticksInAir > 20 * 5)
 			remove();
 
 		if (!level.isClientSide())
@@ -157,8 +157,18 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 				onHit(e);
 			}
 
-		moveTo(getX() + getDeltaMovement().x * speed, getY() + getDeltaMovement().y * speed, getZ() + getDeltaMovement().z * speed);
+		float f1 = 0.99F;
 		float f4 = MathHelper.sqrt(getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z);
+
+		if (isInWater()) {
+			for (int l = 0; l < 4; ++l) {
+				f4 = 0.25F;
+				level.addParticle(ParticleTypes.BUBBLE, getX() - getDeltaMovement().x * (double) f4, getY() - getDeltaMovement().y * (double) f4, getZ() - getDeltaMovement().z * (double) f4, getDeltaMovement().x, getDeltaMovement().y, getDeltaMovement().z);
+			}
+			f1 = 0.6F;
+		}
+
+		moveTo(getX() + getDeltaMovement().x * speed * f1, getY() + getDeltaMovement().y * speed * f1, getZ() + getDeltaMovement().z * speed * f1);
 		yRot = (float) (Math.atan2(getDeltaMovement().x, getDeltaMovement().z) * (180.0D / Math.PI));
 
 		xRot = (float) (MathHelper.atan2(getDeltaMovement().y, (double) f4) * (180D / Math.PI));
@@ -180,24 +190,14 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 		xRot = xRotO + (xRot - xRotO) * 0.2F;
 		yRot = yRotO + (yRot - yRotO) * 0.2F;
-		float f1 = 0.99F;
-		float f2 = range;
-
-		if (isInWater()) {
-			remove();
-			for (int l = 0; l < 4; ++l) {
-				f4 = 0.25F;
-				level.addParticle(ParticleTypes.BUBBLE, getX() - getDeltaMovement().x * (double) f4, getY() - getDeltaMovement().y * (double) f4, getZ() - getDeltaMovement().z * (double) f4, getDeltaMovement().x, getDeltaMovement().y, getDeltaMovement().z);
-			}
-			f1 = 0.6F;
-		}
 
 		if (isInWaterOrRain())
 			clearFire();
 
-		setDeltaMovement(getDeltaMovement().x * (double) f1, getDeltaMovement().y * (double) f1 - (double) f2, getDeltaMovement().z * (double) f1);
 		moveTo(getX(), getY(), getZ());
 		checkInsideBlocks();
+		if (level.isClientSide() && tickCount % 3 == 0)
+			level.addParticle(ParticleTypes.WITCH, getX() - 0.3F + random.nextFloat() * 0.6F, getY() - 0.3F + random.nextFloat() * 0.6F, getZ() - 0.3F + random.nextFloat() * 0.6F, 0, -2, 0);
 	}
 
 	protected DamageSource getDamageSource(LivingEntity attacker) {

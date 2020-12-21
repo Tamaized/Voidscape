@@ -12,6 +12,7 @@ import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,12 +55,25 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public CompoundNBT write(CompoundNBT nbt, Direction side) {
+		nbt.putIntArray("slots", Arrays.stream(slots).mapToInt(slot -> slot == null ? -1 : slot.ability().id()).toArray());
 		return nbt;
 	}
 
 	@Override
 	public void read(CompoundNBT nbt, Direction side) {
-
+		int[] s = nbt.getIntArray("slots");
+		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
+		for (int i = 0; i < s.length; i++) {
+			TurmoilAbility ability = TurmoilAbility.getFromID(s[i]);
+			if (ability == null)
+				slots[i] = null;
+			else {
+				if (!cache.containsKey(ability))
+					cache.put(ability, new TurmoilAbilityInstance(ability));
+				slots[i] = cache.get(ability);
+			}
+		}
+		dirty = true;
 	}
 
 	@Override

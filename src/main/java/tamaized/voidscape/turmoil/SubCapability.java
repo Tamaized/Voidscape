@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,17 +64,16 @@ public class SubCapability {
 					}
 				});
 		});
-		MinecraftForge.EVENT_BUS.addListener(
+		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event ->
 
-				(Consumer<LivingEvent.LivingUpdateEvent>) event ->
+				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap ->
 
-						event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap ->
+						Arrays.stream(cap.tickers()).forEach(t ->
 
-								Arrays.stream(cap.tickers()).forEach(t ->
-
-										t.tick(event.getEntity())))
+								t.tick(event.getEntity())))
 
 		);
+		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(cap::clone)));
 	}
 
 	public interface ISubCap {
@@ -82,6 +83,8 @@ public class SubCapability {
 		ISubCapData.ITickHandler[] tickers();
 
 		ISubCapData.IStorageHandler[] storage();
+
+		void clone(ISubCap old);
 
 		Optional<ISubCapData.INetworkHandler> network(ResourceLocation id);
 
@@ -193,6 +196,18 @@ public class SubCapability {
 		@Override
 		public ISubCapData.IStorageHandler[] storage() {
 			return instances.values().stream().filter(ISubCapData.IStorageHandler.class::isInstance).map(ISubCapData.IStorageHandler.class::cast).toArray(ISubCapData.IStorageHandler[]::new);
+		}
+
+		@Override
+		public void clone(ISubCap old) {
+			CompoundNBT nbt = new CompoundNBT();
+			List<Direction> sides = new ArrayList<>();
+			sides.add(null);
+			Collections.addAll(sides, Direction.values());
+			sides.forEach(side -> {
+				Arrays.stream(old.storage()).forEach(h -> nbt.put(h.id().toString(), h.write(new CompoundNBT(), side)));
+				Arrays.stream(storage()).forEach(h -> h.read(nbt.getCompound(h.id().toString()), side));
+			});
 		}
 
 		@Override
