@@ -3,6 +3,8 @@ package tamaized.voidscape;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +16,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -25,7 +29,9 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.voidscape.network.NetworkMessages;
+import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -92,6 +98,23 @@ public class Voidscape {
 				if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
 					event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
 			}
+		});
+		busForge.addListener((Consumer<AttackEntityEvent>) event -> {
+			LivingEntity attacker = event.getEntityLiving();
+			Entity target = event.getTarget();
+			if (target.isAttackable()) {
+				if (!target.skipAttackInteraction(attacker)) {
+					float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+					if (dmg > 0) {
+						target.invulnerableTime = 0;
+						target.hurt(ModDamageSource.SOURCE_VOIDIC.apply(attacker), dmg);
+					}
+				}
+			}
+		});
+		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
+			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
+				event.setAmount((float) Math.min(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 		});
 	}
 

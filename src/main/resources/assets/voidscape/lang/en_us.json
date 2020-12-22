@@ -13,6 +13,10 @@
   "item.voidscape.voidic_crystal_legs": "Voidic Crystal Leggings",
   "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots",
 
+  "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
+  "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
+  "voidscape.attribute.voidic_dmg": "Voidic Damage",
+
   "voidscape.gui.skills.level": "Level: %s",
   "voidscape.gui.skills.points": "Points: %s",
 

@@ -201,7 +201,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	protected DamageSource getDamageSource(LivingEntity attacker) {
-		return ModDamageSource.VOIDIC.apply(attacker);
+		return ModDamageSource.SOURCE_VOIDIC.apply(attacker);
 	}
 
 	@Override
