@@ -149,7 +149,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, Direction side) {
+	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
 		nbt.putInt("progression", progression.ordinal());
 		nbt.putInt("level", level);
 		nbt.putIntArray("skills", skills.stream().mapToInt(TurmoilSkill::getID).toArray());
@@ -157,7 +157,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, Direction side) {
+	public void read(CompoundNBT nbt, @Nullable Direction side) {
 		setProgression(Progression.get(nbt.getInt("progression")));
 		level = nbt.getInt("level");
 		skills.clear();
@@ -289,15 +289,15 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		dirty = true;
 	}
 
+	public int getLevel() {
+		return level;
+	}
+
 	public void setLevel(int level) {
 		if (this.level > level)
 			skills.clear();
 		this.level = level;
 		dirty = true;
-	}
-
-	public int getLevel() {
-		return level;
 	}
 
 	public int getPoints() {
@@ -329,6 +329,12 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		int spent = skills.stream().mapToInt(TurmoilSkill::getCost).sum();
 		int points = level - spent;
 		return (skill.isCore() && spent == 0 && points > 0) || (!skill.isCore() && points >= skill.getCost() && skill.hasRequired(skills));
+	}
+
+	@Override
+	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
+		if (old instanceof Turmoil)
+			read(((Turmoil) old).write(new CompoundNBT(), null), null);
 	}
 
 	public enum State {

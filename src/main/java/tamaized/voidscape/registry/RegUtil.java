@@ -37,9 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RegUtil {
+
+	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
 
 	public static final ItemGroup CREATIVE_TAB = new ItemGroup(Voidscape.MODID.concat(".item_group")) {
 		@Override
@@ -65,6 +68,17 @@ public class RegUtil {
 		DeferredRegister<R> def = DeferredRegister.create(type, Voidscape.MODID);
 		REGISTERS.add(def);
 		return def;
+	}
+
+	static Function<Integer, Multimap<Attribute, AttributeModifier>> makeAttributeFactory(AttributeData... data) {
+		return (slot) -> {
+			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+			for (AttributeData attribute : data) {
+				ModAttribute a = attribute.attribute.get();
+				builder.put(a, new AttributeModifier(slot == null ? a.id : ARMOR_MODIFIER_UUID_PER_SLOT[slot], a.type, attribute.value, attribute.op));
+			}
+			return builder.build();
+		};
 	}
 
 	enum ItemProps {
@@ -205,89 +219,89 @@ public class RegUtil {
 
 	static class ToolAndArmorHelper {
 
-		static RegistryObject<Item> sword(ItemTier tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> sword(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_sword"), () -> new SwordItem(tier, 3, -2.4F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(null));
 					return map.build();
 				}
 			});
 		}
 
-		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new AxeItem(tier, 5F, -3.0F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(null));
 					return map.build();
 				}
 			});
 		}
 
-		static RegistryObject<Item> pickaxe(ItemTier tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> pickaxe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_pickaxe"), () -> new PickaxeItem(tier, 1, -2.8F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(null));
 					return map.build();
 				}
 			});
 		}
 
-		static RegistryObject<Item> shovel(ItemTier tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> shovel(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shovel"), () -> new ShovelItem(tier, 1.5F, -3.0F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(null));
 					return map.build();
 				}
 			});
 		}
 
-		static RegistryObject<Item> hoe(ItemTier tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> hoe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_hoe"), () -> new HoeItem(tier, -3, 0.0F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(null));
 					return map.build();
 				}
 			});
 		}
 
-		static RegistryObject<Item> helmet(ArmorMaterial tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> helmet(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_helmet"), armorFactory(tier, EquipmentSlotType.HEAD, properties, factory));
 		}
 
-		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlotType.CHEST, properties, factory));
 		}
 
-		static RegistryObject<Item> legs(ArmorMaterial tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> legs(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_legs"), armorFactory(tier, EquipmentSlotType.LEGS, properties, factory));
 		}
 
-		static RegistryObject<Item> boots(ArmorMaterial tier, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		static RegistryObject<Item> boots(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlotType.FEET, properties, factory));
 		}
 
 		@SuppressWarnings("unchecked")
-		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlotType slot, Item.Properties properties, Supplier<Multimap<Attribute, AttributeModifier>> factory) {
+		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlotType slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return () -> new ArmorItem(tier, slot, properties) {
 
 				@Override
@@ -295,7 +309,7 @@ public class RegUtil {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == slot)
-						map.putAll(factory.get());
+						map.putAll(factory.apply(equipmentSlot.getIndex()));
 					return map.build();
 				}
 
@@ -317,9 +331,9 @@ public class RegUtil {
 
 	static class ModAttribute extends Attribute {
 		final UUID id;
-		final AttributeType type;
+		final String type;
 
-		ModAttribute(String name, float defaultValue, UUID id, AttributeType type) {
+		ModAttribute(String name, float defaultValue, UUID id, String type) {
 			super(name, defaultValue);
 			this.id = id;
 			this.type = type;
@@ -340,26 +354,6 @@ public class RegUtil {
 		static AttributeData make(Supplier<ModAttribute> attribute, AttributeModifier.Operation op, double value) {
 			return new AttributeData(attribute, op, value);
 		}
-	}
-
-	enum AttributeType {
-		TOOL("Tool modifier"), ARMOR("Armor modifier");
-		String name;
-
-		AttributeType(String name) {
-			this.name = name;
-		}
-	}
-
-	static Supplier<Multimap<Attribute, AttributeModifier>> makeAttributeFactory(AttributeData... data) {
-		return () -> {
-			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-			for (AttributeData attribute : data) {
-				ModAttribute a = attribute.attribute.get();
-				builder.put(a, new AttributeModifier(a.id, a.type.name, attribute.value, attribute.op));
-			}
-			return builder.build();
-		};
 	}
 
 }

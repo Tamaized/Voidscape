@@ -25,6 +25,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	private int voidicPower = 0;
 	private int nullPower = 0;
 	private int insanePower = 0;
+
 	private int spellpower = 0;
 	private int rechargeRate = 0;
 	private int cooldown = 0;
@@ -54,13 +55,13 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, Direction side) {
+	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
 		nbt.putIntArray("slots", Arrays.stream(slots).mapToInt(slot -> slot == null ? -1 : slot.ability().id()).toArray());
 		return nbt;
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, Direction side) {
+	public void read(CompoundNBT nbt, @Nullable Direction side) {
 		int[] s = nbt.getIntArray("slots");
 		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
 		for (int i = 0; i < s.length; i++) {
@@ -174,4 +175,16 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
+	@Override
+	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
+		if (old instanceof TurmoilStats) {
+			TurmoilStats o = (TurmoilStats) old;
+			System.arraycopy(o.slots, 0, slots, 0, slots.length);
+			if (!death) {
+				voidicPower = o.voidicPower;
+				nullPower = o.nullPower;
+				insanePower = o.insanePower;
+			}
+		}
+	}
 }

@@ -26,7 +26,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class SubCapability {
 								t.tick(event.getEntity())))
 
 		);
-		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(cap::clone)));
+		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()))));
 	}
 
 	public interface ISubCap {
@@ -84,11 +83,13 @@ public class SubCapability {
 
 		ISubCapData.IStorageHandler[] storage();
 
-		void clone(ISubCap old);
+		void clone(ISubCap old, boolean death);
 
 		Optional<ISubCapData.INetworkHandler> network(ResourceLocation id);
 
 		interface ISubCapData {
+
+			void clone(ISubCapData old, boolean death);
 
 			interface ITickHandler extends ISubCapData {
 
@@ -104,9 +105,9 @@ public class SubCapability {
 
 			interface IStorageHandler extends IHasID {
 
-				CompoundNBT write(CompoundNBT nbt, Direction side);
+				CompoundNBT write(CompoundNBT nbt, @Nullable Direction side);
 
-				void read(CompoundNBT nbt, Direction side);
+				void read(CompoundNBT nbt, @Nullable Direction side);
 
 			}
 
@@ -140,14 +141,14 @@ public class SubCapability {
 
 			@Nullable
 			@Override
-			default INBT writeNBT(Capability<ISubCap> capability, ISubCap instance, Direction side) {
+			default INBT writeNBT(Capability<ISubCap> capability, ISubCap instance, @Nullable Direction side) {
 				CompoundNBT nbt = new CompoundNBT();
 				Arrays.stream(instance.storage()).forEach(h -> nbt.put(h.id().toString(), h.write(new CompoundNBT(), side)));
 				return nbt;
 			}
 
 			@Override
-			default void readNBT(Capability<ISubCap> capability, ISubCap instance, Direction side, INBT nbt) {
+			default void readNBT(Capability<ISubCap> capability, ISubCap instance, @Nullable Direction side, INBT nbt) {
 				if (nbt.getId() == Constants.NBT.TAG_COMPOUND)
 					Arrays.stream(instance.storage()).forEach(h -> h.read(((CompoundNBT) nbt).getCompound(h.id().toString()), side));
 			}
@@ -199,15 +200,8 @@ public class SubCapability {
 		}
 
 		@Override
-		public void clone(ISubCap old) {
-			CompoundNBT nbt = new CompoundNBT();
-			List<Direction> sides = new ArrayList<>();
-			sides.add(null);
-			Collections.addAll(sides, Direction.values());
-			sides.forEach(side -> {
-				Arrays.stream(old.storage()).forEach(h -> nbt.put(h.id().toString(), h.write(new CompoundNBT(), side)));
-				Arrays.stream(storage()).forEach(h -> h.read(nbt.getCompound(h.id().toString()), side));
-			});
+		public void clone(ISubCap old, boolean death) {
+			instances.forEach((k, v) -> old.get(k).ifPresent(o -> v.clone(o, death)));
 		}
 
 		@Override
