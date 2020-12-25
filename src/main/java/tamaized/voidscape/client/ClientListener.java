@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -96,6 +97,10 @@ public class ClientListener {
 				event.setRed(0.04F);
 				event.setGreen(0.03F);
 				event.setBlue(0.05F);
+				if (Minecraft.getInstance().player != null)
+					Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
+						event.setRed(MathHelper.clamp(data.getParanoia() / 1200F, 0.04F, 1F));
+					}));
 			}
 		});
 	}

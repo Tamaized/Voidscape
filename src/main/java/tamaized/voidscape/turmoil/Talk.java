@@ -68,7 +68,23 @@ public class Talk {
 
 			new TranslationTextComponent(
 
-					"Welcome to the Void"),
+					"Welcome to the Void\n" +
+
+							"Tread carefully, the landscape is very... chaotic\n" +
+
+							"We wouldn't want to fall into the abyss would we?\n" +
+
+							"Be aware, while a material mortal such as us treads in this ethereal land...\n" +
+
+							"Various effects will take place, both in Mind and Body\n" +
+
+							"While we linger, our essence is spread onto the rock beneath us\n" +
+
+							"This essence forms crystal. This crystal is useful for us\n" +
+
+							"Covering ourselves in it we can slow the voidic decay\n" +
+
+							"Move quickly before our body completely deteriorates!"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.EnteredVoid);
@@ -124,6 +140,35 @@ public class Talk {
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.PostTutorial);
+			})));
+
+	public static Entry CORRUPT_PHANTOM = new Entry(new ResourceLocation(Voidscape.MODID, "corruptphantom"),
+
+			new TranslationTextComponent(
+
+					"The Corrupted Pawn\n" +
+
+							"One of Xia's misguided henchmen\n" +
+
+							"We only bore witness to its Phantom\n" +
+
+							"It uses this form to banish outsiders back to their own Realm\n" +
+
+							"It may only manifest in the minds of complete insanity\n" +
+
+							"Infact its a great contributor to the maddening effects of the Void\n" +
+
+							"Slay its true form and we may explore further in the Void\n" +
+
+							"Our Turmoil can take us directly to the beast\n" +
+
+							"This wont be easy, come prepared\n " +
+
+							"Let us improve our Voidic Powers first..."),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.setProgression(Progression.CorruptPawnPre);
+				data.levelUp();
 			})));
 
 	public static String format(ResourceLocation key) {

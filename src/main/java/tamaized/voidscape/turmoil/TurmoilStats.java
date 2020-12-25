@@ -37,6 +37,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
+		if (parent.tickCount % 20 * 10 == 0)
+			dirty = true;
 		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayerEntity) {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;

@@ -90,7 +90,7 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.10F) {
+			if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.20F) {
 				final int dist = 64;
 				final int rad = dist / 2;
 				final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;

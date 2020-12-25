@@ -63,25 +63,32 @@ public class SubCapability {
 					}
 				});
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event ->
-
-				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap ->
-
-						Arrays.stream(cap.tickers()).forEach(t ->
-
-								t.tick(event.getEntity())))
-
-		);
+		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+			Arrays.stream(cap.tickers()).forEach(t -> t.tick(event.getEntity()));
+			if (event.getEntity() instanceof ServerPlayerEntity) {
+				if (cap.getLastWorld() != event.getEntity().level.dimension().location()) {
+					Arrays.stream(cap.network()).forEach(n -> n.sendToClient((ServerPlayerEntity) event.getEntity()));
+					cap.setLastWorld(event.getEntity().level.dimension().location());
+				}
+			}
+		}));
 		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()))));
 	}
 
 	public interface ISubCap {
+
+		@Nullable
+		ResourceLocation getLastWorld();
+
+		void setLastWorld(ResourceLocation level);
 
 		<C extends ISubCapData> Optional<C> get(SubCapKey<C> key);
 
 		ISubCapData.ITickHandler[] tickers();
 
 		ISubCapData.IStorageHandler[] storage();
+
+		ISubCapData.INetworkHandler[] network();
 
 		void clone(ISubCap old, boolean death);
 
@@ -173,6 +180,8 @@ public class SubCapability {
 		private static final List<SubCapKey<?>> REGISTRY = new ArrayList<>();
 		private final Map<SubCapKey<?>, ISubCapData> instances = new HashMap<>();
 
+		private ResourceLocation level;
+
 		{
 			REGISTRY.forEach(key -> instances.putIfAbsent(key, key.factory.get()));
 		}
@@ -181,6 +190,17 @@ public class SubCapability {
 			SubCapKey<C> key = new SubCapKey<>(cast, factory);
 			REGISTRY.add(key);
 			return key;
+		}
+
+		@Nullable
+		@Override
+		public ResourceLocation getLastWorld() {
+			return level;
+		}
+
+		@Override
+		public void setLastWorld(ResourceLocation level) {
+			this.level = level;
 		}
 
 		@Override
@@ -197,6 +217,11 @@ public class SubCapability {
 		@Override
 		public ISubCapData.IStorageHandler[] storage() {
 			return instances.values().stream().filter(ISubCapData.IStorageHandler.class::isInstance).map(ISubCapData.IStorageHandler.class::cast).toArray(ISubCapData.IStorageHandler[]::new);
+		}
+
+		@Override
+		public ISubCapData.INetworkHandler[] network() {
+			return instances.values().stream().filter(ISubCapData.INetworkHandler.class::isInstance).map(ISubCapData.INetworkHandler.class::cast).toArray(ISubCapData.INetworkHandler[]::new);
 		}
 
 		@Override

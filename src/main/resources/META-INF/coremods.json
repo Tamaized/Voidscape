@@ -1,3 +1,4 @@
 {
-  "attributes": "META-INF/asm/attributes.js"
+  "attributes": "META-INF/asm/attributes.js",
+  "entityalpha": "META-INF/asm/entityalpha.js"
 }

@@ -58,6 +58,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 					tick -= Math.min(3, tick);
 				if (!parent.level.isClientSide() && progression == Progression.Started && Voidscape.checkForVoidDimension(parent.level) && !isTalking())
 					talk(Talk.TUTORIAL);
+				if (!parent.level.isClientSide() && progression == Progression.CorruptPhantom && !Voidscape.checkForVoidDimension(parent.level) && !isTalking())
+					talk(Talk.CORRUPT_PHANTOM);
 				break;
 			case OPENING:
 				if (tick < maxTick)

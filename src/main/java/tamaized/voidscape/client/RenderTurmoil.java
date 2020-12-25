@@ -34,6 +34,7 @@ public class RenderTurmoil {
 	public static final int STENCIL_INDEX = 10;
 	static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	static final ResourceLocation TEXTURE_VOIDICINFUSION = new ResourceLocation(Voidscape.MODID, "textures/ui/voidicinfusion.png");
+	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
 	static final Color24 colorHolder = new Color24();
 	private static float deltaTick;
 	private static Boolean deltaPos;
@@ -114,7 +115,7 @@ public class RenderTurmoil {
 				}
 				if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 					return;
-				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInfusion(insanity, event.getMatrixStack(), event.getPartialTicks()));
+				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(insanity, event.getMatrixStack(), event.getPartialTicks()));
 				float perc = MathHelper.clamp(
 
 						(deltaTick + (deltaPos == null ?
@@ -181,6 +182,37 @@ public class RenderTurmoil {
 			OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
 	}
 
+	private static void renderInsanity(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+		renderInfusion(insanity, matrixStack, partialTicks);
+		renderParanoia(insanity, matrixStack, partialTicks);
+	}
+
+	private static void renderParanoia(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+		if (insanity.getParanoia() < 500F)
+			return;
+		float perc = (insanity.getParanoia() - 500F) / 90F;
+		perc = MathHelper.clamp(perc, 0, 1);
+		perc *= 0.25F;
+		float endPerc = (insanity.getParanoia() - 590F) / 10F;
+		endPerc = MathHelper.clamp(endPerc, 0, 1);
+		endPerc *= 0.25F;
+		perc += endPerc;
+		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+		Minecraft.getInstance().getTextureManager().bind(TEXTURE_WATCHINGYOU);
+		final float w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		final float h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+		buffer.vertex(0, h, 0).color(1F, 1F, 1F, perc).uv(0, 1).endVertex();
+		buffer.vertex(w, h, 0).color(1F, 1F, 1F, perc).uv(1, 1).endVertex();
+		buffer.vertex(w, 0, 0).color(1F, 1F, 1F, perc).uv(1, 0).endVertex();
+		buffer.vertex(0, 0, 0).color(1F, 1F, 1F, perc).uv(0, 0).endVertex();
+		RenderSystem.enableBlend();
+		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+		Tessellator.getInstance().end();
+		RenderSystem.defaultAlphaFunc();
+		RenderSystem.disableBlend();
+	}
+
 	private static void renderInfusion(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
 		if (insanity.getInfusion() <= 0)
 			return;
@@ -191,12 +223,14 @@ public class RenderTurmoil {
 		Minecraft.getInstance().getTextureManager().bind(TEXTURE_VOIDICINFUSION);
 		final float w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		final float h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		buffer.vertex(0, h, 0).color(1F, 1F, 1F, perc).uv(0, 1).endVertex();
-		buffer.vertex(w, h, 0).color(1F, 1F, 1F, perc).uv(1, 1).endVertex();
-		buffer.vertex(w, 0, 0).color(1F, 1F, 1F, perc).uv(1, 0).endVertex();
-		buffer.vertex(0, 0, 0).color(1F, 1F, 1F, perc).uv(0, 0).endVertex();
+		buffer.vertex(0, h, 0).color(0.4F, 0F, 1F, perc).uv(0, 1).endVertex();
+		buffer.vertex(w, h, 0).color(0.4F, 0F, 1F, perc).uv(1, 1).endVertex();
+		buffer.vertex(w, 0, 0).color(0.4F, 0F, 1F, perc).uv(1, 0).endVertex();
+		buffer.vertex(0, 0, 0).color(0.4F, 0F, 1F, perc).uv(0, 0).endVertex();
 		RenderSystem.enableBlend();
+		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
 		Tessellator.getInstance().end();
+		RenderSystem.defaultAlphaFunc();
 		RenderSystem.disableBlend();
 	}
 
