@@ -9,6 +9,7 @@ import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface ITurmoilSkills {
 
@@ -28,6 +29,7 @@ public interface ITurmoilSkills {
 		private boolean core = false;
 		private List<TurmoilSkill> required = new ArrayList<>();
 		private List<TurmoilAbility> abilities = new ArrayList<>();
+		private TurmoilSkill.Stats.Builder stats = TurmoilSkill.Stats.Builder.begin();
 		private boolean disabled;
 
 		private Builder(String loc, String name) {
@@ -65,6 +67,11 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
+		Builder stats(Consumer<TurmoilSkill.Stats.Builder> exec) {
+			exec.accept(stats);
+			return this;
+		}
+
 		Builder disabled() {
 			disabled = true;
 			return this;
@@ -75,7 +82,7 @@ public interface ITurmoilSkills {
 		}
 
 		TurmoilSkill build() {
-			return new TurmoilSkill(format(loc, name.concat(".title")), format(loc, name.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), disabled);
+			return new TurmoilSkill(format(loc, name.concat(".title")), format(loc, name.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), stats.build(), disabled);
 		}
 
 	}

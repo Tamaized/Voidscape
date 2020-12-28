@@ -19,6 +19,16 @@ public final class TurmoilAbilityInstance {
 		this.ability = ability;
 	}
 
+	public static TurmoilAbilityInstance decode(PacketBuffer packet) {
+		TurmoilAbility ability = TurmoilAbility.getFromID(packet.readVarInt());
+		long data = packet.readLong();
+		if (ability == null)
+			return null;
+		TurmoilAbilityInstance instance = new TurmoilAbilityInstance(ability);
+		instance.lastCast = data;
+		return instance;
+	}
+
 	public TurmoilAbility ability() {
 		return ability;
 	}
@@ -32,7 +42,7 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public boolean canAfford(LivingEntity caster) {
-		return caster.getCapability(SubCapability.CAPABILITY).map(resolve -> resolve.get(Voidscape.subCapTurmoilStats).map(stats -> stats.getVoidicPower() >= getCalcCost(stats)).get()).orElse(false);
+		return caster.getCapability(SubCapability.CAPABILITY).map(resolve -> resolve.get(Voidscape.subCapTurmoilStats).map(stats -> TurmoilAbility.getPower(stats, ability.costType()) >= getCalcCost(stats)).get()).orElse(false);
 	}
 
 	public boolean canExecute(LivingEntity caster) {
@@ -43,7 +53,7 @@ public final class TurmoilAbilityInstance {
 		if (!canExecute(caster))
 			return;
 		Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilActivateAbility(slot));
-		stats.setVoidicPower(stats.getVoidicPower() - getCalcCost(stats));
+		TurmoilAbility.drainPower(stats, ability.costType(), getCalcCost(stats));
 		putOnCooldown(caster);
 	}
 
@@ -52,7 +62,7 @@ public final class TurmoilAbilityInstance {
 			return;
 		ability.execute(caster);
 		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-			stats.setVoidicPower(stats.getVoidicPower() - getCalcCost(stats));
+			TurmoilAbility.drainPower(stats, ability.costType(), getCalcCost(stats));
 			casterStats = stats;
 		}));
 		putOnCooldown(caster);
@@ -77,16 +87,6 @@ public final class TurmoilAbilityInstance {
 	public void encode(PacketBuffer packet) {
 		packet.writeVarInt(ability.id());
 		packet.writeLong(lastCast);
-	}
-
-	public static TurmoilAbilityInstance decode(PacketBuffer packet) {
-		TurmoilAbility ability = TurmoilAbility.getFromID(packet.readVarInt());
-		long data = packet.readLong();
-		if (ability == null)
-			return null;
-		TurmoilAbilityInstance instance = new TurmoilAbilityInstance(ability);
-		instance.lastCast = data;
-		return instance;
 	}
 
 }
