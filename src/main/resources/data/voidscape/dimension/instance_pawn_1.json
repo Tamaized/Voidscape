@@ -1,0 +1,10 @@
+{
+  "type": "voidscape:instance_pawn",
+  "generator": {
+	"type": "voidscape:instance",
+	"biome_source": {
+	  "type": "minecraft:fixed",
+	  "biome": "voidscape:void"
+	}
+  }
+}

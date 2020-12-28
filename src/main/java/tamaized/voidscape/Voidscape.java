@@ -38,6 +38,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
+import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
 
@@ -73,6 +74,7 @@ public class Voidscape {
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
 			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
 			}, SubCapability.AttachedSubCap::new);
 		});
