@@ -20,7 +20,7 @@ function initializeCoreMod() {
                             ),
                         ASM.listOf(
                             new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1), // PUSH {method param 1 (LivingEntity)} TO THE TOP OF THE STACK
-                            new org.objectweb.asm.tree.MethodInsnNode( // INVOKE tamaized.voidscape.asm.ASMHooks#handleEntityAttributes(LivingEntity)
+                            new org.objectweb.asm.tree.MethodInsnNode( // INVOKE tamaized.voidscape.asm.ASMHooks#handleEntityTransparency(float, LivingEntity)
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'handleEntityTransparency',
