@@ -1,15 +1,16 @@
 package tamaized.voidscape.turmoil.skills;
 
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public interface ITurmoilSkills {
 
@@ -23,7 +24,7 @@ public interface ITurmoilSkills {
 
 		private final String loc;
 		private final String name;
-		private ResourceLocation texture = TextureManager.INTENTIONAL_MISSING_TEXTURE;
+		private Supplier<Supplier<ResourceLocation>> texture = () -> ClientUtil::getMissingTexture;
 		private int spent = 0;
 		private int cost = 1;
 		private boolean core = false;
@@ -38,7 +39,7 @@ public interface ITurmoilSkills {
 		}
 
 		Builder texture(ResourceLocation loc) {
-			texture = loc;
+			texture = () -> () -> loc;
 			return this;
 		}
 

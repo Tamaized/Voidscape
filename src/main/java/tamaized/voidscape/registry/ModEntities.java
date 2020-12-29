@@ -22,7 +22,7 @@ import tamaized.voidscape.client.entity.render.RenderSpellBolt;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
 
-@Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEntities {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITIES);

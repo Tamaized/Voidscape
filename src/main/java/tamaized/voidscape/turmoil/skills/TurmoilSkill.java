@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TurmoilSkill {
 
@@ -18,7 +19,7 @@ public class TurmoilSkill {
 
 	private final TranslationTextComponent title;
 	private final TranslationTextComponent description;
-	private final ResourceLocation texture;
+	private final Supplier<Supplier<ResourceLocation>> texture;
 	private final int spentPoints;
 	private final int cost;
 	private final boolean core;
@@ -27,7 +28,7 @@ public class TurmoilSkill {
 	private final Stats stats;
 	private final boolean disabled;
 
-	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, ResourceLocation texture, int spentPoints, int cost, boolean core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
+	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, boolean core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
 		this.title = title;
 		this.description = desc;
 		this.texture = texture;
@@ -65,7 +66,7 @@ public class TurmoilSkill {
 	}
 
 	public ResourceLocation getTexture() {
-		return texture;
+		return texture.get().get();
 	}
 
 	public int getSpentPoints() {
