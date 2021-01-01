@@ -3,11 +3,15 @@ package tamaized.voidscape.world;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.DimensionSettings;
 import net.minecraft.world.gen.NoiseChunkGenerator;
+import net.minecraft.world.gen.WorldGenRegion;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import tamaized.voidscape.Voidscape;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -58,4 +62,19 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 	public int getGenDepth() {
 		return 0;
 	}
+
+	@Override
+	public void applyBiomeDecoration(WorldGenRegion worldGenRegion_, StructureManager structureManager_) {
+		try {
+			super.applyBiomeDecoration(worldGenRegion_, structureManager_);
+		} catch (Throwable e) {
+			Voidscape.LOGGER.info("VOIDSCAPE CAUGHT A BIOME DECORATION ERROR, REPORT THIS!");
+			int i = worldGenRegion_.getCenterX();
+			int j = worldGenRegion_.getCenterZ();
+			Biome biome = this.biomeSource.getNoiseBiome((i << 2) + 2, 2, (j << 2) + 2);
+			Voidscape.LOGGER.info(biome.getRegistryName());
+			e.printStackTrace();
+		}
+	}
+
 }
