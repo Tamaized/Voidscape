@@ -38,6 +38,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
+import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
@@ -118,6 +119,7 @@ public class Voidscape {
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
 				event.setAmount((float) Math.min(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 		});
+		HackyWorldGen.init();
 	}
 
 	public static boolean checkForVoidDimension(World world) {
