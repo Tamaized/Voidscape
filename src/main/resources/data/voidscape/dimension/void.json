@@ -3,7 +3,7 @@
   "generator": {
 	"type": "voidscape:void",
 	"biome_source": {
-	  "type": "minecraft:fixed",
+	  "type": "voidscape:fixed",
 	  "biome": "voidscape:void"
 	},
 	"settings": {

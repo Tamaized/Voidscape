@@ -118,7 +118,6 @@ public class Voidscape {
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
 				event.setAmount((float) Math.min(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 		});
-
 	}
 
 	public static boolean checkForVoidDimension(World world) {
