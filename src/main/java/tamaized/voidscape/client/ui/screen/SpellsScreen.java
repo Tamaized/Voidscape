@@ -1,4 +1,4 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.ui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -15,6 +15,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSetSpellBar;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;

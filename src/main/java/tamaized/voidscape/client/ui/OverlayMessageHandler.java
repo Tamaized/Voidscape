@@ -1,4 +1,4 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.ui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,6 +14,8 @@ import net.minecraft.util.text.Style;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientListener;
+import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Talk;
 import tamaized.voidscape.turmoil.Turmoil;

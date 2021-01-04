@@ -1,4 +1,4 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.ui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -19,6 +19,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientListener;
+import tamaized.voidscape.client.StencilBufferUtil;
+import tamaized.voidscape.client.ui.screen.MainScreen;
+import tamaized.voidscape.client.ui.screen.TurmoilScreen;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -32,10 +36,10 @@ import java.util.function.Consumer;
 public class RenderTurmoil {
 
 	public static final int STENCIL_INDEX = 10;
-	static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
+	public static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
 	static final ResourceLocation TEXTURE_VOIDICINFUSION = new ResourceLocation(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
-	static final Color24 colorHolder = new Color24();
+	public static final Color24 colorHolder = new Color24();
 	private static float deltaTick;
 	private static Boolean deltaPos;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
@@ -330,7 +334,7 @@ public class RenderTurmoil {
 		}
 	}
 
-	static class Color24 {
+	public static class Color24 {
 
 		public int bit24;
 		public int bit16;

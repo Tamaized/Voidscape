@@ -10,7 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.OverlayMessageHandler;
+import tamaized.voidscape.client.ui.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;

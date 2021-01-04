@@ -1,4 +1,4 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.ui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;

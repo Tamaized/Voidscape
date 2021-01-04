@@ -1,4 +1,4 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.ui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IngameGui;
