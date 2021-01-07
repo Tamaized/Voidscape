@@ -1,4 +1,5 @@
 {
   "attributes": "META-INF/asm/attributes.js",
-  "entityalpha": "META-INF/asm/entityalpha.js"
+  "entityalpha": "META-INF/asm/entityalpha.js",
+  "deepfreeze": "META-INF/asm/deepfreeze.js"
 }

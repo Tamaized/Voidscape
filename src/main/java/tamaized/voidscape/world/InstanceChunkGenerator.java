@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Blockreader;
@@ -26,12 +27,16 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	public static final Codec<InstanceChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> p_236091_0_.
 			group(BiomeProvider.CODEC.
 					fieldOf("biome_source").
-					forGetter(ChunkGenerator::getBiomeSource)).
+					forGetter(ChunkGenerator::getBiomeSource), ResourceLocation.CODEC.
+					fieldOf("snapshot").
+					forGetter(InstanceChunkGenerator::snapshot)).
 			apply(p_236091_0_, p_236091_0_.stable(InstanceChunkGenerator::new)));
 
+	private final ResourceLocation snapshot;
 
-	private InstanceChunkGenerator(BiomeProvider biomeProvider1) {
+	private InstanceChunkGenerator(BiomeProvider biomeProvider1, ResourceLocation snapshot) {
 		super(biomeProvider1, new DimensionStructuresSettings(Optional.empty(), new HashMap<>()));
+		this.snapshot = snapshot;
 	}
 
 	@Override
@@ -39,9 +44,13 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 		return codec;
 	}
 
+	public ResourceLocation snapshot() {
+		return snapshot;
+	}
+
 	@Override
 	public ChunkGenerator withSeed(long seed) {
-		return new InstanceChunkGenerator(biomeSource.withSeed(seed));
+		return new InstanceChunkGenerator(biomeSource.withSeed(seed), snapshot());
 	}
 
 	@Override
