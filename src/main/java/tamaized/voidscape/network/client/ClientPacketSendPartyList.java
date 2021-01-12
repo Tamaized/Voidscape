@@ -1,7 +1,9 @@
 package tamaized.voidscape.network.client;
 
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
+import net.minecraft.client.network.play.NetworkPlayerInfo;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
@@ -27,10 +29,11 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 		}
 		ClientPartyInfo.PARTIES.clear();
 		data.forEach(party -> {
-			if (player.getServer() != null) {
-				ServerPlayerEntity remote = player.getServer().getPlayerList().getPlayer(party.network_host);
+			if (player instanceof ClientPlayerEntity) {
+				ClientPlayNetHandler network = ((ClientPlayerEntity) player).connection;
+				NetworkPlayerInfo remote = network.getPlayerInfo(party.network_host);
 				if (remote != null) {
-					party.host = remote.getGameProfile();
+					party.host = remote.getProfile();
 					party.network_host = null;
 					ClientPartyInfo.PARTIES.add(party);
 				}
