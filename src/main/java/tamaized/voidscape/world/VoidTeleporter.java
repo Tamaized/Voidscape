@@ -11,6 +11,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.party.PartyManager;
 
 import java.util.function.Function;
 
@@ -24,6 +25,8 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+		if (currentWorld.getChunkSource().getGenerator() instanceof InstanceChunkGenerator && oldEntity instanceof ServerPlayerEntity)
+			PartyManager.findParty((ServerPlayerEntity) oldEntity).ifPresent(party -> party.removeMember((ServerPlayerEntity) oldEntity));
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}

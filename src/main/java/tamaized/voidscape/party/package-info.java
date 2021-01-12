@@ -1,5 +1,5 @@
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
-package tamaized.voidscape.network.common;
+package tamaized.voidscape.party;
 
 import mcp.MethodsReturnNonnullByDefault;
 

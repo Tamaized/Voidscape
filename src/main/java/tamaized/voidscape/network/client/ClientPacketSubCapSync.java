@@ -1,4 +1,4 @@
-package tamaized.voidscape.network.common;
+package tamaized.voidscape.network.client;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;

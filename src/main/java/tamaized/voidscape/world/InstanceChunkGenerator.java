@@ -29,14 +29,18 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 					fieldOf("biome_source").
 					forGetter(ChunkGenerator::getBiomeSource), ResourceLocation.CODEC.
 					fieldOf("snapshot").
+					forGetter(InstanceChunkGenerator::snapshot), ResourceLocation.CODEC.
+					fieldOf("instance_group").
 					forGetter(InstanceChunkGenerator::snapshot)).
 			apply(p_236091_0_, p_236091_0_.stable(InstanceChunkGenerator::new)));
 
 	private final ResourceLocation snapshot;
+	private final ResourceLocation group;
 
-	private InstanceChunkGenerator(BiomeProvider biomeProvider1, ResourceLocation snapshot) {
+	private InstanceChunkGenerator(BiomeProvider biomeProvider1, ResourceLocation snapshot, ResourceLocation group) {
 		super(biomeProvider1, new DimensionStructuresSettings(Optional.empty(), new HashMap<>()));
 		this.snapshot = snapshot;
+		this.group = group;
 	}
 
 	@Override
@@ -48,18 +52,22 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 		return snapshot;
 	}
 
+	public ResourceLocation group() {
+		return group;
+	}
+
 	@Override
 	public ChunkGenerator withSeed(long seed) {
-		return new InstanceChunkGenerator(biomeSource.withSeed(seed), snapshot());
+		return new InstanceChunkGenerator(biomeSource.withSeed(seed), snapshot(), group());
 	}
 
 	@Override
 	public void buildSurfaceAndBedrock(WorldGenRegion worldGenRegion_, IChunk chunk_) {
 		ChunkPos pos = chunk_.getPos();
-		if (pos.x < 2 && pos.x > -2 && pos.z < 2 && pos.z > -2) {
+		if (pos.x == 0 && pos.z == 0) {
 			BlockPos.Mutable bp = new BlockPos.Mutable();
-			for (int x = 0; x < 16; x++)
-				for (int z = 0; z < 16; z++) {
+			for (int x = 0; x < 32; x++)
+				for (int z = 0; z < 32; z++) {
 					bp.set(x, 60, z);
 					chunk_.setBlockState(bp, Blocks.BEDROCK.defaultBlockState(), false);
 				}

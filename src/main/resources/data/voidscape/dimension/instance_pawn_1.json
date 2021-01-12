@@ -6,6 +6,7 @@
 	  "type": "voidscape:fixed",
 	  "biome": "voidscape:void"
 	},
-	"snapshot": "voidscape:pawn"
+	"snapshot": "voidscape:pawn",
+	"instance_group": "voidscape:pawn"
   }
 }

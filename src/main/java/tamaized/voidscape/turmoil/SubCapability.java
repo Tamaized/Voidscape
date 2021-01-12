@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.common.ClientPacketSubCapSync;
+import tamaized.voidscape.network.client.ClientPacketSubCapSync;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

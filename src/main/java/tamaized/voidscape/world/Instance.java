@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,15 +20,21 @@ public final class Instance {
 	private final Dimension dimension;
 	public boolean locked;
 	public int tick;
-	private int unloadTick;
-	private InstanceType type = InstanceType.Solo;
 	private ServerWorld level;
+	private int unloadTick;
+	private InstanceType type = InstanceType.Unrestricted;
 	private int maxPlayers = 1;
 	private List<PlayerEntity> players = new ArrayList<>();
 
 	public Instance(RegistryKey<Dimension> loc, Dimension dimension) {
+		if (!(dimension.generator() instanceof InstanceChunkGenerator))
+			throw new IllegalArgumentException("Dimension Generator must be of Type: " + InstanceChunkGenerator.class);
 		location = RegistryKey.create(Registry.DIMENSION_REGISTRY, loc.location());
 		this.dimension = dimension;
+	}
+
+	public InstanceChunkGenerator generator() {
+		return (InstanceChunkGenerator) dimension.generator();
 	}
 
 	public RegistryKey<World> location() {
@@ -71,7 +78,9 @@ public final class Instance {
 		players.clear();
 		locked = false;
 		unloadTick = 0;
-		Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
+		tick = 0;
+		type = InstanceType.Unrestricted;
+		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 	}
 
 	public ServerWorld getLevel() {
@@ -95,15 +104,19 @@ public final class Instance {
 			return;
 		if (!active() && !load())
 			return;
+		final int i = players.size();
+		final float p = 0.785F;
+		player.moveTo((int) (3F * Math.cos(p * i)) + 0.5F, player.getY(), (int) (3F * Math.sin(p * i)) + 0.5F, -90F, 0F);
 		Entity entity = player.changeDimension(Voidscape.getWorld(player.level, location), InstanceTeleporter.INSTANCE);
-		if (entity instanceof PlayerEntity) {
+		if (entity instanceof PlayerEntity)
 			players.add((PlayerEntity) entity);
-		}
 	}
 
 	private void unloadChunks() {
-		if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager)
+		/*if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
+			Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 			((HackyWorldGen.DeepFreezeChunkManager) level.getChunkSource().chunkMap).unload();
+		}*/
 	}
 
 	public void tick() {
@@ -128,7 +141,7 @@ public final class Instance {
 		if (unloadTick == 0 && locked() && level.players().isEmpty())
 			unloadChunks();
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
-			if (unloadTick % 30 == 0)
+			if (unloadTick % (20 * 30) == 0)
 				unload();
 			else
 				unloadTick++;
@@ -137,7 +150,15 @@ public final class Instance {
 	}
 
 	public enum InstanceType {
-		Solo, Normal, Insane
+		Unrestricted, Normal, Insane;
+		private static InstanceType[] VALUES = values();
+
+		@Nullable
+		public static InstanceType fromOrdinal(int ordinal) {
+			if (ordinal < 0 || ordinal >= VALUES.length)
+				return null;
+			return VALUES[ordinal];
+		}
 	}
 
 }

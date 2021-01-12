@@ -9,11 +9,13 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
+import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidTeleporter;
 
 import javax.annotation.Nullable;
@@ -43,9 +45,13 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		maxTick = 300;
 		if (!(parent instanceof PlayerEntity) || parent.level == null)
 			return;
-		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayerEntity) {
-			sendToClient((ServerPlayerEntity) parent);
-			dirty = false;
+		if (!parent.level.isClientSide() && parent instanceof ServerPlayerEntity) {
+			if (getState() != State.CLOSED && parent.level instanceof ServerWorld && ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
+				setState(State.CLOSED);
+			if (dirty) {
+				sendToClient((ServerPlayerEntity) parent);
+				dirty = false;
+			}
 		}
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
 			talk(null);

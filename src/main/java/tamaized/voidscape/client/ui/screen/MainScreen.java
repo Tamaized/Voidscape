@@ -15,6 +15,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
+import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -98,6 +99,28 @@ public class MainScreen extends TurmoilScreen {
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		spells.active = data != null && data.hasCoreSkill();
 		addButton(spells);
+		Button instances = new Button(
+
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 3,
+
+				buttonWidth,
+
+				buttonHeight,
+
+				new TranslationTextComponent("Duties"),
+
+				button -> {
+					if (ClientPartyInfo.host == null)
+						minecraft.setScreen(new DutyScreen());
+					else
+						minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty, ClientPartyInfo.type));
+				}
+
+		);
+		instances.active = data != null && data.getProgression().ordinal() >= Progression.CorruptPawnPre.ordinal();
+		addButton(instances);
 		addButton(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),

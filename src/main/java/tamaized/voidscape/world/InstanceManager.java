@@ -13,6 +13,7 @@ import tamaized.voidscape.Voidscape;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID)
 public final class InstanceManager {
@@ -32,6 +33,14 @@ public final class InstanceManager {
 
 	public static Optional<Instance> find(ResourceLocation loc) {
 		return instances.stream().filter(instance -> instance.location().location().equals(loc)).findFirst();
+	}
+
+	public static List<Instance> findByGroup(ResourceLocation group) {
+		return instances.stream().filter(instance -> instance.generator().group().equals(group)).collect(Collectors.toList());
+	}
+
+	public static Optional<Instance> findFreeInstanceByGroup(ResourceLocation group) {
+		return instances.stream().filter(instance -> instance.generator().group().equals(group) && !instance.active()).findAny();
 	}
 
 	private static void load(ServerWorld level) {
