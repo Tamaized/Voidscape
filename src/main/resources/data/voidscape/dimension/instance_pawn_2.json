@@ -1,0 +1,12 @@
+{
+  "type": "voidscape:instance_pawn",
+  "generator": {
+	"type": "voidscape:instance",
+	"biome_source": {
+	  "type": "voidscape:fixed",
+	  "biome": "voidscape:void"
+	},
+	"snapshot": "voidscape:pawn",
+	"instance_group": "voidscape:pawn"
+  }
+}
