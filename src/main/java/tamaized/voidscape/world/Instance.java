@@ -112,7 +112,7 @@ public final class Instance {
 			players.add((PlayerEntity) entity);
 	}
 
-	private void unloadChunks() {
+	private void unloadChunks() { // TODO: this doesn't account for dead players, ultimately causing a crash; We can just allow the normal chunk unloader to take action itself
 		/*if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
 			Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 			((HackyWorldGen.DeepFreezeChunkManager) level.getChunkSource().chunkMap).unload();

@@ -72,7 +72,7 @@ public final class VoidCommands {
 							executes(context -> {
 								PlayerEntity player = context.getSource().getPlayerOrException();
 								try {
-									InstanceManager.find(new ResourceLocation(Voidscape.MODID, "instance_pawn_1")).ifPresent(instance -> instance.addPlayer(player));
+									InstanceManager.findFreeInstanceByGroup(new ResourceLocation(Voidscape.MODID, "pawn")).ifPresent(instance -> instance.addPlayer(player));
 								} catch (Throwable e) {
 									e.printStackTrace();
 									throw e;

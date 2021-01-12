@@ -34,6 +34,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	private Talk.Entry talk;
 	private Progression progression = Progression.None;
 	private int level;
+	private boolean instanced;
 
 	@Override
 	public ResourceLocation id() {
@@ -46,13 +47,18 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		if (!(parent instanceof PlayerEntity) || parent.level == null)
 			return;
 		if (!parent.level.isClientSide() && parent instanceof ServerPlayerEntity) {
-			if (getState() != State.CLOSED && parent.level instanceof ServerWorld && ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
-				setState(State.CLOSED);
-			if (dirty) {
+			final boolean cachedInstanced = instanced;
+			if (parent.level instanceof ServerWorld && ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
+				instanced = true;
+			else
+				instanced = false;
+			if (dirty || cachedInstanced != instanced) {
 				sendToClient((ServerPlayerEntity) parent);
 				dirty = false;
 			}
 		}
+		if (instanced && getState() != State.CLOSED)
+			setState(State.CLOSED);
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
 			talk(null);
 		switch (getState()) {
@@ -182,6 +188,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		buffer.writeVarInt(progression.ordinal());
 		buffer.writeVarInt(state.ordinal());
 		buffer.writeFloat(tick);
+		buffer.writeBoolean(instanced);
 		buffer.writeVarInt(skills.size());
 		skills.forEach(skill -> buffer.writeVarInt(skill.getID()));
 		boolean flag = talk != null;
@@ -196,6 +203,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		progression = Progression.get(buffer.readVarInt());
 		state = State.get(buffer.readVarInt());
 		tick = buffer.readFloat();
+		instanced = buffer.readBoolean();
 		int len = buffer.readVarInt();
 		skills.clear();
 		for (int index = 0; index < len; index++) {
@@ -268,6 +276,10 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	public float getMaxTick() {
 		return maxTick;
+	}
+
+	public boolean inInstance() {
+		return instanced;
 	}
 
 	public State getState() {

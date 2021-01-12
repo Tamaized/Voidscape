@@ -27,7 +27,7 @@ public final class InstanceManager {
 	public static void setup(MinecraftServer server) {
 		instances.clear();
 		server.getWorldData().worldGenSettings().dimensions().entrySet().stream().
-				filter(entry -> entry.getKey().location().getNamespace().equals(Voidscape.MODID) && entry.getValue().generator() instanceof InstanceChunkGenerator).
+				filter(entry -> entry.getValue().generator() instanceof InstanceChunkGenerator).
 				forEach(entry -> instances.add(new Instance(entry.getKey(), entry.getValue())));
 	}
 
@@ -48,7 +48,7 @@ public final class InstanceManager {
 			setup(level.getServer());
 			return;
 		}
-		instances.stream().filter(instance -> instance.dimension().type() == level.dimensionType()).
+		instances.stream().filter(instance -> instance.location().location().equals(level.dimension().location())).
 				forEach(instance -> instance.init(level));
 	}
 
