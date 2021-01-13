@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -20,6 +21,7 @@ import tamaized.voidscape.turmoil.Duties;
 import tamaized.voidscape.world.Instance;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PartyListScreen extends TurmoilScreen {
@@ -70,12 +72,12 @@ public class PartyListScreen extends TurmoilScreen {
 
 					window.getGuiScaledHeight() - buttonHeight - 10,
 
-					buttonHeight
+					24
 
 			);
 			list.setLeftPos((int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F) + buttonWidth + 5);
 			list.children().clear();
-			ClientPartyInfo.PARTIES.forEach(party -> list.children().add(new PartyList.Entry(party)));
+			ClientPartyInfo.PARTIES.forEach(party -> list.children().add(list.new Entry(party.host.getId())));
 			children.add(list);
 			initedOnce = true;
 		}
@@ -97,7 +99,7 @@ public class PartyListScreen extends TurmoilScreen {
 					joining = true;
 					join.active = false;
 					password.active = false;
-					Voidscape.NETWORK.sendToServer(new ServerPacketRequestJoinParty(list.getSelected().party.host.getId(), password.getValue()));
+					Voidscape.NETWORK.sendToServer(new ServerPacketRequestJoinParty(list.getSelected().host, password.getValue()));
 				}
 
 		));
@@ -140,8 +142,8 @@ public class PartyListScreen extends TurmoilScreen {
 		if (minecraft != null && minecraft.player != null && minecraft.player.tickCount % (20 * 5) == 0)
 			Voidscape.NETWORK.sendToServer(new ServerPacketRequestPartyList());
 		password.tick();
-		list.children().stream().filter(entry -> !ClientPartyInfo.PARTIES.contains(entry.party)).collect(Collectors.toList()).forEach(list::removeEntry);
-		ClientPartyInfo.PARTIES.stream().filter(party -> list.children().stream().noneMatch(entry -> entry.party == party)).forEach(party -> list.children().add(new PartyList.Entry(party)));
+		list.children().stream().filter(entry -> ClientPartyInfo.PARTIES.stream().noneMatch(party -> party.host.getId().equals(entry.host))).collect(Collectors.toList()).forEach(list::removeEntry);
+		ClientPartyInfo.PARTIES.stream().filter(party -> list.children().stream().noneMatch(entry -> entry.host.equals(party.host.getId()))).forEach(party -> list.children().add(list.new Entry(party.host.getId())));
 		join.active = !joining && list.getSelected() != null;
 	}
 
@@ -170,6 +172,14 @@ public class PartyListScreen extends TurmoilScreen {
 		password.render(matrixStack, mouseX, mouseY, partialTicks);
 		String text = new TranslationTextComponent("Password:").getString();
 		font.draw(matrixStack, text, (int) (minecraft.getWindow().getGuiScaledWidth() / 4 - font.width(text) / 2F), (int) (minecraft.getWindow().getGuiScaledHeight() / 4F - 20F / 2F) + 30F, 0xFFFFFFFF);
+		text = duty.display().getString();
+		font.draw(matrixStack, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
+		text = type.name();
+		font.draw(matrixStack, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(text) / 2F, font.lineHeight + 12, 0xFFFFFFFF);
+		if (ClientPartyInfo.error != null) {
+			final String error = ClientPartyInfo.error.getString();
+			minecraft.font.draw(matrixStack, error, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(error) / 2F, font.lineHeight * 2F + 16, 0xFFFF0000);
+		}
 	}
 
 	static class PartyList extends ExtendedList<PartyList.Entry> {
@@ -178,6 +188,17 @@ public class PartyListScreen extends TurmoilScreen {
 			super(mcIn, widthIn, heightIn, topIn, bottomIn, slotHeightIn);
 			setRenderBackground(false);
 			setRenderTopAndBottom(false);
+			headerHeight = 4;
+		}
+
+		@Override
+		protected int getScrollbarPosition() {
+			return x1 - 4;
+		}
+
+		@Override
+		public int getRowWidth() {
+			return x1 - x0 - 10;
 		}
 
 		private static void quad(BufferBuilder buffer, float x, float y, float z, float w, float h, float r, float g, float b, float a) {
@@ -193,10 +214,6 @@ public class PartyListScreen extends TurmoilScreen {
 			if (children().isEmpty()) {
 				final String text = "No Parties Found";
 				minecraft.font.draw(matrixStack, text, x0 + width / 2F - minecraft.font.width(text) / 2F, y0 + 15, 0xFFFF00FF);
-			}
-			if (ClientPartyInfo.error != null) {
-				final String error = ClientPartyInfo.error.getString();
-				minecraft.font.draw(matrixStack, error, x0 + width / 2F - minecraft.font.width(error) / 2F, y0 + 15 + minecraft.font.lineHeight + 3, 0xFFFF0000);
 			}
 			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
@@ -214,27 +231,43 @@ public class PartyListScreen extends TurmoilScreen {
 			return super.removeEntry(p_230956_1_);
 		}
 
-		static class Entry extends ExtendedList.AbstractListEntry<PartyList.Entry> {
+		class Entry extends ExtendedList.AbstractListEntry<PartyList.Entry> {
 
-			private final ClientPartyInfo.Party party;
+			private final UUID host;
 
-			Entry(ClientPartyInfo.Party party) {
-				this.party = party;
+			Entry(UUID host) {
+				this.host = host;
+			}
+
+			@Override
+			public boolean mouseClicked(double p_231044_1_, double p_231044_3_, int p_231044_5_) {
+				setSelected(this);
+				return false;
 			}
 
 			@Override
 			public void render(@Nonnull MatrixStack mStack, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
+				RenderSystem.color4f(1F, 1F, 1F, 1F);
+				final float realWidth = entryWidth - 5;
 				BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-				buffer.vertex(left, top, 0F).color(0.1F, 0.1F, 0.1F, 1.0F).endVertex();
-				buffer.vertex(left + entryWidth, top, 0F).color(0.1F, 0.1F, 0.1F, 1.0F).endVertex();
-				buffer.vertex(left + entryWidth, top + entryHeight, 0F).color(0.1F, 0.1F, 0.1F, 1.0F).endVertex();
-				buffer.vertex(left, top + entryHeight, 0F).color(0.1F, 0.1F, 0.1F, 1.0F).endVertex();
+				quad(buffer, left + 1, top, 0, realWidth - 2, 1, 1, 1, 1, 1);
+				quad(buffer, left, top, 0, 1, entryHeight, 1, 1, 1, 1);
+				quad(buffer, left + 1, top + entryHeight - 1, 0, realWidth - 2, 1, 1, 1, 1, 1);
+				quad(buffer, left + realWidth - 1, top, 0, 1, entryHeight, 1, 1, 1, 1);
 				RenderSystem.disableTexture();
 				Tessellator.getInstance().end();
 				RenderSystem.enableTexture();
-				Minecraft.getInstance().font.draw(mStack, party.duty.display(), top + entryHeight / 2F - Minecraft.getInstance().font.lineHeight / 2F, left, 0xFFFFFFFF);
-				Minecraft.getInstance().font.draw(mStack, party.members + "/" + party.max, top + entryHeight / 2F - Minecraft.getInstance().font.lineHeight / 2F, left, 0xFFFFFFFF);
+				ClientPartyInfo.PARTIES.stream().filter(p -> p.host.getId().equals(host)).findAny().ifPresent(party -> {
+					if (minecraft.player != null) {
+						ClientPlayNetHandler network = minecraft.player.connection;
+						FormPartyScreen.renderPlayerHead(network.getPlayerInfo(party.host.getId()), mStack, left - 2, top - 2);
+					}
+					Minecraft.getInstance().font.draw(mStack, party.host.getName(), left + 2 + 16 + 2, top + 2 + (entryHeight - 2) / 2F - Minecraft.getInstance().font.lineHeight / 2F, 0xFFFFFFFF);
+					final String text = party.members + "/" + party.max;
+					Minecraft.getInstance().font.draw(mStack, text, left + realWidth - 2 - Minecraft.getInstance().font.width(text), top + 2 + (entryHeight - 2) / 2F - Minecraft.getInstance().font.lineHeight / 2F, 0xFFFFFFFF);
+				});
+
 			}
 		}
 

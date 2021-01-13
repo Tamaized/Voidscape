@@ -101,7 +101,7 @@ public class Party {
 	}
 
 	public boolean password(String test) {
-		return !hasPassword() || password.equals(test);
+		return password.equals(test);
 	}
 
 	public boolean isMember(ServerPlayerEntity player) {
@@ -131,8 +131,7 @@ public class Party {
 	public void tick() {
 		if (reserving && instance == null) {
 			InstanceManager.findFreeInstanceByGroup(duty().group()).ifPresent(inst -> {
-				instance = inst;
-				instance.setType(type);
+				instance = inst.setType(type).maxPlayers(maxMembers());
 				members().forEach(member -> instance.addPlayer(member));
 			});
 		}

@@ -21,7 +21,8 @@ public final class Instance {
 	public boolean locked;
 	public int tick;
 	private ServerWorld level;
-	private int unloadTick;
+	private int unloadTick = 30 * 20;
+	boolean needsUnloading = false;
 	private InstanceType type = InstanceType.Unrestricted;
 	private int maxPlayers = 1;
 	private List<PlayerEntity> players = new ArrayList<>();
@@ -77,7 +78,6 @@ public final class Instance {
 	public void unload() {
 		players.clear();
 		locked = false;
-		unloadTick = 0;
 		tick = 0;
 		type = InstanceType.Unrestricted;
 		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
@@ -100,23 +100,23 @@ public final class Instance {
 	}
 
 	public void addPlayer(PlayerEntity player) {
-		if (locked() || players.contains(player) || players.size() >= maxPlayers)
+		if ((unloadTick < 30 * 20 && !active()) || locked() || players.contains(player) || players.size() >= maxPlayers)
 			return;
 		if (!active() && !load())
 			return;
 		final int i = players.size();
 		final float p = 0.785F;
-		player.moveTo((int) (3F * Math.cos(p * i)) + 0.5F, player.getY(), (int) (3F * Math.sin(p * i)) + 0.5F, -90F, 0F);
+		player.moveTo(Math.round(3F * Math.cos(p * i)) + 0.5F, player.getY(), Math.round(3F * Math.sin(p * i)) + 0.5F, -90F, 0F);
 		Entity entity = player.changeDimension(Voidscape.getWorld(player.level, location), InstanceTeleporter.INSTANCE);
 		if (entity instanceof PlayerEntity)
 			players.add((PlayerEntity) entity);
 	}
 
-	private void unloadChunks() { // TODO: this doesn't account for dead players, ultimately causing a crash; We can just allow the normal chunk unloader to take action itself
-		/*if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
+	private void unloadChunks() {
+		if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
 			Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 			((HackyWorldGen.DeepFreezeChunkManager) level.getChunkSource().chunkMap).unload();
-		}*/
+		}
 	}
 
 	public void tick() {
@@ -128,7 +128,6 @@ public final class Instance {
 				});
 			tick = 0;
 			locked = false;
-			return;
 		}
 		if (!locked() && tick % (20 * 30) == 0)
 			locked = true;
@@ -138,14 +137,15 @@ public final class Instance {
 						player.setHealth(player.getMaxHealth() * 0.1F);
 						player.changeDimension(Voidscape.getWorld(player.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
 					});
-		if (unloadTick == 0 && locked() && level.players().isEmpty())
-			unloadChunks();
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
-			if (unloadTick % (20 * 30) == 0)
+			if (unloadTick == 20 * 10)
+				unloadChunks();
+			if (unloadTick == 20 * 30)
 				unload();
 			else
 				unloadTick++;
-		}
+		} else
+			unloadTick = 0;
 		tick++;
 	}
 

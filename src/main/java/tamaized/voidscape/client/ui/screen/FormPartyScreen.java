@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
@@ -64,6 +65,25 @@ public class FormPartyScreen extends TurmoilScreen {
 		quad(buffer, x + w - 2F, y, 0F, 2F, h, host ? 1F : 0.5F, host ? 1F : 0F, host ? 0F : 1F, host ? 1F : 0.5F);
 		quad(buffer, x + 2F, y + h - 2F, 0F, w - 4F, 2F, host ? 1F : 0.5F, host ? 1F : 0F, host ? 0F : 1F, host ? 1F : 0.5F);
 		quad(buffer, x, y, 0F, 2F, h, host ? 1F : 0.5F, host ? 1F : 0F, host ? 0F : 1F, host ? 1F : 0.5F);
+	}
+
+	public static void renderPlayerHead(@Nullable NetworkPlayerInfo info, MatrixStack matrixStack_, int x, int y) {
+		if (info == null || Minecraft.getInstance().level == null)
+			return;
+		Minecraft.getInstance().getTextureManager().bind(info.getSkinLocation());
+		RenderSystem.enableTexture();
+		GameProfile gameprofile = info.getProfile();
+		PlayerEntity playerentity = Minecraft.getInstance().level.getPlayerByUUID(gameprofile.getId());
+		boolean flag1 = playerentity != null && playerentity.isModelPartShown(PlayerModelPart.CAPE) && ("Dinnerbone".equals(gameprofile.getName()) || "Grumm".equals(gameprofile.getName()));
+		int i3 = 8 + (flag1 ? 8 : 0);
+		int j3 = 8 * (flag1 ? -1 : 1);
+		AbstractGui.blit(matrixStack_, x + 4, y + 4, 16, 16, 8.0F, (float) i3, 8, j3, 64, 64);
+		if (playerentity != null && playerentity.isModelPartShown(PlayerModelPart.HAT)) {
+			int k3 = 8 + (flag1 ? 8 : 0);
+			int l3 = 8 * (flag1 ? -1 : 1);
+			AbstractGui.blit(matrixStack_, x + 4, y + 4, 16, 16, 40.0F, (float) k3, 8, l3, 64, 64);
+		}
+		RenderSystem.disableTexture();
 	}
 
 	@Override
@@ -182,23 +202,6 @@ public class FormPartyScreen extends TurmoilScreen {
 		return super.charTyped(codePoint, modifiers) || this.passwordWidget.charTyped(codePoint, modifiers);
 	}
 
-	private void renderPlayerHead(@Nullable NetworkPlayerInfo info, MatrixStack matrixStack_, int x, int y) {
-		if (minecraft == null || info == null || minecraft.level == null)
-			return;
-		minecraft.getTextureManager().bind(info.getSkinLocation());
-		GameProfile gameprofile = info.getProfile();
-		PlayerEntity playerentity = this.minecraft.level.getPlayerByUUID(gameprofile.getId());
-		boolean flag1 = playerentity != null && playerentity.isModelPartShown(PlayerModelPart.CAPE) && ("Dinnerbone".equals(gameprofile.getName()) || "Grumm".equals(gameprofile.getName()));
-		int i3 = 8 + (flag1 ? 8 : 0);
-		int j3 = 8 * (flag1 ? -1 : 1);
-		AbstractGui.blit(matrixStack_, x + 4, y + 4, 16, 16, 8.0F, (float) i3, 8, j3, 64, 64);
-		if (playerentity != null && playerentity.isModelPartShown(PlayerModelPart.HAT)) {
-			int k3 = 8 + (flag1 ? 8 : 0);
-			int l3 = 8 * (flag1 ? -1 : 1);
-			AbstractGui.blit(matrixStack_, x + 4, y + 4, 16, 16, 40.0F, (float) k3, 8, l3, 64, 64);
-		}
-	}
-
 	@Override
 	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
 		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host == null) {
@@ -209,7 +212,8 @@ public class FormPartyScreen extends TurmoilScreen {
 		passwordWidget.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
 		MainWindow window = minecraft.getWindow();
 		String text = "Password:";
-		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, window.getGuiScaledHeight() - buttonHeight * 3 - 5, 0xFFFFFFFF);
+		if (ClientPartyInfo.host.getId().equals(minecraft.player.getUUID()))
+			font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, window.getGuiScaledHeight() - buttonHeight * 3 - 5, 0xFFFFFFFF);
 		text = duty.display().getString();
 		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
 		text = type.name();
@@ -221,13 +225,18 @@ public class FormPartyScreen extends TurmoilScreen {
 		int y = (int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F);
 		final List<Runnable> renderPlayers = new ArrayList<>();
 		final Consumer<Integer> renderPlayerFactory = (index) -> renderPlayers.add(() -> {
-			renderPlayerHead(minecraft.player.connection.getPlayerInfo(ClientPartyInfo.members.get(index).getId()), p_230430_1_, index < 3 ? x1 : x2, y + 29 * (index + 1));
+			NetworkPlayerInfo info = minecraft.player.connection.getPlayerInfo(ClientPartyInfo.members.get(index).getId());
+			int y0 = y + 29 * ((index + 1) % 4);
+			renderPlayerHead(info, p_230430_1_, index < 3 ? x1 : x2, y0);
+			if (info != null)
+				font.draw(p_230430_1_, info.getProfile().getName(), (index < 3 ? x1 : x2) + 22, y0 + 12 - font.lineHeight / 2F, 0xFFFFFFFF);
 		});
 		drawPartyBox(buffer, x1, y, true);
 		renderPlayers.add(() -> {
 			NetworkPlayerInfo info = minecraft.player.connection.getPlayerInfo(ClientPartyInfo.host.getId());
 			renderPlayerHead(info, p_230430_1_, x1, y);
-			font.draw(p_230430_1_, minecraft.player.getDisplayName(), x1 + 22, y + 12 - font.lineHeight / 2F, 0xFFFFFFFF);
+			if (info != null)
+				font.draw(p_230430_1_, info.getProfile().getName(), x1 + 22, y + 12 - font.lineHeight / 2F, 0xFFFFFFFF);
 		});
 		buttons.stream().limit(7).forEach(button -> button.visible = false);
 		for (int i = 0; i < ClientPartyInfo.members.size(); i++) {
