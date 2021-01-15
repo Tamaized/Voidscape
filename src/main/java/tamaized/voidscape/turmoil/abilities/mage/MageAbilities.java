@@ -17,7 +17,7 @@ public class MageAbilities {
 			return damage;
 		}).get()).orElse(0F));
 		caster.level.addFreshEntity(bolt);
-	});
+	}).damage(1F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.mage.".concat(loc));
