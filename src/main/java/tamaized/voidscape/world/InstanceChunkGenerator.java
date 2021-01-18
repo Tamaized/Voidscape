@@ -31,7 +31,7 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 					fieldOf("snapshot").
 					forGetter(InstanceChunkGenerator::snapshot), ResourceLocation.CODEC.
 					fieldOf("instance_group").
-					forGetter(InstanceChunkGenerator::snapshot)).
+					forGetter(InstanceChunkGenerator::group)).
 			apply(p_236091_0_, p_236091_0_.stable(InstanceChunkGenerator::new)));
 
 	private final ResourceLocation snapshot;
