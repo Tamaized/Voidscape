@@ -13,7 +13,6 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class VoidChunkGenerator extends NoiseChunkGenerator {
@@ -24,7 +23,7 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 							forGetter(ChunkGenerator::getBiomeSource),
 
 					Codec.LONG.
-							fieldOf("seed").orElse(new Random().nextLong()).
+							fieldOf("seed").orElseGet(() -> HackyWorldGen.seed).
 							forGetter(gen -> gen.seed),
 
 					DimensionSettings.CODEC.

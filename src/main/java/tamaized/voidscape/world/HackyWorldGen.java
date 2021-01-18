@@ -44,6 +44,8 @@ import java.util.function.Supplier;
 
 public class HackyWorldGen {
 
+	public static long seed;
+
 	private static final Codec<Biome> DIRECT_CODEC = RecordCodecBuilder.create((builder1) -> builder1.
 			group(Biome.Climate.CODEC.forGetter((biomeIn11) -> biomeIn11.climateSettings), Biome.Category.CODEC.
 					fieldOf("category").forGetter((biomeIn10) -> biomeIn10.biomeCategory), Codec.FLOAT.

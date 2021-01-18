@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.util.concurrent.ThreadTaskExecutor;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkLightProvider;
 import net.minecraft.world.chunk.listener.IChunkStatusListener;
@@ -25,6 +26,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
@@ -61,6 +63,16 @@ public class ASMHooks {
 	 */
 	public static ChunkManager chunkManager(ChunkManager old, ServerWorld serverWorld_, SaveFormat.LevelSave levelSave_, DataFixer dataFixer_, TemplateManager templateManager_, Executor executor_, ThreadTaskExecutor<Runnable> threadTaskExecutor_, IChunkLightProvider chunkLightProvider_, ChunkGenerator chunkGenerator_, IChunkStatusListener chunkStatusListener_, Supplier<DimensionSavedDataManager> supplier_, int int_, boolean boolean_) {
 		return chunkGenerator_ instanceof InstanceChunkGenerator ? new HackyWorldGen.DeepFreezeChunkManager(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkStatusListener_, supplier_, int_, boolean_) : old;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.world.gen.settings.DimensionGeneratorSettings#DimensionGeneratorSettings(long, boolean, boolean, SimpleRegistry, Optional)}<br>
+	 * [FIRST INST]
+	 */
+	public static long seed(long seed) {
+		HackyWorldGen.seed = seed;
+		return seed;
 	}
 
 }
