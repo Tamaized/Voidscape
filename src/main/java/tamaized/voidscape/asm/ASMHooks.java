@@ -68,7 +68,7 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.world.gen.settings.DimensionGeneratorSettings#DimensionGeneratorSettings(long, boolean, boolean, SimpleRegistry, Optional)}<br>
-	 * [FIRST INST]
+	 * [BEFORE FIRST PUTFIELD]
 	 */
 	public static long seed(long seed) {
 		HackyWorldGen.seed = seed;
