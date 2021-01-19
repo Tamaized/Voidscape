@@ -112,19 +112,21 @@ public class TurmoilSkill {
 		private final int voidicDamageReductionPercentage;
 		private final int spellpower;
 		private final int rechargeRate;
+		private final int spellCrit;
 		private final int cooldown;
 		private final int cost;
 		private final int healAmp;
 		private final float heart;
 		private final int threat;
 
-		private Stats(float voidicDamage, int voidicDamagePercent, float voidicDamageReduction, int voidicDamageReductionPercentage, int spellpower, int rechargeRate, int cooldown, int cost, int healAmp, float heart, int threat) {
+		private Stats(float voidicDamage, int voidicDamagePercent, float voidicDamageReduction, int voidicDamageReductionPercentage, int spellpower, int rechargeRate, int spellCrit, int cooldown, int cost, int healAmp, float heart, int threat) {
 			this.voidicDamage = voidicDamage;
 			this.voidicDamagePercent = voidicDamagePercent;
 			this.voidicDamageReduction = voidicDamageReduction;
 			this.voidicDamageReductionPercentage = voidicDamageReductionPercentage;
 			this.spellpower = spellpower;
 			this.rechargeRate = rechargeRate;
+			this.spellCrit = spellCrit;
 			this.cooldown = cooldown;
 			this.cost = cost;
 			this.healAmp = healAmp;
@@ -139,6 +141,7 @@ public class TurmoilSkill {
 			private int voidicDamageReductionPercentage;
 			private int spellpower;
 			private int rechargeRate;
+			private int spellCrit;
 			private int cooldown;
 			private int cost;
 			private int healAmp;
@@ -183,6 +186,11 @@ public class TurmoilSkill {
 				return this;
 			}
 
+			Builder spellCrit(int a) {
+				spellCrit = a;
+				return this;
+			}
+
 			Builder cooldown(int a) {
 				cooldown = a;
 				return this;
@@ -209,7 +217,7 @@ public class TurmoilSkill {
 			}
 
 			Stats build() {
-				return new Stats(voidicDamage, voidicDamagePercent, voidicDamageReduction, voidicDamageReductionPercentage, spellpower, rechargeRate, cooldown, cost, healAmp, heart, threat);
+				return new Stats(voidicDamage, voidicDamagePercent, voidicDamageReduction, voidicDamageReductionPercentage, spellpower, rechargeRate, spellCrit, cooldown, cost, healAmp, heart, threat);
 			}
 
 		}
