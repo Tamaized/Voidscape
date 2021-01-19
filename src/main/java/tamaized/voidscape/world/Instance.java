@@ -79,6 +79,7 @@ public final class Instance {
 		players.clear();
 		locked = false;
 		tick = 0;
+		unloadTick++;
 		type = InstanceType.Unrestricted;
 		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 	}
