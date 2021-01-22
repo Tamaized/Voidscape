@@ -68,8 +68,8 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
-		Builder stats(Consumer<TurmoilSkill.Stats.Builder> exec) {
-			exec.accept(stats);
+		Builder stats(Consumer<TurmoilSkill.Stats.Builder> stats) {
+			stats.accept(this.stats);
 			return this;
 		}
 
