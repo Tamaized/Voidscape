@@ -36,6 +36,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -71,8 +72,11 @@ public class HackyWorldGen {
 		public static Codec<FixedSingleBiomeProvider> CODEC = FIXED_BIOME_CODEC.
 				fieldOf("biome").xmap(FixedSingleBiomeProvider::new, s -> s.biome).stable().codec();
 
-		public FixedSingleBiomeProvider(Supplier<Biome> p_i46709_1_) {
-			super(p_i46709_1_);
+		public FixedSingleBiomeProvider(Supplier<Biome> biome) {
+			super(biome);
+			if (!Objects.requireNonNull(biome.get().getRegistryName()).getNamespace().equals(Voidscape.MODID)) {
+				Voidscape.LOGGER.error("SOMETHING IS VERY WRONG HERE!\nTHIS IS NOT A VOIDSCAPE BIOME!!\n" + biome.get().getRegistryName());
+			}
 		}
 
 		@Override
