@@ -5,7 +5,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +14,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -84,15 +82,6 @@ public class Voidscape {
                         then(VoidCommands.Debug.register()))
 
         );
-        busForge.addListener((Consumer<LivingDeathEvent>) event -> {
-            if (event.getEntity() instanceof PlayerEntity && checkForVoidDimension(event.getEntity().level)) {
-                event.setCanceled(true);
-                ((PlayerEntity) event.getEntity()).setHealth(((PlayerEntity) event.getEntity()).getMaxHealth() * 0.1F);
-                if (!event.getEntity().level.isClientSide())
-                    event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(subCapTurmoilData).
-                            ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
-            }
-        });
         busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
             if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.20F) {
                 final int dist = 64;

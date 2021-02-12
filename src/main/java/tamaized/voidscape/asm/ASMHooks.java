@@ -8,6 +8,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.concurrent.ThreadTaskExecutor;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.SimpleRegistry;
@@ -20,9 +22,12 @@ import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.SaveFormat;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
@@ -73,6 +78,22 @@ public class ASMHooks {
 	public static long seed(long seed) {
 		HackyWorldGen.seed = seed;
 		return seed;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraftforge.common.ForgeHooks#onLivingDeath(LivingEntity, DamageSource)}
+	 * [BEFORE FIRST GETSTATIC]
+	 */
+	public static boolean death(LivingEntity entity, DamageSource source) {
+		if (entity instanceof PlayerEntity && Voidscape.checkForVoidDimension(entity.level)) {
+			entity.setHealth(entity.getMaxHealth() * 0.1F);
+			if (!entity.level.isClientSide())
+				entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
+						ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
+			return true;
+		}
+		return MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, source));
 	}
 
 }
