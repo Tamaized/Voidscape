@@ -50,6 +50,7 @@ public class RegUtil {
 		ModSounds.classload();
 		ModTools.classload();
 		ModEntities.classload();
+		ModBiomes.classload();
 		for (DeferredRegister register : REGISTERS)
 			register.register(bus);
 	}

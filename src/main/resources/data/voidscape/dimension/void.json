@@ -3,8 +3,8 @@
   "generator": {
 	"type": "voidscape:void",
 	"biome_source": {
-	  "type": "voidscape:fixed",
-	  "biome": "voidscape:void"
+		"type": "minecraft:fixed",
+		"biome": "voidscape:void"
 	},
 	"settings": {
 	  "bedrock_roof_position": -10,
