@@ -37,7 +37,7 @@ public class ClientPacketJoinPartyError implements NetworkMessages.IMessage<Clie
 
 	@Override
 	public ClientPacketJoinPartyError fromBytes(PacketBuffer packet) {
-		error = packet.readUtf();
+		error = packet.readUtf(Short.MAX_VALUE);
 		return this;
 	}
 

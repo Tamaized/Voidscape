@@ -48,7 +48,7 @@ public class ServerPacketRequestJoinParty implements NetworkMessages.IMessage<Se
 	@Override
 	public ServerPacketRequestJoinParty fromBytes(PacketBuffer packet) {
 		host = packet.readUUID();
-		password = packet.readUtf();
+		password = packet.readUtf(Short.MAX_VALUE);
 		return this;
 	}
 

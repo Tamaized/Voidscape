@@ -65,7 +65,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 		int len = packet.readVarInt();
 		for (int i = 0; i < len; i++)
 			members.add(packet.readUUID());
-		password = packet.readUtf();
+		password = packet.readUtf(Short.MAX_VALUE);
 		max = packet.readVarInt();
 		duty = Duties.fromID(packet.readVarInt());
 		type = Instance.InstanceType.fromOrdinal(packet.readVarInt());

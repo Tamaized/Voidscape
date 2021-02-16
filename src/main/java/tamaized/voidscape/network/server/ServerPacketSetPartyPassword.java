@@ -32,7 +32,7 @@ public class ServerPacketSetPartyPassword implements NetworkMessages.IMessage<Se
 
 	@Override
 	public ServerPacketSetPartyPassword fromBytes(PacketBuffer packet) {
-		password = packet.readUtf();
+		password = packet.readUtf(Short.MAX_VALUE);
 		return this;
 	}
 
