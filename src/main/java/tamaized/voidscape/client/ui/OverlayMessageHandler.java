@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
 import tamaized.voidscape.client.StencilBufferUtil;
+import tamaized.voidscape.client.ui.screen.TurmoilScreen;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Talk;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -99,6 +100,8 @@ public class OverlayMessageHandler {
 		}
 		if (captureText.isEmpty())
 			captureTick = 0;
+		if (Minecraft.getInstance().screen != null && !(Minecraft.getInstance().screen instanceof TurmoilScreen) && !Minecraft.getInstance().screen.isPauseScreen())
+			Minecraft.getInstance().setScreen(null);
 		RenderSystem.enableBlend();
 		RenderSystem.enableAlphaTest();
 		{

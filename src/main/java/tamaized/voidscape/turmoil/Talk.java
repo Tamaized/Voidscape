@@ -18,7 +18,7 @@ public class Talk {
 
 			new TranslationTextComponent(
 
-					"([%1$s])\n" +
+					"(Press [%1$s])\n" +
 
 							"Do not be afraid.\n" +
 
