@@ -124,6 +124,12 @@ public class Talk {
 
 							"Let us make our choices wisely\n" +
 
+							"You may however allow the void to reshape us\n" +
+
+							"With a Voidic Crystal in possession, allow your turmoil to shatter it\n" +
+
+							"This can only be done once an hour\n" +
+
 							"(This entire section is a majorly work in progress)\n" +
 
 							"(You can only claim one skill)\n" +

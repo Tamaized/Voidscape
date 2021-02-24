@@ -35,6 +35,8 @@ public final class VoidCommands {
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("debug").
 					requires(cs -> cs.hasPermission(2)).
+					then(Commands.literal("reset_resetSkillTimer").
+							executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, Turmoil::resetResetCooldown))).
 					then(Commands.literal("reset").
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, Turmoil::debug))).
 					then(Commands.literal("intro").

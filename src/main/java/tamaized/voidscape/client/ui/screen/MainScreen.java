@@ -15,17 +15,21 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
+import tamaized.voidscape.network.server.ServerPacketTurmoilResetSkills;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
+import tamaized.voidscape.turmoil.TurmoilStats;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class MainScreen extends TurmoilScreen {
 
 	private long tick;
+	private Button reset;
 
 	public MainScreen() {
 		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.main")));
@@ -34,8 +38,9 @@ public class MainScreen extends TurmoilScreen {
 	@Override
 	protected void init() {
 		super.init();
-		if (minecraft == null)
+		if (minecraft == null || minecraft.player == null)
 			return;
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		tick = minecraft.level == null ? 0 : minecraft.level.getGameTime();
 		MainWindow window = minecraft.getWindow();
 		final int buttonWidth = 180;
@@ -74,7 +79,6 @@ public class MainScreen extends TurmoilScreen {
 				new TranslationTextComponent("Voidic Powers"),
 
 				button -> {
-					Turmoil data = getData(Voidscape.subCapTurmoilData);
 					if (data != null && data.getProgression() == Progression.MidTutorial)
 						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilProgressTutorial());
 					minecraft.setScreen(new SkillsScreen());
@@ -96,14 +100,49 @@ public class MainScreen extends TurmoilScreen {
 				button -> minecraft.setScreen(new SpellsScreen())
 
 		);
-		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		spells.active = data != null && data.hasCoreSkill();
 		addButton(spells);
-		Button instances = new Button(
+		reset = new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
 				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 3,
+
+				buttonWidth,
+
+				buttonHeight,
+
+				new TranslationTextComponent("Reset Voidic Skills"),
+
+				button -> {
+					if (button.active) {
+						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilResetSkills());
+						TurmoilStats stats = getData(Voidscape.subCapTurmoilStats);
+						if (data != null && stats != null)
+							data.resetSkills(stats);
+					}
+				},
+
+				(button, matrixStack, x, y) -> {
+					if (button.active || data == null || !data.hasCoreSkill())
+						return;
+					String text = data.getResetCooldown() > 0 ? ("%s Ticks Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
+					if (!text.isEmpty())
+						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(new TranslationTextComponent(
+
+								text
+
+								, data.getResetCooldown()), Math.max(this.width / 2 - 43, 170)), x, y);
+				}
+
+		);
+		reset.active = data != null && data.hasCoreSkill() && data.getResetCooldown() <= 0 && minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get());
+		addButton(reset);
+		Button instances = new Button(
+
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 4,
 
 				buttonWidth,
 
@@ -136,6 +175,13 @@ public class MainScreen extends TurmoilScreen {
 				button -> onClose()
 
 		));
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		Turmoil data = getData(Voidscape.subCapTurmoilData);
+		reset.active = minecraft != null && minecraft.player != null && data != null && data.hasCoreSkill() && data.getResetCooldown() <= 0 && minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get());
 	}
 
 	@Override

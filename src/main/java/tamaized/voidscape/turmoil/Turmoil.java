@@ -36,6 +36,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	private Progression progression = Progression.None;
 	private int level;
 	private boolean instanced;
+	private int resetCooldown;
 
 	@Override
 	public ResourceLocation id() {
@@ -44,6 +45,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
+		if (resetCooldown > 0)
+			if (resetCooldown-- <= 0)
+				dirty = true;
 		maxTick = 300;
 		if (!(parent instanceof PlayerEntity) || parent.level == null)
 			return;
@@ -167,11 +171,23 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
+	public void resetSkills(TurmoilStats stats) {
+		resetCooldown = 20 * 60 * 60;
+		skills.clear();
+		stats.reset();
+		dirty = true;
+	}
+
+	public int getResetCooldown() {
+		return resetCooldown;
+	}
+
 	@Override
 	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
 		nbt.putInt("progression", progression.ordinal());
 		nbt.putInt("level", level);
 		nbt.putIntArray("skills", skills.stream().mapToInt(TurmoilSkill::getID).toArray());
+		nbt.putInt("reset", resetCooldown);
 		return nbt;
 	}
 
@@ -185,11 +201,13 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			if (skill != null)
 				skills.add(skill);
 		}
+		resetCooldown = nbt.getInt("reset");
 	}
 
 	@Override
 	public void write(PacketBuffer buffer) {
 		buffer.writeVarInt(level);
+		buffer.writeInt(resetCooldown);
 		buffer.writeVarInt(progression.ordinal());
 		buffer.writeVarInt(state.ordinal());
 		buffer.writeFloat(tick);
@@ -205,6 +223,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void read(PacketBuffer buffer) {
 		level = buffer.readVarInt();
+		resetCooldown = buffer.readInt();
 		progression = Progression.get(buffer.readVarInt());
 		state = State.get(buffer.readVarInt());
 		tick = buffer.readFloat();
@@ -254,6 +273,12 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		state = State.CLOSED;
 		level = 0;
 		skills.clear();
+		resetCooldown = 0;
+		dirty = true;
+	}
+
+	public void resetResetCooldown() {
+		resetCooldown = 0;
 		dirty = true;
 	}
 

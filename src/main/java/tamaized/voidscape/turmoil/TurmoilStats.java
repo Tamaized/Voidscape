@@ -35,6 +35,20 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean dirty = false;
 
+	public void reset() {
+		voidicPower = 0;
+		nullPower = 0;
+		insanePower = 0;
+		spellpower = 0;
+		rechargeRate = 0;
+		cooldown = 0;
+		cost = 0;
+		crit = 0;
+		voidmancerStance = false;
+		slots = new TurmoilAbilityInstance[9];
+		dirty = true;
+	}
+
 	@Override
 	public void tick(Entity parent) {
 		if (parent.tickCount % 20 * 10 == 0)

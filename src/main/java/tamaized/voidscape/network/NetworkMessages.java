@@ -5,8 +5,26 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
-import tamaized.voidscape.network.client.*;
-import tamaized.voidscape.network.server.*;
+import tamaized.voidscape.network.client.ClientPacketJoinPartyError;
+import tamaized.voidscape.network.client.ClientPacketResetPartyInfo;
+import tamaized.voidscape.network.client.ClientPacketSendPartyList;
+import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
+import tamaized.voidscape.network.server.ServerPacketCommenceDuty;
+import tamaized.voidscape.network.server.ServerPacketCreateParty;
+import tamaized.voidscape.network.server.ServerPacketDisbandParty;
+import tamaized.voidscape.network.server.ServerPacketRemovePartyMember;
+import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
+import tamaized.voidscape.network.server.ServerPacketRequestPartyInfo;
+import tamaized.voidscape.network.server.ServerPacketRequestPartyList;
+import tamaized.voidscape.network.server.ServerPacketSetPartyPassword;
+import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
+import tamaized.voidscape.network.server.ServerPacketTurmoilActivateAbility;
+import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
+import tamaized.voidscape.network.server.ServerPacketTurmoilResetSkills;
+import tamaized.voidscape.network.server.ServerPacketTurmoilSetSpellBar;
+import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
+import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -31,6 +49,7 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketCommenceDuty.class, ServerPacketCommenceDuty::new);
 		registerMessage(network, ServerPacketDisbandParty.class, ServerPacketDisbandParty::new);
 		registerMessage(network, ServerPacketRemovePartyMember.class, () -> new ServerPacketRemovePartyMember(0));
+		registerMessage(network, ServerPacketTurmoilResetSkills.class, ServerPacketTurmoilResetSkills::new);
 
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 		registerMessage(network, ClientPacketUpdatePartyInfo.class, () -> new ClientPacketUpdatePartyInfo(null, false));
