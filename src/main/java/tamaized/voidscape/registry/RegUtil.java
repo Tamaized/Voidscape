@@ -9,7 +9,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.HoeItem;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShovelItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
@@ -73,16 +83,16 @@ public class RegUtil {
 	}
 
 	enum ItemProps {
-		VOIDIC_CRYSTAL(new Item.Properties().tab(RegUtil.CREATIVE_TAB).fireResistant());
+		VOIDIC_CRYSTAL(() -> new Item.Properties().tab(RegUtil.CREATIVE_TAB).fireResistant());
 
-		private final Item.Properties properties;
+		private final Supplier<Item.Properties> properties;
 
-		ItemProps(Item.Properties properties) {
+		ItemProps(Supplier<Item.Properties> properties) {
 			this.properties = properties;
 		}
 
 		Item.Properties get() {
-			return properties;
+			return properties.get();
 		}
 	}
 
