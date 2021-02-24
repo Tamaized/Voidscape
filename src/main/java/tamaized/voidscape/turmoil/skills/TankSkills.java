@@ -1,8 +1,10 @@
 package tamaized.voidscape.turmoil.skills;
 
+import tamaized.voidscape.turmoil.abilities.tank.TankAbilities;
+
 public class TankSkills implements ITurmoilSkills {
 
-	public final TurmoilSkill CORE = builder("core").core().build();
+	public final TurmoilSkill CORE = builder("core").core().abilities(TankAbilities.TAUNT).build();
 
 	public final TurmoilSkill VOIDIC_BOND = builder("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).rechargeRate(1)).build();
 	public final TurmoilSkill VOIDIC_DAMAGE_1 = builder("voidic_damage_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();
