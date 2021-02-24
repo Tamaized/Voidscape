@@ -24,12 +24,12 @@ public class MeleeSkillLayout implements ISkillLayout {
 		final int xshift3 = 20;
 		final int xshift4 = 50;
 
-		final int y1 = y + 50;
-		final int y2 = y + 90;
-		final int y3 = y + 130;
-		final int y4 = y + 170;
-		final int y5 = y + 210;
-		final int y6 = y + 250;
+		final int y1 = y + 250;
+		final int y2 = y1 + 40;
+		final int y3 = y1 + 40 * 2;
+		final int y4 = y1 + 40 * 3;
+		final int y5 = y1 + 40 * 4;
+		final int y6 = y1 + 40 * 5;
 
 		add.accept(skills.CHAOS_BLADE_1, x1, y1);
 		addWithRNG(add, skills.EMPOWER_ATTACK_BLEED, x1 + xshift1, y2);
