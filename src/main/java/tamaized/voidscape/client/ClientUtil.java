@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 public class ClientUtil {
 
+	public static long tick;
+
 	@Nullable
 	public static PlayerEntity getClientPlayerSafely() {
 		return Minecraft.getInstance().player;

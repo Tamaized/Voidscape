@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
+import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.screen.MainScreen;
 import tamaized.voidscape.client.ui.screen.TurmoilScreen;
@@ -48,6 +49,7 @@ public class RenderTurmoil {
 	public static void tick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isPaused() || Minecraft.getInstance().level == null)
 			return;
+		ClientUtil.tick++;
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.getState() != Turmoil.State.CLOSED)

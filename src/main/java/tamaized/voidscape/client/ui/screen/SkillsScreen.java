@@ -18,7 +18,12 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.layout.*;
+import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.layout.HealerSkillLayout;
+import tamaized.voidscape.client.layout.ISkillLayout;
+import tamaized.voidscape.client.layout.MageSkillLayout;
+import tamaized.voidscape.client.layout.MeleeSkillLayout;
+import tamaized.voidscape.client.layout.TankSkillLayout;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSkillClaim;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -94,7 +99,7 @@ public class SkillsScreen extends TurmoilScreen {
 			boolean hover = line.getRight().isHovered() || data.hasSkill(line.getRight().getSkill());
 			//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
 			for (float t = 0; t < dist + 1; t += 1F) {
-				float y = 8F * MathHelper.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + minecraft.level.getGameTime())) * MathHelper.sin((float) Math.toRadians(t * Math.PI * 2F - minecraft.level.getGameTime() * 3F));
+				float y = 8F * MathHelper.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + ClientUtil.tick)) * MathHelper.sin((float) Math.toRadians(t * Math.PI * 2F - ClientUtil.tick * 3F));
 				float xRot = t * cos - y * sin + p2.x;
 				float yRot = t * sin + y * cos + p2.y;
 				buffer.vertex(xRot, yRot, 0).color(hover ? 0F : 0.4F, hover ? 1F : 0F, hover ? 0F : 1F, 1F).endVertex();
