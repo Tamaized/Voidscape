@@ -12,6 +12,7 @@ import net.minecraft.util.text.StringTextComponent;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
+import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.world.InstanceManager;
 
 import java.util.function.Consumer;
@@ -35,6 +36,8 @@ public final class VoidCommands {
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("debug").
 					requires(cs -> cs.hasPermission(2)).
+					then(Commands.literal("resetCooldowns").
+							executes(context -> getDataAndRun(Voidscape.subCapTurmoilStats, context, TurmoilStats::resetCooldowns))).
 					then(Commands.literal("reset_resetSkillTimer").
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, Turmoil::resetResetCooldown))).
 					then(Commands.literal("reset").

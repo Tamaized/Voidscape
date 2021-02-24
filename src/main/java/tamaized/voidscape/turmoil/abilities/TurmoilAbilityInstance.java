@@ -72,6 +72,10 @@ public final class TurmoilAbilityInstance {
 		lastCast = caster.level.getGameTime();
 	}
 
+	public void resetCooldown() {
+		lastCast = 0;
+	}
+
 	public long cooldownRemaining(World level) {
 		return Math.max((filterCooldown() - (level.getGameTime() - lastCast)), 0);
 	}

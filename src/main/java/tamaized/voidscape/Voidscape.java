@@ -7,7 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -40,8 +45,11 @@ import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @Mod(Voidscape.MODID)
@@ -123,5 +131,55 @@ public class Voidscape {
     public static <T> T getNull() {
         return null;
     }
+
+	@Nullable
+	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
+		Vector3d vector3d = entity.getEyePosition(1F);
+		Vector3d vector3d1 = entity.getViewVector(1.0F);
+		Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
+		AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1.0D, 1.0D, 1.0D);
+		RayTraceResult raytraceresult = entity.level.clip(new RayTraceContext(vector3d, vector3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+		if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
+			vector3d2 = raytraceresult.getLocation();
+		}
+		return getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range);
+	}
+
+	@Nullable
+	private static EntityRayTraceResult getEntityHitResult(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance) {
+		World world = shooter.level;
+		double d0 = distance;
+		Entity entity = null;
+		Vector3d vector3d = null;
+
+		for (Entity entity1 : world.getEntities(shooter, boundingBox, filter)) {
+			AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate((double) entity1.getPickRadius());
+			Optional<Vector3d> optional = axisalignedbb.clip(startVec, endVec);
+			if (axisalignedbb.contains(startVec)) {
+				if (d0 >= 0.0D) {
+					entity = entity1;
+					vector3d = optional.orElse(startVec);
+					d0 = 0.0D;
+				}
+			} else if (optional.isPresent()) {
+				Vector3d vector3d1 = optional.get();
+				double d1 = startVec.distanceToSqr(vector3d1);
+				if (d1 < d0 || d0 == 0.0D) {
+					if (entity1.getRootVehicle() == shooter.getRootVehicle() && !entity1.canRiderInteract()) {
+						if (d0 == 0.0D) {
+							entity = entity1;
+							vector3d = vector3d1;
+						}
+					} else {
+						entity = entity1;
+						vector3d = vector3d1;
+						d0 = d1;
+					}
+				}
+			}
+		}
+
+		return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
+	}
 
 }
