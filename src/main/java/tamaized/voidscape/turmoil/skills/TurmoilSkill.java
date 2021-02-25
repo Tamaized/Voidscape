@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil.skills;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
@@ -105,19 +106,20 @@ public class TurmoilSkill {
 		return id;
 	}
 
-	static class Stats {
-		private final float voidicDamage;
-		private final int voidicDamagePercent;
-		private final float voidicDamageReduction;
-		private final int voidicDamageReductionPercentage;
-		private final int spellpower;
-		private final int rechargeRate;
-		private final int spellCrit;
-		private final int cooldown;
-		private final int cost;
-		private final int healAmp;
-		private final float heart;
-		private final int threat;
+	public static class Stats {
+		private static final Stats EMPTY = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		public final float voidicDamage;
+		public final int voidicDamagePercent;
+		public final float voidicDamageReduction;
+		public final int voidicDamageReductionPercentage;
+		public final int spellpower;
+		public final int rechargeRate;
+		public final int spellCrit;
+		public final int cooldown;
+		public final int cost;
+		public final int healAmp;
+		public final float heart;
+		public final int threat;
 
 		private Stats(float voidicDamage, int voidicDamagePercent, float voidicDamageReduction, int voidicDamageReductionPercentage, int spellpower, int rechargeRate, int spellCrit, int cooldown, int cost, int healAmp, float heart, int threat) {
 			this.voidicDamage = voidicDamage;
@@ -132,6 +134,81 @@ public class TurmoilSkill {
 			this.healAmp = healAmp;
 			this.heart = heart;
 			this.threat = threat;
+		}
+
+		public static Stats empty() {
+			return EMPTY;
+		}
+
+		public static Stats decode(PacketBuffer buffer) {
+			return new Stats(buffer.readFloat(),
+
+					buffer.readInt(),
+
+					buffer.readFloat(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readInt(),
+
+					buffer.readFloat(),
+
+					buffer.readInt());
+		}
+
+		public Stats add(Stats other) {
+			return new Stats(
+
+					voidicDamage + other.voidicDamage,
+
+					voidicDamagePercent + other.voidicDamagePercent,
+
+					voidicDamageReduction + other.voidicDamageReduction,
+
+					voidicDamageReductionPercentage + other.voidicDamageReductionPercentage,
+
+					spellpower + other.spellpower,
+
+					rechargeRate + other.rechargeRate,
+
+					spellCrit + other.spellCrit,
+
+					cooldown + other.cooldown,
+
+					cost + other.cost,
+
+					healAmp + other.healAmp,
+
+					heart + other.heart,
+
+					threat + other.threat
+
+			);
+		}
+
+		public void encode(PacketBuffer buffer) {
+			buffer.writeFloat(voidicDamage).
+					writeInt(voidicDamagePercent).
+					writeFloat(voidicDamageReduction).
+					writeInt(voidicDamageReductionPercentage).
+					writeInt(spellpower).
+					writeInt(rechargeRate).
+					writeInt(spellCrit).
+					writeInt(cooldown).
+					writeInt(cost).
+					writeInt(healAmp).
+					writeFloat(heart).
+					writeInt(threat);
 		}
 
 		static class Builder {

@@ -34,11 +34,11 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public int getCalcCost(TurmoilStats stats) {
-		return (int) (ability.cost() * (1F - (float) stats.getCostReduction() / 100F));
+		return (int) (ability.cost() * (1F - (float) stats.stats().cost / 100F));
 	}
 
 	public int getCalcCooldown(TurmoilStats stats) {
-		return (int) (ability.cooldown() * (1F - (float) stats.getCooldownReduction() / 100F));
+		return (int) (ability.cooldown() * (1F - (float) stats.stats().cooldown / 100F));
 	}
 
 	public boolean canAfford(LivingEntity caster) {

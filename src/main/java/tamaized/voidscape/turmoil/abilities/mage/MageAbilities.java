@@ -11,8 +11,8 @@ public class MageAbilities {
 		EntitySpellBolt bolt = new EntitySpellBolt(caster);
 		bolt.setDamage(caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> {
 			float damage = spell.damage();
-			damage *= 1F + (stats.getSpellpower() / 100F);
-			if (caster.level.getRandom().nextInt(100) + 1 <= stats.getSpellCrit())
+			damage *= 1F + (stats.stats().spellpower / 100F);
+			if (caster.level.getRandom().nextInt(100) + 1 <= stats.stats().spellCrit)
 				damage *= 1.25F;
 			return damage;
 		}).get()).orElse(0F));

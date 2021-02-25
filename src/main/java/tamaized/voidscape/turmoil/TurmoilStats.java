@@ -18,6 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
+import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import javax.annotation.Nullable;
@@ -35,11 +36,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	private int nullPower = 0;
 	private int insanePower = 0;
 
-	private int spellpower = 0;
-	private int rechargeRate = 0;
-	private int cooldown = 0;
-	private int cost = 0;
-	private int crit = 0;
+	private TurmoilSkill.Stats stats = TurmoilSkill.Stats.empty();
 
 	private boolean voidmancerStance = false;
 	private float ramDamage = 0;
@@ -48,15 +45,22 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean dirty = false;
 
+	private void resetStats() {
+		stats = TurmoilSkill.Stats.empty();
+	}
+
+	private void recalculateStatsAndApply(Entity parent) {
+		resetStats();
+		parent.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
+				ifPresent(data -> data.getSkills().forEach(skill -> stats = stats.add(skill.getStats()))));
+		markDirty();
+	}
+
 	public void reset() {
 		voidicPower = 0;
 		nullPower = 0;
 		insanePower = 0;
-		spellpower = 0;
-		rechargeRate = 0;
-		cooldown = 0;
-		cost = 0;
-		crit = 0;
+		resetStats();
 		voidmancerStance = false;
 		ramDamage = 0;
 		ramTarget = null;
@@ -67,14 +71,14 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void tick(Entity parent) {
 		if (parent.tickCount % 20 * 10 == 0)
-			dirty = true;
+			recalculateStatsAndApply(parent);
 		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayerEntity) {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
 		if (voidicPower < 1000)
-			voidicPower += 1 + rechargeRate;
-		if (nullPower > 0 && parent.tickCount % ((voidmancerStance ? 2 : 1) * (1 + rechargeRate)) == 0)
+			voidicPower += 1 + stats.rechargeRate;
+		if (nullPower > 0 && parent.tickCount % ((voidmancerStance ? 2 : 1) * (1 + stats.rechargeRate)) == 0)
 			nullPower--;
 		if (insanePower > 0 && parent.tickCount % 10 == 0)
 			insanePower--;
@@ -137,6 +141,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		buffer.writeInt(voidicPower);
 		buffer.writeInt(nullPower);
 		buffer.writeInt(insanePower);
+		stats.encode(buffer);
 		for (TurmoilAbilityInstance slot : slots) {
 			if (slot == null) {
 				buffer.writeVarInt(-1);
@@ -151,6 +156,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		voidicPower = buffer.readInt();
 		nullPower = buffer.readInt();
 		insanePower = buffer.readInt();
+		stats = TurmoilSkill.Stats.decode(buffer);
 		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = TurmoilAbilityInstance.decode(buffer);
@@ -191,24 +197,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		dirty = true;
 	}
 
-	public int getSpellpower() {
-		return spellpower;
-	}
-
-	public int getRechargeRate() {
-		return rechargeRate;
-	}
-
-	public int getCooldownReduction() {
-		return cooldown;
-	}
-
-	public int getCostReduction() {
-		return cost;
-	}
-
-	public int getSpellCrit() {
-		return crit;
+	public TurmoilSkill.Stats stats() {
+		return stats;
 	}
 
 	public void setSlot(@Nullable TurmoilAbilityInstance ability, int slot) {
@@ -263,6 +253,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 				nullPower = o.nullPower;
 				insanePower = o.insanePower;
 			}
+			stats = o.stats;
 		}
 	}
 }
