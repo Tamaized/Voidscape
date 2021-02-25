@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class TurmoilSkill {
@@ -107,6 +108,7 @@ public class TurmoilSkill {
 	}
 
 	public static class Stats {
+		public static final UUID HEALTH = UUID.fromString("fe7b05c2-e1d5-4af5-a249-2f10564e2200");
 		private static final Stats EMPTY = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		public final float voidicDamage;
 		public final int voidicDamagePercent;

@@ -2,6 +2,9 @@ package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -53,6 +56,14 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		resetStats();
 		parent.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
 				ifPresent(data -> data.getSkills().forEach(skill -> stats = stats.add(skill.getStats()))));
+		if (parent instanceof LivingEntity) {
+			LivingEntity living = (LivingEntity) parent;
+			ModifiableAttributeInstance attribute = living.getAttribute(Attributes.MAX_HEALTH);
+			if (attribute != null) {
+				attribute.removeModifier(TurmoilSkill.Stats.HEALTH);
+				attribute.addTransientModifier(new AttributeModifier(TurmoilSkill.Stats.HEALTH, "Voidic Health Boost", stats.heart * 2, AttributeModifier.Operation.ADDITION));
+			}
+		}
 		markDirty();
 	}
 
