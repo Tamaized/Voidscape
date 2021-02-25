@@ -114,7 +114,7 @@ public class Voidscape {
         });
         busForge.addListener((Consumer<LivingHurtEvent>) event -> {
             if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
-                event.setAmount((float) Math.min(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
+				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
         });
     }
 
