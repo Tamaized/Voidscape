@@ -17,6 +17,7 @@ public class MageAbilities {
 			return damage;
 		}).get()).orElse(0F));
 		caster.level.addFreshEntity(bolt);
+		return true;
 	}).damage(1F);
 
 	private static String unloc(String loc) {

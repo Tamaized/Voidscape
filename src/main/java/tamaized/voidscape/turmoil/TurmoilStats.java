@@ -2,14 +2,23 @@ package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SEntityVelocityPacket;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
+import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -31,7 +40,11 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	private int cooldown = 0;
 	private int cost = 0;
 	private int crit = 0;
+
 	private boolean voidmancerStance = false;
+	private float ramDamage = 0;
+	private Vector3d ramTarget;
+	private int ramTimeout;
 
 	private boolean dirty = false;
 
@@ -45,6 +58,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		cost = 0;
 		crit = 0;
 		voidmancerStance = false;
+		ramDamage = 0;
+		ramTarget = null;
 		slots = new TurmoilAbilityInstance[9];
 		dirty = true;
 	}
@@ -63,6 +78,30 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			nullPower--;
 		if (insanePower > 0 && parent.tickCount % 10 == 0)
 			insanePower--;
+		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
+			Vector3d dist = ramTarget.subtract(parent.position());
+			if ((dist.x * dist.x + dist.y * dist.y + dist.z * dist.z) / 2D <= 1D) {
+				final boolean flag = ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
+				parent.level.getEntities(parent, parent.getBoundingBox().inflate(1F, 1F, 1F), e -> !flag || !(e instanceof PlayerEntity)).forEach(e -> {
+					e.hurt(parent instanceof PlayerEntity ? DamageSource.playerAttack((PlayerEntity) parent) : parent instanceof LivingEntity ? DamageSource.mobAttack((LivingEntity) parent) : DamageSource.GENERIC, ramDamage);
+					for (int i = 0; i < 10; i++) {
+						Vector3d pos = new Vector3d(0.25F + parent.level.getRandom().nextFloat() * 0.75F, 0, 0).
+								yRot((float) Math.toRadians(parent.level.getRandom().nextInt(360))).
+								xRot((float) Math.toRadians(parent.level.getRandom().nextInt(360))).
+								add(e.getX(), e.getEyeY() - 0.5F + parent.level.getRandom().nextFloat(), e.getZ());
+						((ServerWorld) parent.level).sendParticles(ParticleTypes.CRIT, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
+					}
+				});
+				parent.level.playSound(null, parent, SoundEvents.BLAZE_HURT, SoundCategory.PLAYERS, 1F, 0.75F + parent.level.getRandom().nextFloat() * 0.5F);
+				ramTarget = null;
+				ramDamage = 0;
+				ramTimeout = 0;
+			} else if (!parent.getDeltaMovement().equals(dist.normalize())) {
+				parent.setDeltaMovement(dist.normalize());
+				if (parent instanceof ServerPlayerEntity)
+					((ServerPlayerEntity) parent).connection.send(new SEntityVelocityPacket(parent));
+			}
+		}
 	}
 
 	@Override
@@ -95,6 +134,9 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void write(PacketBuffer buffer) {
+		buffer.writeInt(voidicPower);
+		buffer.writeInt(nullPower);
+		buffer.writeInt(insanePower);
 		for (TurmoilAbilityInstance slot : slots) {
 			if (slot == null) {
 				buffer.writeVarInt(-1);
@@ -106,6 +148,9 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void read(PacketBuffer buffer) {
+		voidicPower = buffer.readInt();
+		nullPower = buffer.readInt();
+		insanePower = buffer.readInt();
 		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = TurmoilAbilityInstance.decode(buffer);
@@ -189,6 +234,23 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			}
 			a.execute(caster);
 		}
+	}
+
+	public void resetCooldowns() {
+		for (TurmoilAbilityInstance slot : slots) {
+			if (slot != null)
+				slot.resetCooldown();
+		}
+	}
+
+	public void ramTowards(Vector3d target, float damage) {
+		ramTarget = target;
+		ramDamage = damage;
+		ramTimeout = 20 * 3;
+	}
+
+	public void markDirty() {
+		dirty = true;
 	}
 
 	@Override

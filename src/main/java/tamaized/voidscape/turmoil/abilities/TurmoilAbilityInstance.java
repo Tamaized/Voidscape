@@ -60,12 +60,14 @@ public final class TurmoilAbilityInstance {
 	public void execute(LivingEntity caster) {
 		if (!canExecute(caster))
 			return;
-		ability.execute(caster);
 		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-			TurmoilAbility.drainPower(stats, ability.costType(), getCalcCost(stats));
 			casterStats = stats;
+			if (ability.execute(caster)) {
+				TurmoilAbility.drainPower(stats, ability.costType(), getCalcCost(stats));
+				putOnCooldown(caster);
+			} else
+				stats.markDirty();
 		}));
-		putOnCooldown(caster);
 	}
 
 	private void putOnCooldown(LivingEntity caster) {

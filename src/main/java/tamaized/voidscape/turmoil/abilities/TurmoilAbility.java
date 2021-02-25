@@ -7,7 +7,7 @@ import tamaized.voidscape.turmoil.TurmoilStats;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 public class TurmoilAbility {
 
@@ -19,11 +19,11 @@ public class TurmoilAbility {
 	private final Type type;
 	private final int cost;
 	private final int cooldown;
-	private final BiConsumer<TurmoilAbility, LivingEntity> execute;
+	private final BiPredicate<TurmoilAbility, LivingEntity> execute;
 
 	private float damage = 0;
 
-	public TurmoilAbility(String unloc, Toggle toggle, Type type, int cost, int cooldown, BiConsumer<TurmoilAbility, LivingEntity> execute) {
+	public TurmoilAbility(String unloc, Toggle toggle, Type type, int cost, int cooldown, BiPredicate<TurmoilAbility, LivingEntity> execute) {
 		id = register(this);
 		this.unloc = unloc;
 		this.toggle = toggle;
@@ -73,8 +73,8 @@ public class TurmoilAbility {
 		return cost;
 	}
 
-	public void execute(LivingEntity caster) {
-		execute.accept(this, caster);
+	public boolean execute(LivingEntity caster) {
+		return execute.test(this, caster);
 	}
 
 	public TurmoilAbility damage(float d) {

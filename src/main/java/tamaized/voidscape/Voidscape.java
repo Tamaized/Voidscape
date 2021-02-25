@@ -132,7 +132,6 @@ public class Voidscape {
         return null;
     }
 
-	@Nullable
 	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
 		Vector3d vector3d = entity.getEyePosition(1F);
 		Vector3d vector3d1 = entity.getViewVector(1.0F);
@@ -142,7 +141,8 @@ public class Voidscape {
 		if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
 			vector3d2 = raytraceresult.getLocation();
 		}
-		return getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range);
+		RayTraceResult ray = getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range);
+		return ray == null ? raytraceresult : ray;
 	}
 
 	@Nullable

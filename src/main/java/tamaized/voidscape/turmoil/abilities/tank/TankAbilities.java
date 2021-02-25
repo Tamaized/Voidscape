@@ -23,7 +23,9 @@ public class TankAbilities {
 				((ServerWorld) caster.level).sendParticles(ParticleTypes.ANGRY_VILLAGER, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
 			}
 			caster.level.playSound(null, entity, SoundEvents.FIRE_AMBIENT, SoundCategory.PLAYERS, 1F, 0.75F + entity.getRandom().nextFloat() * 0.5F);
+			return true;
 		}
+		return false;
 	});
 
 	private static String unloc(String loc) {
