@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -19,6 +18,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -98,7 +98,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			if ((dist.x * dist.x + dist.y * dist.y + dist.z * dist.z) / 2D <= 1D) {
 				final boolean flag = ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
 				parent.level.getEntities(parent, parent.getBoundingBox().inflate(1F, 1F, 1F), e -> !flag || !(e instanceof PlayerEntity)).forEach(e -> {
-					e.hurt(parent instanceof PlayerEntity ? DamageSource.playerAttack((PlayerEntity) parent) : parent instanceof LivingEntity ? DamageSource.mobAttack((LivingEntity) parent) : DamageSource.GENERIC, ramDamage);
+					e.hurt(parent instanceof LivingEntity ? ModDamageSource.VOIDIC_WITH_ENTITY.apply((LivingEntity) parent) : ModDamageSource.VOIDIC, ramDamage);
 					for (int i = 0; i < 10; i++) {
 						Vector3d pos = new Vector3d(0.25F + parent.level.getRandom().nextFloat() * 0.75F, 0, 0).
 								yRot((float) Math.toRadians(parent.level.getRandom().nextInt(360))).

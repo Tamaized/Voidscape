@@ -26,6 +26,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 
+import javax.annotation.Nullable;
+
 public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAdditionalSpawnData {
 
 	public LivingEntity shootingEntity;
@@ -200,8 +202,8 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 			level.addParticle(ParticleTypes.WITCH, getX() - 0.3F + random.nextFloat() * 0.6F, getY() - 0.3F + random.nextFloat() * 0.6F, getZ() - 0.3F + random.nextFloat() * 0.6F, 0, -2, 0);
 	}
 
-	protected DamageSource getDamageSource(LivingEntity attacker) {
-		return ModDamageSource.SOURCE_VOIDIC.apply(attacker);
+	protected DamageSource getDamageSource(@Nullable LivingEntity attacker) {
+		return attacker == null ? ModDamageSource.VOIDIC : ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker);
 	}
 
 	@Override
