@@ -5,6 +5,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -55,82 +57,93 @@ import java.util.function.Supplier;
 @Mod(Voidscape.MODID)
 public class Voidscape {
 
-    public static final String MODID = "voidscape";
+	public static final String MODID = "voidscape";
 
-    public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.
-            named(new ResourceLocation(MODID, MODID)).
-            clientAcceptedVersions(s -> true).
-            serverAcceptedVersions(s -> true).
-            networkProtocolVersion(() -> "1").
-            simpleChannel();
-    public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
-    public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
-    public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
-    public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
+	public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.
+			named(new ResourceLocation(MODID, MODID)).
+			clientAcceptedVersions(s -> true).
+			serverAcceptedVersions(s -> true).
+			networkProtocolVersion(() -> "1").
+			simpleChannel();
+	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
+	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
+	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
+	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
 
-    public Voidscape() {
-        StartupMessageManager.addModMessage("Loading Turmoil");
-        TurmoilSkill.classload();
-        IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus busForge = MinecraftForge.EVENT_BUS;
-        RegUtil.register(busMod);
-        busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
-            NetworkMessages.register(NETWORK);
-            Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
-            Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
-            CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
-            }, SubCapability.AttachedSubCap::new);
-        });
-        busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
+	public Voidscape() {
+		StartupMessageManager.addModMessage("Loading Turmoil");
+		TurmoilSkill.classload();
+		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus busForge = MinecraftForge.EVENT_BUS;
+		RegUtil.register(busMod);
+		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
+			NetworkMessages.register(NETWORK);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
+			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
+			}, SubCapability.AttachedSubCap::new);
+		});
+		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
-                event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
-                        then(VoidCommands.Debug.register()))
+				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
+						then(VoidCommands.Debug.register()))
 
-        );
-        busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-            if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.20F) {
-                final int dist = 64;
-                final int rad = dist / 2;
-                final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
-                BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-                if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
-                    event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
-            }
-        });
-        busForge.addListener((Consumer<AttackEntityEvent>) event -> {
-            LivingEntity attacker = event.getEntityLiving();
-            Entity target = event.getTarget();
-            if (target.isAttackable()) {
-                if (!target.skipAttackInteraction(attacker)) {
-                    float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
-                    if (dmg > 0) {
-                        target.invulnerableTime = 0;
-                        target.hurt(ModDamageSource.SOURCE_VOIDIC.apply(attacker), dmg);
-                    }
-                }
-            }
-        });
-        busForge.addListener((Consumer<LivingHurtEvent>) event -> {
-            if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
+		);
+		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
+			if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.20F) {
+				final int dist = 64;
+				final int rad = dist / 2;
+				final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
+				BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
+				if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
+					event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
+			}
+		});
+		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
+			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
 				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
-        });
-    }
+			else if (meleeOrArrowSource(event.getSource())) {
+				Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
+				if (e instanceof LivingEntity) {
+					LivingEntity attacker = (LivingEntity) e;
+					float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+					if (dmg > 0) {
+						event.getEntity().invulnerableTime = 0;
+						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
+					}
+				}
+			}
+		});
+	}
 
-    public static boolean checkForVoidDimension(World world) {
-        return world.dimension().location().equals(WORLD_KEY_VOID.location());
-    }
+	private static boolean meleeOrArrowSource(DamageSource source) {
+		if (!(source instanceof EntityDamageSource))
+			return false;
+		switch (source.getMsgId()) {
+			case "player":
+			case "mob":
+			case "arrow":
+				return true;
+			default:
+				return false;
+		}
+	}
 
-    public static ServerWorld getWorld(World world, RegistryKey<World> dest) {
-        return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
-    }
+	public static boolean checkForVoidDimension(World world) {
+		return world.dimension().location().equals(WORLD_KEY_VOID.location());
+	}
 
-    @Nonnull
-    @SuppressWarnings("ConstantConditions")
-    public static <T> T getNull() {
-        return null;
-    }
+	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {
+		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
+	}
+
+	@Nonnull
+	@SuppressWarnings("ConstantConditions")
+	public static <T> T getNull() {
+		return null;
+	}
 
 	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
 		Vector3d vector3d = entity.getEyePosition(1F);
