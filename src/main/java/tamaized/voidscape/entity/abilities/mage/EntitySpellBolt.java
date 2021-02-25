@@ -4,14 +4,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -215,15 +212,6 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
 		if (entity.hurt(damagesource, damage)) {
-			if (entity instanceof LivingEntity) {
-				LivingEntity entitylivingbase = (LivingEntity) entity;
-
-				doPostHurtEffects(entitylivingbase);
-
-				if (shootingEntity != null && entitylivingbase != shootingEntity && entitylivingbase instanceof PlayerEntity && shootingEntity instanceof ServerPlayerEntity) {
-					((ServerPlayerEntity) shootingEntity).connection.send(new SChangeGameStatePacket(SChangeGameStatePacket.ARROW_HIT_PLAYER, 0.0F));
-				}
-			}
 			remove();
 		} else {
 			setDeltaMovement(getDeltaMovement().x * -0.10000000149011612D, getDeltaMovement().y * -0.10000000149011612D, getDeltaMovement().z * -0.10000000149011612D);
