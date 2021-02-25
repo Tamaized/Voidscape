@@ -212,6 +212,10 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
 		if (entity.hurt(damagesource, damage)) {
+			if (entity instanceof LivingEntity) {
+				LivingEntity entitylivingbase = (LivingEntity) entity;
+				doPostHurtEffects(entitylivingbase);
+			}
 			remove();
 		} else {
 			setDeltaMovement(getDeltaMovement().x * -0.10000000149011612D, getDeltaMovement().y * -0.10000000149011612D, getDeltaMovement().z * -0.10000000149011612D);
