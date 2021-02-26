@@ -150,7 +150,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 			remove();
 
 		if (!level.isClientSide())
-			for (Entity e : level.getEntities(this, getBoundingBox().inflate(speed * 2F))) {
+			for (Entity e : level.getEntities(this, getBoundingBox().inflate(1F, 1F, 1F))) {
 				if (e == this || e == shootingEntity || !canHitEntity(e))
 					continue;
 				onHit(e);
