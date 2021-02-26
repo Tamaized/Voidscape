@@ -109,6 +109,10 @@ public class TurmoilSkill {
 
 	public static class Stats {
 		public static final UUID HEALTH = UUID.fromString("fe7b05c2-e1d5-4af5-a249-2f10564e2200");
+		public static final UUID VOIDIC_DAMAGE = UUID.fromString("92c9d3fa-9bcb-482f-af9d-46c5435dc246");
+		public static final UUID VOIDIC_DAMAGE_PERC = UUID.fromString("ba95bf3e-af82-44b1-8d3a-dcf5cc3e8bec");
+		public static final UUID VOIDIC_RESISTANCE = UUID.fromString("dcb02f0b-4f63-4583-be72-8fe1c8230655");
+		public static final UUID VOIDIC_RESISTANCE_PERC = UUID.fromString("6801d807-9ba8-4bc2-8b56-3dbb714556f3");
 		private static final Stats EMPTY = new Stats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		public final float voidicDamage;
 		public final int voidicDamagePercent;

@@ -2,6 +2,7 @@ package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -18,6 +19,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
@@ -28,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
@@ -58,13 +61,21 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 				ifPresent(data -> data.getSkills().forEach(skill -> stats = stats.add(skill.getStats()))));
 		if (parent instanceof LivingEntity) {
 			LivingEntity living = (LivingEntity) parent;
-			ModifiableAttributeInstance attribute = living.getAttribute(Attributes.MAX_HEALTH);
-			if (attribute != null) {
-				attribute.removeModifier(TurmoilSkill.Stats.HEALTH);
-				attribute.addTransientModifier(new AttributeModifier(TurmoilSkill.Stats.HEALTH, "Voidic Health Boost", stats.heart * 2, AttributeModifier.Operation.ADDITION));
-			}
+			applyAttribute(living, Attributes.MAX_HEALTH, TurmoilSkill.Stats.HEALTH, "Voidic Health Boost", stats.heart * 2, AttributeModifier.Operation.ADDITION);
+			applyAttribute(living, ModAttributes.VOIDIC_DMG.get(), TurmoilSkill.Stats.VOIDIC_DAMAGE, "Voidic Damage", stats.voidicDamage, AttributeModifier.Operation.ADDITION);
+			applyAttribute(living, ModAttributes.VOIDIC_DMG.get(), TurmoilSkill.Stats.VOIDIC_DAMAGE_PERC, "Voidic Damage Percentage", stats.voidicDamagePercent, AttributeModifier.Operation.MULTIPLY_TOTAL);
+			applyAttribute(living, ModAttributes.VOIDIC_RES.get(), TurmoilSkill.Stats.VOIDIC_RESISTANCE, "Voidic Resistance", stats.voidicDamageReduction, AttributeModifier.Operation.ADDITION);
+			applyAttribute(living, ModAttributes.VOIDIC_RES.get(), TurmoilSkill.Stats.VOIDIC_RESISTANCE_PERC, "Voidic Resistance Percentage", stats.voidicDamageReductionPercentage, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
 		markDirty();
+	}
+
+	private static void applyAttribute(LivingEntity living, Attribute attribute, UUID modifier, String name, double value, AttributeModifier.Operation op) {
+		ModifiableAttributeInstance a = living.getAttribute(attribute);
+		if (a != null) {
+			a.removeModifier(modifier);
+			a.addTransientModifier(new AttributeModifier(modifier, name, value, op));
+		}
 	}
 
 	public void reset() {
