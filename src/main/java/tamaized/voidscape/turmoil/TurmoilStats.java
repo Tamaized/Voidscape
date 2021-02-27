@@ -24,12 +24,14 @@ import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
+import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
@@ -98,11 +100,14 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClient((ServerPlayerEntity) parent);
 			dirty = false;
 		}
+		Optional<Turmoil> data = parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData)).orElse(Optional.empty());
 		if (voidicPower < 1000)
 			voidicPower += 1 + stats.rechargeRate;
 		if (nullPower > 0 && parent.tickCount % ((voidmancerStance ? 2 : 1) * (1 + stats.rechargeRate)) == 0)
 			nullPower--;
-		if (insanePower > 0 && parent.tickCount % 10 == 0)
+		if ((!data.isPresent() || (!data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.MAD_PRIEST_1) && !data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1))) &&
+
+				insanePower > 0 && parent.tickCount % 10 == 0)
 			insanePower--;
 		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
 			Vector3d dist = ramTarget.subtract(parent.position());
