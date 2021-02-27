@@ -10,7 +10,7 @@ public class MageSkillLayout implements ISkillLayout {
 	@Override
 	public void fill(int x, int y, TriConsumer<TurmoilSkill, Integer, Integer> add) {
 		y -= 50;
-		MageSkills skills = TurmoilSkills.VOIDMANCER_SKILLS;
+		MageSkills skills = TurmoilSkills.MAGE_SKILLS;
 
 		add.accept(skills.CORE, x, y);
 

@@ -43,6 +43,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
+import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
 
@@ -102,13 +103,28 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
+			Boolean arrow;
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
 				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
-			else if (meleeOrArrowSource(event.getSource())) {
+			else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
 				Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
-					float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+					float dmg = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> event.getAmount() * (
+
+							data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 1.50F :
+
+									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 1.00F :
+
+											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 0.75F :
+
+													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 0.50F :
+
+															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 0.25F :
+
+																	0F
+
+					)).orElse(0F)).orElse(0F) : (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;
 						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
@@ -118,16 +134,18 @@ public class Voidscape {
 		});
 	}
 
-	private static boolean meleeOrArrowSource(DamageSource source) {
+	@Nullable
+	private static Boolean meleeOrArrowSource(DamageSource source) {
 		if (!(source instanceof EntityDamageSource))
-			return false;
+			return null;
 		switch (source.getMsgId()) {
 			case "player":
 			case "mob":
+				return false;
 			case "arrow":
 				return true;
 			default:
-				return false;
+				return null;
 		}
 	}
 

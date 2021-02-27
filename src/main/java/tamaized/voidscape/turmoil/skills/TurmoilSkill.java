@@ -56,7 +56,7 @@ public class TurmoilSkill {
 
 	@SuppressWarnings("unused")
 	public static void classload() {
-		Object classload = TurmoilSkills.VOIDMANCER_SKILLS;
+		Object classload = TurmoilSkills.MAGE_SKILLS;
 	}
 
 	public TranslationTextComponent getTitle() {
