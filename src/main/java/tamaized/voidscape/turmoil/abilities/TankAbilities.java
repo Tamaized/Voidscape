@@ -1,4 +1,4 @@
-package tamaized.voidscape.turmoil.abilities.tank;
+package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -9,7 +9,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 public class TankAbilities {
 

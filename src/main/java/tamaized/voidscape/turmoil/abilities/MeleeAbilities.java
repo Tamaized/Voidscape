@@ -1,4 +1,4 @@
-package tamaized.voidscape.turmoil.abilities.melee;
+package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -10,7 +10,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
-import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
 public class MeleeAbilities {

@@ -1,32 +1,32 @@
 package tamaized.voidscape.turmoil.skills;
 
-import tamaized.voidscape.turmoil.abilities.tank.TankAbilities;
+import tamaized.voidscape.turmoil.abilities.TankAbilities;
 
 public class TankSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill CORE = builder("core").core().abilities(TankAbilities.TAUNT).build();
 
-	public final TurmoilSkill VOIDIC_BOND = builder("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).rechargeRate(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_1 = builder("voidic_damage_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_2 = builder("voidic_damage_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_3 = builder("voidic_damage_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_4 = builder("voidic_damage_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamage(2)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_5 = builder("voidic_damage_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamage(5)).build();
-	public final TurmoilSkill VOIDIC_BONDING_1 = builder("voidic_bonding_1").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill VOIDIC_BONDING_2 = builder("voidic_bonding_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill VOIDIC_BONDING_3 = builder("voidic_bonding_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill VOIDIC_BONDING_4 = builder("voidic_bonding_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.rechargeRate(2)).build();
-	public final TurmoilSkill VOIDIC_BONDING_5 = builder("voidic_bonding_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.rechargeRate(5)).build();
-	public final TurmoilSkill VOIDIC_HAMP_1 = builder("voidic_hamp_1").required(VOIDIC_BOND).stats(stats -> stats.healAmp(1)).build();
-	public final TurmoilSkill VOIDIC_HAMP_2 = builder("voidic_hamp_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.healAmp(1)).build();
-	public final TurmoilSkill VOIDIC_HAMP_3 = builder("voidic_hamp_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.healAmp(1)).build();
-	public final TurmoilSkill VOIDIC_HAMP_4 = builder("voidic_hamp_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.healAmp(2)).build();
-	public final TurmoilSkill VOIDIC_HAMP_5 = builder("voidic_hamp_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.healAmp(5)).build();
-	public final TurmoilSkill VOIDIC_DEFENSE_1 = builder("voidic_defense_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamageReduction(1)).build();
-	public final TurmoilSkill VOIDIC_DEFENSE_2 = builder("voidic_defense_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamageReduction(1)).build();
-	public final TurmoilSkill VOIDIC_DEFENSE_3 = builder("voidic_defense_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamageReduction(1)).build();
-	public final TurmoilSkill VOIDIC_DEFENSE_4 = builder("voidic_defense_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamageReduction(2)).build();
-	public final TurmoilSkill VOIDIC_DEFENSE_5 = builder("voidic_defense_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamageReduction(5)).build();
+	public final TurmoilSkill VOIDIC_BOND = generic("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).rechargeRate(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_1 = generic("voidic_damage_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_2 = generic("voidic_damage_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_3 = generic("voidic_damage_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_4 = generic("voidic_damage_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamage(2)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_5 = generic("voidic_damage_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamage(5)).build();
+	public final TurmoilSkill VOIDIC_BONDING_1 = generic("voidic_bonding_1").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill VOIDIC_BONDING_2 = generic("voidic_bonding_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill VOIDIC_BONDING_3 = generic("voidic_bonding_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill VOIDIC_BONDING_4 = generic("voidic_bonding_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.rechargeRate(2)).build();
+	public final TurmoilSkill VOIDIC_BONDING_5 = generic("voidic_bonding_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.rechargeRate(5)).build();
+	public final TurmoilSkill VOIDIC_HAMP_1 = generic("voidic_hamp_1").required(VOIDIC_BOND).stats(stats -> stats.healAmp(1)).build();
+	public final TurmoilSkill VOIDIC_HAMP_2 = generic("voidic_hamp_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.healAmp(1)).build();
+	public final TurmoilSkill VOIDIC_HAMP_3 = generic("voidic_hamp_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.healAmp(1)).build();
+	public final TurmoilSkill VOIDIC_HAMP_4 = generic("voidic_hamp_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.healAmp(2)).build();
+	public final TurmoilSkill VOIDIC_HAMP_5 = generic("voidic_hamp_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.healAmp(5)).build();
+	public final TurmoilSkill VOIDIC_DEFENSE_1 = generic("voidic_defense_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamageReduction(1)).build();
+	public final TurmoilSkill VOIDIC_DEFENSE_2 = generic("voidic_defense_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamageReduction(1)).build();
+	public final TurmoilSkill VOIDIC_DEFENSE_3 = generic("voidic_defense_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamageReduction(1)).build();
+	public final TurmoilSkill VOIDIC_DEFENSE_4 = generic("voidic_defense_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamageReduction(2)).build();
+	public final TurmoilSkill VOIDIC_DEFENSE_5 = generic("voidic_defense_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamageReduction(5)).build();
 
 	public final TurmoilSkill VOIDIC_DEFENDER_1 = builder("voidic_defender_1").required(CORE).stats(stats -> stats.voidicDamageReductionPercentage(1).hearts(1).threat(1)).build();
 	public final TurmoilSkill BULWARK = builder("bulwark").required(VOIDIC_DEFENDER_1).build();

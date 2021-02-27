@@ -1,32 +1,32 @@
 package tamaized.voidscape.turmoil.skills;
 
-import tamaized.voidscape.turmoil.abilities.melee.MeleeAbilities;
+import tamaized.voidscape.turmoil.abilities.MeleeAbilities;
 
 public class MeleeSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill CORE = builder("core").core().abilities(MeleeAbilities.RUSH).build();
 
-	public final TurmoilSkill VOIDIC_BOND = builder("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).rechargeRate(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_1 = builder("voidic_damage_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_2 = builder("voidic_damage_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_3 = builder("voidic_damage_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_4 = builder("voidic_damage_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamage(2)).build();
-	public final TurmoilSkill VOIDIC_DAMAGE_5 = builder("voidic_damage_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamage(5)).build();
-	public final TurmoilSkill BONDING_1 = builder("bonding_1").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_2 = builder("bonding_2").required(BONDING_1).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_3 = builder("bonding_3").required(BONDING_2).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_4 = builder("bonding_4").required(BONDING_3).stats(stats -> stats.rechargeRate(2)).build();
-	public final TurmoilSkill BONDING_5 = builder("bonding_5").required(BONDING_4).stats(stats -> stats.rechargeRate(4)).build();
-	public final TurmoilSkill SPELL_DEX_1 = builder("spell_dex_1").required(VOIDIC_BOND).stats(stats -> stats.cooldown(5)).build();
-	public final TurmoilSkill SPELL_DEX_2 = builder("spell_dex_2").required(SPELL_DEX_1).stats(stats -> stats.cooldown(5)).build();
-	public final TurmoilSkill SPELL_DEX_3 = builder("spell_dex_3").required(SPELL_DEX_2).stats(stats -> stats.cooldown(5)).build();
-	public final TurmoilSkill SPELL_DEX_4 = builder("spell_dex_4").required(SPELL_DEX_3).stats(stats -> stats.cooldown(5)).build();
-	public final TurmoilSkill SPELL_DEX_5 = builder("spell_dex_5").required(SPELL_DEX_4).stats(stats -> stats.cooldown(10)).build();
-	public final TurmoilSkill ASTUTE_UNDERSTANDING_1 = builder("astute_understanding_1").required(VOIDIC_BOND).stats(stats -> stats.cost(1)).build();
-	public final TurmoilSkill ASTUTE_UNDERSTANDING_2 = builder("astute_understanding_2").required(ASTUTE_UNDERSTANDING_1).stats(stats -> stats.cost(1)).build();
-	public final TurmoilSkill ASTUTE_UNDERSTANDING_3 = builder("astute_understanding_3").required(ASTUTE_UNDERSTANDING_2).stats(stats -> stats.cost(1)).build();
-	public final TurmoilSkill ASTUTE_UNDERSTANDING_4 = builder("astute_understanding_4").required(ASTUTE_UNDERSTANDING_3).stats(stats -> stats.cost(2)).build();
-	public final TurmoilSkill ASTUTE_UNDERSTANDING_5 = builder("astute_understanding_5").required(ASTUTE_UNDERSTANDING_4).stats(stats -> stats.cost(5)).build();
+	public final TurmoilSkill VOIDIC_BOND = generic("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).rechargeRate(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_1 = generic("voidic_damage_1").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_2 = generic("voidic_damage_2").required(VOIDIC_DAMAGE_1).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_3 = generic("voidic_damage_3").required(VOIDIC_DAMAGE_2).stats(stats -> stats.voidicDamage(1)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_4 = generic("voidic_damage_4").required(VOIDIC_DAMAGE_3).stats(stats -> stats.voidicDamage(2)).build();
+	public final TurmoilSkill VOIDIC_DAMAGE_5 = generic("voidic_damage_5").required(VOIDIC_DAMAGE_4).stats(stats -> stats.voidicDamage(5)).build();
+	public final TurmoilSkill BONDING_1 = generic("bonding_1").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_2 = generic("bonding_2").required(BONDING_1).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_3 = generic("bonding_3").required(BONDING_2).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_4 = generic("bonding_4").required(BONDING_3).stats(stats -> stats.rechargeRate(2)).build();
+	public final TurmoilSkill BONDING_5 = generic("bonding_5").required(BONDING_4).stats(stats -> stats.rechargeRate(4)).build();
+	public final TurmoilSkill SPELL_DEX_1 = generic("spell_dex_1").required(VOIDIC_BOND).stats(stats -> stats.cooldown(5)).build();
+	public final TurmoilSkill SPELL_DEX_2 = generic("spell_dex_2").required(SPELL_DEX_1).stats(stats -> stats.cooldown(5)).build();
+	public final TurmoilSkill SPELL_DEX_3 = generic("spell_dex_3").required(SPELL_DEX_2).stats(stats -> stats.cooldown(5)).build();
+	public final TurmoilSkill SPELL_DEX_4 = generic("spell_dex_4").required(SPELL_DEX_3).stats(stats -> stats.cooldown(5)).build();
+	public final TurmoilSkill SPELL_DEX_5 = generic("spell_dex_5").required(SPELL_DEX_4).stats(stats -> stats.cooldown(10)).build();
+	public final TurmoilSkill ASTUTE_UNDERSTANDING_1 = generic("astute_understanding_1").required(VOIDIC_BOND).stats(stats -> stats.cost(1)).build();
+	public final TurmoilSkill ASTUTE_UNDERSTANDING_2 = generic("astute_understanding_2").required(ASTUTE_UNDERSTANDING_1).stats(stats -> stats.cost(1)).build();
+	public final TurmoilSkill ASTUTE_UNDERSTANDING_3 = generic("astute_understanding_3").required(ASTUTE_UNDERSTANDING_2).stats(stats -> stats.cost(1)).build();
+	public final TurmoilSkill ASTUTE_UNDERSTANDING_4 = generic("astute_understanding_4").required(ASTUTE_UNDERSTANDING_3).stats(stats -> stats.cost(2)).build();
+	public final TurmoilSkill ASTUTE_UNDERSTANDING_5 = generic("astute_understanding_5").required(ASTUTE_UNDERSTANDING_4).stats(stats -> stats.cost(5)).build();
 
 	public final TurmoilSkill VOIDIC_FIGHTER_1 = builder("voidic_fighter_1").required(CORE).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill WAY_OF_THE_BLADE_1 = builder("way_of_the_blade_1").required(VOIDIC_FIGHTER_1).stats(stats -> stats.voidicDamage(1)).build();

@@ -1,9 +1,8 @@
-package tamaized.voidscape.turmoil.abilities.mage;
+package tamaized.voidscape.turmoil.abilities;
 
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
 import tamaized.voidscape.turmoil.SubCapability;
-import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 public class MageAbilities {
 

@@ -20,6 +20,10 @@ public interface ITurmoilSkills {
 		return new Builder(location(), name);
 	}
 
+	default Builder generic(String name) {
+		return new Builder("generic", name);
+	}
+
 	class Builder {
 
 		private final String loc;
