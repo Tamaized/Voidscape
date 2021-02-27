@@ -11,7 +11,12 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import tamaized.voidscape.Voidscape;
@@ -83,7 +88,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 						parent.getRandom().nextFloat() * 0.9F + 0.1F,
 
 						parent.getRandom().nextFloat() * 0.5F + 0.5F);
-			if (sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
+			if (!parent.level.isClientSide() && sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.hurt(DamageSource.GENERIC, 1F);
 			if (parent.level.isClientSide() && sanity > 0.75F && parent.tickCount % (82) == 0)
 				parent.level.playSound((PlayerEntity) parent,
