@@ -8,6 +8,8 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
@@ -103,12 +105,18 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		Optional<Turmoil> data = parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData)).orElse(Optional.empty());
 		if (voidicPower < 1000)
 			voidicPower += 1 + stats.rechargeRate;
-		if (nullPower > 0 && parent.tickCount % ((voidmancerStance ? 2 : 1) * (1 + stats.rechargeRate)) == 0)
+		if ((!data.isPresent() || (!data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1) && !data.get().hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1))) &&
+
+				nullPower > 0 && parent.tickCount % ((voidmancerStance ? 2 : 1) * (1 + stats.rechargeRate)) == 0)
 			nullPower--;
 		if ((!data.isPresent() || (!data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.MAD_PRIEST_1) && !data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1))) &&
 
 				insanePower > 0 && parent.tickCount % 10 == 0)
 			insanePower--;
+		if (!(parent instanceof LivingEntity) || !data.isPresent() || (data.get().hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1) && !((LivingEntity) parent).getOffhandItem().isShield((LivingEntity) parent)) || (data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof SwordItem)))
+			nullPower = 0;
+		if (!(parent instanceof LivingEntity) || !data.isPresent() || ((data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.get().hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof AxeItem)))
+			insanePower = 0;
 		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
 			Vector3d dist = ramTarget.subtract(parent.position());
 			if ((dist.x * dist.x + dist.y * dist.y + dist.z * dist.z) / 2D <= 1D) {
