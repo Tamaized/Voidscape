@@ -65,8 +65,10 @@ public final class TurmoilAbilityInstance {
 			if (ability.execute(caster)) {
 				TurmoilAbility.drainPower(stats, ability.costType(), getCalcCost(stats));
 				putOnCooldown(caster);
-			} else
+			} else {
+				setCooldown(caster, 40);
 				stats.markDirty();
+			}
 		}));
 	}
 
@@ -74,12 +76,16 @@ public final class TurmoilAbilityInstance {
 		lastCast = caster.level.getGameTime();
 	}
 
+	private void setCooldown(LivingEntity caster, int ticks) {
+		lastCast = ticks - filterCooldown() + caster.level.getGameTime();
+	}
+
 	public void resetCooldown() {
 		lastCast = 0;
 	}
 
 	public long cooldownRemaining(World level) {
-		return Math.max((filterCooldown() - (level.getGameTime() - lastCast)), 0);
+		return Math.max((filterCooldown() - level.getGameTime() + lastCast), 0);
 	}
 
 	public float cooldownPercent(World level) {
