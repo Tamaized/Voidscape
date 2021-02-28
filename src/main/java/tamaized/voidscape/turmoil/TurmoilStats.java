@@ -291,4 +291,11 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			stats = o.stats;
 		}
 	}
+
+	public void increasePowerFromAbilityDamage(LivingEntity caster, LivingEntity target, TurmoilAbility ability) {
+		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+			if (ability.costType() == TurmoilAbility.Type.Voidic && data.hasSkill(TurmoilSkills.MAGE_SKILLS.INSANE_MAGE_1))
+				insanePower = Math.min(1000, insanePower + ability.cost());
+		}));
+	}
 }

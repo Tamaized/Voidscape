@@ -5,6 +5,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
@@ -104,9 +106,20 @@ public class Voidscape {
 		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
 			Boolean arrow;
-			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
+			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
+				event.getEntityLiving().getCapability(SubCapability.CAPABILITY).
+						ifPresent(cap -> {
+							if (event.getEntityLiving().getMainHandItem().getItem() instanceof AxeItem && cap.
+									get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1)).orElse(false))
+								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) event.getAmount())));
+							if (event.getEntityLiving().getOffhandItem().isShield(event.getEntityLiving()) && event.getEntityLiving().isBlocking() && cap.
+									get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1)).orElse(false)) {
+								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) event.getAmount())));
+								event.setAmount(event.getAmount() * 0.9F);
+							}
+						});
 				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
-			else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
+			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
 				Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
@@ -128,6 +141,15 @@ public class Voidscape {
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;
 						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
+						if (!arrow)
+							attacker.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)).
+										orElse(false) && attacker.getMainHandItem().getItem() instanceof AxeItem)
+									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) dmg)));
+								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
+										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
+									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) dmg)));
+							});
 					}
 				}
 			}

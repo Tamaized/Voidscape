@@ -20,14 +20,18 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 import javax.annotation.Nullable;
 
 public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAdditionalSpawnData {
 
 	public LivingEntity shootingEntity;
+	private TurmoilAbility ability;
 	private int ticksInAir;
 
 	private float damage = 1F;
@@ -43,8 +47,9 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		noCulling = true;
 	}
 
-	public EntitySpellBolt(LivingEntity shooter) {
+	public EntitySpellBolt(LivingEntity shooter, TurmoilAbility ability) {
 		this(ModEntities.SPELL_MAGE_BOLT.get(), shooter.level, shooter, shooter.getX(), shooter.getY(), shooter.getZ());
+		this.ability = ability;
 	}
 
 	public EntitySpellBolt(EntityType<? extends EntitySpellBolt> type, World worldIn, LivingEntity shooter, double x, double y, double z) {
@@ -235,7 +240,10 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 	@Override
 	protected void doPostHurtEffects(LivingEntity p_184548_1_) {
-
+		if (shootingEntity != null && ability != null)
+			shootingEntity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
+				stats.increasePowerFromAbilityDamage(shootingEntity, p_184548_1_, ability);
+			}));
 	}
 
 	@Override

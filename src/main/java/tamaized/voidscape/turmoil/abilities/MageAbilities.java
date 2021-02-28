@@ -7,7 +7,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 public class MageAbilities {
 
 	public static final TurmoilAbility BOLT = new TurmoilAbility(unloc("bolt"), TurmoilAbility.Toggle.None, TurmoilAbility.Type.Voidic, 150, 3 * 20, (spell, caster) -> {
-		EntitySpellBolt bolt = new EntitySpellBolt(caster);
+		EntitySpellBolt bolt = new EntitySpellBolt(caster, MageAbilities.BOLT);
 		bolt.setDamage(caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> {
 			float damage = spell.damage();
 			damage *= 1F + (stats.stats().spellpower / 100F);

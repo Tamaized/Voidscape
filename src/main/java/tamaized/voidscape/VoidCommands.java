@@ -9,6 +9,8 @@ import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
+import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -36,6 +38,16 @@ public final class VoidCommands {
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("debug").
 					requires(cs -> cs.hasPermission(2)).
+					then(Commands.literal("hurt").
+							executes(context -> {
+								PlayerEntity me = context.getSource().getPlayerOrException();
+								EntitySpellBolt bolt = new EntitySpellBolt(ModEntities.SPELL_MAGE_BOLT.get(), context.getSource().getLevel());
+								bolt.setPos(me.getX(), me.getY() + 10, me.getZ());
+								bolt.shoot(0, -1, 0, 1F, 0F);
+								bolt.setDamage(10F);
+								context.getSource().getLevel().addFreshEntity(bolt);
+								return 0;
+							})).
 					then(Commands.literal("resetCooldowns").
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilStats, context, TurmoilStats::resetCooldowns))).
 					then(Commands.literal("reset_resetSkillTimer").
