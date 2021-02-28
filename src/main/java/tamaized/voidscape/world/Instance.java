@@ -22,7 +22,6 @@ public final class Instance {
 	public int tick;
 	private ServerWorld level;
 	private int unloadTick = 30 * 20;
-	boolean needsUnloading = false;
 	private InstanceType type = InstanceType.Unrestricted;
 	private int maxPlayers = 1;
 	private List<PlayerEntity> players = new ArrayList<>();
@@ -129,8 +128,7 @@ public final class Instance {
 				});
 			tick = 0;
 			locked = false;
-		}
-		if (!locked() && tick % (20 * 30) == 0)
+		} else if (!locked() && tick % (20 * 30) == 0)
 			locked = true;
 		if (!level.players().isEmpty())
 			level.players().stream().filter(player -> !players.contains(player)).collect(Collectors.toList()).
