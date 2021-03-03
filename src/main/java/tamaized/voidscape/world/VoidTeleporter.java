@@ -13,6 +13,7 @@ import net.minecraftforge.common.util.ITeleporter;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.PartyManager;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public final class VoidTeleporter implements ITeleporter {
@@ -34,12 +35,17 @@ public final class VoidTeleporter implements ITeleporter {
 	@Override
 	public PortalInfo getPortalInfo(Entity oldEntity, ServerWorld destWorld, Function<ServerWorld, PortalInfo> defaultPortalInfo) {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
-			BlockPos pos = null;
-			if (oldEntity instanceof PlayerEntity)
-				pos = ((ServerPlayerEntity) oldEntity).getRespawnPosition();
-			if (pos == null)
-				pos = destWorld.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());
-			return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
+			Vector3d pos = null;
+			if (oldEntity instanceof PlayerEntity) {
+				Optional<Vector3d> o = PlayerEntity.findRespawnPositionAndUseSpawnBlock(destWorld, ((ServerPlayerEntity) oldEntity).getRespawnPosition(), ((ServerPlayerEntity) oldEntity).getRespawnAngle(), ((ServerPlayerEntity) oldEntity).isRespawnForced(), false);
+				if (o.isPresent())
+					pos = o.get();
+			}
+			if (pos == null) {
+				BlockPos bp = destWorld.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());
+				pos = new Vector3d(bp.getX() + 0.5F, bp.getY() + 1F, bp.getZ() + 0.5F);
+			}
+			return new PortalInfo(pos, Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
 		} else {
 			int scan = 2;
 			int lastScan = 0;
