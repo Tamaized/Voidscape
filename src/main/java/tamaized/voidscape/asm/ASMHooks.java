@@ -97,7 +97,13 @@ public class ASMHooks {
 	 * [BEFORE FIRST GETSTATIC]
 	 */
 	public static boolean death(LivingEntity entity, DamageSource source) {
-		if (entity instanceof PlayerEntity && Voidscape.checkForVoidDimension(entity.level)) {
+		if (entity instanceof PlayerEntity &&
+
+				(Voidscape.checkForVoidDimension(entity.level) ||
+
+						(entity.level.dimension().location().getNamespace().equals(Voidscape.MODID) &&
+
+								entity.level.dimension().location().getPath().contains("instance")))) {
 			entity.setHealth(entity.getMaxHealth() * 0.1F);
 			if (!entity.level.isClientSide())
 				entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
