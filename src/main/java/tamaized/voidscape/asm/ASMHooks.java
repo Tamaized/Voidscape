@@ -116,19 +116,12 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.Climate, Biome.Category, Float, Float, BiomeAmbience, BiomeGenerationSettings, MobSpawnInfo, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}
-	 * [BEFORE FIRST NEW]
+	 * [AFTER NEW {@link BiomeLoadingEvent}]
 	 */
-	public static Biome fukUrBiomeEdits(@Nullable final ResourceLocation name, final Biome.Climate climate, final Biome.Category category, final Float depth, final Float scale, final BiomeAmbience effects, final BiomeGenerationSettings gen, final MobSpawnInfo spawns, final RecordCodecBuilder.Instance<Biome> codec, final ForgeHooks.BiomeCallbackFunction callback) {
-		BiomeGenerationSettingsBuilder genBuilder = new BiomeGenerationSettingsBuilder(gen);
-		MobSpawnInfoBuilder spawnBuilder = new MobSpawnInfoBuilder(spawns);
-		BiomeLoadingEvent event = new BiomeLoadingEvent(name, climate, category, depth, scale, effects, genBuilder, spawnBuilder);
-		Supplier<Biome> exec = () -> callback.apply(event.getClimate(), event.getCategory(), event.getDepth(), event.getScale(), event.getEffects(), event.getGeneration().build(), event.getSpawns().build()).setRegistryName(name);
-		if (name == null || !name.getNamespace().equals(Voidscape.MODID)) {
+	public static Biome fukUrBiomeEdits(BiomeLoadingEvent event, final ForgeHooks.BiomeCallbackFunction callback) {
+		if (event.getName() == null || !event.getName().getNamespace().equals(Voidscape.MODID))
 			MinecraftForge.EVENT_BUS.post(event);
-			return exec.get();
-		}
-		Biome b = exec.get();
-		return b;
+		return callback.apply(event.getClimate(), event.getCategory(), event.getDepth(), event.getScale(), event.getEffects(), event.getGeneration().build(), event.getSpawns().build()).setRegistryName(event.getName());
 	}
 
 }
