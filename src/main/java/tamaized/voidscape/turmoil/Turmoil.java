@@ -62,8 +62,11 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				dirty = false;
 			}
 		}
-		if (instanced && getState() != State.CLOSED)
+		if (instanced && getState() != State.CLOSED) {
+			if (getState() == State.TELEPORT)
+				parent.changeDimension(Voidscape.getWorld(parent.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
 			setState(State.CLOSED);
+		}
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
 			talk(null);
 		switch (getState()) {

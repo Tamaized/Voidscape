@@ -18,6 +18,7 @@ import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
 import tamaized.voidscape.network.server.ServerPacketRequestPartyInfo;
 import tamaized.voidscape.network.server.ServerPacketRequestPartyList;
 import tamaized.voidscape.network.server.ServerPacketSetPartyPassword;
+import tamaized.voidscape.network.server.ServerPacketSuccumbDeath;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.network.server.ServerPacketTurmoilActivateAbility;
 import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
@@ -50,6 +51,7 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketDisbandParty.class, ServerPacketDisbandParty::new);
 		registerMessage(network, ServerPacketRemovePartyMember.class, () -> new ServerPacketRemovePartyMember(0));
 		registerMessage(network, ServerPacketTurmoilResetSkills.class, ServerPacketTurmoilResetSkills::new);
+		registerMessage(network, ServerPacketSuccumbDeath.class, ServerPacketSuccumbDeath::new);
 
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 		registerMessage(network, ClientPacketUpdatePartyInfo.class, () -> new ClientPacketUpdatePartyInfo(null, false));

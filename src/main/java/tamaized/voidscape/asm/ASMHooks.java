@@ -30,8 +30,6 @@ import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.SaveFormat;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.common.world.MobSpawnInfoBuilder;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import tamaized.voidscape.Voidscape;
@@ -41,7 +39,6 @@ import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -97,18 +94,24 @@ public class ASMHooks {
 	 * [BEFORE FIRST GETSTATIC]
 	 */
 	public static boolean death(LivingEntity entity, DamageSource source) {
-		if (entity instanceof PlayerEntity &&
-
-				(Voidscape.checkForVoidDimension(entity.level) ||
-
-						(entity.level.dimension().location().getNamespace().equals(Voidscape.MODID) &&
-
-								entity.level.dimension().location().getPath().contains("instance")))) {
-			entity.setHealth(entity.getMaxHealth() * 0.1F);
-			if (!entity.level.isClientSide())
-				entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
-						ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
-			return true;
+		if (entity instanceof PlayerEntity) {
+			if (Voidscape.checkForVoidDimension(entity.level)) {
+				entity.setHealth(entity.getMaxHealth() * 0.1F);
+				if (!entity.level.isClientSide())
+					entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
+							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
+				return true;
+			} else if (entity.level.dimension().location().getNamespace().equals(Voidscape.MODID) && entity.level.dimension().location().getPath().contains("instance")) {
+				entity.setHealth(0.5F);
+				if (entity.getY() > 0) {
+					entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
+						data.incapacitated = true;
+					}));
+				} else if (!entity.level.isClientSide())
+					entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
+							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
+				return true;
+			}
 		}
 		return MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, source));
 	}

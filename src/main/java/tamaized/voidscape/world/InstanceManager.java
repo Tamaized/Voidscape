@@ -40,7 +40,7 @@ public final class InstanceManager {
 	}
 
 	public static Optional<Instance> findFreeInstanceByGroup(ResourceLocation group) {
-		return instances.stream().filter(instance -> instance.generator().group().equals(group) && !instance.active()).findAny();
+		return instances.stream().filter(instance -> instance.generator().group().equals(group) && !instance.active() && !instance.unloading()).findAny();
 	}
 
 	private static void load(ServerWorld level) {

@@ -37,9 +37,12 @@ public final class VoidTeleporter implements ITeleporter {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
 			Vector3d pos = null;
 			if (oldEntity instanceof PlayerEntity) {
-				Optional<Vector3d> o = PlayerEntity.findRespawnPositionAndUseSpawnBlock(destWorld, ((ServerPlayerEntity) oldEntity).getRespawnPosition(), ((ServerPlayerEntity) oldEntity).getRespawnAngle(), ((ServerPlayerEntity) oldEntity).isRespawnForced(), false);
-				if (o.isPresent())
-					pos = o.get();
+				BlockPos p = ((ServerPlayerEntity) oldEntity).getRespawnPosition();
+				if (p != null) {
+					Optional<Vector3d> o = PlayerEntity.findRespawnPositionAndUseSpawnBlock(destWorld, p, ((ServerPlayerEntity) oldEntity).getRespawnAngle(), ((ServerPlayerEntity) oldEntity).isRespawnForced(), false);
+					if (o.isPresent())
+						pos = o.get();
+				}
 			}
 			if (pos == null) {
 				BlockPos bp = destWorld.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());

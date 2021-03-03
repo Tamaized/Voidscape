@@ -25,6 +25,7 @@ public final class Instance {
 	private InstanceType type = InstanceType.Unrestricted;
 	private int maxPlayers = 1;
 	private List<PlayerEntity> players = new ArrayList<>();
+	private boolean unloading;
 
 	public Instance(RegistryKey<Dimension> loc, Dimension dimension) {
 		if (!(dimension.generator() instanceof InstanceChunkGenerator))
@@ -81,6 +82,7 @@ public final class Instance {
 		unloadTick++;
 		type = InstanceType.Unrestricted;
 		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
+		unloading = false;
 	}
 
 	public ServerWorld getLevel() {
@@ -99,6 +101,10 @@ public final class Instance {
 		return locked;
 	}
 
+	public boolean unloading() {
+		return unloading;
+	}
+
 	public void addPlayer(PlayerEntity player) {
 		if ((unloadTick < 30 * 20 && !active()) || locked() || players.contains(player) || players.size() >= maxPlayers)
 			return;
@@ -115,6 +121,7 @@ public final class Instance {
 	private void unloadChunks() {
 		if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
 			Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
+			unloading = true;
 			((HackyWorldGen.DeepFreezeChunkManager) level.getChunkSource().chunkMap).unload();
 		}
 	}

@@ -24,6 +24,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -42,6 +43,7 @@ import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -74,6 +76,7 @@ public class Voidscape {
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
+	public static final SubCapability.ISubCap.SubCapKey<TrackedTurmoilData> subCapTurmoilTracked = SubCapability.AttachedSubCap.register(TrackedTurmoilData.class, TrackedTurmoilData::new);
 
 	public Voidscape() {
 		StartupMessageManager.addModMessage("Loading Turmoil");
@@ -153,6 +156,12 @@ public class Voidscape {
 					}
 				}
 			}
+		});
+		busForge.addListener((Consumer<LivingHealEvent>) event -> {
+			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(subCapTurmoilTracked).ifPresent(data -> {
+				if (data.incapacitated)
+					event.setCanceled(true);
+			}));
 		});
 	}
 

@@ -23,6 +23,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.client.StencilBufferUtil;
+import tamaized.voidscape.client.ui.screen.IncapacitatedScreen;
 import tamaized.voidscape.client.ui.screen.MainScreen;
 import tamaized.voidscape.client.ui.screen.TurmoilScreen;
 import tamaized.voidscape.turmoil.Insanity;
@@ -52,27 +53,35 @@ public class RenderTurmoil {
 			return;
 		ClientUtil.tick++;
 		if (Minecraft.getInstance().player != null)
-			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				if (data.getState() != Turmoil.State.CLOSED)
-					lastState = data.getState();
-				if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null && data.getTick() >= data.getMaxTick())
-					Minecraft.getInstance().setScreen(new MainScreen());
-				if (data.getTick() <= 0)
-					deltaTick = 0;
-				else if (data.getTick() > deltaTick)
-					deltaPos = true;
-				else if (data.getTick() < deltaTick)
-					deltaPos = false;
-				if (deltaPos != null && data.getState() == Turmoil.State.CONSUME) {
-					if (deltaPos)
-						deltaTick++;
-					else {
-						deltaPos = null;
-						deltaTick = data.getTick();
+			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+				cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
+					if (data.incapacitated) {
+						if (Minecraft.getInstance().screen == null || (!Minecraft.getInstance().screen.isPauseScreen() && !(Minecraft.getInstance().screen instanceof IncapacitatedScreen)))
+							Minecraft.getInstance().setScreen(new IncapacitatedScreen());
 					}
-				} else
-					deltaTick = data.getTick();
-			}));
+				});
+				cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+					if (data.getState() != Turmoil.State.CLOSED)
+						lastState = data.getState();
+					if (data.getState() == Turmoil.State.OPEN && Minecraft.getInstance().screen == null && data.getTick() >= data.getMaxTick())
+						Minecraft.getInstance().setScreen(new MainScreen());
+					if (data.getTick() <= 0)
+						deltaTick = 0;
+					else if (data.getTick() > deltaTick)
+						deltaPos = true;
+					else if (data.getTick() < deltaTick)
+						deltaPos = false;
+					if (deltaPos != null && data.getState() == Turmoil.State.CONSUME) {
+						if (deltaPos)
+							deltaTick++;
+						else {
+							deltaPos = null;
+							deltaTick = data.getTick();
+						}
+					} else
+						deltaTick = data.getTick();
+				});
+			});
 	}
 
 	@SubscribeEvent

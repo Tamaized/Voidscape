@@ -50,7 +50,7 @@ public class Party {
 	public void commence() {
 		if (ready()) {
 			reserving = true;
-			Voidscape.LOGGER.info("Party reserving instance, host: " + host().getDisplayName().getString());
+			Voidscape.LOGGER.info("Party reserving instance\n\tDuty: " + duty().display().getString() + "\n\tHost: " + host().getDisplayName().getString());
 		}
 		sendPackets();
 	}
