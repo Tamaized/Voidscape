@@ -16,6 +16,7 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.server.TicketManager;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.SaveFormat;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -26,6 +27,9 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
@@ -37,11 +41,29 @@ public class HackyWorldGen {
 
 	public static class DeepFreezeChunkManager extends ChunkManager {
 
+		private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
+		private static final Method TicketManager_isChunkToRemove = ObfuscationReflectionHelper.findMethod(TicketManager.class, "func_219371_a", long.class);
+		private static final Method TicketManager_updateChunkScheduling = ObfuscationReflectionHelper.findMethod(TicketManager.class, "func_219372_a", long.class, int.class, ChunkHolder.class, int.class);
+		private static final MethodHandle handle_TicketManager_isChunkToRemove;
+		private static final MethodHandle handle_TicketManager_updateChunkScheduling;
+
+		static {
+			MethodHandle tmp_handle_TicketManager_isChunkToRemove = null;
+			MethodHandle tmp_handle_TicketManager_updateChunkScheduling = null;
+			try {
+				tmp_handle_TicketManager_isChunkToRemove = LOOKUP.unreflect(TicketManager_isChunkToRemove);
+				tmp_handle_TicketManager_isChunkToRemove = LOOKUP.unreflect(TicketManager_updateChunkScheduling);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			handle_TicketManager_isChunkToRemove = tmp_handle_TicketManager_isChunkToRemove;
+			handle_TicketManager_updateChunkScheduling = tmp_handle_TicketManager_updateChunkScheduling;
+		}
+
 		private final IOWorker worker;
 
 		public DeepFreezeChunkManager(ServerWorld serverWorld_, SaveFormat.LevelSave levelSave_, DataFixer dataFixer_, TemplateManager templateManager_, Executor executor_, ThreadTaskExecutor<Runnable> threadTaskExecutor_, IChunkLightProvider chunkLightProvider_, ChunkGenerator chunkGenerator_, IChunkStatusListener chunkStatusListener_, Supplier<DimensionSavedDataManager> supplier_, int int_, boolean boolean_) {
 			super(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkStatusListener_, supplier_, int_, boolean_);
-			ObfuscationReflectionHelper.setPrivateValue(ChunkManager.class, this, new AccessibleProxyTicketManager(executor_, threadTaskExecutor_), "field_219267_u");
 			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), new File(levelSave_.getDimensionPath(serverWorld_.dimension()), "region"), boolean_, "chunk");
 		}
 
@@ -53,27 +75,13 @@ public class HackyWorldGen {
 
 		void unload() {
 			getChunks().forEach(chunk -> {
-				if (!((AccessibleProxyTicketManager) getDistanceManager()).isChunkToRemove(chunk.getPos().toLong()))
-					((AccessibleProxyTicketManager) getDistanceManager()).updateChunkScheduling(chunk.getPos().toLong(), ChunkManager.MAX_CHUNK_DISTANCE + 1, chunk, 0);
+				try {
+					if (!(boolean) handle_TicketManager_isChunkToRemove.invokeExact(getDistanceManager(), chunk.getPos().toLong()))
+						handle_TicketManager_updateChunkScheduling.invokeExact(getDistanceManager(), chunk.getPos().toLong(), ChunkManager.MAX_CHUNK_DISTANCE + 1, chunk, 0);
+				} catch (Throwable throwable) {
+					throwable.printStackTrace();
+				}
 			});
-		}
-
-		class AccessibleProxyTicketManager extends ChunkManager.ProxyTicketManager {
-
-			AccessibleProxyTicketManager(Executor executor_, Executor executor1_) {
-				super(executor_, executor1_);
-			}
-
-			@Override
-			public boolean isChunkToRemove(long long_) {
-				return super.isChunkToRemove(long_);
-			}
-
-			@Nullable
-			@Override
-			public ChunkHolder updateChunkScheduling(long chunkPosIn, int newLevel, @Nullable ChunkHolder holder, int oldLevel) {
-				return super.updateChunkScheduling(chunkPosIn, newLevel, holder, oldLevel);
-			}
 		}
 	}
 
