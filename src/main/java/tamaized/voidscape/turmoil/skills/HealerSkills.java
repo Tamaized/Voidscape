@@ -1,8 +1,10 @@
 package tamaized.voidscape.turmoil.skills;
 
+import tamaized.voidscape.turmoil.abilities.HealerAbilities;
+
 public class HealerSkills implements ITurmoilSkills {
 
-	public final TurmoilSkill CORE = builder("core").core().build();
+	public final TurmoilSkill CORE = builder("core").core().abilities(HealerAbilities.REZ).build();
 
 	public final TurmoilSkill VOIDIC_BOND = generic("voidic_bond").required(CORE).stats(stats -> stats.spellpower(5).rechargeRate(1)).build();
 	public final TurmoilSkill SPELLPOWER_1 = generic("spellpower_1").required(VOIDIC_BOND).stats(stats -> stats.spellpower(5)).build();

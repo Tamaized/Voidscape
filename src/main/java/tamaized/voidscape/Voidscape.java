@@ -198,7 +198,7 @@ public class Voidscape {
 		Vector3d vector3d = entity.getEyePosition(1F);
 		Vector3d vector3d1 = entity.getViewVector(1.0F);
 		Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
-		AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1.0D, 1.0D, 1.0D);
+		AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1D, 1D, 1D);
 		RayTraceResult raytraceresult = entity.level.clip(new RayTraceContext(vector3d, vector3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
 		if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
 			vector3d2 = raytraceresult.getLocation();

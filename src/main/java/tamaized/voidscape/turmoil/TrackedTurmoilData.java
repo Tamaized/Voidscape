@@ -32,9 +32,12 @@ public class TrackedTurmoilData implements SubCapability.ISubCap.ISubCapData.All
 			((LivingEntity) parent).setHealth(0.5F);
 			((LivingEntity) parent).deathTime++;
 		}
-		if (parent.level != null && !parent.level.isClientSide() && dirty != incapacitated) {
+		if (dirty != incapacitated) {
 			dirty = incapacitated;
-			sendToClients(parent);
+			if (!incapacitated && parent instanceof LivingEntity)
+				((LivingEntity) parent).deathTime = 0;
+			if (parent.level != null && !parent.level.isClientSide())
+				sendToClients(parent);
 		}
 	}
 
