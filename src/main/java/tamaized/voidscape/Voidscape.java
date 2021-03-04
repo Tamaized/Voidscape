@@ -195,6 +195,10 @@ public class Voidscape {
 	}
 
 	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
+		return getHitResultFromEyes(entity, predicate, range, 0, 0);
+	}
+
+	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range, double inflateXZ, double inflateY) {
 		Vector3d vector3d = entity.getEyePosition(1F);
 		Vector3d vector3d1 = entity.getViewVector(1.0F);
 		Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
@@ -203,19 +207,19 @@ public class Voidscape {
 		if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
 			vector3d2 = raytraceresult.getLocation();
 		}
-		RayTraceResult ray = getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range);
+		RayTraceResult ray = getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range, inflateXZ, inflateY);
 		return ray == null ? raytraceresult : ray;
 	}
 
 	@Nullable
-	private static EntityRayTraceResult getEntityHitResult(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance) {
+	private static EntityRayTraceResult getEntityHitResult(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance, double inflateXZ, double inflateY) {
 		World world = shooter.level;
 		double d0 = distance;
 		Entity entity = null;
 		Vector3d vector3d = null;
 
 		for (Entity entity1 : world.getEntities(shooter, boundingBox, filter)) {
-			AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate((double) entity1.getPickRadius());
+			AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate((double) entity1.getPickRadius()).inflate(inflateXZ, inflateY, inflateXZ);
 			Optional<Vector3d> optional = axisalignedbb.clip(startVec, endVec);
 			if (axisalignedbb.contains(startVec)) {
 				if (d0 >= 0.0D) {

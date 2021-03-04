@@ -14,7 +14,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 public class HealerAbilities {
 
 	public static final TurmoilAbility REZ = new TurmoilAbility(unloc("resurrection"), TurmoilAbility.Toggle.None, TurmoilAbility.Type.Voidic, 800, 30 * 20, (spell, caster) -> {
-		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false), 32);
+		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false), 32, 1.5D, 0D);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			Entity entity = ((EntityRayTraceResult) ray).getEntity();
 			entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> data.incapacitated = false));
