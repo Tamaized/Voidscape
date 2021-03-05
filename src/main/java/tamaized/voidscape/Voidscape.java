@@ -168,10 +168,16 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<LivingHealEvent>) event -> {
-			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(subCapTurmoilTracked).ifPresent(data -> {
-				if (data.incapacitated)
-					event.setCanceled(true);
-			}));
+			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+				cap.get(subCapTurmoilTracked).ifPresent(data -> {
+					if (data.incapacitated)
+						event.setCanceled(true);
+				});
+				cap.get(subCapTurmoilStats).ifPresent(stats -> {
+					if (stats.stats().healAmp > 0)
+						event.setAmount(event.getAmount() * (1F + stats.stats().healAmp));
+				});
+			});
 		});
 	}
 
