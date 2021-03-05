@@ -55,6 +55,14 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean dirty = false;
 
+	private static void applyAttribute(LivingEntity living, Attribute attribute, UUID modifier, String name, double value, AttributeModifier.Operation op) {
+		ModifiableAttributeInstance a = living.getAttribute(attribute);
+		if (a != null) {
+			a.removeModifier(modifier);
+			a.addTransientModifier(new AttributeModifier(modifier, name, value, op));
+		}
+	}
+
 	private void resetStats() {
 		stats = TurmoilSkill.Stats.empty();
 	}
@@ -72,14 +80,6 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			applyAttribute(living, ModAttributes.VOIDIC_RES.get(), TurmoilSkill.Stats.VOIDIC_RESISTANCE_PERC, "Voidic Resistance Percentage", stats.voidicDamageReductionPercentage, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
 		markDirty();
-	}
-
-	private static void applyAttribute(LivingEntity living, Attribute attribute, UUID modifier, String name, double value, AttributeModifier.Operation op) {
-		ModifiableAttributeInstance a = living.getAttribute(attribute);
-		if (a != null) {
-			a.removeModifier(modifier);
-			a.addTransientModifier(new AttributeModifier(modifier, name, value, op));
-		}
 	}
 
 	public void reset() {
@@ -117,6 +117,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			nullPower = 0;
 		if (!(parent instanceof LivingEntity) || !data.isPresent() || ((data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.get().hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof AxeItem)))
 			insanePower = 0;
+		if (parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(tracked -> !tracked.incapacitated).orElse(false)).orElse(false))
+			voidicPower = nullPower = insanePower = 0;
 		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
 			Vector3d dist = ramTarget.subtract(parent.position());
 			if ((dist.x * dist.x + dist.y * dist.y + dist.z * dist.z) / 2D <= 1D) {
