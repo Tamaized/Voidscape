@@ -26,6 +26,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -107,7 +108,16 @@ public class Voidscape {
 					event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
 			}
 		});
+		busForge.addListener((Consumer<LivingKnockBackEvent>) event -> {
+			if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
+				event.setCanceled(true);
+			}
+		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
+			if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
+				event.setCanceled(true);
+				return;
+			}
 			Boolean arrow;
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY).
