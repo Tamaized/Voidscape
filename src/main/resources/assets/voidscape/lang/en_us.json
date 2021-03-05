@@ -22,6 +22,17 @@
 
   "voidscape.gui.duty.pawn": "The Corrupt Pawn",
 
+  "voidscape.skills.stats.voidic_damage": "Voidic Damage: +%s",
+  "voidscape.skills.stats.voidic_reduction": "Voidic Damage Reduction: +%s",
+  "voidscape.skills.stats.spellpower": "Spellpower: +%s",
+  "voidscape.skills.stats.recharge": "Recharge Rate: +%s",
+  "voidscape.skills.stats.spellcrit": "Spell Critical Chance: +%s",
+  "voidscape.skills.stats.cooldown": "Cooldown Reduction: +%s",
+  "voidscape.skills.stats.cost": "Ability Cost Reduction: +%s",
+  "voidscape.skills.stats.hamp": "Heal Amplification: +%s",
+  "voidscape.skills.stats.heart": "Extra Hearts: +%s",
+  "voidscape.skills.stats.threat": "Threat Increase: +%s",
+
   "voidscape.skills.generic.voidic_bond.title": "Voidic Bond",
   "voidscape.skills.generic.spellpower_1.title": "Spellpower I",
   "voidscape.skills.generic.spellpower_2.title": "Spellpower II",

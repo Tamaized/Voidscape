@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 import javax.annotation.Nullable;
@@ -42,6 +43,44 @@ public class TurmoilSkill {
 		id = register(this);
 		this.stats = stats;
 		this.disabled = disabled;
+		desc.append("\n");
+		stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(desc,
+
+				"voidic_damage", stats.voidicDamage),
+
+				"voidic_damage", stats.voidicDamagePercent, true),
+
+				"voidic_reduction", stats.voidicDamageReduction),
+
+				"voidic_reduction", stats.voidicDamageReductionPercentage, true),
+
+				"spellpower", stats.spellpower),
+
+				"recharge", stats.rechargeRate),
+
+				"spellcrit", stats.spellCrit),
+
+				"cooldown", stats.cooldown, true),
+
+				"cost", stats.cost, true),
+
+				"hamp", stats.healAmp, true),
+
+				"heart", stats.heart),
+
+				"threat", stats.threat, true);
+
+
+	}
+
+	private static TranslationTextComponent stat(TranslationTextComponent parent, String name, Number stat) {
+		return stat(parent, name, stat, false);
+	}
+
+	private static TranslationTextComponent stat(TranslationTextComponent parent, String name, Number stat, boolean percent) {
+		if (stat.doubleValue() > 0)
+			parent.append("\n").append(new TranslationTextComponent(Voidscape.MODID.concat(".skills.stats.".concat(name)), percent ? stat + "%" : stat));
+		return parent;
 	}
 
 	private static int register(TurmoilSkill skill) {
