@@ -117,7 +117,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			nullPower = 0;
 		if (!(parent instanceof LivingEntity) || !data.isPresent() || ((data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.get().hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof AxeItem)))
 			insanePower = 0;
-		if (parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(tracked -> !tracked.incapacitated).orElse(false)).orElse(false))
+		if (parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(tracked -> tracked.incapacitated).orElse(false)).orElse(false))
 			voidicPower = nullPower = insanePower = 0;
 		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
 			Vector3d dist = ramTarget.subtract(parent.position());
