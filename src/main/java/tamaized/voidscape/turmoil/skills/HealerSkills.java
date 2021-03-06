@@ -12,11 +12,11 @@ public class HealerSkills implements ITurmoilSkills {
 	public final TurmoilSkill SPELLPOWER_3 = generic("spellpower_3").description("spellpower").required(SPELLPOWER_2).stats(stats -> stats.spellpower(5)).build();
 	public final TurmoilSkill SPELLPOWER_4 = generic("spellpower_4").description("spellpower").required(SPELLPOWER_3).stats(stats -> stats.spellpower(10)).build();
 	public final TurmoilSkill SPELLPOWER_5 = generic("spellpower_5").description("spellpower").required(SPELLPOWER_4).stats(stats -> stats.spellpower(20)).build();
-	public final TurmoilSkill BONDING_1 = generic("bonding_1").description("bonding").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_2 = generic("bonding_2").description("bonding").required(BONDING_1).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_3 = generic("bonding_3").description("bonding").required(BONDING_2).stats(stats -> stats.rechargeRate(1)).build();
-	public final TurmoilSkill BONDING_4 = generic("bonding_4").description("bonding").required(BONDING_3).stats(stats -> stats.rechargeRate(2)).build();
-	public final TurmoilSkill BONDING_5 = generic("bonding_5").description("bonding").required(BONDING_4).stats(stats -> stats.rechargeRate(4)).build();
+	public final TurmoilSkill BONDING_1 = generic("voidic_bonding_1").description("voidic_bonding").required(VOIDIC_BOND).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_2 = generic("voidic_bonding_2").description("voidic_bonding").required(BONDING_1).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_3 = generic("voidic_bonding_3").description("voidic_bonding").required(BONDING_2).stats(stats -> stats.rechargeRate(1)).build();
+	public final TurmoilSkill BONDING_4 = generic("voidic_bonding_4").description("voidic_bonding").required(BONDING_3).stats(stats -> stats.rechargeRate(2)).build();
+	public final TurmoilSkill BONDING_5 = generic("voidic_bonding_5").description("voidic_bonding").required(BONDING_4).stats(stats -> stats.rechargeRate(4)).build();
 	public final TurmoilSkill SPELL_DEX_1 = generic("spell_dex_1").description("spell_dex").required(VOIDIC_BOND).stats(stats -> stats.cooldown(5)).build();
 	public final TurmoilSkill SPELL_DEX_2 = generic("spell_dex_2").description("spell_dex").required(SPELL_DEX_1).stats(stats -> stats.cooldown(5)).build();
 	public final TurmoilSkill SPELL_DEX_3 = generic("spell_dex_3").description("spell_dex").required(SPELL_DEX_2).stats(stats -> stats.cooldown(5)).build();

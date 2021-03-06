@@ -3,10 +3,12 @@ package tamaized.voidscape.turmoil.abilities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.TurmoilStats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiPredicate;
 
 public class TurmoilAbility {
@@ -95,7 +97,13 @@ public class TurmoilAbility {
 	}
 
 	public TranslationTextComponent getDescription() {
-		return new TranslationTextComponent(unloc.concat(".desc"));
+		TranslationTextComponent desc = new TranslationTextComponent(unloc.concat(".desc"));
+		desc.append("\n\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.cost", cost).append(" ").
+				append(new TranslationTextComponent(Voidscape.MODID + ".ability.power." + type.name().toLowerCase(Locale.US)))).
+				append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.cooldown", cooldown));
+		if (damage > 0)
+			desc.append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.damage", damage));
+		return desc;
 	}
 
 	public ResourceLocation getTexture() {

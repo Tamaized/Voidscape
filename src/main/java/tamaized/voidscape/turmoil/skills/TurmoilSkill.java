@@ -44,6 +44,8 @@ public class TurmoilSkill {
 		this.stats = stats;
 		this.disabled = disabled;
 		desc.append("\n");
+		for (TurmoilAbility ability : this.abilities)
+			desc.append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".skills.ability").append(ability.getTitle()).append("\n").append(ability.getDescription())).append("\n");
 		stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(desc,
 
 				"voidic_damage", stats.voidicDamage),
