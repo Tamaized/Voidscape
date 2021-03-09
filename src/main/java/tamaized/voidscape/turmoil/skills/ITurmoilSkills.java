@@ -48,6 +48,11 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
+		Builder noDescription() {
+			this.desc = null;
+			return this;
+		}
+
 		Builder texture(ResourceLocation loc) {
 			texture = () -> () -> loc;
 			return this;
@@ -93,7 +98,7 @@ public interface ITurmoilSkills {
 		}
 
 		TurmoilSkill build() {
-			return new TurmoilSkill(format(loc, name.concat(".title")), format(loc, desc.isEmpty() ? name.concat(".desc") : desc.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), stats.build(), disabled);
+			return new TurmoilSkill(format(loc, name.concat(".title")), desc == null ? new TranslationTextComponent("") : format(loc, desc.isEmpty() ? name.concat(".desc") : desc.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), stats.build(), disabled);
 		}
 
 	}

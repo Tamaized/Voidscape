@@ -29,7 +29,7 @@ public class HealerAbilities {
 	});
 
 	private static String unloc(String loc) {
-		return Voidscape.MODID.concat(".abilities.mage.".concat(loc));
+		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));
 	}
 
 }
