@@ -88,11 +88,13 @@ public class SpellsScreen extends TurmoilScreen {
 
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
+		final int spacing = buttonHeight + 5;
+		final int grid = (window.getGuiScaledWidth() - spacing * 4) / spacing;
 
 		List<TurmoilAbility> spells = new ArrayList<>();
 		data.getSkills().forEach(s -> spells.addAll(s.getAbilities()));
 		for (int index = 0; index < spells.size(); index++)
-			addSpell(spells.get(index), 5 + (buttonHeight * index / ((window.getGuiScaledWidth() - 10) / buttonHeight)), 5 + (buttonHeight * index / ((window.getGuiScaledHeight() - 15 - buttonHeight) / buttonHeight)));
+			addSpell(spells.get(index), 5 + spacing * (index % grid), 5 + spacing * (index / grid));
 
 		TurmoilStats stats = getData(Voidscape.subCapTurmoilStats);
 

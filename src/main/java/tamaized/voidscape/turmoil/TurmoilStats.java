@@ -48,6 +48,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	private TurmoilSkill.Stats stats = TurmoilSkill.Stats.empty();
 
+	private Map<TurmoilAbility.Toggle, TurmoilAbility> toggles = new HashMap<>();
+
 	private boolean voidmancerStance = false;
 	private float ramDamage = 0;
 	private Vector3d ramTarget;
@@ -61,6 +63,21 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			a.removeModifier(modifier);
 			a.addTransientModifier(new AttributeModifier(modifier, name, value, op));
 		}
+	}
+
+	public boolean toggleAbility(TurmoilAbility ability) {
+		TurmoilAbility o = toggles.get(ability.toggle());
+		if (o == null) {
+			toggles.put(ability.toggle(), ability);
+			markDirty();
+			return true;
+		}
+		if (ability == o) {
+			toggles.remove(ability.toggle());
+			markDirty();
+			return true;
+		}
+		return false;
 	}
 
 	private void resetStats() {
@@ -179,9 +196,22 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		buffer.writeInt(nullPower);
 		buffer.writeInt(insanePower);
 		stats.encode(buffer);
+		for (TurmoilAbility.Toggle toggle : TurmoilAbility.Toggle.VALUES) {
+			TurmoilAbility ability = toggles.get(toggle);
+			for (int i = 0; i < 9; i++) {
+				TurmoilAbilityInstance inst = getAbility(i);
+				if (inst != null && ability == inst.ability())
+					break;
+				if (i == 8) {
+					ability = null;
+					toggles.remove(toggle);
+				}
+			}
+			buffer.writeInt(ability == null ? -1 : ability.id());
+		}
 		for (TurmoilAbilityInstance slot : slots) {
 			if (slot == null) {
-				buffer.writeVarInt(-1);
+				buffer.writeInt(-1);
 				buffer.writeLong(0L);
 			} else
 				slot.encode(buffer);
@@ -194,6 +224,12 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		nullPower = buffer.readInt();
 		insanePower = buffer.readInt();
 		stats = TurmoilSkill.Stats.decode(buffer);
+		toggles.clear();
+		for (TurmoilAbility.Toggle toggle : TurmoilAbility.Toggle.VALUES) {
+			TurmoilAbility ability = TurmoilAbility.getFromID(buffer.readInt());
+			if (ability != null)
+				toggles.put(toggle, ability);
+		}
 		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = TurmoilAbilityInstance.decode(buffer);
@@ -205,6 +241,17 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			}
 			slots[i] = instance;
 		}
+	}
+
+	public boolean isActive(TurmoilAbility ability) {
+		for (TurmoilAbility a : toggles.values())
+			if (ability == a)
+				return true;
+		return false;
+	}
+
+	public boolean isActive(TurmoilAbility.Toggle toggle) {
+		return toggles.get(toggle) != null;
 	}
 
 	public int getVoidicPower() {

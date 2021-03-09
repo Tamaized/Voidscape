@@ -12,7 +12,7 @@ import tamaized.voidscape.Voidscape;
 
 public class TankAbilities {
 
-	public static final TurmoilAbility TAUNT = new TurmoilAbility(unloc("taunt"), TurmoilAbility.Toggle.None, TurmoilAbility.Type.Voidic, 50, 15 * 20, (spell, caster) -> {
+	public static final TurmoilAbility TAUNT = new TurmoilAbility(unloc("taunt"), TurmoilAbility.Type.Voidic, 50, 15 * 20, (spell, caster) -> {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();

@@ -93,7 +93,7 @@
   "voidscape.skills.mage.insane_mage_5.title": "Insane Mage V",
   "voidscape.skills.mage.voidmancy_1.title": "Voidmancy I",
   "voidscape.skills.mage.homingbolts.title": "Homing Bolts",
-  "voidscape.skills.mage.homingbolts.desc": "Homing Bolts",
+  "voidscape.skills.mage.homingbolts.desc": "While toggled on, Bolts will now actively seek out targets",
   "voidscape.skills.mage.voidicaura.title": "Voidic Aura",
   "voidscape.skills.mage.voidicaura.desc": "Create an aura around you that deals 1 Voidic Damage every (30 - recharge rate) ticks (min 1 tick)",
   "voidscape.skills.mage.voidmancy_2.title": "Voidmancy II",

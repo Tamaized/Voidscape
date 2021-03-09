@@ -30,6 +30,7 @@ import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
+import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 
 import java.util.List;
@@ -40,9 +41,9 @@ public class RenderTurmoil {
 
 	public static final int STENCIL_INDEX = 10;
 	public static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
+	public static final Color24 colorHolder = new Color24();
 	static final ResourceLocation TEXTURE_VOIDICINFUSION = new ResourceLocation(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
-	public static final Color24 colorHolder = new Color24();
 	private static float deltaTick;
 	private static Boolean deltaPos;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
@@ -96,6 +97,7 @@ public class RenderTurmoil {
 								renderSpellBar(event.getMatrixStack(), 0);
 								renderAbilityInstances(event.getMatrixStack(), stats);
 								renderAbilityActivates(event.getMatrixStack());
+								renderAbilityToggle(event.getMatrixStack(), stats);
 								renderAbilityCooldowns(event.getMatrixStack(), stats);
 							}
 							break;
@@ -129,7 +131,7 @@ public class RenderTurmoil {
 									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0x7700FF);
 									xOffset += 26;
 								}
-								if (stats.getNullPower() < 1000 && stats.getNullPower() > 0) {
+								if (stats.getNullPower() > 0) {
 									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
 									MainWindow window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
@@ -157,7 +159,7 @@ public class RenderTurmoil {
 									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0xFFFFFF);
 									xOffset += 26;
 								}
-								if (stats.getInsanePower() < 1000 && stats.getInsanePower() > 0) {
+								if (stats.getInsanePower() > 0) {
 									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
 									MainWindow window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
@@ -385,6 +387,9 @@ public class RenderTurmoil {
 			if (instance == null)
 				continue;
 			float perc = instance.canAfford(Minecraft.getInstance().player) ? instance.cooldownPercent(Minecraft.getInstance().level) : 1F;
+			boolean toggle = false;
+			if (perc == 0 && instance.ability().toggle() != TurmoilAbility.Toggle.None && (toggle = stats.isActive(instance.ability().toggle())) && !stats.isActive(instance.ability()))
+				perc = 1F;
 			if (perc <= 0)
 				continue;
 			int x = ox + (20) * (i % 3);
@@ -402,9 +407,37 @@ public class RenderTurmoil {
 			Tessellator.getInstance().end();
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
-			boolean flag;
-			String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
-			Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : 0xFF7700FF);
+			if (!toggle) {
+				boolean flag;
+				String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
+				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : 0xFF7700FF);
+			}
+		}
+	}
+
+	private static void renderAbilityToggle(MatrixStack stack, TurmoilStats stats) {
+		int s = 16;
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		for (int i = 0; i < 9; i++) {
+			TurmoilAbilityInstance instance = stats.getAbility(i);
+			if (instance == null || !stats.isActive(instance.ability()))
+				continue;
+			int x = ox + (20) * (i % 3);
+			int y = oy + (20) * (i / 3);
+			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			buffer.vertex(x, y, 0F).color(1F, 1F, 0F, 1F).endVertex();
+			buffer.vertex(x, y + s, 0F).color(1F, 1F, 0F, 0F).endVertex();
+			buffer.vertex(x + s, y + s, 0F).color(1F, 1F, 0F, 0F).endVertex();
+			buffer.vertex(x + s, y, 0F).color(1F, 1F, 0F, 1F).endVertex();
+			RenderSystem.enableBlend();
+			RenderSystem.disableTexture();
+			RenderSystem.shadeModel(GL11.GL_SMOOTH);
+			Tessellator.getInstance().end();
+			RenderSystem.shadeModel(GL11.GL_FLAT);
+			RenderSystem.enableTexture();
+			RenderSystem.disableBlend();
 		}
 	}
 

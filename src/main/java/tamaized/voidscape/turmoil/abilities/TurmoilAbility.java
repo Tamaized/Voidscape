@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TurmoilStats;
 
 import java.util.ArrayList;
@@ -25,7 +26,15 @@ public class TurmoilAbility {
 
 	private float damage = 0;
 
-	public TurmoilAbility(String unloc, Toggle toggle, Type type, int cost, int cooldown, BiPredicate<TurmoilAbility, LivingEntity> execute) {
+	public TurmoilAbility(String unloc, Type type, int cost, int cooldown, Toggle toggle) {
+		this(unloc, toggle, type, cost, cooldown, null);
+	}
+
+	public TurmoilAbility(String unloc, Type type, int cost, int cooldown, BiPredicate<TurmoilAbility, LivingEntity> execute) {
+		this(unloc, Toggle.None, type, cost, cooldown, execute);
+	}
+
+	private TurmoilAbility(String unloc, Toggle toggle, Type type, int cost, int cooldown, BiPredicate<TurmoilAbility, LivingEntity> execute) {
 		id = register(this);
 		this.unloc = unloc;
 		this.toggle = toggle;
@@ -76,7 +85,7 @@ public class TurmoilAbility {
 	}
 
 	public boolean execute(LivingEntity caster) {
-		return execute.test(this, caster);
+		return toggle == Toggle.None ? execute.test(this, caster) : caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(data -> data.toggleAbility(this)).orElse(false)).orElse(false);
 	}
 
 	public TurmoilAbility damage(float d) {
@@ -86,6 +95,10 @@ public class TurmoilAbility {
 
 	public float damage() {
 		return damage;
+	}
+
+	public Toggle toggle() {
+		return toggle;
 	}
 
 	public final int id() {
@@ -116,6 +129,7 @@ public class TurmoilAbility {
 	}
 
 	public enum Toggle {
-		None, Voidic, Imbue, Stance, Link, Empower
+		None, Voidic, Imbue, Stance, Link, Empower;
+		public static final Toggle[] VALUES = values();
 	}
 }

@@ -20,7 +20,7 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public static TurmoilAbilityInstance decode(PacketBuffer packet) {
-		TurmoilAbility ability = TurmoilAbility.getFromID(packet.readVarInt());
+		TurmoilAbility ability = TurmoilAbility.getFromID(packet.readInt());
 		long data = packet.readLong();
 		if (ability == null)
 			return null;
@@ -74,9 +74,22 @@ public final class TurmoilAbilityInstance {
 
 	private void putOnCooldown(LivingEntity caster) {
 		lastCast = caster.level.getGameTime();
+		if (ability.toggle() != TurmoilAbility.Toggle.None) {
+			caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(data -> {
+				for (int i = 0; i < 9; i++) {
+					TurmoilAbilityInstance slot = data.getAbility(i);
+					if (slot != null && slot.ability().toggle() == ability.toggle())
+						slot.setExactCooldown(lastCast);
+				}
+			}));
+		}
 	}
 
-	private void setCooldown(LivingEntity caster, int ticks) {
+	private void setExactCooldown(long ticks) {
+		lastCast = ticks;
+	}
+
+	private void setCooldown(LivingEntity caster, long ticks) {
 		lastCast = ticks - filterCooldown() + caster.level.getGameTime();
 	}
 
@@ -97,7 +110,7 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public void encode(PacketBuffer packet) {
-		packet.writeVarInt(ability.id());
+		packet.writeInt(ability.id());
 		packet.writeLong(lastCast);
 	}
 

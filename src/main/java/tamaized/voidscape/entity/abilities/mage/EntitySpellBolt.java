@@ -9,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,9 +33,13 @@ import javax.annotation.Nullable;
 
 public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAdditionalSpawnData {
 
+	private static final DataParameter<Integer> SEEK_TARGET = EntityDataManager.defineId(EntitySpellBolt.class, DataSerializers.INT);
+
 	public LivingEntity shootingEntity;
 	private TurmoilAbility ability;
 	private int ticksInAir;
+	private boolean homing;
+	private Entity seekTarget;
 
 	private float damage = 1F;
 	private double speed = 1D;
@@ -73,6 +80,10 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		}
 	}
 
+	public void homing() {
+		homing = true;
+	}
+
 	@Override
 	public float getBrightness() {
 		return 1F;
@@ -106,7 +117,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 	@Override
 	protected void defineSynchedData() {
-
+		entityData.define(SEEK_TARGET, -1);
 	}
 
 	@Override
@@ -123,6 +134,36 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	public void tick() {
 		// super.tick();
 		baseTick();
+
+		if (homing && (seekTarget == null || !seekTarget.isAlive())) {
+			if (level.isClientSide) {
+				int id = entityData.get(SEEK_TARGET);
+				if (id > -1)
+					seekTarget = level.getEntity(id);
+			} else {
+				Entity en = null;
+				for (Entity e : level.getEntities(this, getBoundingBox().inflate(10F).move(getDeltaMovement().scale(11F)))) {
+					if (e == this || e == shootingEntity || !canHitEntity(e))
+						continue;
+					if (en == null || e.distanceTo(this) < en.distanceTo(this))
+						en = e;
+				}
+				seekTarget = en;
+				if (seekTarget != null)
+					entityData.set(SEEK_TARGET, seekTarget.getId());
+			}
+		}
+
+		if (seekTarget != null) {
+			double scale = MathHelper.clamp(distanceTo(seekTarget) / 100D * 0.18D + 0.02D, 0.02D, 0.5D);
+			Vector3d targetVec = new Vector3d(seekTarget.getX() - this.getX(), (seekTarget.getY() + seekTarget.getEyeHeight()) - this.getY(), seekTarget.getZ() - this.getZ()).scale(scale);
+			Vector3d courseVec = getDeltaMovement();
+			double courseLen = courseVec.length();
+			double targetLen = targetVec.length();
+			double totalLen = Math.sqrt(courseLen * courseLen + targetLen * targetLen);
+			Vector3d newMotion = courseVec.scale(courseLen / totalLen).add(targetVec.scale(targetLen / totalLen));
+			this.setDeltaMovement(newMotion.normalize());
+		}
 
 		if (xRotO == 0.0F && yRotO == 0.0F) {
 			float f = MathHelper.sqrt(getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z);

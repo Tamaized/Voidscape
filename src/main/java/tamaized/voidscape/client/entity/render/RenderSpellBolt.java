@@ -50,29 +50,6 @@ public class RenderSpellBolt<T extends EntitySpellBolt> extends EntityRenderer<T
 			vertex(buffer, v, n, size, -size, 0, 0.25F, 0F, 0.6F, 0.75F, 1, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
 		}
 		matrixStackIn.popPose();
-/*		RenderSystem.pushMatrix();
-		RenderSystem.disableCull();
-		RenderSystem.disableLighting();
-		RenderSystem.enableBlend();
-		RenderSystem.translated(x - 0.5F, y - 0.5F, z - 0.0F);
-		//		RenderSystem.rotatef(180F - getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexbuffer = tessellator.getBuffer();
-
-		for (int i = 0; i < 8; i++) {
-			RenderSystem.rotatef((45 * i + entity.ticksExisted * 2) % 360, 1, 1, 0);
-			//			RenderSystem.translated(-0.25F + ((0.125F * i) % 4), -0.25F + (0.125F * ((i + 2) % 4)), -0.25F + (0.125F * ((i - 2) % 4)));
-			vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-			vertexbuffer.pos(1, 1, 0).tex(1, 1).endVertex();
-			vertexbuffer.pos(1, 0, 0).tex(1, 0).endVertex();
-			vertexbuffer.pos(0, 0, 0).tex(0, 0).endVertex();
-			vertexbuffer.pos(0, 1, 0).tex(0, 1).endVertex();
-			tessellator.draw();
-		}
-		RenderSystem.disableBlend();
-		RenderSystem.enableLighting();
-		RenderSystem.enableCull();
-		RenderSystem.popMatrix();*/
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class TurmoilSkill {
 
 				"recharge", stats.rechargeRate),
 
-				"spellcrit", stats.spellCrit),
+				"spellcrit", stats.spellCrit, true),
 
 				"cooldown", stats.cooldown, true),
 

@@ -14,7 +14,7 @@ import tamaized.voidscape.world.InstanceChunkGenerator;
 
 public class MeleeAbilities {
 
-	public static final TurmoilAbility RUSH = new TurmoilAbility(unloc("rush"), TurmoilAbility.Toggle.None, TurmoilAbility.Type.Voidic, 200, 15 * 20, (spell, caster) -> {
+	public static final TurmoilAbility RUSH = new TurmoilAbility(unloc("rush"), TurmoilAbility.Type.Voidic, 200, 15 * 20, (spell, caster) -> {
 		final boolean flag = caster.level instanceof ServerWorld && ((ServerWorld) caster.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> !flag || !(e instanceof PlayerEntity), 16);
 		if (caster.level instanceof ServerWorld && ray.getType() != RayTraceResult.Type.MISS) {
