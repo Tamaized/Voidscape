@@ -1,9 +1,10 @@
-package tamaized.voidscape.entity.abilities.mage;
+package tamaized.voidscape.entity.abilities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,6 +22,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
@@ -28,6 +31,7 @@ import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
+import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import javax.annotation.Nullable;
 
@@ -55,7 +59,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	public EntitySpellBolt(LivingEntity shooter, TurmoilAbility ability) {
-		this(ModEntities.SPELL_MAGE_BOLT.get(), shooter.level, shooter, shooter.getX(), shooter.getY(), shooter.getZ());
+		this(ModEntities.SPELL_BOLT.get(), shooter.level, shooter, shooter.getX(), shooter.getY(), shooter.getZ());
 		this.ability = ability;
 	}
 
@@ -128,6 +132,13 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	@Override
 	public void setCritArrow(boolean critical) {
 
+	}
+
+	@Override
+	protected boolean canHitEntity(Entity p_230298_1_) {
+		if (level instanceof ServerWorld && p_230298_1_ instanceof PlayerEntity && ((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator)
+			return false;
+		return super.canHitEntity(p_230298_1_);
 	}
 
 	@Override

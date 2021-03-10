@@ -12,7 +12,7 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
+import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
 public class RenderSpellBolt<T extends EntitySpellBolt> extends EntityRenderer<T> {
 

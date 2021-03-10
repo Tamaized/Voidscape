@@ -1,5 +1,5 @@
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
-package tamaized.voidscape.entity.abilities.mage;
+package tamaized.voidscape.entity.abilities;
 
 import mcp.MethodsReturnNonnullByDefault;
 

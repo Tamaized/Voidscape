@@ -30,7 +30,7 @@ public class MageSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill VOIDMANCY_1 = builder("voidmancy_1").noDescription().required(CORE).stats(stats -> stats.spellpower(2).rechargeRate(1).spellCrit(1)).build();
 	public final TurmoilSkill HOMINGBOLTS = builder("homingbolts").required(VOIDMANCY_1).stats(stats -> stats.spellpower(5)).abilities(MageAbilities.HOMING_BOLTS).build();
-	public final TurmoilSkill VOIDICAURA = builder("voidicaura").required(VOIDMANCY_1).build();
+	public final TurmoilSkill VOIDICAURA = builder("voidicaura").required(VOIDMANCY_1).abilities(MageAbilities.AURA).build();
 	public final TurmoilSkill VOIDMANCY_2 = builder("voidmancy_2").required(VOIDMANCY_1).stats(stats -> stats.spellpower(2).cooldown(1).spellCrit(1)).build();
 	public final TurmoilSkill PENETRATINGBOLTS = builder("penetratingbolts").required(VOIDMANCY_2).stats(stats -> stats.spellpower(5)).build();
 	public final TurmoilSkill EMPOWERBOLT_2X = builder("empowerbolt_2x").required(VOIDMANCY_2).build();

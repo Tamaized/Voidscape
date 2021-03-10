@@ -18,16 +18,19 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
+import tamaized.voidscape.client.entity.render.RenderNull;
 import tamaized.voidscape.client.entity.render.RenderSpellBolt;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
-import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
+import tamaized.voidscape.entity.abilities.EntitySpellAura;
+import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEntities {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITIES);
 
-	public static final RegistryObject<EntityType<EntitySpellBolt>> SPELL_MAGE_BOLT = REGISTRY.register("spell_mage_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "spell_mage_bolt"), EntitySpellBolt::new, EntityClassification.MISC, 0.5F, 0.5F));
+	public static final RegistryObject<EntityType<EntitySpellBolt>> SPELL_BOLT = REGISTRY.register("spell_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "spell_bolt"), EntitySpellBolt::new, EntityClassification.MISC, 0.5F, 0.5F));
+	public static final RegistryObject<EntityType<EntitySpellAura>> SPELL_AURA = REGISTRY.register("spell_aura", () -> make(new ResourceLocation(Voidscape.MODID, "spell_aura"), EntitySpellAura::new, EntityClassification.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnPhantom>> CORRUPTED_PAWN_PHANTOM = REGISTRY.register("corrupted_pawn_phantom", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_phantom"), makeCastedBuilder(EntityCorruptedPawnPhantom.class, EntityCorruptedPawnPhantom::new, EntityClassification.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256)));
 
 	static void classload() {
@@ -66,7 +69,8 @@ public class ModEntities {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderer(FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(SPELL_MAGE_BOLT.get(), RenderSpellBolt::new);
+		RenderingRegistry.registerEntityRenderingHandler(SPELL_BOLT.get(), RenderSpellBolt::new);
+		RenderingRegistry.registerEntityRenderingHandler(SPELL_AURA.get(), RenderNull::new);
 		RenderingRegistry.registerEntityRenderingHandler(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
 	}
 

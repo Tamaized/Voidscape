@@ -57,6 +57,7 @@ public class RegUtil {
 		ModArmors.classload();
 		ModBlocks.classload();
 		ModItems.classload();
+		ModParticles.classload();
 		ModSounds.classload();
 		ModTools.classload();
 		ModEntities.classload();

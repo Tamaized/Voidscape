@@ -193,9 +193,7 @@ public class SpellsScreen extends TurmoilScreen {
 			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
 			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
 			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
-			RenderSystem.enableDepthTest();
 			Tessellator.getInstance().end();
-			RenderSystem.disableDepthTest();
 		}
 
 		@Override

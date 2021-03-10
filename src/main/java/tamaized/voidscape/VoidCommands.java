@@ -9,7 +9,7 @@ import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import tamaized.voidscape.entity.abilities.mage.EntitySpellBolt;
+import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -41,7 +41,7 @@ public final class VoidCommands {
 					then(Commands.literal("hurt").
 							executes(context -> {
 								PlayerEntity me = context.getSource().getPlayerOrException();
-								EntitySpellBolt bolt = new EntitySpellBolt(ModEntities.SPELL_MAGE_BOLT.get(), context.getSource().getLevel());
+								EntitySpellBolt bolt = new EntitySpellBolt(ModEntities.SPELL_BOLT.get(), context.getSource().getLevel());
 								bolt.setPos(me.getX(), me.getY() + 10, me.getZ());
 								bolt.shoot(0, -1, 0, 1F, 0F);
 								bolt.setDamage(10F);
