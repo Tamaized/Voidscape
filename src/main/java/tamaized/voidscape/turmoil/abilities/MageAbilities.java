@@ -8,7 +8,6 @@ import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 
 public class MageAbilities {
 
-	public static final TurmoilAbility HOMING_BOLTS = new TurmoilAbility(unloc("homing_bolts"), TurmoilAbility.Type.Voidic, 50, 10 * 20, TurmoilAbility.Toggle.Voidic);
 	public static final TurmoilAbility BOLT = new TurmoilAbility(unloc("bolt"), TurmoilAbility.Type.Voidic, 150, 3 * 20, (spell, caster) -> {
 		EntitySpellBolt bolt = new EntitySpellBolt(caster, MageAbilities.BOLT);
 		bolt.setDamage(caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> {
@@ -31,6 +30,7 @@ public class MageAbilities {
 		caster.level.addFreshEntity(bolt);
 		return true;
 	}).damage(1F);
+	public static final TurmoilAbility HOMING_BOLTS = new TurmoilAbility(unloc("homing_bolts"), TurmoilAbility.Type.Voidic, 50, 10 * 20, TurmoilAbility.Toggle.Voidic);
 	public static final TurmoilAbility AURA = new TurmoilAbility(unloc("aura"), TurmoilAbility.Type.Voidic, 250, 45 * 20, (spell, caster) -> {
 		EntitySpellAura aura = new EntitySpellAura(MageAbilities.AURA, caster, 0x7700FF, 30L * 20L);
 		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
@@ -43,6 +43,7 @@ public class MageAbilities {
 		caster.level.addFreshEntity(aura);
 		return true;
 	}).damage(1F);
+	public static final TurmoilAbility ARROW_IMBUE_SPELLLIKE = new TurmoilAbility(unloc("arrow_imbue_spelllike"), TurmoilAbility.Type.Voidic, 50, 3 * 20, TurmoilAbility.Toggle.Imbue);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.mage.".concat(loc));

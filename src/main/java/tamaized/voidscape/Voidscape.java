@@ -47,6 +47,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
+import tamaized.voidscape.turmoil.abilities.MageAbilities;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -150,7 +151,9 @@ public class Voidscape {
 
 																	0F
 
-					)).orElse(0F)).orElse(0F) : (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).orElse(1F)).orElse(0F)).orElse(0F) :
+
+							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;
 						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);

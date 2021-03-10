@@ -51,7 +51,7 @@ public class MageSkills implements ITurmoilSkills {
 	public final TurmoilSkill NULLVULNERABILITY = builder("nullvulnerability").required(VOIDMANCERSTANCE).build();
 
 	public final TurmoilSkill VOIDIC_ARCHER_1 = builder("voidic_archer_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
-	public final TurmoilSkill ARROWIMBUE_SPELLLIKE = builder("arrowimbue_spelllike").required(VOIDIC_ARCHER_1).build();
+	public final TurmoilSkill ARROWIMBUE_SPELLLIKE = builder("arrowimbue_spelllike").required(VOIDIC_ARCHER_1).abilities(MageAbilities.ARROW_IMBUE_SPELLLIKE).build();
 	public final TurmoilSkill FLAMESHOT = builder("flameshot").required(VOIDIC_ARCHER_1).build();
 	public final TurmoilSkill VOIDIC_ARCHER_2 = builder("voidic_archer_2").required(VOIDIC_ARCHER_1).stats(stats -> stats.spellpower(1)).build();
 	public final TurmoilSkill ARROWIMBUE_FOCUS = builder("arrowimbue_focus").required(VOIDIC_ARCHER_2).build();

@@ -220,6 +220,8 @@
   "voidscape.abilities.mage.bolt.desc": "Fire a Bolt of Voidic energy towards a target",
   "voidscape.abilities.mage.aura.title": "Voidic Aura",
   "voidscape.abilities.mage.aura.desc": "Deals damage around you every (30 - recharge rate) ticks, minimum of once per tick, for 30 seconds",
+  "voidscape.abilities.mage.arrow_imbue_spelllike.title": "Arrow Imbue: Spell-Like",
+  "voidscape.abilities.mage.arrow_imbue_spelllike.desc": "The Voidic Damage on arrows you fire now scale with spell power",
 
   "voidscape.abilities.tank.taunt.title": "Taunt",
   "voidscape.abilities.tank.taunt.desc": "Provoke a target, causing them to attack you instead",
