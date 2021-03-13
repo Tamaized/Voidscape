@@ -5,6 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
@@ -24,6 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -41,6 +43,7 @@ import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
+import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -48,6 +51,8 @@ import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
+import tamaized.voidscape.turmoil.caps.FireArrowCapability;
+import tamaized.voidscape.turmoil.caps.IFireArrow;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -92,6 +97,7 @@ public class Voidscape {
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
 			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
 			}, SubCapability.AttachedSubCap::new);
+			CapabilityManager.INSTANCE.register(IFireArrow.class, new SubCapability.ISubCap.DummyStorage<>(), FireArrowCapability::new);
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
@@ -168,6 +174,11 @@ public class Voidscape {
 							});
 					}
 				}
+				if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity && event.getSource().getDirectEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).map(IFireArrow::active).orElse(false)) {
+					float dmg = event.getEntity().isOnFire() ? event.getAmount() : event.getAmount() * 0.25F;
+					event.getEntity().invulnerableTime = 0;
+					event.getEntity().hurt(DamageSource.ON_FIRE, dmg);
+				}
 			}
 		});
 		busForge.addListener((Consumer<LivingHealEvent>) event -> {
@@ -181,6 +192,19 @@ public class Voidscape {
 						event.setAmount(event.getAmount() * (1F + stats.stats().healAmp));
 				});
 			});
+		});
+		busForge.addListener((Consumer<EntityJoinWorldEvent>) event -> {
+			if (event.getEntity() instanceof AbstractArrowEntity) {
+				Entity entity = ((AbstractArrowEntity) event.getEntity()).getOwner();
+				if (entity instanceof LivingEntity) {
+					LivingEntity shooter = (LivingEntity) entity;
+					if (shooter.hasEffect(ModEffects.FIRE_ARROW.get())) {
+						if (event.getWorld().random.nextInt(4) == 0)
+							event.getEntity().setSecondsOnFire(100);
+						event.getEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).ifPresent(IFireArrow::mark);
+					}
+				}
+			}
 		});
 	}
 

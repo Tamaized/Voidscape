@@ -3,6 +3,7 @@ package tamaized.voidscape.turmoil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.turmoil.caps.IFireArrow;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +39,9 @@ public class SubCapability {
 
 	@CapabilityInject(ISubCap.class)
 	public static final Capability<ISubCap> CAPABILITY = Voidscape.getNull();
+
+	@CapabilityInject(IFireArrow.class)
+	public static final Capability<IFireArrow> CAPABILITY_FIREARROW = Voidscape.getNull();
 
 	static {
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
@@ -60,6 +65,27 @@ public class SubCapability {
 					@Override
 					public void deserializeNBT(INBT nbt) {
 						CAPABILITY.getStorage().readNBT(CAPABILITY, instance, null, nbt);
+					}
+				});
+			if (event.getObject() instanceof AbstractArrowEntity)
+				event.addCapability(IFireArrow.ID, new ICapabilitySerializable() {
+
+					private IFireArrow instance = CAPABILITY_FIREARROW.getDefaultInstance();
+
+					@Nonnull
+					@Override
+					public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+						return CAPABILITY_FIREARROW.orEmpty(cap, LazyOptional.of(() -> instance));
+					}
+
+					@Override
+					public INBT serializeNBT() {
+						return new CompoundNBT();
+					}
+
+					@Override
+					public void deserializeNBT(INBT nbt) {
+
 					}
 				});
 		});
@@ -142,6 +168,19 @@ public class SubCapability {
 
 			}
 
+		}
+
+		class DummyStorage<T> implements Capability.IStorage<T> {
+			@Nullable
+			@Override
+			public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
+				return new CompoundNBT();
+			}
+
+			@Override
+			public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+
+			}
 		}
 
 		interface Storage extends Capability.IStorage<ISubCap> {

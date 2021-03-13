@@ -129,7 +129,7 @@ public class TurmoilAbility {
 	}
 
 	public enum Toggle {
-		None, Voidic, Imbue, Stance, Link, Empower;
+		None, Voidic, Imbue, ArrowShot, Stance, Link, Empower;
 		public static final Toggle[] VALUES = values();
 	}
 }

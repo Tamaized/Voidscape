@@ -3,6 +3,7 @@ package tamaized.voidscape.turmoil.abilities;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
+import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 
@@ -44,6 +45,10 @@ public class MageAbilities {
 		return true;
 	}).damage(1F);
 	public static final TurmoilAbility ARROW_IMBUE_SPELLLIKE = new TurmoilAbility(unloc("arrow_imbue_spelllike"), TurmoilAbility.Type.Voidic, 50, 3 * 20, TurmoilAbility.Toggle.Imbue);
+	public static final TurmoilAbility FLAME_SHOT = new TurmoilAbility(unloc("flame_shot"), TurmoilAbility.Type.Voidic, 200, 5 * 20, (spell, caster) -> {
+		ModEffects.apply(caster, ModEffects.FIRE_ARROW.get(), 15 * 20, 1);
+		return true;
+	});
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.mage.".concat(loc));
