@@ -109,7 +109,6 @@
   "voidscape.skills.mage.arrowimbue_spelllike.title": "Arrow Imbue: Spell-Like",
   "voidscape.skills.mage.arrowimbue_spelllike.desc": "The Voidic Damage on arrows you fire now scale with spell power",
   "voidscape.skills.mage.flameshot.title": "Flame Shot",
-  "voidscape.skills.mage.flameshot.desc": "Your next arrow will deal 25% extra damage as fire damage\n25% to set targets on fire\nIf the target is on fire, instead deal 100% extra damage as fire damage",
   "voidscape.skills.mage.voidic_archer_2.title": "Voidic Archer II",
   "voidscape.skills.mage.voidic_archer_2.desc": "Bow Voidic Damage increase: 25% -> 50%",
   "voidscape.skills.mage.voidic_archer_3.title": "Voidic Archer III",
@@ -222,7 +221,7 @@
   "voidscape.abilities.mage.aura.desc": "Deals damage around you every (30 - recharge rate) ticks, minimum of once per tick, for 30 seconds",
   "voidscape.abilities.mage.arrow_imbue_spelllike.title": "Arrow Imbue: Spell-Like",
   "voidscape.abilities.mage.arrow_imbue_spelllike.desc": "The Voidic Damage on arrows you fire now scale with spell power",
-  "voidscape.abilities.mage.flame_shot.name": "Flame Shot",
+  "voidscape.abilities.mage.flame_shot.title": "Flame Shot",
   "voidscape.abilities.mage.flame_shot.desc": "Your next arrow will deal 25% (100% if target is on fire) extra damage as fire damage\n25% to set target on fire",
 
   "voidscape.abilities.tank.taunt.title": "Taunt",
