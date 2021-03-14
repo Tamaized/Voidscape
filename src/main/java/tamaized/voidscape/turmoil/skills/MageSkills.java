@@ -67,8 +67,8 @@ public class MageSkills implements ITurmoilSkills {
 	public final TurmoilSkill NULLSHOT = builder("nullshot").required(VOIDIC_ARCHER_5).build();
 
 	public final TurmoilSkill INSANE_MAGE_1 = builder("insane_mage_1").required(CORE).stats(stats -> stats.spellpower(2).cost(1)).build();
-	public final TurmoilSkill ECHO = builder("echo").required(INSANE_MAGE_1).build();
-	public final TurmoilSkill TRAUMATIZE = builder("traumatize").required(INSANE_MAGE_1).build();
+	public final TurmoilSkill ECHO = builder("echo").required(INSANE_MAGE_1).abilities(MageAbilities.ECHO).build();
+	public final TurmoilSkill TRAUMATIZE = builder("traumatize").required(INSANE_MAGE_1).abilities(MageAbilities.TRAUMATIZE).build();
 	public final TurmoilSkill INSANE_MAGE_2 = builder("insane_mage_2").noDescription().required(INSANE_MAGE_1).stats(stats -> stats.spellpower(2).cost(1)).build();
 	public final TurmoilSkill CONVERT = builder("convert").required(INSANE_MAGE_2).build();
 	public final TurmoilSkill DEMORALIZE = builder("demoralize").required(INSANE_MAGE_2).build();

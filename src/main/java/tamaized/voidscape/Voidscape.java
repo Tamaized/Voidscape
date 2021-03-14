@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -51,7 +52,9 @@ import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
+import tamaized.voidscape.turmoil.caps.EffectContextCapability;
 import tamaized.voidscape.turmoil.caps.FireArrowCapability;
+import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IFireArrow;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
@@ -98,6 +101,7 @@ public class Voidscape {
 			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
 			}, SubCapability.AttachedSubCap::new);
 			CapabilityManager.INSTANCE.register(IFireArrow.class, new SubCapability.ISubCap.DummyStorage<>(), FireArrowCapability::new);
+			CapabilityManager.INSTANCE.register(IEffectContext.class, new SubCapability.ISubCap.DummyStorage<>(), EffectContextCapability::new);
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
@@ -205,6 +209,10 @@ public class Voidscape {
 					}
 				}
 			}
+		});
+		busForge.addListener((Consumer<PotionEvent.PotionRemoveEvent>) event -> {
+			if (ModEffects.hasContext(event.getPotion()))
+				event.getEntity().getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.remove(event.getPotion()));
 		});
 	}
 

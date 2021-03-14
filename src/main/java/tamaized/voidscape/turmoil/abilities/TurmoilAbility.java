@@ -1,5 +1,6 @@
 package tamaized.voidscape.turmoil.abilities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -7,9 +8,11 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TurmoilStats;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class TurmoilAbility {
@@ -95,6 +98,24 @@ public class TurmoilAbility {
 
 	public float damage() {
 		return damage;
+	}
+
+	public float damage(@Nullable Entity caater) {
+		return damage(caater, 0);
+	}
+
+	public float damage(@Nullable Entity caster, float offset) {
+		if (caster == null)
+			return damage() + offset;
+		Optional<TurmoilStats> stats = caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats)).orElse(Optional.empty());
+		if (stats.isPresent()) {
+			float dmg = damage() + offset;
+			dmg *= 1F + stats.get().stats().spellpower / 100F;
+			if (caster.level.getRandom().nextInt(100) + 1 <= stats.get().stats().spellCrit)
+				dmg *= 1.25F;
+			return dmg;
+		}
+		return damage() + offset;
 	}
 
 	public Toggle toggle() {

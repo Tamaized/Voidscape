@@ -22,6 +22,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IFireArrow;
 
 import javax.annotation.Nonnull;
@@ -43,51 +44,17 @@ public class SubCapability {
 	@CapabilityInject(IFireArrow.class)
 	public static final Capability<IFireArrow> CAPABILITY_FIREARROW = Voidscape.getNull();
 
+	@CapabilityInject(IEffectContext.class)
+	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = Voidscape.getNull();
+
 	static {
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
-			if (event.getObject() instanceof LivingEntity)
-				event.addCapability(AttachedSubCap.ID, new ICapabilitySerializable() {
-
-					private ISubCap instance = CAPABILITY.getDefaultInstance();
-
-					@Nonnull
-					@Override
-					public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-						return CAPABILITY.orEmpty(cap, LazyOptional.of(() -> instance));
-					}
-
-					@Override
-					public INBT serializeNBT() {
-						INBT tag = CAPABILITY.getStorage().writeNBT(CAPABILITY, instance, null);
-						return tag == null ? new CompoundNBT() : tag;
-					}
-
-					@Override
-					public void deserializeNBT(INBT nbt) {
-						CAPABILITY.getStorage().readNBT(CAPABILITY, instance, null, nbt);
-					}
-				});
+			if (event.getObject() instanceof LivingEntity) {
+				apply(event, CAPABILITY, AttachedSubCap.ID);
+				apply(event, CAPABILITY_EFFECTCONTEXT, IEffectContext.ID);
+			}
 			if (event.getObject() instanceof AbstractArrowEntity)
-				event.addCapability(IFireArrow.ID, new ICapabilitySerializable() {
-
-					private IFireArrow instance = CAPABILITY_FIREARROW.getDefaultInstance();
-
-					@Nonnull
-					@Override
-					public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-						return CAPABILITY_FIREARROW.orEmpty(cap, LazyOptional.of(() -> instance));
-					}
-
-					@Override
-					public INBT serializeNBT() {
-						return new CompoundNBT();
-					}
-
-					@Override
-					public void deserializeNBT(INBT nbt) {
-
-					}
-				});
+				apply(event, CAPABILITY_FIREARROW, IFireArrow.ID);
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 			Arrays.stream(cap.tickers()).forEach(t -> t.tick(event.getEntity()));
@@ -99,6 +66,31 @@ public class SubCapability {
 			}
 		}));
 		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()))));
+	}
+
+	private static <T> void apply(AttachCapabilitiesEvent<?> event, Capability<T> cap, ResourceLocation id) {
+		event.addCapability(id, new ICapabilitySerializable() {
+
+			@SuppressWarnings("NullableProblems")
+			private LazyOptional<T> instance = LazyOptional.of(cap::getDefaultInstance);
+
+			@Nonnull
+			@Override
+			public <R> LazyOptional<R> getCapability(@Nonnull Capability<R> check, @Nullable Direction side) {
+				return cap.orEmpty(check, instance.cast());
+			}
+
+			@Override
+			public INBT serializeNBT() {
+				INBT tag = cap.getStorage().writeNBT(cap, instance.orElseThrow(NullPointerException::new), null);
+				return tag == null ? new CompoundNBT() : tag;
+			}
+
+			@Override
+			public void deserializeNBT(INBT nbt) {
+				cap.getStorage().readNBT(cap, instance.orElseThrow(NullPointerException::new), null, nbt);
+			}
+		});
 	}
 
 	public interface ISubCap {
