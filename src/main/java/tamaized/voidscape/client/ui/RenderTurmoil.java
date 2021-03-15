@@ -47,12 +47,19 @@ public class RenderTurmoil {
 	private static float deltaTick;
 	private static Boolean deltaPos;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
+	private static float fadeTick = 0;
+
+	public static void resetFade() {
+		fadeTick = ClientUtil.tick + 10 * 30;
+	}
 
 	@SubscribeEvent
 	public static void tick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isPaused() || Minecraft.getInstance().level == null)
 			return;
 		ClientUtil.tick++;
+		if (fadeTick <= 0)
+			resetFade();
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 				cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
@@ -94,11 +101,13 @@ public class RenderTurmoil {
 					cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
 						switch (event.getType()) {
 							case HOTBAR: {
-								renderSpellBar(event.getMatrixStack(), 0);
-								renderAbilityInstances(event.getMatrixStack(), stats);
-								renderAbilityActivates(event.getMatrixStack());
-								renderAbilityToggle(event.getMatrixStack(), stats);
-								renderAbilityCooldowns(event.getMatrixStack(), stats);
+								if (fadeTick <= 0 || fadeTick > ClientUtil.tick) {
+									renderSpellBar(event.getMatrixStack(), 0, event.getPartialTicks());
+									renderAbilityInstances(event.getMatrixStack(), stats, event.getPartialTicks());
+									renderAbilityActivates(event.getMatrixStack(), event.getPartialTicks());
+									renderAbilityToggle(event.getMatrixStack(), stats, event.getPartialTicks());
+									renderAbilityCooldowns(event.getMatrixStack(), stats, event.getPartialTicks());
+								}
 							}
 							break;
 							case EXPERIENCE: {
@@ -314,22 +323,29 @@ public class RenderTurmoil {
 		RenderSystem.disableBlend();
 	}
 
-	public static void renderSpellBar(MatrixStack matrixStack, int z) {
+	private static float fade(float base, float partialTicks) {
+		return fadeTick <= 0 || fadeTick - ClientUtil.tick > 20 * 5 ? base : Math.max(0, base * ((fadeTick - (ClientUtil.tick + partialTicks)) / (20F * 5F)));
+	}
+
+	public static void renderSpellBar(MatrixStack matrixStack, int z, float partialTicks) {
 		Minecraft.getInstance().getTextureManager().bind(HackyInGameGUIAccessor.WIDGETS_LOCATION());
 		int w = 61;
 		int h = 22;
 		int x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - w - 2;
 		int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - ((h - 2) / 2 * 3);
 		Minecraft.getInstance().gui.setBlitOffset(-90 + z);
-		RenderSystem.color4f(1F, 1F, 1F, 0.25F);
+		float alpha = z != 0 ? 0.25F : fade(0.25F, partialTicks);
+		RenderSystem.color4f(1F, 1F, 1F, alpha);
 		RenderSystem.enableBlend();
+		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
 		for (int i = 0; i < 3; i++)
 			Minecraft.getInstance().gui.blit(matrixStack, x, y + (h - 2) * i, 0, 1, w, h);
+		RenderSystem.defaultAlphaFunc();
 		RenderSystem.disableBlend();
 		RenderSystem.color4f(1F, 1F, 1F, 1F);
 	}
 
-	private static void renderAbilityInstances(MatrixStack stack, TurmoilStats stats) {
+	private static void renderAbilityInstances(MatrixStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
@@ -346,11 +362,17 @@ public class RenderTurmoil {
 			buffer.vertex(x, y + s, 0F).uv(0, 1).endVertex();
 			buffer.vertex(x + s, y + s, 0F).uv(1, 1).endVertex();
 			buffer.vertex(x + s, y, 0F).uv(1, 0).endVertex();
+			RenderSystem.enableBlend();
+			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
 			Tessellator.getInstance().end();
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.defaultAlphaFunc();
+			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityActivates(MatrixStack stack) {
+	private static void renderAbilityActivates(MatrixStack stack, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
@@ -369,14 +391,18 @@ public class RenderTurmoil {
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
 			RenderSystem.shadeModel(GL11.GL_SMOOTH);
+			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
 			Tessellator.getInstance().end();
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.defaultAlphaFunc();
 			RenderSystem.shadeModel(GL11.GL_FLAT);
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityCooldowns(MatrixStack stack, TurmoilStats stats) {
+	private static void renderAbilityCooldowns(MatrixStack stack, TurmoilStats stats, float partialTicks) {
 		if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
 			return;
 		int s = 16;
@@ -407,15 +433,21 @@ public class RenderTurmoil {
 			Tessellator.getInstance().end();
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
+			RenderSystem.enableBlend();
+			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
 			if (!toggle) {
 				boolean flag;
 				String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
 				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : 0xFF7700FF);
 			}
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.defaultAlphaFunc();
+			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityToggle(MatrixStack stack, TurmoilStats stats) {
+	private static void renderAbilityToggle(MatrixStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
@@ -434,7 +466,11 @@ public class RenderTurmoil {
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
 			RenderSystem.shadeModel(GL11.GL_SMOOTH);
+			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
 			Tessellator.getInstance().end();
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.defaultAlphaFunc();
 			RenderSystem.shadeModel(GL11.GL_FLAT);
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();

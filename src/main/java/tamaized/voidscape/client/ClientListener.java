@@ -3,6 +3,7 @@ package tamaized.voidscape.client;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
@@ -16,12 +17,15 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -87,10 +91,14 @@ public class ClientListener {
 			if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null && Minecraft.getInstance().screen == null) {
 				for (int i = 0; i < ABILITY_KEYS.size(); i++) {
 					final int slot = i;
-					if (ABILITY_KEYS.get(i).isDown())
+					if (ABILITY_KEYS.get(i).isDown()) {
 						Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.executeAbility(Minecraft.getInstance().player, slot)));
+						RenderTurmoil.resetFade();
+					}
 				}
 			}
+			if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.hurtTime > 0)
+				RenderTurmoil.resetFade();
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
@@ -102,6 +110,14 @@ public class ClientListener {
 						event.setRed(MathHelper.clamp(data.getParanoia() / 1200F, 0.04F, 1F));
 					}));
 			}
+		});
+		MinecraftForge.EVENT_BUS.addListener((Consumer<AttackEntityEvent>) event -> {
+			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof ClientPlayerEntity && event.getPlayer() == Minecraft.getInstance().player)
+				RenderTurmoil.resetFade();
+		});
+		MinecraftForge.EVENT_BUS.addListener((Consumer<ArrowNockEvent>) event -> {
+			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof ClientPlayerEntity && event.getPlayer() == Minecraft.getInstance().player)
+				RenderTurmoil.resetFade();
 		});
 	}
 

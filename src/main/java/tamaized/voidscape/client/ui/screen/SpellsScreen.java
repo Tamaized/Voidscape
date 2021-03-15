@@ -54,7 +54,7 @@ public class SpellsScreen extends TurmoilScreen {
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (data == null || minecraft == null || minecraft.level == null)
 			return;
-		RenderTurmoil.renderSpellBar(stack, 990);
+		RenderTurmoil.renderSpellBar(stack, 990, partialTicks);
 		super.render(stack, mouseX, mouseY, partialTicks);
 		if (drag != null) {
 			int size = 20;
