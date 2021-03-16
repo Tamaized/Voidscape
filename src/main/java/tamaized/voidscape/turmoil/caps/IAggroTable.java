@@ -2,8 +2,12 @@ package tamaized.voidscape.turmoil.caps;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.util.ResourceLocation;
+import tamaized.voidscape.Voidscape;
 
 public interface IAggroTable {
+
+	ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "aggrotable");
 
 	void tick(MobEntity entity);
 

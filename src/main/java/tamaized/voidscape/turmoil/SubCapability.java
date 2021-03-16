@@ -2,6 +2,7 @@ package tamaized.voidscape.turmoil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,16 +60,22 @@ public class SubCapability {
 			}
 			if (event.getObject() instanceof AbstractArrowEntity)
 				apply(event, CAPABILITY_FIREARROW, IFireArrow.ID);
+			if (event.getObject() instanceof MobEntity)
+				apply(event, CAPABILITY_AGGRO, IAggroTable.ID);
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
-			Arrays.stream(cap.tickers()).forEach(t -> t.tick(event.getEntity()));
-			if (event.getEntity() instanceof ServerPlayerEntity) {
-				if (cap.getLastWorld() != event.getEntity().level.dimension().location()) {
-					Arrays.stream(cap.network()).forEach(n -> n.sendToClient((ServerPlayerEntity) event.getEntity()));
-					cap.setLastWorld(event.getEntity().level.dimension().location());
+		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> {
+			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+				Arrays.stream(cap.tickers()).forEach(t -> t.tick(event.getEntity()));
+				if (event.getEntity() instanceof ServerPlayerEntity) {
+					if (cap.getLastWorld() != event.getEntity().level.dimension().location()) {
+						Arrays.stream(cap.network()).forEach(n -> n.sendToClient((ServerPlayerEntity) event.getEntity()));
+						cap.setLastWorld(event.getEntity().level.dimension().location());
+					}
 				}
-			}
-		}));
+			});
+			if (event.getEntity() instanceof MobEntity)
+				event.getEntity().getCapability(CAPABILITY_AGGRO).ifPresent(cap -> cap.tick((MobEntity) event.getEntity()));
+		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()))));
 	}
 
