@@ -27,6 +27,7 @@ import tamaized.voidscape.client.ui.screen.IncapacitatedScreen;
 import tamaized.voidscape.client.ui.screen.MainScreen;
 import tamaized.voidscape.client.ui.screen.TurmoilScreen;
 import tamaized.voidscape.turmoil.Insanity;
+import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
@@ -204,7 +205,7 @@ public class RenderTurmoil {
 				}
 				if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 					return;
-				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(insanity, event.getMatrixStack(), event.getPartialTicks()));
+				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(data, insanity, event.getMatrixStack(), event.getPartialTicks()));
 				float perc = MathHelper.clamp(
 
 						(deltaTick + (deltaPos == null ?
@@ -271,13 +272,13 @@ public class RenderTurmoil {
 			OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
 	}
 
-	private static void renderInsanity(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+	private static void renderInsanity(Turmoil data, Insanity insanity, MatrixStack matrixStack, float partialTicks) {
 		renderInfusion(insanity, matrixStack, partialTicks);
-		renderParanoia(insanity, matrixStack, partialTicks);
+		renderParanoia(data, insanity, matrixStack, partialTicks);
 	}
 
-	private static void renderParanoia(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
-		if (insanity.getParanoia() < 500F)
+	private static void renderParanoia(Turmoil data, Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+		if (insanity.getParanoia() < 500F || data.getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal())
 			return;
 		float perc = (insanity.getParanoia() - 500F) / 90F;
 		perc = MathHelper.clamp(perc, 0, 1);

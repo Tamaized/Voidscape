@@ -103,7 +103,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 						1F);
 			if (!parent.level.isClientSide()) {
-				if (hunt == null && paranoia >= 600 && parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.getProgression().ordinal()).orElse(0)).orElse(0) >= Progression.PostTutorial.ordinal()) {
+				if (hunt == null && paranoia >= 600 && parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
+						getProgression().ordinal() >= Progression.PostTutorial.ordinal() && data.getProgression().ordinal() < Progression.CorruptPawnPost.ordinal()).orElse(false)).orElse(false)) {
 					hunt = new EntityCorruptedPawnPhantom(parent.level).target((PlayerEntity) parent);
 					Vector3d vec = new Vector3d(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat() * 2F - 1F);
 					hunt.setPos(parent.getX() + vec.x(), parent.getY() + vec.y(), parent.getZ() + vec.z());
@@ -159,15 +160,26 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	private float calcParanoiaRate(Entity parent) {
-		return 0.87F;
+		return 0.87F * parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
+				getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal() ? 0.1F : 1F).orElse(1F)).orElse(1F);
 	}
 
 	public float getInfusion() {
 		return infusion;
 	}
 
+	public void setInfusion(int amount) {
+		infusion = amount;
+		dirty = true;
+	}
+
 	public float getParanoia() {
 		return paranoia;
+	}
+
+	public void setParanoia(int amount) {
+		paranoia = amount;
+		dirty = true;
 	}
 
 	@Override
@@ -209,15 +221,5 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				paranoia = o.paranoia;
 			}
 		}
-	}
-
-	public void setInfusion(int amount) {
-		infusion = amount;
-		dirty = true;
-	}
-
-	public void setParanoia(int amount) {
-		paranoia = amount;
-		dirty = true;
 	}
 }
