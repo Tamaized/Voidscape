@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
@@ -21,6 +22,8 @@ public class ModEffects {
 	private static final DeferredRegister<Effect> REGISTRY = RegUtil.create(ForgeRegistries.POTIONS);
 	public static final RegistryObject<ToggleEffect> FIRE_ARROW = REGISTRY.register("fire_arrow", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFFAA00, TurmoilAbility.Toggle.ArrowShot));
 	public static final RegistryObject<DotEffect> TRAUMATIZE = REGISTRY.register("traumatize", () -> context(new DotEffect(EffectType.HARMFUL, 0x7700FF)));
+	public static final RegistryObject<Effect> BULWARK = REGISTRY.register("bulwarj", () -> new ToggleEffect(EffectType.BENEFICIAL, 0x00FFFF).
+			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "360ac01a-0be0-4c85-a078-bbc0cf90a6e1", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
 	private static DotEffect context(DotEffect effect) {
 		CONTEXT_EFFECTS.add(effect);

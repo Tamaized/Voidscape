@@ -2,6 +2,7 @@ package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -9,6 +10,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModEffects;
 
 public class TankAbilities {
 
@@ -25,6 +27,10 @@ public class TankAbilities {
 			return true;
 		}
 		return false;
+	});
+	public static final TurmoilAbility BULWARK = new TurmoilAbility(unloc("bulwark"), TurmoilAbility.Type.Voidic, 300, 30 * 20, (spell, caster) -> {
+		caster.addEffect(new EffectInstance(ModEffects.BULWARK.get(), 10 * 20));
+		return true;
 	});
 
 	private static String unloc(String loc) {
