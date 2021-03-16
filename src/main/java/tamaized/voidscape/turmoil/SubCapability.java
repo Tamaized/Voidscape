@@ -22,6 +22,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.turmoil.caps.IAggroTable;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IFireArrow;
 
@@ -46,6 +47,9 @@ public class SubCapability {
 
 	@CapabilityInject(IEffectContext.class)
 	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = Voidscape.getNull();
+
+	@CapabilityInject(IAggroTable.class)
+	public static final Capability<IAggroTable> CAPABILITY_AGGRO = Voidscape.getNull();
 
 	static {
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {

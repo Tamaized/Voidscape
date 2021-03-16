@@ -5,6 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
@@ -129,6 +130,9 @@ public class Voidscape {
 				event.setCanceled(true);
 				return;
 			}
+			Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
+			if (e instanceof LivingEntity && event.getEntityLiving() instanceof MobEntity)
+				event.getEntityLiving().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e)));
 			Boolean arrow;
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY).
@@ -144,7 +148,6 @@ public class Voidscape {
 						});
 				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
-				Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
 					final float dmgPrep = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (event.getAmount() + (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
@@ -231,6 +234,16 @@ public class Voidscape {
 			default:
 				return null;
 		}
+	}
+
+	public static void healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
+		target.heal(heal);
+		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof MobEntity && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
+				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster))));
+	}
+
+	public static double calculateHate(double input, LivingEntity attacker) {
+		return input * attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().threat / 100D).orElse(0.0D)).orElse(0.0D);
 	}
 
 	public static boolean checkForVoidDimension(World world) {

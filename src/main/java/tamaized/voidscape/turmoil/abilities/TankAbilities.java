@@ -11,6 +11,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModEffects;
+import tamaized.voidscape.turmoil.SubCapability;
 
 public class TankAbilities {
 
@@ -19,6 +20,7 @@ public class TankAbilities {
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
 			entity.setTarget(caster);
+			entity.getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.placeAtTop(caster));
 			for (int i = 0; i < 10; i++) {
 				Vector3d pos = new Vector3d(0.25F + entity.getRandom().nextFloat() * 0.75F, 0, 0).yRot((float) Math.toRadians(entity.getRandom().nextInt(360))).add(entity.getX(), entity.getEyeY() - 0.5F + entity.getRandom().nextFloat(), entity.getZ());
 				((ServerWorld) caster.level).sendParticles(ParticleTypes.ANGRY_VILLAGER, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
