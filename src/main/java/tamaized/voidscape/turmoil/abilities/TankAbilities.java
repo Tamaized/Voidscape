@@ -1,5 +1,6 @@
 package tamaized.voidscape.turmoil.abilities;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -10,6 +11,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 
@@ -34,6 +36,14 @@ public class TankAbilities {
 		caster.addEffect(new EffectInstance(ModEffects.BULWARK.get(), 10 * 20));
 		return true;
 	});
+	public static final TurmoilAbility SHOUT = new TurmoilAbility(unloc("shout"), TurmoilAbility.Type.Voidic, 50, 5 * 20, (spell, caster) -> {
+		float damage = spell.damage(caster);
+		for (Entity e : caster.level.getEntities(caster, caster.getBoundingBox().inflate(1F).move(caster.getLookAngle().scale(2F)))) {
+			if (e.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), damage) && e instanceof MobEntity)
+				e.getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.mulHate(caster, 1.1D));
+		}
+		return true;
+	}).damage(2F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.tank.".concat(loc));

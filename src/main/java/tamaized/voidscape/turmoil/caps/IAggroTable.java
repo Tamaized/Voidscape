@@ -13,6 +13,8 @@ public interface IAggroTable {
 
 	void addHate(LivingEntity attacker, double hate);
 
+	void mulHate(LivingEntity attacker, double hate);
+
 	void placeAtTop(LivingEntity entity);
 
 	boolean hasHate(LivingEntity entity);

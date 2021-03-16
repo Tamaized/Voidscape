@@ -28,6 +28,16 @@ public class AggroTable implements IAggroTable {
 	}
 
 	@Override
+	public void mulHate(LivingEntity attacker, double hate) {
+		if (hate <= 1)
+			return;
+		if (table.containsKey(attacker))
+			table.get(attacker).mul(hate);
+		else
+			table.put(attacker, new DoubleValue(hate));
+	}
+
+	@Override
 	public void placeAtTop(LivingEntity entity) {
 		table.put(entity, new DoubleValue(table.entrySet().stream().max(Comparator.comparingDouble(o -> o.getValue().value())).
 				map(livingEntityDoubleValueEntry -> livingEntityDoubleValueEntry.getValue().value()).orElse(1.0D)));
@@ -51,6 +61,10 @@ public class AggroTable implements IAggroTable {
 
 		double sub(double d) {
 			return val -= d;
+		}
+
+		double mul(double d) {
+			return val *= d;
 		}
 
 		double value() {

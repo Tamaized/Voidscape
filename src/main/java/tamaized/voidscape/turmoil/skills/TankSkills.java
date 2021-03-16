@@ -30,7 +30,7 @@ public class TankSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill VOIDIC_DEFENDER_1 = builder("voidic_defender_1").noDescription().required(CORE).stats(stats -> stats.voidicDamageReductionPercentage(1).hearts(1).threat(1)).build();
 	public final TurmoilSkill BULWARK = builder("bulwark").required(VOIDIC_DEFENDER_1).abilities(TankAbilities.BULWARK).build();
-	public final TurmoilSkill SHOUT = builder("shout").required(VOIDIC_DEFENDER_1).build();
+	public final TurmoilSkill SHOUT = builder("shout").required(VOIDIC_DEFENDER_1).abilities(TankAbilities.SHOUT).build();
 	public final TurmoilSkill VOIDIC_DEFENDER_2 = builder("voidic_defender_2").noDescription().required(VOIDIC_DEFENDER_1).stats(stats -> stats.voidicDamageReductionPercentage(1).hearts(1).threat(1)).build();
 	public final TurmoilSkill STANCE_DEFENSIVE = builder("stance_defensive").required(VOIDIC_DEFENDER_2).build();
 	public final TurmoilSkill EMPOWER_STRIKE_THREAT = builder("empower_strike_threat").required(VOIDIC_DEFENDER_2).build();
