@@ -6,6 +6,7 @@
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "item.voidscape.voidic_crystal": "Voidic Crystal",
   "item.voidscape.voidic_crystal_sword": "Voidic Crystal Sword",
+  "item.voidscape.voidic_crystal_bow": "Voidic Crystal Bow",
   "item.voidscape.voidic_crystal_axe": "Voidic Crystal Axe",
   "item.voidscape.voidic_crystal_pickaxe": "Voidic Crystal Pickaxe",
   "item.voidscape.voidic_crystal_helmet": "Voidic Crystal Helmet",
@@ -16,6 +17,7 @@
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
   "voidscape.attribute.voidic_dmg": "Voidic Damage",
+  "voidscape.attribute.voidic_arrow_dmg": "Voidic Arrow Damage",
 
   "voidscape.gui.skills.level": "Level: %s",
   "voidscape.gui.skills.points": "Points: %s",

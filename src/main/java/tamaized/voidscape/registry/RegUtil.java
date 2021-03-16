@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
@@ -235,6 +236,28 @@ public class RegUtil {
 			});
 		}
 
+		static RegistryObject<Item> bow(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_bow"), () -> new BowItem(properties.defaultDurability(tier.getUses())) {
+				@Override
+				public int getEnchantmentValue() {
+					return tier.getEnchantmentValue();
+				}
+
+				@Override
+				public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
+					return tier.getRepairIngredient().test(repair) || super.isValidRepairItem(toRepair, repair);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+					map.putAll(super.getAttributeModifiers(slot, stack));
+					if (slot == EquipmentSlotType.MAINHAND)
+						map.putAll(factory.apply(null));
+					return map.build();
+				}
+			});
+		}
 		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new AxeItem(tier, 5F, -3.0F, properties) {
 				@Override

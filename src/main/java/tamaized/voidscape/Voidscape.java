@@ -147,7 +147,7 @@ public class Voidscape {
 				Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
-					float dmg = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> event.getAmount() * (
+					final float dmgPrep = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (event.getAmount() + (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
 
 							data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 1.50F :
 
@@ -161,9 +161,11 @@ public class Voidscape {
 
 																	0F
 
-					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).orElse(1F)).orElse(0F)).orElse(0F) :
+					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
+							orElse(1F)).orElse(0F)).orElse(0F) :
 
 							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+					final float dmg = dmgPrep == 0 && arrow ? (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) : dmgPrep;
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;
 						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);

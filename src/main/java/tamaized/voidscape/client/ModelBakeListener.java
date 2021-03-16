@@ -9,7 +9,9 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.pipeline.LightUtil;
@@ -51,6 +53,7 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
+		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_AXE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_PICKAXE);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_HELMET);
@@ -78,15 +81,22 @@ public class ModelBakeListener {
 				}
 			});
 		});
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pull"), (stack, level, entity) ->
+
+				entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pulling"), (stack, level, entity) ->
+
+				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	private static class FullBrightModel implements IBakedModel {
 
 		private final IBakedModel model;
+		private final ItemOverrideList overrides;
 		Map<Direction, List<BakedQuad>> cachedQuads = Maps.newHashMap();
-
 		private FullBrightModel(IBakedModel delegate) {
 			model = delegate;
+			overrides = new FullbrightItemOverrideList(delegate.getOverrides());
 		}
 
 		@Nonnull
@@ -129,7 +139,7 @@ public class ModelBakeListener {
 		@Nonnull
 		@Override
 		public ItemOverrideList getOverrides() {
-			return model.getOverrides();
+			return overrides;
 		}
 
 		@Nonnull
@@ -137,6 +147,16 @@ public class ModelBakeListener {
 		@SuppressWarnings("deprecation")
 		public net.minecraft.client.renderer.model.ItemCameraTransforms getTransforms() {
 			return model.getTransforms();
+		}
+
+		private static class FullbrightItemOverrideList extends ItemOverrideList {
+
+			public FullbrightItemOverrideList(ItemOverrideList delegate) {
+				overrides.addAll(delegate.overrides);
+				overrideModels = new ArrayList<>();
+				delegate.overrideModels.forEach(model -> overrideModels.add(new FullBrightModel(model)));
+			}
+
 		}
 
 
