@@ -59,7 +59,7 @@ public class TankSkills implements ITurmoilSkills {
 	public final TurmoilSkill RIP_AND_TEAR = builder("rip_and_tear").required(INSANE_BEAST_5).build();
 
 	public final TurmoilSkill TACTICIAN_1 = builder("tactician_1").required(CORE).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
-	public final TurmoilSkill EMPOWER_SHIELD_2X_NULL = builder("empower_shield_2x_null").required(TACTICIAN_1).build();
+	public final TurmoilSkill EMPOWER_SHIELD_2X_NULL = builder("empower_shield_2x_null").required(TACTICIAN_1).abilities(TankAbilities.EMPOWER_SHIELD_2X_NULL).build();
 	public final TurmoilSkill BACKSTEP = builder("backstep").required(TACTICIAN_1).build();
 	public final TurmoilSkill TACTICIAN_2 = builder("tactician_2").noDescription().required(TACTICIAN_1).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill STANCE_STALWART = builder("stance_stalwart").required(TACTICIAN_2).build();

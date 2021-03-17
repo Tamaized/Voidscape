@@ -27,6 +27,7 @@ public class ModEffects {
 	public static final RegistryObject<Effect> ADRENALINE = REGISTRY.register("adrenaline", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF7700).
 			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "777e0d84-3984-4502-973e-851766de8bc7", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 	public static final RegistryObject<Effect> TUNNEL_VISION = REGISTRY.register("tunnel_vision", () -> context(new StandardEffect(EffectType.BENEFICIAL, 0xFF0000)));
+	public static final RegistryObject<ToggleEffect> EMPOWER_SHIELD_2X_NULL = REGISTRY.register("empower_shield_2x_null", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower));
 
 	private static <T extends Effect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);
@@ -37,7 +38,7 @@ public class ModEffects {
 		return CONTEXT_EFFECTS.contains(effect);
 	}
 
-	public static void apply(LivingEntity entity, ToggleEffect effect, int duration, int amp) {
+	public static boolean apply(LivingEntity entity, ToggleEffect effect, int duration, int amp) {
 		if (effect.toggle() != TurmoilAbility.Toggle.None) {
 			List<Effect> remove = new ArrayList<>();
 			for (EffectInstance e : entity.getActiveEffects())
@@ -45,17 +46,19 @@ public class ModEffects {
 					remove.add(e.getEffect());
 			remove.forEach(entity::removeEffect);
 		}
-		entity.addEffect(new EffectInstance(effect, duration, amp));
+		return entity.addEffect(new EffectInstance(effect, duration, amp));
 	}
 
-	public static void dot(LivingEntity caster, LivingEntity entity, DotEffect effect, int duration, int amp, float damage) {
+	public static boolean dot(LivingEntity caster, LivingEntity entity, DotEffect effect, int duration, int amp, float damage) {
 		EffectInstance instance = new EffectInstance(effect, duration, amp);
 		entity.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.add(instance, caster, damage));
+		return entity.addEffect(instance);
 	}
 
-	public static void target(LivingEntity caster, LivingEntity entity, StandardEffect effect, int duration, int amp) {
+	public static boolean target(LivingEntity caster, LivingEntity entity, Effect effect, int duration, int amp, boolean self) {
 		EffectInstance instance = new EffectInstance(effect, duration, amp);
-		entity.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.add(instance, caster, 0));
+		entity.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.add(instance, self ? entity : caster, 0));
+		return self ? caster.addEffect(instance) : entity.addEffect(instance);
 	}
 
 	public static void classload() {

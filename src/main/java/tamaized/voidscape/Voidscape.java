@@ -145,7 +145,11 @@ public class Voidscape {
 												map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
 							if (event.getEntityLiving().getOffhandItem().isShield(event.getEntityLiving()) && event.getEntityLiving().isBlocking() && cap.
 									get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1)).orElse(false)) {
-								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) event.getAmount())));
+								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
+									stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) event.getAmount() * (event.getEntityLiving().
+											hasEffect(ModEffects.EMPOWER_SHIELD_2X_NULL.get()) ? 2 : 1)));
+									event.getEntityLiving().removeEffect(ModEffects.EMPOWER_SHIELD_2X_NULL.get());
+								});
 								event.setAmount(event.getAmount() * 0.9F);
 							}
 						});

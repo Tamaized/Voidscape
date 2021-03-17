@@ -42,10 +42,8 @@ public class MageAbilities {
 
 			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0x7700FF, 30L * 20L).damage(spell.damage(caster)))).damage(1F);
 	public static final TurmoilAbility ARROW_IMBUE_SPELLLIKE = new TurmoilAbility(unloc("arrow_imbue_spelllike"), TurmoilAbility.Type.Voidic, 50, 3 * 20, TurmoilAbility.Toggle.Imbue);
-	public static final TurmoilAbility FLAME_SHOT = new TurmoilAbility(unloc("flame_shot"), TurmoilAbility.Type.Voidic, 200, 5 * 20, (spell, caster) -> {
-		ModEffects.apply(caster, ModEffects.FIRE_ARROW.get(), 15 * 20, 1);
-		return true;
-	});
+	public static final TurmoilAbility FLAME_SHOT = new TurmoilAbility(unloc("flame_shot"), TurmoilAbility.Type.Voidic, 200, 5 * 20, (spell, caster) -> ModEffects.
+			apply(caster, ModEffects.FIRE_ARROW.get(), 15 * 20, 1));
 	public static final TurmoilAbility ECHO = new TurmoilAbility(unloc("echo"), TurmoilAbility.Type.Voidic, 50, 5 * 20, (spell, caster) -> {
 		Optional<TurmoilStats> stats = caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats)).orElse(Optional.empty());
 		float damage = spell.damage(caster);
@@ -59,8 +57,7 @@ public class MageAbilities {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
-			ModEffects.dot(caster, entity, ModEffects.TRAUMATIZE.get(), 20 * 20, 1, spell.damage(caster));
-			return true;
+			return ModEffects.dot(caster, entity, ModEffects.TRAUMATIZE.get(), 20 * 20, 1, spell.damage(caster));
 		}
 		return false;
 	}).damage(1F);
