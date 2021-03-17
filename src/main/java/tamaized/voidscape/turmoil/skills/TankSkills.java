@@ -45,8 +45,8 @@ public class TankSkills implements ITurmoilSkills {
 	public final TurmoilSkill IRON_WILL = builder("iron_will").required(VOIDIC_DEFENDER_5).build();
 
 	public final TurmoilSkill INSANE_BEAST_1 = builder("insane_beast_1").required(CORE).stats(stats -> stats.hearts(1)).build();
-	public final TurmoilSkill ADRENALINE = builder("adrenaline").required(INSANE_BEAST_1).build();
-	public final TurmoilSkill TUNNEL_VISION = builder("tunnel_vision").required(INSANE_BEAST_1).build();
+	public final TurmoilSkill ADRENALINE = builder("adrenaline").required(INSANE_BEAST_1).abilities(TankAbilities.ADRENALINE).build();
+	public final TurmoilSkill TUNNEL_VISION = builder("tunnel_vision").required(INSANE_BEAST_1).abilities(TankAbilities.TUNNEL_VISION).build();
 	public final TurmoilSkill INSANE_BEAST_2 = builder("insane_beast_2").noDescription().required(INSANE_BEAST_1).stats(stats -> stats.hearts(1)).build();
 	public final TurmoilSkill RAGE = builder("rage").required(INSANE_BEAST_2).build();
 	public final TurmoilSkill EMPOWER_STRIKE_GASH = builder("empower_strike_gash").required(INSANE_BEAST_2).build();

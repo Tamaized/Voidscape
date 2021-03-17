@@ -43,7 +43,15 @@ public class TankAbilities {
 				e.getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.mulHate(caster, 1.1D));
 		}
 		return true;
-	}).damage(2F);
+	}).damage(1F);
+	public static final TurmoilAbility ADRENALINE = new TurmoilAbility(unloc("adrenaline"), TurmoilAbility.Type.Insane, 300, 30 * 20, (spell, caster) -> {
+		caster.addEffect(new EffectInstance(ModEffects.ADRENALINE.get(), 10 * 20));
+		return true;
+	});
+	public static final TurmoilAbility TUNNEL_VISION = new TurmoilAbility(unloc("tunnel_vision"), TurmoilAbility.Type.Voidic, 500, 30 * 20, (spell, caster) -> {
+		caster.addEffect(new EffectInstance(ModEffects.TUNNEL_VISION.get(), 10 * 20));
+		return true;
+	});
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.tank.".concat(loc));
