@@ -16,6 +16,6 @@ public class ModDamageSource {
 	public static final String ID_VOIDIC = Voidscape.MODID + ".voidic";
 
 	public static final Function<LivingEntity, DamageSource> VOIDIC_WITH_ENTITY = attacker -> new EntityDamageSource(ID_VOIDIC, attacker).bypassArmor().setMagic();
-	public static final DamageSource VOIDIC = new DamageSource(ID_VOIDIC);
+	public static final DamageSource VOIDIC = new DamageSource(ID_VOIDIC).bypassArmor().setMagic();
 
 }

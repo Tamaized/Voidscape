@@ -1,0 +1,6 @@
+{
+  "overrides": [
+	{ "predicate": { "blocking": 0.0 }, "model": "voidscape:item/shield_base_voidcrystal" },
+	{ "predicate": { "blocking": 1.0 }, "model": "voidscape:item/shield_blocking_voidcrystal" }
+  ]
+}

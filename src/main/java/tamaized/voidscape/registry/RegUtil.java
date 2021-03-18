@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.crafting.Ingredient;
@@ -34,16 +35,18 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import tamaized.voidscape.Voidscape;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RegUtil {
 
-	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
 
 	public static final ItemGroup CREATIVE_TAB = new ItemGroup(Voidscape.MODID.concat(".item_group")) {
 		@Override
@@ -221,7 +224,7 @@ public class RegUtil {
 		}
 	}
 
-	static class ToolAndArmorHelper {
+	public static class ToolAndArmorHelper {
 
 		static RegistryObject<Item> sword(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_sword"), () -> new SwordItem(tier, 3, -2.4F, properties) {
@@ -231,6 +234,39 @@ public class RegUtil {
 					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 					if (equipmentSlot == EquipmentSlotType.MAINHAND)
 						map.putAll(factory.apply(null));
+					return map.build();
+				}
+			});
+		}
+
+		static RegistryObject<Item> shield(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shield"), () -> new ShieldItem(properties.defaultDurability(tier.getUses())) {
+				@Override
+				public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
+					return true;
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					return Math.min(amount, 6);
+				}
+
+				@Override
+				public int getEnchantmentValue() {
+					return tier.getEnchantmentValue();
+				}
+
+				@Override
+				public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
+					return tier.getRepairIngredient().test(repair);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+					map.putAll(super.getAttributeModifiers(slot, stack));
+					if (slot == EquipmentSlotType.OFFHAND)
+						map.putAll(factory.apply(4));
 					return map.build();
 				}
 			});

@@ -54,6 +54,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
+		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SHIELD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_AXE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_PICKAXE);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_HELMET);
@@ -85,6 +86,9 @@ public class ModelBakeListener {
 
 				entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
 		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pulling"), (stack, level, entity) ->
+
+				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_SHIELD.get(), new ResourceLocation("blocking"), (stack, level, entity) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
