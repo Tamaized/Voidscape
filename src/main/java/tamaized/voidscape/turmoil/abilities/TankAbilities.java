@@ -2,6 +2,8 @@ package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
@@ -54,6 +56,12 @@ public class TankAbilities {
 			addEffect(new EffectInstance(ModEffects.TUNNEL_VISION.get(), 10 * 20)));
 	public static final TurmoilAbility EMPOWER_SHIELD_2X_NULL = new TurmoilAbility(unloc("empower_shield_2x_null"), TurmoilAbility.Type.Voidic, 400, 5 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_SHIELD_2X_NULL.get(), 10 * 20, 1));
+	public static final TurmoilAbility BACKSTEP = new TurmoilAbility(unloc("backstep"), TurmoilAbility.Type.Null, 200, 5 * 20, (spell, caster) -> {
+		caster.setDeltaMovement(caster.getLookAngle().yRot((float) Math.toRadians(180)).add(0F, 0.5F, 0F));
+		if (caster instanceof ServerPlayerEntity)
+			((ServerPlayerEntity) caster).connection.send(new SEntityVelocityPacket(caster));
+		return true;
+	});
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.tank.".concat(loc));

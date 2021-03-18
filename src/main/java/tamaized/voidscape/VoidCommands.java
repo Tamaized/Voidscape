@@ -48,6 +48,12 @@ public final class VoidCommands {
 								context.getSource().getLevel().addFreshEntity(bolt);
 								return 0;
 							})).
+					then(Commands.literal("fillAllPower").
+							executes(context -> getDataAndRun(Voidscape.subCapTurmoilStats, context, stats -> {
+								stats.setVoidicPower(1000);
+								stats.setInsanePower(1000);
+								stats.setNullPower(1000);
+							}))).
 					then(Commands.literal("resetCooldowns").
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilStats, context, TurmoilStats::resetCooldowns))).
 					then(Commands.literal("reset_resetSkillTimer").

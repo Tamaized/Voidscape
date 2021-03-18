@@ -7,8 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
@@ -34,6 +39,8 @@ import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 
+import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,6 +56,7 @@ public class RenderTurmoil {
 	private static Boolean deltaPos;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
 	private static float fadeTick = 0;
+	private static ResourceLocation TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE;
 
 	public static void resetFade() {
 		fadeTick = ClientUtil.tick + 10 * 30;
@@ -142,7 +150,29 @@ public class RenderTurmoil {
 									xOffset += 26;
 								}
 								if (stats.getNullPower() > 0) {
-									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
+									if (TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE == null) {
+										TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE = new ResourceLocation(Voidscape.MODID, "texture_gui_icons_location_grayscale");
+										try (IResource iresource = Minecraft.getInstance().getResourceManager().getResource(AbstractGui.GUI_ICONS_LOCATION)) {
+											NativeImage image = NativeImage.read(iresource.getInputStream());
+											for (int x = 0; x < image.getWidth(); x++) {
+												for (int y = 0; y < image.getHeight(); y++) {
+													int pixel = image.getPixelRGBA(x, y);
+													int L = (int) (0.299D * ((pixel) & 0xFF) + 0.587D * ((pixel >> 8) & 0xFF) + 0.114D * ((pixel >> 16) & 0xFF));
+													image.setPixelRGBA(x, y, NativeImage.combine((pixel >> 24) & 0xFF, L, L, L));
+												}
+											}
+											Minecraft.getInstance().getTextureManager().register(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE, new Texture() {
+												@Override
+												public void load(@Nonnull IResourceManager manager) {
+													TextureUtil.prepareImage(this.getId(), 0, image.getWidth(), image.getHeight());
+													image.upload(0, 0, 0, 0, 0, image.getWidth(), image.getHeight(), false, false, false, true);
+												}
+											});
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+									Minecraft.getInstance().getTextureManager().bind(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE);
 									MainWindow window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
 									int k = (int) (stats.getNullPower() / 1000F * 26F);
@@ -440,7 +470,8 @@ public class RenderTurmoil {
 			if (!toggle) {
 				boolean flag;
 				String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
-				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : 0xFF7700FF);
+				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : instance.ability().
+						costType() == TurmoilAbility.Type.Insane ? 0xFFFF0000 : instance.ability().costType() == TurmoilAbility.Type.Null ? 0xFFFFFFFF : 0xFF7700FF);
 			}
 			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			RenderSystem.defaultAlphaFunc();

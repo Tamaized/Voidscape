@@ -53,8 +53,10 @@ import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
+import tamaized.voidscape.turmoil.caps.AggroTable;
 import tamaized.voidscape.turmoil.caps.EffectContextCapability;
 import tamaized.voidscape.turmoil.caps.FireArrowCapability;
+import tamaized.voidscape.turmoil.caps.IAggroTable;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IFireArrow;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -103,6 +105,7 @@ public class Voidscape {
 			}, SubCapability.AttachedSubCap::new);
 			CapabilityManager.INSTANCE.register(IFireArrow.class, new SubCapability.ISubCap.DummyStorage<>(), FireArrowCapability::new);
 			CapabilityManager.INSTANCE.register(IEffectContext.class, new SubCapability.ISubCap.DummyStorage<>(), EffectContextCapability::new);
+			CapabilityManager.INSTANCE.register(IAggroTable.class, new SubCapability.ISubCap.DummyStorage<>(), AggroTable::new);
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
