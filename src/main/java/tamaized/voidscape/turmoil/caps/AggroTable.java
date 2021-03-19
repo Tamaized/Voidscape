@@ -2,6 +2,7 @@ package tamaized.voidscape.turmoil.caps;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class AggroTable implements IAggroTable {
 
 	@Override
 	public void addHate(LivingEntity attacker, double hate) {
-		if (hate <= 0)
+		if (hate <= 0 || (attacker instanceof PlayerEntity && (((PlayerEntity) attacker).isCreative() || attacker.isSpectator())))
 			return;
 		if (table.containsKey(attacker))
 			table.get(attacker).add(hate);

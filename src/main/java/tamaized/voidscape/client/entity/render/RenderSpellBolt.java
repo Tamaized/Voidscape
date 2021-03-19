@@ -40,14 +40,18 @@ public class RenderSpellBolt<T extends EntitySpellBolt> extends EntityRenderer<T
 		Matrix4f v = stack.pose();
 		Matrix3f n = stack.normal();
 		final float size = 0.5F;
+		final int color = entityIn.color();
+		final float red = ((color >> 16) & 0xFF) / 255F;
+		final float green = ((color >> 8) & 0xFF) / 255F;
+		final float blue = (color & 0xFF) / 255F;
 		for (int i = 0; i < 8; i++) {
 			int deg = (45 * i + entityIn.tickCount * 2) % 360;
 			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(deg));
 			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(deg));
-			vertex(buffer, v, n, -size, -size, 0, 0.25F, 0F, 0.6F, 0.75F, 0, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, n, -size, size, 0, 0.25F, 0F, 0.6F, 0.75F, 0, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, n, size, size, 0, 0.25F, 0F, 0.6F, 0.75F, 1, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, n, size, -size, 0, 0.25F, 0F, 0.6F, 0.75F, 1, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
+			vertex(buffer, v, n, -size, -size, 0, red, green, blue, 0.75F, 0, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
+			vertex(buffer, v, n, -size, size, 0, red, green, blue, 0.75F, 0, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
+			vertex(buffer, v, n, size, size, 0, red, green, blue, 0.75F, 1, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
+			vertex(buffer, v, n, size, -size, 0, red, green, blue, 0.75F, 1, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
 		}
 		matrixStackIn.popPose();
 	}

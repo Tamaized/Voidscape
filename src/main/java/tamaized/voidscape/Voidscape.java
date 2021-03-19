@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
@@ -269,10 +270,19 @@ public class Voidscape {
 		}
 	}
 
-	public static void healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
+	public static boolean healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
+		float val = target.getHealth();
 		target.heal(heal);
+		if (val == target.getHealth())
+			return false;
+		for (int i = 0; i < 10; i++) {
+			Vector3d pos = new Vector3d(0.25F + target.getRandom().nextFloat() * 0.75F, 0, 0).
+					yRot((float) Math.toRadians(target.getRandom().nextInt(360))).add(target.getX(), target.getEyeY() - 0.5F + target.getRandom().nextFloat(), target.getZ());
+			((ServerWorld) caster.level).sendParticles(ParticleTypes.HEART, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
+		}
 		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof MobEntity && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
 				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster))));
+		return true;
 	}
 
 	public static double calculateHate(double input, LivingEntity attacker) {

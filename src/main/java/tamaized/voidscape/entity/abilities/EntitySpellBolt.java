@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
 public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAdditionalSpawnData {
 
 	private static final DataParameter<Integer> SEEK_TARGET = EntityDataManager.defineId(EntitySpellBolt.class, DataSerializers.INT);
+	private static final DataParameter<Integer> COLOR = EntityDataManager.defineId(EntitySpellBolt.class, DataSerializers.INT);
 
 	public LivingEntity shootingEntity;
 	private TurmoilAbility ability;
@@ -46,6 +47,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	private Entity seekTarget;
 
 	private float damage = 1F;
+	private boolean healing = false;
 	private double speed = 1D;
 	private float range = 32.0F;
 	private int maxRange = -1;
@@ -88,6 +90,11 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		homing = true;
 	}
 
+	public EntitySpellBolt healing() {
+		healing = true;
+		return this;
+	}
+
 	@Override
 	public float getBrightness() {
 		return 1F;
@@ -122,6 +129,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	@Override
 	protected void defineSynchedData() {
 		entityData.define(SEEK_TARGET, -1);
+		entityData.define(COLOR, 0xFFFFFF);
 	}
 
 	@Override
@@ -136,9 +144,18 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 	@Override
 	protected boolean canHitEntity(Entity p_230298_1_) {
-		if (level instanceof ServerWorld && p_230298_1_ instanceof PlayerEntity && ((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator)
+		if (!healing && level instanceof ServerWorld && p_230298_1_ instanceof PlayerEntity && ((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator)
 			return false;
 		return super.canHitEntity(p_230298_1_);
+	}
+
+	public EntitySpellBolt color(int color) {
+		entityData.set(COLOR, color);
+		return this;
+	}
+
+	public int color() {
+		return entityData.get(COLOR);
 	}
 
 	@Override
@@ -154,7 +171,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 			} else {
 				Entity en = null;
 				for (Entity e : level.getEntities(this, getBoundingBox().inflate(10F).move(getDeltaMovement().scale(11F)))) {
-					if (e == this || e == shootingEntity || !canHitEntity(e))
+					if (!(e instanceof LivingEntity) && e == this || e == shootingEntity || !canHitEntity(e))
 						continue;
 					if (en == null || e.distanceTo(this) < en.distanceTo(this))
 						en = e;
@@ -268,11 +285,10 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	protected void onHit(Entity entity) {
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
-		if (entity.hurt(damagesource, damage)) {
-			if (entity instanceof LivingEntity) {
-				LivingEntity entitylivingbase = (LivingEntity) entity;
+		if (entity instanceof LivingEntity && ((!healing && entity.hurt(damagesource, damage)) || (healing && Voidscape.healTargetAndAggro((LivingEntity) entity, shootingEntity, damage)))) {
+			LivingEntity entitylivingbase = (LivingEntity) entity;
+			if (!healing)
 				doPostHurtEffects(entitylivingbase);
-			}
 			remove();
 		} else {
 			setDeltaMovement(getDeltaMovement().x * -0.10000000149011612D, getDeltaMovement().y * -0.10000000149011612D, getDeltaMovement().z * -0.10000000149011612D);
