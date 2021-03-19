@@ -61,7 +61,7 @@ public class MeleeSkills implements ITurmoilSkills {
 	public final TurmoilSkill WHIRLING_BLADES = builder("whirling_blades").required(TEMPEST_5).build();
 
 	public final TurmoilSkill CHAOS_BLADE_1 = builder("chaos_blade_1").required(CORE).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill EMPOWER_ATTACK_BLEED = builder("empower_attack_bleed").required(CHAOS_BLADE_1).build();
+	public final TurmoilSkill EMPOWER_ATTACK_BLEED = builder("empower_attack_bleed").abilities(MeleeAbilities.EMPOWER_ATTACK_BLEED).required(CHAOS_BLADE_1).build();
 	public final TurmoilSkill SENSE_WEAKNESS = builder("sense_weakness").required(CHAOS_BLADE_1).build();
 	public final TurmoilSkill CHAOS_BLADE_2 = builder("chaos_blade_2").noDescription().required(CHAOS_BLADE_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill REJUVENATE = builder("rejuvenate").required(CHAOS_BLADE_2).build();

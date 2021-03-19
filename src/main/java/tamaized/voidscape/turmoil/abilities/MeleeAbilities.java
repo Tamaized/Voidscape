@@ -62,6 +62,8 @@ public class MeleeAbilities {
 		}
 		return false;
 	});
+	public static final TurmoilAbility EMPOWER_ATTACK_BLEED = new TurmoilAbility(unloc("empower_attack_bleed"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> ModEffects.
+			apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 1));
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.melee.".concat(loc));

@@ -261,6 +261,10 @@ public class Voidscape {
 			attacker.removeEffect(ModEffects.EMPOWER_ATTACK_SLICING.get());
 			ModEffects.dot(attacker, entity, ModEffects.EMPOWER_ATTACK_SLICING_DOT.get(), 10 * 20, 1, 1);
 		}
+		if (attacker.hasEffect(ModEffects.EMPOWER_ATTACK_BLEED.get())) {
+			attacker.removeEffect(ModEffects.EMPOWER_ATTACK_BLEED.get());
+			ModEffects.dot(attacker, entity, ModEffects.EMPOWER_ATTACK_BLEED_DOT.get(), 15 * 20, 1, 1);
+		}
 	}
 
 	public static void healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {

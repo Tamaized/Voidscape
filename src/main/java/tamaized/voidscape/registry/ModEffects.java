@@ -30,6 +30,8 @@ public class ModEffects {
 	public static final RegistryObject<ToggleEffect> EMPOWER_SHIELD_2X_NULL = REGISTRY.register("empower_shield_2x_null", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower));
 	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_SLICING = REGISTRY.register("empower_attack_slicing", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_SLICING_DOT = REGISTRY.register("empower_attack_slicing_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
+	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_BLEED = REGISTRY.register("empower_attack_bleed", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
+	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_BLEED_DOT = REGISTRY.register("empower_attack_bleed_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
 
 	private static <T extends Effect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);
