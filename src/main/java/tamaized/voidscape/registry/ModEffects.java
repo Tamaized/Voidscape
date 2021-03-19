@@ -32,6 +32,7 @@ public class ModEffects {
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_SLICING_DOT = REGISTRY.register("empower_attack_slicing_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
 	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_BLEED = REGISTRY.register("empower_attack_bleed", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_BLEED_DOT = REGISTRY.register("empower_attack_bleed_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
+	public static final RegistryObject<Effect> SENSE_WEAKNESS = REGISTRY.register("sense_weakness", () -> context(new StandardEffect(EffectType.BENEFICIAL, 0xFF0000)));
 
 	private static <T extends Effect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);
@@ -61,7 +62,7 @@ public class ModEffects {
 
 	public static boolean target(LivingEntity caster, LivingEntity entity, Effect effect, int duration, int amp, boolean self) {
 		EffectInstance instance = new EffectInstance(effect, duration, amp);
-		entity.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.add(instance, self ? entity : caster, 0));
+		(self ? caster : entity).getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.add(instance, self ? entity : caster, 0));
 		return self ? caster.addEffect(instance) : entity.addEffect(instance);
 	}
 

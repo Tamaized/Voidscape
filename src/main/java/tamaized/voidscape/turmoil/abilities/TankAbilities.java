@@ -44,16 +44,16 @@ public class TankAbilities {
 		}
 		return true;
 	}).damage(1F);
-	public static final TurmoilAbility ADRENALINE = new TurmoilAbility(unloc("adrenaline"), TurmoilAbility.Type.Insane, 300, 30 * 20, (spell, caster) -> {
+	public static final TurmoilAbility ADRENALINE = new TurmoilAbility(unloc("adrenaline"), TurmoilAbility.Type.Insane, 300, 30 * 20, (spell, caster) -> caster.
+			addEffect(new EffectInstance(ModEffects.ADRENALINE.get(), 10 * 20)));
+	public static final TurmoilAbility TUNNEL_VISION = new TurmoilAbility(unloc("tunnel_vision"), TurmoilAbility.Type.Voidic, 500, 30 * 20, (spell, caster) -> {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
-			return ModEffects.target(caster, entity, ModEffects.ADRENALINE.get(), 10 * 20, 1, true);
+			return ModEffects.target(caster, entity, ModEffects.TUNNEL_VISION.get(), 10 * 20, 1, true);
 		}
 		return false;
 	});
-	public static final TurmoilAbility TUNNEL_VISION = new TurmoilAbility(unloc("tunnel_vision"), TurmoilAbility.Type.Voidic, 500, 30 * 20, (spell, caster) -> caster.
-			addEffect(new EffectInstance(ModEffects.TUNNEL_VISION.get(), 10 * 20)));
 	public static final TurmoilAbility EMPOWER_SHIELD_2X_NULL = new TurmoilAbility(unloc("empower_shield_2x_null"), TurmoilAbility.Type.Voidic, 400, 5 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_SHIELD_2X_NULL.get(), 10 * 20, 1));
 	public static final TurmoilAbility BACKSTEP = new TurmoilAbility(unloc("backstep"), TurmoilAbility.Type.Null, 200, 5 * 20, (spell, caster) -> {

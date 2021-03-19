@@ -180,7 +180,9 @@ public class Voidscape {
 					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
 							orElse(1F)).orElse(0F)).orElse(0F) :
 
-							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F);
+							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
+									hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
+									map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
 					final float dmg = dmgPrep == 0 && arrow ? (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) : dmgPrep;
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;
@@ -189,8 +191,8 @@ public class Voidscape {
 							attacker.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof AxeItem)
-									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) dmg * (event.getEntityLiving().
-											hasEffect(ModEffects.TUNNEL_VISION.get()) ? event.getEntity().getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
+									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) dmg * (attacker.
+											hasEffect(ModEffects.TUNNEL_VISION.get()) ? attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
 											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
