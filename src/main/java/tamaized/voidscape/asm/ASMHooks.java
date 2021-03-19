@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -45,6 +46,8 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
+
+	public static float PlayerEntity_getAttackStrengthScale;
 
 	/**
 	 * Injection Point:<br>
@@ -125,6 +128,16 @@ public class ASMHooks {
 		if (event.getName() == null || !event.getName().getNamespace().equals(Voidscape.MODID))
 			MinecraftForge.EVENT_BUS.post(event);
 		return callback.apply(event.getClimate(), event.getCategory(), event.getDepth(), event.getScale(), event.getEffects(), event.getGeneration().build(), event.getSpawns().build()).setRegistryName(event.getName());
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link PlayerEntity#attack(Entity)}
+	 * [AFTER INVOKEVIRTUAL {@link PlayerEntity#getAttackStrengthScale(float)}]
+	 */
+	public static synchronized float getAttackStrengthScale(float o) {
+		PlayerEntity_getAttackStrengthScale = o;
+		return o;
 	}
 
 }

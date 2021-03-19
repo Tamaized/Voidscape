@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'attributes': {
+        'death': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraftforge.common.ForgeHooks',

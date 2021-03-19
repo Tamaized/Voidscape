@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'attributes': {
+        'itsmybiomebruh': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraftforge.common.ForgeHooks',

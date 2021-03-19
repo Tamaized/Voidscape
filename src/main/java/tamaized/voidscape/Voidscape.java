@@ -6,6 +6,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
@@ -41,6 +42,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModBlocks;
@@ -177,7 +179,7 @@ public class Voidscape {
 					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
 							orElse(1F)).orElse(0F)).orElse(0F) :
 
-							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get());
+							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F);
 					final float dmg = dmgPrep == 0 && arrow ? (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) : dmgPrep;
 					if (dmg > 0) {
 						event.getEntity().invulnerableTime = 0;

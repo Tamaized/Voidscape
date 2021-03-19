@@ -29,8 +29,8 @@ function initializeCoreMod() {
                         methodNode.instructions.insert(
                             lastInstruction,
                             ASM.listOf(
-                                new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0), // PUSH this TO THE TOP OF THE STACK
-                                new org.objectweb.asm.tree.MethodInsnNode( // INVOKE tamaized.voidscape.asm.ASMHooks#handleEntityAttributes(LivingEntity)
+                                new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
+                                new org.objectweb.asm.tree.MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
                                     'tamaized/voidscape/asm/ASMHooks',
                                     'handleEntityAttributes',

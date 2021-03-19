@@ -4,5 +4,6 @@
   "deepfreeze": "META-INF/asm/deepfreeze.js",
   "seed": "META-INF/asm/seed.js",
   "death": "META-INF/asm/death.js",
-  "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js"
+  "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",
+  "attackstrength": "META-INF/asm/attackstrength.js"
 }

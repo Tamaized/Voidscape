@@ -43,7 +43,7 @@ function initializeCoreMod() {
                             new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 10),
                             new org.objectweb.asm.tree.VarInsnNode(Opcodes.ILOAD, 7),
                             new org.objectweb.asm.tree.VarInsnNode(Opcodes.ILOAD, 8),
-                            new org.objectweb.asm.tree.MethodInsnNode( // INVOKE tamaized.voidscape.asm.ASMHooks#chunkManager
+                            new org.objectweb.asm.tree.MethodInsnNode(
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'chunkManager',
