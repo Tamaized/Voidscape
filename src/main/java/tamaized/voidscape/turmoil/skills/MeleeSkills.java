@@ -46,7 +46,7 @@ public class MeleeSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill TEMPEST_1 = builder("tempest_1").noDescription().required(CORE).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill DEFT_STRIKES_1 = builder("deft_strikes_1").noDescription().required(TEMPEST_1).stats(stats -> stats.cooldown(1)).build();
-	public final TurmoilSkill CLEAVE = builder("cleave").required(TEMPEST_1).build();
+	public final TurmoilSkill CLEAVE = builder("cleave").abilities(MeleeAbilities.CLEAVE).required(TEMPEST_1).build();
 	public final TurmoilSkill TEMPEST_2 = builder("tempest_2").noDescription().required(TEMPEST_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill DEFT_STRIKES_2 = builder("deft_strikes_2").noDescription().required(TEMPEST_2).stats(stats -> stats.cooldown(1)).build();
 	public final TurmoilSkill GREATER_CLEAVE = builder("greater_cleave").required(TEMPEST_2).build();

@@ -1,14 +1,21 @@
 package tamaized.voidscape.turmoil.abilities;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -35,6 +42,26 @@ public class MeleeAbilities {
 	}).damage(4);
 	public static final TurmoilAbility EMPOWER_ATTACK_SLICING = new TurmoilAbility(unloc("empower_attack_slicing"), TurmoilAbility.Type.Voidic, 200, 30 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_ATTACK_SLICING.get(), 15 * 20, 1));
+	public static final TurmoilAbility CLEAVE = new TurmoilAbility(unloc("cleave"), TurmoilAbility.Type.Voidic, 350, 30 * 20, (spell, caster) -> {
+		float f = (float) (caster.getAttributeValue(Attributes.ATTACK_DAMAGE) + caster.getAttributeValue(ModAttributes.VOIDIC_DMG.get()));
+		if (f > 0.0F) {
+			caster.swing(Hand.MAIN_HAND, true);
+			caster.level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, caster.getSoundSource(), 1.0F, 1.0F);
+			double d0 = -MathHelper.sin(caster.yRot * ((float) Math.PI / 180F));
+			double d1 = MathHelper.cos(caster.yRot * ((float) Math.PI / 180F));
+			if (caster.level instanceof ServerWorld) {
+				((ServerWorld) caster.level).sendParticles(ParticleTypes.SWEEP_ATTACK, caster.getX() + d0, caster.getY(0.5D), caster.getZ() + d1, 0, d0, 0.0D, d1, 0.0D);
+			}
+			for (LivingEntity livingentity : caster.level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(1F).move(caster.getLookAngle().scale(2F)))) {
+				if (livingentity != caster && !caster.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingentity).isMarker()) && caster.distanceToSqr(livingentity) < 9.0D) {
+					livingentity.knockback(0.4F, MathHelper.sin(caster.yRot * ((float) Math.PI / 180F)), -MathHelper.cos(caster.yRot * ((float) Math.PI / 180F)));
+					livingentity.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), f);
+				}
+			}
+			return true;
+		}
+		return false;
+	});
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.melee.".concat(loc));
