@@ -143,6 +143,7 @@ public final class Instance {
 						player.setHealth(player.getMaxHealth() * 0.1F);
 						player.changeDimension(Voidscape.getWorld(player.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
 					});
+		level.players().forEach(player -> player.abilities.mayBuild = false);
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
 			if (unloadTick == 20 * 10)
 				unloadChunks();
