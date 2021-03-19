@@ -28,6 +28,8 @@ public class ModEffects {
 			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "777e0d84-3984-4502-973e-851766de8bc7", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 	public static final RegistryObject<Effect> TUNNEL_VISION = REGISTRY.register("tunnel_vision", () -> context(new StandardEffect(EffectType.BENEFICIAL, 0xFF0000)));
 	public static final RegistryObject<ToggleEffect> EMPOWER_SHIELD_2X_NULL = REGISTRY.register("empower_shield_2x_null", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower));
+	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_SLICING = REGISTRY.register("empower_attack_slicing", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
+	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_SLICING_DOT = REGISTRY.register("empower_attack_slicing_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
 
 	private static <T extends Effect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);

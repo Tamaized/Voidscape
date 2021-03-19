@@ -197,6 +197,7 @@ public class Voidscape {
 									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) dmg)));
 							});
 					}
+					applyEffects(event.getEntityLiving(), attacker);
 				}
 				if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity && event.getSource().getDirectEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).map(IFireArrow::active).orElse(false)) {
 					float dmg = event.getEntity().isOnFire() ? event.getAmount() : event.getAmount() * 0.25F;
@@ -252,6 +253,13 @@ public class Voidscape {
 				return true;
 			default:
 				return null;
+		}
+	}
+
+	public static void applyEffects(LivingEntity entity, LivingEntity attacker) {
+		if (attacker.hasEffect(ModEffects.EMPOWER_ATTACK_SLICING.get())) {
+			attacker.removeEffect(ModEffects.EMPOWER_ATTACK_SLICING.get());
+			ModEffects.dot(attacker, entity, ModEffects.EMPOWER_ATTACK_SLICING_DOT.get(), 10 * 20, 1, 1);
 		}
 	}
 

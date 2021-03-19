@@ -9,6 +9,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
@@ -32,6 +33,8 @@ public class MeleeAbilities {
 		}
 		return false;
 	}).damage(4);
+	public static final TurmoilAbility EMPOWER_ATTACK_SLICING = new TurmoilAbility(unloc("empower_attack_slicing"), TurmoilAbility.Type.Voidic, 200, 30 * 20, (spell, caster) -> ModEffects.
+			apply(caster, ModEffects.EMPOWER_ATTACK_SLICING.get(), 15 * 20, 1));
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.melee.".concat(loc));

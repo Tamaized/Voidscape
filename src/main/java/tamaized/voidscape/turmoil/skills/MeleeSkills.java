@@ -30,7 +30,7 @@ public class MeleeSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill VOIDIC_FIGHTER_1 = builder("voidic_fighter_1").noDescription().required(CORE).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill WAY_OF_THE_BLADE_1 = builder("way_of_the_blade_1").noDescription().required(VOIDIC_FIGHTER_1).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill EMPOWER_ATTACK_SLICING = builder("empower_attack_slicing").required(VOIDIC_FIGHTER_1).build();
+	public final TurmoilSkill EMPOWER_ATTACK_SLICING = builder("empower_attack_slicing").abilities(MeleeAbilities.EMPOWER_ATTACK_SLICING).required(VOIDIC_FIGHTER_1).build();
 	public final TurmoilSkill VOIDIC_FIGHTER_2 = builder("voidic_fighter_2").noDescription().required(VOIDIC_FIGHTER_1).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill WAY_OF_THE_BLADE_2 = builder("way_of_the_blade_2").noDescription().required(VOIDIC_FIGHTER_2, WAY_OF_THE_BLADE_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill EMPOWER_ATTACK_2X = builder("empower_attack_2x").required(VOIDIC_FIGHTER_2).build();
