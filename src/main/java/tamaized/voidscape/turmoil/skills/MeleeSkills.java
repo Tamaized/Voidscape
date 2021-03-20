@@ -30,7 +30,7 @@ public class MeleeSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill VOIDIC_FIGHTER_1 = builder("voidic_fighter_1").noDescription().required(CORE).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill WAY_OF_THE_BLADE_1 = builder("way_of_the_blade_1").noDescription().required(VOIDIC_FIGHTER_1).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill EMPOWER_ATTACK_SLICING = builder("empower_attack_slicing").abilities(MeleeAbilities.EMPOWER_ATTACK_SLICING).required(VOIDIC_FIGHTER_1).build();
+	public final TurmoilSkill EMPOWER_ATTACK_SLICING = builder("empower_attack_slicing").noDescription().abilities(MeleeAbilities.EMPOWER_ATTACK_SLICING).required(VOIDIC_FIGHTER_1).build();
 	public final TurmoilSkill VOIDIC_FIGHTER_2 = builder("voidic_fighter_2").noDescription().required(VOIDIC_FIGHTER_1).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill WAY_OF_THE_BLADE_2 = builder("way_of_the_blade_2").noDescription().required(VOIDIC_FIGHTER_2, WAY_OF_THE_BLADE_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill EMPOWER_ATTACK_2X = builder("empower_attack_2x").required(VOIDIC_FIGHTER_2).build();
@@ -46,7 +46,7 @@ public class MeleeSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill TEMPEST_1 = builder("tempest_1").noDescription().required(CORE).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill DEFT_STRIKES_1 = builder("deft_strikes_1").noDescription().required(TEMPEST_1).stats(stats -> stats.cooldown(1)).build();
-	public final TurmoilSkill CLEAVE = builder("cleave").abilities(MeleeAbilities.CLEAVE).required(TEMPEST_1).build();
+	public final TurmoilSkill CLEAVE = builder("cleave").noDescription().abilities(MeleeAbilities.CLEAVE).required(TEMPEST_1).build();
 	public final TurmoilSkill TEMPEST_2 = builder("tempest_2").noDescription().required(TEMPEST_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill DEFT_STRIKES_2 = builder("deft_strikes_2").noDescription().required(TEMPEST_2).stats(stats -> stats.cooldown(1)).build();
 	public final TurmoilSkill GREATER_CLEAVE = builder("greater_cleave").required(TEMPEST_2).build();
@@ -61,8 +61,8 @@ public class MeleeSkills implements ITurmoilSkills {
 	public final TurmoilSkill WHIRLING_BLADES = builder("whirling_blades").required(TEMPEST_5).build();
 
 	public final TurmoilSkill CHAOS_BLADE_1 = builder("chaos_blade_1").required(CORE).stats(stats -> stats.voidicDamage(1)).build();
-	public final TurmoilSkill EMPOWER_ATTACK_BLEED = builder("empower_attack_bleed").abilities(MeleeAbilities.EMPOWER_ATTACK_BLEED).required(CHAOS_BLADE_1).build();
-	public final TurmoilSkill SENSE_WEAKNESS = builder("sense_weakness").abilities(MeleeAbilities.SENSE_WEAKNESS).required(CHAOS_BLADE_1).build();
+	public final TurmoilSkill EMPOWER_ATTACK_BLEED = builder("empower_attack_bleed").noDescription().abilities(MeleeAbilities.EMPOWER_ATTACK_BLEED).required(CHAOS_BLADE_1).build();
+	public final TurmoilSkill SENSE_WEAKNESS = builder("sense_weakness").noDescription().abilities(MeleeAbilities.SENSE_WEAKNESS).required(CHAOS_BLADE_1).build();
 	public final TurmoilSkill CHAOS_BLADE_2 = builder("chaos_blade_2").noDescription().required(CHAOS_BLADE_1).stats(stats -> stats.voidicDamage(1)).build();
 	public final TurmoilSkill REJUVENATE = builder("rejuvenate").required(CHAOS_BLADE_2).build();
 	public final TurmoilSkill EMPOWER_ATTACK_SLASH = builder("empower_attack_slash").required(CHAOS_BLADE_2).build();
