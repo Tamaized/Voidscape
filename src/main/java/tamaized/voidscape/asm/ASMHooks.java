@@ -60,6 +60,7 @@ public class ASMHooks {
 		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
 		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
 		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
+		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
 		entity.attributes = new AttributeModifierManager(n.build());
 	}
 
