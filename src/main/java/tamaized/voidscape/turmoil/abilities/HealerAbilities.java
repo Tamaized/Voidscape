@@ -34,6 +34,12 @@ public class HealerAbilities {
 		caster.level.addFreshEntity(bolt);
 		return true;
 	}).damage(1F);
+	public static final TurmoilAbility HEALING_BURST = new TurmoilAbility(unloc("healing_burst"), TurmoilAbility.Type.Voidic, 200, 3 * 20, (spell, caster) -> {
+		EntitySpellBolt bolt = new EntitySpellBolt(caster, HealerAbilities.HEALING_BOLT).healing().color(0xFFFF00).burst();
+		bolt.setDamage(spell.damage(caster));
+		caster.level.addFreshEntity(bolt);
+		return true;
+	}).damage(0.5F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));

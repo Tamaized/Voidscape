@@ -29,6 +29,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.registry.ModParticles;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -44,10 +45,11 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	private TurmoilAbility ability;
 	private int ticksInAir;
 	private boolean homing;
+	private boolean burst;
+	private boolean healing = false;
 	private Entity seekTarget;
 
 	private float damage = 1F;
-	private boolean healing = false;
 	private double speed = 1D;
 	private float range = 32.0F;
 	private int maxRange = -1;
@@ -86,8 +88,14 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		}
 	}
 
-	public void homing() {
+	public EntitySpellBolt homing() {
 		homing = true;
+		return this;
+	}
+
+	public EntitySpellBolt burst() {
+		burst = true;
+		return this;
 	}
 
 	public EntitySpellBolt healing() {
@@ -227,7 +235,10 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 			for (Entity e : level.getEntities(this, getBoundingBox().inflate(1F, 1F, 1F))) {
 				if (e == this || e == shootingEntity || !canHitEntity(e))
 					continue;
-				onHit(e);
+				if (burst)
+					onBurst();
+				else
+					onHit(e);
 			}
 
 		float f1 = 0.99F;
@@ -282,6 +293,20 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		// NO-OP
 	}
 
+	protected void onBurst() {
+		int color = entityData.get(COLOR);
+		if (level instanceof ServerWorld)
+			for (int i = 0; i < 50; i++) {
+				Vector3d vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vector3d(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
+				((ServerWorld) level).sendParticles(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0, 0, 1F);
+			}
+		level.getEntities(this, getBoundingBox().inflate(4F)).forEach(entity -> {
+			if (entity != this && entity != shootingEntity && canHitEntity(entity))
+				onHit(entity);
+		});
+		remove();
+	}
+
 	protected void onHit(Entity entity) {
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
@@ -303,7 +328,8 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	protected void blockHit(BlockState state, BlockPos pos) {
-
+		if (burst)
+			onBurst();
 	}
 
 	@Override
