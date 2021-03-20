@@ -452,16 +452,20 @@ public class RenderTurmoil {
 			int x = ox + (20) * (i % 3);
 			int y = oy + (20) * (i / 3);
 			float offset = y + s * (1F - perc);
-			Minecraft.getInstance().getTextureManager().bind(instance.ability().getTexture());
 			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-			buffer.vertex(x, offset, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
-			buffer.vertex(x, y + s, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
-			buffer.vertex(x + s, y + s, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
-			buffer.vertex(x + s, offset, 0F).color(1F, 0.1F, 0F, 0.75F).endVertex();
+			final float alpha = 0.75F * fade(1F, partialTicks);
+			buffer.vertex(x, offset, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
+			buffer.vertex(x, y + s, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
+			buffer.vertex(x + s, y + s, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
+			buffer.vertex(x + s, offset, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
+			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
+			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
 			Tessellator.getInstance().end();
+			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.defaultAlphaFunc();
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 			RenderSystem.enableBlend();
@@ -470,8 +474,8 @@ public class RenderTurmoil {
 			if (!toggle) {
 				boolean flag;
 				String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
-				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, flag ? 0xFFFFFF00 : instance.ability().
-						costType() == TurmoilAbility.Type.Insane ? 0xFFFF0000 : instance.ability().costType() == TurmoilAbility.Type.Null ? 0xFFFFFFFF : 0xFF7700FF);
+				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, (Math.max(0x04, (int) (fade(1F, partialTicks) * 0xFF)) << 24) | (flag ? 0xFFFF00 : instance.ability().
+						costType() == TurmoilAbility.Type.Insane ? 0xFF0000 : instance.ability().costType() == TurmoilAbility.Type.Null ? 0xFFFFFF : 0x7700FF));
 			}
 			RenderSystem.color4f(1F, 1F, 1F, 1F);
 			RenderSystem.defaultAlphaFunc();

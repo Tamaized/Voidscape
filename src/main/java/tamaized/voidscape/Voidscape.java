@@ -201,7 +201,13 @@ public class Voidscape {
 											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
-									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) dmg + stats.stats().spellpower)));
+									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
+										stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) (dmg + stats.stats().spellpower * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F))));
+										if (attacker.hasEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get())) {
+											attacker.removeEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get());
+											stats.setVoidicPower(Math.min(1000, stats.getVoidicPower() + (int) (150F * (stats.stats().spellpower / 100F))));
+										}
+									});
 							});
 					}
 					applyEffects(event.getEntityLiving(), attacker);

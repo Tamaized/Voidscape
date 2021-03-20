@@ -1,5 +1,6 @@
 package tamaized.voidscape.turmoil.abilities;
 
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -12,6 +13,7 @@ import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
+import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 
@@ -47,8 +49,10 @@ public class HealerAbilities {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 2);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
-			Voidscape.healTargetAndAggro(entity, caster, spell.damage(caster));
-			return true;
+			if (entity.getMobType() == CreatureAttribute.UNDEAD)
+				return entity.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), spell.damage(caster));
+			else
+				return Voidscape.healTargetAndAggro(entity, caster, spell.damage(caster));
 		}
 		return false;
 	}).damage(2F);
@@ -63,6 +67,8 @@ public class HealerAbilities {
 	public static final TurmoilAbility HEALING_AURA = new TurmoilAbility(unloc("healing_aura"), TurmoilAbility.Type.Voidic, 400, 60 * 20, (spell, caster) ->
 
 			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(0.5F);
+	public static final TurmoilAbility EMPOWER_SWORD_OSMOSIS = new TurmoilAbility(unloc("empower_sword_osmosis"), TurmoilAbility.Type.Null, 100, 3 * 20, (spell, caster) -> ModEffects.
+			apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 1));
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));
