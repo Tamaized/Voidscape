@@ -233,7 +233,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 		if (!level.isClientSide())
 			for (Entity e : level.getEntities(this, getBoundingBox().inflate(1F, 1F, 1F))) {
-				if (e == this || (!healing && e == shootingEntity) || !canHitEntity(e))
+				if (e == this || e == shootingEntity || !canHitEntity(e))
 					continue;
 				if (burst)
 					onBurst();
