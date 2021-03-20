@@ -28,6 +28,7 @@ public class EntitySpellAura extends Entity {
 	private TurmoilAbility ability;
 	private LivingEntity caster;
 	private float damage;
+	private boolean healing;
 	private long life;
 
 	public EntitySpellAura(EntityType<?> p_i48580_1_, World p_i48580_2_) {
@@ -45,6 +46,12 @@ public class EntitySpellAura extends Entity {
 
 	public EntitySpellAura damage(float damage) {
 		this.damage = damage;
+		return this;
+	}
+
+
+	public EntitySpellAura healing() {
+		healing = true;
 		return this;
 	}
 
@@ -75,13 +82,13 @@ public class EntitySpellAura extends Entity {
 		if (tickCount % Math.max(1, 30 - caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().rechargeRate).orElse(0)).orElse(0)) == 0)
 			for (Entity e : level.getEntities(this, getBoundingBox().inflate(5F, 2F, 5F), e -> {
 				boolean flag = e != this && e != caster && canHitEntity(e);
-				return (damage < 0) != flag;
+				return (healing) != flag;
 			})) {
 				if (!(e instanceof LivingEntity))
 					continue;
 				LivingEntity entity = (LivingEntity) e;
-				if (damage < 0)
-					entity.heal(-damage);
+				if (healing)
+					Voidscape.healTargetAndAggro(entity, caster, damage);
 				else if (entity.hurt(caster == null ? ModDamageSource.VOIDIC : ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), damage))
 					caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
 						stats.increasePowerFromAbilityDamage(caster, entity, ability);

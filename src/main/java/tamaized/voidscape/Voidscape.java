@@ -24,6 +24,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -271,6 +272,8 @@ public class Voidscape {
 	}
 
 	public static boolean healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
+		if (target.level instanceof ServerWorld && ((ServerChunkProvider) target.level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator && !(target instanceof PlayerEntity))
+			return false;
 		float val = target.getHealth();
 		target.heal(heal);
 		if (val == target.getHealth())

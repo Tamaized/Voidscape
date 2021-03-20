@@ -100,8 +100,8 @@ public class TurmoilAbility {
 		return damage;
 	}
 
-	public float damage(@Nullable Entity caater) {
-		return damage(caater, 0);
+	public float damage(@Nullable Entity caster) {
+		return damage(caster, 0);
 	}
 
 	public float damage(@Nullable Entity caster, float offset) {

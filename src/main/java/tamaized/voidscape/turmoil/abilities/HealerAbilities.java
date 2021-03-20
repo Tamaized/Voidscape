@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -40,6 +41,15 @@ public class HealerAbilities {
 		caster.level.addFreshEntity(bolt);
 		return true;
 	}).damage(0.5F);
+	public static final TurmoilAbility MEND = new TurmoilAbility(unloc("mend"), TurmoilAbility.Type.Voidic, 100, 3 * 20, (spell, caster) -> {
+		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 2);
+		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
+			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
+			Voidscape.healTargetAndAggro(entity, caster, spell.damage(caster));
+			return true;
+		}
+		return false;
+	}).damage(2F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));
