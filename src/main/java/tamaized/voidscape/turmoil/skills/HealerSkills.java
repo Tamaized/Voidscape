@@ -30,7 +30,7 @@ public class HealerSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill VOIDIC_CLERIC_1 = builder("voidic_cleric_1").noDescription().required(CORE).stats(stats -> stats.voidicDamageReductionPercentage(1).spellpower(1)).build();
 	public final TurmoilSkill HEALING_BOLT = builder("healing_bolt").noDescription().abilities(HealerAbilities.HEALING_BOLT).required(VOIDIC_CLERIC_1).build();
-	public final TurmoilSkill HEALING_BLAST = builder("healing_blast").noDescription().abilities(HealerAbilities.HEALING_BURST).required(VOIDIC_CLERIC_1).build();
+	public final TurmoilSkill HEALING_BLAST = builder("healing_blast").noDescription().abilities(HealerAbilities.HEALING_BLAST).required(VOIDIC_CLERIC_1).build();
 	public final TurmoilSkill VOIDIC_CLERIC_2 = builder("voidic_cleric_2").noDescription().required(VOIDIC_CLERIC_1).stats(stats -> stats.voidicDamageReductionPercentage(1).spellpower(1)).build();
 	public final TurmoilSkill GREATER_HEALING_BOLT = builder("greater_healing_bolt").required(VOIDIC_CLERIC_2).build();
 	public final TurmoilSkill GREATER_HEALING_BLAST = builder("greater_healing_blast").required(VOIDIC_CLERIC_2).build();

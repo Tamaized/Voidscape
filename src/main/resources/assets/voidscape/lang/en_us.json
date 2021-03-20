@@ -1,5 +1,6 @@
 {
   "voidscape.item_group": "Voidscape",
+  "itemGroup.voidscape.item_group": "Voidscape",
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
 
@@ -199,8 +200,8 @@
 
   "voidscape.abilities.mage.bolt.title": "Voidic Bolt",
   "voidscape.abilities.mage.bolt.desc": "Fire a Bolt of Voidic energy towards a target",
-  "voidscape.abilities.mage.homingbolts.title": "Homing Bolts",
-  "voidscape.abilities.mage.homingbolts.desc": "While toggled on, Bolts will now actively seek out targets",
+  "voidscape.abilities.mage.homing_bolts.title": "Homing Bolts",
+  "voidscape.abilities.mage.homing_bolts.desc": "While toggled on, Bolts will now actively seek out targets",
   "voidscape.abilities.mage.aura.title": "Voidic Aura",
   "voidscape.abilities.mage.aura.desc": "Deals damage around you every (30 - recharge rate) ticks, minimum of once per tick, for 30 seconds",
   "voidscape.abilities.mage.arrow_imbue_spelllike.title": "Arrow Imbue: Spell-Like",
