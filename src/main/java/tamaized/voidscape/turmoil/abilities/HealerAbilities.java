@@ -10,6 +10,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -59,6 +60,9 @@ public class HealerAbilities {
 		}
 		return false;
 	}).damage(0.5F);
+	public static final TurmoilAbility HEALING_AURA = new TurmoilAbility(unloc("healing_aura"), TurmoilAbility.Type.Voidic, 400, 60 * 20, (spell, caster) ->
+
+			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(0.5F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));

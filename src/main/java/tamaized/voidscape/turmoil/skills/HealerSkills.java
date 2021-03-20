@@ -58,7 +58,7 @@ public class HealerSkills implements ITurmoilSkills {
 	public final TurmoilSkill MIND_LINK_NEG = builder("mind_link_neg").required(MAD_PRIEST_5).build();
 
 	public final TurmoilSkill VOIDS_FAVOR_1 = builder("voids_favor_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
-	public final TurmoilSkill HEALING_AURA = builder("healing_aura").required(VOIDS_FAVOR_1).build();
+	public final TurmoilSkill HEALING_AURA = builder("healing_aura").abilities(HealerAbilities.HEALING_AURA).required(VOIDS_FAVOR_1).build();
 	public final TurmoilSkill EMPOWER_SWORD_OSMOSIS = builder("empower_sword_osmosis").required(VOIDS_FAVOR_1).build();
 	public final TurmoilSkill VOIDS_FAVOR_2 = builder("voids_favor_2").noDescription().required(VOIDS_FAVOR_1).stats(stats -> stats.spellpower(1)).build();
 	public final TurmoilSkill HEALING_BURST = builder("healing_burst").required(VOIDS_FAVOR_2).build();

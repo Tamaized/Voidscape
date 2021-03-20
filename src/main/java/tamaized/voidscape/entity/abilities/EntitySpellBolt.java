@@ -1,9 +1,11 @@
 package tamaized.voidscape.entity.abilities;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
@@ -151,10 +153,8 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	protected boolean canHitEntity(Entity p_230298_1_) {
-		if (!healing && level instanceof ServerWorld && p_230298_1_ instanceof PlayerEntity && ((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator)
-			return false;
-		return super.canHitEntity(p_230298_1_);
+	protected boolean canHitEntity(Entity entity) {
+		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
 	}
 
 	public EntitySpellBolt color(int color) {
@@ -233,7 +233,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 		if (!level.isClientSide())
 			for (Entity e : level.getEntities(this, getBoundingBox().inflate(1F, 1F, 1F))) {
-				if (e == this || e == shootingEntity || !canHitEntity(e))
+				if (e == this || (!healing && e == shootingEntity) || !canHitEntity(e))
 					continue;
 				if (burst)
 					onBurst();
@@ -301,7 +301,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 				((ServerWorld) level).sendParticles(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0, 0, 1F);
 			}
 		level.getEntities(this, getBoundingBox().inflate(4F)).forEach(entity -> {
-			if (entity != this && entity != shootingEntity && canHitEntity(entity))
+			if (entity != this && (healing || entity != shootingEntity) && canHitEntity(entity))
 				onHit(entity);
 		});
 		remove();
@@ -310,7 +310,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	protected void onHit(Entity entity) {
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
-		if (entity instanceof LivingEntity && ((!healing && entity.hurt(damagesource, damage)) || (healing && Voidscape.healTargetAndAggro((LivingEntity) entity, shootingEntity, damage)))) {
+		if (entity instanceof LivingEntity && (((!healing || (entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD)) && entity.hurt(damagesource, damage)) || (healing && Voidscape.healTargetAndAggro((LivingEntity) entity, shootingEntity, damage)))) {
 			LivingEntity entitylivingbase = (LivingEntity) entity;
 			if (!healing)
 				doPostHurtEffects(entitylivingbase);

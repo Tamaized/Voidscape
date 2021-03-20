@@ -1,8 +1,10 @@
 package tamaized.voidscape.entity.abilities;
 
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -61,7 +63,7 @@ public class EntitySpellAura extends Entity {
 	}
 
 	protected boolean canHitEntity(Entity entity) {
-		return !(level instanceof ServerWorld) || !(entity instanceof PlayerEntity) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
+		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
 	}
 
 	@Override
@@ -80,14 +82,11 @@ public class EntitySpellAura extends Entity {
 		}
 		moveTo(caster.position());
 		if (tickCount % Math.max(1, 30 - caster.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().rechargeRate).orElse(0)).orElse(0)) == 0)
-			for (Entity e : level.getEntities(this, getBoundingBox().inflate(5F, 2F, 5F), e -> {
-				boolean flag = e != this && e != caster && canHitEntity(e);
-				return (healing) != flag;
-			})) {
+			for (Entity e : level.getEntities(this, getBoundingBox().inflate(5F, 2F, 5F), e -> e != this && (healing || e != caster) && canHitEntity(e))) {
 				if (!(e instanceof LivingEntity))
 					continue;
 				LivingEntity entity = (LivingEntity) e;
-				if (healing)
+				if (healing && !(entity instanceof MobEntity && entity.getMobType() == CreatureAttribute.UNDEAD))
 					Voidscape.healTargetAndAggro(entity, caster, damage);
 				else if (entity.hurt(caster == null ? ModDamageSource.VOIDIC : ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), damage))
 					caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {

@@ -20,7 +20,7 @@ import java.util.Optional;
 public class MageAbilities {
 
 	public static final TurmoilAbility BOLT = new TurmoilAbility(unloc("bolt"), TurmoilAbility.Type.Voidic, 150, 3 * 20, (spell, caster) -> {
-		EntitySpellBolt bolt = new EntitySpellBolt(caster, MageAbilities.BOLT);
+		EntitySpellBolt bolt = new EntitySpellBolt(caster, MageAbilities.BOLT).color(0x7700FF);
 		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
 			if (stats.isActive(MageAbilities.HOMING_BOLTS))
 				bolt.homing();
