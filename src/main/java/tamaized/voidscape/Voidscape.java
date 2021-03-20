@@ -140,7 +140,10 @@ public class Voidscape {
 			}
 			Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 			if (e instanceof LivingEntity && event.getEntityLiving() instanceof MobEntity)
-				event.getEntityLiving().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e)));
+				event.getEntityLiving().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.
+						addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e) * (((LivingEntity) e).
+								hasEffect(ModEffects.TUNNEL_VISION.get()) && e.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
+								map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.1F : 1F)));
 			Boolean arrow;
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY).
@@ -278,6 +281,11 @@ public class Voidscape {
 		target.heal(heal);
 		if (val == target.getHealth())
 			return false;
+		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
+			if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.MAD_PRIEST_1)).orElse(false))
+				cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) (target.getHealth() - val))));
+
+		});
 		for (int i = 0; i < 10; i++) {
 			Vector3d pos = new Vector3d(0.25F + target.getRandom().nextFloat() * 0.75F, 0, 0).
 					yRot((float) Math.toRadians(target.getRandom().nextInt(360))).add(target.getX(), target.getEyeY() - 0.5F + target.getRandom().nextFloat(), target.getZ());

@@ -45,7 +45,7 @@ public class HealerSkills implements ITurmoilSkills {
 
 	public final TurmoilSkill MAD_PRIEST_1 = builder("mad_priest_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
 	public final TurmoilSkill MEND = builder("mend").abilities(HealerAbilities.MEND).required(MAD_PRIEST_1).build();
-	public final TurmoilSkill MIND_WARP = builder("mind_warp").required(MAD_PRIEST_1).build();
+	public final TurmoilSkill MIND_WARP = builder("mind_warp").abilities(HealerAbilities.MIND_WARP).required(MAD_PRIEST_1).build();
 	public final TurmoilSkill MAD_PRIEST_2 = builder("mad_priest_2").noDescription().required(MAD_PRIEST_1).stats(stats -> stats.spellpower(1)).build();
 	public final TurmoilSkill EQUILIZE = builder("equilize").required(MAD_PRIEST_2).build();
 	public final TurmoilSkill UNCARING_MADNESS = builder("uncaring_madness").required(MAD_PRIEST_2).build();

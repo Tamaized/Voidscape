@@ -1,7 +1,6 @@
 package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -66,9 +65,9 @@ public class MeleeAbilities {
 	public static final TurmoilAbility EMPOWER_ATTACK_BLEED = new TurmoilAbility(unloc("empower_attack_bleed"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 1));
 	public static final TurmoilAbility SENSE_WEAKNESS = new TurmoilAbility(unloc("sense_weakness"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> {
-		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
+		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
-			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
+			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
 			return ModEffects.target(caster, entity, ModEffects.SENSE_WEAKNESS.get(), 15 * 20, 1, true);
 		}
 		return false;

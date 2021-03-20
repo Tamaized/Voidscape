@@ -11,6 +11,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
+import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.turmoil.SubCapability;
 
 public class HealerAbilities {
@@ -50,6 +51,14 @@ public class HealerAbilities {
 		}
 		return false;
 	}).damage(2F);
+	public static final TurmoilAbility MIND_WARP = new TurmoilAbility(unloc("mind_warp"), TurmoilAbility.Type.Insane, 250, 10 * 20, (spell, caster) -> {
+		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
+		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
+			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
+			return ModEffects.dot(caster, entity, ModEffects.MIND_WARP.get(), 10 * 20, 1, spell.damage(caster));
+		}
+		return false;
+	}).damage(0.5F);
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));

@@ -33,6 +33,7 @@ public class ModEffects {
 	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_BLEED = REGISTRY.register("empower_attack_bleed", () -> new ToggleEffect(EffectType.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_BLEED_DOT = REGISTRY.register("empower_attack_bleed_dot", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0000)));
 	public static final RegistryObject<Effect> SENSE_WEAKNESS = REGISTRY.register("sense_weakness", () -> context(new StandardEffect(EffectType.BENEFICIAL, 0xFF0000)));
+	public static final RegistryObject<DotEffect> MIND_WARP = REGISTRY.register("mind_warp", () -> context(new DotEffect(EffectType.HARMFUL, 0xFF0077)));
 
 	private static <T extends Effect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);

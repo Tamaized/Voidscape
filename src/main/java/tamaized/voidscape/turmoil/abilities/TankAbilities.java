@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil.abilities;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
@@ -47,9 +48,9 @@ public class TankAbilities {
 	public static final TurmoilAbility ADRENALINE = new TurmoilAbility(unloc("adrenaline"), TurmoilAbility.Type.Insane, 300, 30 * 20, (spell, caster) -> caster.
 			addEffect(new EffectInstance(ModEffects.ADRENALINE.get(), 10 * 20)));
 	public static final TurmoilAbility TUNNEL_VISION = new TurmoilAbility(unloc("tunnel_vision"), TurmoilAbility.Type.Voidic, 500, 30 * 20, (spell, caster) -> {
-		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
+		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
-			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
+			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
 			return ModEffects.target(caster, entity, ModEffects.TUNNEL_VISION.get(), 10 * 20, 1, true);
 		}
 		return false;
