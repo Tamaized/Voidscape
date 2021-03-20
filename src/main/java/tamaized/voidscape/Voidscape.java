@@ -240,6 +240,7 @@ public class Voidscape {
 						if (event.getWorld().random.nextInt(4) == 0)
 							event.getEntity().setSecondsOnFire(100);
 						event.getEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).ifPresent(IFireArrow::mark);
+						shooter.removeEffect(ModEffects.FIRE_ARROW.get());
 					}
 				}
 			}
