@@ -201,7 +201,7 @@ public class Voidscape {
 											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
-									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) dmg)));
+									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) dmg + stats.stats().spellpower)));
 							});
 					}
 					applyEffects(event.getEntityLiving(), attacker);

@@ -201,7 +201,7 @@
   "voidscape.skills.healer.voidic_cleric_4.title": "Voidic Cleric IV",
   "voidscape.skills.healer.voidic_cleric_5.title": "Voidic Cleric V",
   "voidscape.skills.healer.voids_favor_1.title": "Void's Favor I",
-  "voidscape.skills.healer.voids_favor_1.desc": "While wielding a sword, melee Voidic damage you deal is converted to Null Power\nUnequipping a sword resets null power back to 0",
+  "voidscape.skills.healer.voids_favor_1.desc": "While wielding a sword, melee Voidic damage you deal is converted to Null Power\nSpellpower is added to the amount gained\nUnequipping a sword resets null power back to 0",
   "voidscape.skills.healer.healing_aura.title": "Healing Aura",
   "voidscape.skills.healer.healing_aura.desc": "For a short time, you and your allies around you are healed for half a heart every second, scales with Spellpower",
   "voidscape.skills.healer.empower_sword_osmosis.title": "Empower Sword: Osmosis",
