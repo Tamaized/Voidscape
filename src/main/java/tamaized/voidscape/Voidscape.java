@@ -143,7 +143,7 @@ public class Voidscape {
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.
 						addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e) * (((LivingEntity) e).
 								hasEffect(ModEffects.TUNNEL_VISION.get()) && e.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-								map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.1F : 1F)));
+								map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.1F : 1F), false));
 			Boolean arrow;
 			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY).
@@ -299,7 +299,7 @@ public class Voidscape {
 			((ServerWorld) caster.level).sendParticles(ParticleTypes.HEART, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
 		}
 		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof MobEntity && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
-				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster))));
+				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster), true)));
 		return true;
 	}
 

@@ -19,12 +19,12 @@ public class AggroTable implements IAggroTable {
 	}
 
 	@Override
-	public void addHate(LivingEntity attacker, double hate) {
+	public void addHate(LivingEntity attacker, double hate, boolean existing) {
 		if (hate <= 0 || (attacker instanceof PlayerEntity && (((PlayerEntity) attacker).isCreative() || attacker.isSpectator())))
 			return;
 		if (table.containsKey(attacker))
 			table.get(attacker).add(hate);
-		else
+		else if (!existing)
 			table.put(attacker, new DoubleValue(hate));
 	}
 

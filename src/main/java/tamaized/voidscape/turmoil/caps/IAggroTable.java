@@ -11,7 +11,7 @@ public interface IAggroTable {
 
 	void tick(MobEntity entity);
 
-	void addHate(LivingEntity attacker, double hate);
+	void addHate(LivingEntity attacker, double hate, boolean existing);
 
 	void mulHate(LivingEntity attacker, double hate);
 
