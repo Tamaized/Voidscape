@@ -198,7 +198,7 @@ public class Voidscape {
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof AxeItem)
 									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) dmg * (attacker.
 											hasEffect(ModEffects.TUNNEL_VISION.get()) ? attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
+											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity() ? 2 : 1).orElse(1)).orElse(1) : 1))));
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
 									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {

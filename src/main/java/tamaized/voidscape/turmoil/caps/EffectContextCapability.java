@@ -19,7 +19,7 @@ public class EffectContextCapability implements IEffectContext {
 
 	@Override
 	public EffectInstance add(EffectInstance effect, LivingEntity caster, float damage) {
-		map.putIfAbsent(effect.getEffect(), new Context(caster, damage));
+		map.put(effect.getEffect(), new Context(caster, damage));
 		return effect;
 	}
 
