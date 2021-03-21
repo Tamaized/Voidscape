@@ -41,7 +41,7 @@ public class MeleeAbilities {
 		return false;
 	}).damage(4);
 	public static final TurmoilAbility EMPOWER_ATTACK_SLICING = new TurmoilAbility(unloc("empower_attack_slicing"), TurmoilAbility.Type.Voidic, 200, 30 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_ATTACK_SLICING.get(), 15 * 20, 1));
+			apply(caster, ModEffects.EMPOWER_ATTACK_SLICING.get(), 15 * 20, 0));
 	public static final TurmoilAbility CLEAVE = new TurmoilAbility(unloc("cleave"), TurmoilAbility.Type.Voidic, 350, 30 * 20, (spell, caster) -> {
 		float f = (float) (caster.getAttributeValue(Attributes.ATTACK_DAMAGE) + caster.getAttributeValue(ModAttributes.VOIDIC_DMG.get()));
 		if (f > 0.0F) {
@@ -63,12 +63,12 @@ public class MeleeAbilities {
 		return false;
 	});
 	public static final TurmoilAbility EMPOWER_ATTACK_BLEED = new TurmoilAbility(unloc("empower_attack_bleed"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 1));
+			apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 0));
 	public static final TurmoilAbility SENSE_WEAKNESS = new TurmoilAbility(unloc("sense_weakness"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
-			return ModEffects.target(caster, entity, ModEffects.SENSE_WEAKNESS.get(), 15 * 20, 1, true);
+			return ModEffects.target(caster, entity, ModEffects.SENSE_WEAKNESS.get(), 15 * 20, 0, true);
 		}
 		return false;
 	});

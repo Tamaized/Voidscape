@@ -60,7 +60,7 @@ public class HealerAbilities {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
-			return ModEffects.dot(caster, entity, ModEffects.MIND_WARP.get(), 10 * 20, 1, spell.damage(caster));
+			return ModEffects.dot(caster, entity, ModEffects.MIND_WARP.get(), 10 * 20, 0, spell.damage(caster));
 		}
 		return false;
 	}).damage(0.5F);
@@ -68,7 +68,7 @@ public class HealerAbilities {
 
 			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(0.5F);
 	public static final TurmoilAbility EMPOWER_SWORD_OSMOSIS = new TurmoilAbility(unloc("empower_sword_osmosis"), TurmoilAbility.Type.Null, 100, 3 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 1));
+			apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 0));
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));

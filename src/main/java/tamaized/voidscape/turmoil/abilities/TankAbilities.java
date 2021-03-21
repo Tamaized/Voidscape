@@ -51,12 +51,12 @@ public class TankAbilities {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();
-			return ModEffects.target(caster, entity, ModEffects.TUNNEL_VISION.get(), 10 * 20, 1, true);
+			return ModEffects.target(caster, entity, ModEffects.TUNNEL_VISION.get(), 10 * 20, 0, true);
 		}
 		return false;
 	});
 	public static final TurmoilAbility EMPOWER_SHIELD_2X_NULL = new TurmoilAbility(unloc("empower_shield_2x_null"), TurmoilAbility.Type.Voidic, 400, 5 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_SHIELD_2X_NULL.get(), 10 * 20, 1));
+			apply(caster, ModEffects.EMPOWER_SHIELD_2X_NULL.get(), 10 * 20, 0));
 	public static final TurmoilAbility BACKSTEP = new TurmoilAbility(unloc("backstep"), TurmoilAbility.Type.Null, 200, 5 * 20, (spell, caster) -> {
 		caster.setDeltaMovement(caster.getLookAngle().yRot((float) Math.toRadians(180)).add(0F, 0.5F, 0F));
 		if (caster instanceof ServerPlayerEntity)
