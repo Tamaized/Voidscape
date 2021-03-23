@@ -26,8 +26,11 @@ public final class VoidTeleporter implements ITeleporter {
 
 	@Override
 	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		if (currentWorld.getChunkSource().getGenerator() instanceof InstanceChunkGenerator && oldEntity instanceof ServerPlayerEntity)
+		if (currentWorld.getChunkSource().getGenerator() instanceof InstanceChunkGenerator && oldEntity instanceof ServerPlayerEntity) {
 			PartyManager.findParty((ServerPlayerEntity) oldEntity).ifPresent(party -> party.removeMember((ServerPlayerEntity) oldEntity));
+			((ServerPlayerEntity) oldEntity).gameMode.getGameModeForPlayer().updatePlayerAbilities(((ServerPlayerEntity) oldEntity).abilities);
+			((ServerPlayerEntity) oldEntity).onUpdateAbilities();
+		}
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}
