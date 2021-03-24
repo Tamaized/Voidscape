@@ -46,7 +46,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
-		if (Voidscape.checkForVoidDimension(parent.level)) {
+		if (Voidscape.checkForVoidDimension(parent.level) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
 			infusion += calcInfusionRate(parent) / 20F;
 		} else {
