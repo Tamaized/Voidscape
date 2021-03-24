@@ -1,7 +1,7 @@
 {
 	"forge:registry_name": "voidscape:void",
 	"precipitation": "none",
-	"temperature": 0.151,
+  "temperature": 0,
 	"downfall": 0.0,
 	"category": "none",
 	"depth": -3.0,
@@ -45,14 +45,7 @@
 	}
   },
   "carvers": {
-	"air": [
-	  {
-		"type": "nether_cave",
-		"config": {
-		  "probability": 0.2
-		}
-	  }
-	]
+
   },
   "features": [
 

@@ -14,8 +14,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.concurrent.ThreadTaskExecutor;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeAmbience;
@@ -138,6 +140,17 @@ public class ASMHooks {
 	 */
 	public static synchronized float getAttackStrengthScale(float o) {
 		PlayerEntity_getAttackStrengthScale = o;
+		return o;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link Biome#shouldSnow(IWorldReader, BlockPos)}
+	 * [AFTER ICONST_1]
+	 */
+	public static boolean shouldSnow(boolean o, Biome biome) {
+		if (biome.getRegistryName() != null && biome.getRegistryName().getNamespace().equals(Voidscape.MODID))
+			return false;
 		return o;
 	}
 

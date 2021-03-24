@@ -5,5 +5,6 @@
   "seed": "META-INF/asm/seed.js",
   "death": "META-INF/asm/death.js",
   "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",
-  "attackstrength": "META-INF/asm/attackstrength.js"
+  "attackstrength": "META-INF/asm/attackstrength.js",
+  "nosnow": "META-INF/asm/nosnow.js"
 }
