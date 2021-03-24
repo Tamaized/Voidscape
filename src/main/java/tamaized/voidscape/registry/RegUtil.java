@@ -67,6 +67,7 @@ public class RegUtil {
 		ModTools.classload();
 		ModEntities.classload();
 		ModBiomes.classload();
+		ModSurfaceBuilders.classload();
 		for (DeferredRegister register : REGISTERS)
 			register.register(bus);
 	}

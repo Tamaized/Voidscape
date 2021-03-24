@@ -16,6 +16,9 @@ public class ModBiomes {
 	private static final DeferredRegister<Biome> REGISTRY = RegUtil.create(ForgeRegistries.BIOMES);
 
 	public static final RegistryKey<Biome> VOID = register("void");
+	public static final RegistryKey<Biome> OVERWORLD = register("overworld");
+	public static final RegistryKey<Biome> NETHER = register("nether");
+	public static final RegistryKey<Biome> END = register("end");
 
 	private static RegistryKey<Biome> register(String id) {
 		REGISTRY.register(id, () -> new Biome.Builder().

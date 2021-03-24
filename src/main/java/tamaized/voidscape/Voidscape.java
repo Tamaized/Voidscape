@@ -68,6 +68,7 @@ import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
+import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,6 +103,7 @@ public class Voidscape {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus busForge = MinecraftForge.EVENT_BUS;
 		RegUtil.register(busMod);
+		Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);

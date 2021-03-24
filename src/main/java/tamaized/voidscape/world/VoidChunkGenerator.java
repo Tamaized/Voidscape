@@ -3,10 +3,15 @@ package tamaized.voidscape.world;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.DimensionSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
@@ -60,6 +65,30 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 	@Override
 	public int getGenDepth() {
 		return 0;
+	}
+
+	@Override
+	public void buildSurfaceAndBedrock(WorldGenRegion genRegion, IChunk chunk) {
+		ChunkPos chunkpos = chunk.getPos();
+		SharedSeedRandom sharedseedrandom = new SharedSeedRandom();
+		sharedseedrandom.setBaseChunkSeed(chunkpos.x, chunkpos.z);
+		final int xChunkBase = chunkpos.getMinBlockX();
+		final int zChunkBase = chunkpos.getMinBlockZ();
+		double d0 = 0.0625D;
+
+		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+		for (int xRelative = 0; xRelative < 16; ++xRelative) {
+			for (int zRelative = 0; zRelative < 16; ++zRelative) {
+				int xReal = xChunkBase + xRelative;
+				int zReal = zChunkBase + zRelative;
+				double noise = this.surfaceNoise.getSurfaceNoiseValue((double) xReal * d0, (double) zReal * d0, d0, (double) xRelative * d0) * 15.0D;
+				for (int y = chunk.getHeight(Heightmap.Type.WORLD_SURFACE_WG, xRelative, zRelative); y > 0; y--)
+					genRegion.getBiome(blockpos$mutable.set(xReal, y, zReal)).
+							buildSurfaceAt(sharedseedrandom, chunk, xReal, zReal, y, noise, this.defaultBlock, this.defaultFluid, this.getSeaLevel(), genRegion.getSeed());
+			}
+		}
+
+		this.setBedrock(chunk, sharedseedrandom);
 	}
 
 	@Override
