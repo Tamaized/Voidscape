@@ -19,6 +19,8 @@ public class ModBiomes {
 	public static final RegistryKey<Biome> OVERWORLD = register("overworld");
 	public static final RegistryKey<Biome> NETHER = register("nether");
 	public static final RegistryKey<Biome> END = register("end");
+	public static final RegistryKey<Biome> THUNDER_SPIRES = register("thunderspires");
+	public static final RegistryKey<Biome> ANTI_SPIRES = register("antispires");
 
 	private static RegistryKey<Biome> register(String id) {
 		REGISTRY.register(id, () -> new Biome.Builder().

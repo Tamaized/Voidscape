@@ -149,7 +149,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 		final int m1 = antiSpireY + m;
 		final int m2 = antiSpireY + m * 2;
 		layerMergeRandom.setSeed(seed + (x & -4) * 25117 + (z & -4) * 151121);
-		return getBiome((y < (antiSpireY - 4) || y > (thunderSpireY + 4)) ? (getBiomeId(ModBiomes.VOID)) :
+		return getBiome(y < (antiSpireY - 4) ? getBiomeId(ModBiomes.ANTI_SPIRES) : y > (thunderSpireY + 4) ? getBiomeId(ModBiomes.THUNDER_SPIRES) :
 
 				y <= antiSpireY ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.VOID) : genLower.area.get(x, z) :
 
