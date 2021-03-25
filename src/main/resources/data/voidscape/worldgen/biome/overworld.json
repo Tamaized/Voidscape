@@ -58,9 +58,49 @@
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
-
+	"monster": [
+	  {
+		"type": "minecraft:spider",
+		"weight": 5,
+		"minCount": 1,
+		"maxCount": 1
+	  },
+	  {
+		"type": "minecraft:zombie",
+		"weight": 20,
+		"minCount": 1,
+		"maxCount": 1
+	  },
+	  {
+		"type": "minecraft:skeleton",
+		"weight": 10,
+		"minCount": 1,
+		"maxCount": 1
+	  },
+	  {
+		"type": "minecraft:creeper",
+		"weight": 5,
+		"minCount": 1,
+		"maxCount": 1
+	  }
+	]
   },
   "spawn_costs": {
-
+	"minecraft:spider": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	},
+	"minecraft:zombie": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	},
+	"minecraft:skeleton": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	},
+	"minecraft:creeper": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	}
   }
 }

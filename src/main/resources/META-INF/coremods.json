@@ -1,6 +1,7 @@
 {
   "attributes": "META-INF/asm/attributes.js",
   "entityalpha": "META-INF/asm/entityalpha.js",
+  "entityalpharendertype": "META-INF/asm/entityalpharendertype.js",
   "deepfreeze": "META-INF/asm/deepfreeze.js",
   "seed": "META-INF/asm/seed.js",
   "death": "META-INF/asm/death.js",

@@ -55,9 +55,39 @@
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
-
+	"monster": [
+	  {
+		"type": "minecraft:wither_skeleton",
+		"weight": 5,
+		"minCount": 1,
+		"maxCount": 1
+	  },
+	  {
+		"type": "minecraft:zombified_piglin",
+		"weight": 20,
+		"minCount": 1,
+		"maxCount": 1
+	  },
+	  {
+		"type": "minecraft:zoglin",
+		"weight": 10,
+		"minCount": 1,
+		"maxCount": 1
+	  }
+	]
   },
   "spawn_costs": {
-
+	"minecraft:wither_skeleton": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	},
+	"minecraft:zombified_piglin": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	},
+	"minecraft:zoglin": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	}
   }
 }

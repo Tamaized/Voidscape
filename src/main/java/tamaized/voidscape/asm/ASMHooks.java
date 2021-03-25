@@ -5,6 +5,9 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -31,6 +34,8 @@ import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.SaveFormat;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -73,6 +78,16 @@ public class ASMHooks {
 	 */
 	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
 		return Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> MathHelper.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.entity.LivingRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
+	 * [AFTER] INVOKEVIRTUAL : {@link net.minecraft.client.renderer.entity.model.EntityModel#renderType(ResourceLocation)}
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static RenderType handleEntityTransparencyRenderType(RenderType type, LivingRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
+		return entity.level != null && Voidscape.checkForVoidDimension(entity.level) ? RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : type;
 	}
 
 	/**

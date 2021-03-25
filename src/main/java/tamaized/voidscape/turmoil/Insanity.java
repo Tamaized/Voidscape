@@ -6,7 +6,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -30,6 +29,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "insanity");
 	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
+	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
+	private static final UUID INFUSION_RESISTANCE = UUID.fromString("4fe870c1-c74f-4856-b30d-7a4311d72639");
 
 	private static final SoundEvent[] PARANOIA_SOUNDS = new SoundEvent[]{
 
@@ -55,9 +56,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		}
 		paranoia = MathHelper.clamp(paranoia, 0, 600);
 		infusion = MathHelper.clamp(infusion, 0, 600);
-		if (parent instanceof ServerPlayerEntity && !parent.level.isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
+		if (parent instanceof LivingEntity && !parent.level.isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
 			refreshEquipmentAttributes((LivingEntity) parent);
-			sendToClient((ServerPlayerEntity) parent);
+			sendToClients(parent);
 			dirty = false;
 		}
 		if (parent instanceof LivingEntity)
@@ -69,8 +70,13 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		ModifiableAttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
 		if (attribute != null) {
 			attribute.removeModifier(INFUSION_HEALTH_DECAY);
-			if (perc > 0F)
+			attribute.removeModifier(INFUSION_ATTACK_DAMAGE);
+			attribute.removeModifier(INFUSION_RESISTANCE);
+			if (perc > 0F) {
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", (1F - perc) - 1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
+				attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
+				attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
+			}
 			if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
 				parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);
 		}

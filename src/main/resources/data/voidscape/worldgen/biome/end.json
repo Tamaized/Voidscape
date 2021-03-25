@@ -55,9 +55,19 @@
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
-
+	"monster": [
+	  {
+		"type": "minecraft:enderman",
+		"weight": 20,
+		"minCount": 1,
+		"maxCount": 1
+	  }
+	]
   },
   "spawn_costs": {
-
+	"minecraft:enderman": {
+	  "energy_budget": 0.15,
+	  "charge": 0.7
+	}
   }
 }

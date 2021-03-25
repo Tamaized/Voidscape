@@ -4,8 +4,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.monster.ZoglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.AxeItem;
@@ -26,6 +29,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
@@ -33,8 +37,10 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -255,6 +261,32 @@ public class Voidscape {
 			if (event.getPlayer().level.dimension().location().getNamespace().equals(Voidscape.MODID) && event.getPlayer().level.dimension().location().getPath().contains("instance"))
 				event.setCanceled(true);
 		});
+		busForge.addListener((Consumer<LivingSpawnEvent.CheckSpawn>) event -> {
+			if (event.getSpawnReason() == SpawnReason.NATURAL && event.getWorld() instanceof ServerWorld && event.getEntity() instanceof MobEntity && Voidscape.
+					checkForVoidDimension(event.getEntity().level)) {
+				PlayerEntity player = event.getWorld().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
+				if (player != null && Voidscape.isValidPositionForMob((ServerWorld) event.getWorld(), (MobEntity) event.getEntity(), player.
+						distanceToSqr(event.getX(), event.getY(), event.getZ()), new BlockPos(event.getX(), event.getY(), event.getZ())))
+					event.setResult(Event.Result.ALLOW);
+				else
+					event.setResult(Event.Result.DENY);
+			}
+		});
+		busForge.addListener((Consumer<LivingSpawnEvent.SpecialSpawn>) event -> {
+			if (event.getSpawnReason() == SpawnReason.NATURAL && event.getEntity() instanceof LivingEntity && Voidscape.checkForVoidDimension(event.getEntity().level)) {
+				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
+						setInfusion(((LivingEntity) event.getEntity()).getRandom().nextInt(200) + 100)));
+			}
+		});
+	}
+
+	private static boolean isValidPositionForMob(ServerWorld serverWorld_, MobEntity mobEntity_, double double_, BlockPos pos) {
+		if (double_ > (double) (mobEntity_.getType().getCategory().getDespawnDistance() * mobEntity_.getType().getCategory().getDespawnDistance()) && mobEntity_.removeWhenFarAway(double_)) {
+			return false;
+		} else {
+			return mobEntity_.checkSpawnObstruction(serverWorld_) && (!(mobEntity_ instanceof ZoglinEntity) || WorldEntitySpawner.
+					canSpawnAtBody(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
+		}
 	}
 
 	@Nullable
