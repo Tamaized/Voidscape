@@ -52,6 +52,7 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
+		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SHIELD);

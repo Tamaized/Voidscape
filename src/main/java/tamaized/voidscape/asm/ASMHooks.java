@@ -14,6 +14,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.concurrent.ThreadTaskExecutor;
@@ -42,6 +44,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
@@ -132,6 +135,11 @@ public class ASMHooks {
 					entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
 							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
 				return true;
+			}
+		} else {
+			if ((source.getDirectEntity() instanceof PlayerEntity || source.getEntity() instanceof PlayerEntity) && Voidscape.checkForVoidDimension(entity.level) && entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.
+					getInfusion() > 200).orElse(false)).orElse(false) && entity.getRandom().nextInt(3) == 0) {
+				InventoryHelper.dropItemStack(entity.level, entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.ETHEREAL_ESSENCE.get()));
 			}
 		}
 		return MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, source));
