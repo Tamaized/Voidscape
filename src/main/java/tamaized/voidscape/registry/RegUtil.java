@@ -26,8 +26,14 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -43,6 +49,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 public class RegUtil {
 
@@ -55,6 +62,13 @@ public class RegUtil {
 		}
 	};
 	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
+	private static final List<Runnable> CONFIGURED_FEATURES = new ArrayList<>();
+
+	static <FC extends IFeatureConfig, F extends Feature<FC>> LazyValue<ConfiguredFeature<?, ?>> registerConfiguredFeature(RegistryObject<F> feature, FC inst, UnaryOperator<ConfiguredFeature<?, ?>> config) {
+		LazyValue<ConfiguredFeature<?, ?>> val = new LazyValue<>(() -> config.apply(new ConfiguredFeature<>(feature.get(), inst)));
+		CONFIGURED_FEATURES.add(() -> Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, feature.getId(), val.get()));
+		return val;
+	}
 
 	public static void register(IEventBus bus) {
 		ModAttributes.classload();
@@ -68,8 +82,10 @@ public class RegUtil {
 		ModEntities.classload();
 		ModBiomes.classload();
 		ModSurfaceBuilders.classload();
+		ModFeatures.classload();
 		for (DeferredRegister register : REGISTERS)
 			register.register(bus);
+		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> CONFIGURED_FEATURES.forEach(Runnable::run));
 	}
 
 	static <R extends IForgeRegistryEntry<R>> DeferredRegister<R> create(IForgeRegistry<R> type) {
@@ -90,7 +106,7 @@ public class RegUtil {
 	}
 
 	enum ItemProps {
-		VOIDIC_CRYSTAL(() -> new Item.Properties().tab(RegUtil.CREATIVE_TAB).fireResistant());
+		DEFAULT(() -> new Item.Properties().tab(RegUtil.CREATIVE_TAB)), VOIDIC_CRYSTAL(() -> DEFAULT.get().fireResistant());
 
 		private final Supplier<Item.Properties> properties;
 

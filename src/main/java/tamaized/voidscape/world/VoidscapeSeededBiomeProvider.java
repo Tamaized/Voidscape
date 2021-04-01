@@ -118,9 +118,23 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 		return new VoidscapeSeededBiomeProvider(l, registry);
 	}
 
+	public static final int[] LAYERS;
+
+	static {
+		final int antiSpireY = 32;
+		final int thunderSpireY = 192 - antiSpireY;
+		final int split = (thunderSpireY - (antiSpireY * 2)) / 3;
+		final int sliceBottom = antiSpireY + split;
+		final int sliceTop = antiSpireY + split * 2;
+		LAYERS = new int[]{antiSpireY, sliceBottom, sliceTop, thunderSpireY};
+	}
+
 	@Override
 	public Biome getNoiseBiome(int x, int cy, int z) {
-		final int y = cy << 2;
+		return getRealNoiseBiome(x, cy << 2, z);
+	}
+
+	public Biome getRealNoiseBiome(int x, int y, int z) {
 		// Debug code to render an image of the biome layout within the ide
 		/*final Map<Integer, Integer> remapColors = new HashMap<>();
 		remapColors.put(getBiomeId(ModBiomes.VOID), 0x000000);
@@ -143,24 +157,29 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 			}
 		}
  		System.out.println("breakpoint");*/
-		final int antiSpireY = 16;
-		final int thunderSpireY = 200 - antiSpireY;
-		final int m = (thunderSpireY - (antiSpireY * 2)) / 3;
-		final int m1 = antiSpireY + m;
-		final int m2 = antiSpireY + m * 2;
+		final int antiSpireY = LAYERS[0];
+		final int thunderSpireY = LAYERS[3];
+		final int m1 = LAYERS[1];
+		final int m2 = LAYERS[2];
 		layerMergeRandom.setSeed(seed + (x & -4) * 25117 + (z & -4) * 151121);
-		return getBiome(y < (antiSpireY - 4) ? getBiomeId(ModBiomes.ANTI_SPIRES) : y > (thunderSpireY + 4) ? getBiomeId(ModBiomes.THUNDER_SPIRES) :
+		return getBiome(
 
-				y <= antiSpireY ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.VOID) : genLower.area.get(x, z) :
+				y < (antiSpireY - 2) ? getBiomeId(ModBiomes.ANTI_SPIRES) :
 
-						y >= thunderSpireY ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.VOID) : genUpper.area.get(x, z) :
+						y <= (antiSpireY + 2) ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.ANTI_SPIRES) : genLower.area.get(x, z) :
 
-								y < (m1 - 4) ? genLower.area.get(x, z) :
+								y < (m1 - 2) ? genLower.area.get(x, z) :
 
-										y < m1 ? (layerMergeRandom.nextBoolean() ? genLower : genMiddle).area.get(x, z) :
+										y <= (m1 + 2) ? (layerMergeRandom.nextBoolean() ? genLower : genMiddle).area.get(x, z) :
 
-												y > (m2 + 4) ? genUpper.area.get(x, z) :
+												y < (m2 - 2) ? genMiddle.area.get(x, z) :
 
-														y > m2 ? (layerMergeRandom.nextBoolean() ? genUpper : genMiddle).area.get(x, z) : genMiddle.area.get(x, z));
+														y <= (m2 + 2) ? (layerMergeRandom.nextBoolean() ? genMiddle : genUpper).area.get(x, z) :
+
+																y < (thunderSpireY - 2) ? genUpper.area.get(x, z) :
+
+																		y <= (thunderSpireY + 2) ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.THUNDER_SPIRES) : genUpper.area.get(x, z) :
+
+																				getBiomeId(ModBiomes.THUNDER_SPIRES));
 	}
 }

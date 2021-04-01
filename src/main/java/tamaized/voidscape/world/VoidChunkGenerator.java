@@ -3,6 +3,8 @@ package tamaized.voidscape.world;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -16,8 +18,10 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import org.apache.commons.lang3.ArrayUtils;
 import tamaized.voidscape.Voidscape;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class VoidChunkGenerator extends NoiseChunkGenerator {
@@ -75,7 +79,6 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 		final int xChunkBase = chunkpos.getMinBlockX();
 		final int zChunkBase = chunkpos.getMinBlockZ();
 		double d0 = 0.0625D;
-
 		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
 		for (int xRelative = 0; xRelative < 16; ++xRelative) {
 			for (int zRelative = 0; zRelative < 16; ++zRelative) {
@@ -93,15 +96,30 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 
 	@Override
 	public void applyBiomeDecoration(WorldGenRegion worldGenRegion_, StructureManager structureManager_) {
-		try {
-			super.applyBiomeDecoration(worldGenRegion_, structureManager_);
-		} catch (Throwable e) {
-			Voidscape.LOGGER.info("VOIDSCAPE CAUGHT A BIOME DECORATION ERROR, REPORT THIS!");
-			int i = worldGenRegion_.getCenterX();
-			int j = worldGenRegion_.getCenterZ();
-			Biome biome = this.biomeSource.getNoiseBiome((i << 2) + 2, 2, (j << 2) + 2);
-			Voidscape.LOGGER.info(biome.getRegistryName());
-			e.printStackTrace();
+		int centerX = worldGenRegion_.getCenterX();
+		int centerZ = worldGenRegion_.getCenterZ();
+		int x = centerX * 16;
+		int z = centerZ * 16;
+		int[] yIterator = new int[]{0};
+		boolean cast;
+		if (cast = biomeSource instanceof VoidscapeSeededBiomeProvider)
+			yIterator = ArrayUtils.insert(1, yIterator, Arrays.stream(VoidscapeSeededBiomeProvider.LAYERS).map(i -> i + 3).toArray());
+		for (int y : yIterator) {
+			BlockPos pos = new BlockPos(x, y, z);
+			Biome biome = cast ? ((VoidscapeSeededBiomeProvider) biomeSource).
+					getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) : this.biomeSource.
+					getNoiseBiome((centerX << 2) + 2, (y >> 2), (centerZ << 2) + 2);
+			SharedSeedRandom rand = new SharedSeedRandom();
+			long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
+			try {
+				biome.generate(structureManager_, this, worldGenRegion_, seed, rand, pos);
+			} catch (Exception var14) {
+				CrashReport lvt_13_1_ = CrashReport.forThrowable(var14, "Biome decoration");
+				lvt_13_1_.addCategory("Generation").setDetail("CenterX", centerX).setDetail("CenterZ", centerZ).setDetail("Seed", seed).setDetail("Biome", biome);
+				new ReportedException(lvt_13_1_).printStackTrace();
+				Voidscape.LOGGER.info("VOIDSCAPE CAUGHT A BIOME DECORATION ERROR, REPORT THIS!");
+				Voidscape.LOGGER.info(biome.getRegistryName());
+			}
 		}
 	}
 

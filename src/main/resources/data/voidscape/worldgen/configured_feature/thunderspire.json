@@ -1,0 +1,14 @@
+{
+  "config": {
+	"feature": {
+	  "config": { },
+	  "type": "voidscape:thunderspire"
+	},
+	"decorator": {
+	  "config": {
+	  },
+	  "type": "minecraft:square"
+	}
+  },
+  "type": "minecraft:decorated"
+}

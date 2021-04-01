@@ -27,6 +27,7 @@ import tamaized.voidscape.registry.ModTools;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -34,17 +35,20 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModelBakeListener {
 
-	private static void addBlock(List<ModelResourceLocation> list, RegistryObject<Block> object) {
-		add(list, object, "");
-		add(list, object, "inventory");
+	private static void addBlock(List<ModelResourceLocation> list, RegistryObject<Block> object, String... extra) {
+		add(list, object, "", extra);
+		add(list, object, "inventory", extra);
 	}
 
-	private static void add(List<ModelResourceLocation> list, RegistryObject<Item> object) {
-		add(list, object, "inventory");
+	private static void add(List<ModelResourceLocation> list, RegistryObject<Item> object, String... extra) {
+		add(list, object, "inventory", extra);
 	}
 
-	private static void add(List<ModelResourceLocation> list, RegistryObject object, String loc) {
-		list.add(new ModelResourceLocation(object.getId(), loc));
+	private static void add(List<ModelResourceLocation> list, RegistryObject object, String loc, String... extra) {
+		List<String> extras = new ArrayList<>();
+		extras.add("");
+		extras.addAll(Arrays.asList(extra));
+		extras.forEach(e -> list.add(new ModelResourceLocation(object.getId().toString().concat(e), loc)));
 	}
 
 	@SubscribeEvent
