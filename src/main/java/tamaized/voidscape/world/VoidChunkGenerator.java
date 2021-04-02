@@ -18,7 +18,6 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import org.apache.commons.lang3.ArrayUtils;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Arrays;
@@ -102,8 +101,13 @@ public class VoidChunkGenerator extends NoiseChunkGenerator {
 		int z = centerZ * 16;
 		int[] yIterator = new int[]{0};
 		boolean cast;
-		if (cast = biomeSource instanceof VoidscapeSeededBiomeProvider)
-			yIterator = ArrayUtils.insert(1, yIterator, Arrays.stream(VoidscapeSeededBiomeProvider.LAYERS).map(i -> i + 3).toArray());
+		if (cast = biomeSource instanceof VoidscapeSeededBiomeProvider) {
+			final int[] layers = Arrays.stream(VoidscapeSeededBiomeProvider.LAYERS).map(i -> i + 3).toArray();
+			final int[] result = new int[yIterator.length + layers.length];
+			System.arraycopy(yIterator, 0, result, 0, yIterator.length);
+			System.arraycopy(layers, 0, result, yIterator.length, layers.length);
+			yIterator = result;
+		}
 		for (int y : yIterator) {
 			BlockPos pos = new BlockPos(x, y, z);
 			Biome biome = cast ? ((VoidscapeSeededBiomeProvider) biomeSource).
