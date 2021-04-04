@@ -130,7 +130,7 @@ public class ClientListener {
 		ClientRegistry.registerKeyBinding(KEY_TURMOIL);
 		ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
 		RenderTypeLookup.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
-		DimensionRenderInfo.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
+		DimensionRenderInfo info = new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
 			@Override
 			public Vector3d getBrightnessDependentFogColor(Vector3d p_230494_1_, float p_230494_2_) {
 				return Vector3d.ZERO;
@@ -146,7 +146,9 @@ public class ClientListener {
 			public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
 				return null;
 			}
-		});
+		};
+		info.setSkyRenderHandler(new VoidSkyRenderer());
+		DimensionRenderInfo.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
 	}
 
 }
