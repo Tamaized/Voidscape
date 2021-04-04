@@ -47,7 +47,7 @@ public class ModBlocks {
 			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
 		@Override
 		public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
-			if (random.nextBoolean())
+			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 				return;
 			LightningBoltEntity lit = EntityType.LIGHTNING_BOLT.create(level);
 			if (lit != null) {
