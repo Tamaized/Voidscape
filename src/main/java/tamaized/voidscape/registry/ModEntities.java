@@ -17,9 +17,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.render.RenderAntiBolt;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
 import tamaized.voidscape.client.entity.render.RenderNull;
 import tamaized.voidscape.client.entity.render.RenderSpellBolt;
+import tamaized.voidscape.entity.EntityAntiBolt;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
@@ -32,6 +34,7 @@ public class ModEntities {
 	public static final RegistryObject<EntityType<EntitySpellBolt>> SPELL_BOLT = REGISTRY.register("spell_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "spell_bolt"), EntitySpellBolt::new, EntityClassification.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntitySpellAura>> SPELL_AURA = REGISTRY.register("spell_aura", () -> make(new ResourceLocation(Voidscape.MODID, "spell_aura"), EntitySpellAura::new, EntityClassification.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnPhantom>> CORRUPTED_PAWN_PHANTOM = REGISTRY.register("corrupted_pawn_phantom", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_phantom"), makeCastedBuilder(EntityCorruptedPawnPhantom.class, EntityCorruptedPawnPhantom::new, EntityClassification.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256)));
+	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, EntityClassification.MISC, 0.5F, 0.5F));
 
 	static void classload() {
 
@@ -72,6 +75,7 @@ public class ModEntities {
 		RenderingRegistry.registerEntityRenderingHandler(SPELL_BOLT.get(), RenderSpellBolt::new);
 		RenderingRegistry.registerEntityRenderingHandler(SPELL_AURA.get(), RenderNull::new);
 		RenderingRegistry.registerEntityRenderingHandler(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
+		RenderingRegistry.registerEntityRenderingHandler(ANTI_BOLT.get(), RenderAntiBolt::new);
 	}
 
 }

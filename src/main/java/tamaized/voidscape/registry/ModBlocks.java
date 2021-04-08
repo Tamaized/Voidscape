@@ -20,6 +20,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tamaized.voidscape.entity.EntityAntiBolt;
 
 import java.util.Random;
 
@@ -61,8 +62,30 @@ public class ModBlocks {
 			return true;
 		}
 	});
+	public static final RegistryObject<Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
+			strength(-1.0F, 3600000.0F).
+			noDrops().
+			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
+		@Override
+		public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
+			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
+				return;
+			EntityAntiBolt lit = ModEntities.ANTI_BOLT.get().create(level);
+			if (lit != null) {
+				lit.moveTo(Vector3d.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
+				level.addFreshEntity(lit);
+			}
+		}
+
+		@Override
+		public boolean isRandomlyTicking(BlockState state) {
+			return true;
+		}
+	});
 	public static final RegistryObject<Item> THUNDERROCK_ITEM = ModItems.REGISTRY.
 			register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), RegUtil.ItemProps.DEFAULT.get()));
+	public static final RegistryObject<Item> ANTIROCK_ITEM = ModItems.REGISTRY.
+			register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), RegUtil.ItemProps.DEFAULT.get()));
 
 	static void classload() {
 

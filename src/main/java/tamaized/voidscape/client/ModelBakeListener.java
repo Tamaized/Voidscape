@@ -13,6 +13,7 @@ import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,6 +53,11 @@ public class ModelBakeListener {
 	}
 
 	@SubscribeEvent
+	public static void applyColors(ColorHandlerEvent.Block event) {
+		event.getBlockColors().register((blockState, iBlockDisplayReader, blockPos, i) -> 0x331166, ModBlocks.ANTIROCK.get());
+	}
+
+	@SubscribeEvent
 	public static void modelBake(ModelBakeEvent event) {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
@@ -67,6 +73,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_LEGS);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_BOOTS);
 		addBlock(overlayList, ModBlocks.VOIDIC_CRYSTAL_ORE);
+		addBlock(fullbrightList, ModBlocks.ANTIROCK);
 		fullbrightList.forEach(mrl -> {
 			final IBakedModel model = event.getModelRegistry().get(mrl);
 			event.getModelRegistry().put(mrl, new FullBrightModel(model));
