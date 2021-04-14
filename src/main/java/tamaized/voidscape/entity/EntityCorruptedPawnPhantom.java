@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import tamaized.voidscape.Voidscape;
@@ -37,8 +38,9 @@ public class EntityCorruptedPawnPhantom extends EntityCorruptedPawn implements I
 		return this;
 	}
 
-	public EntityCorruptedPawnPhantom debug() {
+	public EntityCorruptedPawnPhantom debug(Vector3d pos) {
 		debug = true;
+		moveTo(pos);
 		return this;
 	}
 

@@ -7,15 +7,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
-import tamaized.voidscape.world.InstanceManager;
 
 import java.util.function.Consumer;
 
@@ -94,12 +93,7 @@ public final class VoidCommands {
 					then(Commands.literal("pawn").
 							executes(context -> {
 								PlayerEntity player = context.getSource().getPlayerOrException();
-								try {
-									InstanceManager.findFreeInstanceByGroup(new ResourceLocation(Voidscape.MODID, "pawn")).ifPresent(instance -> instance.addPlayer(player));
-								} catch (Throwable e) {
-									e.printStackTrace();
-									throw e;
-								}
+								player.level.addFreshEntity(new EntityCorruptedPawnPhantom(player.level).debug(player.position().add(5, 0, 0)));
 								return 0;
 							}));
 		}

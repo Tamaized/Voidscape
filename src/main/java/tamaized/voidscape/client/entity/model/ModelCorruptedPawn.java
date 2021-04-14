@@ -28,78 +28,78 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 
 	public ModelCorruptedPawn() {
 		super();
-		texWidth = 128;
+		texWidth = 64;
 		texHeight = 64;
 		ImmutableList.Builder<ModelRenderer> builder = ImmutableList.builder();
 
 		head = new ModelRenderer(this, 0, 0);
 		head.addBox(-4F, -8F, -4F, 16, 16, 16);
 		head.setPos(-4F, 0F, -2F);
-		head.setTexSize(128, 64);
+		head.setTexSize(64, 64);
 		head.mirror = true;
 		setRotation(head, 0F, 0F, 0F);
 		builder.add(head);
 
-		topRightTentacle = new ModelRenderer(this, 32, 41);
+		topRightTentacle = new ModelRenderer(this, 0, 32);
 		topRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		topRightTentacle.setPos(-9F, -9F, 2F);
-		topRightTentacle.setTexSize(128, 64);
+		topRightTentacle.setTexSize(64, 64);
 		topRightTentacle.mirror = true;
 		setRotation(topRightTentacle, 0F, 0F, 2.324799F);
 		builder.add(topRightTentacle);
 
-		topLeftTentacle = new ModelRenderer(this, 32, 41);
+		topLeftTentacle = new ModelRenderer(this, 0, 32);
 		topLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		topLeftTentacle.setPos(9F, -9F, 2F);
-		topLeftTentacle.setTexSize(128, 64);
+		topLeftTentacle.setTexSize(64, 64);
 		topLeftTentacle.mirror = true;
 		setRotation(topLeftTentacle, 0F, 0F, -2.324796F);
 		builder.add(topLeftTentacle);
 
-		bottomRightTentacle = new ModelRenderer(this, 32, 41);
+		bottomRightTentacle = new ModelRenderer(this, 0, 32);
 		bottomRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		bottomRightTentacle.setPos(-9F, 9F, 2F);
-		bottomRightTentacle.setTexSize(128, 64);
+		bottomRightTentacle.setTexSize(64, 64);
 		bottomRightTentacle.mirror = true;
 		setRotation(bottomRightTentacle, 0F, 0F, 0.7435722F);
 		builder.add(bottomRightTentacle);
 
-		bottomLeftTentacle = new ModelRenderer(this, 32, 41);
+		bottomLeftTentacle = new ModelRenderer(this, 0, 32);
 		bottomLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		bottomLeftTentacle.setPos(9F, 9F, 2F);
-		bottomLeftTentacle.setTexSize(128, 64);
+		bottomLeftTentacle.setTexSize(64, 64);
 		bottomLeftTentacle.mirror = true;
 		setRotation(bottomLeftTentacle, 0F, 0F, -0.7435801F);
 		builder.add(bottomLeftTentacle);
 
-		topTentacle = new ModelRenderer(this, 32, 41);
+		topTentacle = new ModelRenderer(this, 0, 32);
 		topTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		topTentacle.setPos(0F, -9F, 2F);
-		topTentacle.setTexSize(128, 64);
+		topTentacle.setTexSize(64, 64);
 		topTentacle.mirror = true;
 		setRotation(topTentacle, 0F, 0F, 3.141593F);
 		builder.add(topTentacle);
 
-		rightTentacle = new ModelRenderer(this, 32, 41);
+		rightTentacle = new ModelRenderer(this, 0, 32);
 		rightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		rightTentacle.setPos(-9F, 0F, 2F);
-		rightTentacle.setTexSize(128, 64);
+		rightTentacle.setTexSize(64, 64);
 		rightTentacle.mirror = true;
 		setRotation(rightTentacle, 0F, 0F, 1.570796F);
 		builder.add(rightTentacle);
 
-		bottomTentacle = new ModelRenderer(this, 32, 41);
+		bottomTentacle = new ModelRenderer(this, 0, 32);
 		bottomTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		bottomTentacle.setPos(0F, 9F, 2F);
-		bottomTentacle.setTexSize(128, 64);
+		bottomTentacle.setTexSize(64, 64);
 		bottomTentacle.mirror = true;
 		setRotation(bottomTentacle, 0F, 0F, 0F);
 		builder.add(bottomTentacle);
 
-		leftTentacle = new ModelRenderer(this, 32, 41);
+		leftTentacle = new ModelRenderer(this, 0, 32);
 		leftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		leftTentacle.setPos(9F, 0F, 2F);
-		leftTentacle.setTexSize(128, 64);
+		leftTentacle.setTexSize(64, 64);
 		leftTentacle.mirror = true;
 		setRotation(leftTentacle, 0F, 0F, -1.570796F);
 		builder.add(leftTentacle);
