@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -13,8 +12,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
@@ -22,7 +19,6 @@ import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModParticles;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
-import tamaized.voidscape.world.InstanceChunkGenerator;
 
 public class EntitySpellAura extends Entity {
 
@@ -63,7 +59,7 @@ public class EntitySpellAura extends Entity {
 	}
 
 	protected boolean canHitEntity(Entity entity) {
-		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
+		return EntitySpellBolt.canHitEntity(level, entity, healing);
 	}
 
 	@Override

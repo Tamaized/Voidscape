@@ -152,9 +152,13 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 	}
 
+	public static boolean canHitEntity(World level, Entity entity, boolean healing) {
+		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing && !entity.isSpectator() && entity.isAlive() && entity.isPickable()) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
+	}
+
 	@Override
 	protected boolean canHitEntity(Entity entity) {
-		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
+		return EntitySpellBolt.canHitEntity(level, entity, healing);
 	}
 
 	public EntitySpellBolt color(int color) {
