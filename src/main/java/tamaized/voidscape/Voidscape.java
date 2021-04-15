@@ -34,6 +34,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -140,6 +141,10 @@ public class Voidscape {
 			if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
 				event.setCanceled(true);
 			}
+		});
+		busForge.addListener((Consumer<LivingAttackEvent>) event -> {
+			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
+				event.getEntityLiving().invulnerableTime = 0;
 		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
 			if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
