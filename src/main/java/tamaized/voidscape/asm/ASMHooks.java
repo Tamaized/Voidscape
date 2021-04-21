@@ -181,7 +181,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.enchantment.EnchantmentType#canEnchant(Item)}
+	 * {@link net.minecraft.enchantment.EnchantmentType.WEAPON#canEnchant(Item)}
 	 * [BEFORE IRETURN]
 	 */
 	public static boolean axesRWeps(boolean o, Item i) {
