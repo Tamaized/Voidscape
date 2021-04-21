@@ -311,8 +311,22 @@ public class RegUtil {
 				}
 			});
 		}
+
+		public static abstract class LootingAxe extends AxeItem {
+
+			public LootingAxe(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
+				super(tier, attackDamageIn, attackSpeedIn, builder);
+			}
+
+			@Override
+			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+				stack.hurtAndBreak(1, attacker, (entityIn1) -> entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+				return true;
+			}
+
+		}
 		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new AxeItem(tier, 5F, -3.0F, properties) {
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new LootingAxe(tier, 5F, -3.0F, properties) {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();

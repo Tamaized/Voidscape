@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -45,6 +46,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
@@ -175,6 +177,15 @@ public class ASMHooks {
 		if (biome.getRegistryName() != null && biome.getRegistryName().getNamespace().equals(Voidscape.MODID))
 			return false;
 		return o;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.enchantment.EnchantmentType#canEnchant(Item)}
+	 * [BEFORE IRETURN]
+	 */
+	public static boolean axesRWeps(boolean o, Item i) {
+		return o || i instanceof RegUtil.ToolAndArmorHelper.LootingAxe;
 	}
 
 }
