@@ -179,6 +179,8 @@ public class Voidscape {
 						});
 				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
+				if (event.getEntityLiving().getHealth() <= event.getAmount())
+					return;
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
 					final float dmgPrep = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (event.getAmount() + (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
