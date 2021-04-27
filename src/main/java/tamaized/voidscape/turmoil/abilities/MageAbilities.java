@@ -36,7 +36,7 @@ public class MageAbilities {
 											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDMANCY_2) ? 1 : 0).orElse(0)).orElse(0)));
 		caster.level.addFreshEntity(bolt);
 		return true;
-	}).damage(1F);
+	}).damage(2F);
 	public static final TurmoilAbility HOMING_BOLTS = new TurmoilAbility(unloc("homing_bolts"), TurmoilAbility.Type.Voidic, 50, 10 * 20, TurmoilAbility.Toggle.Voidic);
 	public static final TurmoilAbility AURA = new TurmoilAbility(unloc("aura"), TurmoilAbility.Type.Voidic, 250, 45 * 20, (spell, caster) ->
 

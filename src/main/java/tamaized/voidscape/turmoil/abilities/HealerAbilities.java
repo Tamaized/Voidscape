@@ -38,13 +38,13 @@ public class HealerAbilities {
 		bolt.setDamage(spell.damage(caster));
 		caster.level.addFreshEntity(bolt);
 		return true;
-	}).damage(1F);
+	}).damage(2F);
 	public static final TurmoilAbility HEALING_BLAST = new TurmoilAbility(unloc("healing_blast"), TurmoilAbility.Type.Voidic, 200, 3 * 20, (spell, caster) -> {
 		EntitySpellBolt bolt = new EntitySpellBolt(caster, HealerAbilities.HEALING_BOLT).healing().color(0xFFFF00).burst();
 		bolt.setDamage(spell.damage(caster));
 		caster.level.addFreshEntity(bolt);
 		return true;
-	}).damage(0.5F);
+	}).damage(1F);
 	public static final TurmoilAbility MEND = new TurmoilAbility(unloc("mend"), TurmoilAbility.Type.Voidic, 100, 3 * 20, (spell, caster) -> {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 2);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
@@ -55,7 +55,7 @@ public class HealerAbilities {
 				return Voidscape.healTargetAndAggro(entity, caster, spell.damage(caster));
 		}
 		return false;
-	}).damage(2F);
+	}).damage(4F);
 	public static final TurmoilAbility MIND_WARP = new TurmoilAbility(unloc("mind_warp"), TurmoilAbility.Type.Insane, 250, 10 * 20, (spell, caster) -> {
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
@@ -63,10 +63,10 @@ public class HealerAbilities {
 			return ModEffects.dot(caster, entity, ModEffects.MIND_WARP.get(), 10 * 20, 0, spell.damage(caster));
 		}
 		return false;
-	}).damage(0.5F);
+	}).damage(1F);
 	public static final TurmoilAbility HEALING_AURA = new TurmoilAbility(unloc("healing_aura"), TurmoilAbility.Type.Voidic, 400, 60 * 20, (spell, caster) ->
 
-			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(0.5F);
+			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(1F);
 	public static final TurmoilAbility EMPOWER_SWORD_OSMOSIS = new TurmoilAbility(unloc("empower_sword_osmosis"), TurmoilAbility.Type.Null, 100, 3 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 0));
 
