@@ -8,8 +8,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
@@ -129,10 +127,6 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		if ((!data.isPresent() || (!data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.MAD_PRIEST_1) && !data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1))) &&
 
 				insanePower > 0 && parent.tickCount % 10 == 0)
-			insanePower--;
-		if (!(parent instanceof LivingEntity) || !data.isPresent() || (data.get().hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1) && !((LivingEntity) parent).getOffhandItem().isShield((LivingEntity) parent)) || (data.get().hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof SwordItem)))
-			nullPower--;
-		if (!(parent instanceof LivingEntity) || !data.isPresent() || ((data.get().hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.get().hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)) && !(((LivingEntity) parent).getMainHandItem().getItem() instanceof AxeItem)))
 			insanePower--;
 		if (parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(tracked -> tracked.incapacitated).orElse(false)).orElse(false))
 			voidicPower = nullPower = insanePower = 0;

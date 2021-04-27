@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.AxeItem;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -62,9 +63,14 @@ public class MeleeAbilities {
 		}
 		return false;
 	});
-	public static final TurmoilAbility EMPOWER_ATTACK_BLEED = new TurmoilAbility(unloc("empower_attack_bleed"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 0));
+	public static final TurmoilAbility EMPOWER_ATTACK_BLEED = new TurmoilAbility(unloc("empower_attack_bleed"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> {
+		if (!(caster.getMainHandItem().getItem() instanceof AxeItem))
+			return false;
+		return ModEffects.apply(caster, ModEffects.EMPOWER_ATTACK_BLEED.get(), 15 * 20, 0);
+	});
 	public static final TurmoilAbility SENSE_WEAKNESS = new TurmoilAbility(unloc("sense_weakness"), TurmoilAbility.Type.Insane, 200, 45 * 20, (spell, caster) -> {
+		if (!(caster.getMainHandItem().getItem() instanceof AxeItem))
+			return false;
 		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof LivingEntity, 32);
 		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
 			LivingEntity entity = (LivingEntity) ((EntityRayTraceResult) ray).getEntity();

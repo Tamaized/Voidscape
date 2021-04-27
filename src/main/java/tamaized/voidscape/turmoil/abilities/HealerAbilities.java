@@ -3,6 +3,7 @@ package tamaized.voidscape.turmoil.abilities;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.SwordItem;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -67,8 +68,11 @@ public class HealerAbilities {
 	public static final TurmoilAbility HEALING_AURA = new TurmoilAbility(unloc("healing_aura"), TurmoilAbility.Type.Voidic, 400, 60 * 20, (spell, caster) ->
 
 			caster.level.addFreshEntity(new EntitySpellAura(MageAbilities.AURA, caster, 0xFFFF00, 30L * 20L).damage(spell.damage(caster)).healing())).damage(1F);
-	public static final TurmoilAbility EMPOWER_SWORD_OSMOSIS = new TurmoilAbility(unloc("empower_sword_osmosis"), TurmoilAbility.Type.Null, 100, 3 * 20, (spell, caster) -> ModEffects.
-			apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 0));
+	public static final TurmoilAbility EMPOWER_SWORD_OSMOSIS = new TurmoilAbility(unloc("empower_sword_osmosis"), TurmoilAbility.Type.Null, 100, 3 * 20, (spell, caster) -> {
+		if (!(caster.getMainHandItem().getItem() instanceof SwordItem))
+			return false;
+		return ModEffects.apply(caster, ModEffects.EMPOWER_SWORD_OSMOSIS.get(), 10 * 20, 0);
+	});
 
 	private static String unloc(String loc) {
 		return Voidscape.MODID.concat(".abilities.healer.".concat(loc));
