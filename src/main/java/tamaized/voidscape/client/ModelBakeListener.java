@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,6 +67,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
+		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SHIELD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_AXE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_PICKAXE);
@@ -94,12 +97,36 @@ public class ModelBakeListener {
 				}
 			});
 		});
+
+		// ######### Voidic ######### //
+
+		// Bow
 		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pull"), (stack, level, entity) ->
 
 				entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
+
 		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pulling"), (stack, level, entity) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+		// XBow
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_XBOW.get(), new ResourceLocation("pull"), (stack, level, entity) ->
+
+				entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack));
+
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_XBOW.get(), new ResourceLocation("pulling"), (stack, level, entity) ->
+
+				entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
+
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_XBOW.get(), new ResourceLocation("charged"), (stack, level, entity) ->
+
+				entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
+
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_XBOW.get(), new ResourceLocation("firework"), (stack, level, entity) ->
+
+				entity != null && CrossbowItem.isCharged(stack) && CrossbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F);
+
+		// Shield
 		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_SHIELD.get(), new ResourceLocation("blocking"), (stack, level, entity) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);

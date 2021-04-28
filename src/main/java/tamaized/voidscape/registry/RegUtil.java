@@ -8,26 +8,32 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -53,14 +59,13 @@ import java.util.function.UnaryOperator;
 
 public class RegUtil {
 
-	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
-
 	public static final ItemGroup CREATIVE_TAB = new ItemGroup(Voidscape.MODID.concat(".item_group")) {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.VOIDIC_CRYSTAL.get());
 		}
 	};
+	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
 	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
 	private static final List<Runnable> CONFIGURED_FEATURES = new ArrayList<>();
 
@@ -312,19 +317,46 @@ public class RegUtil {
 			});
 		}
 
-		public static abstract class LootingAxe extends AxeItem {
+		static RegistryObject<Item> xbow(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_xbow"), () -> new CrossbowItem(properties.defaultDurability(tier.getUses())) {
 
-			public LootingAxe(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
-				super(tier, attackDamageIn, attackSpeedIn, builder);
-			}
+				@Override
+				public boolean useOnRelease(ItemStack stack) {
+					return stack.getItem() instanceof CrossbowItem;
+				}
 
-			@Override
-			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-				stack.hurtAndBreak(1, attacker, (entityIn1) -> entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
-				return true;
-			}
+				@Override
+				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+					ItemStack itemstack = playerIn.getItemInHand(handIn);
+					if (isCharged(itemstack)) {
+						performShooting(worldIn, playerIn, handIn, itemstack, itemstack.getItem() instanceof CrossbowItem && containsChargedProjectile(itemstack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F, 1.0F);
+						setCharged(itemstack, false);
+						return ActionResult.consume(itemstack);
+					}
+					return super.use(worldIn, playerIn, handIn);
+				}
 
+				@Override
+				public int getEnchantmentValue() {
+					return tier.getEnchantmentValue();
+				}
+
+				@Override
+				public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
+					return tier.getRepairIngredient().test(repair) || super.isValidRepairItem(toRepair, repair);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+					map.putAll(super.getAttributeModifiers(slot, stack));
+					if (slot == EquipmentSlotType.MAINHAND)
+						map.putAll(factory.apply(null));
+					return map.build();
+				}
+			});
 		}
+
 		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new LootingAxe(tier, 5F, -3.0F, properties) {
 				@Override
@@ -418,6 +450,20 @@ public class RegUtil {
 				}
 
 			};
+		}
+
+		public static abstract class LootingAxe extends AxeItem {
+
+			public LootingAxe(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
+				super(tier, attackDamageIn, attackSpeedIn, builder);
+			}
+
+			@Override
+			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+				stack.hurtAndBreak(1, attacker, (entityIn1) -> entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+				return true;
+			}
+
 		}
 
 	}
