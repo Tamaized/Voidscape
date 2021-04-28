@@ -144,7 +144,7 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<LivingAttackEvent>) event -> {
-			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
+			if (event.getEntityLiving().isAlive() && ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
 				event.getEntityLiving().invulnerableTime = 0;
 		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {

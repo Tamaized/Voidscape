@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
@@ -44,6 +45,8 @@ public class MeleeAbilities {
 	public static final TurmoilAbility EMPOWER_ATTACK_SLICING = new TurmoilAbility(unloc("empower_attack_slicing"), TurmoilAbility.Type.Voidic, 200, 30 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_ATTACK_SLICING.get(), 15 * 20, 0));
 	public static final TurmoilAbility CLEAVE = new TurmoilAbility(unloc("cleave"), TurmoilAbility.Type.Voidic, 350, 30 * 20, (spell, caster) -> {
+		if (caster.getMainHandItem().isEmpty() || !caster.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()))
+			return false;
 		float f = (float) (caster.getAttributeValue(Attributes.ATTACK_DAMAGE) + caster.getAttributeValue(ModAttributes.VOIDIC_DMG.get()));
 		if (f > 0.0F) {
 			caster.swing(Hand.MAIN_HAND, true);
