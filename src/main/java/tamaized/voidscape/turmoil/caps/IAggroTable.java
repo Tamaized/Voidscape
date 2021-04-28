@@ -17,6 +17,8 @@ public interface IAggroTable {
 
 	void placeAtTop(LivingEntity entity);
 
+	void remove(LivingEntity entity);
+
 	boolean hasHate(LivingEntity entity);
 
 }

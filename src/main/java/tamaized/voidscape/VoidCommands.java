@@ -8,7 +8,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
-import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
+import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.turmoil.Progression;
@@ -93,7 +93,7 @@ public final class VoidCommands {
 					then(Commands.literal("pawn").
 							executes(context -> {
 								PlayerEntity player = context.getSource().getPlayerOrException();
-								player.level.addFreshEntity(new EntityCorruptedPawnPhantom(player.level).debug(player.position().add(5, 0, 0)));
+								player.level.addFreshEntity(new EntityCorruptedPawnTentacle(player.level, null, player.position()).markBinding(player));
 								return 0;
 							}));
 		}

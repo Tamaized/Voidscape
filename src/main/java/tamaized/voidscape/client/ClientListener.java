@@ -56,16 +56,6 @@ public class ClientListener {
 	);
 
 	private static final List<KeyBinding> ABILITY_KEYS = new ArrayList<>();
-
-	private static KeyBinding register(KeyBinding key) {
-		ABILITY_KEYS.add(key);
-		return key;
-	}
-
-	public static List<KeyBinding> getAbilityKeys() {
-		return ImmutableList.copyOf(ABILITY_KEYS);
-	}
-
 	public static final KeyBinding KEY_SPELL_1 = register(new KeyBinding(unloc("spell.1"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_1, CATEGORY));
 	public static final KeyBinding KEY_SPELL_2 = register(new KeyBinding(unloc("spell.2"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_2, CATEGORY));
 	public static final KeyBinding KEY_SPELL_3 = register(new KeyBinding(unloc("spell.3"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_3, CATEGORY));
@@ -75,7 +65,6 @@ public class ClientListener {
 	public static final KeyBinding KEY_SPELL_7 = register(new KeyBinding(unloc("spell.7"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_7, CATEGORY));
 	public static final KeyBinding KEY_SPELL_8 = register(new KeyBinding(unloc("spell.8"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_8, CATEGORY));
 	public static final KeyBinding KEY_SPELL_9 = register(new KeyBinding(unloc("spell.9"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_9, CATEGORY));
-
 	private static boolean turmoilDown = false;
 
 	static {
@@ -99,6 +88,11 @@ public class ClientListener {
 			}
 			if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.hurtTime > 0)
 				RenderTurmoil.resetFade();
+			if (Minecraft.getInstance().level != null)
+				Minecraft.getInstance().level.entitiesForRendering().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
+					if (!e.canUpdate())
+						data.tick(e);
+				})));
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
@@ -119,6 +113,15 @@ public class ClientListener {
 			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof ClientPlayerEntity && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
+	}
+
+	private static KeyBinding register(KeyBinding key) {
+		ABILITY_KEYS.add(key);
+		return key;
+	}
+
+	public static List<KeyBinding> getAbilityKeys() {
+		return ImmutableList.copyOf(ABILITY_KEYS);
 	}
 
 	private static String unloc(String k) {

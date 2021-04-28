@@ -16,7 +16,7 @@ public class ModAttributes {
 
 	private static final DeferredRegister<Attribute> ATTRIBUTE_REGISTERY = RegUtil.create(ForgeRegistries.ATTRIBUTES);
 
-	public static final RegistryObject<RegUtil.ModAttribute> VOIDIC_INFUSION_RES = make("voidic_infusion_res", 0F, "Voidic Infusion Resistance", UUID.fromString("15d20c76-90c0-4d15-affd-c974e36ac35d"));
+	public static final RegistryObject<RegUtil.ModAttribute> VOIDIC_INFUSION_RES = make("voidic_infusion_res", 1F, "Voidic Infusion Resistance", UUID.fromString("15d20c76-90c0-4d15-affd-c974e36ac35d"));
 	public static final RegistryObject<RegUtil.ModAttribute> VOIDIC_RES = make("voidic_res", 0F, "Voidic Damage Resistance", UUID.fromString("a1fa645b-70ca-459b-becc-bcf7bdf090c0"));
 	public static final RegistryObject<RegUtil.ModAttribute> VOIDIC_DMG = make("voidic_dmg", 0F, "Voidic Damage", UUID.fromString("eeacdd6d-bc33-4d30-b2f0-807e7ed333d6"));
 	public static final RegistryObject<RegUtil.ModAttribute> VOIDIC_ARROW_DMG = make("voidic_arrow_dmg", 0F, "Voidic Arrow Damage", UUID.fromString("43812ed1-d129-44b9-8b51-673c91d498c6"));

@@ -1,4 +1,4 @@
-package tamaized.voidscape.entity;
+package tamaized.voidscape.entity.ai;
 
 import tamaized.voidscape.world.Instance;
 

@@ -27,6 +27,10 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 		});
 	}
 
+	public static <T extends EntityCorruptedPawn> RenderCorruptedPawn<T, ModelCorruptedPawn<T>> factory(EntityRendererManager manager) {
+		return new RenderCorruptedPawn<>(manager, new ModelCorruptedPawn<>());
+	}
+
 	@Override
 	protected boolean shouldShowName(T entityIn) {
 		return super.shouldShowName(entityIn) && (entityIn.shouldShowName() || entityIn.hasCustomName() && entityIn == this.entityRenderDispatcher.crosshairPickEntity);
@@ -41,9 +45,5 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 	@Override
 	public ResourceLocation getTextureLocation(T entityIn) {
 		return TEXTURE;
-	}
-
-	public static <T extends EntityCorruptedPawn> RenderCorruptedPawn<T, ModelCorruptedPawn<T>> factory(EntityRendererManager manager) {
-		return new RenderCorruptedPawn<>(manager, new ModelCorruptedPawn<>());
 	}
 }

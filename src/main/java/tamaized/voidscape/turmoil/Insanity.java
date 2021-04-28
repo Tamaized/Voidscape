@@ -40,6 +40,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	private float paranoia;
 	private float infusion;
+	public boolean decrementEffects = true;
 
 	private EntityCorruptedPawnPhantom hunt;
 
@@ -50,10 +51,11 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		if (Voidscape.checkForVoidDimension(parent.level) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
 			infusion += calcInfusionRate(parent) / 20F;
-		} else {
+		} else if (parent.isSpectator() || decrementEffects) {
 			paranoia = 0;
 			infusion--;
 		}
+		decrementEffects = true;
 		paranoia = MathHelper.clamp(paranoia, 0, 600);
 		infusion = MathHelper.clamp(infusion, 0, 600);
 		if (parent instanceof LivingEntity && !parent.level.isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
@@ -142,13 +144,10 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		return hunt;
 	}
 
-	private float calcInfusionRate(Entity parent) {
+	public float calcInfusionRate(Entity parent) {
 		if (parent instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) parent;
-			ModifiableAttributeInstance attribute = entity.getAttribute(ModAttributes.VOIDIC_INFUSION_RES.get());
-			if (attribute != null && attribute.getBaseValue() == 0)
-				attribute.setBaseValue(1);
-			return 1F * 2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get());
+			return 2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get());
 		}
 		return 1F;
 	}
@@ -165,7 +164,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
-	private float calcParanoiaRate(Entity parent) {
+	public float calcParanoiaRate(Entity parent) {
 		return 0.87F * parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
 				getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal() ? 0.1F : 1F).orElse(1F)).orElse(1F);
 	}
@@ -174,7 +173,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		return infusion;
 	}
 
-	public void setInfusion(int amount) {
+	public void setInfusion(float amount) {
 		infusion = amount;
 		dirty = true;
 	}

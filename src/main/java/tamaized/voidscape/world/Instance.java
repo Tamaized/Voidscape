@@ -66,23 +66,26 @@ public final class Instance {
 	}
 
 	public boolean load() {
+		Voidscape.LOGGER.info("Loading Instance: ".concat(this.location.location().toString()));
 		if (level.getChunkSource().getLoadedChunksCount() > 0) {
 			unloadChunks();
 			return false;
 		}
+		InstanceEntitySpawner.spawnEntities(this);
 		unloadTick = 0;
-		Voidscape.LOGGER.info("Loading Instance: ".concat(this.location.location().toString()));
+		Voidscape.LOGGER.info("Loaded Instance: ".concat(this.location.location().toString()));
 		return true;
 	}
 
 	public void unload() {
+		Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 		players.clear();
 		locked = false;
 		tick = 0;
 		unloadTick++;
 		type = InstanceType.Unrestricted;
-		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 		unloading = false;
+		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 	}
 
 	public ServerWorld getLevel() {
@@ -120,13 +123,14 @@ public final class Instance {
 
 	private void unloadChunks() {
 		if (level.getChunkSource().chunkMap instanceof HackyWorldGen.DeepFreezeChunkManager) {
-			Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
+			Voidscape.LOGGER.info("Unloading Instance Chunks: ".concat(this.location.location().toString()));
 			unloading = true;
 			((HackyWorldGen.DeepFreezeChunkManager) level.getChunkSource().chunkMap).unload();
 		}
 	}
 
 	public void tick() {
+		InstanceSpecialEffects.doEffects(this);
 		level.players().forEach(player -> player.abilities.mayBuild = false);
 		if (!active()) {
 			if (!level.players().isEmpty())

@@ -62,7 +62,7 @@ public final class InstanceManager {
 
 	@SubscribeEvent
 	public static void onTick(TickEvent.WorldTickEvent event) {
-		if (event.world.isClientSide())
+		if (event.phase == TickEvent.Phase.END || event.world.isClientSide())
 			return;
 		instances.stream().filter(instance -> instance.getLevel() == event.world).forEach(Instance::tick);
 	}

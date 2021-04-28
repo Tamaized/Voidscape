@@ -60,6 +60,7 @@ import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.RegUtil;
+import tamaized.voidscape.turmoil.BindData;
 import tamaized.voidscape.turmoil.Insanity;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TrackedTurmoilData;
@@ -104,6 +105,7 @@ public class Voidscape {
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
 	public static final SubCapability.ISubCap.SubCapKey<TrackedTurmoilData> subCapTurmoilTracked = SubCapability.AttachedSubCap.register(TrackedTurmoilData.class, TrackedTurmoilData::new);
+	public static final SubCapability.ISubCap.SubCapKey<BindData> subCapBind = SubCapability.AttachedSubCap.register(BindData.class, BindData::new);
 
 	public Voidscape() {
 		StartupMessageManager.addModMessage("Loading Turmoil");
@@ -128,6 +130,15 @@ public class Voidscape {
 						then(VoidCommands.Debug.register()))
 
 		);
+		busForge.addListener((Consumer<TickEvent.WorldTickEvent>) event -> {
+			if (event.phase == TickEvent.Phase.START)
+				return;
+			if (event.world instanceof ServerWorld)
+				((ServerWorld) event.world).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
+					if (!e.canUpdate())
+						data.tick(e);
+				})));
+		});
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
 			if (event.player.level != null &&
 

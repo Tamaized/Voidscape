@@ -7,6 +7,8 @@
 package tamaized.voidscape.client.entity.model;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
@@ -17,17 +19,17 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 	private final ImmutableList<ModelRenderer> parts;
 
 	private ModelRenderer head;
-	private ModelRenderer topRightTentacle;
-	private ModelRenderer topLeftTentacle;
-	private ModelRenderer bottomRightTentacle;
-	private ModelRenderer bottomLeftTentacle;
-	private ModelRenderer topTentacle;
-	private ModelRenderer rightTentacle;
-	private ModelRenderer bottomTentacle;
-	private ModelRenderer leftTentacle;
+	private TransparentModelRenderer topTentacle;
+	private TransparentModelRenderer topRightTentacle;
+	private TransparentModelRenderer rightTentacle;
+	private TransparentModelRenderer bottomRightTentacle;
+	private TransparentModelRenderer bottomTentacle;
+	private TransparentModelRenderer bottomLeftTentacle;
+	private TransparentModelRenderer leftTentacle;
+	private TransparentModelRenderer topLeftTentacle;
 
 	public ModelCorruptedPawn() {
-		super();
+		super(RenderType::entityTranslucent);
 		texWidth = 64;
 		texHeight = 64;
 		ImmutableList.Builder<ModelRenderer> builder = ImmutableList.builder();
@@ -40,39 +42,7 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		setRotation(head, 0F, 0F, 0F);
 		builder.add(head);
 
-		topRightTentacle = new ModelRenderer(this, 0, 32);
-		topRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
-		topRightTentacle.setPos(-9F, -9F, 2F);
-		topRightTentacle.setTexSize(64, 64);
-		topRightTentacle.mirror = true;
-		setRotation(topRightTentacle, 0F, 0F, 2.324799F);
-		builder.add(topRightTentacle);
-
-		topLeftTentacle = new ModelRenderer(this, 0, 32);
-		topLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
-		topLeftTentacle.setPos(9F, -9F, 2F);
-		topLeftTentacle.setTexSize(64, 64);
-		topLeftTentacle.mirror = true;
-		setRotation(topLeftTentacle, 0F, 0F, -2.324796F);
-		builder.add(topLeftTentacle);
-
-		bottomRightTentacle = new ModelRenderer(this, 0, 32);
-		bottomRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
-		bottomRightTentacle.setPos(-9F, 9F, 2F);
-		bottomRightTentacle.setTexSize(64, 64);
-		bottomRightTentacle.mirror = true;
-		setRotation(bottomRightTentacle, 0F, 0F, 0.7435722F);
-		builder.add(bottomRightTentacle);
-
-		bottomLeftTentacle = new ModelRenderer(this, 0, 32);
-		bottomLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
-		bottomLeftTentacle.setPos(9F, 9F, 2F);
-		bottomLeftTentacle.setTexSize(64, 64);
-		bottomLeftTentacle.mirror = true;
-		setRotation(bottomLeftTentacle, 0F, 0F, -0.7435801F);
-		builder.add(bottomLeftTentacle);
-
-		topTentacle = new ModelRenderer(this, 0, 32);
+		topTentacle = new TransparentModelRenderer(this, 0, 32);
 		topTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		topTentacle.setPos(0F, -9F, 2F);
 		topTentacle.setTexSize(64, 64);
@@ -80,7 +50,15 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		setRotation(topTentacle, 0F, 0F, 3.141593F);
 		builder.add(topTentacle);
 
-		rightTentacle = new ModelRenderer(this, 0, 32);
+		topRightTentacle = new TransparentModelRenderer(this, 0, 32);
+		topRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
+		topRightTentacle.setPos(-9F, -9F, 2F);
+		topRightTentacle.setTexSize(64, 64);
+		topRightTentacle.mirror = true;
+		setRotation(topRightTentacle, 0F, 0F, 2.324799F);
+		builder.add(topRightTentacle);
+
+		rightTentacle = new TransparentModelRenderer(this, 0, 32);
 		rightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		rightTentacle.setPos(-9F, 0F, 2F);
 		rightTentacle.setTexSize(64, 64);
@@ -88,7 +66,15 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		setRotation(rightTentacle, 0F, 0F, 1.570796F);
 		builder.add(rightTentacle);
 
-		bottomTentacle = new ModelRenderer(this, 0, 32);
+		bottomRightTentacle = new TransparentModelRenderer(this, 0, 32);
+		bottomRightTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
+		bottomRightTentacle.setPos(-9F, 9F, 2F);
+		bottomRightTentacle.setTexSize(64, 64);
+		bottomRightTentacle.mirror = true;
+		setRotation(bottomRightTentacle, 0F, 0F, 0.7435722F);
+		builder.add(bottomRightTentacle);
+
+		bottomTentacle = new TransparentModelRenderer(this, 0, 32);
 		bottomTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		bottomTentacle.setPos(0F, 9F, 2F);
 		bottomTentacle.setTexSize(64, 64);
@@ -96,13 +82,29 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		setRotation(bottomTentacle, 0F, 0F, 0F);
 		builder.add(bottomTentacle);
 
-		leftTentacle = new ModelRenderer(this, 0, 32);
+		bottomLeftTentacle = new TransparentModelRenderer(this, 0, 32);
+		bottomLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
+		bottomLeftTentacle.setPos(9F, 9F, 2F);
+		bottomLeftTentacle.setTexSize(64, 64);
+		bottomLeftTentacle.mirror = true;
+		setRotation(bottomLeftTentacle, 0F, 0F, -0.7435801F);
+		builder.add(bottomLeftTentacle);
+
+		leftTentacle = new TransparentModelRenderer(this, 0, 32);
 		leftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
 		leftTentacle.setPos(9F, 0F, 2F);
 		leftTentacle.setTexSize(64, 64);
 		leftTentacle.mirror = true;
 		setRotation(leftTentacle, 0F, 0F, -1.570796F);
 		builder.add(leftTentacle);
+
+		topLeftTentacle = new TransparentModelRenderer(this, 0, 32);
+		topLeftTentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
+		topLeftTentacle.setPos(9F, -9F, 2F);
+		topLeftTentacle.setTexSize(64, 64);
+		topLeftTentacle.mirror = true;
+		setRotation(topLeftTentacle, 0F, 0F, -2.324796F);
+		builder.add(topLeftTentacle);
 
 		this.parts = builder.build();
 	}
@@ -118,7 +120,9 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		this.head.xRot = headPitch / (180F / (float) Math.PI);
 		this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
 
-		float swing = limbSwingAmount * 4F;
+		float swing = Math.max(limbSwingAmount * 4F, entityIn.isCasting() ? 4F : 0F);
+		if (entityIn.isCasting())
+			limbSwing += entityIn.tickCount - entityIn.castTick;
 		float swingCorner = swing * 0.45F + MathHelper.sin(limbSwing) * 0.25F;
 		float swingCardinal = swing * 0.95F + MathHelper.cos(limbSwing) * 0.25F;
 
@@ -130,10 +134,24 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		this.leftTentacle.xRot = swingCardinal;
 		this.rightTentacle.xRot = swingCardinal;
 		this.bottomTentacle.xRot = swingCardinal;
+
+		int i = -1;
+		for (ModelRenderer part : parts) {
+			if (part instanceof TransparentModelRenderer) {
+				boolean state = ((entityIn.getTentacleBits() >> (7 - i)) & 0b1) == 1;
+				float perc = MathHelper.clamp(1F - (entityIn.tentacleTimes[i] - entityIn.tickCount + Minecraft.getInstance().getFrameTime()) / (20F * 5F), 0F, 1F);
+				float alpha = MathHelper.clamp(entityIn.tickCount >= entityIn.tentacleTimes[i] ? state ? 0F : 1F : state ? 1F - perc : perc, 0F, 1F);
+				part.visible = alpha > 0F;
+				((TransparentModelRenderer) part).alpha = alpha;
+			}
+			i++;
+		}
 	}
 
 	@Override
 	public Iterable<ModelRenderer> parts() {
 		return parts;
 	}
+
+
 }
