@@ -11,6 +11,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.ZoglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.particles.ParticleTypes;
@@ -67,10 +68,10 @@ import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
 import tamaized.voidscape.turmoil.caps.AggroTable;
 import tamaized.voidscape.turmoil.caps.EffectContextCapability;
-import tamaized.voidscape.turmoil.caps.FireArrowCapability;
 import tamaized.voidscape.turmoil.caps.IAggroTable;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
-import tamaized.voidscape.turmoil.caps.IFireArrow;
+import tamaized.voidscape.turmoil.caps.IVoidicArrow;
+import tamaized.voidscape.turmoil.caps.VoidicArrowCapability;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -117,7 +118,7 @@ public class Voidscape {
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
 			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
 			}, SubCapability.AttachedSubCap::new);
-			CapabilityManager.INSTANCE.register(IFireArrow.class, new SubCapability.ISubCap.DummyStorage<>(), FireArrowCapability::new);
+			CapabilityManager.INSTANCE.register(IVoidicArrow.class, new SubCapability.ISubCap.DummyStorage<>(), VoidicArrowCapability::new);
 			CapabilityManager.INSTANCE.register(IEffectContext.class, new SubCapability.ISubCap.DummyStorage<>(), EffectContextCapability::new);
 			CapabilityManager.INSTANCE.register(IAggroTable.class, new SubCapability.ISubCap.DummyStorage<>(), AggroTable::new);
 		});
@@ -183,31 +184,13 @@ public class Voidscape {
 					return;
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
-					final float dmgPrep = arrow ? attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (event.getAmount() + (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
-
-							data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 1.50F :
-
-									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 1.00F :
-
-											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 0.75F :
-
-													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 0.50F :
-
-															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 0.25F :
-
-																	0F
-
-					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
-							orElse(1F)).orElse(0F)).orElse(0F) :
-
-							(float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
-									hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-									map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
-					final float dmg = dmgPrep == 0 && arrow ? (float) attacker.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) : dmgPrep;
-					if (dmg > 0) {
-						event.getEntity().invulnerableTime = 0;
-						event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
-						if (!arrow)
+					if (!arrow) {
+						final float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
+								hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
+								map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
+						if (dmg > 0) {
+							event.getEntity().invulnerableTime = 0;
+							event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
 							attacker.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof AxeItem)
@@ -224,13 +207,30 @@ public class Voidscape {
 										}
 									});
 							});
+							applyEffects(event.getEntityLiving(), attacker);
+						}
 					}
-					applyEffects(event.getEntityLiving(), attacker);
 				}
-				if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity && event.getSource().getDirectEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).map(IFireArrow::active).orElse(false)) {
-					float dmg = event.getEntity().isOnFire() ? event.getAmount() : event.getAmount() * 0.25F;
-					event.getEntity().invulnerableTime = 0;
-					event.getEntity().hurt(DamageSource.ON_FIRE, dmg);
+				if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity) {
+					AbstractArrowEntity arrowEntity = (AbstractArrowEntity) event.getSource().getDirectEntity();
+					arrowEntity.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> {
+						float voidic = data.active(IVoidicArrow.ID_VOIDIC);
+						if (voidic > 0) {
+							if (event.getEntityLiving().getHealth() <= event.getAmount())
+								return;
+							event.getEntity().invulnerableTime = 0;
+							event.getEntity().hurt(arrowEntity.getOwner() instanceof LivingEntity ? ModDamageSource.
+									VOIDIC_WITH_ENTITY.apply((LivingEntity) arrowEntity.getOwner()) : ModDamageSource.VOIDIC, voidic);
+						}
+						float fire = data.active(IVoidicArrow.ID_FIRE);
+						if (fire > 0) {
+							if (event.getEntityLiving().getHealth() <= event.getAmount())
+								return;
+							float dmg = arrowEntity.isOnFire() ? fire : fire * 0.25F;
+							event.getEntity().invulnerableTime = 0;
+							event.getEntity().hurt(DamageSource.ON_FIRE, dmg);
+						}
+					});
 				}
 			}
 		});
@@ -248,13 +248,34 @@ public class Voidscape {
 		});
 		busForge.addListener((Consumer<EntityJoinWorldEvent>) event -> {
 			if (event.getEntity() instanceof AbstractArrowEntity) {
-				Entity entity = ((AbstractArrowEntity) event.getEntity()).getOwner();
+				AbstractArrowEntity arrow = (AbstractArrowEntity) event.getEntity();
+				Entity entity = arrow.getOwner();
 				if (entity instanceof LivingEntity) {
 					LivingEntity shooter = (LivingEntity) entity;
+					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
+						return;
+					float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) + (float) arrow.getBaseDamage() * shooter.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> ((float) arrow.getBaseDamage() + (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
+
+							data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 1.00F :
+
+									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 0.75F :
+
+											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 0.50F :
+
+													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 0.25F :
+
+															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 0.10F :
+
+																	0F
+
+					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
+							orElse(1F)).orElse(0F)).orElse(0F);
+					if (voidic > 0)
+						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.mark(IVoidicArrow.ID_VOIDIC, voidic));
 					if (shooter.hasEffect(ModEffects.FIRE_ARROW.get())) {
 						if (event.getWorld().random.nextInt(4) == 0)
-							event.getEntity().setSecondsOnFire(100);
-						event.getEntity().getCapability(SubCapability.CAPABILITY_FIREARROW).ifPresent(IFireArrow::mark);
+							arrow.setSecondsOnFire(100);
+						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.mark(IVoidicArrow.ID_FIRE, (float) arrow.getBaseDamage()));
 						shooter.removeEffect(ModEffects.FIRE_ARROW.get());
 					}
 				}

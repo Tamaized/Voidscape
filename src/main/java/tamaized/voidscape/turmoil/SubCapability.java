@@ -25,7 +25,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
 import tamaized.voidscape.turmoil.caps.IAggroTable;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
-import tamaized.voidscape.turmoil.caps.IFireArrow;
+import tamaized.voidscape.turmoil.caps.IVoidicArrow;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,8 +43,8 @@ public class SubCapability {
 	@CapabilityInject(ISubCap.class)
 	public static final Capability<ISubCap> CAPABILITY = Voidscape.getNull();
 
-	@CapabilityInject(IFireArrow.class)
-	public static final Capability<IFireArrow> CAPABILITY_FIREARROW = Voidscape.getNull();
+	@CapabilityInject(IVoidicArrow.class)
+	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = Voidscape.getNull();
 
 	@CapabilityInject(IEffectContext.class)
 	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = Voidscape.getNull();
@@ -59,7 +59,7 @@ public class SubCapability {
 				apply(event, CAPABILITY_EFFECTCONTEXT, IEffectContext.ID);
 			}
 			if (event.getObject() instanceof AbstractArrowEntity)
-				apply(event, CAPABILITY_FIREARROW, IFireArrow.ID);
+				apply(event, CAPABILITY_VOIDICARROW, IVoidicArrow.ID);
 			if (event.getObject() instanceof MobEntity)
 				apply(event, CAPABILITY_AGGRO, IAggroTable.ID);
 		});
