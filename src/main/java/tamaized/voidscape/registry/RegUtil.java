@@ -492,7 +492,18 @@ public class RegUtil {
 
 				@Override
 				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+					if (!isBroken(stack)) {
+						// This must remain an anon class to spoof the reobfuscator from mapping to the wrong SRG name
+						//noinspection Convert2Lambda
+						stack.hurtAndBreak(1, attacker, new Consumer<LivingEntity>() {
+							@Override
+							public void accept(LivingEntity entityIn1) {
+								entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+							}
+						});
+						return true;
+					}
+					return false;
 				}
 
 				@Override
@@ -729,12 +740,6 @@ public class RegUtil {
 
 			public LootingAxe(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 				super(tier, attackDamageIn, attackSpeedIn, builder);
-			}
-
-			@Override
-			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-				stack.hurtAndBreak(1, attacker, (entityIn1) -> entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
-				return true;
 			}
 
 		}
