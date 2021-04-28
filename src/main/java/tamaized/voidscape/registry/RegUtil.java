@@ -4,12 +4,15 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
@@ -20,6 +23,7 @@ import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ShieldItem;
@@ -27,12 +31,16 @@ import net.minecraft.item.ShovelItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
@@ -248,14 +256,47 @@ public class RegUtil {
 
 	public static class ToolAndArmorHelper {
 
+		public static boolean isBroken(ItemStack stack) {
+			return stack.isDamageableItem() && stack.getDamageValue() >= stack.getMaxDamage() - 1;
+		}
+
 		static RegistryObject<Item> sword(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_sword"), () -> new SwordItem(tier, 3, -2.4F, properties) {
+
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public float getDestroySpeed(ItemStack stack, BlockState state) {
+					return isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+				}
+
+				@Override
+				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(slot));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -263,6 +304,15 @@ public class RegUtil {
 
 		static RegistryObject<Item> shield(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shield"), () -> new ShieldItem(properties.defaultDurability(tier.getUses())) {
+
+				@Override
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
 				@Override
 				public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
 					return true;
@@ -270,7 +320,19 @@ public class RegUtil {
 
 				@Override
 				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-					return Math.min(amount, 6);
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					int dmg = Math.min(amount, 6);
+					if (dmg >= remaining) {
+						onBroken.accept(entity);
+						entity.stopUsingItem();
+					}
+					return Math.min(remaining, dmg);
+				}
+
+				@Override
+				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+					final ItemStack stack = playerIn.getItemInHand(handIn);
+					return isBroken(stack) ? ActionResult.fail(stack) : super.use(worldIn, playerIn, handIn);
 				}
 
 				@Override
@@ -286,9 +348,11 @@ public class RegUtil {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getAttributeModifiers(slot, stack));
-					if (slot == EquipmentSlotType.OFFHAND)
-						map.putAll(factory.apply(4));
+					if (!isBroken(stack)) {
+						map.putAll(super.getAttributeModifiers(slot, stack));
+						if (slot == EquipmentSlotType.OFFHAND)
+							map.putAll(factory.apply(4));
+					}
 					return map.build();
 				}
 			});
@@ -296,6 +360,29 @@ public class RegUtil {
 
 		static RegistryObject<Item> bow(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_bow"), () -> new BowItem(properties.defaultDurability(tier.getUses())) {
+
+				@Override
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+					final ItemStack stack = playerIn.getItemInHand(handIn);
+					return isBroken(stack) ? ActionResult.fail(stack) : super.use(worldIn, playerIn, handIn);
+				}
+
 				@Override
 				public int getEnchantmentValue() {
 					return tier.getEnchantmentValue();
@@ -309,9 +396,11 @@ public class RegUtil {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getAttributeModifiers(slot, stack));
-					if (slot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getAttributeModifiers(slot, stack));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -321,6 +410,22 @@ public class RegUtil {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_xbow"), () -> new CrossbowItem(properties.defaultDurability(tier.getUses())) {
 
 				@Override
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
 				public boolean useOnRelease(ItemStack stack) {
 					return stack.getItem() instanceof CrossbowItem;
 				}
@@ -328,6 +433,8 @@ public class RegUtil {
 				@Override
 				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 					ItemStack itemstack = playerIn.getItemInHand(handIn);
+					if (isBroken(itemstack))
+						return ActionResult.fail(itemstack);
 					if (isCharged(itemstack)) {
 						performShooting(worldIn, playerIn, handIn, itemstack, itemstack.getItem() instanceof CrossbowItem && containsChargedProjectile(itemstack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F, 1.0F);
 						setCharged(itemstack, false);
@@ -349,9 +456,11 @@ public class RegUtil {
 				@Override
 				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getAttributeModifiers(slot, stack));
-					if (slot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getAttributeModifiers(slot, stack));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -359,12 +468,46 @@ public class RegUtil {
 
 		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_axe"), () -> new LootingAxe(tier, 5F, -3.0F, properties) {
+
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public float getDestroySpeed(ItemStack stack, BlockState state) {
+					return isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+				}
+
+				@Override
+				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+				}
+
+				@Override
+				public ActionResultType useOn(ItemUseContext context) {
+					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(slot));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -372,12 +515,46 @@ public class RegUtil {
 
 		static RegistryObject<Item> pickaxe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_pickaxe"), () -> new PickaxeItem(tier, 1, -2.8F, properties) {
+
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public float getDestroySpeed(ItemStack stack, BlockState state) {
+					return isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+				}
+
+				@Override
+				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+				}
+
+				@Override
+				public ActionResultType useOn(ItemUseContext context) {
+					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(slot));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -385,12 +562,46 @@ public class RegUtil {
 
 		static RegistryObject<Item> shovel(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shovel"), () -> new ShovelItem(tier, 1.5F, -3.0F, properties) {
+
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public float getDestroySpeed(ItemStack stack, BlockState state) {
+					return isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+				}
+
+				@Override
+				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+				}
+
+				@Override
+				public ActionResultType useOn(ItemUseContext context) {
+					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(slot));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -398,12 +609,46 @@ public class RegUtil {
 
 		static RegistryObject<Item> hoe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_hoe"), () -> new HoeItem(tier, -3, 0.0F, properties) {
+
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public float getDestroySpeed(ItemStack stack, BlockState state) {
+					return isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+				}
+
+				@Override
+				public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+					return !isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+				}
+
+				@Override
+				public ActionResultType useOn(ItemUseContext context) {
+					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == EquipmentSlotType.MAINHAND)
-						map.putAll(factory.apply(null));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(slot));
+						if (slot == EquipmentSlotType.MAINHAND)
+							map.putAll(factory.apply(null));
+					}
 					return map.build();
 				}
 			});
@@ -430,11 +675,39 @@ public class RegUtil {
 			return () -> new ArmorItem(tier, slot, properties) {
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+				@OnlyIn(Dist.CLIENT)
+				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+					if (isBroken(stack))
+						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+					super.appendHoverText(stack, worldIn, tooltip, flagIn);
+				}
+
+				@Override
+				public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+					int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+					if (amount >= remaining)
+						onBroken.accept(entity);
+					return Math.min(remaining, amount);
+				}
+
+				@Override
+				public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+					if (isBroken(stack)) {
+						if (!player.inventory.add(stack))
+							InventoryHelper.dropItemStack(world, player.position().x(), player.position().y(), player.position().z(), stack);
+						else
+							stack.shrink(1);
+					}
+				}
+
+				@Override
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-					map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
-					if (equipmentSlot == slot)
-						map.putAll(factory.apply(equipmentSlot.getIndex()));
+					if (!isBroken(stack)) {
+						map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
+						if (equipmentSlot == slot)
+							map.putAll(factory.apply(equipmentSlot.getIndex()));
+					}
 					return map.build();
 				}
 

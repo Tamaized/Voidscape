@@ -2,5 +2,13 @@
   "parent": "item/handheld",
   "textures": {
 	"layer0": "voidscape:items/voidic/voidic_crystal_sword"
-  }
+  },
+  "overrides": [
+	{
+	  "predicate": {
+		"broken": 1
+	  },
+	  "model": "voidscape:item/voidic_crystal_sword_broken"
+	}
+  ]
 }

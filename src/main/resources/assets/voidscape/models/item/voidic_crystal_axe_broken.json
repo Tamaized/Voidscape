@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+	"layer0": "voidscape:items/voidic/voidic_crystal_axe_broken"
+  }
+}

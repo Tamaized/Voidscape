@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
 	"layer0": "voidscape:items/voidic/voidic_crystal_legs"
-  }
+  },
+  "overrides": [
+	{
+	  "predicate": {
+		"broken": 1
+	  },
+	  "model": "voidscape:item/voidic_crystal_legs_broken"
+	}
+  ]
 }

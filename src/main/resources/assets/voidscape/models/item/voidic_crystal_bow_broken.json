@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+	"layer0": "voidscape:items/voidic/bow/voidic_crystal_bow_broken"
+  }
+}

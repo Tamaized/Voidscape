@@ -26,6 +26,7 @@ import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.RegUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,6 +100,17 @@ public class ModelBakeListener {
 		});
 
 		// ######### Voidic ######### //
+
+		// Broken
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_SWORD.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_AXE.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_XBOW.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_PICKAXE.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModArmors.VOIDIC_CRYSTAL_HELMET.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModArmors.VOIDIC_CRYSTAL_CHEST.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModArmors.VOIDIC_CRYSTAL_LEGS.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemModelsProperties.register(ModArmors.VOIDIC_CRYSTAL_BOOTS.get(), new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
 
 		// Bow
 		ItemModelsProperties.register(ModTools.VOIDIC_CRYSTAL_BOW.get(), new ResourceLocation("pull"), (stack, level, entity) ->

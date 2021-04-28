@@ -28,6 +28,12 @@
   "overrides": [
 	{
 	  "predicate": {
+		"broken": 1
+	  },
+	  "model": "voidscape:item/voidic_crystal_bow_broken"
+	},
+	{
+	  "predicate": {
 		"pulling": 1
 	  },
 	  "model": "voidscape:item/voidic_crystal_bow_pulling_0"
