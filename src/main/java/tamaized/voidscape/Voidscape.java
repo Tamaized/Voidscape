@@ -129,7 +129,16 @@ public class Voidscape {
 
 		);
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			if (event.player.level != null && !event.player.level.isClientSide() && checkForVoidDimension(event.player.level) && event.player.tickCount % 30 == 0 && event.player.getRandom().nextFloat() <= 0.20F) {
+			if (event.player.level != null &&
+
+					(!event.player.level.isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
+							map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
+
+					checkForVoidDimension(event.player.level) &&
+
+					event.player.tickCount % 30 == 0 &&
+
+					event.player.getRandom().nextFloat() <= 0.20F) {
 				final int dist = 64;
 				final int rad = dist / 2;
 				final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
