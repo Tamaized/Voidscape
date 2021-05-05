@@ -1,14 +1,3 @@
 {
-  "attributes": "META-INF/asm/attributes.js",
-  "entityalpha": "META-INF/asm/entityalpha.js",
-  "entityalpharendertype": "META-INF/asm/entityalpharendertype.js",
-  "deepfreeze": "META-INF/asm/deepfreeze.js",
-  "seed": "META-INF/asm/seed.js",
-  "death": "META-INF/asm/death.js",
-  "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",
-  "attackstrength": "META-INF/asm/attackstrength.js",
-  "nosnow": "META-INF/asm/nosnow.js",
-  "axesareweps": "META-INF/asm/axesareweps.js",
-  "visibility": "META-INF/asm/visibility.js",
-  "modelpathing": "META-INF/asm/modelpathing.js"
+  "voidscape": "META-INF/asm/asm.js"
 }
