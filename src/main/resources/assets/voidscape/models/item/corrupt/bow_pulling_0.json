@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+	"layer0": "voidscape:items/corrupt/bow/bow_pulling_0"
+  }
+}

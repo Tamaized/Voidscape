@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+	"layer0": "voidscape:items/voidic/axe"
+  },
+  "overrides": [
+	{
+	  "predicate": {
+		"broken": 1
+	  },
+	  "model": "voidscape:item/voidic/axe_broken"
+	}
+  ]
+}

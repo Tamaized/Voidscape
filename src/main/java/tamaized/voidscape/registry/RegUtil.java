@@ -5,8 +5,10 @@ import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -36,6 +38,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.util.text.ITextComponent;
@@ -54,6 +57,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -119,7 +123,9 @@ public class RegUtil {
 	}
 
 	enum ItemProps {
-		DEFAULT(() -> new Item.Properties().tab(RegUtil.CREATIVE_TAB)), VOIDIC_CRYSTAL(() -> DEFAULT.get().fireResistant());
+		DEFAULT(() -> new Item.Properties().tab(RegUtil.CREATIVE_TAB)),
+
+		VOIDIC_CRYSTAL(() -> DEFAULT.get().fireResistant());
 
 		private final Supplier<Item.Properties> properties;
 
@@ -134,6 +140,10 @@ public class RegUtil {
 
 	enum ItemTier implements IItemTier {
 		VOIDIC_CRYSTAL(5, 2538, 9.5F, 5F, 17, () -> {
+			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
+		}),
+
+		CORRUPT(6, 3041, 10.0F, 6F, 19, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		});
 
@@ -184,10 +194,70 @@ public class RegUtil {
 		}
 	}
 
-	enum ArmorMaterial implements IArmorMaterial {
-		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.2F, () -> {
+	enum ArmorMaterial implements IArmorMaterial { // KB Resist max = 0.25 (0.25 * 4 = 1 = 100%)
+		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
-		}, true);
+		}, true),
+
+		CORRUPT("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.21F, () -> {
+			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
+		}, true) {
+			@Override
+			@OnlyIn(Dist.CLIENT)
+			@SuppressWarnings("unchecked")
+			public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(0.5F);
+				model.rightfoot.visible = false;
+				model.leftfoot.visible = false;
+				model.bodyToLeg.visible = false;
+				model.rightleg.visible = false;
+				model.leftleg.visible = false;
+				model.body.visible = false;
+				model.rightarm.visible = false;
+				model.leftarm.visible = false;
+				model.head.visible = false;
+				model.headoverlay.visible = false;
+				switch (armorSlot) {
+					case FEET:
+						model.rightfoot.visible = true;
+						model.leftfoot.visible = true;
+						break;
+					case LEGS:
+						model.bodyToLeg.visible = true;
+						model.rightleg.visible = true;
+						model.leftleg.visible = true;
+						break;
+					case CHEST:
+						model.body.visible = true;
+						model.rightarm.visible = true;
+						model.leftarm.visible = true;
+						float tick = entityLiving.tickCount + Minecraft.getInstance().getDeltaFrameTime();
+						float scale = 0.05F;
+						float amp = 0.15F;
+						float offset = 0.25F;
+						model.topLeftTentacle.xRot = MathHelper.cos(tick * scale) * amp + offset;
+						model.topLeftTentacle.yRot = MathHelper.sin(tick * scale + 0.2F) * amp + offset;
+						model.topRightTentacle.xRot = MathHelper.sin(tick * scale + 0.4F) * amp + offset;
+						model.topRightTentacle.yRot = MathHelper.cos(tick * scale + 0.6F) * amp - offset;
+						model.bottomLeftTentacle.xRot = MathHelper.sin(tick * scale + 0.7F) * amp - offset;
+						model.bottomLeftTentacle.yRot = MathHelper.cos(tick * scale + 0.5F) * amp + offset;
+						model.bottomRightTentacle.xRot = MathHelper.cos(tick * scale + 0.3F) * amp - offset;
+						model.bottomRightTentacle.yRot = MathHelper.sin(tick * scale + 0.1F) * amp - offset;
+						break;
+					case HEAD:
+						model.head.visible = true;
+						model.headoverlay.visible = true;
+						break;
+					default:
+				}
+				return (A) model;
+			}
+
+			@Override
+			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+				return Voidscape.MODID.concat(":textures/models/armor/corrupt.png");
+			}
+		};
 
 		private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 		private final String name;
@@ -210,6 +280,18 @@ public class RegUtil {
 			this.knockbackResistance = knockbackResistance;
 			this.repairMaterial = new LazyValue<>(repairMaterial);
 			this.fullbright = fullbright;
+		}
+
+		@Nullable
+		@OnlyIn(Dist.CLIENT)
+		public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+			return null;
+		}
+
+		@Nullable
+		@OnlyIn(Dist.CLIENT)
+		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+			return null;
 		}
 
 		@Override
@@ -725,7 +807,8 @@ public class RegUtil {
 				@Override
 				@OnlyIn(Dist.CLIENT)
 				public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-					return tier.fullbright ? (A) new BipedModel(slot == EquipmentSlotType.LEGS ? 0.5F : 1.0F) {
+					A tierModel = tier.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+					return tierModel != null ? tierModel : tier.fullbright ? (A) new BipedModel(slot == EquipmentSlotType.LEGS ? 0.5F : 1.0F) {
 						@Override
 						public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 							super.renderToBuffer(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
@@ -733,6 +816,13 @@ public class RegUtil {
 					} : super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 				}
 
+				@Nullable
+				@Override
+				@OnlyIn(Dist.CLIENT)
+				public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+					String tierTexture = tier.getArmorTexture(stack, entity, slot, type);
+					return tierTexture != null ? tierTexture : super.getArmorTexture(stack, entity, slot, type);
+				}
 			};
 		}
 

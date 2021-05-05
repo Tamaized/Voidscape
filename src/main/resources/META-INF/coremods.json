@@ -8,5 +8,7 @@
   "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",
   "attackstrength": "META-INF/asm/attackstrength.js",
   "nosnow": "META-INF/asm/nosnow.js",
-  "axesareweps": "META-INF/asm/axesareweps.js"
+  "axesareweps": "META-INF/asm/axesareweps.js",
+  "visibility": "META-INF/asm/visibility.js",
+  "modelpathing": "META-INF/asm/modelpathing.js"
 }

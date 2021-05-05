@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+	"layer0": "voidscape:items/corrupt/chest"
+  },
+  "overrides": [
+	{
+	  "predicate": {
+		"broken": 1
+	  },
+	  "model": "voidscape:item/corrupt/chest_broken"
+	}
+  ]
+}

@@ -17,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.IProfiler;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.concurrent.ThreadTaskExecutor;
@@ -44,6 +45,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.RegUtil;
@@ -69,6 +71,7 @@ public class ASMHooks {
 	public static void handleEntityAttributes(LivingEntity entity) {
 		AttributeModifierMap.MutableAttribute n = AttributeModifierMap.builder();
 		n.builder.putAll(entity.attributes.supplier.instances);
+		n.add(ModAttributes.VOIDIC_VISIBILITY.get(), 1F);
 		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
 		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
 		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
@@ -186,6 +189,37 @@ public class ASMHooks {
 	 */
 	public static boolean axesRWeps(boolean o, Item i) {
 		return o || i instanceof RegUtil.ToolAndArmorHelper.LootingAxe;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(World, int)}
+	 * [BEFORE FRETURN]
+	 */
+	public static float visibility(float o, World level, int light) {
+		if (level.isClientSide() && Voidscape.checkForVoidDimension(level))
+			return VoidVisibilityCache.value(o, light);
+		return o;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.model.ModelBakery#processLoading(IProfiler, int)}
+	 * [BEFORE GETSTATIC {@link net.minecraft.util.registry.Registry.ITEM)]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static void redirectModels() {
+		ModelBakeListener.redirectModels();
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.model.ModelBakery#processLoading(IProfiler, int)}
+	 * [BEFORE INVOKESTATIC {@link com.google.common.collect.Sets#newLinkedHashSet()}]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static void cleanModels() {
+		ModelBakeListener.clearOldModels();
 	}
 
 }

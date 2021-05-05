@@ -9,6 +9,7 @@
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "item.voidscape.voidic_crystal": "Voidic Crystal",
   "item.voidscape.ethereal_essence": "Ethereal Essence",
+
   "item.voidscape.voidic_crystal_sword": "Voidic Crystal Sword",
   "item.voidscape.voidic_crystal_shield": "Voidic Crystal Shield",
   "item.voidscape.voidic_crystal_bow": "Voidic Crystal Bow",
@@ -19,6 +20,15 @@
   "item.voidscape.voidic_crystal_chest": "Voidic Crystal Chestplate",
   "item.voidscape.voidic_crystal_legs": "Voidic Crystal Leggings",
   "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots",
+
+  "item.voidscape.corrupt_sword": "Corrupt Sword",
+  "item.voidscape.corrupt_bow": "Corrupt Bow",
+  "item.voidscape.corrupt_xbow": "Corrupt Crossbow",
+  "item.voidscape.corrupt_axe": "Corrupt Axe",
+  "item.voidscape.corrupt_helmet": "Corrupt Helmet",
+  "item.voidscape.corrupt_chest": "Corrupt Chestplate",
+  "item.voidscape.corrupt_legs": "Corrupt Leggings",
+  "item.voidscape.corrupt_boots": "Corrupt Boots",
 
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
