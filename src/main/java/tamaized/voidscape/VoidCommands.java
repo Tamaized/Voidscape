@@ -6,11 +6,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
+import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -37,6 +42,14 @@ public final class VoidCommands {
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("debug").
 					requires(cs -> cs.hasPermission(2)).
+					then(Commands.literal("sword").
+							executes(context -> {
+								PlayerEntity me = context.getSource().getPlayerOrException();
+								ItemStack stack = new ItemStack(ModTools.CORRUPT_SWORD.get());
+								stack.addAttributeModifier(ModAttributes.VOIDIC_DMG.get(), new AttributeModifier("god", 50, AttributeModifier.Operation.ADDITION), EquipmentSlotType.MAINHAND);
+								me.inventory.add(stack);
+								return 0;
+							})).
 					then(Commands.literal("hurt").
 							executes(context -> {
 								PlayerEntity me = context.getSource().getPlayerOrException();

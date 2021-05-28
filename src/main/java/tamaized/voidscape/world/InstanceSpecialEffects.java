@@ -20,9 +20,9 @@ public final class InstanceSpecialEffects {
 				data.decrementEffects = false;
 				float rate = data.calcInfusionRate(player);
 				if (rate > 0.8F)
-					rate = 5F;
+					rate = 2.5F;
 				else
-					rate *= 0.025F;
+					rate *= 0.2F;
 				data.setInfusion(data.getInfusion() + rate);
 			}));
 		}));

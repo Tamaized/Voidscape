@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.util.ResourceLocation;
@@ -38,7 +39,7 @@ public class ModEntities {
 	public static final RegistryObject<EntityType<EntitySpellAura>> SPELL_AURA = REGISTRY.register("spell_aura", () -> make(new ResourceLocation(Voidscape.MODID, "spell_aura"), EntitySpellAura::new, EntityClassification.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnPhantom>> CORRUPTED_PAWN_PHANTOM = REGISTRY.register("corrupted_pawn_phantom", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_phantom"), makeCastedBuilder(EntityCorruptedPawnPhantom.class, EntityCorruptedPawnPhantom::new, EntityClassification.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256)));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnBoss>> CORRUPTED_PAWN_BOSS = REGISTRY.register("corrupted_pawn_boss", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_boss"), makeCastedBuilder(EntityCorruptedPawnBoss.class, EntityCorruptedPawnBoss::new, EntityClassification.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256)));
-	public static final RegistryObject<EntityType<EntityCorruptedPawnTentacle>> CORRUPTED_PAWN_TENTACLE = REGISTRY.register("corrupted_pawn_tentacle", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_tentacle"), makeCastedBuilder(EntityCorruptedPawnTentacle.class, EntityCorruptedPawnTentacle::new, EntityClassification.MONSTER).sized(3F, 5F).setTrackingRange(256)));
+	public static final RegistryObject<EntityType<EntityCorruptedPawnTentacle>> CORRUPTED_PAWN_TENTACLE = REGISTRY.register("corrupted_pawn_tentacle", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_tentacle"), makeCastedBuilder(EntityCorruptedPawnTentacle.class, EntityCorruptedPawnTentacle::new, EntityClassification.MISC).sized(3F, 5F).setTrackingRange(256)));
 	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, EntityClassification.MISC, 0.5F, 0.5F));
 
 	static void classload() {
@@ -73,6 +74,7 @@ public class ModEntities {
 	public static void registerAttributes(FMLCommonSetupEvent event) {
 		GlobalEntityTypeAttributes.put(CORRUPTED_PAWN_PHANTOM.get(), MobEntity.createMobAttributes().build());
 		GlobalEntityTypeAttributes.put(CORRUPTED_PAWN_BOSS.get(), MobEntity.createMobAttributes().build());
+		GlobalEntityTypeAttributes.put(CORRUPTED_PAWN_TENTACLE.get(), LivingEntity.createLivingAttributes().build());
 	}
 
 	@SubscribeEvent

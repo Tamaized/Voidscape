@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 
 public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> extends SegmentedModel<T> {
@@ -31,7 +30,8 @@ public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> e
 
 	@Override
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		tentacle.alpha = MathHelper.clamp((entityIn.tickCount + Minecraft.getInstance().getFrameTime()) / (20F * 5F), 0F, 1F);
+		if (entityIn.falling() && !Minecraft.getInstance().isPaused())
+			tentacle.yRot += Math.toRadians(Minecraft.getInstance().getFrameTime());
 	}
 
 	@Override

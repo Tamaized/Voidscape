@@ -1,5 +1,6 @@
 package tamaized.voidscape.entity;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IInstanceEntity {
 
-	private static final Vector3d[] TENTACLE_POSITIONS = new Vector3d[]{new Vector3d(36.5, 60, 0.5), new Vector3d(27.5, 60, 9.5), new Vector3d(18.5, 60, 18.5), new Vector3d(9.5, 60, 9.5), new Vector3d(0.5, 60, 0.5), new Vector3d(9.5, 60, -9.5), new Vector3d(18.5, 60, -18.5), new Vector3d(27.5, 60, -9.5)};
+	private static final Vector3d[] TENTACLE_POSITIONS = new Vector3d[]{new Vector3d(36.5, 60, 0.5), new Vector3d(27.5, 60, 9.5), new Vector3d(18.5, 60, 18.5), new Vector3d(9.5, 60, 9.5), new Vector3d(0.5, 60, 0.5), new Vector3d(9.5, 60, -8.5), new Vector3d(18.5, 60, -17.5), new Vector3d(27.5, 60, -8.5)};
 	private final ServerBossInfo bossEvent = (ServerBossInfo) (new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenScreen(true);
 	public boolean beStill = false;
 	private AITask<EntityCorruptedPawnBoss> ai;
@@ -71,6 +72,17 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
 		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
 		setYHeadRot(yRot);
+	}
+
+	@Override
+	protected void tickDeath() {
+		super.tickDeath();
+		if (!level.isClientSide()) {
+			if (deathTime == 1)
+				level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
+			if (deathTime == 20)
+				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
+		}
 	}
 
 	@Override
@@ -138,7 +150,6 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	}
 
 	@Override
-	@SuppressWarnings("ConstantConditions")
 	public void initInstanceType(Instance.InstanceType type) {
 		this.type = type;
 		float hp = 20;
@@ -150,17 +161,16 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 						boss.setInvulnerable(true);
 						boss.beStill = true;
 						boss.markCasting(true);
+						boss.setRayBits(0);
+						boss.setRayTarget(null);
+						boss.lockonTarget = null;
 						int t1 = random.nextInt(8);
-						int t2 = t1;
-						while (t2 == t1)
-							t2 = random.nextInt(8);
-						boss.disableTentacles(t1 | t2);
+						boss.disableTentacles(1 << t1);
 						tentacleIndicies.add(t1);
-						tentacleIndicies.add(t2);
 						boss.teleportHome();
 						for (int t : tentacleIndicies) {
 							Vector3d pos = TENTACLE_POSITIONS[t];
-							EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).setHealth(25).explodes(65 * 20, 100F);
+							EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
 							tentacles.add(tentacle);
 							level.addFreshEntity(tentacle);
 						}
@@ -169,51 +179,159 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 						if (tentacles.isEmpty()) {
 							int t = 0;
 							for (Integer i : tentacleIndicies)
-								t |= i;
+								t |= (1 << i);
 							tentacleIndicies.clear();
 							boss.enableTentacles(t);
 							boss.markCasting(false);
 							boss.setInvulnerable(false);
+							teleportHome();
+							boss.beStill = false;
 							ai.finish();
-						}
+						} else
+							boss.setInvulnerable(true);
 					}
 				}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
 						next(new AITask.PendingAITask<>((boss, ai) -> {
-							ai.finish();
+							if (!boss.isInvulnerable()) {
+								boss.setInvulnerable(true);
+								boss.beStill = true;
+								boss.markCasting(true);
+								boss.setRayBits(0);
+								boss.setRayTarget(null);
+								boss.lockonTarget = null;
+								int t1 = random.nextInt(8);
+								int t2 = t1;
+								while (t2 == t1)
+									t2 = random.nextInt(8);
+								boss.disableTentacles((1 << t1) | (1 << t2));
+								tentacleIndicies.add(t1);
+								tentacleIndicies.add(t2);
+								boss.teleportHome();
+								for (int t : tentacleIndicies) {
+									Vector3d pos = TENTACLE_POSITIONS[t];
+									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
+									tentacles.add(tentacle);
+									level.addFreshEntity(tentacle);
+								}
+							} else {
+								tentacles.removeIf(t -> !t.isAlive());
+								if (tentacles.isEmpty()) {
+									int t = 0;
+									for (Integer i : tentacleIndicies)
+										t |= (1 << i);
+									tentacleIndicies.clear();
+									boss.enableTentacles(t);
+									boss.markCasting(false);
+									boss.setInvulnerable(false);
+									teleportHome();
+									boss.beStill = false;
+									ai.finish();
+								} else
+									boss.setInvulnerable(true);
+							}
 						}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F)).
 						next(new AITask.PendingAITask<>((boss, ai) -> {
-							ai.finish();
+							if (!boss.isInvulnerable()) {
+								boss.setInvulnerable(true);
+								boss.beStill = true;
+								boss.markCasting(true);
+								boss.setRayBits(0);
+								boss.setRayTarget(null);
+								boss.lockonTarget = null;
+								int t1 = random.nextInt(8);
+								int t2 = t1;
+								while (t2 == t1)
+									t2 = random.nextInt(8);
+								int t3 = t2;
+								while (t3 == t1 || t3 == t2)
+									t3 = random.nextInt(8);
+								boss.disableTentacles((1 << t1) | (1 << t2) | (1 << t3));
+								tentacleIndicies.add(t1);
+								tentacleIndicies.add(t2);
+								tentacleIndicies.add(t3);
+								boss.teleportHome();
+								for (int t : tentacleIndicies) {
+									Vector3d pos = TENTACLE_POSITIONS[t];
+									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
+									tentacles.add(tentacle);
+									level.addFreshEntity(tentacle);
+								}
+							} else {
+								tentacles.removeIf(t -> !t.isAlive());
+								if (tentacles.isEmpty()) {
+									int t = 0;
+									for (Integer i : tentacleIndicies)
+										t |= (1 << i);
+									tentacleIndicies.clear();
+									boss.enableTentacles(t);
+									boss.markCasting(false);
+									boss.setInvulnerable(false);
+									teleportHome();
+									boss.beStill = false;
+									ai.finish();
+								} else
+									boss.setInvulnerable(true);
+							}
 						}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F)).
 						next(new AITask.RandomAITask<>()).
-						next(new AITask.RepeatedAITask<>((boss, ai) -> { // Auto Attack
-							if (boss.aiTick == 0) {
-								if (boss.tickCount % 60 == 0)
-									boss.aiTick = boss.tickCount + 20 * 3;
-							} else if (boss.tickCount >= boss.aiTick) {
-								boss.aiTick = 0;
-								boss.getTarget().hurt(DamageSource.indirectMagic(boss, boss), 3);
-								boss.getTarget().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 3);
-								ai.finish();
-							}
-						})).
-						next(new AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBoss>(rand -> rand.nextInt(5) == 0).
+						next(new AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBoss>(rand -> rand.nextInt(3) == 0).
 								next(new AITask.RepeatedAITask<>((boss, ai) -> { // Tank Buster
 									if (boss.aiTick == 0) {
 										if (boss.tickCount % 60 == 0) {
-											boss.beStill = true;
 											boss.aiTick = boss.tickCount + 20 * 6;
 											boss.lockonTarget = boss.getTarget();
+											boss.beStill = true;
+											boss.markCasting(true);
+											boss.setRayBits(0b011111111);
+											boss.setRayTarget(boss.lockonTarget);
+											boss.updateRayStart();
+											boss.updateRayEnd(20 * 6);
 										}
 									} else if (boss.tickCount >= boss.aiTick) {
-										boss.aiTick = 0;
 										if (boss.lockonTarget == null || !boss.lockonTarget.isAlive())
 											boss.lockonTarget = boss.getTarget();
-										boss.lockonTarget.hurt(DamageSource.indirectMagic(boss, boss), 6);
-										boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 6);
+										if (boss.lockonTarget != null && boss.lockonTarget.isAlive())
+											boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 8);
 										boss.beStill = false;
+										boss.markCasting(false);
+										boss.setRayBits(0);
+										boss.setRayTarget(null);
+										boss.aiTick = 0;
 										ai.finish();
+									} else if (boss.lockonTarget != null && boss.lockonTarget.isAlive()) {
+										boss.lookAt(boss.lockonTarget, 10F, 10F);
+										if (boss.distanceToSqr(boss.lockonTarget) >= 100F) {
+											boss.beStill = false;
+											boss.markCasting(false);
+											boss.setRayBits(0);
+											boss.setRayTarget(null);
+											boss.aiTick = 0;
+											level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDER_DRAGON_GROWL, this.getSoundSource(), 0.75F, 0.25F + random.nextFloat() * 0.5F);
+											ai.finish();
+										}
 									}
-								})));
+								}))).
+						next(new AITask.RepeatedAITask<>((boss, ai) -> { // Auto Attack
+							if (boss.aiTick == 0) {
+								if (boss.tickCount % 60 == 0) {
+									boss.aiTick = boss.tickCount + 20 * 3;
+									boss.lockonTarget = boss.getTarget();
+									boss.setRayBits(0b100000000);
+									boss.setRayTarget(boss.lockonTarget);
+									boss.updateRayStart();
+									boss.updateRayEnd(20 * 3);
+								}
+							} else if (boss.tickCount >= boss.aiTick) {
+								if (boss.lockonTarget == null || !boss.lockonTarget.isAlive())
+									boss.lockonTarget = boss.getTarget();
+								boss.aiTick = 0;
+								if (boss.lockonTarget != null && boss.lockonTarget.isAlive())
+									boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 4);
+								boss.setRayBits(0);
+								boss.setRayTarget(null);
+								ai.finish();
+							}
+						}));
 				break;
 			case Normal:
 				remove();

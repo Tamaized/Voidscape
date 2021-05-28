@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawnTentacle;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
@@ -30,7 +31,17 @@ public class RenderCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> 
 		matrixStackIn.translate(0, 0.01F, 0);
 		final float scale = entityIn.binding() ? 4F : 10F;
 		matrixStackIn.scale(scale, scale, scale);
-		model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(model.renderType(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+		model.setupAnim(entityIn, 0, 0, entityIn.tickCount + partialTicks, 0, 0);
+		float color = (float) (1F - MathHelper.clamp((entityIn.getExplosionTimer() + partialTicks) / entityIn.getExplosionDuration(), 0F, 1F));
+		model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(model.renderType(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY,
+
+				1F,
+
+				color,
+
+				color,
+
+				MathHelper.clamp(entityIn.getDeathTicks() <= 0 ? (entityIn.tickCount + partialTicks) / (20F * 5F) : 1F - (entityIn.getDeathTicks() + partialTicks) / (20F * 5F), 0F, 1F));
 		matrixStackIn.popPose();
 	}
 

@@ -10,17 +10,19 @@ import tamaized.voidscape.entity.EntityCorruptedPawn;
 
 public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends SegmentedModel<T> {
 
+	private static final int[] CAST_MOVEMENT = {225, 315, 135, 270, 45, 180, 0, 90};
+
 	private final ImmutableList<ModelRenderer> parts;
 
-	private ModelRenderer head;
-	private TransparentModelRenderer topTentacle;
-	private TransparentModelRenderer topRightTentacle;
-	private TransparentModelRenderer rightTentacle;
-	private TransparentModelRenderer bottomRightTentacle;
-	private TransparentModelRenderer bottomTentacle;
-	private TransparentModelRenderer bottomLeftTentacle;
-	private TransparentModelRenderer leftTentacle;
-	private TransparentModelRenderer topLeftTentacle;
+	private final ModelRenderer head;
+	private final TransparentModelRenderer topTentacle;
+	private final TransparentModelRenderer topRightTentacle;
+	private final TransparentModelRenderer rightTentacle;
+	private final TransparentModelRenderer bottomRightTentacle;
+	private final TransparentModelRenderer bottomTentacle;
+	private final TransparentModelRenderer bottomLeftTentacle;
+	private final TransparentModelRenderer leftTentacle;
+	private final TransparentModelRenderer topLeftTentacle;
 
 	public ModelCorruptedPawn() {
 		super(RenderType::entityTranslucent);
@@ -110,13 +112,11 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 	}
 
 	@Override
-	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.head.xRot = headPitch / (180F / (float) Math.PI);
 		this.head.yRot = netHeadYaw / (180F / (float) Math.PI);
 
-		float swing = Math.max(limbSwingAmount * 4F, entityIn.isCasting() ? 4F : 0F);
-		if (entityIn.isCasting())
-			limbSwing += entityIn.tickCount - entityIn.castTick;
+		float swing = limbSwingAmount * 4F;
 		float swingCorner = swing * 0.45F + MathHelper.sin(limbSwing) * 0.25F;
 		float swingCardinal = swing * 0.95F + MathHelper.cos(limbSwing) * 0.25F;
 
@@ -132,9 +132,17 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends Segmented
 		int i = -1;
 		for (ModelRenderer part : parts) {
 			if (part instanceof TransparentModelRenderer) {
-				boolean state = ((entityIn.getTentacleBits() >> (7 - i)) & 0b1) == 1;
-				float perc = MathHelper.clamp(1F - (entityIn.tentacleTimes[i] - entityIn.tickCount + Minecraft.getInstance().getFrameTime()) / (20F * 5F), 0F, 1F);
-				float alpha = MathHelper.clamp(entityIn.tickCount >= entityIn.tentacleTimes[i] ? state ? 0F : 1F : state ? 1F - perc : perc, 0F, 1F);
+				if (entity.isCasting()) {
+					float rot = (float) Math.toRadians(CAST_MOVEMENT[i] + (entity.tickCount - entity.castTick) * 25L);
+					float sine = MathHelper.sin(rot) * 0.5F;
+					float cosine = MathHelper.cos(rot) * 0.5F;
+					part.yRot = sine + cosine;
+					part.xRot = cosine - sine;
+				} else
+					part.yRot = 0;
+				boolean state = ((entity.getTentacleBits() >> (7 - i)) & 0b1) == 1;
+				float perc = MathHelper.clamp(1F - (entity.tentacleTimes[i] - entity.tickCount + Minecraft.getInstance().getFrameTime()) / (20F * 5F), 0F, 1F);
+				float alpha = MathHelper.clamp(entity.tickCount >= entity.tentacleTimes[i] ? state ? 0F : 1F : state ? 1F - perc : perc, 0F, 1F);
 				part.visible = alpha > 0F;
 				((TransparentModelRenderer) part).alpha = alpha;
 			}
