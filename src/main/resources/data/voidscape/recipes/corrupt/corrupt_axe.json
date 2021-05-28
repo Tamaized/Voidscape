@@ -1,0 +1,19 @@
+{
+  "result": {
+	"item": "voidscape:corrupt_axe"
+  },
+  "pattern": [
+	"TTT",
+	"TIT",
+	"TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"I": {
+	  "item": "voidscape:voidic_crystal_axe"
+	},
+	"T": {
+	  "item": "voidscape:tendril"
+	}
+  }
+}

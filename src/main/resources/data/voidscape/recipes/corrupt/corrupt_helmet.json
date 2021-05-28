@@ -1,0 +1,19 @@
+{
+  "result": {
+	"item": "voidscape:corrupt_helmet"
+  },
+  "pattern": [
+	"TTT",
+	"TIT",
+	"TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"I": {
+	  "item": "voidscape:voidic_crystal_helmet"
+	},
+	"T": {
+	  "item": "voidscape:tendril"
+	}
+  }
+}

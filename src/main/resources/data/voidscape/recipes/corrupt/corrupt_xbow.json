@@ -1,0 +1,19 @@
+{
+  "result": {
+	"item": "voidscape:corrupt_xbow"
+  },
+  "pattern": [
+	"TTT",
+	"TIT",
+	"TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"I": {
+	  "item": "voidscape:voidic_crystal_xbow"
+	},
+	"T": {
+	  "item": "voidscape:tendril"
+	}
+  }
+}

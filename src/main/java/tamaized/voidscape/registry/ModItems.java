@@ -53,6 +53,7 @@ public class ModItems {
 			return super.useOn(context);
 		}
 	});
+	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(RegUtil.ItemProps.VOIDIC_CRYSTAL.get()));
 
 	static void classload() {
 

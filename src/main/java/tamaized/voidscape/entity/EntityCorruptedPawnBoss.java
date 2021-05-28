@@ -8,8 +8,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
@@ -17,11 +19,13 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.items.CapabilityItemHandler;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.entity.ai.IInstanceEntity;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.world.Instance;
 
@@ -80,8 +84,12 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 		if (!level.isClientSide()) {
 			if (deathTime == 1)
 				level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
-			if (deathTime == 20)
+			if (deathTime == 20) {
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
+				TileEntity te = level.getBlockEntity(getRestrictCenter().above(1));
+				if (te != null)
+					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get()), false));
+			}
 		}
 	}
 

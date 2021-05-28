@@ -1,0 +1,19 @@
+{
+  "result": {
+	"item": "voidscape:corrupt_boots"
+  },
+  "pattern": [
+	"TTT",
+	"TIT",
+	"TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"I": {
+	  "item": "voidscape:voidic_crystal_boots"
+	},
+	"T": {
+	  "item": "voidscape:tendril"
+	}
+  }
+}
