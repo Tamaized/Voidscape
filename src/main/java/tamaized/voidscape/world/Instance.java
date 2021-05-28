@@ -1,5 +1,6 @@
 package tamaized.voidscape.world;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
@@ -106,6 +107,10 @@ public final class Instance {
 
 	public boolean unloading() {
 		return unloading;
+	}
+
+	public List<PlayerEntity> players() {
+		return ImmutableList.copyOf(players);
 	}
 
 	public void addPlayer(PlayerEntity player) {

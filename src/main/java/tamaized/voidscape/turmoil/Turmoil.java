@@ -266,6 +266,11 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		dirty = true;
 	}
 
+	public void progressTo(Progression progression) {
+		if (getProgression().ordinal() + 1 == progression.ordinal())
+			setProgression(progression);
+	}
+
 	public boolean hasStarted() {
 		return progression.ordinal() > Progression.None.ordinal();
 	}

@@ -87,7 +87,7 @@ public class Talk {
 							"Move quickly before our body completely deteriorates!"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.setProgression(Progression.EnteredVoid);
+				data.progressTo(Progression.EnteredVoid);
 				data.levelUp();
 				data.setState(Turmoil.State.OPENING);
 			})));
@@ -111,7 +111,7 @@ public class Talk {
 					format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.setProgression(Progression.MidTutorial);
+				data.progressTo(Progression.MidTutorial);
 			})));
 
 	public static Entry TUTORIAL_SKILLS = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialskills"),
@@ -145,7 +145,7 @@ public class Talk {
 							"(Check Controls for what keybinds to use or configure in order to use the spell bar)"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.setProgression(Progression.PostTutorial);
+				data.progressTo(Progression.PostTutorial);
 			})));
 
 	public static Entry CORRUPT_PHANTOM = new Entry(new ResourceLocation(Voidscape.MODID, "corruptphantom"),
@@ -173,7 +173,38 @@ public class Talk {
 							"Let us improve our Voidic Powers first..."),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.setProgression(Progression.CorruptPawnPre);
+				data.progressTo(Progression.CorruptPawnPre);
+				data.levelUp();
+			})));
+
+	public static Entry CORRUPT_PAWN = new Entry(new ResourceLocation(Voidscape.MODID, "corruptpawn"),
+
+			new TranslationTextComponent(
+
+					"We've done it...\n" +
+
+							"The Pawn is slain.\n" +
+
+							"No longer will we have to deal with the enhanced paranoia.\n" +
+
+							"Of course we will still experience insanity.\n" +
+
+							"Just not to the extreme as we were...\n" +
+
+							"Now then, lets use the charred bone of our dead enemy.\n" +
+
+							"It serves more purpose than just a trophy however.\n" +
+
+							"It will further reduce Voidic Infusion within the Void.\n" +
+
+							"Not only that, the helm helps us see in the dark Void.\n" +
+
+							"Let us use this to venture into the Tower of Null.\n" +
+
+							"(Note: The Tower of Null does not exist yet!)"),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.progressTo(Progression.CorruptPawnPost);
 				data.levelUp();
 			})));
 

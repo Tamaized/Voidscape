@@ -26,8 +26,11 @@ import tamaized.voidscape.entity.ai.IInstanceEntity;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.Talk;
 import tamaized.voidscape.world.Instance;
+import tamaized.voidscape.world.InstanceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +92,14 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				TileEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
 					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get()), false));
+				InstanceManager.findByLevel(level).
+						ifPresent(instance -> instance.players().
+								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
+										ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
+												ifPresent(data -> {
+													if (data.getProgression() == Progression.CorruptPawnPre)
+														data.talk(Talk.CORRUPT_PAWN);
+												}))));
 			}
 		}
 	}

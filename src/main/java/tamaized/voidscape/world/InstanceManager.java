@@ -39,6 +39,10 @@ public final class InstanceManager {
 		return instances.stream().filter(instance -> instance.generator().group().equals(group)).collect(Collectors.toList());
 	}
 
+	public static Optional<Instance> findByLevel(World level) {
+		return instances.stream().filter(instance -> instance.getLevel() == level).findFirst();
+	}
+
 	public static Optional<Instance> findFreeInstanceByGroup(ResourceLocation group) {
 		return instances.stream().filter(instance -> instance.generator().group().equals(group) && !instance.active() && !instance.unloading()).findAny();
 	}
