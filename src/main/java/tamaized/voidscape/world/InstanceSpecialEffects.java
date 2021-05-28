@@ -22,7 +22,7 @@ public final class InstanceSpecialEffects {
 				if (rate > 0.8F)
 					rate = 2.5F;
 				else
-					rate *= 0.2F;
+					rate *= 0.05F;
 				data.setInfusion(data.getInfusion() + rate);
 			}));
 		}));

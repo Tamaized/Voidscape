@@ -178,7 +178,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 						boss.teleportHome();
 						for (int t : tentacleIndicies) {
 							Vector3d pos = TENTACLE_POSITIONS[t];
-							EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
+							EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
 							tentacles.add(tentacle);
 							level.addFreshEntity(tentacle);
 						}
@@ -217,7 +217,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 								boss.teleportHome();
 								for (int t : tentacleIndicies) {
 									Vector3d pos = TENTACLE_POSITIONS[t];
-									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
+									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
 									tentacles.add(tentacle);
 									level.addFreshEntity(tentacle);
 								}
@@ -260,7 +260,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 								boss.teleportHome();
 								for (int t : tentacleIndicies) {
 									Vector3d pos = TENTACLE_POSITIONS[t];
-									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(65 * 20, 100F);
+									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
 									tentacles.add(tentacle);
 									level.addFreshEntity(tentacle);
 								}
