@@ -91,7 +91,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
 				TileEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
-					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get()), false));
+					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), random.nextInt(2) + 1), false));
 				InstanceManager.findByLevel(level).
 						ifPresent(instance -> instance.players().
 								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
