@@ -44,6 +44,7 @@
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
   "voidscape.attribute.voidic_dmg": "Voidic Damage",
   "voidscape.attribute.voidic_arrow_dmg": "Voidic Arrow Damage",
+  "voidscape.attribute.voidic_visibility": "Voidic Visibility",
 
   "voidscape.gui.skills.level": "Level: %s",
   "voidscape.gui.skills.points": "Points: %s",
