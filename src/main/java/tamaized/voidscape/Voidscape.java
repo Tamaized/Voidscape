@@ -33,6 +33,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -274,22 +275,22 @@ public class Voidscape {
 					LivingEntity shooter = (LivingEntity) entity;
 					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
 						return;
-					float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) + (float) arrow.getBaseDamage() * shooter.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> ((float) arrow.getBaseDamage() + (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get())) * (
+					LazyOptional<SubCapability.ISubCap> c = shooter.getCapability(SubCapability.CAPABILITY);
+					float voidic = (float) (((shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) + arrow.getBaseDamage()) * c.
+							map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (
+									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 2.00F :
 
-							data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 1.00F :
+											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 1.75F :
 
-									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 0.75F :
+													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 1.50F :
 
-											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 0.50F :
+															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 1.25F :
 
-													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 0.25F :
+																	data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 1.10F :
 
-															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 0.10F :
-
-																	0F
-
-					) * cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
-							orElse(1F)).orElse(0F)).orElse(0F);
+																			1F)).orElse(1F)).orElse(1F)) * c.map(cap -> cap.get(Voidscape.subCapTurmoilStats).
+							map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
+							orElse(1F)).orElse(1F) - arrow.getBaseDamage());
 					if (voidic > 0)
 						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.mark(IVoidicArrow.ID_VOIDIC, voidic));
 					if (shooter.hasEffect(ModEffects.FIRE_ARROW.get())) {
