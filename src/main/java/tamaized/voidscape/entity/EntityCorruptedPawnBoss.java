@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -97,8 +98,10 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
 										ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
 												ifPresent(data -> {
-													if (data.getProgression() == Progression.CorruptPawnPre)
+													if (data.getProgression() == Progression.CorruptPawnPre) {
 														data.talk(Talk.CORRUPT_PAWN);
+														level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), new ItemStack(ModItems.TENDRIL.get(), 8)));
+													}
 												}))));
 			}
 		}
