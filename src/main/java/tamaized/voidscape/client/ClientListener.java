@@ -9,16 +9,19 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +30,7 @@ import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.turmoil.BindData;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 
@@ -67,10 +71,37 @@ public class ClientListener {
 	public static final KeyBinding KEY_SPELL_9 = register(new KeyBinding(unloc("spell.9"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_9, CATEGORY));
 	private static boolean turmoilDown = false;
 
+	private static float pitch, yaw, roll;
+
+	private static boolean hackyRenderSkip;
+	private static float capturedPartialTicks;
+
 	static {
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
+			if (!hackyRenderSkip && !event.getEntity().canUpdate() && event.getEntity().
+					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {
+				event.setCanceled(true);
+				hackyRenderSkip = true;
+				capturedPartialTicks = event.getPartialRenderTick();
+				event.getRenderer().render(event.getEntity(),
+
+						MathHelper.lerp(1F, event.getEntity().yRotO, event.getEntity().yRot),
+
+						1F,
+
+						event.getMatrixStack(),
+
+						event.getBuffers(),
+
+						event.getLight());
+				hackyRenderSkip = false;
+			}
+		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
 			if (event.phase == TickEvent.Phase.START)
 				return;
+			if (!Minecraft.getInstance().isPaused() && Minecraft.getInstance().player != null)
+				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(bind -> bind.tick(Minecraft.getInstance().player)));
 			if (!turmoilDown && KEY_TURMOIL.isDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
 				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::clientAction));
 				turmoilDown = true;

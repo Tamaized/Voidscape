@@ -294,6 +294,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void executeAbility(LivingEntity caster, int slot) {
+		if (!caster.canUpdate())
+			return;
 		TurmoilAbilityInstance a = getAbility(slot);
 		if (a != null) {
 			if (caster.level.isClientSide()) {

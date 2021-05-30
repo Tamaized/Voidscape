@@ -4,7 +4,7 @@ import tamaized.voidscape.turmoil.abilities.TankAbilities;
 
 public class TankSkills implements ITurmoilSkills {
 
-	public final TurmoilSkill CORE = builder("core").noDescription().core().stats(stats -> stats.threat(1)).abilities(TankAbilities.TAUNT).build();
+	public final TurmoilSkill CORE = builder("core").noDescription().core(TurmoilSkill.CoreType.Tank).stats(stats -> stats.threat(1)).abilities(TankAbilities.TAUNT).build();
 
 	public final TurmoilSkill VOIDIC_BOND = generic("voidic_bond").required(CORE).stats(stats -> stats.voidicDamage(1).voidicDamageReduction(1)).build();
 	public final TurmoilSkill VOIDIC_DAMAGE_1 = generic("voidic_damage_1").description("voidic_damage").required(VOIDIC_BOND).stats(stats -> stats.voidicDamage(1)).build();

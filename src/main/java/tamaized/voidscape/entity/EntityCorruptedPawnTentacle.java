@@ -130,7 +130,7 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 	public void tick() {
 		if (!level.isClientSide())
 			setDeltaMovement(Vector3d.ZERO);
-		else if (!binding() && !falling())
+		else if (!falling())
 			explosionTimer++;
 		if (getHealth() <= 0)
 			deathTicks++;
@@ -140,7 +140,18 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 					remove();
 				else {
 					moveTo(bindTarget.position());
-					bindTarget.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(bind -> bind.bound = true));
+					bindTarget.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(bind -> bind.bind(true)));
+					if (explosionDamage > 0 && explosionTimer >= 0) {
+						if (explosionTimer == 0) {
+							level.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundCategory.HOSTILE, 4F, 0.25F + random.nextFloat() * 0.5F);
+							if (level instanceof ServerWorld)
+								for (int i = 0; i < 25; i++)
+									((ServerWorld) level).sendParticles(ParticleTypes.EXPLOSION, getRandomX(1F), getRandomY(), getRandomZ(1F), 0, 0, 0, 0, 0);
+							bindTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(parent), explosionDamage);
+							remove();
+						}
+						explosionTimer--;
+					}
 				}
 			} else if (position().y() > startingPos.y() - 20F) {
 				moveTo(position().subtract(0F, Math.min(0.1F, position().y() - (startingPos.y() - 20F)), 0F));
@@ -157,7 +168,7 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 				}
 				explosionTimer--;
 			}
-			if (parent == null || !parent.isAlive() || deathTicks >= 20 * 5) {
+			if (/*parent == null || !parent.isAlive() || */deathTicks >= 20 * 5) {
 				remove();
 			}
 		}

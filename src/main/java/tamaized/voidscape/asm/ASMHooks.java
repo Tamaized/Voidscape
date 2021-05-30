@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -54,6 +55,7 @@ import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -220,6 +222,20 @@ public class ASMHooks {
 	@OnlyIn(Dist.CLIENT)
 	public static void cleanModels() {
 		ModelBakeListener.clearOldModels();
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.GameRenderer#bobHurt(MatrixStack, float)}
+	 * [BEFORE FIRST IFEQ]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static boolean cancelBobHurt(boolean o) {
+		if (!o) // Short-Circuit
+			return false;
+		Entity camera = Objects.requireNonNull(Minecraft.getInstance().getCameraEntity());
+		return ((LivingEntity) camera).hurtTime == 0 || (!camera.canUpdate() && camera.
+				getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(bind -> !bind.isBound()).orElse(true)).orElse(true));
 	}
 
 }

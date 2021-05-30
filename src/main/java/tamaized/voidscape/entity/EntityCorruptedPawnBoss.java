@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
@@ -24,9 +25,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.entity.ai.IInstanceEntity;
+import tamaized.voidscape.entity.ai.pawn.AutoAttack;
+import tamaized.voidscape.entity.ai.pawn.Bind;
+import tamaized.voidscape.entity.ai.pawn.TankBuster;
+import tamaized.voidscape.entity.ai.pawn.TentacleFall;
+import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Talk;
@@ -39,15 +46,15 @@ import java.util.Objects;
 
 public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IInstanceEntity {
 
-	private static final Vector3d[] TENTACLE_POSITIONS = new Vector3d[]{new Vector3d(36.5, 60, 0.5), new Vector3d(27.5, 60, 9.5), new Vector3d(18.5, 60, 18.5), new Vector3d(9.5, 60, 9.5), new Vector3d(0.5, 60, 0.5), new Vector3d(9.5, 60, -8.5), new Vector3d(18.5, 60, -17.5), new Vector3d(27.5, 60, -8.5)};
+	public static final Vector3d[] TENTACLE_POSITIONS = new Vector3d[]{new Vector3d(36.5, 60, 0.5), new Vector3d(27.5, 60, 9.5), new Vector3d(18.5, 60, 18.5), new Vector3d(9.5, 60, 9.5), new Vector3d(0.5, 60, 0.5), new Vector3d(9.5, 60, -8.5), new Vector3d(18.5, 60, -17.5), new Vector3d(27.5, 60, -8.5)};
 	private final ServerBossInfo bossEvent = (ServerBossInfo) (new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenScreen(true);
 	public boolean beStill = false;
+	public int aiTick;
+	public Entity lockonTarget;
+	public List<Entity> tentacles = new ArrayList<>();
+	public List<Integer> tentacleIndicies = new ArrayList<>();
 	private AITask<EntityCorruptedPawnBoss> ai;
 	private Instance.InstanceType type;
-	private int aiTick;
-	private Entity lockonTarget;
-	private List<Entity> tentacles = new ArrayList<>();
-	private List<Integer> tentacleIndicies = new ArrayList<>();
 
 	public EntityCorruptedPawnBoss(World level) {
 		this(ModEntities.CORRUPTED_PAWN_BOSS.get(), level);
@@ -92,7 +99,41 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
 				TileEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
-					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), random.nextInt(2) + 1), false));
+					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> {
+						if (type != Instance.InstanceType.Insane)
+							cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), level.random.nextInt(2) + 1), false);
+						if (type == Instance.InstanceType.Normal) {
+							Item item;
+							switch (random.nextInt(8)) {
+								default:
+								case 0:
+									item = ModTools.CORRUPT_SWORD.get();
+									break;
+								case 1:
+									item = ModTools.CORRUPT_AXE.get();
+									break;
+								case 2:
+									item = ModTools.CORRUPT_BOW.get();
+									break;
+								case 3:
+									item = ModTools.CORRUPT_XBOW.get();
+									break;
+								case 4:
+									item = ModArmors.CORRUPT_HELMET.get();
+									break;
+								case 5:
+									item = ModArmors.CORRUPT_CHEST.get();
+									break;
+								case 6:
+									item = ModArmors.CORRUPT_LEGS.get();
+									break;
+								case 7:
+									item = ModArmors.CORRUPT_BOOTS.get();
+									break;
+							}
+							cap.insertItem(1, new ItemStack(item), false);
+						}
+					});
 				InstanceManager.findByLevel(level).
 						ifPresent(instance -> instance.players().
 								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
@@ -163,7 +204,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 			}
 	}
 
-	private void teleportHome() {
+	public void teleportHome() {
 		doTeleportParticles();
 		moveTo(getRestrictCenter().getX() + 0.5F, getRestrictCenter().getY(), getRestrictCenter().getZ() + 0.5F);
 		if (!level.isClientSide())
@@ -178,187 +219,27 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 		switch (type) {
 			case Unrestricted:
 				hp = 400;
-				(ai = new AITask.PendingAITask<>((boss, ai) -> {
-					if (!boss.isInvulnerable()) {
-						boss.setInvulnerable(true);
-						boss.beStill = true;
-						boss.markCasting(true);
-						boss.setRayBits(0);
-						boss.setRayTarget(null);
-						boss.lockonTarget = null;
-						int t1 = random.nextInt(8);
-						boss.disableTentacles(1 << t1);
-						tentacleIndicies.add(t1);
-						boss.teleportHome();
-						for (int t : tentacleIndicies) {
-							Vector3d pos = TENTACLE_POSITIONS[t];
-							EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
-							tentacles.add(tentacle);
-							level.addFreshEntity(tentacle);
-						}
-					} else {
-						tentacles.removeIf(t -> !t.isAlive());
-						if (tentacles.isEmpty()) {
-							int t = 0;
-							for (Integer i : tentacleIndicies)
-								t |= (1 << i);
-							tentacleIndicies.clear();
-							boss.enableTentacles(t);
-							boss.markCasting(false);
-							boss.setInvulnerable(false);
-							teleportHome();
-							boss.beStill = false;
-							ai.finish();
-						} else
-							boss.setInvulnerable(true);
-					}
-				}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
-						next(new AITask.PendingAITask<>((boss, ai) -> {
-							if (!boss.isInvulnerable()) {
-								boss.setInvulnerable(true);
-								boss.beStill = true;
-								boss.markCasting(true);
-								boss.setRayBits(0);
-								boss.setRayTarget(null);
-								boss.lockonTarget = null;
-								int t1 = random.nextInt(8);
-								int t2 = t1;
-								while (t2 == t1)
-									t2 = random.nextInt(8);
-								boss.disableTentacles((1 << t1) | (1 << t2));
-								tentacleIndicies.add(t1);
-								tentacleIndicies.add(t2);
-								boss.teleportHome();
-								for (int t : tentacleIndicies) {
-									Vector3d pos = TENTACLE_POSITIONS[t];
-									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
-									tentacles.add(tentacle);
-									level.addFreshEntity(tentacle);
-								}
-							} else {
-								tentacles.removeIf(t -> !t.isAlive());
-								if (tentacles.isEmpty()) {
-									int t = 0;
-									for (Integer i : tentacleIndicies)
-										t |= (1 << i);
-									tentacleIndicies.clear();
-									boss.enableTentacles(t);
-									boss.markCasting(false);
-									boss.setInvulnerable(false);
-									teleportHome();
-									boss.beStill = false;
-									ai.finish();
-								} else
-									boss.setInvulnerable(true);
-							}
-						}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F)).
-						next(new AITask.PendingAITask<>((boss, ai) -> {
-							if (!boss.isInvulnerable()) {
-								boss.setInvulnerable(true);
-								boss.beStill = true;
-								boss.markCasting(true);
-								boss.setRayBits(0);
-								boss.setRayTarget(null);
-								boss.lockonTarget = null;
-								int t1 = random.nextInt(8);
-								int t2 = t1;
-								while (t2 == t1)
-									t2 = random.nextInt(8);
-								int t3 = t2;
-								while (t3 == t1 || t3 == t2)
-									t3 = random.nextInt(8);
-								boss.disableTentacles((1 << t1) | (1 << t2) | (1 << t3));
-								tentacleIndicies.add(t1);
-								tentacleIndicies.add(t2);
-								tentacleIndicies.add(t3);
-								boss.teleportHome();
-								for (int t : tentacleIndicies) {
-									Vector3d pos = TENTACLE_POSITIONS[t];
-									EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(level, this, pos).withHealth(25F).explodes(80 * 20, 100F);
-									tentacles.add(tentacle);
-									level.addFreshEntity(tentacle);
-								}
-							} else {
-								tentacles.removeIf(t -> !t.isAlive());
-								if (tentacles.isEmpty()) {
-									int t = 0;
-									for (Integer i : tentacleIndicies)
-										t |= (1 << i);
-									tentacleIndicies.clear();
-									boss.enableTentacles(t);
-									boss.markCasting(false);
-									boss.setInvulnerable(false);
-									teleportHome();
-									boss.beStill = false;
-									ai.finish();
-								} else
-									boss.setInvulnerable(true);
-							}
-						}, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F)).
+				(
+						ai = new TentacleFall(0, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
+						next(new TentacleFall(1, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F)).
+						next(new TentacleFall(2, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F)).
 						next(new AITask.RandomAITask<>()).
-						next(new AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBoss>(rand -> rand.nextInt(3) == 0).
-								next(new AITask.RepeatedAITask<>((boss, ai) -> { // Tank Buster
-									if (boss.aiTick == 0) {
-										if (boss.tickCount % 60 == 0) {
-											boss.aiTick = boss.tickCount + 20 * 6;
-											boss.lockonTarget = boss.getTarget();
-											boss.beStill = true;
-											boss.markCasting(true);
-											boss.setRayBits(0b011111111);
-											boss.setRayTarget(boss.lockonTarget);
-											boss.updateRayStart();
-											boss.updateRayEnd(20 * 6);
-										}
-									} else if (boss.tickCount >= boss.aiTick) {
-										if (boss.lockonTarget == null || !boss.lockonTarget.isAlive())
-											boss.lockonTarget = boss.getTarget();
-										if (boss.lockonTarget != null && boss.lockonTarget.isAlive())
-											boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 8);
-										boss.beStill = false;
-										boss.markCasting(false);
-										boss.setRayBits(0);
-										boss.setRayTarget(null);
-										boss.aiTick = 0;
-										ai.finish();
-									} else if (boss.lockonTarget != null && boss.lockonTarget.isAlive()) {
-										boss.lookAt(boss.lockonTarget, 10F, 10F);
-										if (boss.distanceToSqr(boss.lockonTarget) >= 100F) {
-											boss.beStill = false;
-											boss.markCasting(false);
-											boss.setRayBits(0);
-											boss.setRayTarget(null);
-											boss.aiTick = 0;
-											level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDER_DRAGON_GROWL, this.getSoundSource(), 0.75F, 0.25F + random.nextFloat() * 0.5F);
-											ai.finish();
-										}
-									}
-								}))).
-						next(new AITask.RepeatedAITask<>((boss, ai) -> { // Auto Attack
-							if (boss.aiTick == 0) {
-								if (boss.tickCount % 60 == 0) {
-									boss.aiTick = boss.tickCount + 20 * 3;
-									boss.lockonTarget = boss.getTarget();
-									boss.setRayBits(0b100000000);
-									boss.setRayTarget(boss.lockonTarget);
-									boss.updateRayStart();
-									boss.updateRayEnd(20 * 3);
-								}
-							} else if (boss.tickCount >= boss.aiTick) {
-								if (boss.lockonTarget == null || !boss.lockonTarget.isAlive())
-									boss.lockonTarget = boss.getTarget();
-								boss.aiTick = 0;
-								if (boss.lockonTarget != null && boss.lockonTarget.isAlive())
-									boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 4);
-								boss.setRayBits(0);
-								boss.setRayTarget(null);
-								ai.finish();
-							}
-						}));
+						next(new TankBuster(8F, false, rand -> rand.nextInt(3) == 0)).
+						next(new AutoAttack(4F));
 				break;
 			case Normal:
-				remove();
+				hp = 600;
+				(
+						ai = new TentacleFall(3, 25F, 80 * 20, 25F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
+						next(new TentacleFall(4, 25F, 80 * 20, 25F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F)).
+						next(new TentacleFall(5, 25F, 80 * 20, 25F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F)).
+						next(new AITask.RandomAITask<>()).
+						next(new TankBuster(12F, true, rand -> rand.nextInt(3) == 0)).
+						next(new AutoAttack(6F)).
+						next(new Bind(30F, 30 * 20, 100F, rand -> rand.nextInt(3) == 0));
 				break;
 			case Insane:
+				hp = 1200;
 				remove();
 				break;
 		}

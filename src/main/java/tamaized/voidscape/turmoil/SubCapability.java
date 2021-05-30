@@ -64,6 +64,8 @@ public class SubCapability {
 				apply(event, CAPABILITY_AGGRO, IAggroTable.ID);
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> {
+			if (!event.getEntity().canUpdate())
+				return;
 			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 				Arrays.stream(cap.tickers()).forEach(t -> t.tick(event.getEntity()));
 				if (event.getEntity() instanceof ServerPlayerEntity) {

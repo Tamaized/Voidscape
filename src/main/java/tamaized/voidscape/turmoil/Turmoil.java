@@ -381,6 +381,14 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		return skills.size() > 0;
 	}
 
+	public TurmoilSkill.CoreType classType() {
+		for (TurmoilSkill skill : skills) {
+			if (skill.coreType() != TurmoilSkill.CoreType.Null)
+				return skill.coreType();
+		}
+		return TurmoilSkill.CoreType.Null;
+	}
+
 	public boolean canClaim(@Nullable TurmoilSkill skill) {
 		if (skill == null || skill.disabled() || hasSkill(skill))
 			return false;

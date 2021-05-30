@@ -422,6 +422,30 @@ function initializeCoreMod() {
                     );
                 return methodNode;
             }
+        },
+        'camerahurt': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.client.renderer.GameRenderer',
+                'methodName': ASM.mapMethod('func_228380_a_'),
+                'methodDesc': '(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V'
+            },
+            'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
+                var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
+                instructions.insertBefore(
+                    ASM.findFirstInstruction(methodNode, Opcodes.IFEQ),
+                    ASM.listOf(
+                        new org.objectweb.asm.tree.MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'cancelBobHurt',
+                            '(Z)Z',
+                            false
+                            )
+                        )
+                    );
+                return methodNode;
+            }
         }
     }
 }

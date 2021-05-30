@@ -31,7 +31,7 @@ public interface ITurmoilSkills {
 		private Supplier<Supplier<ResourceLocation>> texture = () -> ClientUtil::getMissingTexture;
 		private int spent = 0;
 		private int cost = 1;
-		private boolean core = false;
+		private TurmoilSkill.CoreType core = TurmoilSkill.CoreType.Null;
 		private List<TurmoilSkill> required = new ArrayList<>();
 		private List<TurmoilAbility> abilities = new ArrayList<>();
 		private TurmoilSkill.Stats.Builder stats = TurmoilSkill.Stats.Builder.begin();
@@ -68,8 +68,8 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
-		Builder core() {
-			core = true;
+		Builder core(TurmoilSkill.CoreType type) {
+			core = type;
 			return this;
 		}
 

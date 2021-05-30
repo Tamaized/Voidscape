@@ -42,11 +42,11 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public boolean canAfford(LivingEntity caster) {
-		return caster.getCapability(SubCapability.CAPABILITY).map(resolve -> resolve.get(Voidscape.subCapTurmoilStats).map(stats -> TurmoilAbility.getPower(stats, ability.costType()) >= getCalcCost(stats)).get()).orElse(false);
+		return caster.canUpdate() && caster.getCapability(SubCapability.CAPABILITY).map(resolve -> resolve.get(Voidscape.subCapTurmoilStats).map(stats -> TurmoilAbility.getPower(stats, ability.costType()) >= getCalcCost(stats)).get()).orElse(false);
 	}
 
 	public boolean canExecute(LivingEntity caster) {
-		return cooldownRemaining(caster.level) <= 0 && canAfford(caster);
+		return caster.canUpdate() && cooldownRemaining(caster.level) <= 0 && canAfford(caster);
 	}
 
 	public void executeClientSide(TurmoilStats stats, LivingEntity caster, int slot) {

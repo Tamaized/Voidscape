@@ -25,13 +25,17 @@ public class TurmoilSkill {
 	private final Supplier<Supplier<ResourceLocation>> texture;
 	private final int spentPoints;
 	private final int cost;
-	private final boolean core;
+	private final CoreType core;
 	private final List<TurmoilSkill> required = new ArrayList<>();
 	private final List<TurmoilAbility> abilities = new ArrayList<>();
 	private final Stats stats;
 	private final boolean disabled;
 
-	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, boolean core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
+	public enum CoreType {
+		Null, Tank, Healer, Melee, Ranged
+	}
+
+	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, CoreType core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
 		this.title = title;
 		this.description = desc;
 		this.texture = texture;
@@ -121,6 +125,10 @@ public class TurmoilSkill {
 	}
 
 	public boolean isCore() {
+		return core != CoreType.Null;
+	}
+
+	public CoreType coreType() {
 		return core;
 	}
 

@@ -73,7 +73,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		return entityData.get(CASTING);
 	}
 
-	protected void markCasting(boolean cast) {
+	public void markCasting(boolean cast) {
 		entityData.set(CASTING, cast);
 	}
 
@@ -100,7 +100,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		return entityData.get(RAYS);
 	}
 
-	protected void setRayBits(int bits) {
+	public void setRayBits(int bits) {
 		entityData.set(RAYS, bits & 0b111111111);
 	}
 
@@ -112,7 +112,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		return targetCache;
 	}
 
-	protected void setRayTarget(@Nullable Entity entity) {
+	public void setRayTarget(@Nullable Entity entity) {
 		entityData.set(RAY_TARGET, entity == null ? -1 : entity.getId());
 	}
 
@@ -120,7 +120,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		return entityData.get(RAY_START);
 	}
 
-	protected void updateRayStart() {
+	public void updateRayStart() {
 		entityData.set(RAY_START, level.getGameTime());
 	}
 
@@ -128,15 +128,15 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		return entityData.get(RAY_END);
 	}
 
-	protected void updateRayEnd(long len) {
+	public void updateRayEnd(long len) {
 		entityData.set(RAY_END, level.getGameTime() + len);
 	}
 
-	protected void disableTentacles(int bits) {
+	public void disableTentacles(int bits) {
 		setTentacleBits(getTentacleBits() | bits);
 	}
 
-	protected void enableTentacles(int bits) {
+	public void enableTentacles(int bits) {
 		setTentacleBits(~((~getTentacleBits()) | bits));
 	}
 

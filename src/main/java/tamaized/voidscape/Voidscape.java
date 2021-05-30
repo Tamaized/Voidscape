@@ -42,6 +42,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -135,11 +136,12 @@ public class Voidscape {
 			if (event.phase == TickEvent.Phase.START)
 				return;
 			if (event.world instanceof ServerWorld)
-				((ServerWorld) event.world).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
-					if (!e.canUpdate())
-						data.tick(e);
-				})));
+				((ServerWorld) event.world).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> data.tick(e))));
 		});
+		busForge.addListener((Consumer<AttackEntityEvent>) event -> event.getPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
+			if (data.isBound())
+				event.setCanceled(true);
+		})));
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
 			if (event.player.level != null &&
 
