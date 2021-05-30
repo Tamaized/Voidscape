@@ -91,6 +91,7 @@ public class RegUtil {
 		ModAttributes.classload();
 		ModArmors.classload();
 		ModBlocks.classload();
+		ModDataSerializers.classload();
 		ModEffects.classload();
 		ModItems.classload();
 		ModParticles.classload();
