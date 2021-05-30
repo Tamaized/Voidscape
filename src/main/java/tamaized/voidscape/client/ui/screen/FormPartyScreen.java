@@ -19,7 +19,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.server.*;
+import tamaized.voidscape.network.server.ServerPacketCommenceDuty;
+import tamaized.voidscape.network.server.ServerPacketDisbandParty;
+import tamaized.voidscape.network.server.ServerPacketRemovePartyMember;
+import tamaized.voidscape.network.server.ServerPacketRequestPartyInfo;
+import tamaized.voidscape.network.server.ServerPacketSetPartyPassword;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Duties;
 import tamaized.voidscape.world.Instance;
@@ -181,7 +185,7 @@ public class FormPartyScreen extends TurmoilScreen {
 		passwordWidget.visible = ClientPartyInfo.host.getId().equals(minecraft.player.getUUID());
 		passwordWidget.active = !ClientPartyInfo.reserving;
 		passwordWidget.tick();
-		if (ClientPartyInfo.reserving || (ClientPartyInfo.members.size() != ClientPartyInfo.max && type != Instance.InstanceType.Unrestricted))
+		if (ClientPartyInfo.reserving || (ClientPartyInfo.members.size() != ClientPartyInfo.max - 1 && type != Instance.InstanceType.Unrestricted))
 			commence.active = false;
 		if (!password.equals(oldPassword))
 			Voidscape.NETWORK.sendToServer(new ServerPacketSetPartyPassword(password));
