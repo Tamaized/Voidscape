@@ -11,7 +11,9 @@
 
   "voidscape.tooltip.broken": "Broken",
 
+  "entity.voidscape.corrupted_pawn_phantom": "The Corrupted Pawn's Phantom",
   "entity.voidscape.corrupted_pawn_boss": "The Corrupted Pawn",
+  "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
 
