@@ -101,7 +101,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				if (te != null)
 					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> {
 						if (type != Instance.InstanceType.Insane)
-							cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), level.random.nextInt(2) + 1), false);
+							cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), level.random.nextInt(5) + 1), false);
 						if (type == Instance.InstanceType.Normal) {
 							Item item;
 							switch (random.nextInt(8)) {
