@@ -54,7 +54,7 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 	}
 
 	public static void renderRay(MatrixStack stack, IRenderTypeBuffer buffer, World level, Vector3d offset, Vector3d start, Vector3d end, float lerp, int tickCount, float partialTicks) {
-		float t = (float) level.getGameTime() + partialTicks;
+		float t = (float) tickCount + partialTicks;
 		float lvt_10_1_ = t * 0.5F % 1.0F;
 		stack.pushPose();
 		stack.translate(offset.x(), offset.y(), offset.z());
