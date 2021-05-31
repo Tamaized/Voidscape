@@ -81,6 +81,7 @@ public final class Instance {
 	public void unload() {
 		Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 		players.clear();
+		level.getEntities().forEach(Entity::remove);
 		locked = false;
 		tick = 0;
 		unloadTick++;
