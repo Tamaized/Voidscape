@@ -208,7 +208,9 @@ public class Voidscape {
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
 					if (!arrow) {
-						final float dmg = (float) attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
+						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
+								attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) : 0) *
+								(attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
 								hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
 								map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
 						if (dmg > 0) {
