@@ -53,7 +53,7 @@ public class RenderTurmoil {
 	static final ResourceLocation TEXTURE_VOIDICINFUSION = new ResourceLocation(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
 	private static float deltaTick;
-	private static Boolean deltaPos;
+	private static Boolean deltaPos = true;
 	private static Turmoil.State lastState = Turmoil.State.CLOSED;
 	private static float fadeTick = 0;
 	private static ResourceLocation TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE;
