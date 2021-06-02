@@ -41,10 +41,10 @@ import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.SaveFormat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.registry.ModAttributes;
@@ -155,12 +155,10 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.Climate, Biome.Category, Float, Float, BiomeAmbience, BiomeGenerationSettings, MobSpawnInfo, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}
-	 * [AFTER NEW {@link BiomeLoadingEvent}]
+	 * [AFTER GETSTATIC {@link MinecraftForge.EVENT_BUS}]
 	 */
-	public static Biome fukUrBiomeEdits(BiomeLoadingEvent event, final ForgeHooks.BiomeCallbackFunction callback) {
-		if (event.getName() == null || !event.getName().getNamespace().equals(Voidscape.MODID))
-			MinecraftForge.EVENT_BUS.post(event);
-		return callback.apply(event.getClimate(), event.getCategory(), event.getDepth(), event.getScale(), event.getEffects(), event.getGeneration().build(), event.getSpawns().build()).setRegistryName(event.getName());
+	public static IEventBus fukUrBiomeEdits(IEventBus o, BiomeLoadingEvent event) {
+		return event.getName() != null && event.getName().getNamespace().equals(Voidscape.MODID) ? NoOpEventBus.INSTANCE : o;
 	}
 
 	/**

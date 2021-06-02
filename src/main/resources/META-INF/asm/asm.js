@@ -255,11 +255,11 @@ function initializeCoreMod() {
                     var node = instructions.get(index);
                     if (lastInstruction == null &&
 
-                        node instanceof org.objectweb.asm.tree.VarInsnNode &&
+                        node instanceof org.objectweb.asm.tree.FieldInsnNode &&
 
-                        node.getOpcode() === Opcodes.ASTORE &&
+                        node.getOpcode() === Opcodes.GETSTATIC &&
 
-                        node.var === 12
+                        node.name === 'EVENT_BUS'
 
                     )
                         lastInstruction = node;
@@ -268,15 +268,13 @@ function initializeCoreMod() {
                     lastInstruction,
                     ASM.listOf(
                         new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 12),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 9),
                         new org.objectweb.asm.tree.MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'fukUrBiomeEdits',
-                            '(Lnet/minecraftforge/event/world/BiomeLoadingEvent;Lnet/minecraftforge/common/ForgeHooks$BiomeCallbackFunction;)Lnet/minecraft/world/biome/Biome;',
+                            '(Lnet/minecraftforge/eventbus/api/IEventBus;Lnet/minecraftforge/event/world/BiomeLoadingEvent;)Lnet/minecraftforge/eventbus/api/IEventBus;',
                             false
-                            ),
-                        new org.objectweb.asm.tree.InsnNode(Opcodes.ARETURN)
+                            )
                         )
                     );
                 return methodNode;
