@@ -92,6 +92,8 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.CORRUPT_BOOTS);
 		addBlock(overlayList, ModBlocks.VOIDIC_CRYSTAL_ORE);
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
+		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
+		addBlock(fullbrightList, ModBlocks.NULL_WHITE);
 		fullbrightList.forEach(mrl -> {
 			final IBakedModel model = event.getModelRegistry().get(mrl);
 			event.getModelRegistry().put(mrl, new FullBrightModel(model));

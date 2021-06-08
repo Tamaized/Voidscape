@@ -21,6 +21,7 @@ public class ModBiomes {
 	public static final RegistryKey<Biome> END = register("end");
 	public static final RegistryKey<Biome> THUNDER_SPIRES = register("thunderspires");
 	public static final RegistryKey<Biome> ANTI_SPIRES = register("antispires");
+	public static final RegistryKey<Biome> NULL = register("null");
 
 	private static RegistryKey<Biome> register(String id) {
 		REGISTRY.register(id, () -> new Biome.Builder().

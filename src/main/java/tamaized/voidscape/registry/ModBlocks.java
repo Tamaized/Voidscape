@@ -27,6 +27,7 @@ import java.util.Random;
 public class ModBlocks {
 
 	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
+
 	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			harvestTool(ToolType.PICKAXE).
 			strength(3F, 3F).
@@ -41,6 +42,7 @@ public class ModBlocks {
 	});
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_ORE_ITEM = ModItems.REGISTRY.
 			register(VOIDIC_CRYSTAL_ORE.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_ORE.get(), RegUtil.ItemProps.VOIDIC_CRYSTAL.get()));
+
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
@@ -62,6 +64,9 @@ public class ModBlocks {
 			return true;
 		}
 	});
+	public static final RegistryObject<Item> THUNDERROCK_ITEM = ModItems.REGISTRY.
+			register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), RegUtil.ItemProps.DEFAULT.get()));
+
 	public static final RegistryObject<Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
@@ -82,10 +87,21 @@ public class ModBlocks {
 			return true;
 		}
 	});
-	public static final RegistryObject<Item> THUNDERROCK_ITEM = ModItems.REGISTRY.
-			register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), RegUtil.ItemProps.DEFAULT.get()));
 	public static final RegistryObject<Item> ANTIROCK_ITEM = ModItems.REGISTRY.
 			register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), RegUtil.ItemProps.DEFAULT.get()));
+
+	public static final RegistryObject<Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
+			strength(-1.0F, 3600000.0F).
+			noDrops().
+			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)));
+	public static final RegistryObject<Item> NULL_BLACK_ITEM = ModItems.REGISTRY.
+			register(NULL_BLACK.getId().getPath(), () -> new BlockItem(NULL_BLACK.get(), RegUtil.ItemProps.DEFAULT.get()));
+	public static final RegistryObject<Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
+			strength(-1.0F, 3600000.0F).
+			noDrops().
+			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)));
+	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY.
+			register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), RegUtil.ItemProps.DEFAULT.get()));
 
 	static void classload() {
 

@@ -157,11 +157,14 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 			}
 		}
  		System.out.println("breakpoint");*/
+		if (x * x <= 10000 || z * z <= 10000) {
+			return getBiome(getBiomeId(ModBiomes.NULL));
+		}
 		final int antiSpireY = LAYERS[0];
 		final int thunderSpireY = LAYERS[3];
 		final int m1 = LAYERS[1];
 		final int m2 = LAYERS[2];
-		layerMergeRandom.setSeed(seed + (x & -4) * 25117 + (z & -4) * 151121);
+		layerMergeRandom.setSeed(seed + (x & -4) * 25117L + (z & -4) * 151121L);
 		return getBiome(
 
 				y < (antiSpireY - 2) ? getBiomeId(ModBiomes.ANTI_SPIRES) :

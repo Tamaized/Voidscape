@@ -16,8 +16,17 @@
   "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
+  "block.voidscape.thunderrock": "Thunder Rock",
+  "block.voidscape.antirock": "Anti Rock",
+  "block.voidscape.null_black": "Null",
+  "block.voidscape.null_white": "Null",
 
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
+  "item.voidscape.thunderrock": "Thunder Rock",
+  "item.voidscape.antirock": "Anti Rock",
+  "item.voidscape.null_black": "Null",
+  "item.voidscape.null_white": "Null",
+
   "item.voidscape.voidic_crystal": "Voidic Crystal",
   "item.voidscape.ethereal_essence": "Ethereal Essence",
   "item.voidscape.tendril": "Tendril",
