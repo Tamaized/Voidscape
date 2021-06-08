@@ -209,7 +209,11 @@ public class ASMHooks {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static void redirectModels() {
-		ModelBakeListener.redirectModels();
+		try {
+			ModelBakeListener.redirectModels();
+		} catch (NullPointerException e) {
+			// Another mod crashed earlier on, this will throw a NPE when the registry isnt populated, just fail silently and let the game error properly later
+		}
 	}
 
 	/**
