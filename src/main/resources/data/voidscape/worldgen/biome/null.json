@@ -4,8 +4,8 @@
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",
-  "depth": 0.0,
-  "scale": 0.0,
+  "depth": -3.0,
+  "scale": 1.8,
   "effects": {
 	"fog_color": 655628,
 	"water_color": 655628,
@@ -31,16 +31,16 @@
 	}
   },
   "surface_builder": {
-	"type": "nope",
+	"type": "voidscape:exact",
 	"config": {
 	  "top_material": {
-		"Name": "bedrock"
+		"Name": "air"
 	  },
 	  "under_material": {
-		"Name": "bedrock"
+		"Name": "air"
 	  },
 	  "underwater_material": {
-		"Name": "bedrock"
+		"Name": "air"
 	  }
 	}
   },

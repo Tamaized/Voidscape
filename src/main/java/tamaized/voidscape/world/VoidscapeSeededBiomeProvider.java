@@ -157,7 +157,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 			}
 		}
  		System.out.println("breakpoint");*/
-		if ((x * x + z * z) <= 10000)
+		if (x * x + z * z <= 2500)
 			return getBiome(getBiomeId(ModBiomes.NULL));
 		final int antiSpireY = LAYERS[0];
 		final int thunderSpireY = LAYERS[3];
