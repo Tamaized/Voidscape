@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
+import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModTools;
@@ -47,6 +48,14 @@ public final class VoidCommands {
 								PlayerEntity me = context.getSource().getPlayerOrException();
 								ItemStack stack = new ItemStack(ModTools.CORRUPT_SWORD.get());
 								stack.addAttributeModifier(ModAttributes.VOIDIC_DMG.get(), new AttributeModifier("god", 50, AttributeModifier.Operation.ADDITION), EquipmentSlotType.MAINHAND);
+								me.inventory.add(stack);
+								return 0;
+							})).
+					then(Commands.literal("eyes").
+							executes(context -> {
+								PlayerEntity me = context.getSource().getPlayerOrException();
+								ItemStack stack = new ItemStack(ModArmors.CORRUPT_HELMET.get());
+								stack.addAttributeModifier(ModAttributes.VOIDIC_VISIBILITY.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlotType.HEAD);
 								me.inventory.add(stack);
 								return 0;
 							})).

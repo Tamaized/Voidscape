@@ -4,8 +4,8 @@
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",
-  "depth": -3.0,
-  "scale": 1.8,
+  "depth": -5.0,
+  "scale": 1,
   "effects": {
 	"fog_color": 655628,
 	"water_color": 655628,
@@ -48,7 +48,7 @@
 
   },
   "features": [
-
+	[ "voidscape:thunderspire" ]
   ],
   "starts": [
 
