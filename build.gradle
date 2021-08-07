@@ -1,12 +1,12 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         jcenter()
         mavenCentral()
         mavenLocal()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -23,7 +23,7 @@ version = "1.${minecraftVersionMajor}-${modVersion}${modVersionValue}"
 group = "tamaized.voidscape"
 archivesBaseName = "Voidscape"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
     mappings("${project.mappingType}", "${project.mappingVersion}")
@@ -67,7 +67,7 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
 
-    runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
+    //runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
 }
 
 processResources {
@@ -91,10 +91,10 @@ jar {
     }
 }
 
-task finalize << {
-    ant.propertyfile(file: "gradle.properties") {
-        entry(key: "modVersionValue", value: Integer.parseInt(project.modVersionValue) + 1)
-    }
-}
-
-build.finalizedBy(finalize)
+//task finalize << {
+//    ant.propertyfile(file: "gradle.properties") {
+//        entry(key: "modVersionValue", value: Integer.parseInt(project.modVersionValue) + 1)
+//    }
+//}
+//
+//build.finalizedBy(finalize)
