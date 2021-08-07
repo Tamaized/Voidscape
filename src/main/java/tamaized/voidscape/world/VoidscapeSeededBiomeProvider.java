@@ -91,9 +91,6 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 		biomes = GenLayerBiomeStabilize.INSTANCE.run(seed.apply(700L), biomes);
 
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1002), biomes);
-		//		biomes = ZoomLayer.NORMAL.run(seed.apply(1003), biomes);
-		//		biomes = ZoomLayer.NORMAL.run(seed.apply(1004), biomes);
-		//		biomes = ZoomLayer.NORMAL.run(seed.apply(1005), biomes);
 
 		return biomes;
 	}

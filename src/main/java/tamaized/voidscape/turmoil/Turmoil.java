@@ -46,7 +46,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void tick(Entity parent) {
 		if (resetCooldown > 0)
-			if (resetCooldown-- <= 0)
+			if (--resetCooldown <= 0)
 				dirty = true;
 		maxTick = 300;
 		if (!(parent instanceof PlayerEntity) || parent.level == null)

@@ -249,15 +249,17 @@ public class ModelBakeListener {
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
 			return cachedQuads.computeIfAbsent(side, (face) -> {
 				List<BakedQuad> quads = model.getQuads(state, side, rand);
-				for (BakedQuad quad : quads)
+				for (BakedQuad quad : quads) {
 					LightUtil.setLightData(quad, 0xF000F0);
+					quad.shade = false;
+				}
 				return quads;
 			});
 		}
 
 		@Override
 		public boolean useAmbientOcclusion() {
-			return model.useAmbientOcclusion();
+			return false;//model.useAmbientOcclusion();
 		}
 
 		@Override
