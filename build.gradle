@@ -64,15 +64,8 @@ minecraft {
     }
 }
 
-dependencies {
-    minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
-
-    //runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
-}
-
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
+    filesMatching("META-INF/mods.toml") {
         expand([
                 'version': "${project.version}"
         ])
@@ -83,12 +76,18 @@ jar {
     manifest {
         attributes(["Specification-Title"     : "Voidscape",
                     "Specification-Vendor"    : "Tamaized",
-                    "Specification-Version"   : "${modVersion}${modVersionValue}",
+                    "Specification-Version"   : "${version}",
                     "Implementation-Title"    : project.name,
                     "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "Tamaized",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
+
+    //runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
 }
 
 //task finalize << {
