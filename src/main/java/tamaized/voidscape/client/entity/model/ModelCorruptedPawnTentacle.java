@@ -19,7 +19,7 @@ public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> e
 
 	public ModelCorruptedPawnTentacle(ModelPart parent) {
 		super(RenderType::entityTranslucent);
-		tentacle = parent.getChild("head");
+		tentacle = parent.getChild("tentacle");
 	}
 
 	public static LayerDefinition createMesh() {
@@ -27,7 +27,7 @@ public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> e
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition definition = mesh.getRoot();
 
-		definition.addOrReplaceChild("body",
+		definition.addOrReplaceChild("tentacle",
 				CubeListBuilder.create().texOffs(0, 32).
 						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.ZERO);
 
