@@ -1,13 +1,18 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.storage.RegionBitmap;
-import net.minecraft.world.chunk.storage.RegionFileVersion;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.storage.RegionBitmap;
+import net.minecraft.world.level.chunk.storage.RegionFileVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -126,6 +131,7 @@ public class RegionFileInputStream implements AutoCloseable {
 		return this.offsets.get(getOffsetIndex(chunkPos_));
 	}
 
+	@Override
 	public void close() throws IOException {
 		this.file.close();
 	}

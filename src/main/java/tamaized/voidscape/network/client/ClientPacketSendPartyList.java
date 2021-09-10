@@ -1,10 +1,10 @@
 package tamaized.voidscape.network.client;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.client.network.play.NetworkPlayerInfo;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.party.ClientPartyInfo;
@@ -22,16 +22,16 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 	private final List<ClientPartyInfo.Party> data = new ArrayList<>();
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player == null || player.level == null || !player.level.isClientSide()) {
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
 		ClientPartyInfo.PARTIES.clear();
 		data.forEach(party -> {
-			if (player instanceof ClientPlayerEntity) {
-				ClientPlayNetHandler network = ((ClientPlayerEntity) player).connection;
-				NetworkPlayerInfo remote = network.getPlayerInfo(party.network_host);
+			if (player instanceof LocalPlayer) {
+				ClientPacketListener network = ((LocalPlayer) player).connection;
+				PlayerInfo remote = network.getPlayerInfo(party.network_host);
 				if (remote != null) {
 					party.host = remote.getProfile();
 					party.network_host = null;
@@ -43,7 +43,7 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		List<Party> list = PartyManager.parties();
 		packet.writeInt(list.size());
 		list.forEach(party -> {
@@ -57,7 +57,7 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 	}
 
 	@Override
-	public ClientPacketSendPartyList fromBytes(PacketBuffer packet) {
+	public ClientPacketSendPartyList fromBytes(FriendlyByteBuf packet) {
 		data.clear();
 		int len = packet.readInt();
 		for (int i = 0; i < len; i++) {

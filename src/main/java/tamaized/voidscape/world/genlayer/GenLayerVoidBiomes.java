@@ -1,11 +1,11 @@
 package tamaized.voidscape.world.genlayer;
 
-import net.minecraft.world.gen.INoiseRandom;
-import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
+import net.minecraft.world.level.newbiome.context.Context;
+import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer0;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
 
-public enum GenLayerVoidBiomes implements IAreaTransformer0 {
+public enum GenLayerVoidBiomes implements AreaTransformer0 {
 	INSTANCE;
 
 	private VoidscapeSeededBiomeProvider provider;
@@ -20,11 +20,11 @@ public enum GenLayerVoidBiomes implements IAreaTransformer0 {
 	}
 
 	@Override
-	public int applyPixel(INoiseRandom iNoiseRandom, int x, int y) {
+	public int applyPixel(Context iNoiseRandom, int x, int y) {
 		return iNoiseRandom.nextRandom(4) == 0 ? getRandomBiome(iNoiseRandom) : provider.getBiomeId(ModBiomes.VOID);
 	}
 
-	private int getRandomBiome(INoiseRandom random) {
+	private int getRandomBiome(Context random) {
 		return provider.getBiomeId(VoidscapeSeededBiomeProvider.BIOMES.get(1 + random.nextRandom(VoidscapeSeededBiomeProvider.BIOMES.size() - 1)));
 	}
 }

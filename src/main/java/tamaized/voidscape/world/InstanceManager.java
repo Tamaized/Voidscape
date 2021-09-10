@@ -1,9 +1,9 @@
 package tamaized.voidscape.world;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +39,7 @@ public final class InstanceManager {
 		return instances.stream().filter(instance -> instance.generator().group().equals(group)).collect(Collectors.toList());
 	}
 
-	public static Optional<Instance> findByLevel(World level) {
+	public static Optional<Instance> findByLevel(Level level) {
 		return instances.stream().filter(instance -> instance.getLevel() == level).findFirst();
 	}
 
@@ -47,8 +47,8 @@ public final class InstanceManager {
 		return instances.stream().filter(instance -> instance.generator().group().equals(group) && !instance.active() && !instance.unloading()).findAny();
 	}
 
-	private static void load(ServerWorld level) {
-		if (level.dimension().location().equals(World.OVERWORLD.location())) {
+	private static void load(ServerLevel level) {
+		if (level.dimension().location().equals(Level.OVERWORLD.location())) {
 			setup(level.getServer());
 			return;
 		}
@@ -60,8 +60,8 @@ public final class InstanceManager {
 	public static void onLevelLoad(WorldEvent.Load event) {
 		if (event.getWorld().isClientSide())
 			return;
-		if (event.getWorld() instanceof ServerWorld)
-			load((ServerWorld) event.getWorld());
+		if (event.getWorld() instanceof ServerLevel)
+			load((ServerLevel) event.getWorld());
 	}
 
 	@SubscribeEvent

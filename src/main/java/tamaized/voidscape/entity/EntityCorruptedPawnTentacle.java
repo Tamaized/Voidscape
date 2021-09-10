@@ -1,29 +1,29 @@
 package tamaized.voidscape.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModDataSerializers;
@@ -34,30 +34,30 @@ import javax.annotation.Nullable;
 
 public class EntityCorruptedPawnTentacle extends LivingEntity {
 
-	private static final DataParameter<Boolean> BINDING = EntityDataManager.defineId(EntityCorruptedPawnTentacle.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> FALLING = EntityDataManager.defineId(EntityCorruptedPawnTentacle.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Long> EXPLOSION_DURATION = EntityDataManager.defineId(EntityCorruptedPawnTentacle.class, ModDataSerializers.LONG);
+	private static final EntityDataAccessor<Boolean> BINDING = SynchedEntityData.defineId(EntityCorruptedPawnTentacle.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> FALLING = SynchedEntityData.defineId(EntityCorruptedPawnTentacle.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Long> EXPLOSION_DURATION = SynchedEntityData.defineId(EntityCorruptedPawnTentacle.class, ModDataSerializers.LONG);
 	private final EntityCorruptedPawnBoss parent;
-	private final Vector3d startingPos;
+	private final Vec3 startingPos;
 	private int deathTicks = 0;
 	private Entity bindTarget;
 	private long explosionTimer = -1;
 	private float explosionDamage;
 
-	public EntityCorruptedPawnTentacle(EntityType<? extends EntityCorruptedPawnTentacle> type, World level) {
-		this(type, level, null, Vector3d.ZERO);
+	public EntityCorruptedPawnTentacle(EntityType<? extends EntityCorruptedPawnTentacle> type, Level level) {
+		this(type, level, null, Vec3.ZERO);
 		ObfuscationReflectionHelper.getPrivateValue(AxeItem.class, null, "field_203176_a");
 	}
 
-	public EntityCorruptedPawnTentacle(World level, @Nullable EntityCorruptedPawnBoss pawn, Vector3d pos) {
+	public EntityCorruptedPawnTentacle(Level level, @Nullable EntityCorruptedPawnBoss pawn, Vec3 pos) {
 		this(ModEntities.CORRUPTED_PAWN_TENTACLE.get(), level, pawn, pos);
 	}
 
-	public EntityCorruptedPawnTentacle(EntityType<? extends EntityCorruptedPawnTentacle> type, World level, @Nullable EntityCorruptedPawnBoss pawn, Vector3d pos) {
+	public EntityCorruptedPawnTentacle(EntityType<? extends EntityCorruptedPawnTentacle> type, Level level, @Nullable EntityCorruptedPawnBoss pawn, Vec3 pos) {
 		super(type, level);
 		setNoGravity(true);
 		parent = pawn;
-		startingPos = new Vector3d(pos.x(), pos.y() + 20F, pos.z());
+		startingPos = new Vec3(pos.x(), pos.y() + 20F, pos.z());
 		moveTo(startingPos);
 	}
 
@@ -98,18 +98,18 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 	}
 
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlotType equipmentSlotType) {
+	public ItemStack getItemBySlot(EquipmentSlot equipmentSlotType) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setItemSlot(EquipmentSlotType equipmentSlotType, ItemStack itemStack) {
+	public void setItemSlot(EquipmentSlot equipmentSlotType, ItemStack itemStack) {
 
 	}
 
 	@Override
-	public HandSide getMainArm() {
-		return HandSide.RIGHT;
+	public HumanoidArm getMainArm() {
+		return HumanoidArm.RIGHT;
 	}
 
 	@Override
@@ -122,14 +122,14 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 				this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
 			}
 			if (deathTicks >= 20 * 5)
-				remove();
+				remove(RemovalReason.DISCARDED);
 		}
 	}
 
 	@Override
 	public void tick() {
 		if (!level.isClientSide())
-			setDeltaMovement(Vector3d.ZERO);
+			setDeltaMovement(Vec3.ZERO);
 		else if (!falling())
 			explosionTimer++;
 		if (getHealth() <= 0)
@@ -137,18 +137,18 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 		else if (!level.isClientSide()) {
 			if (binding()) {
 				if (bindTarget == null || !bindTarget.isAlive())
-					remove();
+					remove(RemovalReason.DISCARDED);
 				else {
 					moveTo(bindTarget.position());
 					bindTarget.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(bind -> bind.bind(true)));
 					if (explosionDamage > 0 && explosionTimer >= 0) {
 						if (explosionTimer == 0) {
-							level.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundCategory.HOSTILE, 4F, 0.25F + random.nextFloat() * 0.5F);
-							if (level instanceof ServerWorld)
+							level.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 4F, 0.25F + random.nextFloat() * 0.5F);
+							if (level instanceof ServerLevel)
 								for (int i = 0; i < 25; i++)
-									((ServerWorld) level).sendParticles(ParticleTypes.EXPLOSION, getRandomX(1F), getRandomY(), getRandomZ(1F), 0, 0, 0, 0, 0);
+									((ServerLevel) level).sendParticles(ParticleTypes.EXPLOSION, getRandomX(1F), getRandomY(), getRandomZ(1F), 0, 0, 0, 0, 0);
 							bindTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(parent), explosionDamage);
-							remove();
+							remove(RemovalReason.DISCARDED);
 						}
 						explosionTimer--;
 					}
@@ -159,17 +159,17 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 				entityData.set(FALLING, false);
 			} else if (explosionTimer >= 0) {
 				if (explosionTimer == 0) {
-					level.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundCategory.HOSTILE, 4F, 0.25F + random.nextFloat() * 0.5F);
-					if (level instanceof ServerWorld)
+					level.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 4F, 0.25F + random.nextFloat() * 0.5F);
+					if (level instanceof ServerLevel)
 						for (int i = 0; i < 100; i++)
-							((ServerWorld) level).sendParticles(ParticleTypes.EXPLOSION, getRandomX(10F), getRandomY(), getRandomZ(10F), 0, 0, 0, 0, 0);
-					level.getEntitiesOfClass(PlayerEntity.class, getBoundingBox().inflate(50F)).forEach(p -> p.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(parent), explosionDamage));
-					remove();
+							((ServerLevel) level).sendParticles(ParticleTypes.EXPLOSION, getRandomX(10F), getRandomY(), getRandomZ(10F), 0, 0, 0, 0, 0);
+					level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(50F)).forEach(p -> p.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(parent), explosionDamage));
+					remove(RemovalReason.DISCARDED);
 				}
 				explosionTimer--;
 			}
 			if (/*parent == null || !parent.isAlive() || */deathTicks >= 20 * 5) {
-				remove();
+				remove(RemovalReason.DISCARDED);
 			}
 		}
 		super.tick();
@@ -203,12 +203,12 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 
 	}
 
@@ -227,7 +227,7 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

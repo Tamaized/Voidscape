@@ -1,10 +1,10 @@
 package tamaized.voidscape.world.genlayer;
 
-import net.minecraft.world.gen.IExtendedNoiseRandom;
-import net.minecraft.world.gen.area.IArea;
-import net.minecraft.world.gen.layer.traits.IAreaTransformer1;
+import net.minecraft.world.level.newbiome.area.Area;
+import net.minecraft.world.level.newbiome.context.BigContext;
+import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer1;
 
-public enum GenLayerBiomeStabilize implements IAreaTransformer1 {
+public enum GenLayerBiomeStabilize implements AreaTransformer1 {
 
 	INSTANCE;
 
@@ -22,7 +22,7 @@ public enum GenLayerBiomeStabilize implements IAreaTransformer1 {
 	}
 
 	@Override
-	public int applyPixel(IExtendedNoiseRandom<?> iExtendedNoiseRandom, IArea iArea, int x, int z) {
+	public int applyPixel(BigContext<?> iExtendedNoiseRandom, Area iArea, int x, int z) {
 		int offX = getParentX(x << 4);
 		int offZ = getParentY(z << 4);
 		int centerX = ((x + offX + 1) & -4) - offX;

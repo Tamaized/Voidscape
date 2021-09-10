@@ -1,9 +1,9 @@
 package tamaized.voidscape.network.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.screen.PartyListScreen;
 import tamaized.voidscape.network.NetworkMessages;
@@ -20,23 +20,23 @@ public class ClientPacketJoinPartyError implements NetworkMessages.IMessage<Clie
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player == null || player.level == null || !player.level.isClientSide()) {
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
-		ClientPartyInfo.error = new TranslationTextComponent(error);
+		ClientPartyInfo.error = new TranslatableComponent(error);
 		if (Minecraft.getInstance().screen instanceof PartyListScreen)
 			((PartyListScreen) Minecraft.getInstance().screen).joining = false;
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeUtf(error);
 	}
 
 	@Override
-	public ClientPacketJoinPartyError fromBytes(PacketBuffer packet) {
+	public ClientPacketJoinPartyError fromBytes(FriendlyByteBuf packet) {
 		error = packet.readUtf(Short.MAX_VALUE);
 		return this;
 	}

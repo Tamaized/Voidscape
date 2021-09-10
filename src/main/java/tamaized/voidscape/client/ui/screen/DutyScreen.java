@@ -1,9 +1,9 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Duties;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class DutyScreen extends TurmoilScreen {
 
 	public DutyScreen() {
-		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.duty")));
+		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.duty")));
 	}
 
 	@Override
@@ -31,14 +31,14 @@ public class DutyScreen extends TurmoilScreen {
 			onClose();
 			return;
 		}
-		MainWindow window = minecraft.getWindow();
+		Window window = minecraft.getWindow();
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
 		List<Duties.Duty> filtered = Duties.duties().stream().filter(duty -> duty.progression().ordinal() <= data.getProgression().ordinal()).collect(Collectors.toList());
 		for (int index = 0; index < filtered.size(); index++) {
 			Duties.Duty duty = filtered.get(index);
-			addButton(new Button(
+			addRenderableWidget(new Button(
 
 					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -54,7 +54,7 @@ public class DutyScreen extends TurmoilScreen {
 
 			));
 		}
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 
@@ -64,7 +64,7 @@ public class DutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Back"),
+				new TranslatableComponent("Back"), // FIXME: localizae
 
 				button -> minecraft.setScreen(new MainScreen())
 
@@ -72,7 +72,7 @@ public class DutyScreen extends TurmoilScreen {
 	}
 
 	@Override
-	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
 		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host != null) {
 			onClose();
 			return;

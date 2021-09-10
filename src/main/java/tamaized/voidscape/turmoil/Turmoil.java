@@ -1,16 +1,16 @@
 package tamaized.voidscape.turmoil;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.OverlayMessageHandler;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
@@ -49,22 +49,22 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			if (--resetCooldown <= 0)
 				dirty = true;
 		maxTick = 300;
-		if (!(parent instanceof PlayerEntity) || parent.level == null)
+		if (!(parent instanceof Player) || parent.level == null)
 			return;
-		if (!parent.level.isClientSide() && parent instanceof ServerPlayerEntity) {
+		if (!parent.level.isClientSide() && parent instanceof ServerPlayer) {
 			final boolean cachedInstanced = instanced;
-			if (parent.level instanceof ServerWorld && ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
+			if (parent.level instanceof ServerLevel && ((ServerLevel) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
 				instanced = true;
 			else
 				instanced = false;
 			if (dirty || cachedInstanced != instanced) {
-				sendToClient((ServerPlayerEntity) parent);
+				sendToClient((ServerPlayer) parent);
 				dirty = false;
 			}
 		}
 		if (instanced && getState() != State.CLOSED) {
 			if (!parent.level.isClientSide() && getState() == State.TELEPORT)
-				parent.changeDimension(Voidscape.getWorld(parent.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
+				parent.changeDimension(Voidscape.getWorld(parent.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
 			setState(State.CLOSED);
 		}
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
@@ -121,7 +121,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				tick = maxTick;
 				if (!parent.level.isClientSide()) {
 					if (Voidscape.checkForVoidDimension(parent.level))
-						parent.changeDimension(Voidscape.getWorld(parent.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
+						parent.changeDimension(Voidscape.getWorld(parent.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
 					else
 						parent.changeDimension(Voidscape.getWorld(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 				}
@@ -186,7 +186,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
+	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
 		nbt.putInt("progression", progression.ordinal());
 		nbt.putInt("level", level);
 		nbt.putIntArray("skills", skills.stream().mapToInt(TurmoilSkill::getID).toArray());
@@ -195,7 +195,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, @Nullable Direction side) {
+	public void read(CompoundTag nbt, @Nullable Direction side) {
 		setProgression(Progression.get(nbt.getInt("progression")));
 		level = nbt.getInt("level");
 		skills.clear();
@@ -208,7 +208,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void write(PacketBuffer buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeVarInt(level);
 		buffer.writeInt(resetCooldown);
 		buffer.writeVarInt(progression.ordinal());
@@ -224,7 +224,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void read(PacketBuffer buffer) {
+	public void read(FriendlyByteBuf buffer) {
 		level = buffer.readVarInt();
 		resetCooldown = buffer.readInt();
 		progression = Progression.get(buffer.readVarInt());
@@ -400,7 +400,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
 		if (old instanceof Turmoil)
-			read(((Turmoil) old).write(new CompoundNBT(), null), null);
+			read(((Turmoil) old).write(new CompoundTag(), null), null);
 	}
 
 	public enum State {

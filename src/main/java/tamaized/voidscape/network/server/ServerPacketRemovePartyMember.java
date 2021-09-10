@@ -1,8 +1,8 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.party.PartyManager;
 
@@ -17,21 +17,21 @@ public class ServerPacketRemovePartyMember implements NetworkMessages.IMessage<S
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity)
-			PartyManager.findParty((ServerPlayerEntity) player).ifPresent(party -> {
+	public void handle(@Nullable Player player) {
+		if (player instanceof ServerPlayer)
+			PartyManager.findParty((ServerPlayer) player).ifPresent(party -> {
 				if (party.host() == player && party.size() > index - 1)
 					party.removeMember(party.members().get(index + 1));
 			});
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeVarInt(index);
 	}
 
 	@Override
-	public ServerPacketRemovePartyMember fromBytes(PacketBuffer packet) {
+	public ServerPacketRemovePartyMember fromBytes(FriendlyByteBuf packet) {
 		index = packet.readVarInt();
 		return this;
 	}

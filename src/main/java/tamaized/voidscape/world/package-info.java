@@ -1,7 +1,6 @@
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
 package tamaized.voidscape.world;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

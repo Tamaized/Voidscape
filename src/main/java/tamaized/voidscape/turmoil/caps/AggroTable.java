@@ -1,8 +1,8 @@
 package tamaized.voidscape.turmoil.caps;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
 
@@ -15,7 +15,7 @@ public class AggroTable implements IAggroTable {
 	private Map<LivingEntity, DoubleValue> table = new WeakHashMap<>();
 
 	@Override
-	public void tick(MobEntity entity) {
+	public void tick(Mob entity) {
 		table.entrySet().stream().max(Comparator.comparingDouble(o -> o.getValue().value())).ifPresent(e -> entity.setTarget(e.getKey()));
 		table.entrySet().removeIf(e -> e.getValue().sub(1.0D) <= 0 || e.
 				getKey().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false));
@@ -23,7 +23,7 @@ public class AggroTable implements IAggroTable {
 
 	@Override
 	public void addHate(LivingEntity attacker, double hate, boolean existing) {
-		if (hate <= 0 || (attacker instanceof PlayerEntity && (((PlayerEntity) attacker).isCreative() || attacker.isSpectator())))
+		if (hate <= 0 || (attacker instanceof Player && (((Player) attacker).isCreative() || attacker.isSpectator())))
 			return;
 		if (table.containsKey(attacker))
 			table.get(attacker).add(hate);

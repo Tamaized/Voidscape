@@ -1,11 +1,11 @@
 package tamaized.voidscape.party;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketResetPartyInfo;
 
@@ -32,7 +32,7 @@ public final class PartyManager {
 		parties.add(party);
 	}
 
-	public static Optional<Party> findParty(@Nullable ServerPlayerEntity member) {
+	public static Optional<Party> findParty(@Nullable ServerPlayer member) {
 		if (member == null)
 			return Optional.empty();
 		return parties.stream().filter(p -> p.isMember(member)).findAny();
@@ -43,15 +43,15 @@ public final class PartyManager {
 		parties.remove(party);
 	}
 
-	public static void resetClientInfo(ServerPlayerEntity player) {
+	public static void resetClientInfo(ServerPlayer player) {
 		resetClientInfo(player, true);
 	}
 
-	public static void resetClientInfoSilently(ServerPlayerEntity player) {
+	public static void resetClientInfoSilently(ServerPlayer player) {
 		resetClientInfo(player, false);
 	}
 
-	public static void resetClientInfo(ServerPlayerEntity player, boolean toast) {
+	public static void resetClientInfo(ServerPlayer player, boolean toast) {
 		Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketResetPartyInfo(toast));
 	}
 

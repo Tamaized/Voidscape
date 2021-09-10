@@ -1,8 +1,8 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
 import tamaized.voidscape.client.ui.OverlayMessageHandler;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class TurmoilScreen extends Screen {
 
-	public TurmoilScreen(ITextComponent p_i51108_1_) {
+	public TurmoilScreen(Component p_i51108_1_) {
 		super(p_i51108_1_);
 	}
 
@@ -34,7 +34,7 @@ public class TurmoilScreen extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		OverlayMessageHandler.render(matrixStack, partialTicks);
 	}

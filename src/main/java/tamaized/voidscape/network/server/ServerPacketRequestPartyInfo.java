@@ -1,9 +1,9 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
@@ -16,21 +16,21 @@ import java.util.Optional;
 public class ServerPacketRequestPartyInfo implements NetworkMessages.IMessage<ServerPacketRequestPartyInfo> {
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity) {
-			Optional<Party> o = PartyManager.findParty((ServerPlayerEntity) player);
-			o.ifPresent(party -> Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new ClientPacketUpdatePartyInfo(party, party.host() == player)));
+	public void handle(@Nullable Player player) {
+		if (player instanceof ServerPlayer) {
+			Optional<Party> o = PartyManager.findParty((ServerPlayer) player);
+			o.ifPresent(party -> Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new ClientPacketUpdatePartyInfo(party, party.host() == player)));
 			if (!o.isPresent())
-				PartyManager.resetClientInfo((ServerPlayerEntity) player);
+				PartyManager.resetClientInfo((ServerPlayer) player);
 		}
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 	}
 
 	@Override
-	public ServerPacketRequestPartyInfo fromBytes(PacketBuffer packet) {
+	public ServerPacketRequestPartyInfo fromBytes(FriendlyByteBuf packet) {
 		return this;
 	}
 

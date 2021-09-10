@@ -1,14 +1,14 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.block.PortalInfo;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.portal.PortalInfo;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.PartyManager;
@@ -25,37 +25,37 @@ public final class VoidTeleporter implements ITeleporter {
 	}
 
 	@Override
-	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		if (currentWorld.getChunkSource().getGenerator() instanceof InstanceChunkGenerator && oldEntity instanceof ServerPlayerEntity) {
-			PartyManager.findParty((ServerPlayerEntity) oldEntity).ifPresent(party -> party.removeMember((ServerPlayerEntity) oldEntity));
-			((ServerPlayerEntity) oldEntity).gameMode.getGameModeForPlayer().updatePlayerAbilities(((ServerPlayerEntity) oldEntity).abilities);
-			((ServerPlayerEntity) oldEntity).onUpdateAbilities();
+	public Entity placeEntity(Entity oldEntity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+		if (currentWorld.getChunkSource().getGenerator() instanceof InstanceChunkGenerator && oldEntity instanceof ServerPlayer) {
+			PartyManager.findParty((ServerPlayer) oldEntity).ifPresent(party -> party.removeMember((ServerPlayer) oldEntity));
+			((ServerPlayer) oldEntity).gameMode.getGameModeForPlayer().updatePlayerAbilities(((ServerPlayer) oldEntity).getAbilities());
+			((ServerPlayer) oldEntity).onUpdateAbilities();
 		}
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}
 
 	@Override
-	public PortalInfo getPortalInfo(Entity oldEntity, ServerWorld destWorld, Function<ServerWorld, PortalInfo> defaultPortalInfo) {
+	public PortalInfo getPortalInfo(Entity oldEntity, ServerLevel destWorld, Function<ServerLevel, PortalInfo> defaultPortalInfo) {
 		if (!Voidscape.checkForVoidDimension(destWorld)) {
-			Vector3d pos = null;
-			if (oldEntity instanceof PlayerEntity) {
-				BlockPos p = ((ServerPlayerEntity) oldEntity).getRespawnPosition();
+			Vec3 pos = null;
+			if (oldEntity instanceof Player) {
+				BlockPos p = ((ServerPlayer) oldEntity).getRespawnPosition();
 				if (p != null) {
-					Optional<Vector3d> o = PlayerEntity.findRespawnPositionAndUseSpawnBlock(destWorld, p, ((ServerPlayerEntity) oldEntity).getRespawnAngle(), ((ServerPlayerEntity) oldEntity).isRespawnForced(), false);
+					Optional<Vec3> o = Player.findRespawnPositionAndUseSpawnBlock(destWorld, p, ((ServerPlayer) oldEntity).getRespawnAngle(), ((ServerPlayer) oldEntity).isRespawnForced(), false);
 					if (o.isPresent())
 						pos = o.get();
 				}
 			}
 			if (pos == null) {
-				BlockPos bp = destWorld.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());
-				pos = new Vector3d(bp.getX() + 0.5F, bp.getY() + 1F, bp.getZ() + 0.5F);
+				BlockPos bp = destWorld.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, destWorld.getSharedSpawnPos());
+				pos = new Vec3(bp.getX() + 0.5F, bp.getY() + 1F, bp.getZ() + 0.5F);
 			}
-			return new PortalInfo(pos, Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
+			return new PortalInfo(pos, Vec3.ZERO, oldEntity.getYRot(), oldEntity.getXRot());
 		} else {
 			int scan = 2;
 			int lastScan = 0;
-			final BlockPos.Mutable pos = new BlockPos.Mutable();
+			final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			while (true) {
 				for (int y = -scan; y < scan; y++)
 					for (int x = -scan; x < scan; x++)
@@ -80,7 +80,7 @@ public final class VoidTeleporter implements ITeleporter {
 												continue scan;
 										}
 										pos.set(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
-										return new PortalInfo(new Vector3d(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
+										return new PortalInfo(new Vec3(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vec3.ZERO, oldEntity.getYRot(), oldEntity.getXRot());
 									}
 								}
 				lastScan = scan;
@@ -92,6 +92,6 @@ public final class VoidTeleporter implements ITeleporter {
 				}
 			}
 		}
-		return new PortalInfo(oldEntity.position(), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
+		return new PortalInfo(oldEntity.position(), Vec3.ZERO, oldEntity.getYRot(), oldEntity.getXRot());
 	}
 }

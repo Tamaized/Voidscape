@@ -1,12 +1,12 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeAmbience;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
@@ -15,28 +15,28 @@ public class ModBiomes {
 
 	private static final DeferredRegister<Biome> REGISTRY = RegUtil.create(ForgeRegistries.BIOMES);
 
-	public static final RegistryKey<Biome> VOID = register("void");
-	public static final RegistryKey<Biome> OVERWORLD = register("overworld");
-	public static final RegistryKey<Biome> NETHER = register("nether");
-	public static final RegistryKey<Biome> END = register("end");
-	public static final RegistryKey<Biome> THUNDER_SPIRES = register("thunderspires");
-	public static final RegistryKey<Biome> ANTI_SPIRES = register("antispires");
-	public static final RegistryKey<Biome> NULL = register("null");
+	public static final ResourceKey<Biome> VOID = register("void");
+	public static final ResourceKey<Biome> OVERWORLD = register("overworld");
+	public static final ResourceKey<Biome> NETHER = register("nether");
+	public static final ResourceKey<Biome> END = register("end");
+	public static final ResourceKey<Biome> THUNDER_SPIRES = register("thunderspires");
+	public static final ResourceKey<Biome> ANTI_SPIRES = register("antispires");
+	public static final ResourceKey<Biome> NULL = register("null");
 
-	private static RegistryKey<Biome> register(String id) {
-		REGISTRY.register(id, () -> new Biome.Builder().
-				precipitation(Biome.RainType.NONE).
-				biomeCategory(Biome.Category.NONE).
+	private static ResourceKey<Biome> register(String id) {
+		REGISTRY.register(id, () -> new Biome.BiomeBuilder().
+				precipitation(Biome.Precipitation.NONE).
+				biomeCategory(Biome.BiomeCategory.NONE).
 				depth(0).
 				scale(0).
 				temperature(0).
 				downfall(0).
-				specialEffects(new BiomeAmbience.Builder().fogColor(0).skyColor(0).waterFogColor(0).waterColor(0).build()).
-				mobSpawnSettings(MobSpawnInfo.EMPTY).
+				specialEffects(new BiomeSpecialEffects.Builder().fogColor(0).skyColor(0).waterFogColor(0).waterColor(0).build()).
+				mobSpawnSettings(MobSpawnSettings.EMPTY).
 				generationSettings(BiomeGenerationSettings.EMPTY).
 				temperatureAdjustment(Biome.TemperatureModifier.NONE).
 				build());
-		return RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Voidscape.MODID, id));
+		return ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Voidscape.MODID, id));
 	}
 
 	public static void classload() {

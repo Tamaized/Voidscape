@@ -2,57 +2,58 @@ package tamaized.voidscape.registry;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -71,19 +72,19 @@ import java.util.function.UnaryOperator;
 
 public class RegUtil {
 
-	public static final ItemGroup CREATIVE_TAB = new ItemGroup(Voidscape.MODID.concat(".item_group")) {
+	public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(Voidscape.MODID.concat(".item_group")) {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.VOIDIC_CRYSTAL.get());
 		}
 	};
 	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
-	private static final List<DeferredRegister> REGISTERS = new ArrayList<>();
+	private static final List<DeferredRegister<?>> REGISTERS = new ArrayList<>();
 	private static final List<Runnable> CONFIGURED_FEATURES = new ArrayList<>();
 
-	static <FC extends IFeatureConfig, F extends Feature<FC>> LazyValue<ConfiguredFeature<?, ?>> registerConfiguredFeature(RegistryObject<F> feature, FC inst, UnaryOperator<ConfiguredFeature<?, ?>> config) {
-		LazyValue<ConfiguredFeature<?, ?>> val = new LazyValue<>(() -> config.apply(new ConfiguredFeature<>(feature.get(), inst)));
-		CONFIGURED_FEATURES.add(() -> Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, feature.getId(), val.get()));
+	static <FC extends FeatureConfiguration, F extends Feature<FC>> LazyLoadedValue<ConfiguredFeature<?, ?>> registerConfiguredFeature(RegistryObject<F> feature, FC inst, UnaryOperator<ConfiguredFeature<?, ?>> config) {
+		LazyLoadedValue<ConfiguredFeature<?, ?>> val = new LazyLoadedValue<>(() -> config.apply(new ConfiguredFeature<>(feature.get(), inst)));
+		CONFIGURED_FEATURES.add(() -> Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.getId(), val.get()));
 		return val;
 	}
 
@@ -101,7 +102,7 @@ public class RegUtil {
 		ModBiomes.classload();
 		ModSurfaceBuilders.classload();
 		ModFeatures.classload();
-		for (DeferredRegister register : REGISTERS)
+		for (DeferredRegister<?> register : REGISTERS)
 			register.register(bus);
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> CONFIGURED_FEATURES.forEach(Runnable::run));
 	}
@@ -139,7 +140,7 @@ public class RegUtil {
 		}
 	}
 
-	enum ItemTier implements IItemTier {
+	enum ItemTier implements Tier {
 		VOIDIC_CRYSTAL(5, 2538, 9.5F, 5F, 17, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		}),
@@ -153,7 +154,7 @@ public class RegUtil {
 		private final float efficiency;
 		private final float attackDamage;
 		private final int enchantability;
-		private final LazyValue<Ingredient> repairMaterial;
+		private final LazyLoadedValue<Ingredient> repairMaterial;
 
 		ItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
 			this.harvestLevel = harvestLevelIn;
@@ -161,7 +162,7 @@ public class RegUtil {
 			this.efficiency = efficiencyIn;
 			this.attackDamage = attackDamageIn;
 			this.enchantability = enchantabilityIn;
-			this.repairMaterial = new LazyValue<>(repairMaterialIn);
+			this.repairMaterial = new LazyLoadedValue<>(repairMaterialIn);
 		}
 
 		@Override
@@ -195,7 +196,7 @@ public class RegUtil {
 		}
 	}
 
-	enum ArmorMaterial implements IArmorMaterial { // KB Resist max = 0.25 (0.25 * 4 = 1 = 100%)
+	enum ArmorMaterial implements net.minecraft.world.item.ArmorMaterial { // KB Resist max = 0.25 (0.25 * 4 = 1 = 100%)
 		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		}, true),
@@ -206,8 +207,8 @@ public class RegUtil {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
-			public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(0.5F);
+			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE));
 				model.rightfoot.visible = false;
 				model.leftfoot.visible = false;
 				model.bodyToLeg.visible = false;
@@ -236,14 +237,14 @@ public class RegUtil {
 						float scale = 0.05F;
 						float amp = 0.15F;
 						float offset = 0.25F;
-						model.topLeftTentacle.xRot = MathHelper.cos(tick * scale) * amp + offset;
-						model.topLeftTentacle.yRot = MathHelper.sin(tick * scale + 0.2F) * amp + offset;
-						model.topRightTentacle.xRot = MathHelper.sin(tick * scale + 0.4F) * amp + offset;
-						model.topRightTentacle.yRot = MathHelper.cos(tick * scale + 0.6F) * amp - offset;
-						model.bottomLeftTentacle.xRot = MathHelper.sin(tick * scale + 0.7F) * amp - offset;
-						model.bottomLeftTentacle.yRot = MathHelper.cos(tick * scale + 0.5F) * amp + offset;
-						model.bottomRightTentacle.xRot = MathHelper.cos(tick * scale + 0.3F) * amp - offset;
-						model.bottomRightTentacle.yRot = MathHelper.sin(tick * scale + 0.1F) * amp - offset;
+						model.topLeftTentacle.xRot = Mth.cos(tick * scale) * amp + offset;
+						model.topLeftTentacle.yRot = Mth.sin(tick * scale + 0.2F) * amp + offset;
+						model.topRightTentacle.xRot = Mth.sin(tick * scale + 0.4F) * amp + offset;
+						model.topRightTentacle.yRot = Mth.cos(tick * scale + 0.6F) * amp - offset;
+						model.bottomLeftTentacle.xRot = Mth.sin(tick * scale + 0.7F) * amp - offset;
+						model.bottomLeftTentacle.yRot = Mth.cos(tick * scale + 0.5F) * amp + offset;
+						model.bottomRightTentacle.xRot = Mth.cos(tick * scale + 0.3F) * amp - offset;
+						model.bottomRightTentacle.yRot = Mth.sin(tick * scale + 0.1F) * amp - offset;
 						break;
 					case HEAD:
 						model.head.visible = true;
@@ -255,7 +256,7 @@ public class RegUtil {
 			}
 
 			@Override
-			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 				return Voidscape.MODID.concat(":textures/models/armor/corrupt.png");
 			}
 		};
@@ -268,7 +269,7 @@ public class RegUtil {
 		private final SoundEvent soundEvent;
 		private final float toughness;
 		private final float knockbackResistance;
-		private final LazyValue<Ingredient> repairMaterial;
+		private final LazyLoadedValue<Ingredient> repairMaterial;
 		private final boolean fullbright;
 
 		ArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial, boolean fullbright) {
@@ -279,29 +280,29 @@ public class RegUtil {
 			this.soundEvent = soundEvent;
 			this.toughness = toughness;
 			this.knockbackResistance = knockbackResistance;
-			this.repairMaterial = new LazyValue<>(repairMaterial);
+			this.repairMaterial = new LazyLoadedValue<>(repairMaterial);
 			this.fullbright = fullbright;
 		}
 
 		@Nullable
 		@OnlyIn(Dist.CLIENT)
-		public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+		public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 			return null;
 		}
 
 		@Nullable
 		@OnlyIn(Dist.CLIENT)
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 			return null;
 		}
 
 		@Override
-		public int getDurabilityForSlot(EquipmentSlotType slotIn) {
+		public int getDurabilityForSlot(EquipmentSlot slotIn) {
 			return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
 		}
 
 		@Override
-		public int getDefenseForSlot(EquipmentSlotType slotIn) {
+		public int getDefenseForSlot(EquipmentSlot slotIn) {
 			return this.damageReductionAmountArray[slotIn.getIndex()];
 		}
 
@@ -348,9 +349,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -373,11 +374,11 @@ public class RegUtil {
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(slot));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -390,9 +391,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -413,9 +414,9 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+				public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 					final ItemStack stack = playerIn.getItemInHand(handIn);
-					return isBroken(stack) ? ActionResult.fail(stack) : super.use(worldIn, playerIn, handIn);
+					return isBroken(stack) ? InteractionResultHolder.fail(stack) : super.use(worldIn, playerIn, handIn);
 				}
 
 				@Override
@@ -429,11 +430,11 @@ public class RegUtil {
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getAttributeModifiers(slot, stack));
-						if (slot == EquipmentSlotType.OFFHAND)
+						if (slot == EquipmentSlot.OFFHAND)
 							map.putAll(factory.apply(4));
 					}
 					return map.build();
@@ -446,9 +447,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -461,9 +462,9 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+				public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 					final ItemStack stack = playerIn.getItemInHand(handIn);
-					return isBroken(stack) ? ActionResult.fail(stack) : super.use(worldIn, playerIn, handIn);
+					return isBroken(stack) ? InteractionResultHolder.fail(stack) : super.use(worldIn, playerIn, handIn);
 				}
 
 				@Override
@@ -477,11 +478,11 @@ public class RegUtil {
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getAttributeModifiers(slot, stack));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -494,9 +495,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -514,14 +515,14 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+				public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 					ItemStack itemstack = playerIn.getItemInHand(handIn);
 					if (isBroken(itemstack))
-						return ActionResult.fail(itemstack);
+						return InteractionResultHolder.fail(itemstack);
 					if (isCharged(itemstack)) {
 						performShooting(worldIn, playerIn, handIn, itemstack, itemstack.getItem() instanceof CrossbowItem && containsChargedProjectile(itemstack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F, 1.0F);
 						setCharged(itemstack, false);
-						return ActionResult.consume(itemstack);
+						return InteractionResultHolder.consume(itemstack);
 					}
 					return super.use(worldIn, playerIn, handIn);
 				}
@@ -537,11 +538,11 @@ public class RegUtil {
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getAttributeModifiers(slot, stack));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -554,9 +555,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -578,10 +579,10 @@ public class RegUtil {
 					if (!isBroken(stack)) {
 						// This must remain an anon class to spoof the reobfuscator from mapping to the wrong SRG name
 						//noinspection Convert2Lambda
-						stack.hurtAndBreak(1, attacker, new Consumer<LivingEntity>() {
+						stack.hurtAndBreak(1, attacker, new Consumer<>() {
 							@Override
 							public void accept(LivingEntity entityIn1) {
-								entityIn1.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+								entityIn1.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 							}
 						});
 						return true;
@@ -590,16 +591,16 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResultType useOn(ItemUseContext context) {
-					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				public InteractionResult useOn(UseOnContext context) {
+					return isBroken(context.getItemInHand()) ? InteractionResult.FAIL : super.useOn(context);
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(slot));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -612,9 +613,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -637,16 +638,16 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResultType useOn(ItemUseContext context) {
-					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				public InteractionResult useOn(UseOnContext context) {
+					return isBroken(context.getItemInHand()) ? InteractionResult.FAIL : super.useOn(context);
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(slot));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -659,9 +660,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -684,16 +685,16 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResultType useOn(ItemUseContext context) {
-					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				public InteractionResult useOn(UseOnContext context) {
+					return isBroken(context.getItemInHand()) ? InteractionResult.FAIL : super.useOn(context);
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(slot));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -706,9 +707,9 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -731,16 +732,16 @@ public class RegUtil {
 				}
 
 				@Override
-				public ActionResultType useOn(ItemUseContext context) {
-					return isBroken(context.getItemInHand()) ? ActionResultType.FAIL : super.useOn(context);
+				public InteractionResult useOn(UseOnContext context) {
+					return isBroken(context.getItemInHand()) ? InteractionResult.FAIL : super.useOn(context);
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(slot));
-						if (slot == EquipmentSlotType.MAINHAND)
+						if (slot == EquipmentSlot.MAINHAND)
 							map.putAll(factory.apply(null));
 					}
 					return map.build();
@@ -749,30 +750,30 @@ public class RegUtil {
 		}
 
 		static RegistryObject<Item> helmet(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_helmet"), armorFactory(tier, EquipmentSlotType.HEAD, properties, factory));
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_helmet"), armorFactory(tier, EquipmentSlot.HEAD, properties, factory));
 		}
 
 		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlotType.CHEST, properties, factory));
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlot.CHEST, properties, factory));
 		}
 
 		static RegistryObject<Item> legs(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_legs"), armorFactory(tier, EquipmentSlotType.LEGS, properties, factory));
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_legs"), armorFactory(tier, EquipmentSlot.LEGS, properties, factory));
 		}
 
 		static RegistryObject<Item> boots(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlotType.FEET, properties, factory));
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlot.FEET, properties, factory));
 		}
 
 		@SuppressWarnings("unchecked")
-		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlotType slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
+		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlot slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
 			return () -> new ArmorItem(tier, slot, properties) {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
-						tooltip.add(new TranslationTextComponent(Voidscape.MODID + ".tooltip.broken").withStyle(TextFormatting.DARK_RED));
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 
@@ -785,17 +786,17 @@ public class RegUtil {
 				}
 
 				@Override
-				public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+				public void onArmorTick(ItemStack stack, Level world, Player player) {
 					if (isBroken(stack)) {
 						if (!player.inventory.add(stack))
-							InventoryHelper.dropItemStack(world, player.position().x(), player.position().y(), player.position().z(), stack);
+							Containers.dropItemStack(world, player.position().x(), player.position().y(), player.position().z(), stack);
 						else
 							stack.shrink(1);
 					}
 				}
 
 				@Override
-				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack) {
+				public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack) {
 					ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
 					if (!isBroken(stack)) {
 						map.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
@@ -807,20 +808,26 @@ public class RegUtil {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-					A tierModel = tier.getArmorModel(entityLiving, itemStack, armorSlot, _default);
-					return tierModel != null ? tierModel : tier.fullbright ? (A) new BipedModel(slot == EquipmentSlotType.LEGS ? 0.5F : 1.0F) {
+				public Object getRenderPropertiesInternal() {
+					return new IItemRenderProperties() {
 						@Override
-						public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-							super.renderToBuffer(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
+						public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+							A tierModel = tier.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+							return tierModel != null ? tierModel : tier.fullbright ? (A) new HumanoidModel<>(Minecraft.getInstance().getEntityModels().
+									bakeLayer(slot == EquipmentSlot.LEGS ? ModelLayers.PLAYER_INNER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR)) {
+								@Override
+								public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+									super.renderToBuffer(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
+								}
+							} : IItemRenderProperties.super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 						}
-					} : super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+					};
 				}
 
 				@Nullable
 				@Override
 				@OnlyIn(Dist.CLIENT)
-				public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+				public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 					String tierTexture = tier.getArmorTexture(stack, entity, slot, type);
 					return tierTexture != null ? tierTexture : super.getArmorTexture(stack, entity, slot, type);
 				}
@@ -829,7 +836,7 @@ public class RegUtil {
 
 		public static abstract class LootingAxe extends AxeItem {
 
-			public LootingAxe(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
+			public LootingAxe(Tier tier, float attackDamageIn, float attackSpeedIn, Properties builder) {
 				super(tier, attackDamageIn, attackSpeedIn, builder);
 			}
 
@@ -848,17 +855,7 @@ public class RegUtil {
 		}
 	}
 
-	static class AttributeData {
-		final Supplier<ModAttribute> attribute;
-		final AttributeModifier.Operation op;
-		final double value;
-
-		private AttributeData(Supplier<ModAttribute> attribute, AttributeModifier.Operation op, double value) {
-			this.attribute = attribute;
-			this.op = op;
-			this.value = value;
-		}
-
+	record AttributeData(Supplier<ModAttribute> attribute, AttributeModifier.Operation op, double value) {
 		static AttributeData make(Supplier<ModAttribute> attribute, AttributeModifier.Operation op, double value) {
 			return new AttributeData(attribute, op, value);
 		}

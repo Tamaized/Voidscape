@@ -1,11 +1,11 @@
 package tamaized.voidscape.turmoil.abilities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
@@ -54,9 +54,9 @@ public class MageAbilities {
 		return true;
 	}).damage(2F);
 	public static final TurmoilAbility TRAUMATIZE = new TurmoilAbility(unloc("traumatize"), TurmoilAbility.Type.Insane, 200, 20 * 20, (spell, caster) -> {
-		RayTraceResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof MobEntity, 32);
-		if (caster.level instanceof ServerWorld && ray instanceof EntityRayTraceResult) {
-			MobEntity entity = (MobEntity) ((EntityRayTraceResult) ray).getEntity();
+		HitResult ray = Voidscape.getHitResultFromEyes(caster, e -> e instanceof Mob, 32);
+		if (caster.level instanceof ServerLevel && ray instanceof EntityHitResult) {
+			Mob entity = (Mob) ((EntityHitResult) ray).getEntity();
 			return ModEffects.dot(caster, entity, ModEffects.TRAUMATIZE.get(), 20 * 20, 0, spell.damage(caster));
 		}
 		return false;

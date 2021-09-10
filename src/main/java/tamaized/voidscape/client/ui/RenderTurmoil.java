@@ -1,32 +1,34 @@
 package tamaized.voidscape.client.ui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
 import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.screen.IncapacitatedScreen;
 import tamaized.voidscape.client.ui.screen.MainScreen;
@@ -103,13 +105,13 @@ public class RenderTurmoil {
 
 	@SubscribeEvent
 	public static void render(RenderGameOverlayEvent.Post event) {
-		World world = Minecraft.getInstance().level;
+		Level world = Minecraft.getInstance().level;
 		if (world != null && Minecraft.getInstance().player != null) {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.hasCoreSkill()) {
 					cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-						switch (event.getType()) {
-							case HOTBAR: {
+						if (event.getType() == RenderGameOverlayEvent.ElementType.LAYER && event instanceof RenderGameOverlayEvent.PostLayer layer) {
+							if (layer.getOverlay() == ForgeIngameGui.HOTBAR_ELEMENT) {
 								if (fadeTick <= 0 || fadeTick > ClientUtil.tick) {
 									renderSpellBar(event.getMatrixStack(), 0, event.getPartialTicks());
 									renderAbilityInstances(event.getMatrixStack(), stats, event.getPartialTicks());
@@ -117,17 +119,15 @@ public class RenderTurmoil {
 									renderAbilityToggle(event.getMatrixStack(), stats, event.getPartialTicks());
 									renderAbilityCooldowns(event.getMatrixStack(), stats, event.getPartialTicks());
 								}
-							}
-							break;
-							case EXPERIENCE: {
+							} else if (layer.getOverlay() == ForgeIngameGui.EXPERIENCE_BAR_ELEMENT) {
 								int xOffset = 124;
 								if (stats.getVoidicPower() < 1000) {
-									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
-									MainWindow window = event.getWindow();
+									ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
+									Window window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
 									int k = (int) (stats.getVoidicPower() / 1000F * 26F);
 									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.color4f(0.5F, 0F, 1F, 1F);
+									RenderSystem.setShaderColor(0.5F, 0F, 1F, 1F);
 									event.getMatrixStack().pushPose();
 									event.getMatrixStack().translate(x, l, 0);
 									event.getMatrixStack().mulPose(Vector3f.ZP.rotationDegrees(90));
@@ -137,7 +137,7 @@ public class RenderTurmoil {
 										Minecraft.getInstance().gui.blit(event.getMatrixStack(), x + 26 - k, l, 26 - k, 69, k, 5);
 									}
 									event.getMatrixStack().popPose();
-									RenderSystem.color4f(1F, 1F, 1F, 1F);
+									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
 									String s = stats.getVoidicPower() + "";
 									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
@@ -152,7 +152,7 @@ public class RenderTurmoil {
 								if (stats.getNullPower() > 0) {
 									if (TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE == null) {
 										TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE = new ResourceLocation(Voidscape.MODID, "texture_gui_icons_location_grayscale");
-										try (IResource iresource = Minecraft.getInstance().getResourceManager().getResource(AbstractGui.GUI_ICONS_LOCATION)) {
+										try (Resource iresource = Minecraft.getInstance().getResourceManager().getResource(AbstractWidget.GUI_ICONS_LOCATION)) {
 											NativeImage image = NativeImage.read(iresource.getInputStream());
 											for (int x = 0; x < image.getWidth(); x++) {
 												for (int y = 0; y < image.getHeight(); y++) {
@@ -161,9 +161,9 @@ public class RenderTurmoil {
 													image.setPixelRGBA(x, y, NativeImage.combine((pixel >> 24) & 0xFF, L, L, L));
 												}
 											}
-											Minecraft.getInstance().getTextureManager().register(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE, new Texture() {
+											Minecraft.getInstance().getTextureManager().register(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE, new AbstractTexture() {
 												@Override
-												public void load(@Nonnull IResourceManager manager) {
+												public void load(@Nonnull ResourceManager manager) {
 													TextureUtil.prepareImage(this.getId(), 0, image.getWidth(), image.getHeight());
 													image.upload(0, 0, 0, 0, 0, image.getWidth(), image.getHeight(), false, false, false, true);
 												}
@@ -172,12 +172,12 @@ public class RenderTurmoil {
 											e.printStackTrace();
 										}
 									}
-									Minecraft.getInstance().getTextureManager().bind(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE);
-									MainWindow window = event.getWindow();
+									ClientUtil.bindTexture(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE);
+									Window window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
 									int k = (int) (stats.getNullPower() / 1000F * 26F);
 									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.color4f(1F, 1F, 1F, 1F);
+									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 									event.getMatrixStack().pushPose();
 									event.getMatrixStack().translate(x, l, 0);
 									event.getMatrixStack().mulPose(Vector3f.ZP.rotationDegrees(90));
@@ -187,7 +187,7 @@ public class RenderTurmoil {
 										Minecraft.getInstance().gui.blit(event.getMatrixStack(), x + 26 - k, l, 26 - k, 69, k, 5);
 									}
 									event.getMatrixStack().popPose();
-									RenderSystem.color4f(1F, 1F, 1F, 1F);
+									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
 									String s = stats.getNullPower() + "";
 									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
@@ -200,12 +200,12 @@ public class RenderTurmoil {
 									xOffset += 26;
 								}
 								if (stats.getInsanePower() > 0) {
-									Minecraft.getInstance().getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
-									MainWindow window = event.getWindow();
+									ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
+									Window window = event.getWindow();
 									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
 									int k = (int) (stats.getInsanePower() / 1000F * 26F);
 									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.color4f(1F, 0F, 0F, 1F);
+									RenderSystem.setShaderColor(1F, 0F, 0F, 1F);
 									event.getMatrixStack().pushPose();
 									event.getMatrixStack().translate(x, l, 0);
 									event.getMatrixStack().mulPose(Vector3f.ZP.rotationDegrees(90));
@@ -215,7 +215,7 @@ public class RenderTurmoil {
 										Minecraft.getInstance().gui.blit(event.getMatrixStack(), x + 26 - k, l, 26 - k, 69, k, 5);
 									}
 									event.getMatrixStack().popPose();
-									RenderSystem.color4f(1F, 1F, 1F, 1F);
+									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
 									String s = stats.getInsanePower() + "";
 									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
@@ -227,16 +227,13 @@ public class RenderTurmoil {
 									Minecraft.getInstance().gui.getFont().draw(event.getMatrixStack(), s, (float) i1, (float) j1, 0xFF0000);
 								}
 							}
-							break;
-							default:
-								break;
 						}
 					});
 				}
 				if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
 					return;
 				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(data, insanity, event.getMatrixStack(), event.getPartialTicks()));
-				float perc = MathHelper.clamp(
+				float perc = Mth.clamp(
 
 						(deltaTick + (deltaPos == null ?
 
@@ -250,13 +247,12 @@ public class RenderTurmoil {
 						0F, 1F);
 				if (perc > 0) {
 					RenderSystem.enableBlend();
-					RenderSystem.enableAlphaTest();
 					{
 
-						BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+						BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+						buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
-						MainWindow window = Minecraft.getInstance().getWindow();
+						Window window = Minecraft.getInstance().getWindow();
 
 						float x = 0F;
 						float y = 0F;
@@ -269,31 +265,26 @@ public class RenderTurmoil {
 							final float g = Color24.asFloat(color.bit16);
 							final float b = Color24.asFloat(color.bit8);
 							final float a = Color24.asFloat(color.bit0);
-							buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
-							buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
-							buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
-							buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
+							buffer.vertex(x, y + h, z).uv(0F, 1F).color(r, g, b, a).endVertex();
+							buffer.vertex(x + w, y + h, z).uv(1F, 1F).color(r, g, b, a).endVertex();
+							buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
+							buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
 						};
 						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
 
-						Minecraft.getInstance().getTextureManager().bind(TEXTURE_MASK);
+						ClientUtil.bindTexture(TEXTURE_MASK);
 
-						StencilBufferUtil.setup(STENCIL_INDEX, () -> {
-							RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-							Tessellator.getInstance().end();
-							RenderSystem.defaultAlphaFunc();
-						});
+						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
-						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+						buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
 
 						StencilBufferUtil.render(STENCIL_INDEX, () -> {
 							RenderSystem.disableTexture();
-							Tessellator.getInstance().end();
+							Tesselator.getInstance().end();
 							RenderSystem.enableTexture();
 						}, true);
 					}
-					RenderSystem.disableAlphaTest();
 					RenderSystem.disableBlend();
 				}
 			}));
@@ -302,55 +293,51 @@ public class RenderTurmoil {
 			OverlayMessageHandler.render(event.getMatrixStack(), event.getPartialTicks());
 	}
 
-	private static void renderInsanity(Turmoil data, Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+	private static void renderInsanity(Turmoil data, Insanity insanity, PoseStack matrixStack, float partialTicks) {
 		renderInfusion(insanity, matrixStack, partialTicks);
 		renderParanoia(data, insanity, matrixStack, partialTicks);
 	}
 
-	private static void renderParanoia(Turmoil data, Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+	private static void renderParanoia(Turmoil data, Insanity insanity, PoseStack matrixStack, float partialTicks) {
 		if (insanity.getParanoia() < 500F || data.getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal())
 			return;
 		float perc = (insanity.getParanoia() - 500F) / 90F;
-		perc = MathHelper.clamp(perc, 0, 1);
+		perc = Mth.clamp(perc, 0, 1);
 		perc *= 0.25F;
 		float endPerc = (insanity.getParanoia() - 590F) / 10F;
-		endPerc = MathHelper.clamp(endPerc, 0, 1);
+		endPerc = Mth.clamp(endPerc, 0, 1);
 		endPerc *= 0.25F;
 		perc += endPerc;
-		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-		Minecraft.getInstance().getTextureManager().bind(TEXTURE_WATCHINGYOU);
+		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		ClientUtil.bindTexture(TEXTURE_WATCHINGYOU);
 		final float w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		final float h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		buffer.vertex(0, h, 0).color(1F, 1F, 1F, perc).uv(0, 1).endVertex();
-		buffer.vertex(w, h, 0).color(1F, 1F, 1F, perc).uv(1, 1).endVertex();
-		buffer.vertex(w, 0, 0).color(1F, 1F, 1F, perc).uv(1, 0).endVertex();
-		buffer.vertex(0, 0, 0).color(1F, 1F, 1F, perc).uv(0, 0).endVertex();
+		buffer.vertex(0, h, 0).uv(0, 1).color(1F, 1F, 1F, perc).endVertex();
+		buffer.vertex(w, h, 0).uv(1, 1).color(1F, 1F, 1F, perc).endVertex();
+		buffer.vertex(w, 0, 0).uv(1, 0).color(1F, 1F, 1F, perc).endVertex();
+		buffer.vertex(0, 0, 0).uv(0, 0).color(1F, 1F, 1F, perc).endVertex();
 		RenderSystem.enableBlend();
-		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-		Tessellator.getInstance().end();
-		RenderSystem.defaultAlphaFunc();
+		Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
 		RenderSystem.disableBlend();
 	}
 
-	private static void renderInfusion(Insanity insanity, MatrixStack matrixStack, float partialTicks) {
+	private static void renderInfusion(Insanity insanity, PoseStack matrixStack, float partialTicks) {
 		if (insanity.getInfusion() <= 0)
 			return;
 		float perc = insanity.getInfusion() / 600F;
-		perc = MathHelper.clamp(perc, 0, 1);
-		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
-		Minecraft.getInstance().getTextureManager().bind(TEXTURE_VOIDICINFUSION);
+		perc = Mth.clamp(perc, 0, 1);
+		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		ClientUtil.bindTexture(TEXTURE_VOIDICINFUSION);
 		final float w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		final float h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		buffer.vertex(0, h, 0).color(0.4F, 0F, 1F, perc).uv(0, 1).endVertex();
-		buffer.vertex(w, h, 0).color(0.4F, 0F, 1F, perc).uv(1, 1).endVertex();
-		buffer.vertex(w, 0, 0).color(0.4F, 0F, 1F, perc).uv(1, 0).endVertex();
-		buffer.vertex(0, 0, 0).color(0.4F, 0F, 1F, perc).uv(0, 0).endVertex();
+		buffer.vertex(0, h, 0).uv(0, 1).color(0.4F, 0F, 1F, perc).endVertex();
+		buffer.vertex(w, h, 0).uv(1, 1).color(0.4F, 0F, 1F, perc).endVertex();
+		buffer.vertex(w, 0, 0).uv(1, 0).color(0.4F, 0F, 1F, perc).endVertex();
+		buffer.vertex(0, 0, 0).uv(0, 0).color(0.4F, 0F, 1F, perc).endVertex();
 		RenderSystem.enableBlend();
-		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-		Tessellator.getInstance().end();
-		RenderSystem.defaultAlphaFunc();
+		Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
 		RenderSystem.disableBlend();
 	}
 
@@ -358,25 +345,25 @@ public class RenderTurmoil {
 		return fadeTick <= 0 || fadeTick - ClientUtil.tick > 20 * 5 ? base : Math.max(0, base * ((fadeTick - (ClientUtil.tick + partialTicks)) / (20F * 5F)));
 	}
 
-	public static void renderSpellBar(MatrixStack matrixStack, int z, float partialTicks) {
-		Minecraft.getInstance().getTextureManager().bind(HackyInGameGUIAccessor.WIDGETS_LOCATION());
+	public static void renderSpellBar(PoseStack matrixStack, int z, float partialTicks) {
+		ClientUtil.bindTexture(AbstractWidget.WIDGETS_LOCATION);
 		int w = 61;
 		int h = 22;
 		int x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - w - 2;
 		int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - ((h - 2) / 2 * 3);
 		Minecraft.getInstance().gui.setBlitOffset(-90 + z);
 		float alpha = z != 0 ? 0.25F : fade(0.25F, partialTicks);
-		RenderSystem.color4f(1F, 1F, 1F, alpha);
+		RenderSystem.setShaderColor(1F, 1F, 1F, alpha);
 		RenderSystem.enableBlend();
-		RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-		for (int i = 0; i < 3; i++)
-			Minecraft.getInstance().gui.blit(matrixStack, x, y + (h - 2) * i, 0, 1, w, h);
-		RenderSystem.defaultAlphaFunc();
+		Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX.invokeThenClear(0F, () -> {
+			for (int i = 0; i < 3; i++)
+				BlitWithoutShader.blit(matrixStack, x, y + (h - 2) * i, 0, 1, w, h);
+		});
 		RenderSystem.disableBlend();
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
+		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 	}
 
-	private static void renderAbilityInstances(MatrixStack stack, TurmoilStats stats, float partialTicks) {
+	private static void renderAbilityInstances(PoseStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
@@ -386,54 +373,48 @@ public class RenderTurmoil {
 				continue;
 			int x = ox + (20) * (i % 3);
 			int y = oy + (20) * (i / 3);
-			Minecraft.getInstance().getTextureManager().bind(instance.ability().getTexture());
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			ClientUtil.bindTexture(instance.ability().getTexture());
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 			buffer.vertex(x, y, 0F).uv(0, 0).endVertex();
 			buffer.vertex(x, y + s, 0F).uv(0, 1).endVertex();
 			buffer.vertex(x + s, y + s, 0F).uv(1, 1).endVertex();
 			buffer.vertex(x + s, y, 0F).uv(1, 0).endVertex();
 			RenderSystem.enableBlend();
-			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
-			Tessellator.getInstance().end();
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
-			RenderSystem.defaultAlphaFunc();
+			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityActivates(MatrixStack stack, float partialTicks) {
+	private static void renderAbilityActivates(PoseStack stack, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
-		List<KeyBinding> list = ClientListener.getAbilityKeys();
+		List<KeyMapping> list = ClientListener.getAbilityKeys();
 		for (int i = 0; i < list.size(); i++) {
 			if (!list.get(i).isDown())
 				continue;
 			int x = ox + (20) * (i % 3);
 			int y = oy + (20) * (i / 3);
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 			buffer.vertex(x, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
 			buffer.vertex(x, y + s, 0F).color(0F, 1F, 1F, 1F).endVertex();
 			buffer.vertex(x + s, y + s, 0F).color(0F, 1F, 1F, 1F).endVertex();
 			buffer.vertex(x + s, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
-			RenderSystem.shadeModel(GL11.GL_SMOOTH);
-			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
-			Tessellator.getInstance().end();
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
-			RenderSystem.defaultAlphaFunc();
-			RenderSystem.shadeModel(GL11.GL_FLAT);
+			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityCooldowns(MatrixStack stack, TurmoilStats stats, float partialTicks) {
+	private static void renderAbilityCooldowns(PoseStack stack, TurmoilStats stats, float partialTicks) {
 		if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
 			return;
 		int s = 16;
@@ -452,8 +433,8 @@ public class RenderTurmoil {
 			int x = ox + (20) * (i % 3);
 			int y = oy + (20) * (i / 3);
 			float offset = y + s * (1F - perc);
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 			final float alpha = 0.75F * fade(1F, partialTicks);
 			buffer.vertex(x, offset, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
 			buffer.vertex(x, y + s, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
@@ -461,29 +442,27 @@ public class RenderTurmoil {
 			buffer.vertex(x + s, offset, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
-			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
-			Tessellator.getInstance().end();
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
-			RenderSystem.defaultAlphaFunc();
+			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 			RenderSystem.enableBlend();
-			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
+			//			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F); // FIXME: alphaFunc on text doesnt look possible, is this even needed here?
+			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
 			if (!toggle) {
 				boolean flag;
 				String text = (flag = instance.cooldownRemaining(Minecraft.getInstance().level) > 0) ? String.valueOf(instance.cooldownRemaining(Minecraft.getInstance().level) / 20) : String.valueOf(instance.getCalcCost(stats));
 				Minecraft.getInstance().font.drawShadow(stack, text, x + s / 2F - Minecraft.getInstance().font.width(text) / 2F, y + s / 2F - Minecraft.getInstance().font.lineHeight / 2F, (Math.max(0x04, (int) (fade(1F, partialTicks) * 0xFF)) << 24) | (flag ? 0xFFFF00 : instance.ability().
 						costType() == TurmoilAbility.Type.Insane ? 0xFF0000 : instance.ability().costType() == TurmoilAbility.Type.Null ? 0xFFFFFF : 0x7700FF));
 			}
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
-			RenderSystem.defaultAlphaFunc();
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+			//			RenderSystem.defaultAlphaFunc();
 			RenderSystem.disableBlend();
 		}
 	}
 
-	private static void renderAbilityToggle(MatrixStack stack, TurmoilStats stats, float partialTicks) {
+	private static void renderAbilityToggle(PoseStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
 		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
 		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
@@ -493,21 +472,17 @@ public class RenderTurmoil {
 				continue;
 			int x = ox + (20) * (i % 3);
 			int y = oy + (20) * (i / 3);
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 			buffer.vertex(x, y, 0F).color(1F, 1F, 0F, 1F).endVertex();
 			buffer.vertex(x, y + s, 0F).color(1F, 1F, 0F, 0F).endVertex();
 			buffer.vertex(x + s, y + s, 0F).color(1F, 1F, 0F, 0F).endVertex();
 			buffer.vertex(x + s, y, 0F).color(1F, 1F, 0F, 1F).endVertex();
 			RenderSystem.enableBlend();
 			RenderSystem.disableTexture();
-			RenderSystem.shadeModel(GL11.GL_SMOOTH);
-			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F);
-			RenderSystem.color4f(1F, 1F, 1F, fade(1F, partialTicks));
-			Tessellator.getInstance().end();
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
-			RenderSystem.defaultAlphaFunc();
-			RenderSystem.shadeModel(GL11.GL_FLAT);
+			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 		}

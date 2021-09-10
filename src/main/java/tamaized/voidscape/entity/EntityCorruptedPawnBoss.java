@@ -1,26 +1,26 @@
 package tamaized.voidscape.entity;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerBossInfo;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.CapabilityItemHandler;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
@@ -46,8 +46,8 @@ import java.util.Objects;
 
 public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IInstanceEntity {
 
-	public static final Vector3d[] TENTACLE_POSITIONS = new Vector3d[]{new Vector3d(36.5, 60, 0.5), new Vector3d(27.5, 60, 9.5), new Vector3d(18.5, 60, 18.5), new Vector3d(9.5, 60, 9.5), new Vector3d(0.5, 60, 0.5), new Vector3d(9.5, 60, -8.5), new Vector3d(18.5, 60, -17.5), new Vector3d(27.5, 60, -8.5)};
-	private final ServerBossInfo bossEvent = (ServerBossInfo) (new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenScreen(true);
+	public static final Vec3[] TENTACLE_POSITIONS = new Vec3[]{new Vec3(36.5, 60, 0.5), new Vec3(27.5, 60, 9.5), new Vec3(18.5, 60, 18.5), new Vec3(9.5, 60, 9.5), new Vec3(0.5, 60, 0.5), new Vec3(9.5, 60, -8.5), new Vec3(18.5, 60, -17.5), new Vec3(27.5, 60, -8.5)};
+	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 	public boolean beStill = false;
 	public int aiTick;
 	public Entity lockonTarget;
@@ -56,24 +56,23 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	private AITask<EntityCorruptedPawnBoss> ai;
 	private Instance.InstanceType type;
 
-	public EntityCorruptedPawnBoss(World level) {
+	public EntityCorruptedPawnBoss(Level level) {
 		this(ModEntities.CORRUPTED_PAWN_BOSS.get(), level);
 	}
 
-	public EntityCorruptedPawnBoss(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, World p_i48577_2_) {
+	public EntityCorruptedPawnBoss(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, Level p_i48577_2_) {
 		super(p_i48577_1_, p_i48577_2_);
-		forcedLoading = true;
 		setNoGravity(true);
 	}
 
 	@Override
-	public void startSeenByPlayer(ServerPlayerEntity player) {
+	public void startSeenByPlayer(ServerPlayer player) {
 		super.startSeenByPlayer(player);
 		this.bossEvent.addPlayer(player);
 	}
 
 	@Override
-	public void stopSeenByPlayer(ServerPlayerEntity player) {
+	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
 		this.bossEvent.removePlayer(player);
 	}
@@ -86,7 +85,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	@Override
 	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
 		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
-		setYHeadRot(yRot);
+		setYHeadRot(getYRot());
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
-				TileEntity te = level.getBlockEntity(getRestrictCenter().above(1));
+				BlockEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
 					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> {
 						if (type != Instance.InstanceType.Insane)
@@ -151,8 +150,8 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	@Override
 	public void tick() {
 		if (!level.isClientSide())
-			setDeltaMovement(Vector3d.ZERO);
-		bossEvent.setPercent(this.getHealth() / this.getMaxHealth());
+			setDeltaMovement(Vec3.ZERO);
+		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 		if (getTarget() != null && getTarget().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
 			getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.remove(getTarget()));
 			setTarget(null);
@@ -162,14 +161,14 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 			lookAt(getTarget(), 10F, 10F);
 			if (!beStill) {
 				if (distanceTo(getTarget()) > 4) {
-					Vector3d angle = getLookAngle().scale(0.25F);
-					move(MoverType.SELF, new Vector3d(angle.x(), 0, angle.z()));
+					Vec3 angle = getLookAngle().scale(0.25F);
+					move(MoverType.SELF, new Vec3(angle.x(), 0, angle.z()));
 				}
 			}
 		}
 		if (!level.isClientSide() && getTarget() == null) {
 			Entity closest = null;
-			for (PlayerEntity p : level.getEntitiesOfClass(PlayerEntity.class, getBoundingBox().inflate(20F), e -> true)) {
+			for (Player p : level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(20F), e -> true)) {
 				if (closest == null || distanceTo(p) < distanceTo(closest))
 					closest = p;
 			}
@@ -180,27 +179,27 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT tag) {
+	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
 		type = Instance.InstanceType.fromOrdinal(tag.getCompound(Voidscape.MODID).getInt("instance") - 1);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT tag) {
+	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		if (type != null)
 			nbt.putInt("instance", type.ordinal() + 1);
 		tag.put(Voidscape.MODID, nbt);
 	}
 
 	private void doTeleportParticles() {
-		if (level instanceof ServerWorld)
+		if (level instanceof ServerLevel)
 			for (int i = 0; i < 50; i++) {
 				double x = random.nextFloat() * (getBoundingBox().maxX - getBoundingBox().minX) + getBoundingBox().minX;
 				double y = random.nextFloat() * (getBoundingBox().maxY - getBoundingBox().minY) + getBoundingBox().minY;
 				double z = random.nextFloat() * (getBoundingBox().maxZ - getBoundingBox().minZ) + getBoundingBox().minZ;
-				((ServerWorld) level).sendParticles(ParticleTypes.SQUID_INK, x, y, z, 0, 0, 0, 0, 0);
+				((ServerLevel) level).sendParticles(ParticleTypes.SQUID_INK, x, y, z, 0, 0, 0, 0, 0);
 			}
 	}
 
@@ -217,7 +216,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 		this.type = type;
 		float hp = 20;
 		switch (type) {
-			case Unrestricted:
+			case Unrestricted -> {
 				hp = 400;
 				(
 						ai = new TentacleFall(0, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
@@ -226,8 +225,8 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 						next(new AITask.RandomAITask<>()).
 						next(new TankBuster(8F, false, rand -> rand.nextInt(3) == 0)).
 						next(new AutoAttack(4F));
-				break;
-			case Normal:
+			}
+			case Normal -> {
 				hp = 600;
 				(
 						ai = new TentacleFall(3, 25F, 80 * 20, 25F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
@@ -237,11 +236,11 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 						next(new TankBuster(12F, true, rand -> rand.nextInt(3) == 0)).
 						next(new AutoAttack(6F)).
 						next(new Bind(30F, 30 * 20, 100F, rand -> rand.nextInt(3) == 0));
-				break;
-			case Insane:
+			}
+			case Insane -> {
 				hp = 1200;
-				remove();
-				break;
+				remove(RemovalReason.DISCARDED);
+			}
 		}
 		Objects.requireNonNull(getAttribute(Attributes.MAX_HEALTH)).addPermanentModifier(new AttributeModifier("Instanced Health", hp - 20, AttributeModifier.Operation.ADDITION));
 		setHealth(getMaxHealth());

@@ -2,24 +2,24 @@ package tamaized.voidscape.world;
 
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.concurrent.ThreadTaskExecutor;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.IChunkLightProvider;
-import net.minecraft.world.chunk.listener.IChunkStatusListener;
-import net.minecraft.world.chunk.storage.IOWorker;
-import net.minecraft.world.chunk.storage.RegionFileCache;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ChunkHolder;
-import net.minecraft.world.server.ChunkManager;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketManager;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.SaveFormat;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.util.thread.BlockableEventLoop;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.LightChunkGetter;
+import net.minecraft.world.level.chunk.storage.IOWorker;
+import net.minecraft.world.level.chunk.storage.RegionFileStorage;
+import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
@@ -39,11 +39,11 @@ public class HackyWorldGen {
 
 	public static long seed;
 
-	public static class DeepFreezeChunkManager extends ChunkManager {
+	public static class DeepFreezeChunkManager extends ChunkMap {
 
 		private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-		private static final Method TicketManager_isChunkToRemove = ObfuscationReflectionHelper.findMethod(TicketManager.class, "func_219371_a", long.class);
-		private static final Method TicketManager_updateChunkScheduling = ObfuscationReflectionHelper.findMethod(TicketManager.class, "func_219372_a", long.class, int.class, ChunkHolder.class, int.class);
+		private static final Method TicketManager_isChunkToRemove = ObfuscationReflectionHelper.findMethod(DistanceManager.class, "m_7009_", long.class);
+		private static final Method TicketManager_updateChunkScheduling = ObfuscationReflectionHelper.findMethod(DistanceManager.class, "m_7288_", long.class, int.class, ChunkHolder.class, int.class);
 		private static final MethodHandle handle_TicketManager_isChunkToRemove;
 		private static final MethodHandle handle_TicketManager_updateChunkScheduling;
 
@@ -62,14 +62,14 @@ public class HackyWorldGen {
 
 		private final IOWorker worker;
 
-		public DeepFreezeChunkManager(ServerWorld serverWorld_, SaveFormat.LevelSave levelSave_, DataFixer dataFixer_, TemplateManager templateManager_, Executor executor_, ThreadTaskExecutor<Runnable> threadTaskExecutor_, IChunkLightProvider chunkLightProvider_, ChunkGenerator chunkGenerator_, IChunkStatusListener chunkStatusListener_, Supplier<DimensionSavedDataManager> supplier_, int int_, boolean boolean_) {
-			super(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkStatusListener_, supplier_, int_, boolean_);
+		public DeepFreezeChunkManager(ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
+			super(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkProgressListener, chunkStatusListener_, supplier_, int_, boolean_);
 			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), new File(levelSave_.getDimensionPath(serverWorld_.dimension()), "region"), boolean_, "chunk");
 		}
 
 		@Nullable
 		@Override
-		public CompoundNBT read(ChunkPos chunkPos_) throws IOException {
+		public CompoundTag read(ChunkPos chunkPos_) throws IOException {
 			return worker.load(chunkPos_);
 		}
 
@@ -77,7 +77,7 @@ public class HackyWorldGen {
 			getChunks().forEach(chunk -> {
 				try {
 					if (!(boolean) handle_TicketManager_isChunkToRemove.invokeExact(getDistanceManager(), chunk.getPos().toLong()))
-						handle_TicketManager_updateChunkScheduling.invokeExact(getDistanceManager(), chunk.getPos().toLong(), ChunkManager.MAX_CHUNK_DISTANCE + 1, chunk, 0);
+						handle_TicketManager_updateChunkScheduling.invokeExact(getDistanceManager(), chunk.getPos().toLong(), ChunkMap.MAX_CHUNK_DISTANCE + 1, chunk, 0);
 				} catch (Throwable throwable) {
 					throwable.printStackTrace();
 				}
@@ -88,20 +88,20 @@ public class HackyWorldGen {
 	static class DeepFreezeIOWorker extends IOWorker {
 
 		private final ResourceLocation location;
-		private final RegionFileCache deepStorage;
+		private final RegionFileStorage deepStorage;
 
 		protected DeepFreezeIOWorker(ResourceLocation location, File file_, boolean boolean_, String string_) {
 			super(file_, boolean_, string_);
 			this.location = location;
-			this.deepStorage = new RegionFileCache(new File(file_, "deepfreeze"), boolean_);
+			this.deepStorage = new RegionFileStorage(new File(file_, "deepfreeze"), boolean_);
 		}
 
 		@Nullable
 		@Override
-		public CompoundNBT load(ChunkPos chunkPos_) throws IOException {
-			CompletableFuture<CompoundNBT> completablefuture = this.submitTask(() -> {
+		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
+			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
 				try {
-					CompoundNBT compoundnbt = this.deepStorage.read(chunkPos_);
+					CompoundTag compoundnbt = this.deepStorage.read(chunkPos_);
 					if (compoundnbt == null) {
 						try (InputStream stream = getClass().getResourceAsStream("/data/".
 								concat(location.getNamespace()).
@@ -117,7 +117,7 @@ public class HackyWorldGen {
 							if (stream != null) {
 								DataInputStream data = new RegionFileInputStream(stream).getChunkDataInputStream(chunkPos_);
 								if (data != null) {
-									CompoundNBT nbt = CompressedStreamTools.read(data);
+									CompoundTag nbt = NbtIo.read(data);
 									deepStorage.write(chunkPos_, nbt);
 									compoundnbt = nbt;
 								}

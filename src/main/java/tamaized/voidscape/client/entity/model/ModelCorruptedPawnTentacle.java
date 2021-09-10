@@ -1,31 +1,37 @@
 package tamaized.voidscape.client.entity.model;
 
-import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 
-public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> extends SegmentedModel<T> {
+public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> extends EntityModel<T> {
 
-	private final ImmutableList<ModelRenderer> parts;
+	private ModelPart tentacle;
 
-	private TransparentModelRenderer tentacle;
-
-	public ModelCorruptedPawnTentacle() {
+	public ModelCorruptedPawnTentacle(ModelPart parent) {
 		super(RenderType::entityTranslucent);
-		texWidth = 64;
-		texHeight = 64;
-		ImmutableList.Builder<ModelRenderer> builder = ImmutableList.builder();
+		tentacle = parent.getChild("head");
+	}
 
-		tentacle = new TransparentModelRenderer(this, 0, 32);
-		tentacle.addBox(-2F, 0F, -2F, 4, 12, 4);
-		tentacle.setTexSize(64, 64);
-		tentacle.mirror = true;
-		builder.add(tentacle);
+	public static LayerDefinition createMesh() {
 
-		this.parts = builder.build();
+		MeshDefinition mesh = new MeshDefinition();
+		PartDefinition definition = mesh.getRoot();
+
+		definition.addOrReplaceChild("body",
+				CubeListBuilder.create().texOffs(0, 32).
+						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.ZERO);
+
+		return LayerDefinition.create(mesh, 64, 64);
 	}
 
 	@Override
@@ -34,10 +40,9 @@ public class ModelCorruptedPawnTentacle<T extends EntityCorruptedPawnTentacle> e
 			tentacle.yRot += Math.toRadians(Minecraft.getInstance().getFrameTime());
 	}
 
+
 	@Override
-	public Iterable<ModelRenderer> parts() {
-		return parts;
+	public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
+		tentacle.render(p_103111_, p_103112_, p_103113_, p_103114_, p_103115_, p_103116_, p_103117_, p_103118_);
 	}
-
-
 }

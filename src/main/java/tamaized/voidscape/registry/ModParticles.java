@@ -5,16 +5,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
@@ -27,7 +27,7 @@ public class ModParticles {
 
 	private static final DeferredRegister<ParticleType<?>> REGISTRY = RegUtil.create(ForgeRegistries.PARTICLE_TYPES);
 
-	public static final RegistryObject<ParticleType<ParticleSpellCloudData>> SPELL_CLOUD = REGISTRY.register("spell_cloud", () -> new ParticleType<ParticleSpellCloudData>(false, new ParticleSpellCloudData.Deserializer()) {
+	public static final RegistryObject<ParticleType<ParticleSpellCloudData>> SPELL_CLOUD = REGISTRY.register("spell_cloud", () -> new ParticleType<>(false, new ParticleSpellCloudData.Deserializer()) {
 		@Override
 		public Codec<ParticleSpellCloudData> codec() {
 			return ParticleSpellCloudData.codec();
@@ -41,12 +41,12 @@ public class ModParticles {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void registerFactories(ParticleFactoryRegisterEvent event) {
-		ParticleManager particles = Minecraft.getInstance().particleEngine;
+		ParticleEngine particles = Minecraft.getInstance().particleEngine;
 
 		particles.register(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);
 	}
 
-	public static class ParticleSpellCloudData implements IParticleData {
+	public static class ParticleSpellCloudData implements ParticleOptions {
 		public final int r;
 		public final int g;
 		public final int b;
@@ -68,7 +68,7 @@ public class ModParticles {
 		}
 
 		@Override
-		public void writeToNetwork(@Nonnull PacketBuffer buf) {
+		public void writeToNetwork(@Nonnull FriendlyByteBuf buf) {
 			buf.writeVarInt(r);
 			buf.writeVarInt(g);
 			buf.writeVarInt(b);
@@ -80,7 +80,7 @@ public class ModParticles {
 			return String.format("%d %d %d", r, g, b);
 		}
 
-		public static class Deserializer implements IParticleData.IDeserializer<ParticleSpellCloudData> {
+		public static class Deserializer implements ParticleOptions.Deserializer<ParticleSpellCloudData> {
 			@Nonnull
 			@Override
 			public ParticleSpellCloudData fromCommand(@Nonnull ParticleType<ParticleSpellCloudData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
@@ -95,7 +95,7 @@ public class ModParticles {
 
 			@Nonnull
 			@Override
-			public ParticleSpellCloudData fromNetwork(@Nonnull ParticleType<ParticleSpellCloudData> type, PacketBuffer buf) {
+			public ParticleSpellCloudData fromNetwork(@Nonnull ParticleType<ParticleSpellCloudData> type, FriendlyByteBuf buf) {
 				return new ParticleSpellCloudData(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
 			}
 		}

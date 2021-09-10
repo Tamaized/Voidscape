@@ -1,6 +1,6 @@
 package tamaized.voidscape.entity.ai.pawn;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.ai.AITask;
@@ -27,7 +27,7 @@ public class TentacleFall extends AITask.PendingAITask<EntityCorruptedPawnBoss> 
 					boss.tentacleIndicies.add(num);
 					disable |= 1 << num;
 					left--;
-					Vector3d pos = EntityCorruptedPawnBoss.TENTACLE_POSITIONS[num];
+					Vec3 pos = EntityCorruptedPawnBoss.TENTACLE_POSITIONS[num];
 					EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(boss.level, boss, pos).withHealth(health).explodes(duration, damage);
 					boss.tentacles.add(tentacle);
 					boss.level.addFreshEntity(tentacle);

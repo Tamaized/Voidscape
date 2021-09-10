@@ -1,18 +1,19 @@
 package tamaized.voidscape.client.entity.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderState;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.entity.EntityAntiBolt;
 
@@ -20,26 +21,27 @@ import java.util.Random;
 
 public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 
-	protected static final RenderState.TransparencyState ANTI_TRANSPARENCY = new RenderState.TransparencyState("antibolt_transparency", () -> {
+	protected static final RenderStateShard.TransparencyStateShard ANTI_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("antibolt_transparency", () -> {
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 	}, () -> {
 		RenderSystem.disableBlend();
 		RenderSystem.defaultBlendFunc();
 	});
-	private static final RenderType ANTIBOLT = RenderType.create("antibolt", DefaultVertexFormats.POSITION_COLOR, 7, 256, false, true, RenderType.State.builder().
+	private static final RenderType ANTIBOLT = RenderType.create("antibolt", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().
+			setShaderState(RenderStateAccessor.RENDERTYPE_LIGHTNING_SHADER()).
 			setWriteMaskState(RenderStateAccessor.COLOR_DEPTH_WRITE()).
 			setTransparencyState(ANTI_TRANSPARENCY).
 			setOutputState(RenderStateAccessor.WEATHER_TARGET()).
-			setShadeModelState(RenderStateAccessor.SMOOTH_SHADE()).
 			createCompositeState(false));
 
-	public RenderAntiBolt(EntityRendererManager p_i46157_1_) {
+
+	public RenderAntiBolt(EntityRendererProvider.Context p_i46157_1_) {
 		super(p_i46157_1_);
 	}
 
 	@Override
-	public void render(EntityAntiBolt p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int p_225623_6_) {
+	public void render(EntityAntiBolt p_225623_1_, float p_225623_2_, float p_225623_3_, PoseStack p_225623_4_, MultiBufferSource p_225623_5_, int p_225623_6_) {
 		float[] lvt_7_1_ = new float[8];
 		float[] lvt_8_1_ = new float[8];
 		float lvt_9_1_ = 0.0F;
@@ -53,7 +55,7 @@ public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 			lvt_10_1_ += (float) (lvt_11_1_.nextInt(11) - 5);
 		}
 
-		IVertexBuilder lvt_11_2_ = p_225623_5_.getBuffer(ANTIBOLT);
+		VertexConsumer vertexconsumer = p_225623_5_.getBuffer(ANTIBOLT);
 		Matrix4f lvt_12_2_ = p_225623_4_.last().pose();
 
 		for (int lvt_13_1_ = 0; lvt_13_1_ < 4; ++lvt_13_1_) {
@@ -102,17 +104,17 @@ public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 					float green = 0.02F;
 					float blue = 0.1F;
 
-					quad(lvt_12_2_, lvt_11_2_, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, false, false, true, false);
-					quad(lvt_12_2_, lvt_11_2_, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, true, false, true, true);
-					quad(lvt_12_2_, lvt_11_2_, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, true, true, false, true);
-					quad(lvt_12_2_, lvt_11_2_, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, false, true, false, false);
+					quad(lvt_12_2_, vertexconsumer, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, false, false, true, false);
+					quad(lvt_12_2_, vertexconsumer, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, true, false, true, true);
+					quad(lvt_12_2_, vertexconsumer, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, true, true, false, true);
+					quad(lvt_12_2_, vertexconsumer, lvt_18_1_, lvt_19_1_, lvt_20_1_, lvt_21_1_, lvt_22_1_, red, green, blue, lvt_27_1_, lvt_28_1_, false, true, false, false);
 				}
 			}
 		}
 
 	}
 
-	private static void quad(Matrix4f p_229116_0_, IVertexBuilder p_229116_1_, float p_229116_2_, float p_229116_3_, int p_229116_4_, float p_229116_5_, float p_229116_6_, float p_229116_7_, float p_229116_8_, float p_229116_9_, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
+	private static void quad(Matrix4f p_229116_0_, VertexConsumer p_229116_1_, float p_229116_2_, float p_229116_3_, int p_229116_4_, float p_229116_5_, float p_229116_6_, float p_229116_7_, float p_229116_8_, float p_229116_9_, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
 		p_229116_1_.vertex(p_229116_0_, p_229116_2_ + (p_229116_12_ ? p_229116_11_ : -p_229116_11_), (float) (p_229116_4_ * -16), p_229116_3_ + (p_229116_13_ ? p_229116_11_ : -p_229116_11_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
 		p_229116_1_.vertex(p_229116_0_, p_229116_5_ + (p_229116_12_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_13_ ? p_229116_10_ : -p_229116_10_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
 		p_229116_1_.vertex(p_229116_0_, p_229116_5_ + (p_229116_14_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_15_ ? p_229116_10_ : -p_229116_10_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
@@ -121,6 +123,6 @@ public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 
 	@Override
 	public ResourceLocation getTextureLocation(EntityAntiBolt p_110775_1_) {
-		return AtlasTexture.LOCATION_BLOCKS;
+		return TextureAtlas.LOCATION_BLOCKS;
 	}
 }

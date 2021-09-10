@@ -1,6 +1,6 @@
 package tamaized.voidscape.turmoil.caps;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 
 public interface IVoidicArrow {

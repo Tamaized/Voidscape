@@ -1,7 +1,7 @@
 package tamaized.voidscape.asm;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import tamaized.voidscape.registry.ModAttributes;
 
 public class VoidVisibilityCache {
@@ -27,7 +27,7 @@ public class VoidVisibilityCache {
 		for (int i = 0; i <= 15; ++i) {
 			float f = (float) i / 15.0F;
 			float f1 = f / (4.0F - 3.0F * f);
-			afloat[i] = MathHelper.lerp(light, f1, 1.0F);
+			afloat[i] = Mth.lerp(light, f1, 1.0F);
 		}
 
 		return afloat;

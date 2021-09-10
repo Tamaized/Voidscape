@@ -1,6 +1,6 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
 

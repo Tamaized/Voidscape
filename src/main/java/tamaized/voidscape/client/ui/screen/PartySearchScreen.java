@@ -1,9 +1,9 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketCreateParty;
 import tamaized.voidscape.party.ClientPartyInfo;
@@ -21,7 +21,7 @@ public class PartySearchScreen extends TurmoilScreen {
 	private long tick;
 
 	public PartySearchScreen(Duties.Duty duty, Instance.InstanceType type) {
-		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.form")));
+		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
 		this.type = type;
 	}
@@ -33,11 +33,11 @@ public class PartySearchScreen extends TurmoilScreen {
 			return;
 
 		tick = minecraft.level == null ? 0 : minecraft.level.getGameTime();
-		MainWindow window = minecraft.getWindow();
+		Window window = minecraft.getWindow();
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -47,12 +47,12 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Find Party"),
+				new TranslatableComponent("Find Party"), // FIXME: localize
 
 				button -> minecraft.setScreen(new PartyListScreen(duty, type))
 
 		));
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -62,7 +62,7 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Start Party"),
+				new TranslatableComponent("Start Party"),
 
 				button -> {
 					if (minecraft.player == null)
@@ -73,7 +73,7 @@ public class PartySearchScreen extends TurmoilScreen {
 				}
 
 		));
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 
@@ -83,7 +83,7 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Back"),
+				new TranslatableComponent("Back"),
 
 				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
 
@@ -91,7 +91,7 @@ public class PartySearchScreen extends TurmoilScreen {
 	}
 
 	@Override
-	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
 		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host != null) {
 			onClose();
 			return;

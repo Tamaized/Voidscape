@@ -1,6 +1,6 @@
 package tamaized.voidscape.entity.ai.pawn;
 
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.registry.ModDamageSource;

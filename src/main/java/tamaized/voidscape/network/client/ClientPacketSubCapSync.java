@@ -1,9 +1,9 @@
 package tamaized.voidscape.network.client;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
@@ -16,7 +16,7 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 	private SubCapability.ISubCap.ISubCapData.INetworkHandler cap;
 	private int otherEntity;
 	private ResourceLocation id;
-	private PacketBuffer data;
+	private FriendlyByteBuf data;
 
 	public ClientPacketSubCapSync(@Nullable SubCapability.ISubCap.ISubCapData.INetworkHandler cap, int id) {
 		this(cap);
@@ -28,7 +28,7 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player == null || player.level == null || !player.level.isClientSide()) {
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
@@ -43,14 +43,14 @@ public class ClientPacketSubCapSync implements NetworkMessages.IMessage<ClientPa
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeInt(otherEntity);
 		packet.writeResourceLocation(cap.id());
 		cap.write(packet);
 	}
 
 	@Override
-	public ClientPacketSubCapSync fromBytes(PacketBuffer packet) {
+	public ClientPacketSubCapSync fromBytes(FriendlyByteBuf packet) {
 		otherEntity = packet.readInt();
 		id = packet.readResourceLocation();
 		data = packet;

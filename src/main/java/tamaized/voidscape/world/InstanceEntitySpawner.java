@@ -1,10 +1,10 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 
@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 public final class InstanceEntitySpawner {
 
-	private static final Map<ResourceLocation, List<BiConsumer<World, Instance.InstanceType>>> REGISTRY = new HashMap<>();
+	private static final Map<ResourceLocation, List<BiConsumer<Level, Instance.InstanceType>>> REGISTRY = new HashMap<>();
 
 	static {
 		registerSpawner(new ResourceLocation(Voidscape.MODID, "pawn"), (level, type) -> {
@@ -24,7 +24,7 @@ public final class InstanceEntitySpawner {
 			boss.initInstanceType(type);
 			boss.restrictTo(new BlockPos(18, 61, 0), 1024);
 			boss.moveTo(boss.getRestrictCenter().getX() + 0.5F, boss.getRestrictCenter().getY(), boss.getRestrictCenter().getZ() + 0.5F);
-			boss.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(0.5F, 63, 0.5F));
+			boss.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(0.5F, 63, 0.5F));
 			level.addFreshEntity(boss);
 		});
 	}
@@ -34,9 +34,9 @@ public final class InstanceEntitySpawner {
 	}
 
 	@SafeVarargs
-	public static void registerSpawner(ResourceLocation instance, BiConsumer<World, Instance.InstanceType>... entities) {
+	public static void registerSpawner(ResourceLocation instance, BiConsumer<Level, Instance.InstanceType>... entities) {
 		REGISTRY.computeIfAbsent(instance, (e) -> new ArrayList<>());
-		for (BiConsumer<World, Instance.InstanceType> entity : entities)
+		for (BiConsumer<Level, Instance.InstanceType> entity : entities)
 			REGISTRY.get(instance).add(entity);
 	}
 

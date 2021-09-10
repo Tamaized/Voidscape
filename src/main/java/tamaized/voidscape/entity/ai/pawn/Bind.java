@@ -1,7 +1,7 @@
 package tamaized.voidscape.entity.ai.pawn;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
@@ -30,8 +30,8 @@ public class Bind extends AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBo
 			}
 			cooldown = boss.tickCount + 20 * 30;
 			InstanceManager.findByLevel(boss.level).ifPresent(instance -> {
-				List<PlayerEntity> players = instance.players();
-				List<PlayerEntity> list = players.stream().filter(p -> p.getCapability(SubCapability.CAPABILITY).
+				List<Player> players = instance.players();
+				List<Player> list = players.stream().filter(p -> p.getCapability(SubCapability.CAPABILITY).
 						map(cap -> cap.get(Voidscape.subCapBind).
 								map(bind -> !bind.isBound()).orElse(true) && cap.get(Voidscape.subCapTurmoilData).map(data -> data.classType() == TurmoilSkill.CoreType.Healer).
 								orElse(false)).orElse(false)).collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class Bind extends AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBo
 					list = players;
 				list = list.stream().filter(Entity::canUpdate).collect(Collectors.toList());
 				if (!list.isEmpty()) {
-					PlayerEntity player = list.size() == 1 ? list.get(0) : list.get(boss.getRandom().nextInt(list.size()));
+					Player player = list.size() == 1 ? list.get(0) : list.get(boss.getRandom().nextInt(list.size()));
 					EntityCorruptedPawnTentacle tentacle = new EntityCorruptedPawnTentacle(boss.level, boss, player.position()).withHealth(health).explodes(duration, damage).markBinding(player);
 					boss.level.addFreshEntity(tentacle);
 				}

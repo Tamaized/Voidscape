@@ -1,19 +1,20 @@
 package tamaized.voidscape.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityAntiBolt extends LightningBoltEntity {
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-	public EntityAntiBolt(EntityType<? extends EntityAntiBolt> entityType_, World worldIn) {
+public class EntityAntiBolt extends LightningBolt {
+
+	public EntityAntiBolt(EntityType<? extends EntityAntiBolt> entityType_, Level worldIn) {
 		super(entityType_, worldIn);
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

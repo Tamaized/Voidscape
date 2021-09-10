@@ -1,33 +1,33 @@
 package tamaized.voidscape.entity.abilities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fmllegacy.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
@@ -38,10 +38,10 @@ import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import javax.annotation.Nullable;
 
-public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAdditionalSpawnData {
+public class EntitySpellBolt extends AbstractArrow implements IEntityAdditionalSpawnData {
 
-	private static final DataParameter<Integer> SEEK_TARGET = EntityDataManager.defineId(EntitySpellBolt.class, DataSerializers.INT);
-	private static final DataParameter<Integer> COLOR = EntityDataManager.defineId(EntitySpellBolt.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> SEEK_TARGET = SynchedEntityData.defineId(EntitySpellBolt.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(EntitySpellBolt.class, EntityDataSerializers.INT);
 
 	public LivingEntity shootingEntity;
 	private TurmoilAbility ability;
@@ -55,12 +55,12 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	private double speed = 1D;
 	private float range = 32.0F;
 	private int maxRange = -1;
-	private Vector3d startingPoint;
+	private Vec3 startingPoint;
 
-	public EntitySpellBolt(EntityType<? extends EntitySpellBolt> type, World level) {
+	public EntitySpellBolt(EntityType<? extends EntitySpellBolt> type, Level level) {
 		super(type, level);
 		startingPoint = position();
-		pickup = AbstractArrowEntity.PickupStatus.DISALLOWED;
+		pickup = AbstractArrow.Pickup.DISALLOWED;
 		noCulling = true;
 	}
 
@@ -69,24 +69,24 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		this.ability = ability;
 	}
 
-	public EntitySpellBolt(EntityType<? extends EntitySpellBolt> type, World worldIn, LivingEntity shooter, double x, double y, double z) {
+	public EntitySpellBolt(EntityType<? extends EntitySpellBolt> type, Level worldIn, LivingEntity shooter, double x, double y, double z) {
 		this(type, worldIn);
 		shootingEntity = shooter;
 		setPos(x, y + shooter.getEyeHeight(), z);
 		startingPoint = position();
-		Vector3d vec = shooter.getViewVector(1.0f);
+		Vec3 vec = shooter.getViewVector(1.0f);
 		setTheVelocity(vec.x, vec.y, vec.z);
 	}
 
 	private void setTheVelocity(double x, double y, double z) {
 		setDeltaMovement(x, y, z);
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-			float f = MathHelper.sqrt(x * x + z * z);
-			this.xRot = (float) (MathHelper.atan2(y, f) * (180D / Math.PI));
-			this.yRot = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
-			this.xRotO = this.xRot;
-			this.yRotO = this.yRot;
-			this.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, this.xRot);
+			float f = Mth.sqrt((float) (x * x + z * z));
+			this.setXRot((float) (Mth.atan2(y, f) * (180D / Math.PI)));
+			this.setYRot((float) (Mth.atan2(x, z) * (180D / Math.PI)));
+			this.xRotO = this.getXRot();
+			this.yRotO = this.getYRot();
+			this.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
 		}
 	}
 
@@ -119,7 +119,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		buffer.writeDouble(getX());
 		buffer.writeDouble(getY());
 		buffer.writeDouble(getZ());
@@ -129,7 +129,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer buffer) {
+	public void readSpawnData(FriendlyByteBuf buffer) {
 		moveTo(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		range = buffer.readFloat();
 		speed = buffer.readDouble();
@@ -152,8 +152,8 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 
 	}
 
-	public static boolean canHitEntity(World level, Entity entity, boolean healing) {
-		return (healing && entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD) || !(level instanceof ServerWorld) || ((entity instanceof PlayerEntity) == healing && !entity.isSpectator() && entity.isAlive() && entity.isPickable()) || !(((ServerChunkProvider) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
+	public static boolean canHitEntity(Level level, Entity entity, boolean healing) {
+		return (healing && entity instanceof Mob && ((Mob) entity).getMobType() == MobType.UNDEAD) || !(level instanceof ServerLevel) || ((entity instanceof Player) == healing && !entity.isSpectator() && entity.isAlive() && entity.isPickable()) || !(((ServerChunkCache) level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator);
 	}
 
 	@Override
@@ -195,32 +195,32 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		}
 
 		if (seekTarget != null) {
-			double scale = MathHelper.clamp(distanceTo(seekTarget) / 100D * 0.18D + 0.02D, 0.02D, 0.5D);
-			Vector3d targetVec = new Vector3d(seekTarget.getX() - this.getX(), (seekTarget.getY() + seekTarget.getEyeHeight()) - this.getY(), seekTarget.getZ() - this.getZ()).scale(scale);
-			Vector3d courseVec = getDeltaMovement();
+			double scale = Mth.clamp(distanceTo(seekTarget) / 100D * 0.18D + 0.02D, 0.02D, 0.5D);
+			Vec3 targetVec = new Vec3(seekTarget.getX() - this.getX(), (seekTarget.getY() + seekTarget.getEyeHeight()) - this.getY(), seekTarget.getZ() - this.getZ()).scale(scale);
+			Vec3 courseVec = getDeltaMovement();
 			double courseLen = courseVec.length();
 			double targetLen = targetVec.length();
 			double totalLen = Math.sqrt(courseLen * courseLen + targetLen * targetLen);
-			Vector3d newMotion = courseVec.scale(courseLen / totalLen).add(targetVec.scale(targetLen / totalLen));
+			Vec3 newMotion = courseVec.scale(courseLen / totalLen).add(targetVec.scale(targetLen / totalLen));
 			this.setDeltaMovement(newMotion.normalize());
 		}
 
 		if (xRotO == 0.0F && yRotO == 0.0F) {
-			float f = MathHelper.sqrt(getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z);
-			yRotO = yRot = (float) (Math.atan2(getDeltaMovement().x, getDeltaMovement().z) * (180.0D / Math.PI));
-			xRotO = xRot = (float) (Math.atan2(getDeltaMovement().y, f) * (180.0D / Math.PI));
+			float f = Mth.sqrt((float) (getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z));
+			setYRot(yRotO = (float) (Math.atan2(getDeltaMovement().x, getDeltaMovement().z) * (180.0D / Math.PI)));
+			setXRot(xRotO = (float) (Math.atan2(getDeltaMovement().y, f) * (180.0D / Math.PI)));
 		}
 
 		BlockPos blockpos = new BlockPos(getX(), getY(), getZ());
 		BlockState iblockstate = level.getBlockState(blockpos);
 
-		if (!iblockstate.isAir(this.level, blockpos)) {
+		if (!iblockstate.isAir()) {
 			VoxelShape voxelshape = iblockstate.getCollisionShape(this.level, blockpos);
 			if (!voxelshape.isEmpty()) {
-				for (AxisAlignedBB axisalignedbb : voxelshape.toAabbs()) {
-					if (axisalignedbb.move(blockpos).contains(new Vector3d(this.getX(), this.getY(), this.getZ()))) {
+				for (AABB axisalignedbb : voxelshape.toAabbs()) {
+					if (axisalignedbb.move(blockpos).contains(new Vec3(this.getX(), this.getY(), this.getZ()))) {
 						blockHit(iblockstate, blockpos);
-						remove();
+						remove(RemovalReason.DISCARDED);
 						return;
 					}
 				}
@@ -231,9 +231,9 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		++ticksInAir;
 		if (maxRange >= 0) {
 			if (startingPoint.distanceTo(position()) >= maxRange)
-				remove();
+				remove(RemovalReason.DISCARDED);
 		} else if (ticksInAir > 20 * 5)
-			remove();
+			remove(RemovalReason.DISCARDED);
 
 		if (!level.isClientSide())
 			for (Entity e : level.getEntities(this, getBoundingBox().inflate(1F, 1F, 1F))) {
@@ -246,7 +246,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 			}
 
 		float f1 = 0.99F;
-		float f4 = MathHelper.sqrt(getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z);
+		float f4 = Mth.sqrt((float) (getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().z * getDeltaMovement().z));
 
 		if (isInWater()) {
 			for (int l = 0; l < 4; ++l) {
@@ -257,27 +257,27 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 		}
 
 		moveTo(getX() + getDeltaMovement().x * speed * f1, getY() + getDeltaMovement().y * speed * f1, getZ() + getDeltaMovement().z * speed * f1);
-		yRot = (float) (Math.atan2(getDeltaMovement().x, getDeltaMovement().z) * (180.0D / Math.PI));
+		setYRot((float) (Math.atan2(getDeltaMovement().x, getDeltaMovement().z) * (180.0D / Math.PI)));
 
-		xRot = (float) (MathHelper.atan2(getDeltaMovement().y, (double) f4) * (180D / Math.PI));
-		while (xRot - xRotO < -180.0F) {
+		setXRot((float) (Mth.atan2(getDeltaMovement().y, (double) f4) * (180D / Math.PI)));
+		while (getXRot() - xRotO < -180.0F) {
 			xRotO -= 360.0F;
 		}
 
-		while (xRot - xRotO >= 180.0F) {
+		while (getXRot() - xRotO >= 180.0F) {
 			xRotO += 360.0F;
 		}
 
-		while (yRot - yRotO < -180.0F) {
+		while (getYRot() - yRotO < -180.0F) {
 			yRotO -= 360.0F;
 		}
 
-		while (yRot - yRotO >= 180.0F) {
+		while (getYRot() - yRotO >= 180.0F) {
 			yRotO += 360.0F;
 		}
 
-		xRot = xRotO + (xRot - xRotO) * 0.2F;
-		yRot = yRotO + (yRot - yRotO) * 0.2F;
+		setXRot(xRotO + (getXRot() - xRotO) * 0.2F);
+		setYRot(yRotO + (getYRot() - yRotO) * 0.2F);
 
 		if (isInWaterOrRain())
 			clearFire();
@@ -293,40 +293,40 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	protected void onHit(RayTraceResult raytraceResultIn) {
+	protected void onHit(HitResult p_37260_) {
 		// NO-OP
 	}
 
 	protected void onBurst() {
 		int color = entityData.get(COLOR);
-		if (level instanceof ServerWorld)
+		if (level instanceof ServerLevel)
 			for (int i = 0; i < 50; i++) {
-				Vector3d vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vector3d(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
-				((ServerWorld) level).sendParticles(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0, 0, 1F);
+				Vec3 vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vec3(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
+				((ServerLevel) level).sendParticles(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0, 0, 1F);
 			}
 		level.getEntities(this, getBoundingBox().inflate(4F)).forEach(entity -> {
 			if (entity != this && (healing || entity != shootingEntity) && canHitEntity(entity))
 				onHit(entity);
 		});
-		remove();
+		remove(RemovalReason.DISCARDED);
 	}
 
 	protected void onHit(Entity entity) {
 		DamageSource damagesource = getDamageSource(shootingEntity);
 
-		if (entity instanceof LivingEntity && (((!healing || (entity instanceof MobEntity && ((MobEntity) entity).getMobType() == CreatureAttribute.UNDEAD)) && entity.hurt(damagesource, damage)) || (healing && Voidscape.healTargetAndAggro((LivingEntity) entity, shootingEntity, damage)))) {
+		if (entity instanceof LivingEntity && (((!healing || (entity instanceof Mob && ((Mob) entity).getMobType() == MobType.UNDEAD)) && entity.hurt(damagesource, damage)) || (healing && Voidscape.healTargetAndAggro((LivingEntity) entity, shootingEntity, damage)))) {
 			LivingEntity entitylivingbase = (LivingEntity) entity;
 			if (!healing)
 				doPostHurtEffects(entitylivingbase);
-			remove();
+			remove(RemovalReason.DISCARDED);
 		} else {
 			setDeltaMovement(getDeltaMovement().x * -0.10000000149011612D, getDeltaMovement().y * -0.10000000149011612D, getDeltaMovement().z * -0.10000000149011612D);
-			yRot += 180.0F;
+			setYRot(getYRot() + 180.0F);
 			yRotO += 180.0F;
 			ticksInAir = 0;
 
 			if (!level.isClientSide() && getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().y * getDeltaMovement().y + getDeltaMovement().z * getDeltaMovement().z < 0.0010000000474974513D) {
-				remove();
+				remove(RemovalReason.DISCARDED);
 			}
 		}
 	}
@@ -345,12 +345,12 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 
 	}
 
@@ -360,7 +360,7 @@ public class EntitySpellBolt extends AbstractArrowEntity implements IEntityAddit
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

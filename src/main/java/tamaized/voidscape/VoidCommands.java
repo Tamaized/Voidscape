@@ -4,13 +4,13 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 import tamaized.voidscape.registry.ModArmors;
@@ -30,38 +30,38 @@ public final class VoidCommands {
 
 	}
 
-	private static <T extends SubCapability.ISubCap.ISubCapData> int getDataAndRun(SubCapability.ISubCap.SubCapKey<T> type, CommandContext<CommandSource> context, Consumer<T> exec) throws CommandSyntaxException {
+	private static <T extends SubCapability.ISubCap.ISubCapData> int getDataAndRun(SubCapability.ISubCap.SubCapKey<T> type, CommandContext<CommandSourceStack> context, Consumer<T> exec) throws CommandSyntaxException {
 		context.getSource().getPlayerOrException().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(type).ifPresent(exec));
 		return 0;
 	}
 
-	private static int getArgAsInt(CommandContext<CommandSource> context, String id) {
+	private static int getArgAsInt(CommandContext<CommandSourceStack> context, String id) {
 		return context.getArgument(id, Integer.class);
 	}
 
 	public static class Debug {
-		public static ArgumentBuilder<CommandSource, ?> register() {
+		public static ArgumentBuilder<CommandSourceStack, ?> register() {
 			return Commands.literal("debug").
 					requires(cs -> cs.hasPermission(2)).
 					then(Commands.literal("sword").
 							executes(context -> {
-								PlayerEntity me = context.getSource().getPlayerOrException();
+								Player me = context.getSource().getPlayerOrException();
 								ItemStack stack = new ItemStack(ModTools.CORRUPT_SWORD.get());
-								stack.addAttributeModifier(ModAttributes.VOIDIC_DMG.get(), new AttributeModifier("god", 50, AttributeModifier.Operation.ADDITION), EquipmentSlotType.MAINHAND);
+								stack.addAttributeModifier(ModAttributes.VOIDIC_DMG.get(), new AttributeModifier("god", 50, AttributeModifier.Operation.ADDITION), EquipmentSlot.MAINHAND);
 								me.inventory.add(stack);
 								return 0;
 							})).
 					then(Commands.literal("eyes").
 							executes(context -> {
-								PlayerEntity me = context.getSource().getPlayerOrException();
+								Player me = context.getSource().getPlayerOrException();
 								ItemStack stack = new ItemStack(ModArmors.CORRUPT_HELMET.get());
-								stack.addAttributeModifier(ModAttributes.VOIDIC_VISIBILITY.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlotType.HEAD);
+								stack.addAttributeModifier(ModAttributes.VOIDIC_VISIBILITY.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlot.HEAD);
 								me.inventory.add(stack);
 								return 0;
 							})).
 					then(Commands.literal("hurt").
 							executes(context -> {
-								PlayerEntity me = context.getSource().getPlayerOrException();
+								Player me = context.getSource().getPlayerOrException();
 								EntitySpellBolt bolt = new EntitySpellBolt(ModEntities.SPELL_BOLT.get(), context.getSource().getLevel());
 								bolt.setPos(me.getX(), me.getY() + 10, me.getZ());
 								bolt.shoot(0, -1, 0, 1F, 0F);
@@ -87,15 +87,15 @@ public final class VoidCommands {
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, Turmoil::forceStart))).
 					then(Commands.literal("get").
 							then(Commands.literal("progress").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new StringTextComponent(data.getProgression().name()), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(data.getProgression().name()), false)))).
 							then(Commands.literal("state").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new StringTextComponent(data.getState().name()), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(data.getState().name()), false)))).
 							then(Commands.literal("level").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new StringTextComponent(String.valueOf(data.getLevel())), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getLevel())), false)))).
 							then(Commands.literal("infusion").
-									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new StringTextComponent(String.valueOf(data.getInfusion())), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getInfusion())), false)))).
 							then(Commands.literal("paranoia").
-									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new StringTextComponent(String.valueOf(data.getParanoia())), false))))).
+									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getParanoia())), false))))).
 					then(Commands.literal("set").
 							then(Commands.literal("progress").
 									then(Commands.argument("id", IntegerArgumentType.integer(0, Progression.values().length - 1)).
@@ -114,7 +114,7 @@ public final class VoidCommands {
 											executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> data.setParanoia(getArgAsInt(context, "amount"))))))).
 					then(Commands.literal("pawn").
 							executes(context -> {
-								PlayerEntity player = context.getSource().getPlayerOrException();
+								Player player = context.getSource().getPlayerOrException();
 								player.level.addFreshEntity(new EntityCorruptedPawnTentacle(player.level, null, player.position()).markBinding(player));
 								return 0;
 							}));

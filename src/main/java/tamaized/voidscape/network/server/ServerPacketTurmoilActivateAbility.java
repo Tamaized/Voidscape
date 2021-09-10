@@ -1,7 +1,7 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -17,18 +17,18 @@ public class ServerPacketTurmoilActivateAbility implements NetworkMessages.IMess
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player != null)
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.executeAbility(player, id)));
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeVarInt(id);
 	}
 
 	@Override
-	public ServerPacketTurmoilActivateAbility fromBytes(PacketBuffer packet) {
+	public ServerPacketTurmoilActivateAbility fromBytes(FriendlyByteBuf packet) {
 		id = packet.readVarInt();
 		return this;
 	}

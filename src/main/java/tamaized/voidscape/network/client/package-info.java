@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
 package tamaized.voidscape.network.client;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

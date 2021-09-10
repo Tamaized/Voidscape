@@ -1,9 +1,9 @@
 package tamaized.voidscape.turmoil.abilities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TurmoilStats;
@@ -65,6 +65,7 @@ public class TurmoilAbility {
 		}
 	}
 
+	@Nullable
 	public static TurmoilAbility getFromID(int id) {
 		return id < 0 || id >= REGISTRY.size() ? null : REGISTRY.get(id);
 	}
@@ -126,17 +127,17 @@ public class TurmoilAbility {
 		return id;
 	}
 
-	public TranslationTextComponent getTitle() {
-		return new TranslationTextComponent(unloc.concat(".title"));
+	public TranslatableComponent getTitle() {
+		return new TranslatableComponent(unloc.concat(".title"));
 	}
 
-	public TranslationTextComponent getDescription() {
-		TranslationTextComponent desc = new TranslationTextComponent(unloc.concat(".desc"));
-		desc.append("\n\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.cost", cost).append(" ").
-				append(new TranslationTextComponent(Voidscape.MODID + ".ability.power." + type.name().toLowerCase(Locale.US)))).
-				append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.cooldown", cooldown));
+	public TranslatableComponent getDescription() {
+		TranslatableComponent desc = new TranslatableComponent(unloc.concat(".desc"));
+		desc.append("\n\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.cost", cost).append(" ").
+						append(new TranslatableComponent(Voidscape.MODID + ".ability.power." + type.name().toLowerCase(Locale.US)))).
+				append("\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.cooldown", cooldown));
 		if (damage > 0)
-			desc.append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".ability.damage", damage));
+			desc.append("\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.damage", damage));
 		return desc;
 	}
 

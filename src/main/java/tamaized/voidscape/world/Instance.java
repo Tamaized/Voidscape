@@ -1,13 +1,13 @@
 package tamaized.voidscape.world;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.LevelStem;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
@@ -17,21 +17,21 @@ import java.util.stream.Collectors;
 
 public final class Instance {
 
-	private final RegistryKey<World> location;
-	private final Dimension dimension;
+	private final ResourceKey<Level> location;
+	private final LevelStem dimension;
 	public boolean locked;
 	public int tick;
-	private ServerWorld level;
+	private ServerLevel level;
 	private int unloadTick = 30 * 20;
 	private InstanceType type = InstanceType.Unrestricted;
 	private int maxPlayers = 1;
-	private List<PlayerEntity> players = new ArrayList<>();
+	private List<Player> players = new ArrayList<>();
 	private boolean unloading;
 
-	public Instance(RegistryKey<Dimension> loc, Dimension dimension) {
+	public Instance(ResourceKey<LevelStem> loc, LevelStem dimension) {
 		if (!(dimension.generator() instanceof InstanceChunkGenerator))
 			throw new IllegalArgumentException("Dimension Generator must be of Type: " + InstanceChunkGenerator.class);
-		location = RegistryKey.create(Registry.DIMENSION_REGISTRY, loc.location());
+		location = ResourceKey.create(Registry.DIMENSION_REGISTRY, loc.location());
 		this.dimension = dimension;
 	}
 
@@ -39,7 +39,7 @@ public final class Instance {
 		return (InstanceChunkGenerator) dimension.generator();
 	}
 
-	public RegistryKey<World> location() {
+	public ResourceKey<Level> location() {
 		return location;
 	}
 
@@ -61,7 +61,7 @@ public final class Instance {
 		return maxPlayers;
 	}
 
-	public void init(ServerWorld level) {
+	public void init(ServerLevel level) {
 		this.level = level;
 		Voidscape.LOGGER.info("Initializing Instance: ".concat(this.location.location().toString()));
 	}
@@ -81,7 +81,7 @@ public final class Instance {
 	public void unload() {
 		Voidscape.LOGGER.info("Unloading Instance: ".concat(this.location.location().toString()));
 		players.clear();
-		level.getEntities().forEach(Entity::remove);
+		level.getEntities().getAll().forEach(entity -> entity.remove(Entity.RemovalReason.DISCARDED));
 		locked = false;
 		tick = 0;
 		unloadTick++;
@@ -90,11 +90,11 @@ public final class Instance {
 		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 	}
 
-	public ServerWorld getLevel() {
+	public ServerLevel getLevel() {
 		return level;
 	}
 
-	public Dimension dimension() {
+	public LevelStem dimension() {
 		return dimension;
 	}
 
@@ -110,11 +110,11 @@ public final class Instance {
 		return unloading;
 	}
 
-	public List<PlayerEntity> players() {
+	public List<Player> players() {
 		return ImmutableList.copyOf(players);
 	}
 
-	public void addPlayer(PlayerEntity player) {
+	public void addPlayer(Player player) {
 		if ((unloadTick < 30 * 20 && !active()) || locked() || players.contains(player) || players.size() >= maxPlayers)
 			return;
 		if (!active() && !load())
@@ -123,8 +123,8 @@ public final class Instance {
 		final float p = 0.785F;
 		player.moveTo(Math.round(3F * Math.cos(p * i)) + 0.5F, player.getY(), Math.round(3F * Math.sin(p * i)) + 0.5F, -90F, 0F);
 		Entity entity = player.changeDimension(Voidscape.getWorld(player.level, location), InstanceTeleporter.INSTANCE);
-		if (entity instanceof PlayerEntity)
-			players.add((PlayerEntity) entity);
+		if (entity instanceof Player)
+			players.add((Player) entity);
 	}
 
 	private void unloadChunks() {
@@ -137,12 +137,12 @@ public final class Instance {
 
 	public void tick() {
 		InstanceSpecialEffects.doEffects(this);
-		level.players().forEach(player -> player.abilities.mayBuild = false);
+		level.players().forEach(player -> player.getAbilities().mayBuild = false);
 		if (!active()) {
 			if (!level.players().isEmpty())
 				new ArrayList<>(level.players()).forEach(player -> {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getWorld(player.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
 				});
 			tick = 0;
 			locked = false;
@@ -152,7 +152,7 @@ public final class Instance {
 			level.players().stream().filter(player -> !players.contains(player)).collect(Collectors.toList()).
 					forEach(player -> {
 						player.setHealth(player.getMaxHealth() * 0.1F);
-						player.changeDimension(Voidscape.getWorld(player.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
+						player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
 					});
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
 			if (unloadTick == 20 * 10)

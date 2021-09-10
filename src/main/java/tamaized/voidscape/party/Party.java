@@ -1,8 +1,8 @@
 package tamaized.voidscape.party;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
 import tamaized.voidscape.turmoil.Duties;
@@ -17,13 +17,13 @@ public class Party {
 
 	private final Duties.Duty duty;
 	private final Instance.InstanceType type;
-	private final ServerPlayerEntity leader;
-	private final List<ServerPlayerEntity> members = new ArrayList<>();
+	private final ServerPlayer leader;
+	private final List<ServerPlayer> members = new ArrayList<>();
 	private String password = "";
 	private boolean reserving;
 	Instance instance;
 
-	public Party(Duties.Duty duty, Instance.InstanceType type, ServerPlayerEntity leader) {
+	public Party(Duties.Duty duty, Instance.InstanceType type, ServerPlayer leader) {
 		this.duty = duty;
 		this.type = type;
 		this.leader = leader;
@@ -55,7 +55,7 @@ public class Party {
 		sendPackets();
 	}
 
-	public ServerPlayerEntity host() {
+	public ServerPlayer host() {
 		return leader;
 	}
 
@@ -71,11 +71,11 @@ public class Party {
 		return reserving;
 	}
 
-	public List<ServerPlayerEntity> members() {
+	public List<ServerPlayer> members() {
 		return ImmutableList.copyOf(members);
 	}
 
-	public boolean addMember(ServerPlayerEntity player, String password) {
+	public boolean addMember(ServerPlayer player, String password) {
 		if (!reserving && this.password.equals(password) && !full() && !members.contains(player)) {
 			members.add(player);
 			sendPackets();
@@ -84,7 +84,7 @@ public class Party {
 		return false;
 	}
 
-	public void removeMember(@Nullable ServerPlayerEntity player) {
+	public void removeMember(@Nullable ServerPlayer player) {
 		if (player != null && player != leader && members.contains(player)) {
 			members.remove(player);
 			sendPackets();
@@ -106,7 +106,7 @@ public class Party {
 		return password.equals(test);
 	}
 
-	public boolean isMember(ServerPlayerEntity player) {
+	public boolean isMember(ServerPlayer player) {
 		return members.contains(player);
 	}
 

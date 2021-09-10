@@ -1,15 +1,15 @@
 package tamaized.voidscape.turmoil.caps;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import tamaized.voidscape.Voidscape;
 
 public interface IAggroTable {
 
 	ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "aggrotable");
 
-	void tick(MobEntity entity);
+	void tick(Mob entity);
 
 	void addHate(LivingEntity attacker, double hate, boolean existing);
 

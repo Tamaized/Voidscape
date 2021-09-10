@@ -1,33 +1,23 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ISkyRenderHandler;
-
-import java.nio.FloatBuffer;
-import java.util.Random;
 
 public class VoidSkyRenderer implements ISkyRenderHandler {
 
-	private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
+	/*private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
 	private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
 	private static final Random RANDOM = new Random(31100L);
 	private static final FloatBuffer MODELVIEW = GLAllocation.createFloatBuffer(16);
 	private static final FloatBuffer PROJECTION = GLAllocation.createFloatBuffer(16);
-	private FloatBuffer buffer = GLAllocation.createFloatBuffer(16);
+	private FloatBuffer buffer = GLAllocation.createFloatBuffer(16);*/
 
 	@Override
-	public void render(int ticks, float partialTicks, MatrixStack matrixStack, ClientWorld world, Minecraft mc) { // FIXME: raw GL bad
-		double scale = 200.0D;
+	public void render(int ticks, float partialTicks, PoseStack matrixStack, ClientLevel world, Minecraft mc) { // FIXME: use a shader
+		/*double scale = 200.0D;
 		double offset = scale / 2D;
 
 		double x = -offset;
@@ -40,7 +30,7 @@ public class VoidSkyRenderer implements ISkyRenderHandler {
 
 		float exactTick = (float) ticks + partialTicks;
 		float dur = 3200F;
-		float phase = MathHelper.cos((float) Math.toRadians(((exactTick % dur) / dur) * 360F)) * 0.5F + 0.5F;
+		float phase = Mth.cos((float) Math.toRadians(((exactTick % dur) / dur) * 360F)) * 0.5F + 0.5F;
 		float maxPhases = 8F;
 		int minPhases = 1;
 		int phases = (int) Math.ceil((phase * maxPhases) / 1F);
@@ -86,9 +76,9 @@ public class VoidSkyRenderer implements ISkyRenderHandler {
 			RenderSystem.scalef(4.5F - f2 / 4.0F, 4.5F - f2 / 4.0F, 1.0F);
 			GlStateManager._multMatrix(PROJECTION);
 			GlStateManager._multMatrix(MODELVIEW);
-			Tessellator tessellator = Tessellator.getInstance();
+			Tesselator tessellator = Tesselator.getInstance();
 			BufferBuilder vertexbuffer = tessellator.getBuilder();
-			vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+			vertexbuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 			float fade = j == 0 ? 0.1F : j < (phases + (minPhases - 1)) ? 1.0F : (phase % (1F / maxPhases) * maxPhases);
 
@@ -140,17 +130,17 @@ public class VoidSkyRenderer implements ISkyRenderHandler {
 		GlStateManager._disableTexGen(GlStateManager.TexGen.S);
 		GlStateManager._disableTexGen(GlStateManager.TexGen.T);
 		GlStateManager._disableTexGen(GlStateManager.TexGen.R);
-		RenderSystem.enableLighting();
+		RenderSystem.enableLighting();*/
 	}
 
-	private FloatBuffer getBuffer(float p_188193_1_, float p_188193_2_, float p_188193_3_) {
+	/*private FloatBuffer getBuffer(float p_188193_1_, float p_188193_2_, float p_188193_3_) {
 		this.buffer.clear();
 		this.buffer.put(p_188193_1_).put(p_188193_2_).put(p_188193_3_).put(0.0F);
 		this.buffer.flip();
 		return this.buffer;
-	}
+	}*/
 
 	protected void bindTexture(ResourceLocation location) {
-		Minecraft.getInstance().getTextureManager().bind(location);
+		ClientUtil.bindTexture(location);
 	}
 }

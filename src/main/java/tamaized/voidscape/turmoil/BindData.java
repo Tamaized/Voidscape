@@ -1,11 +1,11 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 
 public class BindData implements SubCapability.ISubCap.ISubCapData.INetworkHandler {
@@ -36,25 +36,25 @@ public class BindData implements SubCapability.ISubCap.ISubCapData.INetworkHandl
 	}
 
 	@Override
-	public void write(PacketBuffer buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeBoolean(bound);
 	}
 
 	@Override
-	public void read(PacketBuffer buffer) {
+	public void read(FriendlyByteBuf buffer) {
 		bound = buffer.readBoolean();
 	}
 
 	public void tick(Entity parent) {
 		parent.canUpdate(parent.isSpectator() || !bound);
 		if (!parent.canUpdate()) {
-			parent.setDeltaMovement(Vector3d.ZERO);
+			parent.setDeltaMovement(Vec3.ZERO);
 			if (parent instanceof LivingEntity) {
 				LivingEntity living = (LivingEntity) parent;
 				living.animationSpeedOld = living.animationSpeed;
 			}
 		}
-		if (parent instanceof ServerPlayerEntity && parent.tickCount % 20 == 0) {
+		if (parent instanceof ServerPlayer && parent.tickCount % 20 == 0) {
 			sendToClients(parent);
 			if (ticks <= 0)
 				bound = false;

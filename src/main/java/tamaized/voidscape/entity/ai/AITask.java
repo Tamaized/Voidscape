@@ -1,6 +1,6 @@
 package tamaized.voidscape.entity.ai;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,11 @@ import java.util.function.Predicate;
 
 public class AITask<T extends Entity> {
 
-	protected final BiConsumer<T, AITask> exec;
+	protected final BiConsumer<T, AITask<T>> exec;
 	protected boolean finished = false;
 	protected AITask<T> next;
 
-	public AITask(BiConsumer<T, AITask> handle) {
+	public AITask(BiConsumer<T, AITask<T>> handle) {
 		exec = handle;
 		if (!(this instanceof EmptyAITask))
 			next = new EmptyAITask<>();
@@ -62,7 +62,7 @@ public class AITask<T extends Entity> {
 
 	public static class RepeatedAITask<T extends Entity> extends AITask<T> {
 
-		public RepeatedAITask(BiConsumer<T, AITask> handle) {
+		public RepeatedAITask(BiConsumer<T, AITask<T>> handle) {
 			super(handle);
 		}
 
@@ -148,7 +148,7 @@ public class AITask<T extends Entity> {
 		private final Predicate<T> condition;
 		private boolean triggered = false;
 
-		public PendingAITask(BiConsumer<T, AITask> handle, Predicate<T> condition) {
+		public PendingAITask(BiConsumer<T, AITask<T>> handle, Predicate<T> condition) {
 			super(handle);
 			this.condition = condition;
 		}

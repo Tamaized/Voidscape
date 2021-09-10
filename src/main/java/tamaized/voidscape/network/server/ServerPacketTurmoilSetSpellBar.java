@@ -1,7 +1,7 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -23,7 +23,7 @@ public class ServerPacketTurmoilSetSpellBar implements NetworkMessages.IMessage<
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player != null)
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				List<TurmoilAbility> spells = new ArrayList<>();
@@ -46,13 +46,13 @@ public class ServerPacketTurmoilSetSpellBar implements NetworkMessages.IMessage<
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		for (TurmoilAbility ability : slots)
 			packet.writeVarInt(ability == null ? -1 : ability.id());
 	}
 
 	@Override
-	public ServerPacketTurmoilSetSpellBar fromBytes(PacketBuffer packet) {
+	public ServerPacketTurmoilSetSpellBar fromBytes(FriendlyByteBuf packet) {
 		for (int index = 0; index < 9; index++)
 			slots[index] = TurmoilAbility.getFromID(packet.readVarInt());
 		return this;

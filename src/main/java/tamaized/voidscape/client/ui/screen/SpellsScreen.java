@@ -1,20 +1,21 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSetSpellBar;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -28,7 +29,7 @@ import java.util.Objects;
 
 public class SpellsScreen extends TurmoilScreen {
 
-	private final Button.ITooltip tooltip = (button, matrixStack, x, y) -> {
+	private final Button.OnTooltip tooltip = (button, matrixStack, x, y) -> {
 		if (button instanceof SpellButton && GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
 			this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(((SpellButton) button).getTooltip(), Math.max(this.width / 2 - 43, 170)), x, y);
 	};
@@ -36,13 +37,13 @@ public class SpellsScreen extends TurmoilScreen {
 	private TurmoilAbility drag = null;
 
 	public SpellsScreen() {
-		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.spells")));
+		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.spells")));
 	}
 
 	@Override
 	public void onClose() {
 		TurmoilAbility[] slots = new TurmoilAbility[9];
-		buttons.stream().filter(SlotButton.class::isInstance).map(SlotButton.class::cast).forEach(slot -> slots[slot.id] = slot.set);
+		renderables.stream().filter(SlotButton.class::isInstance).map(SlotButton.class::cast).forEach(slot -> slots[slot.id] = slot.set);
 		Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilSetSpellBar(slots));
 		super.onClose();
 		if (minecraft != null)
@@ -50,7 +51,7 @@ public class SpellsScreen extends TurmoilScreen {
 	}
 
 	@Override
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (data == null || minecraft == null || minecraft.level == null)
 			return;
@@ -60,14 +61,14 @@ public class SpellsScreen extends TurmoilScreen {
 			int size = 20;
 			int x = mouseX - size / 2;
 			int y = mouseY - size / 2;
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 			buffer.vertex(x, y, 0F).uv(0, 0).endVertex();
 			buffer.vertex(x, y + size, 0F).uv(0, 1).endVertex();
 			buffer.vertex(x + size, y + size, 0F).uv(1, 1).endVertex();
 			buffer.vertex(x + size, y, 0F).uv(1, 0).endVertex();
-			minecraft.getTextureManager().bind(drag.getTexture());
-			Tessellator.getInstance().end();
+			ClientUtil.bindTexture(drag.getTexture());
+			Tesselator.getInstance().end();
 		}
 	}
 
@@ -84,7 +85,7 @@ public class SpellsScreen extends TurmoilScreen {
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (minecraft == null || data == null)
 			return;
-		MainWindow window = minecraft.getWindow();
+		Window window = minecraft.getWindow();
 
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
@@ -105,10 +106,10 @@ public class SpellsScreen extends TurmoilScreen {
 				if (inst != null)
 					slot.set = inst.ability();
 			}
-			addButton(slot);
+			addRenderableWidget(slot);
 		}
 
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 
@@ -118,7 +119,7 @@ public class SpellsScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Back"),
+				new TranslatableComponent("Back"), // FIXME: localize
 
 				button -> onClose()
 
@@ -126,7 +127,7 @@ public class SpellsScreen extends TurmoilScreen {
 	}
 
 	public void addSpell(TurmoilAbility ability, int x, int y) {
-		addButton(new SpellButton(this, ability, x, y, 20));
+		addRenderableWidget(new SpellButton(this, ability, x, y, 20));
 	}
 
 	class SpellButton extends Button {
@@ -134,7 +135,7 @@ public class SpellsScreen extends TurmoilScreen {
 		private final TurmoilAbility ability;
 
 		SpellButton(SpellsScreen parent, TurmoilAbility ability, int x, int y, int s) {
-			super(x, y, s, s, new StringTextComponent(""), button -> {
+			super(x, y, s, s, new TextComponent(""), button -> {
 				if (!button.active)
 					return;
 				parent.drag = ability;
@@ -146,24 +147,24 @@ public class SpellsScreen extends TurmoilScreen {
 			return ability;
 		}
 
-		ITextProperties getTooltip() {
+		FormattedText getTooltip() {
 			return ability.getTitle().copy().append("\n\n").append(ability.getDescription());
 		}
 
 		@Override
-		public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 			if (minecraft == null)
 				return;
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			minecraft.getTextureManager().bind(ability.getTexture());
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+			ClientUtil.bindTexture(ability.getTexture());
 			Matrix4f matrix = stack.last().pose();
 			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).endVertex();
 			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
 			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
 			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
 			RenderSystem.enableDepthTest();
-			Tessellator.getInstance().end();
+			Tesselator.getInstance().end();
 			RenderSystem.disableDepthTest();
 			if (this.isHovered())
 				this.renderToolTip(stack, mouseX, mouseY);
@@ -176,24 +177,24 @@ public class SpellsScreen extends TurmoilScreen {
 		private TurmoilAbility set;
 
 		SlotButton(int id, int x, int y) {
-			super(x, y, 16, 16, new StringTextComponent(""), button -> {
+			super(x, y, 16, 16, new TextComponent(""), button -> {
 			});
 			this.id = id;
 		}
 
 		@Override
-		public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+		public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 			if (minecraft == null || set == null)
 				return;
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			minecraft.getTextureManager().bind(set.getTexture());
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+			ClientUtil.bindTexture(set.getTexture());
 			Matrix4f matrix = stack.last().pose();
 			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).endVertex();
 			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
 			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
 			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
-			Tessellator.getInstance().end();
+			Tesselator.getInstance().end();
 		}
 
 		@Override

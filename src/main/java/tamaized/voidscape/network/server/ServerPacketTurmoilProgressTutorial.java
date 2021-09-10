@@ -1,7 +1,7 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.Progression;
@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 public class ServerPacketTurmoilProgressTutorial implements NetworkMessages.IMessage<ServerPacketTurmoilProgressTutorial> {
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player != null)
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.getProgression() == Progression.MidTutorial && data.getState() == Turmoil.State.OPEN && !data.isTalking())
@@ -23,12 +23,12 @@ public class ServerPacketTurmoilProgressTutorial implements NetworkMessages.IMes
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 
 	}
 
 	@Override
-	public ServerPacketTurmoilProgressTutorial fromBytes(PacketBuffer packet) {
+	public ServerPacketTurmoilProgressTutorial fromBytes(FriendlyByteBuf packet) {
 		return this;
 	}
 

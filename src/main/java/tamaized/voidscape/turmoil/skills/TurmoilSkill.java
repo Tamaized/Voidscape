@@ -1,9 +1,9 @@
 package tamaized.voidscape.turmoil.skills;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
@@ -20,8 +20,8 @@ public class TurmoilSkill {
 
 	private final int id;
 
-	private final TranslationTextComponent title;
-	private final TranslationTextComponent description;
+	private final TranslatableComponent title;
+	private final TranslatableComponent description;
 	private final Supplier<Supplier<ResourceLocation>> texture;
 	private final int spentPoints;
 	private final int cost;
@@ -35,7 +35,7 @@ public class TurmoilSkill {
 		Null, Tank, Healer, Melee, Ranged
 	}
 
-	public TurmoilSkill(TranslationTextComponent title, TranslationTextComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, CoreType core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
+	public TurmoilSkill(TranslatableComponent title, TranslatableComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, CoreType core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
 		this.title = title;
 		this.description = desc;
 		this.texture = texture;
@@ -49,7 +49,7 @@ public class TurmoilSkill {
 		this.disabled = disabled;
 		desc.append("\n");
 		for (TurmoilAbility ability : this.abilities)
-			desc.append("\n").append(new TranslationTextComponent(Voidscape.MODID + ".skills.ability").append(ability.getTitle()).append("\n").append(ability.getDescription())).append("\n");
+			desc.append("\n").append(new TranslatableComponent(Voidscape.MODID + ".skills.ability").append(ability.getTitle()).append("\n").append(ability.getDescription())).append("\n");
 		stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(desc,
 
 				"voidic_damage", stats.voidicDamage),
@@ -79,13 +79,13 @@ public class TurmoilSkill {
 
 	}
 
-	private static TranslationTextComponent stat(TranslationTextComponent parent, String name, Number stat) {
+	private static TranslatableComponent stat(TranslatableComponent parent, String name, Number stat) {
 		return stat(parent, name, stat, false);
 	}
 
-	private static TranslationTextComponent stat(TranslationTextComponent parent, String name, Number stat, boolean percent) {
+	private static TranslatableComponent stat(TranslatableComponent parent, String name, Number stat, boolean percent) {
 		if (stat.doubleValue() > 0)
-			parent.append("\n").append(new TranslationTextComponent(Voidscape.MODID.concat(".skills.stats.".concat(name)), percent ? stat + "%" : stat));
+			parent.append("\n").append(new TranslatableComponent(Voidscape.MODID.concat(".skills.stats.".concat(name)), percent ? stat + "%" : stat));
 		return parent;
 	}
 
@@ -104,11 +104,11 @@ public class TurmoilSkill {
 		Object classload = TurmoilSkills.MAGE_SKILLS;
 	}
 
-	public TranslationTextComponent getTitle() {
+	public TranslatableComponent getTitle() {
 		return title;
 	}
 
-	public TranslationTextComponent getDescription() {
+	public TranslatableComponent getDescription() {
 		return description;
 	}
 
@@ -195,7 +195,7 @@ public class TurmoilSkill {
 			return EMPTY;
 		}
 
-		public static Stats decode(PacketBuffer buffer) {
+		public static Stats decode(FriendlyByteBuf buffer) {
 			return new Stats(buffer.readFloat(),
 
 					buffer.readInt(),
@@ -251,7 +251,7 @@ public class TurmoilSkill {
 			);
 		}
 
-		public void encode(PacketBuffer buffer) {
+		public void encode(FriendlyByteBuf buffer) {
 			buffer.writeFloat(voidicDamage).
 					writeInt(voidicDamagePercent).
 					writeFloat(voidicDamageReduction).

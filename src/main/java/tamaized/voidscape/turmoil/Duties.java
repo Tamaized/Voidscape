@@ -1,9 +1,9 @@
 package tamaized.voidscape.turmoil;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
@@ -39,12 +39,12 @@ public class Duties {
 
 		private final ResourceLocation group;
 		private final Progression req;
-		private final ITextComponent display;
+		private final Component display;
 
 		Duty(ResourceLocation group, Progression req, String display) {
 			this.group = group;
 			this.req = req;
-			this.display = new TranslationTextComponent(Voidscape.MODID + ".gui.duty." + display);
+			this.display = new TranslatableComponent(Voidscape.MODID + ".gui.duty." + display);
 			DUTY_LIST.add(this);
 		}
 
@@ -56,7 +56,7 @@ public class Duties {
 			return req;
 		}
 
-		public ITextComponent display() {
+		public Component display() {
 			return display;
 		}
 

@@ -1,9 +1,9 @@
 package tamaized.voidscape.world;
 
-import net.minecraft.block.PortalInfo;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.portal.PortalInfo;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
@@ -17,13 +17,13 @@ public final class InstanceTeleporter implements ITeleporter {
 	}
 
 	@Override
-	public Entity placeEntity(Entity oldEntity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+	public Entity placeEntity(Entity oldEntity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
 		oldEntity.fallDistance = 0;
 		return repositionEntity.apply(false);
 	}
 
 	@Override
-	public PortalInfo getPortalInfo(Entity oldEntity, ServerWorld destWorld, Function<ServerWorld, PortalInfo> defaultPortalInfo) {
-		return new PortalInfo(new Vector3d(oldEntity.getX(), 61, oldEntity.getZ()), Vector3d.ZERO, oldEntity.yRot, oldEntity.xRot);
+	public PortalInfo getPortalInfo(Entity oldEntity, ServerLevel destWorld, Function<ServerLevel, PortalInfo> defaultPortalInfo) {
+		return new PortalInfo(new Vec3(oldEntity.getX(), 61, oldEntity.getZ()), Vec3.ZERO, oldEntity.getYRot(), oldEntity.getXRot());
 	}
 }

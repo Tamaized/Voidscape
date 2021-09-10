@@ -1,23 +1,23 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.registry.ModAttributes;
@@ -56,8 +56,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			infusion--;
 		}
 		decrementEffects = true;
-		paranoia = MathHelper.clamp(paranoia, 0, 600);
-		infusion = MathHelper.clamp(infusion, 0, 600);
+		paranoia = Mth.clamp(paranoia, 0, 600);
+		infusion = Mth.clamp(infusion, 0, 600);
 		if (parent instanceof LivingEntity && !parent.level.isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
 			refreshEquipmentAttributes((LivingEntity) parent);
 			sendToClients(parent);
@@ -69,7 +69,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	private void calculateEffects(LivingEntity parent) {
 		float perc = infusion / 600F;
-		ModifiableAttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
+		AttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
 		if (attribute != null) {
 			attribute.removeModifier(INFUSION_HEALTH_DECAY);
 			attribute.removeModifier(INFUSION_ATTACK_DAMAGE);
@@ -83,16 +83,16 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
 				parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);
 		}
-		if (parent instanceof PlayerEntity) {
+		if (parent instanceof Player) {
 			float sanity = paranoia / 600F;
 			if (parent.level.isClientSide() && sanity > 0.25F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
-				parent.level.playSound((PlayerEntity) parent,
+				parent.level.playSound((Player) parent,
 
 						parent.blockPosition().offset(parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30),
 
 						PARANOIA_SOUNDS[parent.getRandom().nextInt(PARANOIA_SOUNDS.length)],
 
-						SoundCategory.MASTER,
+						SoundSource.MASTER,
 
 						parent.getRandom().nextFloat() * 0.9F + 0.1F,
 
@@ -100,13 +100,13 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			if (!parent.level.isClientSide() && sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.hurt(DamageSource.GENERIC, 1F);
 			if (parent.level.isClientSide() && sanity > 0.75F && parent.tickCount % (82) == 0)
-				parent.level.playSound((PlayerEntity) parent,
+				parent.level.playSound((Player) parent,
 
 						parent.blockPosition(),
 
 						SoundEvents.CONDUIT_AMBIENT,
 
-						SoundCategory.MASTER,
+						SoundSource.MASTER,
 
 						4F,
 
@@ -114,8 +114,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			if (!parent.level.isClientSide()) {
 				if (hunt == null && paranoia >= 600 && parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
 						getProgression().ordinal() >= Progression.PostTutorial.ordinal() && data.getProgression().ordinal() < Progression.CorruptPawnPost.ordinal()).orElse(false)).orElse(false)) {
-					hunt = new EntityCorruptedPawnPhantom(parent.level).target((PlayerEntity) parent);
-					Vector3d vec = new Vector3d(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat() * 2F - 1F);
+					hunt = new EntityCorruptedPawnPhantom(parent.level).target((Player) parent);
+					Vec3 vec = new Vec3(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat() * 2F - 1F);
 					hunt.setPos(parent.getX() + vec.x(), parent.getY() + vec.y(), parent.getZ() + vec.z());
 					parent.level.addFreshEntity(hunt);
 				}
@@ -123,7 +123,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 					if (!hunt.isAlive()) {
 						hunt = null;
 					} else if (!Voidscape.checkForVoidDimension(parent.level) || paranoia < 600) {
-						hunt.remove();
+						hunt.remove(Entity.RemovalReason.DISCARDED);
 						hunt = null;
 					} else {
 						if (parent.distanceTo(hunt) <= 1F) {
@@ -146,8 +146,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public float calcInfusionRate(Entity parent) {
-		if (parent instanceof LivingEntity) {
-			LivingEntity entity = (LivingEntity) parent;
+		if (parent instanceof LivingEntity entity) {
 			return 2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get());
 		}
 		return 1F;
@@ -155,7 +154,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 
 	private void refreshEquipmentAttributes(LivingEntity entity) {
-		for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+		for (EquipmentSlot equipmentslottype : EquipmentSlot.values()) {
 			ItemStack itemstack = entity.getItemBySlot(equipmentslottype);
 			if (!itemstack.isEmpty()) {
 				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers(equipmentslottype));
@@ -189,14 +188,14 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
+	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
 		nbt.putFloat("paranoia", paranoia);
 		nbt.putFloat("infusion", infusion);
 		return nbt;
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, @Nullable Direction side) {
+	public void read(CompoundTag nbt, @Nullable Direction side) {
 		paranoia = nbt.getFloat("paranoia");
 		infusion = nbt.getFloat("infusion");
 	}
@@ -207,21 +206,20 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void write(PacketBuffer buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeFloat(paranoia);
 		buffer.writeFloat(infusion);
 	}
 
 	@Override
-	public void read(PacketBuffer buffer) {
+	public void read(FriendlyByteBuf buffer) {
 		paranoia = buffer.readFloat();
 		infusion = buffer.readFloat();
 	}
 
 	@Override
 	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
-		if (old instanceof Insanity) {
-			Insanity o = (Insanity) old;
+		if (old instanceof Insanity o) {
 			if (!death) {
 				infusion = o.infusion;
 				paranoia = o.paranoia;

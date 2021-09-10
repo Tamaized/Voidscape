@@ -3,18 +3,18 @@ package tamaized.voidscape.world;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.IExtendedNoiseRandom;
-import net.minecraft.world.gen.LazyAreaLayerContext;
-import net.minecraft.world.gen.area.IArea;
-import net.minecraft.world.gen.area.IAreaFactory;
-import net.minecraft.world.gen.area.LazyArea;
-import net.minecraft.world.gen.layer.Layer;
-import net.minecraft.world.gen.layer.ZoomLayer;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.newbiome.area.Area;
+import net.minecraft.world.level.newbiome.area.AreaFactory;
+import net.minecraft.world.level.newbiome.area.LazyArea;
+import net.minecraft.world.level.newbiome.context.BigContext;
+import net.minecraft.world.level.newbiome.context.LazyAreaContext;
+import net.minecraft.world.level.newbiome.layer.Layer;
+import net.minecraft.world.level.newbiome.layer.ZoomLayer;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.world.genlayer.GenLayerVoidBiomes;
@@ -26,9 +26,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.LongFunction;
 
-public class VoidscapeSeededBiomeProvider extends BiomeProvider {
+public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
-	public static final List<RegistryKey<Biome>> BIOMES = ImmutableList.of(
+	public static final List<ResourceKey<Biome>> BIOMES = ImmutableList.of(
 
 			ModBiomes.VOID,
 
@@ -42,7 +42,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 	public static final Codec<VoidscapeSeededBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.
 			fieldOf("seed").stable().orElseGet(() -> HackyWorldGen.seed).forGetter((obj) -> obj.seed), RegistryLookupCodec.
 			create(Registry.BIOME_REGISTRY).forGetter(provider -> provider.registry)).apply(instance, instance.stable(VoidscapeSeededBiomeProvider::new)));
-	private final Map<RegistryKey<Biome>, Integer> idCache = new HashMap<>();
+	private final Map<ResourceKey<Biome>, Integer> idCache = new HashMap<>();
 	private final Map<Integer, Biome> biomeCache = new HashMap<>();
 	private final Registry<Biome> registry;
 	private final Layer genUpper;
@@ -52,7 +52,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 	private final Random layerMergeRandom;
 
 	public VoidscapeSeededBiomeProvider(long seed, Registry<Biome> registryIn) {
-		super(BIOMES.stream().map(RegistryKey::location).map(registryIn::getOptional).filter(Optional::isPresent).map(opt -> opt::get));
+		super(BIOMES.stream().map(ResourceKey::location).map(registryIn::getOptional).filter(Optional::isPresent).map(opt -> opt::get));
 
 		this.seed = seed;
 		layerMergeRandom = new Random(seed);
@@ -62,7 +62,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 		genLower = makeLayers(seed + 2);
 	}
 
-	public int getBiomeId(RegistryKey<Biome> biome) {
+	public int getBiomeId(ResourceKey<Biome> biome) {
 		Integer id = idCache.get(biome);
 		if (id != null)
 			return id;
@@ -82,8 +82,8 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 		return biome;
 	}
 
-	private <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> seed) {
-		IAreaFactory<T> biomes = GenLayerVoidBiomes.INSTANCE.setup(this).run(seed.apply(1L));
+	private <T extends Area, C extends BigContext<T>> AreaFactory<T> makeLayers(LongFunction<C> seed) {
+		AreaFactory<T> biomes = GenLayerVoidBiomes.INSTANCE.setup(this).run(seed.apply(1L));
 
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1000L), biomes);
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1001L), biomes);
@@ -96,7 +96,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 	}
 
 	public Layer makeLayers(long seed) {
-		IAreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaLayerContext(25, seed, context));
+		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context));
 		return new Layer(areaFactory) {
 			@Override
 			public Biome get(Registry<Biome> p_242936_1_, int x, int y) {
@@ -106,12 +106,12 @@ public class VoidscapeSeededBiomeProvider extends BiomeProvider {
 	}
 
 	@Override
-	protected Codec<? extends BiomeProvider> codec() {
+	protected Codec<? extends BiomeSource> codec() {
 		return CODEC;
 	}
 
 	@Override
-	public BiomeProvider withSeed(long l) {
+	public BiomeSource withSeed(long l) {
 		return new VoidscapeSeededBiomeProvider(l, registry);
 	}
 

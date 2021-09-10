@@ -1,9 +1,9 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Duties;
@@ -15,7 +15,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 	private final Duties.Duty duty;
 
 	public ConfirmDutyScreen(Duties.Duty duty) {
-		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.confirm")));
+		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.confirm")));
 		this.duty = duty;
 	}
 
@@ -31,11 +31,12 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 			onClose();
 			return;
 		}
-		MainWindow window = minecraft.getWindow();
+		Window window = minecraft.getWindow();
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
-		addButton(new Button(
+		// FIXME: localization
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -45,12 +46,12 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Unrestricted"),
+				new TranslatableComponent("Unrestricted"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Unrestricted))
 
 		));
-		addButton(new Button(
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -60,7 +61,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Normal"),
+				new TranslatableComponent("Normal"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
 
@@ -75,14 +76,14 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Insane"),
+				new TranslatableComponent("Insane"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
 
 		);
 		insane.active = data.getProgression().ordinal() > duty.progression().ordinal();
-		addButton(insane);
-		addButton(new Button(
+		addRenderableWidget(insane);
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 
@@ -92,7 +93,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Back"),
+				new TranslatableComponent("Back"),
 
 				button -> minecraft.setScreen(new DutyScreen())
 
@@ -100,7 +101,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 	}
 
 	@Override
-	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
 		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host != null) {
 			onClose();
 			return;

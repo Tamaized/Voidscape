@@ -2,16 +2,16 @@ package tamaized.voidscape.client;
 
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.client.world.DimensionRenderInfo;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -23,9 +23,9 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
@@ -45,13 +45,13 @@ public class ClientListener {
 
 	private static final String CATEGORY = Voidscape.MODID.substring(0, 1).toUpperCase(Locale.US).concat(Voidscape.MODID.substring(1));
 
-	public static final KeyBinding KEY_TURMOIL = new KeyBinding(
+	public static final KeyMapping KEY_TURMOIL = new KeyMapping(
 
-			"Summon forth your inner turmoil",
+			"Summon forth your inner turmoil", // FIXME: localization
 
 			KeyConflictContext.IN_GAME,
 
-			InputMappings.Type.KEYSYM,
+			InputConstants.Type.KEYSYM,
 
 			GLFW.GLFW_KEY_Z,
 
@@ -59,16 +59,16 @@ public class ClientListener {
 
 	);
 
-	private static final List<KeyBinding> ABILITY_KEYS = new ArrayList<>();
-	public static final KeyBinding KEY_SPELL_1 = register(new KeyBinding(unloc("spell.1"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_1, CATEGORY));
-	public static final KeyBinding KEY_SPELL_2 = register(new KeyBinding(unloc("spell.2"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_2, CATEGORY));
-	public static final KeyBinding KEY_SPELL_3 = register(new KeyBinding(unloc("spell.3"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_3, CATEGORY));
-	public static final KeyBinding KEY_SPELL_4 = register(new KeyBinding(unloc("spell.4"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_4, CATEGORY));
-	public static final KeyBinding KEY_SPELL_5 = register(new KeyBinding(unloc("spell.5"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_5, CATEGORY));
-	public static final KeyBinding KEY_SPELL_6 = register(new KeyBinding(unloc("spell.6"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_6, CATEGORY));
-	public static final KeyBinding KEY_SPELL_7 = register(new KeyBinding(unloc("spell.7"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_7, CATEGORY));
-	public static final KeyBinding KEY_SPELL_8 = register(new KeyBinding(unloc("spell.8"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_8, CATEGORY));
-	public static final KeyBinding KEY_SPELL_9 = register(new KeyBinding(unloc("spell.9"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_9, CATEGORY));
+	private static final List<KeyMapping> ABILITY_KEYS = new ArrayList<>();
+	public static final KeyMapping KEY_SPELL_1 = register(new KeyMapping(unloc("spell.1"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_1, CATEGORY));
+	public static final KeyMapping KEY_SPELL_2 = register(new KeyMapping(unloc("spell.2"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_2, CATEGORY));
+	public static final KeyMapping KEY_SPELL_3 = register(new KeyMapping(unloc("spell.3"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_3, CATEGORY));
+	public static final KeyMapping KEY_SPELL_4 = register(new KeyMapping(unloc("spell.4"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_4, CATEGORY));
+	public static final KeyMapping KEY_SPELL_5 = register(new KeyMapping(unloc("spell.5"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_5, CATEGORY));
+	public static final KeyMapping KEY_SPELL_6 = register(new KeyMapping(unloc("spell.6"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_6, CATEGORY));
+	public static final KeyMapping KEY_SPELL_7 = register(new KeyMapping(unloc("spell.7"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_7, CATEGORY));
+	public static final KeyMapping KEY_SPELL_8 = register(new KeyMapping(unloc("spell.8"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_8, CATEGORY));
+	public static final KeyMapping KEY_SPELL_9 = register(new KeyMapping(unloc("spell.9"), KeyConflictContext.IN_GAME, KeyModifier.CONTROL, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_9, CATEGORY));
 	private static boolean turmoilDown = false;
 
 	private static float pitch, yaw, roll;
@@ -85,7 +85,7 @@ public class ClientListener {
 				capturedPartialTicks = event.getPartialRenderTick();
 				event.getRenderer().render(event.getEntity(),
 
-						MathHelper.lerp(1F, event.getEntity().yRotO, event.getEntity().yRot),
+						Mth.lerp(1F, event.getEntity().yRotO, event.getEntity().getYRot()),
 
 						1F,
 
@@ -132,42 +132,43 @@ public class ClientListener {
 				event.setBlue(0.05F);
 				if (Minecraft.getInstance().player != null)
 					Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-						event.setRed(MathHelper.clamp(data.getParanoia() / 1200F, 0.04F, 1F));
+						event.setRed(Mth.clamp(data.getParanoia() / 1200F, 0.04F, 1F));
 					}));
 			}
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<AttackEntityEvent>) event -> {
-			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof ClientPlayerEntity && event.getPlayer() == Minecraft.getInstance().player)
+			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<ArrowNockEvent>) event -> {
-			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof ClientPlayerEntity && event.getPlayer() == Minecraft.getInstance().player)
+			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
 	}
 
-	private static KeyBinding register(KeyBinding key) {
+	private static KeyMapping register(KeyMapping key) {
 		ABILITY_KEYS.add(key);
 		return key;
 	}
 
-	public static List<KeyBinding> getAbilityKeys() {
+	public static List<KeyMapping> getAbilityKeys() {
 		return ImmutableList.copyOf(ABILITY_KEYS);
 	}
 
 	private static String unloc(String k) {
-		return Voidscape.MODID.concat(".keybinding.".concat(k));
+		return Voidscape.MODID.concat(".KeyMapping.".concat(k));
 	}
 
 	@SubscribeEvent
 	public static void setup(FMLClientSetupEvent event) {
+		Shaders.init();
 		ClientRegistry.registerKeyBinding(KEY_TURMOIL);
 		ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
-		RenderTypeLookup.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
-		DimensionRenderInfo info = new DimensionRenderInfo(Float.NaN, false, DimensionRenderInfo.FogType.NONE, false, false) {
+		ItemBlockRenderTypes.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
+		DimensionSpecialEffects info = new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
 			@Override
-			public Vector3d getBrightnessDependentFogColor(Vector3d p_230494_1_, float p_230494_2_) {
-				return Vector3d.ZERO;
+			public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
+				return Vec3.ZERO;
 			}
 
 			@Override
@@ -182,7 +183,7 @@ public class ClientListener {
 			}
 		};
 		info.setSkyRenderHandler(new VoidSkyRenderer());
-		DimensionRenderInfo.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
+		DimensionSpecialEffects.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
 	}
 
 }

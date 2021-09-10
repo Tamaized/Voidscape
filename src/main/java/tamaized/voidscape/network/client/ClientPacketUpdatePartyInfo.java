@@ -1,8 +1,8 @@
 package tamaized.voidscape.network.client;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.party.ClientPartyInfo;
@@ -39,7 +39,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
+	public void handle(@Nullable Player player) {
 		if (player == null || player.level == null || !player.level.isClientSide()) {
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
@@ -48,7 +48,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeUUID(host);
 		packet.writeVarInt(members.size());
 		members.forEach(packet::writeUUID);
@@ -60,7 +60,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 	}
 
 	@Override
-	public ClientPacketUpdatePartyInfo fromBytes(PacketBuffer packet) {
+	public ClientPacketUpdatePartyInfo fromBytes(FriendlyByteBuf packet) {
 		host = packet.readUUID();
 		int len = packet.readVarInt();
 		for (int i = 0; i < len; i++)

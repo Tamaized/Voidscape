@@ -1,20 +1,23 @@
 package tamaized.voidscape.client.ui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.Style;
-import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientListener;
+import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.screen.TurmoilScreen;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -67,8 +70,8 @@ public class OverlayMessageHandler {
 		captureTick = Objects.requireNonNull(Minecraft.getInstance().player).tickCount;
 	}
 
-	public static void render(MatrixStack stack, float partialTicks) {
-		World world = Minecraft.getInstance().level;
+	public static void render(PoseStack stack, float partialTicks) {
+		Level world = Minecraft.getInstance().level;
 		Runnable reset = () -> {
 			currentText = "";
 			captureText = "";
@@ -82,7 +85,7 @@ public class OverlayMessageHandler {
 			if ((!data.hasStarted() && data.getState() != Turmoil.State.CONSUME) || (!data.isTalking() && Minecraft.getInstance().player.tickCount >= captureTick + maxTick))
 				reset.run();
 		}));
-		MainWindow window = Minecraft.getInstance().getWindow();
+		Window window = Minecraft.getInstance().getWindow();
 		float w = window.getGuiScaledWidth() - 1;
 		float h = window.getGuiScaledHeight() * 0.25F;
 		float x = 1;
@@ -90,7 +93,7 @@ public class OverlayMessageHandler {
 		float z = 402F; // Catch All
 
 		int tick = Minecraft.getInstance().player.tickCount;
-		float val = captureTick == 0 ? 1 : MathHelper.clamp((tick - captureTick + partialTicks) / maxTick, 0F, 1F);
+		float val = captureTick == 0 ? 1 : Mth.clamp((tick - captureTick + partialTicks) / maxTick, 0F, 1F);
 		if (currentText.isEmpty())
 			val = 1F - val;
 		final float perc = val;
@@ -103,42 +106,38 @@ public class OverlayMessageHandler {
 		if (Minecraft.getInstance().screen != null && !(Minecraft.getInstance().screen instanceof TurmoilScreen) && !Minecraft.getInstance().screen.isPauseScreen())
 			Minecraft.getInstance().setScreen(null);
 		RenderSystem.enableBlend();
-		RenderSystem.enableAlphaTest();
+		RenderSystem.setShader(GameRenderer::getRendertypeEntityAlphaShader);
 		{
 
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
 
 			Consumer<RenderTurmoil.Color24> verticies = color -> {
 				final float r = RenderTurmoil.Color24.asFloat(color.bit24);
 				final float g = RenderTurmoil.Color24.asFloat(color.bit16);
 				final float b = RenderTurmoil.Color24.asFloat(color.bit8);
 				final float a = RenderTurmoil.Color24.asFloat(color.bit0);
-				buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
-				buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
-				buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
-				buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
+				buffer.vertex(x, y + h, z).uv(0F, 1F).color(r, g, b, a).endVertex();
+				buffer.vertex(x + w, y + h, z).uv(1F, 1F).color(r, g, b, a).endVertex();
+				buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
+				buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
 			};
 			verticies.accept(RenderTurmoil.colorHolder.set(1F, 1F, 1F, 1F));
 
-			Minecraft.getInstance().getTextureManager().bind(RenderTurmoil.TEXTURE_MASK);
+			ClientUtil.bindTexture(RenderTurmoil.TEXTURE_MASK);
 
 			final int stencilIndex = 11;
 
-			StencilBufferUtil.setup(stencilIndex, () -> {
-				RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-				Tessellator.getInstance().end();
-				RenderSystem.defaultAlphaFunc();
-			});
+			StencilBufferUtil.setup(stencilIndex, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 			verticies.accept(RenderTurmoil.colorHolder.set(0F, 0F, 0F, 0.9F));
 
-			Minecraft.getInstance().getTextureManager().bind(TEXTURE_TEXT_BG);
+			ClientUtil.bindTexture(TEXTURE_TEXT_BG);
 
 			StencilBufferUtil.render(stencilIndex, () -> {
-				Tessellator.getInstance().end();
-				FontRenderer fontRenderer = Minecraft.getInstance().font;
+				Tesselator.getInstance().end();
+				Font fontRenderer = Minecraft.getInstance().font;
 				stack.pushPose();
 				stack.translate(0, 0, z);
 				fontRenderer.draw(stack,
@@ -152,7 +151,7 @@ public class OverlayMessageHandler {
 
 			}, true);
 		}
-		RenderSystem.disableAlphaTest();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.disableBlend();
 
 	}

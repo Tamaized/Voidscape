@@ -1,23 +1,21 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.entity.EntityAntiBolt;
@@ -29,12 +27,10 @@ public class ModBlocks {
 	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
 
 	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
-			harvestTool(ToolType.PICKAXE).
 			strength(3F, 3F).
-			requiresCorrectToolForDrops().
-			harvestLevel(ItemTier.DIAMOND.getLevel())) {
+			requiresCorrectToolForDrops()) {
 		@Override
-		public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+		public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 			boolean flag = super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 			world.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), world.isClientSide() ? 11 : 3);
 			return flag;
@@ -49,12 +45,12 @@ public class ModBlocks {
 			lightLevel(state -> 15).
 			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
 		@Override
-		public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
+		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
 			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 				return;
-			LightningBoltEntity lit = EntityType.LIGHTNING_BOLT.create(level);
+			LightningBolt lit = EntityType.LIGHTNING_BOLT.create(level);
 			if (lit != null) {
-				lit.moveTo(Vector3d.atBottomCenterOf(pos));
+				lit.moveTo(Vec3.atBottomCenterOf(pos));
 				level.addFreshEntity(lit);
 			}
 		}
@@ -72,12 +68,12 @@ public class ModBlocks {
 			noDrops().
 			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
 		@Override
-		public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
+		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
 			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 				return;
 			EntityAntiBolt lit = ModEntities.ANTI_BOLT.get().create(level);
 			if (lit != null) {
-				lit.moveTo(Vector3d.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
+				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
 				level.addFreshEntity(lit);
 			}
 		}

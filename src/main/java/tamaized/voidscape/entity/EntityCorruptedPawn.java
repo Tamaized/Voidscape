@@ -1,31 +1,31 @@
 package tamaized.voidscape.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import tamaized.voidscape.registry.ModDataSerializers;
 
 import javax.annotation.Nullable;
 
-public abstract class EntityCorruptedPawn extends MobEntity {
+public abstract class EntityCorruptedPawn extends Mob {
 
-	private static final DataParameter<Integer> TENTACLES = EntityDataManager.defineId(EntityCorruptedPawn.class, DataSerializers.INT);
-	private static final DataParameter<Boolean> CASTING = EntityDataManager.defineId(EntityCorruptedPawn.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> RAYS = EntityDataManager.defineId(EntityCorruptedPawn.class, DataSerializers.INT);
-	private static final DataParameter<Integer> RAY_TARGET = EntityDataManager.defineId(EntityCorruptedPawn.class, DataSerializers.INT);
-	private static final DataParameter<Long> RAY_START = EntityDataManager.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
-	private static final DataParameter<Long> RAY_END = EntityDataManager.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
+	private static final EntityDataAccessor<Integer> TENTACLES = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> CASTING = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> RAYS = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> RAY_TARGET = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Long> RAY_START = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
+	private static final EntityDataAccessor<Long> RAY_END = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
 
 	public int lastTentacleState;
 	public long[] tentacleTimes = new long[8];
@@ -35,7 +35,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 
 	private Entity targetCache;
 
-	protected EntityCorruptedPawn(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, World p_i48577_2_) {
+	protected EntityCorruptedPawn(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, Level p_i48577_2_) {
 		super(p_i48577_1_, p_i48577_2_);
 	}
 
@@ -140,7 +140,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 		setTentacleBits(~((~getTentacleBits()) | bits));
 	}
 
-	public boolean shouldRender(@Nullable PlayerEntity player) {
+	public boolean shouldRender(@Nullable Player player) {
 		return true;
 	}
 
@@ -150,22 +150,22 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 	}
 
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlotType equipmentSlotType) {
+	public ItemStack getItemBySlot(EquipmentSlot equipmentSlotType) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setItemSlot(EquipmentSlotType equipmentSlotType, ItemStack itemStack) {
+	public void setItemSlot(EquipmentSlot equipmentSlotType, ItemStack itemStack) {
 
 	}
 
 	@Override
-	public HandSide getMainArm() {
-		return HandSide.RIGHT;
+	public HumanoidArm getMainArm() {
+		return HumanoidArm.RIGHT;
 	}
 
 	@Override
-	public void knockback(float p_233627_1_, double p_233627_2_, double p_233627_4_) {
+	public void knockback(double p_147241_, double p_147242_, double p_147243_) {
 
 	}
 
@@ -180,7 +180,7 @@ public abstract class EntityCorruptedPawn extends MobEntity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

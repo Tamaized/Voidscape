@@ -1,8 +1,8 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import tamaized.voidscape.Voidscape;
 
 import java.util.HashMap;
@@ -17,13 +17,13 @@ public class Talk {
 
 	public static Entry INTRO = new Entry(new ResourceLocation(Voidscape.MODID, "intro"),
 
-			new TranslationTextComponent(KEY_BASE + "intro", format(FORMAT_KEYBIND)),
+			new TranslatableComponent(KEY_BASE + "intro", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start)));
 
 	public static Entry TUTORIAL = new Entry(new ResourceLocation(Voidscape.MODID, "tutorial"),
 
-			new TranslationTextComponent(KEY_BASE + "tutorial"),
+			new TranslatableComponent(KEY_BASE + "tutorial"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.EnteredVoid);
@@ -33,7 +33,7 @@ public class Talk {
 
 	public static Entry TUTORIAL_GUI = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialgui"),
 
-			new TranslationTextComponent(KEY_BASE + "tutorialgui", format(FORMAT_KEYBIND)),
+			new TranslatableComponent(KEY_BASE + "tutorialgui", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.MidTutorial);
@@ -41,7 +41,7 @@ public class Talk {
 
 	public static Entry TUTORIAL_SKILLS = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialskills"),
 
-			new TranslationTextComponent(KEY_BASE + "tutorialskills"),
+			new TranslatableComponent(KEY_BASE + "tutorialskills"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.PostTutorial);
@@ -49,7 +49,7 @@ public class Talk {
 
 	public static Entry CORRUPT_PHANTOM = new Entry(new ResourceLocation(Voidscape.MODID, "corruptphantom"),
 
-			new TranslationTextComponent(KEY_BASE + "corruptphantom"),
+			new TranslatableComponent(KEY_BASE + "corruptphantom"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.CorruptPawnPre);
@@ -58,7 +58,7 @@ public class Talk {
 
 	public static Entry CORRUPT_PAWN = new Entry(new ResourceLocation(Voidscape.MODID, "corruptpawn"),
 
-			new TranslationTextComponent(KEY_BASE + "corruptpawn"),
+			new TranslatableComponent(KEY_BASE + "corruptpawn"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.CorruptPawnPost);
@@ -74,9 +74,9 @@ public class Talk {
 		private static final Map<ResourceLocation, Entry> REGISTRY = new HashMap<>();
 		private final ResourceLocation id;
 		private final Consumer<Entity> finish;
-		private final TranslationTextComponent message;
+		private final TranslatableComponent message;
 
-		public Entry(ResourceLocation id, TranslationTextComponent message, Consumer<Entity> finish) {
+		public Entry(ResourceLocation id, TranslatableComponent message, Consumer<Entity> finish) {
 			this.id = id;
 			this.finish = finish;
 			this.message = message;
@@ -98,7 +98,7 @@ public class Talk {
 			return id;
 		}
 
-		public TranslationTextComponent getMessage() {
+		public TranslatableComponent getMessage() {
 			return message;
 		}
 

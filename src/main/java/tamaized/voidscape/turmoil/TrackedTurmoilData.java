@@ -1,11 +1,11 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
@@ -47,23 +47,23 @@ public class TrackedTurmoilData implements SubCapability.ISubCap.ISubCapData.All
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
+	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
 		nbt.putBoolean("incapacitated", incapacitated);
 		return nbt;
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, @Nullable Direction side) {
+	public void read(CompoundTag nbt, @Nullable Direction side) {
 		incapacitated = nbt.getBoolean("incapacitated");
 	}
 
 	@Override
-	public void write(PacketBuffer buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeBoolean(incapacitated);
 	}
 
 	@Override
-	public void read(PacketBuffer buffer) {
+	public void read(FriendlyByteBuf buffer) {
 		incapacitated = buffer.readBoolean();
 	}
 }

@@ -1,17 +1,19 @@
 package tamaized.voidscape.client.ui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.util.LazyOptional;
-import org.lwjgl.opengl.GL11;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilProgressTutorial;
@@ -32,7 +34,7 @@ public class MainScreen extends TurmoilScreen {
 	private Button reset;
 
 	public MainScreen() {
-		super(new TranslationTextComponent(Voidscape.MODID.concat(".screen.main")));
+		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.main")));
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class MainScreen extends TurmoilScreen {
 			return;
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		tick = minecraft.level == null ? 0 : minecraft.level.getGameTime();
-		MainWindow window = minecraft.getWindow();
+		Window window = minecraft.getWindow();
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
@@ -56,7 +58,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Enter the Void"),
+				new TranslatableComponent("Enter the Void"), // FIXME: localize
 
 				button -> {
 					if (minecraft.player != null)
@@ -65,8 +67,8 @@ public class MainScreen extends TurmoilScreen {
 
 		);
 		teleport.active = !Voidscape.checkForVoidDimension(minecraft.level);
-		addButton(teleport);
-		addButton(new Button(
+		addRenderableWidget(teleport);
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
@@ -76,7 +78,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Voidic Powers"),
+				new TranslatableComponent("Voidic Powers"), // FIXME: localize
 
 				button -> {
 					if (data != null && data.getProgression() == Progression.MidTutorial)
@@ -95,13 +97,13 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Configure Voidic Spells"),
+				new TranslatableComponent("Configure Voidic Spells"),
 
 				button -> minecraft.setScreen(new SpellsScreen())
 
 		);
 		spells.active = data != null && data.hasCoreSkill();
-		addButton(spells);
+		addRenderableWidget(spells);
 		reset = new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
@@ -112,7 +114,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Reset Voidic Skills"),
+				new TranslatableComponent("Reset Voidic Skills"),
 
 				button -> {
 					if (button.active) {
@@ -128,7 +130,7 @@ public class MainScreen extends TurmoilScreen {
 						return;
 					String text = data.getResetCooldown() > 0 ? ("%s Ticks Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
 					if (!text.isEmpty())
-						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(new TranslationTextComponent(
+						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(new TranslatableComponent(
 
 								text
 
@@ -137,7 +139,7 @@ public class MainScreen extends TurmoilScreen {
 
 		);
 		reset.active = data != null && data.hasCoreSkill() && data.getResetCooldown() <= 0 && minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get());
-		addButton(reset);
+		addRenderableWidget(reset);
 		Button instances = new Button(
 
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
@@ -148,7 +150,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Duties"),
+				new TranslatableComponent("Duties"),
 
 				button -> {
 					if (ClientPartyInfo.host == null)
@@ -159,8 +161,8 @@ public class MainScreen extends TurmoilScreen {
 
 		);
 		instances.active = data != null && data.getProgression().ordinal() >= Progression.CorruptPawnPre.ordinal();
-		addButton(instances);
-		addButton(new Button(
+		addRenderableWidget(instances);
+		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 
@@ -170,7 +172,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslationTextComponent("Close"),
+				new TranslatableComponent("Close"),
 
 				button -> onClose()
 
@@ -185,19 +187,18 @@ public class MainScreen extends TurmoilScreen {
 	}
 
 	@Override
-	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
 		if (minecraft == null || minecraft.level == null) {
 			onClose();
 			return;
 		}
 		RenderSystem.enableBlend();
-		RenderSystem.enableAlphaTest();
 		{
 
-			BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX);
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
-			MainWindow window = Minecraft.getInstance().getWindow();
+			Window window = Minecraft.getInstance().getWindow();
 
 			float x = 0F;
 			float y = 0F;
@@ -210,30 +211,25 @@ public class MainScreen extends TurmoilScreen {
 				final float g = RenderTurmoil.Color24.asFloat(color.bit16);
 				final float b = RenderTurmoil.Color24.asFloat(color.bit8);
 				final float a = RenderTurmoil.Color24.asFloat(color.bit0);
-				buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
-				buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
-				buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
-				buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
+				buffer.vertex(x, y + h, z).uv(0F, 1F).color(r, g, b, a).endVertex();
+				buffer.vertex(x + w, y + h, z).uv(1F, 1F).color(r, g, b, a).endVertex();
+				buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
+				buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
 			};
 			verticies.accept(RenderTurmoil.colorHolder.set(1F, 1F, 1F, 1F));
 
-			Minecraft.getInstance().getTextureManager().bind(RenderTurmoil.TEXTURE_MASK);
+			ClientUtil.bindTexture(RenderTurmoil.TEXTURE_MASK);
 
 			final int stencilIndex = 12;
 
 			StencilBufferUtil.setup(stencilIndex, () -> {
 				float perc = Math.min(1F, (minecraft.level.getGameTime() - tick) / (20 * 3F));
-				RenderSystem.alphaFunc(GL11.GL_LESS, perc);
-				Tessellator.getInstance().end();
-				RenderSystem.defaultAlphaFunc();
+				Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc);
 			});
 
 
-			StencilBufferUtil.render(stencilIndex, () -> {
-				super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-			}, true);
+			StencilBufferUtil.render(stencilIndex, () -> super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_), true);
 		}
-		RenderSystem.disableAlphaTest();
 		RenderSystem.disableBlend();
 		if (minecraft == null || minecraft.player == null) {
 			onClose();

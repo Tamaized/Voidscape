@@ -1,9 +1,9 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -14,23 +14,23 @@ import javax.annotation.Nullable;
 public class ServerPacketSuccumbDeath implements NetworkMessages.IMessage<ServerPacketSuccumbDeath> {
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity && player.getServer() != null)
+	public void handle(@Nullable Player player) {
+		if (player instanceof ServerPlayer && player.getServer() != null)
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
 				if (data.incapacitated) {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getWorld(player.level, World.OVERWORLD), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
 					data.incapacitated = false;
 				}
 			}));
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 	}
 
 	@Override
-	public ServerPacketSuccumbDeath fromBytes(PacketBuffer packet) {
+	public ServerPacketSuccumbDeath fromBytes(FriendlyByteBuf packet) {
 		return this;
 	}
 

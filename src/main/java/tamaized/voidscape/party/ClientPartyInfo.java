@@ -2,11 +2,11 @@ package tamaized.voidscape.party;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.toasts.IToast;
-import net.minecraft.client.gui.toasts.SystemToast;
-import net.minecraft.client.network.play.NetworkPlayerInfo;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.client.gui.components.toasts.Toast;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +22,8 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, value = Dist.CLIENT)
 public class ClientPartyInfo {
 
-	private static final IToast TOAST_DISBAND = new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslationTextComponent("Voidscape"), new TranslationTextComponent("Party Disbanded"));
+	// FIXME: localize
+	private static final Toast TOAST_DISBAND = new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TranslatableComponent("Voidscape"), new TranslatableComponent("Party Disbanded"));
 
 	public static GameProfile host;
 	public static List<GameProfile> members = new ArrayList<>();
@@ -31,7 +32,7 @@ public class ClientPartyInfo {
 	public static Duties.Duty duty;
 	public static Instance.InstanceType type;
 	public static boolean reserving;
-	public static ITextComponent error;
+	public static Component error;
 
 	public static final List<Party> PARTIES = new ArrayList<>();
 
@@ -62,7 +63,7 @@ public class ClientPartyInfo {
 		if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null)
 			return;
 
-		NetworkPlayerInfo player = Minecraft.getInstance().player.connection.getPlayerInfo(host);
+		PlayerInfo player = Minecraft.getInstance().player.connection.getPlayerInfo(host);
 		if (player == null)
 			return;
 		ClientPartyInfo.host = player.getProfile();

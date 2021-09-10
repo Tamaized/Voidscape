@@ -1,23 +1,23 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SEntityVelocityPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDamageSource;
@@ -50,13 +50,13 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean voidmancerStance = false;
 	private float ramDamage = 0;
-	private Vector3d ramTarget;
+	private Vec3 ramTarget;
 	private int ramTimeout;
 
 	private boolean dirty = false;
 
 	private static void applyAttribute(LivingEntity living, Attribute attribute, UUID modifier, String name, double value, AttributeModifier.Operation op) {
-		ModifiableAttributeInstance a = living.getAttribute(attribute);
+		AttributeInstance a = living.getAttribute(attribute);
 		if (a != null) {
 			a.removeModifier(modifier);
 			a.addTransientModifier(new AttributeModifier(modifier, name, value, op));
@@ -113,8 +113,8 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	public void tick(Entity parent) {
 		if (parent.tickCount % 20 * 10 == 0)
 			recalculateStatsAndApply(parent);
-		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayerEntity) {
-			sendToClient((ServerPlayerEntity) parent);
+		if (!parent.level.isClientSide() && dirty && parent instanceof ServerPlayer) {
+			sendToClient((ServerPlayer) parent);
 			dirty = false;
 		}
 		Optional<Turmoil> data = parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData)).orElse(Optional.empty());
@@ -130,28 +130,28 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 			insanePower--;
 		if (parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(tracked -> tracked.incapacitated).orElse(false)).orElse(false))
 			voidicPower = nullPower = insanePower = 0;
-		if (parent.level instanceof ServerWorld && ramTarget != null && ramTimeout-- > 0) {
-			Vector3d dist = ramTarget.subtract(parent.position());
+		if (parent.level instanceof ServerLevel && ramTarget != null && ramTimeout-- > 0) {
+			Vec3 dist = ramTarget.subtract(parent.position());
 			if ((dist.x * dist.x + dist.y * dist.y + dist.z * dist.z) / 2D <= 1D) {
-				final boolean flag = ((ServerWorld) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
-				parent.level.getEntities(parent, parent.getBoundingBox().inflate(1F, 1F, 1F), e -> !flag || !(e instanceof PlayerEntity)).forEach(e -> {
+				final boolean flag = ((ServerLevel) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
+				parent.level.getEntities(parent, parent.getBoundingBox().inflate(1F, 1F, 1F), e -> !flag || !(e instanceof Player)).forEach(e -> {
 					e.hurt(parent instanceof LivingEntity ? ModDamageSource.VOIDIC_WITH_ENTITY.apply((LivingEntity) parent) : ModDamageSource.VOIDIC, ramDamage);
 					for (int i = 0; i < 10; i++) {
-						Vector3d pos = new Vector3d(0.25F + parent.level.getRandom().nextFloat() * 0.75F, 0, 0).
+						Vec3 pos = new Vec3(0.25F + parent.level.getRandom().nextFloat() * 0.75F, 0, 0).
 								yRot((float) Math.toRadians(parent.level.getRandom().nextInt(360))).
 								xRot((float) Math.toRadians(parent.level.getRandom().nextInt(360))).
 								add(e.getX(), e.getEyeY() - 0.5F + parent.level.getRandom().nextFloat(), e.getZ());
-						((ServerWorld) parent.level).sendParticles(ParticleTypes.CRIT, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
+						((ServerLevel) parent.level).sendParticles(ParticleTypes.CRIT, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
 					}
 				});
-				parent.level.playSound(null, parent, SoundEvents.BLAZE_HURT, SoundCategory.PLAYERS, 1F, 0.75F + parent.level.getRandom().nextFloat() * 0.5F);
+				parent.level.playSound(null, parent, SoundEvents.BLAZE_HURT, SoundSource.PLAYERS, 1F, 0.75F + parent.level.getRandom().nextFloat() * 0.5F);
 				ramTarget = null;
 				ramDamage = 0;
 				ramTimeout = 0;
 			} else if (!parent.getDeltaMovement().equals(dist.normalize())) {
 				parent.setDeltaMovement(dist.normalize());
-				if (parent instanceof ServerPlayerEntity)
-					((ServerPlayerEntity) parent).connection.send(new SEntityVelocityPacket(parent));
+				if (parent instanceof ServerPlayer)
+					((ServerPlayer) parent).connection.send(new ClientboundSetEntityMotionPacket(parent));
 			}
 		}
 	}
@@ -162,13 +162,13 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt, @Nullable Direction side) {
+	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
 		nbt.putIntArray("slots", Arrays.stream(slots).mapToInt(slot -> slot == null ? -1 : slot.ability().id()).toArray());
 		return nbt;
 	}
 
 	@Override
-	public void read(CompoundNBT nbt, @Nullable Direction side) {
+	public void read(CompoundTag nbt, @Nullable Direction side) {
 		int[] s = nbt.getIntArray("slots");
 		Map<TurmoilAbility, TurmoilAbilityInstance> cache = new HashMap<>();
 		for (int i = 0; i < s.length; i++) {
@@ -185,7 +185,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void write(PacketBuffer buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeInt(voidicPower);
 		buffer.writeInt(nullPower);
 		buffer.writeInt(insanePower);
@@ -213,7 +213,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void read(PacketBuffer buffer) {
+	public void read(FriendlyByteBuf buffer) {
 		voidicPower = buffer.readInt();
 		nullPower = buffer.readInt();
 		insanePower = buffer.readInt();
@@ -313,7 +313,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		}
 	}
 
-	public void ramTowards(Vector3d target, float damage) {
+	public void ramTowards(Vec3 target, float damage) {
 		ramTarget = target;
 		ramDamage = damage;
 		ramTimeout = 20 * 3;

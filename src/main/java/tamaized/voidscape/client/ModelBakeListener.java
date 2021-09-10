@@ -1,28 +1,28 @@
 package tamaized.voidscape.client;
 
 import com.google.common.collect.Maps;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
@@ -95,11 +95,11 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
 		addBlock(fullbrightList, ModBlocks.NULL_WHITE);
 		fullbrightList.forEach(mrl -> {
-			final IBakedModel model = event.getModelRegistry().get(mrl);
+			final BakedModel model = event.getModelRegistry().get(mrl);
 			event.getModelRegistry().put(mrl, new FullBrightModel(model));
 		});
 		overlayList.forEach(mrl -> {
-			final IBakedModel model = event.getModelRegistry().get(mrl);
+			final BakedModel model = event.getModelRegistry().get(mrl);
 			event.getModelRegistry().put(mrl, new FullBrightModel(model) {
 				@Nonnull
 				@Override
@@ -144,39 +144,39 @@ public class ModelBakeListener {
 	}
 
 	private static void impBroken(Item item) {
-		ItemModelsProperties.register(item, new ResourceLocation("broken"), (stack, level, entity) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+		ItemProperties.register(item, new ResourceLocation("broken"), (stack, level, entity, prop) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
 	}
 
 	private static void impBow(Item item) {
-		ItemModelsProperties.register(item, new ResourceLocation("pull"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, prop) ->
 
 				entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
 
-		ItemModelsProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity, prop) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	private static void impXBow(Item item) {
-		ItemModelsProperties.register(item, new ResourceLocation("pull"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, prop) ->
 
 				entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack));
 
-		ItemModelsProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity, prop) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
 
-		ItemModelsProperties.register(item, new ResourceLocation("charged"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("charged"), (stack, level, entity, prop) ->
 
 				entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
 
-		ItemModelsProperties.register(item, new ResourceLocation("firework"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("firework"), (stack, level, entity, prop) ->
 
 				entity != null && CrossbowItem.isCharged(stack) && CrossbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F);
 	}
 
 	private static void impShield(Item item) {
-		ItemModelsProperties.register(item, new ResourceLocation("blocking"), (stack, level, entity) ->
+		ItemProperties.register(item, new ResourceLocation("blocking"), (stack, level, entity, prop) ->
 
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
@@ -234,12 +234,13 @@ public class ModelBakeListener {
 		});
 	}
 
-	private static class FullBrightModel implements IBakedModel {
+	private static class FullBrightModel implements BakedModel {
 
-		private final IBakedModel model;
-		private final ItemOverrideList overrides;
+		private final BakedModel model;
+		private final ItemOverrides overrides;
 		Map<Direction, List<BakedQuad>> cachedQuads = Maps.newHashMap();
-		private FullBrightModel(IBakedModel delegate) {
+
+		private FullBrightModel(BakedModel delegate) {
 			model = delegate;
 			overrides = new FullbrightItemOverrideList(delegate.getOverrides());
 		}
@@ -285,23 +286,27 @@ public class ModelBakeListener {
 
 		@Nonnull
 		@Override
-		public ItemOverrideList getOverrides() {
+		public ItemOverrides getOverrides() {
 			return overrides;
 		}
 
 		@Nonnull
 		@Override
 		@SuppressWarnings("deprecation")
-		public net.minecraft.client.renderer.model.ItemCameraTransforms getTransforms() {
+		public net.minecraft.client.renderer.block.model.ItemTransforms getTransforms() {
 			return model.getTransforms();
 		}
 
-		private static class FullbrightItemOverrideList extends ItemOverrideList {
+		private static class FullbrightItemOverrideList extends ItemOverrides {
 
-			public FullbrightItemOverrideList(ItemOverrideList delegate) {
-				overrides.addAll(delegate.overrides);
-				overrideModels = new ArrayList<>();
-				delegate.overrideModels.forEach(model -> overrideModels.add(new FullBrightModel(model)));
+			public FullbrightItemOverrideList(ItemOverrides delegate) {
+				properties = delegate.properties;
+				List<BakedOverride> overridesList = new ArrayList<>();
+				for (BakedOverride override : delegate.overrides) {
+					if (override.model != null)
+						overridesList.add(new BakedOverride(override.matchers, new FullBrightModel(override.model)));
+				}
+				overrides = overridesList.toArray(new BakedOverride[0]);
 			}
 
 		}

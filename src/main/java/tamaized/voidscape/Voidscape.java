@@ -1,38 +1,38 @@
 package tamaized.voidscape;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.monster.ZoglinEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.SwordItem;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Zoglin;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -48,11 +48,11 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.progress.StartupMessageManager;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.voidscape.asm.ASMHooks;
@@ -102,7 +102,7 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-	public static final RegistryKey<World> WORLD_KEY_VOID = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
+	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
@@ -120,23 +120,23 @@ public class Voidscape {
 			NetworkMessages.register(NETWORK);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
-			CapabilityManager.INSTANCE.register(SubCapability.ISubCap.class, new SubCapability.ISubCap.Storage() {
-			}, SubCapability.AttachedSubCap::new);
-			CapabilityManager.INSTANCE.register(IVoidicArrow.class, new SubCapability.ISubCap.DummyStorage<>(), VoidicArrowCapability::new);
-			CapabilityManager.INSTANCE.register(IEffectContext.class, new SubCapability.ISubCap.DummyStorage<>(), EffectContextCapability::new);
-			CapabilityManager.INSTANCE.register(IAggroTable.class, new SubCapability.ISubCap.DummyStorage<>(), AggroTable::new);
+			SubCapability.Registry.register(SubCapability.ISubCap.class, SubCapability.AttachedSubCap.ID, SubCapability.AttachedSubCap::new, new SubCapability.ISubCap.Storage() {
+			}, new CompoundTag());
+			SubCapability.Registry.register(IVoidicArrow.class, VoidicArrowCapability.ID, VoidicArrowCapability::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
+			SubCapability.Registry.register(IEffectContext.class, EffectContextCapability.ID, EffectContextCapability::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
+			SubCapability.Registry.register(IAggroTable.class, AggroTable.ID, AggroTable::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
-				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("voidscape").
+				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape").
 						then(VoidCommands.Debug.register()))
 
 		);
 		busForge.addListener((Consumer<TickEvent.WorldTickEvent>) event -> {
 			if (event.phase == TickEvent.Phase.START)
 				return;
-			if (event.world instanceof ServerWorld)
-				((ServerWorld) event.world).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> data.tick(e))));
+			if (event.world instanceof ServerLevel)
+				((ServerLevel) event.world).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> data.tick(e))));
 		});
 		busForge.addListener((Consumer<AttackEntityEvent>) event -> event.getPlayer().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
 			if (data.isBound())
@@ -176,7 +176,7 @@ public class Voidscape {
 				return;
 			}
 			Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
-			if (e instanceof LivingEntity && event.getEntityLiving() instanceof MobEntity)
+			if (e instanceof LivingEntity && event.getEntityLiving() instanceof Mob)
 				event.getEntityLiving().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.
 						addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e) * (((LivingEntity) e).
 								hasEffect(ModEffects.TUNNEL_VISION.get()) && e.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
@@ -208,9 +208,9 @@ public class Voidscape {
 				if (e instanceof LivingEntity) {
 					LivingEntity attacker = (LivingEntity) e;
 					if (!arrow) {
-						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
+						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
 								attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) : 0) *
-								(attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
+								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
 								hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
 								map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
 						if (dmg > 0) {
@@ -225,7 +225,7 @@ public class Voidscape {
 								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
 										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
 									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-										stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) (dmg + stats.stats().spellpower * (attacker instanceof PlayerEntity ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F))));
+										stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) (dmg + stats.stats().spellpower * (attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F))));
 										if (attacker.hasEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get())) {
 											attacker.removeEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get());
 											stats.setVoidicPower(Math.min(1000, stats.getVoidicPower() + (int) (150F * (stats.stats().spellpower / 100F))));
@@ -236,8 +236,8 @@ public class Voidscape {
 						}
 					}
 				}
-				if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity) {
-					AbstractArrowEntity arrowEntity = (AbstractArrowEntity) event.getSource().getDirectEntity();
+				if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
+					AbstractArrow arrowEntity = (AbstractArrow) event.getSource().getDirectEntity();
 					arrowEntity.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> {
 						float voidic = data.active(IVoidicArrow.ID_VOIDIC);
 						if (voidic > 0) {
@@ -272,12 +272,12 @@ public class Voidscape {
 			});
 		});
 		busForge.addListener((Consumer<EntityJoinWorldEvent>) event -> {
-			if (event.getEntity() instanceof AbstractArrowEntity) {
-				AbstractArrowEntity arrow = (AbstractArrowEntity) event.getEntity();
+			if (event.getEntity() instanceof AbstractArrow) {
+				AbstractArrow arrow = (AbstractArrow) event.getEntity();
 				Entity entity = arrow.getOwner();
 				if (entity instanceof LivingEntity) {
 					LivingEntity shooter = (LivingEntity) entity;
-					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
+					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
 						return;
 					LazyOptional<SubCapability.ISubCap> c = shooter.getCapability(SubCapability.CAPABILITY);
 					float voidic = (float) (((shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) + arrow.getBaseDamage()) * c.
@@ -315,10 +315,10 @@ public class Voidscape {
 				event.setCanceled(true);
 		});
 		busForge.addListener((Consumer<LivingSpawnEvent.CheckSpawn>) event -> {
-			if (event.getSpawnReason() == SpawnReason.NATURAL && event.getWorld() instanceof ServerWorld && event.getEntity() instanceof MobEntity && Voidscape.
+			if (event.getSpawnReason() == MobSpawnType.NATURAL && event.getWorld() instanceof ServerLevel && event.getEntity() instanceof Mob && Voidscape.
 					checkForVoidDimension(event.getEntity().level)) {
-				PlayerEntity player = event.getWorld().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
-				if (player != null && Voidscape.isValidPositionForMob((ServerWorld) event.getWorld(), (MobEntity) event.getEntity(), player.
+				Player player = event.getWorld().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
+				if (player != null && Voidscape.isValidPositionForMob((ServerLevel) event.getWorld(), (Mob) event.getEntity(), player.
 						distanceToSqr(event.getX(), event.getY(), event.getZ()), new BlockPos(event.getX(), event.getY(), event.getZ())))
 					event.setResult(Event.Result.ALLOW);
 				else
@@ -326,19 +326,19 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<LivingSpawnEvent.SpecialSpawn>) event -> {
-			if (event.getSpawnReason() == SpawnReason.NATURAL && event.getEntity() instanceof LivingEntity && Voidscape.checkForVoidDimension(event.getEntity().level)) {
+			if (event.getSpawnReason() == MobSpawnType.NATURAL && event.getEntity() instanceof LivingEntity && Voidscape.checkForVoidDimension(event.getEntity().level)) {
 				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
 						setInfusion(((LivingEntity) event.getEntity()).getRandom().nextInt(200) + 100)));
 			}
 		});
 	}
 
-	private static boolean isValidPositionForMob(ServerWorld serverWorld_, MobEntity mobEntity_, double double_, BlockPos pos) {
+	private static boolean isValidPositionForMob(ServerLevel serverWorld_, Mob mobEntity_, double double_, BlockPos pos) {
 		if (double_ > (double) (mobEntity_.getType().getCategory().getDespawnDistance() * mobEntity_.getType().getCategory().getDespawnDistance()) && mobEntity_.removeWhenFarAway(double_)) {
 			return false;
 		} else {
-			return mobEntity_.checkSpawnObstruction(serverWorld_) && (!(mobEntity_ instanceof ZoglinEntity) || WorldEntitySpawner.
-					canSpawnAtBody(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
+			return mobEntity_.checkSpawnObstruction(serverWorld_) && (!(mobEntity_ instanceof Zoglin) || NaturalSpawner.
+					canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
 		}
 	}
 
@@ -369,7 +369,7 @@ public class Voidscape {
 	}
 
 	public static boolean healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
-		if (target.level instanceof ServerWorld && ((ServerChunkProvider) target.level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator && !(target instanceof PlayerEntity))
+		if (target.level instanceof ServerLevel && ((ServerChunkCache) target.level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator && !(target instanceof Player))
 			return false;
 		float val = target.getHealth();
 		target.heal(heal);
@@ -381,11 +381,11 @@ public class Voidscape {
 
 		});
 		for (int i = 0; i < 10; i++) {
-			Vector3d pos = new Vector3d(0.25F + target.getRandom().nextFloat() * 0.75F, 0, 0).
+			Vec3 pos = new Vec3(0.25F + target.getRandom().nextFloat() * 0.75F, 0, 0).
 					yRot((float) Math.toRadians(target.getRandom().nextInt(360))).add(target.getX(), target.getEyeY() - 0.5F + target.getRandom().nextFloat(), target.getZ());
-			((ServerWorld) caster.level).sendParticles(ParticleTypes.HEART, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
+			((ServerLevel) caster.level).sendParticles(ParticleTypes.HEART, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
 		}
-		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof MobEntity && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
+		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof Mob && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
 				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster), true)));
 		return true;
 	}
@@ -394,11 +394,11 @@ public class Voidscape {
 		return input * attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().threat / 100D).orElse(0.0D)).orElse(0.0D);
 	}
 
-	public static boolean checkForVoidDimension(World world) {
+	public static boolean checkForVoidDimension(Level world) {
 		return world.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
-	public static ServerWorld getWorld(World world, RegistryKey<World> dest) {
+	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
 		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
 	}
 
@@ -408,33 +408,33 @@ public class Voidscape {
 		return null;
 	}
 
-	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
+	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
 		return getHitResultFromEyes(entity, predicate, range, 0, 0);
 	}
 
-	public static RayTraceResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range, double inflateXZ, double inflateY) {
-		Vector3d vector3d = entity.getEyePosition(1F);
-		Vector3d vector3d1 = entity.getViewVector(1.0F);
-		Vector3d vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
-		AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1D, 1D, 1D);
-		RayTraceResult raytraceresult = entity.level.clip(new RayTraceContext(vector3d, vector3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
-		if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
+	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range, double inflateXZ, double inflateY) {
+		Vec3 vector3d = entity.getEyePosition(1F);
+		Vec3 vector3d1 = entity.getViewVector(1.0F);
+		Vec3 vector3d2 = vector3d.add(vector3d1.x * range, vector3d1.y * range, vector3d1.z * range);
+		AABB axisalignedbb = entity.getBoundingBox().expandTowards(vector3d1.scale(range)).inflate(1D, 1D, 1D);
+		HitResult raytraceresult = entity.level.clip(new ClipContext(vector3d, vector3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+		if (raytraceresult.getType() != HitResult.Type.MISS) {
 			vector3d2 = raytraceresult.getLocation();
 		}
-		RayTraceResult ray = getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range, inflateXZ, inflateY);
+		HitResult ray = getEntityHitResult(entity, vector3d, vector3d2, axisalignedbb, predicate, range * range, inflateXZ, inflateY);
 		return ray == null ? raytraceresult : ray;
 	}
 
 	@Nullable
-	private static EntityRayTraceResult getEntityHitResult(Entity shooter, Vector3d startVec, Vector3d endVec, AxisAlignedBB boundingBox, Predicate<Entity> filter, double distance, double inflateXZ, double inflateY) {
-		World world = shooter.level;
+	private static EntityHitResult getEntityHitResult(Entity shooter, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, double distance, double inflateXZ, double inflateY) {
+		Level world = shooter.level;
 		double d0 = distance;
 		Entity entity = null;
-		Vector3d vector3d = null;
+		Vec3 vector3d = null;
 
 		for (Entity entity1 : world.getEntities(shooter, boundingBox, filter)) {
-			AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate((double) entity1.getPickRadius()).inflate(inflateXZ, inflateY, inflateXZ);
-			Optional<Vector3d> optional = axisalignedbb.clip(startVec, endVec);
+			AABB axisalignedbb = entity1.getBoundingBox().inflate((double) entity1.getPickRadius()).inflate(inflateXZ, inflateY, inflateXZ);
+			Optional<Vec3> optional = axisalignedbb.clip(startVec, endVec);
 			if (axisalignedbb.contains(startVec)) {
 				if (d0 >= 0.0D) {
 					entity = entity1;
@@ -442,7 +442,7 @@ public class Voidscape {
 					d0 = 0.0D;
 				}
 			} else if (optional.isPresent()) {
-				Vector3d vector3d1 = optional.get();
+				Vec3 vector3d1 = optional.get();
 				double d1 = startVec.distanceToSqr(vector3d1);
 				if (d1 < d0 || d0 == 0.0D) {
 					if (entity1.getRootVehicle() == shooter.getRootVehicle() && !entity1.canRiderInteract()) {
@@ -459,7 +459,7 @@ public class Voidscape {
 			}
 		}
 
-		return entity == null ? null : new EntityRayTraceResult(entity, vector3d);
+		return entity == null ? null : new EntityHitResult(entity, vector3d);
 	}
 
 }

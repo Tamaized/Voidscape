@@ -1,9 +1,9 @@
 package tamaized.voidscape.network.server;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
@@ -26,25 +26,25 @@ public class ServerPacketCreateParty implements NetworkMessages.IMessage<ServerP
 	}
 
 	@Override
-	public void handle(@Nullable PlayerEntity player) {
-		if (duty != null && type != null && player instanceof ServerPlayerEntity && player.getServer() != null) {
-			Optional<Party> o = PartyManager.findParty((ServerPlayerEntity) player);
+	public void handle(@Nullable Player player) {
+		if (duty != null && type != null && player instanceof ServerPlayer && player.getServer() != null) {
+			Optional<Party> o = PartyManager.findParty((ServerPlayer) player);
 			if (o.isPresent())
-				Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new ClientPacketUpdatePartyInfo(o.get(), true));
+				Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new ClientPacketUpdatePartyInfo(o.get(), true));
 			else
-				PartyManager.addParty(new Party(duty, type, (ServerPlayerEntity) player));
+				PartyManager.addParty(new Party(duty, type, (ServerPlayer) player));
 
 		}
 	}
 
 	@Override
-	public void toBytes(PacketBuffer packet) {
+	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeVarInt(Duties.getID(duty));
 		packet.writeVarInt(type.ordinal());
 	}
 
 	@Override
-	public ServerPacketCreateParty fromBytes(PacketBuffer packet) {
+	public ServerPacketCreateParty fromBytes(FriendlyByteBuf packet) {
 		duty = Duties.fromID(packet.readVarInt());
 		type = Instance.InstanceType.fromOrdinal(packet.readVarInt());
 		return this;

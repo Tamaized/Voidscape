@@ -1,9 +1,9 @@
 package tamaized.voidscape.turmoil.caps;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Optional;
@@ -12,11 +12,11 @@ public interface IEffectContext {
 
 	static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "effectcontext");
 
-	Optional<Context> context(Effect effect);
+	Optional<Context> context(MobEffect effect);
 
-	EffectInstance add(EffectInstance effect, LivingEntity caster, float damage);
+	MobEffectInstance add(MobEffectInstance effect, LivingEntity caster, float damage);
 
-	void remove(Effect effect);
+	void remove(MobEffect effect);
 
 	class Context {
 		private final LivingEntity source;

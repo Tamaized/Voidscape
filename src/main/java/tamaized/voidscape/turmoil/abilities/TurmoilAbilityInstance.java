@@ -1,13 +1,15 @@
 package tamaized.voidscape.turmoil.abilities;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketTurmoilActivateAbility;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.TurmoilStats;
+
+import javax.annotation.Nullable;
 
 public final class TurmoilAbilityInstance {
 
@@ -19,7 +21,8 @@ public final class TurmoilAbilityInstance {
 		this.ability = ability;
 	}
 
-	public static TurmoilAbilityInstance decode(PacketBuffer packet) {
+	@Nullable
+	public static TurmoilAbilityInstance decode(FriendlyByteBuf packet) {
 		TurmoilAbility ability = TurmoilAbility.getFromID(packet.readInt());
 		long data = packet.readLong();
 		if (ability == null)
@@ -97,19 +100,19 @@ public final class TurmoilAbilityInstance {
 		lastCast = 0;
 	}
 
-	public long cooldownRemaining(World level) {
+	public long cooldownRemaining(Level level) {
 		return Math.max((filterCooldown() - level.getGameTime() + lastCast), 0);
 	}
 
-	public float cooldownPercent(World level) {
-		return MathHelper.clamp((float) cooldownRemaining(level) / (float) filterCooldown(), 0F, 1F);
+	public float cooldownPercent(Level level) {
+		return Mth.clamp((float) cooldownRemaining(level) / (float) filterCooldown(), 0F, 1F);
 	}
 
 	private int filterCooldown() {
 		return casterStats == null ? ability.cooldown() : getCalcCooldown(casterStats);
 	}
 
-	public void encode(PacketBuffer packet) {
+	public void encode(FriendlyByteBuf packet) {
 		packet.writeInt(ability.id());
 		packet.writeLong(lastCast);
 	}

@@ -1,18 +1,18 @@
 package tamaized.voidscape.entity.abilities;
 
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
@@ -22,14 +22,14 @@ import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 
 public class EntitySpellAura extends Entity {
 
-	private static final DataParameter<Integer> COLOR = EntityDataManager.defineId(EntitySpellAura.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(EntitySpellAura.class, EntityDataSerializers.INT);
 	private TurmoilAbility ability;
 	private LivingEntity caster;
 	private float damage;
 	private boolean healing;
 	private long life;
 
-	public EntitySpellAura(EntityType<?> p_i48580_1_, World p_i48580_2_) {
+	public EntitySpellAura(EntityType<?> p_i48580_1_, Level p_i48580_2_) {
 		super(p_i48580_1_, p_i48580_2_);
 	}
 
@@ -67,13 +67,13 @@ public class EntitySpellAura extends Entity {
 		if (level.isClientSide()) {
 			int color = entityData.get(COLOR);
 			for (int i = 0; i < 10; i++) {
-				Vector3d vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vector3d(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
+				Vec3 vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vec3(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
 				level.addParticle(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0);
 			}
 			return;
 		}
 		if (tickCount > life || caster == null || !caster.isAlive()) {
-			remove();
+			remove(RemovalReason.DISCARDED);
 			return;
 		}
 		moveTo(caster.position());
@@ -82,7 +82,7 @@ public class EntitySpellAura extends Entity {
 				if (!(e instanceof LivingEntity))
 					continue;
 				LivingEntity entity = (LivingEntity) e;
-				if (healing && !(entity instanceof MobEntity && entity.getMobType() == CreatureAttribute.UNDEAD))
+				if (healing && !(entity instanceof Mob && entity.getMobType() == MobType.UNDEAD))
 					Voidscape.healTargetAndAggro(entity, caster, damage);
 				else if (entity.hurt(caster == null ? ModDamageSource.VOIDIC : ModDamageSource.VOIDIC_WITH_ENTITY.apply(caster), damage))
 					caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
@@ -92,17 +92,17 @@ public class EntitySpellAura extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }
