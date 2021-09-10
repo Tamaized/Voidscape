@@ -3,6 +3,7 @@
 uniform sampler2D Sampler0;
 
 uniform vec4 ColorModulator;
+uniform float Alpha;
 
 in vec2 texCoord0;
 
