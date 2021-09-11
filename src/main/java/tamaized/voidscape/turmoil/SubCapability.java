@@ -13,20 +13,24 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.turmoil.caps.AggroTable;
+import tamaized.voidscape.turmoil.caps.EffectContextCapability;
 import tamaized.voidscape.turmoil.caps.IAggroTable;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IVoidicArrow;
+import tamaized.voidscape.turmoil.caps.VoidicArrowCapability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,28 +49,27 @@ public class SubCapability {
 
 		private static class Data<C, T extends Tag> {
 
+			private final Class<C> cap;
 			private final ResourceLocation id;
 			private final NonNullSupplier<C> defaultInstance;
 			private final ISubCap.IStorage<C, T> storage;
-			private final T defaultTag;
 
-			public Data(ResourceLocation id, NonNullSupplier<C> defaultInstance, ISubCap.IStorage<C, T> storage, T defaultTag) {
+			public Data(Class<C> cap, ResourceLocation id, NonNullSupplier<C> defaultInstance, ISubCap.IStorage<C, T> storage) {
+				this.cap = cap;
 				this.id = id;
 				this.defaultInstance = defaultInstance;
 				this.storage = storage;
-				this.defaultTag = defaultTag;
 			}
 		}
 
-		private static final Map<Class<?>, Data<?, ?>> REGISTRY = new HashMap<>();
+		private static final Map<String, Data<?, ?>> REGISTRY = new HashMap<>();
 
-		public static <C, T extends Tag> void register(Class<C> cap, ResourceLocation id, NonNullSupplier<C> defaultInstance, ISubCap.IStorage<C, T> storage, T defaultTag) {
-			CapabilityManager.INSTANCE.register(cap);
-			REGISTRY.put(cap, new Data<>(id, defaultInstance, storage, defaultTag));
+		public static <C, T extends Tag> void register(Class<C> cap, ResourceLocation id, NonNullSupplier<C> defaultInstance, ISubCap.IStorage<C, T> storage) {
+			REGISTRY.put(cap.getName().intern(), new Data<>(cap, id, defaultInstance, storage));
 		}
 
 		public static Data<?, ?> lookup(Capability<?> cap) {
-			return REGISTRY.get(cap.getClass());
+			return REGISTRY.get(cap.getName());
 		}
 
 	}
@@ -83,7 +86,13 @@ public class SubCapability {
 	@CapabilityInject(IAggroTable.class)
 	public static final Capability<IAggroTable> CAPABILITY_AGGRO = Voidscape.getNull();
 
-	static {
+	public static void init(IEventBus modBus) {
+		SubCapability.Registry.register(SubCapability.ISubCap.class, SubCapability.AttachedSubCap.ID, SubCapability.AttachedSubCap::new, new SubCapability.ISubCap.Storage() {
+		});
+		SubCapability.Registry.register(IVoidicArrow.class, VoidicArrowCapability.ID, VoidicArrowCapability::new, new SubCapability.ISubCap.DummyStorage<>());
+		SubCapability.Registry.register(IEffectContext.class, EffectContextCapability.ID, EffectContextCapability::new, new SubCapability.ISubCap.DummyStorage<>());
+		SubCapability.Registry.register(IAggroTable.class, AggroTable.ID, AggroTable::new, new SubCapability.ISubCap.DummyStorage<>());
+		modBus.addListener((Consumer<RegisterCapabilitiesEvent>) event -> Registry.REGISTRY.values().stream().map(v -> v.cap).forEach(event::register));
 		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
 			if (event.getObject() instanceof LivingEntity) {
 				apply(event, CAPABILITY);
@@ -124,8 +133,7 @@ public class SubCapability {
 
 			@Override
 			public T serializeNBT() {
-				T tag = data.storage.writeNBT(cap, instance.orElseThrow(NullPointerException::new), null);
-				return tag == null ? data.defaultTag : tag;
+				return data.storage.writeNBT(cap, instance.orElseThrow(NullPointerException::new), null);
 			}
 
 			@Override
@@ -211,7 +219,6 @@ public class SubCapability {
 		}
 
 		class DummyStorage<C> implements IStorage<C, CompoundTag> {
-			@Nullable
 			@Override
 			public CompoundTag writeNBT(Capability<C> capability, C instance, @Nullable Direction side) {
 				return new CompoundTag();
@@ -225,7 +232,6 @@ public class SubCapability {
 
 		interface Storage extends IStorage<ISubCap, CompoundTag> {
 
-			@Nullable
 			@Override
 			default CompoundTag writeNBT(Capability<ISubCap> capability, ISubCap instance, @Nullable Direction side) {
 				CompoundTag nbt = new CompoundTag();

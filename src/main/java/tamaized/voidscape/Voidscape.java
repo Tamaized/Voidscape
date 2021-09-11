@@ -5,7 +5,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
@@ -69,12 +68,7 @@ import tamaized.voidscape.turmoil.TrackedTurmoilData;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.turmoil.TurmoilStats;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
-import tamaized.voidscape.turmoil.caps.AggroTable;
-import tamaized.voidscape.turmoil.caps.EffectContextCapability;
-import tamaized.voidscape.turmoil.caps.IAggroTable;
-import tamaized.voidscape.turmoil.caps.IEffectContext;
 import tamaized.voidscape.turmoil.caps.IVoidicArrow;
-import tamaized.voidscape.turmoil.caps.VoidicArrowCapability;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
 import tamaized.voidscape.turmoil.skills.TurmoilSkills;
 import tamaized.voidscape.world.InstanceChunkGenerator;
@@ -116,15 +110,11 @@ public class Voidscape {
 		IEventBus busForge = MinecraftForge.EVENT_BUS;
 		RegUtil.register(busMod);
 		Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
+		SubCapability.init(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
-			SubCapability.Registry.register(SubCapability.ISubCap.class, SubCapability.AttachedSubCap.ID, SubCapability.AttachedSubCap::new, new SubCapability.ISubCap.Storage() {
-			}, new CompoundTag());
-			SubCapability.Registry.register(IVoidicArrow.class, VoidicArrowCapability.ID, VoidicArrowCapability::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
-			SubCapability.Registry.register(IEffectContext.class, EffectContextCapability.ID, EffectContextCapability::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
-			SubCapability.Registry.register(IAggroTable.class, AggroTable.ID, AggroTable::new, new SubCapability.ISubCap.DummyStorage<>(), new CompoundTag());
 		});
 		busForge.addListener((Consumer<FMLServerStartingEvent>) event ->
 
