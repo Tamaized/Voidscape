@@ -44,7 +44,7 @@ import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
@@ -250,7 +250,6 @@ public class RenderTurmoil {
 					{
 
 						BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-						buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
 						Window window = Minecraft.getInstance().getWindow();
 
@@ -260,26 +259,36 @@ public class RenderTurmoil {
 						float h = window.getGuiScaledHeight();
 						float z = 401F; // Catch All
 
-						Consumer<Color24> verticies = color -> {
+						BiConsumer<Color24, Boolean> verticies = (color, tex) -> {
+							buffer.begin(VertexFormat.Mode.QUADS, tex ? DefaultVertexFormat.POSITION_TEX_COLOR : DefaultVertexFormat.POSITION_COLOR);
 							final float r = Color24.asFloat(color.bit24);
 							final float g = Color24.asFloat(color.bit16);
 							final float b = Color24.asFloat(color.bit8);
 							final float a = Color24.asFloat(color.bit0);
-							buffer.vertex(x, y + h, z).uv(0F, 1F).color(r, g, b, a).endVertex();
-							buffer.vertex(x + w, y + h, z).uv(1F, 1F).color(r, g, b, a).endVertex();
-							buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
-							buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
+							buffer.vertex(x, y + h, z);
+							if (tex)
+								buffer.uv(0F, 1F);
+							buffer.color(r, g, b, a).endVertex();
+							buffer.vertex(x + w, y + h, z);
+							if (tex)
+								buffer.uv(1F, 1F);
+							buffer.color(r, g, b, a).endVertex();
+							buffer.vertex(x + w, y, z);
+							if (tex)
+								buffer.uv(1F, 0F);
+							buffer.color(r, g, b, a).endVertex();
+							buffer.vertex(x, y, z);
+							if (tex)
+								buffer.uv(0F, 0F);
+							buffer.color(r, g, b, a).endVertex();
 						};
 
 						ClientUtil.bindTexture(TEXTURE_MASK);
-						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
+						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F), true);
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
-						buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
-						RenderSystem.disableTexture();
-						StencilBufferUtil.renderTesselatorAndFlush(STENCIL_INDEX);
-						RenderSystem.enableTexture();
+						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F), false);
+						StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
 					}
 					RenderSystem.disableBlend();
 				}

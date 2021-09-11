@@ -5,16 +5,19 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.unsafe.UnsafeHacks;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Shaders {
 
@@ -25,6 +28,7 @@ public class Shaders {
 	public static OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR;
 	public static OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_TEX;
 	public static OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR;
+	public static WrappedBindableShaderInstance WRAPPED_POS_COLOR;
 
 	public static void init() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<RegisterShadersEvent>) event -> {
@@ -43,6 +47,7 @@ public class Shaders {
 						POSITION_TEX), shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX = (OptimalAlphaShaderInstance) shader);
 				event.registerShader(new OptimalAlphaShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex_color"), DefaultVertexFormat.
 						POSITION_TEX_COLOR), shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader);
+				WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -57,10 +62,15 @@ public class Shaders {
 			super(p_173336_, shaderLocation, p_173338_);
 		}
 
-		public final void bind(Runnable exec) {
+		ShaderInstance getSelf() {
+			return this;
+		}
+
+		public final void bind(@Nullable Runnable exec) {
 			last = RenderSystem.getShader();
-			RenderSystem.setShader(() -> this);
-			exec.run();
+			RenderSystem.setShader(this::getSelf);
+			if (exec != null)
+				exec.run();
 			apply();
 		}
 
@@ -71,18 +81,57 @@ public class Shaders {
 			last = null;
 		}
 
-		public final void invokeThenClear(Runnable execBind, Runnable execPost) {
+		public final void invokeThenClear(@Nullable Runnable execBind, Runnable execPost) {
 			bind(execBind);
 			runThenClear(execPost);
 		}
 
-		public final void invokeThenEndTesselator(Runnable execBind, Runnable execPost) {
-			invokeThenClear(execBind, () -> {
-				Tesselator.getInstance().end();
-				execPost.run();
-			});
+		public final void invokeThenClear(Runnable execPost) {
+			invokeThenClear(null, execPost);
 		}
 
+		public final void invokeThenEndTesselator(@Nullable Runnable execBind) {
+			invokeThenClear(execBind, () -> Tesselator.getInstance().end());
+		}
+
+		public final void invokeThenEndTesselator() {
+			invokeThenClear(() -> Tesselator.getInstance().end());
+		}
+
+	}
+
+	public static class WrappedBindableShaderInstance extends BindableShaderInstance {
+
+		private Supplier<ShaderInstance> wrapped;
+
+		/*
+			DO NOT USE
+		 */
+		@SuppressWarnings("ConstantConditions")
+		private WrappedBindableShaderInstance() throws IOException {
+			super(null, null, null);
+		}
+
+		private static WrappedBindableShaderInstance make(Supplier<ShaderInstance> instance) {
+			WrappedBindableShaderInstance wrapper = UnsafeHacks.newInstance(WrappedBindableShaderInstance.class);
+			wrapper.wrapped = instance;
+			return wrapper;
+		}
+
+		@Override
+		ShaderInstance getSelf() {
+			return wrapped.get();
+		}
+
+		@Override
+		public void apply() {
+			getSelf().apply();
+		}
+
+		@Override
+		public void clear() {
+			getSelf().clear();
+		}
 	}
 
 	public static class OptimalAlphaShaderInstance extends BindableShaderInstance {
