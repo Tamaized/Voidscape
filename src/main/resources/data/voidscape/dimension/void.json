@@ -9,6 +9,12 @@
 	  "bedrock_roof_position": -10,
 	  "bedrock_floor_position": -10,
 	  "sea_level": 0,
+	  "noise_caves_enabled": false,
+	  "deepslate_enabled": false,
+	  "ore_veins_enabled": false,
+	  "noodle_caves_enabled": false,
+	  "min_surface_level": 0,
+	  "aquifers_enabled": false,
 	  "disable_mob_generation": false,
 	  "structures": {
 		"stronghold": {
@@ -22,6 +28,7 @@
 	  },
 	  "noise": {
 		"height": 256,
+		"min_y": 0,
 		"sampling": {
 		  "xz_scale": 0.9999999814507745,
 		  "y_scale": 3.0,

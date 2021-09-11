@@ -44,11 +44,12 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	private VoidChunkGenerator(BiomeSource biomeProvider1, long seed, Supplier<NoiseGeneratorSettings> dimensionSettings) {
 		super(biomeProvider1, seed, dimensionSettings);
 		this.seed = seed;
-		int horizontalNoiseGranularity = dimensionSettings.get().noiseSettings().noiseSizeHorizontal() * 2;
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, horizontalNoiseGranularity, "field_222564_k");
-		int noise = 16 / horizontalNoiseGranularity;
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "field_222565_l");
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "field_222567_n");
+		// Vanilla constraints this to a multiple of 4, we want an even lower bound!
+		int cellWidth = dimensionSettings.get().noiseSettings().noiseSizeHorizontal() * 2;
+		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, cellWidth, "f_158375_"); // cellWidth
+		int noise = 16 / cellWidth;
+		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "f_158376_"); // cellCountX
+		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "f_158378_"); // cellCountZ
 	}
 
 	@Override
