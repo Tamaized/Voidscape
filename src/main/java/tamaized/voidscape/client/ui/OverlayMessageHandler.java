@@ -135,7 +135,7 @@ public class OverlayMessageHandler {
 
 			ClientUtil.bindTexture(TEXTURE_TEXT_BG);
 
-			StencilBufferUtil.render(stencilIndex, () -> {
+			StencilBufferUtil.renderAndFlush(stencilIndex, () -> {
 				Tesselator.getInstance().end();
 				Font fontRenderer = Minecraft.getInstance().font;
 				stack.pushPose();
@@ -149,7 +149,7 @@ public class OverlayMessageHandler {
 						y + h * 0.5F - fontRenderer.lineHeight * 0.5F, 0x00FFAAFF);
 				stack.popPose();
 
-			}, true);
+			});
 		}
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.disableBlend();

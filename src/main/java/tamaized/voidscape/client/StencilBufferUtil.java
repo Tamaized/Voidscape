@@ -2,6 +2,7 @@ package tamaized.voidscape.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
@@ -39,10 +40,6 @@ public final class StencilBufferUtil {
 		finishRender();
 	}
 
-	public static void render(int index, Runnable run) {
-		render(index, run, false);
-	}
-
 	public static void render(int index, Runnable run, boolean flush) {
 		startRender(index);
 		run.run();
@@ -51,6 +48,22 @@ public final class StencilBufferUtil {
 		else
 			endRender(index);
 
+	}
+
+	public static void render(int index, Runnable run) {
+		render(index, run, false);
+	}
+
+	public static void renderAndFlush(int index, Runnable run) {
+		render(index, run, true);
+	}
+
+	public static void renderTesselator(int index) {
+		render(index, () -> Tesselator.getInstance().end());
+	}
+
+	public static void renderTesselatorAndFlush(int index) {
+		renderAndFlush(index, () -> Tesselator.getInstance().end());
 	}
 
 	public static void endRender(int index) {

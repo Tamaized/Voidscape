@@ -51,11 +51,14 @@ public class Shaders {
 
 	public static class BindableShaderInstance extends ShaderInstance {
 
+		private ShaderInstance last;
+
 		public BindableShaderInstance(ResourceProvider p_173336_, ResourceLocation shaderLocation, VertexFormat p_173338_) throws IOException {
 			super(p_173336_, shaderLocation, p_173338_);
 		}
 
 		public final void bind(Runnable exec) {
+			last = RenderSystem.getShader();
 			RenderSystem.setShader(() -> this);
 			exec.run();
 			apply();
@@ -64,6 +67,8 @@ public class Shaders {
 		public final void runThenClear(Runnable exec) {
 			exec.run();
 			clear();
+			RenderSystem.setShader(() -> last);
+			last = null;
 		}
 
 		public final void invokeThenClear(Runnable execBind, Runnable execPost) {

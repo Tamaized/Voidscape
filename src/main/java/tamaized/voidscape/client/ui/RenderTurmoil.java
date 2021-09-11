@@ -270,20 +270,16 @@ public class RenderTurmoil {
 							buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
 							buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
 						};
-						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
 
 						ClientUtil.bindTexture(TEXTURE_MASK);
-
+						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F));
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
 						buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F));
-
-						StencilBufferUtil.render(STENCIL_INDEX, () -> {
-							RenderSystem.disableTexture();
-							Tesselator.getInstance().end();
-							RenderSystem.enableTexture();
-						}, true);
+						RenderSystem.disableTexture();
+						StencilBufferUtil.renderTesselatorAndFlush(STENCIL_INDEX);
+						RenderSystem.enableTexture();
 					}
 					RenderSystem.disableBlend();
 				}

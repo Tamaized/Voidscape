@@ -222,13 +222,11 @@ public class MainScreen extends TurmoilScreen {
 
 			final int stencilIndex = 12;
 
-			StencilBufferUtil.setup(stencilIndex, () -> {
-				float perc = Math.min(1F, (minecraft.level.getGameTime() - tick) / (20 * 3F));
-				Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc);
-			});
+			float perc = Math.min(1F, (minecraft.level.getGameTime() - tick) / (20 * 3F));
+			StencilBufferUtil.setup(stencilIndex, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
 
-			StencilBufferUtil.render(stencilIndex, () -> super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_), true);
+			StencilBufferUtil.renderAndFlush(stencilIndex, () -> super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_));
 		}
 		RenderSystem.disableBlend();
 		if (minecraft == null || minecraft.player == null) {
