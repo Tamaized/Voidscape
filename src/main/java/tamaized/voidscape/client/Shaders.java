@@ -97,7 +97,7 @@ public class Shaders {
 		}
 
 		public final void setValueBindApply(float val) {
-			bind(() -> setValueBindApply(val));
+			bind(() -> setValue(val));
 		}
 
 		public final void reset() {
