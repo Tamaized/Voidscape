@@ -105,10 +105,8 @@ public class SkillsScreen extends TurmoilScreen {
 				buffer.vertex(xRot, yRot, 0).color(hover ? 0F : 0.4F, hover ? 1F : 0F, hover ? 0F : 1F, 1F).endVertex();
 			}
 			//buffer.vertex(p2.x, p2.y, 0).color(1f, 0, 0, 1f).endVertex();
-			RenderSystem.disableTexture();
 			RenderSystem.lineWidth(5F);
 			Tesselator.getInstance().end();
-			RenderSystem.enableTexture();
 		}
 		dragX = dragY = 0;
 		lastX = mouseX;

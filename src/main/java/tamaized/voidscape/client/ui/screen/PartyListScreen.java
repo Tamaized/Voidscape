@@ -203,10 +203,10 @@ public class PartyListScreen extends TurmoilScreen {
 		}
 
 		private static void quad(BufferBuilder buffer, float x, float y, float z, float w, float h, float r, float g, float b, float a) {
-			buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
-			buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
-			buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
-			buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
+			buffer.vertex(x, y + h, z).color(r, g, b, a).endVertex();
+			buffer.vertex(x + w, y + h, z).color(r, g, b, a).endVertex();
+			buffer.vertex(x + w, y, z).color(r, g, b, a).endVertex();
+			buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
 		}
 
 		@Override
@@ -256,9 +256,7 @@ public class PartyListScreen extends TurmoilScreen {
 				quad(buffer, left, top, 0, 1, entryHeight, 1, 1, 1, 1);
 				quad(buffer, left + 1, top + entryHeight - 1, 0, realWidth - 2, 1, 1, 1, 1, 1);
 				quad(buffer, left + realWidth - 1, top, 0, 1, entryHeight, 1, 1, 1, 1);
-				RenderSystem.disableTexture();
 				Tesselator.getInstance().end();
-				RenderSystem.enableTexture();
 				ClientPartyInfo.PARTIES.stream().filter(p -> p.host.getId().equals(host)).findAny().ifPresent(party -> {
 					if (minecraft.player != null) {
 						ClientPacketListener network = minecraft.player.connection;

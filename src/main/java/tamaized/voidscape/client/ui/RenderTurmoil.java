@@ -410,11 +410,9 @@ public class RenderTurmoil {
 			buffer.vertex(x + s, y + s, 0F).color(0F, 1F, 1F, 1F).endVertex();
 			buffer.vertex(x + s, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
 			RenderSystem.enableBlend();
-			RenderSystem.disableTexture();
 			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
-			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR.invokeThenEndTesselator(0F);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 		}
 	}
@@ -446,11 +444,9 @@ public class RenderTurmoil {
 			buffer.vertex(x + s, y + s, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
 			buffer.vertex(x + s, offset, 0F).color(1F, 0.1F, 0F, alpha).endVertex();
 			RenderSystem.enableBlend();
-			RenderSystem.disableTexture();
 			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
-			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR.invokeThenEndTesselator(0F);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 			RenderSystem.enableBlend();
 			//			RenderSystem.alphaFunc(GL11.GL_GREATER, 0F); // FIXME: alphaFunc on text doesnt look possible, is this even needed here?
@@ -484,11 +480,9 @@ public class RenderTurmoil {
 			buffer.vertex(x + s, y + s, 0F).color(1F, 1F, 0F, 0F).endVertex();
 			buffer.vertex(x + s, y, 0F).color(1F, 1F, 0F, 1F).endVertex();
 			RenderSystem.enableBlend();
-			RenderSystem.disableTexture();
 			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
-			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR.invokeThenEndTesselator(0F);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 		}
 	}
