@@ -208,7 +208,8 @@ public class RegUtil {
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE));
+				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
+						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER));
 				model.rightfoot.visible = false;
 				model.leftfoot.visible = false;
 				model.bodyToLeg.visible = false;

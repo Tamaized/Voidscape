@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
@@ -56,19 +57,29 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 				leftleg = parent.getChild("leftleg"),
 				rightfoot = parent.getChild("rightfoot"),
 				leftfoot = parent.getChild("leftfoot"),
-				topLeftTentacle = parent.getChild("topLeftTentacle"),
-				topRightTentacle = parent.getChild("topRightTentacle"),
-				bottomLeftTentacle = parent.getChild("bottomLeftTentacle"),
-				bottomRightTentacle = parent.getChild("bottomRightTentacle")
+				topLeftTentacle = body.getChild("topLeftTentacle"),
+				topRightTentacle = body.getChild("topRightTentacle"),
+				bottomLeftTentacle = body.getChild("bottomLeftTentacle"),
+				bottomRightTentacle = body.getChild("bottomRightTentacle")
 
 		);
 
 		parts = builder.build();
 	}
 
-	public static MeshDefinition createMesh(CubeDeformation deformation, float p_170683_) {
+	public static LayerDefinition makeMesh(CubeDeformation deformation, float f) {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition definition = mesh.getRoot();
+
+		// Copied from super
+		definition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, deformation), PartPose.offset(0.0F, 0.0F + f, 0.0F));
+		definition.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, deformation.extend(0.5F)), PartPose.offset(0.0F, 0.0F + f, 0.0F));
+		definition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, deformation), PartPose.offset(0.0F, 0.0F + f, 0.0F));
+		definition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.offset(-5.0F, 2.0F + f, 0.0F));
+		definition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(40, 16).mirror().addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.offset(5.0F, 2.0F + f, 0.0F));
+		definition.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.offset(-1.9F, 12.0F + f, 0.0F));
+		definition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.offset(1.9F, 12.0F + f, 0.0F));
+		// End super
 
 		PartDefinition bodyDefinition = definition.addOrReplaceChild("body",
 				CubeListBuilder.create().texOffs(16, 16).
@@ -140,7 +151,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
 						offset(-1.9F, 12.0F, 0.0F));
 
-		return mesh;
+		return LayerDefinition.create(mesh, 64, 64);
 
 	}
 

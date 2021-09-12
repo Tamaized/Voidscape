@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawnTentacle;
 import tamaized.voidscape.client.entity.render.RenderAntiBolt;
@@ -84,7 +86,8 @@ public class ModEntities {
 		public static final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
 		public static final ModelLayerLocation CORRUPTED_PAWN_TENTACLE = make("corruptedpawntentacle");
 
-		public static final ModelLayerLocation MODEL_ARMOR_INSANE = make("insane");
+		public static final ModelLayerLocation MODEL_ARMOR_INSANE_OUTER = make("insane_outer");
+		public static final ModelLayerLocation MODEL_ARMOR_INSANE_INNER = make("insane_inner");
 
 		private static ModelLayerLocation make(String name) {
 			return new ModelLayerLocation(new ResourceLocation(Voidscape.MODID, "main"), name);
@@ -97,6 +100,9 @@ public class ModEntities {
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN, ModelCorruptedPawn::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN_TENTACLE, ModelCorruptedPawnTentacle::createMesh);
+
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
 
 	}
 
