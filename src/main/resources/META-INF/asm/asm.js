@@ -1,28 +1,35 @@
+// noinspection ES6ConvertVarToLetConst
+
+var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var Opcodes = Java.type('org.objectweb.asm.Opcodes');
+
+var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
+var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
+var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
+var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
+
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
-    var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
-    var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
     return {
         'attackstrength': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.entity.player.PlayerEntity',
-                'methodName': ASM.mapMethod('func_71059_n'),
-                'methodDesc': '(Lnet/minecraft/entity/Entity;)V'
+                'class': 'net.minecraft.world.entity.player.Player',
+                'methodName': ASM.mapMethod('m_5706_'), // attack
+                'methodDesc': '(Lnet/minecraft/world/entity/Entity;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insert(
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
-                        'net/minecraft/entity/player/PlayerEntity',
-                        ASM.mapMethod('func_184825_o'),
+                        'net/minecraft/world/entity/player/Player',
+                        ASM.mapMethod('m_36403_'), // getAttackStrengthScale
                         '(F)F'
                         ),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'getAttackStrengthScale',
@@ -37,22 +44,22 @@ function initializeCoreMod() {
         'attributes': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.entity.LivingEntity',
+                'class': 'net.minecraft.world.entity.LivingEntity',
                 'methodName': '<init>',
-                'methodDesc': '(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)V'
+                'methodDesc': '(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 var lastInstruction = null;
                 for (var index = 0; index < instructions.size(); index++) {
-                    var node = instructions.get(index);
+                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
                     if (lastInstruction == null &&
 
-                        node instanceof org.objectweb.asm.tree.FieldInsnNode &&
+                        node instanceof FieldInsnNode &&
 
                         node.getOpcode() === Opcodes.PUTFIELD &&
 
-                        node.name === ASM.mapField("field_110155_d")
+                        node.name === ASM.mapField("f_20943_") // attributes
 
                     )
                         lastInstruction = node;
@@ -61,12 +68,12 @@ function initializeCoreMod() {
                     instructions.insert(
                         lastInstruction,
                         ASM.listOf(
-                            new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                            new org.objectweb.asm.tree.MethodInsnNode(
+                            new VarInsnNode(Opcodes.ALOAD, 0),
+                            new MethodInsnNode(
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'handleEntityAttributes',
-                                '(Lnet/minecraft/entity/LivingEntity;)V',
+                                '(Lnet/minecraft/world/entity/LivingEntity;)V',
                                 false
                                 )
                             )
@@ -78,21 +85,21 @@ function initializeCoreMod() {
         'axesareweps': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.enchantment.EnchantmentType$6',
-                'methodName': ASM.mapMethod('func_77557_a'),
-                'methodDesc': '(Lnet/minecraft/item/Item;)Z'
+                'class': 'net.minecraft.world.item.enchantment.EnchantmentCategory$6', // WEAPON
+                'methodName': ASM.mapMethod('m_7454_'), // canEnchant
+                'methodDesc': '(Lnet/minecraft/world/item/Item;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.IRETURN),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'axesRWeps',
-                            '(ZLnet/minecraft/item/Item;)Z',
+                            '(ZLnet/minecraft/world/item/Item;)Z',
                             false
                             )
                         )
@@ -105,20 +112,20 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'net.minecraftforge.common.ForgeHooks',
                 'methodName': 'onLivingDeath',
-                'methodDesc': '(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/DamageSource;)Z'
+                'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.GETSTATIC),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'death',
-                            '(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/DamageSource;)Z',
+                            '(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)Z',
                             false
                             ),
                         new org.objectweb.asm.tree.InsnNode(Opcodes.IRETURN)
@@ -130,49 +137,50 @@ function initializeCoreMod() {
         'deepfreeze': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.world.server.ServerChunkProvider',
+                'class': 'net.minecraft.server.level.ServerChunkCache',
                 'methodName': '<init>',
-                'methodDesc': '(Lnet/minecraft/world/server/ServerWorld;Lnet/minecraft/world/storage/SaveFormat$LevelSave;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/gen/feature/template/TemplateManager;Ljava/util/concurrent/Executor;Lnet/minecraft/world/gen/ChunkGenerator;IZLnet/minecraft/world/chunk/listener/IChunkStatusListener;Ljava/util/function/Supplier;)V'
+                'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureManager;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/chunk/ChunkGenerator;IZLnet/minecraft/server/level/progress/ChunkProgressListener;Lnet/minecraft/world/level/entity/ChunkStatusUpdateListener;Ljava/util/function/Supplier;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insert(
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.SPECIAL,
-                        'net/minecraft/world/server/ChunkManager',
+                        'net/minecraft/server/level/ChunkMap',
                         '<init>',
                         '(Lnet/minecraft/world/server/ServerWorld;Lnet/minecraft/world/storage/SaveFormat$LevelSave;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/gen/feature/template/TemplateManager;Ljava/util/concurrent/Executor;Lnet/minecraft/util/concurrent/ThreadTaskExecutor;Lnet/minecraft/world/chunk/IChunkLightProvider;Lnet/minecraft/world/gen/ChunkGenerator;Lnet/minecraft/world/chunk/listener/IChunkStatusListener;Ljava/util/function/Supplier;IZ)V'
                         ),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 2),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 3),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 4),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 5),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.FieldInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new VarInsnNode(Opcodes.ALOAD, 2),
+                        new VarInsnNode(Opcodes.ALOAD, 3),
+                        new VarInsnNode(Opcodes.ALOAD, 4),
+                        new VarInsnNode(Opcodes.ALOAD, 5),
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new FieldInsnNode(
                             Opcodes.GETFIELD,
-                            'net/minecraft/world/server/ServerChunkProvider',
-                            ASM.mapField('field_217243_i'),
-                            'Lnet/minecraft/world/server/ServerChunkProvider$ChunkExecutor;'
+                            'net/minecraft/server/level/ServerChunkCache',
+                            ASM.mapField('f_8332_'), // mainThreadProcessor
+                            'Lnet/minecraft/server/level/ServerChunkCache$MainThreadExecutor;'
                             ),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new MethodInsnNode(
                             Opcodes.INVOKEVIRTUAL,
-                            'net/minecraft/world/server/ServerChunkProvider',
-                            ASM.mapMethod('func_201711_g'),
-                            '()Lnet/minecraft/world/gen/ChunkGenerator;'
+                            'net/minecraft/server/level/ServerChunkCache',
+                            ASM.mapMethod('m_8481_'), // getGenerator
+                            '()Lnet/minecraft/world/level/chunk/ChunkGenerator;'
                             ),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 9),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 10),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ILOAD, 7),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ILOAD, 8),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 9),
+                        new VarInsnNode(Opcodes.ALOAD, 10),
+                        new VarInsnNode(Opcodes.ALOAD, 11),
+                        new VarInsnNode(Opcodes.ILOAD, 7),
+                        new VarInsnNode(Opcodes.ILOAD, 8),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'chunkManager',
-                            '(Lnet/minecraft/world/server/ChunkManager;Lnet/minecraft/world/server/ServerWorld;Lnet/minecraft/world/storage/SaveFormat$LevelSave;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/gen/feature/template/TemplateManager;Ljava/util/concurrent/Executor;Lnet/minecraft/util/concurrent/ThreadTaskExecutor;Lnet/minecraft/world/chunk/IChunkLightProvider;Lnet/minecraft/world/gen/ChunkGenerator;Lnet/minecraft/world/chunk/listener/IChunkStatusListener;Ljava/util/function/Supplier;IZ)Lnet/minecraft/world/server/ChunkManager;',
+                            '(Lnet/minecraft/server/level/ChunkMap;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureManager;Ljava/util/concurrent/Executor;Lnet/minecraft/util/thread/BlockableEventLoop;Lnet/minecraft/world/level/chunk/LightChunkGetter;Lnet/minecraft/world/level/chunk/ChunkGenerator;Lnet/minecraft/server/level/progress/ChunkProgressListener;Lnet/minecraft/world/level/entity/ChunkStatusUpdateListener;Ljava/util/function/Supplier;IZ)V',
                             false
                             )
                         )
@@ -183,26 +191,26 @@ function initializeCoreMod() {
         'entityalpha': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.renderer.entity.LivingRenderer',
-                'methodName': ASM.mapMethod('func_225623_a_'),
-                'methodDesc': '(Lnet/minecraft/entity/LivingEntity;FFLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;I)V'
+                'class': 'net.minecraft.client.renderer.entity.LivingEntityRenderer',
+                'methodName': ASM.mapMethod('m_7392_'), // render
+                'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
-                        'net/minecraft/client/renderer/entity/model/EntityModel',
-                        ASM.mapMethod('func_225598_a_'),
-                        '(Lcom/mojang/blaze3d/matrix/MatrixStack;Lcom/mojang/blaze3d/vertex/IVertexBuilder;IIFFFF)V'
+                        'net/minecraft/client/model/EntityModel',
+                        ASM.mapMethod('m_7695_'), // renderToBuffer
+                        '(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V'
                         ),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'handleEntityTransparency',
-                            '(FLnet/minecraft/entity/LivingEntity;)F',
+                            '(FLnet/minecraft/world/entity/LivingEntity;)F',
                             false
                             )
                         )
@@ -213,27 +221,27 @@ function initializeCoreMod() {
         'entityalpharendertype': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.renderer.entity.LivingRenderer',
-                'methodName': ASM.mapMethod('func_230496_a_'),
-                'methodDesc': '(Lnet/minecraft/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;'
+                'class': 'net.minecraft.client.renderer.entity.LivingEntityRenderer',
+                'methodName': ASM.mapMethod('m_7225_'), // getRenderType
+                'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insert(
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
-                        'net/minecraft/client/renderer/entity/model/EntityModel',
-                        ASM.mapMethod('func_228282_a_'),
-                        '(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;'
+                        'net/minecraft/client/model/EntityModel',
+                        ASM.mapMethod('m_103119_'), // renderType
+                        '(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;'
                         ),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'handleEntityTransparencyRenderType',
-                            '(Lnet/minecraft/client/renderer/RenderType;Lnet/minecraft/client/renderer/entity/LivingRenderer;Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/client/renderer/RenderType;',
+                            '(Lnet/minecraft/client/renderer/RenderType;Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/RenderType;',
                             false
                             )
                         )
@@ -246,16 +254,16 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'net.minecraftforge.common.ForgeHooks',
                 'methodName': 'enhanceBiome',
-                'methodDesc': '(Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/world/biome/Biome$Climate;Lnet/minecraft/world/biome/Biome$Category;Ljava/lang/Float;Ljava/lang/Float;Lnet/minecraft/world/biome/BiomeAmbience;Lnet/minecraft/world/biome/BiomeGenerationSettings;Lnet/minecraft/world/biome/MobSpawnInfo;Lcom/mojang/serialization/codecs/RecordCodecBuilder$Instance;Lnet/minecraftforge/common/ForgeHooks$BiomeCallbackFunction;)Lnet/minecraft/world/biome/Biome;'
+                'methodDesc': '(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/biome/Biome$ClimateSettings;Lnet/minecraft/world/level/biome/Biome$BiomeCategory;Ljava/lang/Float;Ljava/lang/Float;Lnet/minecraft/world/level/biome/BiomeSpecialEffects;Lnet/minecraft/world/level/biome/BiomeGenerationSettings;Lnet/minecraft/world/level/biome/MobSpawnSettings;Lcom/mojang/serialization/codecs/RecordCodecBuilder$Instance;Lnet/minecraftforge/common/ForgeHooks$BiomeCallbackFunction;)Lnet/minecraft/world/level/biome/Biome;'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 var lastInstruction = null;
                 for (var index = 0; index < instructions.size(); index++) {
-                    var node = instructions.get(index);
+                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
                     if (lastInstruction == null &&
 
-                        node instanceof org.objectweb.asm.tree.FieldInsnNode &&
+                        node instanceof FieldInsnNode &&
 
                         node.getOpcode() === Opcodes.GETSTATIC &&
 
@@ -267,8 +275,8 @@ function initializeCoreMod() {
                 instructions.insert(
                     lastInstruction,
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 12),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 12),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'fukUrBiomeEdits',
@@ -283,22 +291,22 @@ function initializeCoreMod() {
         'modelpathing': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.renderer.model.ModelBakery',
-                'methodName': 'processLoading',
-                'methodDesc': '(Lnet/minecraft/profiler/IProfiler;I)V'
+                'class': 'net.minecraft.client.resources.model.ModelBakery',
+                'methodName': 'processLoading', // Added by Forge
+                'methodDesc': '(Lnet/minecraft/util/profiling/ProfilerFiller;I)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 var lastInstruction = null;
                 for (var index = 0; index < instructions.size(); index++) {
-                    var node = instructions.get(index);
+                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
                     if (lastInstruction == null &&
 
-                        node instanceof org.objectweb.asm.tree.FieldInsnNode &&
+                        node instanceof FieldInsnNode &&
 
                         node.getOpcode() === Opcodes.GETSTATIC &&
 
-                        node.name === ASM.mapField("field_212630_s")
+                        node.name === ASM.mapField("f_122827_") // ITEM
 
                     )
                         lastInstruction = node;
@@ -307,7 +315,7 @@ function initializeCoreMod() {
                     instructions.insertBefore(
                         lastInstruction,
                         ASM.listOf(
-                            new org.objectweb.asm.tree.MethodInsnNode(
+                            new MethodInsnNode(
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'redirectModels',
@@ -322,7 +330,7 @@ function initializeCoreMod() {
                         "newLinkedHashSet",
                         "()Ljava/util/LinkedHashSet;"),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'cleanModels',
@@ -338,17 +346,17 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.biome.Biome',
-                'methodName': ASM.mapMethod('func_201850_b'),
-                'methodDesc': '(Lnet/minecraft/world/IWorldReader;Lnet/minecraft/util/math/BlockPos;)Z'
+                'methodName': ASM.mapMethod('m_47519_'), // shouldSnow
+                'methodDesc': '(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 var lastInstruction = null;
                 for (var index = 0; index < instructions.size(); index++) {
-                    var node = instructions.get(index);
+                    var /*org.objectweb.asm.tree.InsnNode*/ node = instructions.get(index);
                     if (lastInstruction == null &&
 
-                        node instanceof org.objectweb.asm.tree.InsnNode &&
+                        node instanceof InsnNode &&
 
                         node.getOpcode() === Opcodes.ICONST_1
 
@@ -358,8 +366,8 @@ function initializeCoreMod() {
                 instructions.insert(
                     lastInstruction,
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 0),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'shouldSnow',
@@ -376,14 +384,14 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.gen.settings.DimensionGeneratorSettings',
                 'methodName': '<init>',
-                'methodDesc': '(JZZLnet/minecraft/util/registry/SimpleRegistry;Ljava/util/Optional;)V'
+                'methodDesc': '(JZZLnet/minecraft/core/MappedRegistry;Ljava/util/Optional;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.PUTFIELD),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'seed',
@@ -399,21 +407,21 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('func_228452_a_'),
-                'methodDesc': '(Lnet/minecraft/world/World;I)F'
+                'methodName': ASM.mapMethod('m_109888_'), // getBrightness
+                'methodDesc': '(Lnet/minecraft/world/level/Level;I)F'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.FRETURN),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ALOAD, 1),
-                        new org.objectweb.asm.tree.VarInsnNode(Opcodes.ILOAD, 2),
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new VarInsnNode(Opcodes.ILOAD, 2),
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'visibility',
-                            '(FLnet/minecraft/world/World;I)F',
+                            '(FLnet/minecraft/world/level/Level;I)F',
                             false
                             )
                         )
@@ -425,15 +433,15 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.GameRenderer',
-                'methodName': ASM.mapMethod('func_228380_a_'),
-                'methodDesc': '(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V'
+                'methodName': ASM.mapMethod('m_109117_'), // bobHurt
+                'methodDesc': '(Lcom/mojang/blaze3d/vertex/PoseStack;F)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.IFEQ),
                     ASM.listOf(
-                        new org.objectweb.asm.tree.MethodInsnNode(
+                        new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'cancelBobHurt',
