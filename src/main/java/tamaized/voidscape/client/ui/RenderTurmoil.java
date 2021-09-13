@@ -44,14 +44,12 @@ import tamaized.voidscape.turmoil.abilities.TurmoilAbilityInstance;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
 
 	public static final int STENCIL_INDEX = 10;
 	public static final ResourceLocation TEXTURE_MASK = new ResourceLocation(Voidscape.MODID, "textures/ui/mask.png");
-	public static final Color24 colorHolder = new Color24();
 	static final ResourceLocation TEXTURE_VOIDICINFUSION = new ResourceLocation(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
 	private static float deltaTick;
@@ -249,8 +247,6 @@ public class RenderTurmoil {
 					RenderSystem.enableBlend();
 					{
 
-						BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-
 						Window window = Minecraft.getInstance().getWindow();
 
 						float x = 0F;
@@ -259,35 +255,11 @@ public class RenderTurmoil {
 						float h = window.getGuiScaledHeight();
 						float z = 401F; // Catch All
 
-						BiConsumer<Color24, Boolean> verticies = (color, tex) -> {
-							buffer.begin(VertexFormat.Mode.QUADS, tex ? DefaultVertexFormat.POSITION_TEX_COLOR : DefaultVertexFormat.POSITION_COLOR);
-							final float r = Color24.asFloat(color.bit24);
-							final float g = Color24.asFloat(color.bit16);
-							final float b = Color24.asFloat(color.bit8);
-							final float a = Color24.asFloat(color.bit0);
-							buffer.vertex(x, y + h, z);
-							if (tex)
-								buffer.uv(0F, 1F);
-							buffer.color(r, g, b, a).endVertex();
-							buffer.vertex(x + w, y + h, z);
-							if (tex)
-								buffer.uv(1F, 1F);
-							buffer.color(r, g, b, a).endVertex();
-							buffer.vertex(x + w, y, z);
-							if (tex)
-								buffer.uv(1F, 0F);
-							buffer.color(r, g, b, a).endVertex();
-							buffer.vertex(x, y, z);
-							if (tex)
-								buffer.uv(0F, 0F);
-							buffer.color(r, g, b, a).endVertex();
-						};
-
 						ClientUtil.bindTexture(TEXTURE_MASK);
-						verticies.accept(colorHolder.set(1F, 1F, 1F, 1F), true);
+						Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
-						verticies.accept(colorHolder.set(0F, 0F, 0F, 1F), false);
+						Color24.INSTANCE.set(0F, 0F, 0F, 1F).apply(false, x, y, z, w, h);
 						StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
 					}
 					RenderSystem.disableBlend();
@@ -489,10 +461,14 @@ public class RenderTurmoil {
 
 	public static class Color24 {
 
+		public static final Color24 INSTANCE = new Color24();
+
 		public int bit24;
 		public int bit16;
 		public int bit8;
 		public int bit0;
+
+		private Color24() {}
 
 		public static float asFloat(int value) {
 			return value / 255F;
@@ -518,6 +494,36 @@ public class RenderTurmoil {
 					packed & 0xFF
 
 			);
+		}
+
+		public Color24 apply(boolean tex, float x, float y, float z, float w, float h) {
+			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+			buffer.begin(VertexFormat.Mode.QUADS, tex ? DefaultVertexFormat.POSITION_TEX_COLOR : DefaultVertexFormat.POSITION_COLOR);
+			final float r = asFloat(bit24);
+			final float g = asFloat(bit16);
+			final float b = asFloat(bit8);
+			final float a = asFloat(bit0);
+			buffer.vertex(x, y + h, z);
+			if (tex)
+				buffer.uv(0F, 1F);
+			buffer.color(r, g, b, a).endVertex();
+			buffer.vertex(x + w, y + h, z);
+			if (tex)
+				buffer.uv(1F, 1F);
+			buffer.color(r, g, b, a).endVertex();
+			buffer.vertex(x + w, y, z);
+			if (tex)
+				buffer.uv(1F, 0F);
+			buffer.color(r, g, b, a).endVertex();
+			buffer.vertex(x, y, z);
+			if (tex)
+				buffer.uv(0F, 0F);
+			buffer.color(r, g, b, a).endVertex();
+			return this;
+		}
+
+		public void endTesselator() {
+			Tesselator.getInstance().end();
 		}
 
 		public Color24 set(int b24, int b16, int b8, int b0) {

@@ -2,11 +2,7 @@ package tamaized.voidscape.client.ui.screen;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -26,7 +22,6 @@ import tamaized.voidscape.turmoil.TurmoilStats;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class MainScreen extends TurmoilScreen {
 
@@ -195,9 +190,6 @@ public class MainScreen extends TurmoilScreen {
 		RenderSystem.enableBlend();
 		{
 
-			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-
 			Window window = Minecraft.getInstance().getWindow();
 
 			float x = 0F;
@@ -206,26 +198,11 @@ public class MainScreen extends TurmoilScreen {
 			float h = window.getGuiScaledHeight();
 			float z = 0F;
 
-			Consumer<RenderTurmoil.Color24> verticies = color -> {
-				final float r = RenderTurmoil.Color24.asFloat(color.bit24);
-				final float g = RenderTurmoil.Color24.asFloat(color.bit16);
-				final float b = RenderTurmoil.Color24.asFloat(color.bit8);
-				final float a = RenderTurmoil.Color24.asFloat(color.bit0);
-				buffer.vertex(x, y + h, z).uv(0F, 1F).color(r, g, b, a).endVertex();
-				buffer.vertex(x + w, y + h, z).uv(1F, 1F).color(r, g, b, a).endVertex();
-				buffer.vertex(x + w, y, z).uv(1F, 0F).color(r, g, b, a).endVertex();
-				buffer.vertex(x, y, z).uv(0F, 0F).color(r, g, b, a).endVertex();
-			};
-			verticies.accept(RenderTurmoil.colorHolder.set(1F, 1F, 1F, 1F));
-
 			ClientUtil.bindTexture(RenderTurmoil.TEXTURE_MASK);
-
+			RenderTurmoil.Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
 			final int stencilIndex = 12;
-
 			float perc = Math.min(1F, (minecraft.level.getGameTime() - tick) / (20 * 3F));
 			StencilBufferUtil.setup(stencilIndex, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
-
-
 			StencilBufferUtil.renderAndFlush(stencilIndex, () -> super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_));
 		}
 		RenderSystem.disableBlend();
