@@ -139,8 +139,10 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends EntityMod
 		this.rightTentacle.part.xRot = swingCardinal;
 		this.bottomTentacle.part.xRot = swingCardinal;
 
-		int i = -1;
+		int i = 0;
 		for (TransparentModelWrapper part : parts) {
+			if (part == head)
+				continue;
 			if (entity.isCasting()) {
 				float rot = (float) Math.toRadians(CAST_MOVEMENT[i] + (entity.tickCount - entity.castTick) * 25L);
 				float sine = Mth.sin(rot) * 0.5F;
