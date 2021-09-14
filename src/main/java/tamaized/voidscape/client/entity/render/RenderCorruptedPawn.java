@@ -38,6 +38,7 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 					setTextureState(new RenderStateShard.TextureStateShard(GUARDIAN_BEAM_LOCATION, false, false)).
 					setTransparencyState(RenderStateAccessor.NO_TRANSPARENCY()).
 					setCullState(RenderStateAccessor.NO_CULL()).
+					setLightmapState(RenderStateAccessor.LIGHTMAP()).
 					setOverlayState(RenderStateAccessor.OVERLAY()).
 					createCompositeState(true));
 
@@ -119,7 +120,7 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 	}
 
 	private static void vertex(VertexConsumer p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_) {
-		p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
+		p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(0xF000F0).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
 	}
 
 	@Override

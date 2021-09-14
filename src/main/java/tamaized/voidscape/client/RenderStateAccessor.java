@@ -31,6 +31,10 @@ public class RenderStateAccessor extends RenderStateShard {
 		return LIGHTMAP;
 	}
 
+	public static LightmapStateShard NO_LIGHTMAP() {
+		return NO_LIGHTMAP;
+	}
+
 	public static OverlayStateShard OVERLAY() {
 		return OVERLAY;
 	}
