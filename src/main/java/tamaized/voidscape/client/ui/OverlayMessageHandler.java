@@ -106,9 +106,9 @@ public class OverlayMessageHandler {
 			final int stencilIndex = 11;
 			StencilBufferUtil.setup(stencilIndex, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 			ClientUtil.bindTexture(TEXTURE_TEXT_BG);
-			RenderTurmoil.Color24.INSTANCE.set(0F, 0F, 0F, 0.9F).apply(false, x, y, z, w, h);
+			RenderTurmoil.Color24.INSTANCE.set(0F, 0F, 0F, 0.9F).apply(true, x, y, z, w, h);
 			StencilBufferUtil.renderAndFlush(stencilIndex, () -> {
-				Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator();
+				Shaders.WRAPPED_POS_TEX_COLOR.invokeThenEndTesselator();
 				Font fontRenderer = Minecraft.getInstance().font;
 				stack.pushPose();
 				stack.translate(0, 0, z);
