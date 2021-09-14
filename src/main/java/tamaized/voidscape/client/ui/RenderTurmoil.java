@@ -324,17 +324,17 @@ public class RenderTurmoil {
 
 	public static void renderSpellBar(PoseStack matrixStack, int z, float partialTicks) {
 		ClientUtil.bindTexture(AbstractWidget.WIDGETS_LOCATION);
-		int w = 61;
+		int w = 60;
 		int h = 22;
-		int x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - w - 2;
-		int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - ((h - 2) / 2 * 3);
+		int x = Minecraft.getInstance().getWindow().getGuiScaledWidth() - w;
+		int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - ((h - 1) / 2 * 3);
 		Minecraft.getInstance().gui.setBlitOffset(-90 + z);
-		float alpha = z != 0 ? 0.25F : fade(0.25F, partialTicks);
+		float alpha = z != 0 ? 0.5F : fade(0.5F, partialTicks);
 		RenderSystem.setShaderColor(1F, 1F, 1F, alpha);
 		RenderSystem.enableBlend();
 		Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX.invokeThenClear(0F, () -> {
 			for (int i = 0; i < 3; i++)
-				BlitWithoutShader.blit(matrixStack, x, y + (h - 2) * i, 0, 1, w, h);
+				BlitWithoutShader.blit(matrixStack, x, y + (h - 1) * i, 0, 0, w, h);
 		});
 		RenderSystem.disableBlend();
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
@@ -342,8 +342,8 @@ public class RenderTurmoil {
 
 	private static void renderAbilityInstances(PoseStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
-		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
-		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (19) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (27);
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = stats.getAbility(i);
 			if (instance == null)
@@ -367,8 +367,8 @@ public class RenderTurmoil {
 
 	private static void renderAbilityActivates(PoseStack stack, float partialTicks) {
 		int s = 16;
-		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
-		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (19) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (27);
 		List<KeyMapping> list = ClientListener.getAbilityKeys();
 		for (int i = 0; i < list.size(); i++) {
 			if (!list.get(i).isDown())
@@ -393,8 +393,8 @@ public class RenderTurmoil {
 		if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
 			return;
 		int s = 16;
-		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
-		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (19) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (27);
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = stats.getAbility(i);
 			if (instance == null)
@@ -437,8 +437,8 @@ public class RenderTurmoil {
 
 	private static void renderAbilityToggle(PoseStack stack, TurmoilStats stats, float partialTicks) {
 		int s = 16;
-		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (20) * 3;
-		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (28);
+		int ox = Minecraft.getInstance().getWindow().getGuiScaledWidth() - (19) * 3;
+		int oy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 - (27);
 		for (int i = 0; i < 9; i++) {
 			TurmoilAbilityInstance instance = stats.getAbility(i);
 			if (instance == null || !stats.isActive(instance.ability()))
