@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.network.server.ServerPacketCommenceDuty;
 import tamaized.voidscape.network.server.ServerPacketDisbandParty;
 import tamaized.voidscape.network.server.ServerPacketRemovePartyMember;
@@ -53,10 +54,10 @@ public class FormPartyScreen extends TurmoilScreen {
 	}
 
 	private static void quad(BufferBuilder buffer, float x, float y, float z, float w, float h, float r, float g, float b, float a) {
-		buffer.vertex(x, y + h, z).color(r, g, b, a).uv(0F, 1F).endVertex();
-		buffer.vertex(x + w, y + h, z).color(r, g, b, a).uv(1F, 1F).endVertex();
-		buffer.vertex(x + w, y, z).color(r, g, b, a).uv(1F, 0F).endVertex();
-		buffer.vertex(x, y, z).color(r, g, b, a).uv(0F, 0F).endVertex();
+		buffer.vertex(x, y + h, z).color(r, g, b, a).endVertex();
+		buffer.vertex(x + w, y + h, z).color(r, g, b, a).endVertex();
+		buffer.vertex(x + w, y, z).color(r, g, b, a).endVertex();
+		buffer.vertex(x, y, z).color(r, g, b, a).endVertex();
 	}
 
 	private static void drawPartyBox(BufferBuilder buffer, int x, int y, boolean host) {
@@ -266,7 +267,7 @@ public class FormPartyScreen extends TurmoilScreen {
 			renderPlayerFactory.accept(i);
 		}
 		RenderSystem.enableBlend();
-		Tesselator.getInstance().end();
+		Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator();
 		RenderSystem.disableBlend();
 		renderPlayers.forEach(Runnable::run);
 	}

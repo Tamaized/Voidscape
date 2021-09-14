@@ -15,6 +15,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
 import tamaized.voidscape.network.server.ServerPacketRequestPartyList;
 import tamaized.voidscape.party.ClientPartyInfo;
@@ -223,7 +224,7 @@ public class PartyListScreen extends TurmoilScreen {
 			quad(buffer, x0 + 3, y0 + height - 3, 0, width - 6, 3, 0.6F, 0F, 1F, 0.25F);
 			quad(buffer, x0, y0, 0, 3, height, 0.6F, 0F, 1F, 0.25F);
 			RenderSystem.enableBlend();
-			Tesselator.getInstance().end();
+			Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator();
 			RenderSystem.disableBlend();
 		}
 
@@ -256,7 +257,7 @@ public class PartyListScreen extends TurmoilScreen {
 				quad(buffer, left, top, 0, 1, entryHeight, 1, 1, 1, 1);
 				quad(buffer, left + 1, top + entryHeight - 1, 0, realWidth - 2, 1, 1, 1, 1, 1);
 				quad(buffer, left + realWidth - 1, top, 0, 1, entryHeight, 1, 1, 1, 1);
-				Tesselator.getInstance().end();
+				Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator();
 				ClientPartyInfo.PARTIES.stream().filter(p -> p.host.getId().equals(host)).findAny().ifPresent(party -> {
 					if (minecraft.player != null) {
 						ClientPacketListener network = minecraft.player.connection;
