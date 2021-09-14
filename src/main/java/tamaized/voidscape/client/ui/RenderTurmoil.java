@@ -359,7 +359,7 @@ public class RenderTurmoil {
 			buffer.vertex(x + s, y, 0F).uv(1, 0).endVertex();
 			RenderSystem.enableBlend();
 			RenderSystem.setShaderColor(1F, 1F, 1F, fade(1F, partialTicks));
-			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
+			Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX.invokeThenEndTesselator(0F);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			RenderSystem.disableBlend();
 		}
