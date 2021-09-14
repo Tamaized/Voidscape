@@ -18,11 +18,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
@@ -46,7 +44,6 @@ public class EntityCorruptedPawnTentacle extends LivingEntity {
 
 	public EntityCorruptedPawnTentacle(EntityType<? extends EntityCorruptedPawnTentacle> type, Level level) {
 		this(type, level, null, Vec3.ZERO);
-		ObfuscationReflectionHelper.getPrivateValue(AxeItem.class, null, "field_203176_a");
 	}
 
 	public EntityCorruptedPawnTentacle(Level level, @Nullable EntityCorruptedPawnBoss pawn, Vec3 pos) {
