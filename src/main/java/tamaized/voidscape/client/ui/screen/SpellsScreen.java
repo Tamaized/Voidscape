@@ -16,6 +16,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.server.ServerPacketTurmoilSetSpellBar;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -68,7 +69,7 @@ public class SpellsScreen extends TurmoilScreen {
 			buffer.vertex(x + size, y + size, 0F).uv(1, 1).endVertex();
 			buffer.vertex(x + size, y, 0F).uv(1, 0).endVertex();
 			ClientUtil.bindTexture(drag.getTexture());
-			Tesselator.getInstance().end();
+			Shaders.WRAPPED_POS_TEX.invokeThenEndTesselator();
 		}
 	}
 
@@ -194,7 +195,7 @@ public class SpellsScreen extends TurmoilScreen {
 			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
 			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
 			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
-			Tesselator.getInstance().end();
+			Shaders.WRAPPED_POS_TEX.invokeThenEndTesselator();
 		}
 
 		@Override
