@@ -19,6 +19,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.layout.HealerSkillLayout;
 import tamaized.voidscape.client.layout.ISkillLayout;
 import tamaized.voidscape.client.layout.MageSkillLayout;
@@ -82,32 +83,36 @@ public class SkillsScreen extends TurmoilScreen {
 			button.y += dragY;
 			button.active = data.canClaim(button.getSkill());
 		});
-		for (int offset = 0; offset < lines.size(); offset++) {
-			Triple<MutableVec2i, MutableVec2i, SkillButton> line = lines.get(offset);
-			line.getLeft().x += dragX;
-			line.getLeft().y += dragY;
-			line.getMiddle().x += dragX;
-			line.getMiddle().y += dragY;
-			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-			buffer.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-			MutableVec2i p1 = line.getLeft();
-			MutableVec2i p2 = line.getMiddle();
-			float theta = (float) Math.atan2(p1.y - p2.y, p1.x - p2.x);
-			float cos = Mth.cos(theta);
-			float sin = Mth.sin(theta);
-			float dist = Mth.sqrt(Mth.square(p2.x - p1.x) + Mth.square(p2.y - p1.y));
-			boolean hover = line.getRight().isHovered() || data.hasSkill(line.getRight().getSkill());
-			//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
-			for (float t = 0; t < dist + 1; t += 1F) {
-				float y = 8F * Mth.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + ClientUtil.tick)) * Mth.sin((float) Math.toRadians(t * Math.PI * 2F - ClientUtil.tick * 3F));
-				float xRot = t * cos - y * sin + p2.x;
-				float yRot = t * sin + y * cos + p2.y;
-				buffer.vertex(xRot, yRot, 0).color(hover ? 0F : 0.4F, hover ? 1F : 0F, hover ? 0F : 1F, 1F).endVertex();
-			}
-			//buffer.vertex(p2.x, p2.y, 0).color(1f, 0, 0, 1f).endVertex();
+		Shaders.LINES.invokeThenClear(() -> {
+			RenderSystem.disableCull();
 			RenderSystem.lineWidth(5F);
-			Tesselator.getInstance().end();
-		}
+			for (int offset = 0; offset < lines.size(); offset++) {
+				Triple<MutableVec2i, MutableVec2i, SkillButton> line = lines.get(offset);
+				line.getLeft().x += dragX;
+				line.getLeft().y += dragY;
+				line.getMiddle().x += dragX;
+				line.getMiddle().y += dragY;
+				BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+				buffer.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+				MutableVec2i p1 = line.getLeft();
+				MutableVec2i p2 = line.getMiddle();
+				float theta = (float) Math.atan2(p1.y - p2.y, p1.x - p2.x);
+				float cos = Mth.cos(theta);
+				float sin = Mth.sin(theta);
+				float dist = Mth.sqrt(Mth.square(p2.x - p1.x) + Mth.square(p2.y - p1.y));
+				boolean hover = line.getRight().isHovered() || data.hasSkill(line.getRight().getSkill());
+				//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
+				for (float t = 0; t < dist + 1; t += 1F) {
+					float y = 8F * Mth.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + ClientUtil.tick)) * Mth.sin((float) Math.toRadians(t * Math.PI * 2F - ClientUtil.tick * 3F));
+					float xRot = t * cos - y * sin + p2.x;
+					float yRot = t * sin + y * cos + p2.y;
+					buffer.vertex(xRot, yRot, 0).color(hover ? 0F : 0.4F, hover ? 1F : 0F, hover ? 0F : 1F, 1F).normal(p2.x - p1.x, p2.y - p1.y, 0).endVertex();
+				}
+				//buffer.vertex(p2.x, p2.y, 0).color(1f, 0, 0, 1f).endVertex();
+				Tesselator.getInstance().end();
+			}
+			RenderSystem.enableCull();
+		});
 		dragX = dragY = 0;
 		lastX = mouseX;
 		lastY = mouseY;
@@ -194,18 +199,18 @@ public class SkillsScreen extends TurmoilScreen {
 			if (minecraft == null)
 				return;
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 			final float color = data.hasSkill(skill) || (isHovered() && !skill.disabled() && data.canClaim(skill)) ? 1.0F : 0.25F;
 			final float activeColor = active || data.hasSkill(skill) ? color : 0.0F;
 			final float alpha = 1.0F;
 			ClientUtil.bindTexture(skill.getTexture());
 			Matrix4f matrix = stack.last().pose();
-			buffer.vertex(matrix, x, y, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(0, 0).endVertex();
-			buffer.vertex(matrix, x, y + height, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(0, 1).endVertex();
-			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(1, 1).endVertex();
-			buffer.vertex(matrix, x + width, y, getBlitOffset()).color(color, activeColor, activeColor, alpha).uv(1, 0).endVertex();
+			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).color(color, activeColor, activeColor, alpha).endVertex();
 			RenderSystem.enableDepthTest();
-			Tesselator.getInstance().end();
+			Shaders.WRAPPED_POS_TEX_COLOR.invokeThenEndTesselator();
 			RenderSystem.disableDepthTest();
 			if (this.isHovered())
 				this.renderToolTip(stack, mouseX, mouseY);

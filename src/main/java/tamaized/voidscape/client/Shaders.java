@@ -30,6 +30,7 @@ public class Shaders {
 	public static OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR;
 	public static WrappedBindableShaderInstance WRAPPED_POS_COLOR;
 	public static WrappedBindableShaderInstance WRAPPED_POS_TEX_COLOR;
+	public static BindableShaderInstance LINES;
 	public static BindableShaderInstance VOIDSKY;
 
 	public static void init() {
@@ -51,6 +52,8 @@ public class Shaders {
 						POSITION_TEX_COLOR), shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "voidsky/sky"), DefaultVertexFormat.
 						POSITION), shader -> VOIDSKY = (BindableShaderInstance) shader);
+				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "lines/lines"), DefaultVertexFormat.
+						POSITION_COLOR_NORMAL), shader -> LINES = (BindableShaderInstance) shader);
 				WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
 				WRAPPED_POS_TEX_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexColorShader);
 			} catch (IOException e) {
