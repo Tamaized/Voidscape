@@ -47,22 +47,22 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 		builder.add(
 
-				head = parent.getChild("head"),
+				head = parent.getChild("realhead"),
 				headoverlay = parent.getChild("headoverlay"),
-				body = parent.getChild("body"),
+				body = parent.getChild("realbody"),
 				rightarm = parent.getChild("rightarm"),
 				leftarm = parent.getChild("leftarm"),
 				bodyToLeg = parent.getChild("bodyToLeg"),
 				rightleg = parent.getChild("rightleg"),
 				leftleg = parent.getChild("leftleg"),
 				rightfoot = parent.getChild("rightfoot"),
-				leftfoot = parent.getChild("leftfoot"),
-				topLeftTentacle = body.getChild("topLeftTentacle"),
-				topRightTentacle = body.getChild("topRightTentacle"),
-				bottomLeftTentacle = body.getChild("bottomLeftTentacle"),
-				bottomRightTentacle = body.getChild("bottomRightTentacle")
+				leftfoot = parent.getChild("leftfoot")
 
 		);
+		topLeftTentacle = body.getChild("topLeftTentacle");
+		topRightTentacle = body.getChild("topRightTentacle");
+		bottomLeftTentacle = body.getChild("bottomLeftTentacle");
+		bottomRightTentacle = body.getChild("bottomRightTentacle");
 
 		parts = builder.build();
 	}
@@ -81,7 +81,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		definition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 16).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.offset(1.9F, 12.0F + f, 0.0F));
 		// End super
 
-		PartDefinition bodyDefinition = definition.addOrReplaceChild("body",
+		PartDefinition bodyDefinition = definition.addOrReplaceChild("realbody",
 				CubeListBuilder.create().texOffs(16, 16).
 						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
@@ -131,7 +131,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
 
-		definition.addOrReplaceChild("head",
+		definition.addOrReplaceChild("realhead",
 				CubeListBuilder.create().texOffs(0, 0).
 						addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
