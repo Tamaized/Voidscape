@@ -23,17 +23,24 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class HackyWorldGen {
 
@@ -97,6 +104,16 @@ public class HackyWorldGen {
 		}
 
 		@Nullable
+		private InputStream getRegionFolder() {
+			return getClass().getResourceAsStream("/data/".
+					concat(location.getNamespace()).
+					concat("/worldgen/").
+					concat(Voidscape.MODID).
+					concat("/instance/").
+					concat(location.getPath()));
+		}
+
+		@Nullable
 		@Override
 		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
 			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
@@ -143,6 +160,44 @@ public class HackyWorldGen {
 			}
 		}
 
+	}
+
+	public static void main(String[] args) throws IOException {
+		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "pawn"), new File("./sanitized/region/"), false, "chunk");
+		List<String> regions;
+		try (InputStream stream = worker.getRegionFolder(); InputStreamReader ir = new InputStreamReader(Objects.requireNonNull(stream)); BufferedReader reader = new BufferedReader(ir)) {
+			regions = reader.lines().collect(Collectors.toList());
+		}
+		regions.forEach(r -> {
+			System.out.println("Sanitizing: " + r);
+			Matcher matcher = Pattern.compile("r\\.(.*?)\\.(.*?)\\.mca").matcher(r);
+			if (matcher.find()) {
+				int x = Integer.parseInt(matcher.group(1));
+				int z = Integer.parseInt(matcher.group(2));
+				System.out.println("rX: " + x + "; rZ: " + z);
+				int cx = x << 5;
+				int cz = z << 5;
+				System.out.println("cX: " + cx + "; cZ: " + cz);
+				for (int px = cx; px < (x + 1) << 5; px++) {
+					for (int pz = cz; pz < (z + 1) << 5; pz++) {
+						System.out.print("Reading " + px + " : " + pz + "; ");
+						try {
+							final ChunkPos pos = new ChunkPos(px, pz);
+							final CompoundTag nbt = worker.load(pos);
+							if (nbt != null) {
+								nbt.getCompound("Level").remove("Biomes");
+								worker.deepStorage.write(pos, nbt);
+								System.out.print("Sanitized; ");
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				System.out.println("\nDone\n");
+			}
+		});
+		System.out.println("Finished");
 	}
 
 }

@@ -79,7 +79,6 @@ public class RegionFileInputStream implements AutoCloseable {
 	}
 
 	@Nullable
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	synchronized DataInputStream getChunkDataInputStream(ChunkPos pos) throws IOException {
 		int i = this.getOffset(pos);
 		if (i == 0) {
