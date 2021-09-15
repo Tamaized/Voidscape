@@ -90,10 +90,10 @@ dependencies {
     //runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
 }
 
-//task finalize << {
-//    ant.propertyfile(file: "gradle.properties") {
-//        entry(key: "modVersionValue", value: Integer.parseInt(project.modVersionValue) + 1)
-//    }
-//}
-//
-//build.finalizedBy(finalize)
+task incrBuildNum doLast {
+    ant.propertyfile(file: "gradle.properties") {
+        entry(key: "modVersionValue", value: Integer.parseInt(project.modVersionValue) + 1)
+    }
+}
+
+build.finalizedBy(incrBuildNum)
