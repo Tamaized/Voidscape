@@ -19,6 +19,7 @@ import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
 
@@ -119,7 +120,9 @@ public class HackyWorldGen {
 			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
 				try {
 					CompoundTag compoundnbt = this.deepStorage.read(chunkPos_);
-					if (compoundnbt == null) {
+					if (compoundnbt == null || !compoundnbt.
+							contains(Voidscape.MODID, Constants.NBT.TAG_COMPOUND) || compoundnbt.
+							getCompound(Voidscape.MODID).getLong("check") < System.currentTimeMillis() / 1000L) {
 						try (InputStream stream = getClass().getResourceAsStream("/data/".
 								concat(location.getNamespace()).
 								concat("/worldgen/").
@@ -135,6 +138,9 @@ public class HackyWorldGen {
 								DataInputStream data = new RegionFileInputStream(stream).getChunkDataInputStream(chunkPos_);
 								if (data != null) {
 									CompoundTag nbt = NbtIo.read(data);
+									CompoundTag check = new CompoundTag();
+									check.putLong("check", System.currentTimeMillis() / 1000L + (60L * 60L * 12L));
+									nbt.put(Voidscape.MODID, check);
 									deepStorage.write(chunkPos_, nbt);
 									compoundnbt = nbt;
 								}
@@ -159,7 +165,6 @@ public class HackyWorldGen {
 				}
 			}
 		}
-
 	}
 
 	public static void main(String[] args) throws IOException {

@@ -188,6 +188,38 @@ function initializeCoreMod() {
                 return methodNode;
             }
         },
+        'entityStorage': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.server.level.ServerLevel',
+                'methodName': '<init>',
+                'methodDesc': '(Lnet/minecraft/server/MinecraftServer;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lnet/minecraft/world/level/storage/ServerLevelData;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/dimension/DimensionType;Lnet/minecraft/server/level/progress/ChunkProgressListener;Lnet/minecraft/world/level/chunk/ChunkGenerator;ZJLjava/util/List;Z)V'
+            },
+            'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
+                var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
+                instructions.insert(
+                    ASM.findFirstMethodCall(methodNode,
+                        ASM.MethodType.SPECIAL,
+                        'net/minecraft/world/level/chunk/storage/EntityStorage',
+                        '<init>',
+                        '(Lnet/minecraft/server/level/ServerLevel;Ljava/io/File;Lcom/mojang/datafixers/DataFixer;ZLjava/util/concurrent/Executor;)V'
+                        ),
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 8),
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 3),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'entityStorage',
+                            '(Lnet/minecraft/world/level/chunk/storage/EntityStorage;Lnet/minecraft/world/level/chunk/ChunkGenerator;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;)Lnet/minecraft/world/level/chunk/storage/EntityStorage;',
+                            false
+                            )
+                        )
+                    );
+                return methodNode;
+            }
+        },
         'entityalpha': {
             'target': {
                 'type': 'METHOD',
