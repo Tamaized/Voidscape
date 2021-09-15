@@ -349,7 +349,7 @@ public class RenderTurmoil {
 			if (instance == null)
 				continue;
 			int x = ox + (20) * (i % 3);
-			int y = oy + (20) * (i / 3);
+			int y = oy + (21) * (i / 3);
 			ClientUtil.bindTexture(instance.ability().getTexture());
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -374,7 +374,7 @@ public class RenderTurmoil {
 			if (!list.get(i).isDown())
 				continue;
 			int x = ox + (20) * (i % 3);
-			int y = oy + (20) * (i / 3);
+			int y = oy + (21) * (i / 3);
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 			buffer.vertex(x, y, 0F).color(0F, 1F, 1F, 0F).endVertex();
@@ -406,7 +406,7 @@ public class RenderTurmoil {
 			if (perc <= 0)
 				continue;
 			int x = ox + (20) * (i % 3);
-			int y = oy + (20) * (i / 3);
+			int y = oy + (21) * (i / 3);
 			float offset = y + s * (1F - perc);
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
@@ -444,7 +444,7 @@ public class RenderTurmoil {
 			if (instance == null || !stats.isActive(instance.ability()))
 				continue;
 			int x = ox + (20) * (i % 3);
-			int y = oy + (20) * (i / 3);
+			int y = oy + (21) * (i / 3);
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 			buffer.vertex(x, y, 0F).color(1F, 1F, 0F, 1F).endVertex();

@@ -101,7 +101,7 @@ public class SpellsScreen extends TurmoilScreen {
 		TurmoilStats stats = getData(Voidscape.subCapTurmoilStats);
 
 		for (int i = 0; i < 9; i++) {
-			SlotButton slot = new SlotButton(i, window.getGuiScaledWidth() - 60 + 20 * (i % 3), window.getGuiScaledHeight() / 2 - 28 + 20 * (i / 3));
+			SlotButton slot = new SlotButton(i, window.getGuiScaledWidth() - 57 + 20 * (i % 3), window.getGuiScaledHeight() / 2 - 27 + 21 * (i / 3));
 			if (stats != null) {
 				TurmoilAbilityInstance inst = stats.getAbility(i);
 				if (inst != null)
