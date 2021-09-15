@@ -86,8 +86,7 @@ public class TurmoilStats implements SubCapability.ISubCap.ISubCapData.All {
 		resetStats();
 		parent.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
 				ifPresent(data -> data.getSkills().forEach(skill -> stats = stats.add(skill.getStats()))));
-		if (parent instanceof LivingEntity) {
-			LivingEntity living = (LivingEntity) parent;
+		if (parent instanceof LivingEntity living) {
 			applyAttribute(living, Attributes.MAX_HEALTH, TurmoilSkill.Stats.HEALTH, "Voidic Health Boost", stats.heart * 2, AttributeModifier.Operation.ADDITION);
 			applyAttribute(living, ModAttributes.VOIDIC_DMG.get(), TurmoilSkill.Stats.VOIDIC_DAMAGE, "Voidic Damage", stats.voidicDamage, AttributeModifier.Operation.ADDITION);
 			applyAttribute(living, ModAttributes.VOIDIC_DMG.get(), TurmoilSkill.Stats.VOIDIC_DAMAGE_PERC, "Voidic Damage Percentage", stats.voidicDamagePercent, AttributeModifier.Operation.MULTIPLY_TOTAL);

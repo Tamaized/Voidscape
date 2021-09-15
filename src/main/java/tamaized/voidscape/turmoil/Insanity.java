@@ -79,6 +79,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
+				final float maxHealth = parent.getMaxHealth();
+				if (parent.getHealth() > maxHealth)
+					parent.setHealth(parent.getMaxHealth());
 			}
 			if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
 				parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);
