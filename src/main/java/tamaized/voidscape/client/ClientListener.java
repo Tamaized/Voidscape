@@ -77,6 +77,7 @@ public class ClientListener {
 	private static float capturedPartialTicks;
 
 	static {
+		Shaders.init();
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
 			if (!hackyRenderSkip && !event.getEntity().canUpdate() && event.getEntity().
 					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {
@@ -161,7 +162,6 @@ public class ClientListener {
 
 	@SubscribeEvent
 	public static void setup(FMLClientSetupEvent event) {
-		Shaders.init();
 		ClientRegistry.registerKeyBinding(KEY_TURMOIL);
 		ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
 		ItemBlockRenderTypes.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());

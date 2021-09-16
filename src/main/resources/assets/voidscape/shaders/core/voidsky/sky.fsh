@@ -39,22 +39,22 @@ out vec4 fragColor;
 
 void main() {
     vec3 color = vec3(0);//textureProj(Sampler0, texProj0).rgb;
-    float colorMod = 0.15F;
-    float fade = 0.1F;
+    float colorMod = 0.15;
+    float fade = 0.1;
 
-    float exactTick = GameTime * 24000.0F;
-    float dur = 3200.0F;
-    float phase = cos(radians((mod(exactTick, dur) / dur) * 360F)) * 0.5F + 0.5F;
-    float maxPhases = 8.0F;
+    float exactTick = GameTime * 24000.0;
+    float dur = 3200.0;
+    float phase = cos(radians((mod(exactTick, dur) / dur) * 360.0)) * 0.5 + 0.5;
+    float maxPhases = 8.0;
     int phases = int(ceil(phase * maxPhases));
-    float lerp = mod(phase, (1F / maxPhases)) * maxPhases;
+    float lerp = mod(phase, (1.0 / maxPhases)) * maxPhases;
     for (int i = 0; i < phases + 1; ++i) {
-        colorMod = 2.0F / (18 - i);
-        fade = i == 0 ? 0.1F : i < phases ? 1.0F : lerp;
+        colorMod = 2.0 / (18 - i);
+        fade = i == 0 ? 0.1 : i < phases ? 1.0 : lerp;
 
-        float r = (/*RANDOM.nextFloat() * */0.5F + 0.1F) * colorMod * fade;
-        float g = (/*RANDOM.nextFloat() * */0.5F + 0.4F) * colorMod * fade * 0.4F;
-        float b = (/*RANDOM.nextFloat() * */0.5F + 0.5F) * colorMod * fade * 0.8F;
+        float r = (/*RANDOM.nextFloat() * */0.5 + 0.1) * colorMod * fade;
+        float g = (/*RANDOM.nextFloat() * */0.5 + 0.4) * colorMod * fade * 0.4;
+        float b = (/*RANDOM.nextFloat() * */0.5 + 0.5) * colorMod * fade * 0.8;
 
         color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vec3(r, g, b);
     }
