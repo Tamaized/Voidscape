@@ -2,6 +2,7 @@ package tamaized.voidscape.registry;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.ChatFormatting;
@@ -10,12 +11,17 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +49,8 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.UpgradeRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -55,6 +63,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import tamaized.voidscape.Voidscape;
@@ -65,6 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -102,6 +112,37 @@ public class RegUtil {
 		ModBiomes.classload();
 		ModSurfaceBuilders.classload();
 		ModFeatures.classload();
+		class FixedUpgradeRecipe extends UpgradeRecipe {
+			public FixedUpgradeRecipe(ResourceLocation p_44523_, Ingredient p_44524_, Ingredient p_44525_, ItemStack p_44526_) {
+				super(p_44523_, p_44524_, p_44525_, p_44526_);
+			}
+
+			@Override
+			public ItemStack assemble(Container p_44531_) {
+				ItemStack itemstack = getResultItem().copy();
+				CompoundTag compoundtag = p_44531_.getItem(0).getTag();
+				if (compoundtag != null)
+					itemstack.getOrCreateTag().merge(compoundtag.copy());
+				return itemstack;
+			}
+		}
+		create(ForgeRegistries.RECIPE_SERIALIZERS).register("smithing", () -> new UpgradeRecipe.Serializer() {
+			@Override
+			public UpgradeRecipe fromJson(ResourceLocation p_44562_, JsonObject p_44563_) {
+				Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(p_44563_, "base"));
+				Ingredient ingredient1 = Ingredient.fromJson(GsonHelper.getAsJsonObject(p_44563_, "addition"));
+				ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(p_44563_, "result"));
+				return new FixedUpgradeRecipe(p_44562_, ingredient, ingredient1, itemstack);
+			}
+
+			@Override
+			public UpgradeRecipe fromNetwork(ResourceLocation p_44565_, FriendlyByteBuf p_44566_) {
+				Ingredient ingredient = Ingredient.fromNetwork(p_44566_);
+				Ingredient ingredient1 = Ingredient.fromNetwork(p_44566_);
+				ItemStack itemstack = p_44566_.readItem();
+				return new FixedUpgradeRecipe(p_44565_, ingredient, ingredient1, itemstack);
+			}
+		});
 		for (DeferredRegister<?> register : REGISTERS)
 			register.register(bus);
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> CONFIGURED_FEATURES.forEach(Runnable::run));
@@ -755,7 +796,11 @@ public class RegUtil {
 		}
 
 		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlot.CHEST, properties, factory));
+			return chest(tier, properties, factory, (stack, tick) -> false);
+		}
+
+		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, BiPredicate<ItemStack, Boolean> elytra) {
+			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlot.CHEST, properties, factory, elytra));
 		}
 
 		static RegistryObject<Item> legs(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
@@ -766,15 +811,31 @@ public class RegUtil {
 			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlot.FEET, properties, factory));
 		}
 
-		@SuppressWarnings("unchecked")
 		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlot slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
+			return armorFactory(tier, slot, properties, factory, (stack, tick) -> false);
+		}
+
+		@SuppressWarnings("unchecked")
+		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlot slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, BiPredicate<ItemStack, Boolean> elytra) {
 			return () -> new ArmorItem(tier, slot, properties) {
+
+				@Override
+				public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
+					return elytra.test(stack, true) || super.elytraFlightTick(stack, entity, flightTicks);
+				}
+
+				@Override
+				public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
+					return elytra.test(stack, false) || super.canElytraFly(stack, entity);
+				}
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
 				public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if (isBroken(stack))
 						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
+					if (elytra.test(stack, false))
+						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.elytra").withStyle(ChatFormatting.DARK_AQUA));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
 				}
 

@@ -1,10 +1,13 @@
 package tamaized.voidscape.asm;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceKey;
@@ -44,6 +47,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModelBakeListener;
+import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.RegUtil;
@@ -79,6 +83,24 @@ public class ASMHooks {
 		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
 		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
 		entity.attributes = new AttributeMap(n.build());
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)} <br>
+	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}
+	 */
+	public static boolean capeLayer(boolean o, ItemStack stack) {
+		return o || stack.is(ModArmors.CORRUPT_CHEST.get()) || ModArmors.elytra(stack);
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}  <br>
+	 * [BEFORE] IRETURN
+	 */
+	public static boolean elytraLayer(boolean o, ItemStack stack) {
+		return o || ModArmors.elytra(stack);
 	}
 
 	/**
