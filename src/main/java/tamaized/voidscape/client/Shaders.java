@@ -55,13 +55,13 @@ public class Shaders {
 						POSITION), shader -> VOIDSKY = (BindableShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "lines/lines"), DefaultVertexFormat.
 						POSITION_COLOR_NORMAL), shader -> LINES = (BindableShaderInstance) shader);
-				WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
-				WRAPPED_POS_TEX = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexShader);
-				WRAPPED_POS_TEX_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexColorShader);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
+		WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
+		WRAPPED_POS_TEX = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexShader);
+		WRAPPED_POS_TEX_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexColorShader);
 	}
 
 	public static class BindableShaderInstance extends ShaderInstance {
