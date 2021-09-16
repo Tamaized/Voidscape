@@ -11,3 +11,10 @@ authors="Tamaized"
 description='''
 
 '''
+
+[[dependencies.twilightforest]]
+    modId="forge"
+    mandatory=true
+    versionRange="[37.0.58,)"
+    ordering="NONE"
+    side="BOTH"
