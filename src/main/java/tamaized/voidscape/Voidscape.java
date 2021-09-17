@@ -388,6 +388,11 @@ public class Voidscape {
 		return world.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
+	public static boolean checkForPawnInstance(Level world) {
+		ResourceLocation loc = world.dimension().location();
+		return loc.getNamespace().equals(Voidscape.MODID) && loc.getPath().contains("_pawn_");
+	}
+
 	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
 		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
 	}

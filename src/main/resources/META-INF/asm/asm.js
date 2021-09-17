@@ -516,6 +516,45 @@ function initializeCoreMod() {
                 return methodNode;
             }
         },
+        'nonightvision': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.client.renderer.LightTexture',
+                'methodName': ASM.mapMethod('m_109881_'), // getBrightness
+                'methodDesc': '(F)V'
+            },
+            'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
+                var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
+                var lastInstruction = null;
+                for (var index = 0; index < instructions.size(); index++) {
+                    var /*org.objectweb.asm.tree.VarInsnNode*/ node = instructions.get(index);
+                    if (lastInstruction == null &&
+
+                        node instanceof VarInsnNode &&
+
+                        node.getOpcode() === Opcodes.FLOAD &&
+
+                        node.var === 6
+
+                    )
+                        lastInstruction = node;
+                }
+                instructions.insert(
+                    lastInstruction,
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 2),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'cancelNightVision',
+                            '(FLnet/minecraft/world/level/Level;)F',
+                            false
+                            )
+                        )
+                    );
+                return methodNode;
+            }
+        },
         'camerahurt': {
             'target': {
                 'type': 'METHOD',

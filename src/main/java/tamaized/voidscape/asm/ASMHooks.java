@@ -234,12 +234,23 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(World, int)}
+	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(Level, int)}
 	 * [BEFORE FRETURN]
 	 */
 	public static float visibility(float o, Level level, int light) {
 		if (level.isClientSide() && Voidscape.checkForVoidDimension(level))
 			return VoidVisibilityCache.value(o, light);
+		return o;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}
+	 * [AFTER FIRST FLOAD 6]
+	 */
+	public static float cancelNightVision(float o, Level level) {
+		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForPawnInstance(level)))
+			return 0;
 		return o;
 	}
 
