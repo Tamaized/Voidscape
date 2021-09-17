@@ -128,7 +128,7 @@ function initializeCoreMod() {
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
-                            'capeLayer',
+                            'elytraLayer',
                             '(ZLnet/minecraft/world/item/ItemStack;)Z',
                             false
                             )
