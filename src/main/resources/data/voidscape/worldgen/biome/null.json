@@ -51,7 +51,7 @@
 	[ "voidscape:thunderspire" ]
   ],
   "starts": [
-
+	"voidscape:configured_null"
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {

@@ -25,6 +25,8 @@ public class ModFeatures {
 		@Override
 		public boolean place(FeaturePlaceContext<BooleanFeatureConfig> context) {
 			BlockPos.MutableBlockPos pos = context.origin().mutable();
+			if (pos.getX() <= 48 && pos.getX() >= -48 && pos.getZ() <= 48 && pos.getZ() >= -48)
+				return false;
 			int base = pos.getY();
 			int length = context.random().nextInt(25) + 5;
 			boolean canGen = false;

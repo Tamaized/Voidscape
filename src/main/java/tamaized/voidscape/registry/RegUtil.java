@@ -55,6 +55,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -98,6 +99,10 @@ public class RegUtil {
 		return val;
 	}
 
+	public static StructurePieceType registerStructurePiece(String name, StructurePieceType piece) {
+		return Registry.register(Registry.STRUCTURE_PIECE, new ResourceLocation(Voidscape.MODID, name.toLowerCase(Locale.ROOT)), piece);
+	}
+
 	public static void register(IEventBus bus) {
 		ModAttributes.classload();
 		ModArmors.classload();
@@ -112,6 +117,7 @@ public class RegUtil {
 		ModBiomes.classload();
 		ModSurfaceBuilders.classload();
 		ModFeatures.classload();
+		ModStructures.classload(bus);
 		class FixedUpgradeRecipe extends UpgradeRecipe {
 			public FixedUpgradeRecipe(ResourceLocation p_44523_, Ingredient p_44524_, Ingredient p_44525_, ItemStack p_44526_) {
 				super(p_44523_, p_44524_, p_44525_, p_44526_);
