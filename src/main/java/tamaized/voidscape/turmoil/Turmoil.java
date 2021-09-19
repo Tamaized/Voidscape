@@ -72,7 +72,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		switch (getState()) {
 			default:
 			case CLOSED:
-				if (!hasStarted() && !parent.level.isClientSide() && parent.getY() < 12 && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
+				if (!hasStarted() && !parent.level.isClientSide() && parent.getY() < (parent.level.getMinBuildHeight() + 12) && parent.tickCount % 100 == 0 && parent.level.getRandom().nextInt(25) == 0)
 					setState(State.CONSUME);
 				if (tick > 0)
 					tick -= Math.min(3, tick);

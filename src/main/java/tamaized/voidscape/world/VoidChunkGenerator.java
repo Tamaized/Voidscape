@@ -71,6 +71,11 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		return 0;
 	}
 
+	/*@Override
+	public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_158463_, StructureFeatureManager p_158464_, ChunkAccess p_158465_) {
+		return CompletableFuture.completedFuture(p_158465_);
+	}*/
+
 	@Override
 	public void buildSurfaceAndBedrock(WorldGenRegion genRegion, ChunkAccess chunk) {
 		ChunkPos chunkpos = chunk.getPos();
