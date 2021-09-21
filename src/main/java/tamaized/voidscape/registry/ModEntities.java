@@ -21,15 +21,18 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawnTentacle;
+import tamaized.voidscape.client.entity.model.ModelNullServant;
 import tamaized.voidscape.client.entity.render.RenderAntiBolt;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawnTentacle;
 import tamaized.voidscape.client.entity.render.RenderNull;
+import tamaized.voidscape.client.entity.render.RenderNullServant;
 import tamaized.voidscape.client.entity.render.RenderSpellBolt;
 import tamaized.voidscape.entity.EntityAntiBolt;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
+import tamaized.voidscape.entity.EntityNullServant;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
@@ -44,6 +47,7 @@ public class ModEntities {
 	public static final RegistryObject<EntityType<EntityCorruptedPawnBoss>> CORRUPTED_PAWN_BOSS = REGISTRY.register("corrupted_pawn_boss", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_boss"), makeCastedBuilder(EntityCorruptedPawnBoss.class, EntityCorruptedPawnBoss::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnTentacle>> CORRUPTED_PAWN_TENTACLE = REGISTRY.register("corrupted_pawn_tentacle", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_tentacle"), makeCastedBuilder(EntityCorruptedPawnTentacle.class, EntityCorruptedPawnTentacle::new, MobCategory.MISC).sized(3F, 5F).setTrackingRange(256).fireImmune()));
 	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, MobCategory.MISC, 0.5F, 0.5F));
+	public static final RegistryObject<EntityType<EntityNullServant>> NULL_SERVANT = REGISTRY.register("null_servant", () -> build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(EntityNullServant.class, EntityNullServant::new, MobCategory.MONSTER).sized(1.5F, 1.5F).setTrackingRange(256).fireImmune()));
 
 	static void classload() {
 
@@ -77,6 +81,7 @@ public class ModEntities {
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(CORRUPTED_PAWN_PHANTOM.get(), Mob.createMobAttributes().build());
 		event.put(CORRUPTED_PAWN_BOSS.get(), Mob.createMobAttributes().build());
+		event.put(NULL_SERVANT.get(), Mob.createMobAttributes().build());
 		event.put(CORRUPTED_PAWN_TENTACLE.get(), LivingEntity.createLivingAttributes().build());
 	}
 
@@ -85,6 +90,7 @@ public class ModEntities {
 
 		public static final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
 		public static final ModelLayerLocation CORRUPTED_PAWN_TENTACLE = make("corruptedpawntentacle");
+		public static final ModelLayerLocation NULL_SERVANT = make("nullservant");
 
 		public static final ModelLayerLocation MODEL_ARMOR_INSANE_OUTER = make("insane_outer");
 		public static final ModelLayerLocation MODEL_ARMOR_INSANE_INNER = make("insane_inner");
@@ -100,6 +106,7 @@ public class ModEntities {
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN, ModelCorruptedPawn::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN_TENTACLE, ModelCorruptedPawnTentacle::createMesh);
+		event.registerLayerDefinition(ModelLayerLocations.NULL_SERVANT, ModelNullServant::createMesh);
 
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
@@ -114,6 +121,7 @@ public class ModEntities {
 		event.registerEntityRenderer(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_BOSS.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_TENTACLE.get(), RenderCorruptedPawnTentacle::new);
+		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
 	}
 

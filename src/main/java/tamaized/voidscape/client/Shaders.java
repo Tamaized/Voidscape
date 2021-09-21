@@ -33,6 +33,7 @@ public class Shaders {
 	public static WrappedBindableShaderInstance WRAPPED_POS_TEX_COLOR;
 	public static BindableShaderInstance LINES;
 	public static BindableShaderInstance VOIDSKY;
+	public static BindableShaderInstance VOIDSKY_ENTITY;
 
 	public static void init() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<RegisterShadersEvent>) event -> {
@@ -53,6 +54,8 @@ public class Shaders {
 						POSITION_TEX_COLOR), shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "voidsky/sky"), DefaultVertexFormat.
 						POSITION), shader -> VOIDSKY = (BindableShaderInstance) shader);
+				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "voidsky/sky"), DefaultVertexFormat.
+						NEW_ENTITY), shader -> VOIDSKY_ENTITY = (BindableShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "lines/lines"), DefaultVertexFormat.
 						POSITION_COLOR_NORMAL), shader -> LINES = (BindableShaderInstance) shader);
 			} catch (IOException e) {
