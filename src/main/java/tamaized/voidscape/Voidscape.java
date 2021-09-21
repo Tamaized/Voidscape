@@ -13,6 +13,7 @@ import net.minecraft.world.gen.GenerationSettings;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ModDimension;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -27,11 +28,14 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.voidscape.network.NetworkMessages;
+import tamaized.voidscape.turmoil.Insanity;
+import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.VoidBiome;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidDimension;
 import tamaized.voidscape.world.VoidTeleporter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -83,6 +87,10 @@ public class Voidscape {
 				event.getEntity().changeDimension(DimensionType.OVERWORLD, VoidTeleporter.INSTANCE);
 			}
 		});
+		CapabilityManager.INSTANCE.register(Turmoil.ITurmoilData.class, new Turmoil.ITurmoilData.Storage() {
+		}, Turmoil.AttachedTurmoilData::new);
+		Turmoil.AttachedTurmoilData.register(Insanity::new);
+
 	}
 
 	private static <R extends IForgeRegistryEntry<R>> DeferredRegister<R> create(DeferredRegister<R> register) {
@@ -97,4 +105,11 @@ public class Voidscape {
 	public static DimensionType getDimensionType() {
 		return DIMENSION_TYPE = DimensionManager.registerOrGetDimension(new ResourceLocation(MODID, "void"), DIMENSION.get(), new PacketBuffer(Unpooled.buffer()), false);
 	}
+
+	@Nonnull
+	@SuppressWarnings("ConstantConditions")
+	public static <T> T getNull() {
+		return null;
+	}
+
 }
