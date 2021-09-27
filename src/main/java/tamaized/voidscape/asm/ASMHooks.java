@@ -2,6 +2,7 @@ package tamaized.voidscape.asm;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
@@ -10,16 +11,21 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -28,7 +34,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
@@ -41,6 +51,7 @@ import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -72,7 +83,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.entity.LivingEntity#LivingEntity(EntityType, World)}<br>
+	 * {@link net.minecraft.world.entity.LivingEntity#LivingEntity(EntityType, Level)}<br>
 	 * [AFTER] PUTFIELD : attributes
 	 */
 	public static void handleEntityAttributes(LivingEntity entity) {
@@ -102,8 +113,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.entity.LivingRenderer#render(LivingEntity, float, float, MatrixStack, IRenderTypeBuffer, int)}<br>
-	 * [BEFORE] INVOKEVIRTUAL : {@link net.minecraft.client.renderer.entity.model.EntityModel#renderToBuffer(MatrixStack, IVertexBuilder, int, int, float, float, float, float)}
+	 * {@link net.minecraft.client.renderer.entity.LivingEntityRenderer#render(LivingEntity, float, float, PoseStack, MultiBufferSource, int)}<br>
+	 * [BEFORE] INVOKEVIRTUAL : {@link net.minecraft.client.model.EntityModel#renderToBuffer(PoseStack, VertexConsumer, int, int, float, float, float, float)}
 	 */
 	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
 		return Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> Mth.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
@@ -111,8 +122,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.entity.LivingRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
-	 * [AFTER] INVOKEVIRTUAL : {@link net.minecraft.client.renderer.entity.model.EntityModel#renderType(ResourceLocation)}
+	 * {@link net.minecraft.client.renderer.entity.LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
+	 * [AFTER] INVOKEVIRTUAL : {@link net.minecraft.client.model.EntityModel#renderType(ResourceLocation)}
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static RenderType handleEntityTransparencyRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
@@ -121,8 +132,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.world.server.ServerChunkProvider#ServerChunkProvider(ServerWorld, SaveFormat.LevelSave, DataFixer, TemplateManager, Executor, ChunkGenerator, int, boolean, IChunkStatusListener, Supplier)}<br>
-	 * [AFTER] INVOKESPECIAL : {@link ChunkManager#ChunkManager(ServerWorld, SaveFormat.LevelSave, DataFixer, TemplateManager, Executor, ThreadTaskExecutor, IChunkLightProvider, ChunkGenerator, IChunkStatusListener, Supplier, int, boolean)}
+	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, ChunkGenerator, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)} <br>
+	 * [AFTER] INVOKESPECIAL : {@link ChunkMap#ChunkMap(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, BlockableEventLoop, LightChunkGetter, ChunkGenerator, ChunkProgressListener, ChunkStatusUpdateListener, Supplier, int, boolean)}
 	 */
 	public static ChunkMap chunkManager(ChunkMap old, ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
 		return chunkGenerator_ instanceof InstanceChunkGenerator ? new HackyWorldGen.DeepFreezeChunkManager(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkProgressListener, chunkStatusListener_, supplier_, int_, boolean_) : old;
@@ -130,7 +141,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, DimensionType, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)} <br>
+	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, DimensionType, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}  <br>
 	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, File, DataFixer, boolean, Executor)}
 	 */
 	public static EntityStorage entityStorage(EntityStorage o, ChunkGenerator chunkGenerator_, ServerLevel level, LevelStorageSource.LevelStorageAccess file) {
@@ -149,7 +160,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.world.gen.settings.DimensionGeneratorSettings#DimensionGeneratorSettings(long, boolean, boolean, SimpleRegistry, Optional)}<br>
+	 * {@link net.minecraft.world.level.levelgen.WorldGenSettings#WorldGenSettings(long, boolean, boolean, MappedRegistry, Optional)} <br>
 	 * [BEFORE FIRST PUTFIELD]
 	 */
 	public static long seed(long seed) {
@@ -192,7 +203,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.Climate, Biome.Category, Float, Float, BiomeAmbience, BiomeGenerationSettings, MobSpawnInfo, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}
+	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.ClimateSettings, Biome.BiomeCategory, Float, Float, BiomeSpecialEffects, BiomeGenerationSettings, MobSpawnSettings, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}
 	 * [AFTER GETSTATIC {@link MinecraftForge.EVENT_BUS}]
 	 */
 	public static IEventBus fukUrBiomeEdits(IEventBus o, BiomeLoadingEvent event) {
@@ -201,8 +212,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link PlayerEntity#attack(Entity)}
-	 * [AFTER INVOKEVIRTUAL {@link PlayerEntity#getAttackStrengthScale(float)}]
+	 * {@link Player#attack(Entity)}
+	 * [AFTER INVOKEVIRTUAL {@link Player#getAttackStrengthScale(float)}]
 	 */
 	public static synchronized float getAttackStrengthScale(float o) {
 		PlayerEntity_getAttackStrengthScale = o;
@@ -211,7 +222,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link Biome#shouldSnow(IWorldReader, BlockPos)}
+	 * {@link Biome#shouldSnow(LevelReader, BlockPos)}
 	 * [AFTER ICONST_1]
 	 */
 	public static boolean shouldSnow(boolean o, Biome biome) {
@@ -222,7 +233,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.enchantment.EnchantmentType.WEAPON#canEnchant(Item)}
+	 * {@link net.minecraft.world.item.enchantment.EnchantmentCategory#canEnchant(Item)}
 	 * [BEFORE IRETURN]
 	 */
 	public static boolean axesRWeps(boolean o, Item i) {
@@ -253,8 +264,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.model.ModelBakery#processLoading(IProfiler, int)}
-	 * [BEFORE GETSTATIC {@link net.minecraft.util.registry.Registry.ITEM)]
+	 * {@link net.minecraft.client.resources.model.ModelBakery#processLoading(ProfilerFiller, int)}
+	 * [BEFORE GETSTATIC {@link net.minecraft.core.Registry#ITEM)]
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static void redirectModels() {
@@ -267,7 +278,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.model.ModelBakery#processLoading(IProfiler, int)}
+	 * {@link net.minecraft.client.resources.model.ModelBakery#processLoading(ProfilerFiller, int)}
 	 * [BEFORE INVOKESTATIC {@link com.google.common.collect.Sets#newLinkedHashSet()}]
 	 */
 	@OnlyIn(Dist.CLIENT)
@@ -277,7 +288,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.GameRenderer#bobHurt(MatrixStack, float)}
+	 * {@link net.minecraft.client.renderer.GameRenderer#bobHurt(PoseStack, float)}
 	 * [BEFORE FIRST IFEQ]
 	 */
 	@OnlyIn(Dist.CLIENT)
