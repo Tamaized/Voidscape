@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,6 +34,14 @@ public class ModAttributes {
 				attribute.setSyncable(true);
 			return attribute;
 		});
+	}
+
+	public static void assignAttributes(AttributeSupplier.Builder n) {
+		n.add(ModAttributes.VOIDIC_VISIBILITY.get(), 1F);
+		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
+		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
+		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
+		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
 	}
 
 }

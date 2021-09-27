@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
@@ -31,7 +32,12 @@ public class ModStructures {
 	public static final StructureFeature<NoneFeatureConfiguration> NULL = new NullStructure();
 	public static final ConfiguredStructureFeature<?, ?> CONFIGURED_NULL = NULL.configured(FeatureConfiguration.NONE);
 
+	private static void classloadPieces(StructurePieceType... noop) {
+		// NO-OP
+	}
+
 	static void classload(IEventBus bus) {
+		classloadPieces(NullStructure.Pieces.MAIN);
 		bus.addGenericListener(StructureFeature.class, (Consumer<RegistryEvent.Register<StructureFeature<?>>>) event -> {
 			SEPARATION_SETTINGS.clear();
 

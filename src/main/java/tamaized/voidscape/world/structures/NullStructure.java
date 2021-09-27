@@ -1,10 +1,12 @@
 package tamaized.voidscape.world.structures;
 
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -12,6 +14,7 @@ import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -28,8 +31,11 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnorePr
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.RegUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
@@ -53,6 +59,12 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 		return (config, pos, ref, seed) -> new StructureStart<>(config, pos, ref, seed) {
 
 			@Override
+			public CompoundTag createTag(ServerLevel p_163607_, ChunkPos p_163608_) {
+				return super.createTag(p_163607_, p_163608_);
+			}
+
+
+			@Override
 			public void generatePieces(RegistryAccess p_163615_, ChunkGenerator p_163616_, StructureManager manager, ChunkPos pos, Biome p_163619_, NoneFeatureConfiguration config, LevelHeightAccessor p_163621_) {
 				BlockPos blockpos = new BlockPos(pos.getMinBlockX(), 0, pos.getMinBlockZ());
 				Pieces.addPieces(manager, blockpos, Pieces.TEMPLATE_ENTRANCE, this);
@@ -67,9 +79,19 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 		};
 	}
 
+	@Override
+	public List<MobSpawnSettings.SpawnerData> getDefaultSpawnList(MobCategory category) {
+		return category == MobCategory.MONSTER ? Lists.newArrayList(new MobSpawnSettings.SpawnerData(ModEntities.NULL_SERVANT.get(), 10, 0, 1)) : new ArrayList<>();
+	}
+
+	@Override
+	public boolean getDefaultRestrictsSpawnsToInside() {
+		return true;
+	}
+
 	public static class Pieces {
 
-		public static final StructurePieceType MAIN = RegUtil.registerStructurePiece("VOIDSCAPENullMain", Piece::new);
+		public static final StructurePieceType MAIN = RegUtil.registerStructurePiece("NullMain", Piece::new);
 
 		private static final ResourceLocation TEMPLATE_ENTRANCE = new ResourceLocation(Voidscape.MODID, "null/entrance");
 		private static final ResourceLocation TEMPLATE_ENTRANCE_PLATFORM = new ResourceLocation(Voidscape.MODID, "null/entrance-platform");

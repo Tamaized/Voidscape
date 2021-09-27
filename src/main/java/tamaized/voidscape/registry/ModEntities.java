@@ -8,6 +8,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -25,7 +30,7 @@ import tamaized.voidscape.client.entity.model.ModelNullServant;
 import tamaized.voidscape.client.entity.render.RenderAntiBolt;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawnTentacle;
-import tamaized.voidscape.client.entity.render.RenderNull;
+import tamaized.voidscape.client.entity.render.RenderNoOp;
 import tamaized.voidscape.client.entity.render.RenderNullServant;
 import tamaized.voidscape.client.entity.render.RenderSpellBolt;
 import tamaized.voidscape.entity.EntityAntiBolt;
@@ -47,7 +52,14 @@ public class ModEntities {
 	public static final RegistryObject<EntityType<EntityCorruptedPawnBoss>> CORRUPTED_PAWN_BOSS = REGISTRY.register("corrupted_pawn_boss", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_boss"), makeCastedBuilder(EntityCorruptedPawnBoss.class, EntityCorruptedPawnBoss::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
 	public static final RegistryObject<EntityType<EntityCorruptedPawnTentacle>> CORRUPTED_PAWN_TENTACLE = REGISTRY.register("corrupted_pawn_tentacle", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_tentacle"), makeCastedBuilder(EntityCorruptedPawnTentacle.class, EntityCorruptedPawnTentacle::new, MobCategory.MISC).sized(3F, 5F).setTrackingRange(256).fireImmune()));
 	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, MobCategory.MISC, 0.5F, 0.5F));
-	public static final RegistryObject<EntityType<EntityNullServant>> NULL_SERVANT = REGISTRY.register("null_servant", () -> build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(EntityNullServant.class, EntityNullServant::new, MobCategory.MONSTER).sized(1.5F, 1.5F).setTrackingRange(256).fireImmune()));
+	public static final RegistryObject<EntityType<EntityNullServant>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
+		EntityType<EntityNullServant> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(EntityNullServant.class, EntityNullServant::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
+		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) -> !level.
+				getBlockState(pos.below()).is(Blocks.BEDROCK) && NaturalSpawner.
+				canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) && level.getEntities(null,
+				new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
+		return type;
+	});
 
 	static void classload() {
 
@@ -81,7 +93,7 @@ public class ModEntities {
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(CORRUPTED_PAWN_PHANTOM.get(), Mob.createMobAttributes().build());
 		event.put(CORRUPTED_PAWN_BOSS.get(), Mob.createMobAttributes().build());
-		event.put(NULL_SERVANT.get(), Mob.createMobAttributes().build());
+		event.put(NULL_SERVANT.get(), EntityNullServant.createAttributes().build());
 		event.put(CORRUPTED_PAWN_TENTACLE.get(), LivingEntity.createLivingAttributes().build());
 	}
 
@@ -117,7 +129,7 @@ public class ModEntities {
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderer(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(SPELL_BOLT.get(), RenderSpellBolt::new);
-		event.registerEntityRenderer(SPELL_AURA.get(), RenderNull::new);
+		event.registerEntityRenderer(SPELL_AURA.get(), RenderNoOp::new);
 		event.registerEntityRenderer(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_BOSS.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_TENTACLE.get(), RenderCorruptedPawnTentacle::new);

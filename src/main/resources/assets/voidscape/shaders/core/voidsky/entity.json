@@ -5,7 +5,7 @@
 	"dstrgb": "1"
   },
   "vertex": "voidscape:voidsky/entity",
-  "fragment": "voidscape:voidsky/sky",
+  "fragment": "voidscape:voidsky/entity",
   "attributes": [
 	"Position",
 	"Color",

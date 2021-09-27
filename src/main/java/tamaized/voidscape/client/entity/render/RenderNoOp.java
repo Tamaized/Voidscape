@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class RenderNull<T extends Entity> extends EntityRenderer<T> {
+public class RenderNoOp<T extends Entity> extends EntityRenderer<T> {
 
-	public RenderNull(EntityRendererProvider.Context p_i46179_1_) {
+	public RenderNoOp(EntityRendererProvider.Context p_i46179_1_) {
 		super(p_i46179_1_);
 	}
 

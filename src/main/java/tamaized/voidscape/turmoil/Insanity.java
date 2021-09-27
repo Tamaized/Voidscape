@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModAttributes;
 
 import javax.annotation.Nullable;
@@ -48,6 +49,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
+		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity())
+			return;
 		if (Voidscape.checkForVoidDimension(parent.level) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
 			infusion += calcInfusionRate(parent) / 20F;

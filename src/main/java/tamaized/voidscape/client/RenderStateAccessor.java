@@ -19,6 +19,10 @@ public class RenderStateAccessor extends RenderStateShard {
 		return LIGHTNING_TRANSPARENCY;
 	}
 
+	public static TransparencyStateShard TRANSLUCENT_TRANSPARENCY() {
+		return TRANSLUCENT_TRANSPARENCY;
+	}
+
 	public static OutputStateShard WEATHER_TARGET() {
 		return WEATHER_TARGET;
 	}
@@ -37,6 +41,10 @@ public class RenderStateAccessor extends RenderStateShard {
 
 	public static OverlayStateShard OVERLAY() {
 		return OVERLAY;
+	}
+
+	public static OverlayStateShard NO_OVERLAY() {
+		return NO_OVERLAY;
 	}
 
 	public static ShaderStateShard RENDERTYPE_LIGHTNING_SHADER() {

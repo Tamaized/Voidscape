@@ -47,6 +47,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModelBakeListener;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItems;
@@ -77,11 +78,7 @@ public class ASMHooks {
 	public static void handleEntityAttributes(LivingEntity entity) {
 		AttributeSupplier.Builder n = AttributeSupplier.builder();
 		n.builder.putAll(entity.attributes.supplier.instances);
-		n.add(ModAttributes.VOIDIC_VISIBILITY.get(), 1F);
-		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
-		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
-		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
-		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
+		ModAttributes.assignAttributes(n);
 		entity.attributes = new AttributeMap(n.build());
 	}
 
@@ -119,7 +116,7 @@ public class ASMHooks {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static RenderType handleEntityTransparencyRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
-		return entity.level != null && Voidscape.checkForVoidDimension(entity.level) ? RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : type;
+		return entity.level != null && Voidscape.checkForVoidDimension(entity.level) && !(entity instanceof IEthereal) ? RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : type;
 	}
 
 	/**
