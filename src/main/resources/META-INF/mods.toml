@@ -15,6 +15,6 @@ description='''
 [[dependencies.twilightforest]]
     modId="forge"
     mandatory=true
-    versionRange="[37.0.58,)"
+    versionRange="[37.0.75,)"
     ordering="NONE"
     side="BOTH"
