@@ -12,7 +12,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
@@ -74,17 +75,15 @@ public class SubCapability {
 
 	}
 
-	@CapabilityInject(ISubCap.class)
-	public static final Capability<ISubCap> CAPABILITY = Voidscape.getNull();
+	public static final Capability<ISubCap> CAPABILITY = token();
+	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = token();
+	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = token();
+	public static final Capability<IAggroTable> CAPABILITY_AGGRO = token();
 
-	@CapabilityInject(IVoidicArrow.class)
-	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = Voidscape.getNull();
-
-	@CapabilityInject(IEffectContext.class)
-	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = Voidscape.getNull();
-
-	@CapabilityInject(IAggroTable.class)
-	public static final Capability<IAggroTable> CAPABILITY_AGGRO = Voidscape.getNull();
+	private static <T> Capability<T> token() {
+		return CapabilityManager.get(new CapabilityToken<>() {
+		});
+	}
 
 	public static void init(IEventBus modBus) {
 		SubCapability.Registry.register(SubCapability.ISubCap.class, SubCapability.AttachedSubCap.ID, SubCapability.AttachedSubCap::new, new SubCapability.ISubCap.Storage() {

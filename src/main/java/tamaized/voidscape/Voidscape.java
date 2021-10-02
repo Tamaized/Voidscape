@@ -75,7 +75,6 @@ import tamaized.voidscape.world.InstanceChunkGenerator;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
@@ -395,12 +394,6 @@ public class Voidscape {
 
 	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
 		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
-	}
-
-	@Nonnull
-	@SuppressWarnings("ConstantConditions")
-	public static <T> T getNull() {
-		return null;
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
