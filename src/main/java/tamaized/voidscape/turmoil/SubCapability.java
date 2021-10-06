@@ -24,6 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import org.objectweb.asm.Type;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
 import tamaized.voidscape.turmoil.caps.AggroTable;
@@ -66,7 +67,7 @@ public class SubCapability {
 		private static final Map<String, Data<?, ?>> REGISTRY = new HashMap<>();
 
 		public static <C, T extends Tag> void register(Class<C> cap, ResourceLocation id, NonNullSupplier<C> defaultInstance, ISubCap.IStorage<C, T> storage) {
-			REGISTRY.put(cap.getName().intern(), new Data<>(cap, id, defaultInstance, storage));
+			REGISTRY.put(Type.getInternalName(cap), new Data<>(cap, id, defaultInstance, storage));
 		}
 
 		public static Data<?, ?> lookup(Capability<?> cap) {
@@ -75,15 +76,14 @@ public class SubCapability {
 
 	}
 
-	public static final Capability<ISubCap> CAPABILITY = token();
-	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = token();
-	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = token();
-	public static final Capability<IAggroTable> CAPABILITY_AGGRO = token();
-
-	private static <T> Capability<T> token() {
-		return CapabilityManager.get(new CapabilityToken<>() {
-		});
-	}
+	public static final Capability<ISubCap> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<IEffectContext> CAPABILITY_EFFECTCONTEXT = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<IAggroTable> CAPABILITY_AGGRO = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	public static void init(IEventBus modBus) {
 		SubCapability.Registry.register(SubCapability.ISubCap.class, SubCapability.AttachedSubCap.ID, SubCapability.AttachedSubCap::new, new SubCapability.ISubCap.Storage() {
