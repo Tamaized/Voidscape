@@ -72,8 +72,10 @@ import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -92,6 +94,21 @@ public class RegUtil {
 	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
 	private static final List<DeferredRegister<?>> REGISTERS = new ArrayList<>();
 	private static final List<Runnable> CONFIGURED_FEATURES = new ArrayList<>();
+	private static final Map<Item, List<RegistryObject<Item>>> BOWS = new HashMap<>() {{
+		put(Items.BOW, new ArrayList<>());
+		put(Items.CROSSBOW, new ArrayList<>());
+	}};
+
+	public static boolean isMyBow(ItemStack stack, Item check) {
+		List<RegistryObject<Item>> list = BOWS.get(check);
+		if (list == null)
+			return false;
+		for (RegistryObject<Item> o : list) {
+			if (stack.is(o.get()))
+				return true;
+		}
+		return false;
+	}
 
 	static <FC extends FeatureConfiguration, F extends Feature<FC>> LazyLoadedValue<ConfiguredFeature<?, ?>> registerConfiguredFeature(RegistryObject<F> feature, FC inst, UnaryOperator<ConfiguredFeature<?, ?>> config) {
 		LazyLoadedValue<ConfiguredFeature<?, ?>> val = new LazyLoadedValue<>(() -> config.apply(new ConfiguredFeature<>(feature.get(), inst)));
@@ -490,8 +507,14 @@ public class RegUtil {
 			});
 		}
 
+		private static RegistryObject<Item> registerBow(Item item, RegistryObject<Item> o) {
+			if (BOWS.containsKey(item))
+				BOWS.get(item).add(o);
+			return o;
+		}
+
 		static RegistryObject<Item> bow(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_bow"), () -> new BowItem(properties.defaultDurability(tier.getUses())) {
+			return registerBow(Items.BOW, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_bow"), () -> new BowItem(properties.defaultDurability(tier.getUses())) {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
@@ -535,11 +558,11 @@ public class RegUtil {
 					}
 					return map.build();
 				}
-			});
+			}));
 		}
 
 		static RegistryObject<Item> xbow(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_xbow"), () -> new CrossbowItem(properties.defaultDurability(tier.getUses())) {
+			return registerBow(Items.CROSSBOW, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_xbow"), () -> new CrossbowItem(properties.defaultDurability(tier.getUses())) {
 
 				@Override
 				@OnlyIn(Dist.CLIENT)
@@ -595,7 +618,7 @@ public class RegUtil {
 					}
 					return map.build();
 				}
-			});
+			}));
 		}
 
 		static RegistryObject<Item> axe(ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {

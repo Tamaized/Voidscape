@@ -12,5 +12,6 @@
   "nosnow": "META-INF/asm/nosnow.js",
   "seed": "META-INF/asm/seed.js",
   "visibility": "META-INF/asm/visibility.js",
-  "effecthud": "META-INF/asm/effecthud.js"
+  "effecthud": "META-INF/asm/effecthud.js",
+  "mybow": "META-INF/asm/mybow.js"
 }

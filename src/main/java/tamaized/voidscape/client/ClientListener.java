@@ -11,9 +11,12 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
@@ -30,6 +33,7 @@ import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.BindData;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -144,6 +148,24 @@ public class ClientListener {
 		MinecraftForge.EVENT_BUS.addListener((Consumer<ArrowNockEvent>) event -> {
 			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
+		});
+		MinecraftForge.EVENT_BUS.addListener((Consumer<FOVUpdateEvent>) event -> {
+			ItemStack itemstack = event.getEntity().getUseItem();
+			if (event.getEntity().isUsingItem()) {
+				if (RegUtil.isMyBow(itemstack, Items.BOW)) {
+					int i = event.getEntity().getTicksUsingItem();
+					float f1 = (float) i / 20.0F;
+					if (f1 > 1.0F) {
+						f1 = 1.0F;
+					} else {
+						f1 = f1 * f1;
+					}
+
+					event.setNewfov(event.getFov() * (1.0F - f1 * 0.15F));
+				} else if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && event.getEntity().isScoping()) {
+					event.setNewfov(0.1F);
+				}
+			}
 		});
 	}
 

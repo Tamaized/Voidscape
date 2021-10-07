@@ -321,4 +321,14 @@ public class ASMHooks {
 		}
 	}
 
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.ItemInHandRenderer) all potential methods}
+	 * [AFTER ALL INVOKESTATIC {@link ItemStack#is(Item)}]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static boolean isMyBow(boolean o, ItemStack stack, Item item) {
+		return o || RegUtil.isMyBow(stack, item);
+	}
+
 }
