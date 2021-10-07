@@ -21,6 +21,7 @@ public class TurmoilAbility {
 
 	private final int id;
 	private final String unloc;
+	private final ResourceLocation texture;
 	private final Toggle toggle;
 	private final Type type;
 	private final int cost;
@@ -40,6 +41,8 @@ public class TurmoilAbility {
 	private TurmoilAbility(String unloc, Toggle toggle, Type type, int cost, int cooldown, BiPredicate<TurmoilAbility, LivingEntity> execute) {
 		id = register(this);
 		this.unloc = unloc;
+		String[] loc = unloc.contains(".") ? unloc.replaceAll("\\.", "/").split("/", 2) : new String[]{"minecraft", unloc};
+		texture = new ResourceLocation(loc[0], "textures/".concat(loc[1].concat(".png")));
 		this.toggle = toggle;
 		this.type = type;
 		this.cost = cost;
@@ -142,8 +145,7 @@ public class TurmoilAbility {
 	}
 
 	public ResourceLocation getTexture() {
-		String[] loc = unloc.contains(".") ? unloc.replaceAll("\\.", "/").split("/", 2) : new String[]{"minecraft", unloc};
-		return new ResourceLocation(loc[0], "textures/".concat(loc[1].concat(".png")));
+		return texture;
 	}
 
 	public enum Type {

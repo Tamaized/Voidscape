@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,6 +25,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +53,7 @@ import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.EffectRenderer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -61,6 +64,7 @@ import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -298,6 +302,23 @@ public class ASMHooks {
 		Entity camera = Objects.requireNonNull(Minecraft.getInstance().getCameraEntity());
 		return ((LivingEntity) camera).hurtTime == 0 || (!camera.canUpdate() && camera.
 				getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(bind -> !bind.isBound()).orElse(true)).orElse(true));
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.gui.Gui#renderEffects(PoseStack)}
+	 * [AFTER INVOKEVIRTUAL {@link EffectRenderer#renderHUDEffect}]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static void renderEffectHUD(List<Runnable> list, EffectRenderer renderer, MobEffectInstance effect, GuiComponent gui, PoseStack mStack, int x, int y, float z, float alpha) {
+		if (effect.getEffect() instanceof ModEffects.StandardEffect) {
+			list.remove(list.size() - 1);
+			list.add(() -> {
+				ModEffects.StandardEffect.hackyRenderPerformanceSkip = false;
+				renderer.renderHUDEffect(effect, gui, mStack, x, y, z, alpha);
+				ModEffects.StandardEffect.hackyRenderPerformanceSkip = true;
+			});
+		}
 	}
 
 }

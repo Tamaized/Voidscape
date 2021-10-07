@@ -53,6 +53,9 @@
   "item.voidscape.corrupt_legs": "Corrupt Leggings",
   "item.voidscape.corrupt_boots": "Corrupt Boots",
 
+  "effect.voidscape.fire_arrow": "Flame Shot",
+  "effect.voidscape.traumatize": "Traumatized",
+
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
   "voidscape.attribute.voidic_dmg": "Voidic Damage",

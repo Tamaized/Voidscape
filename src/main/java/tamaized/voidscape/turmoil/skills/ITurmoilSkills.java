@@ -58,6 +58,10 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
+		Builder texture(String loc) {
+			return texture(new ResourceLocation(Voidscape.MODID, "textures/" + loc));
+		}
+
 		Builder spent(int spent) {
 			this.spent = spent;
 			return this;

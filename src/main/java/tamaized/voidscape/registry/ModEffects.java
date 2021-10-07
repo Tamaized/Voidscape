@@ -1,27 +1,45 @@
 package tamaized.voidscape.registry;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraftforge.client.EffectRenderer;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.abilities.MageAbilities;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ModEffects {
 
 	private static final List<MobEffect> CONTEXT_EFFECTS = new ArrayList<>();
 	private static final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(ForgeRegistries.MOB_EFFECTS);
-	public static final RegistryObject<ToggleEffect> FIRE_ARROW = REGISTRY.register("fire_arrow", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFAA00, TurmoilAbility.Toggle.ArrowShot));
-	public static final RegistryObject<DotEffect> TRAUMATIZE = REGISTRY.register("traumatize", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0x7700FF)));
+	public static final RegistryObject<ToggleEffect> FIRE_ARROW = REGISTRY.register("fire_arrow", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFAA00, TurmoilAbility.Toggle.ArrowShot).
+			texture(MageAbilities.FLAME_SHOT.getTexture()));
+	public static final RegistryObject<DotEffect> TRAUMATIZE = REGISTRY.register("traumatize", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0x7700FF).
+			texture(MageAbilities.TRAUMATIZE.getTexture())));
 	public static final RegistryObject<MobEffect> BULWARK = REGISTRY.register("bulwark", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0x00FFFF).
 			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "360ac01a-0be0-4c85-a078-bbc0cf90a6e1", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 	public static final RegistryObject<MobEffect> ADRENALINE = REGISTRY.register("adrenaline", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFF7700).
@@ -72,7 +90,7 @@ public class ModEffects {
 
 	}
 
-	public static class ToggleEffect extends MobEffect {
+	public static class ToggleEffect extends StandardEffect {
 
 		private final TurmoilAbility.Toggle toggle;
 
@@ -91,7 +109,7 @@ public class ModEffects {
 
 	}
 
-	public static class DotEffect extends MobEffect {
+	public static class DotEffect extends StandardEffect {
 
 		private final int hurtTick;
 
@@ -121,8 +139,64 @@ public class ModEffects {
 
 	public static class StandardEffect extends MobEffect {
 
+		private Supplier<Supplier<ResourceLocation>> texture = () -> ClientUtil::getMissingTexture;
+
 		private StandardEffect(MobEffectCategory type, int color) {
 			super(type, color);
+		}
+
+		<T extends StandardEffect> T texture(String loc) {
+			return texture(new ResourceLocation(Voidscape.MODID, "textures/" + loc));
+		}
+
+		@SuppressWarnings("unchecked")
+		<T extends StandardEffect> T texture(ResourceLocation loc) {
+			texture = () -> () -> loc;
+			return (T) this;
+		}
+
+		public static boolean hackyRenderPerformanceSkip = true;
+
+		@Override
+		public void initializeClient(Consumer<EffectRenderer> consumer) {
+			consumer.accept(new EffectRenderer() {
+				@Override
+				public void renderInventoryEffect(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, float z) {
+					RenderSystem.setShaderTexture(0, texture.get().get());
+					float x1 = x + 6;
+					float y1 = y + 7;
+					float x2 = x1 + 18;
+					float y2 = y1 + 18;
+					RenderSystem.setShader(GameRenderer::getPositionTexShader);
+					BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+					buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+					buffer.vertex(x1, y2, z).uv(0, 1).endVertex();
+					buffer.vertex(x2, y2, z).uv(1, 1).endVertex();
+					buffer.vertex(x2, y1, z).uv(1, 0).endVertex();
+					buffer.vertex(x1, y1, z).uv(0, 0).endVertex();
+					Tesselator.getInstance().end();
+				}
+
+				@Override
+				public void renderHUDEffect(MobEffectInstance effect, GuiComponent gui, PoseStack mStack, int x, int y, float z, float alpha) {
+					if (hackyRenderPerformanceSkip)
+						return;
+					RenderSystem.setShaderTexture(0, texture.get().get());
+					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+					float x1 = x + 3;
+					float y1 = y + 3;
+					float x2 = x1 + 18;
+					float y2 = y1 + 18;
+					RenderSystem.setShader(GameRenderer::getPositionTexShader);
+					BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+					buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+					buffer.vertex(x1, y2, z).uv(0, 1).endVertex();
+					buffer.vertex(x2, y2, z).uv(1, 1).endVertex();
+					buffer.vertex(x2, y1, z).uv(1, 0).endVertex();
+					buffer.vertex(x1, y1, z).uv(0, 0).endVertex();
+					Tesselator.getInstance().end();
+				}
+			});
 		}
 	}
 

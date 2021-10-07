@@ -4,7 +4,7 @@ import tamaized.voidscape.turmoil.abilities.MageAbilities;
 
 public class MageSkills implements ITurmoilSkills {
 
-	public final TurmoilSkill CORE = builder("core").noDescription().core(TurmoilSkill.CoreType.Ranged).stats(stats -> stats.threat(1)).abilities(MageAbilities.BOLT).build();
+	public final TurmoilSkill CORE = builder("core").noDescription().core(TurmoilSkill.CoreType.Ranged).stats(stats -> stats.threat(1)).abilities(MageAbilities.BOLT).texture(MageAbilities.BOLT.getTexture()).build();
 
 	public final TurmoilSkill VOIDIC_BOND = generic("voidic_bond").required(CORE).stats(stats -> stats.spellpower(5)).build();
 	public final TurmoilSkill SPELLPOWER_1 = generic("spellpower_1").description("spellpower").required(VOIDIC_BOND).stats(stats -> stats.spellpower(5)).build();
@@ -29,8 +29,8 @@ public class MageSkills implements ITurmoilSkills {
 	public final TurmoilSkill ASTUTE_UNDERSTANDING_5 = generic("astute_understanding_5").description("astute_understanding").required(ASTUTE_UNDERSTANDING_4).stats(stats -> stats.cost(5)).build();
 
 	public final TurmoilSkill VOIDMANCY_1 = builder("voidmancy_1").noDescription().required(CORE).stats(stats -> stats.spellpower(2).rechargeRate(1).spellCrit(1)).build();
-	public final TurmoilSkill HOMINGBOLTS = builder("homingbolts").noDescription().required(VOIDMANCY_1).stats(stats -> stats.spellpower(5)).abilities(MageAbilities.HOMING_BOLTS).build();
-	public final TurmoilSkill VOIDICAURA = builder("voidicaura").noDescription().required(VOIDMANCY_1).abilities(MageAbilities.AURA).build();
+	public final TurmoilSkill HOMINGBOLTS = builder("homingbolts").noDescription().required(VOIDMANCY_1).stats(stats -> stats.spellpower(5)).abilities(MageAbilities.HOMING_BOLTS).texture(MageAbilities.HOMING_BOLTS.getTexture()).build();
+	public final TurmoilSkill VOIDICAURA = builder("voidicaura").noDescription().required(VOIDMANCY_1).abilities(MageAbilities.AURA).texture(MageAbilities.AURA.getTexture()).build();
 	public final TurmoilSkill VOIDMANCY_2 = builder("voidmancy_2").required(VOIDMANCY_1).stats(stats -> stats.spellpower(2).cooldown(1).spellCrit(1)).build();
 	public final TurmoilSkill PENETRATINGBOLTS = builder("penetratingbolts").required(VOIDMANCY_2).stats(stats -> stats.spellpower(5)).build();
 	public final TurmoilSkill EMPOWERBOLT_2X = builder("empowerbolt_2x").required(VOIDMANCY_2).build();
@@ -51,8 +51,8 @@ public class MageSkills implements ITurmoilSkills {
 	public final TurmoilSkill NULLVULNERABILITY = builder("nullvulnerability").required(VOIDMANCERSTANCE).build();
 
 	public final TurmoilSkill VOIDIC_ARCHER_1 = builder("voidic_archer_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
-	public final TurmoilSkill ARROWIMBUE_SPELLLIKE = builder("arrowimbue_spelllike").noDescription().required(VOIDIC_ARCHER_1).abilities(MageAbilities.ARROW_IMBUE_SPELLLIKE).build();
-	public final TurmoilSkill FLAMESHOT = builder("flameshot").noDescription().required(VOIDIC_ARCHER_1).abilities(MageAbilities.FLAME_SHOT).build();
+	public final TurmoilSkill ARROWIMBUE_SPELLLIKE = builder("arrowimbue_spelllike").noDescription().required(VOIDIC_ARCHER_1).abilities(MageAbilities.ARROW_IMBUE_SPELLLIKE).texture(MageAbilities.ARROW_IMBUE_SPELLLIKE.getTexture()).build();
+	public final TurmoilSkill FLAMESHOT = builder("flameshot").noDescription().required(VOIDIC_ARCHER_1).abilities(MageAbilities.FLAME_SHOT).texture(MageAbilities.FLAME_SHOT.getTexture()).build();
 	public final TurmoilSkill VOIDIC_ARCHER_2 = builder("voidic_archer_2").required(VOIDIC_ARCHER_1).stats(stats -> stats.spellpower(1)).build();
 	public final TurmoilSkill ARROWIMBUE_FOCUS = builder("arrowimbue_focus").required(VOIDIC_ARCHER_2).build();
 	public final TurmoilSkill FORCESHOT = builder("forceshot").required(VOIDIC_ARCHER_2).build();
@@ -67,8 +67,8 @@ public class MageSkills implements ITurmoilSkills {
 	public final TurmoilSkill NULLSHOT = builder("nullshot").required(VOIDIC_ARCHER_5).build();
 
 	public final TurmoilSkill INSANE_MAGE_1 = builder("insane_mage_1").required(CORE).stats(stats -> stats.spellpower(2).cost(1)).build();
-	public final TurmoilSkill ECHO = builder("echo").noDescription().required(INSANE_MAGE_1).abilities(MageAbilities.ECHO).build();
-	public final TurmoilSkill TRAUMATIZE = builder("traumatize").noDescription().required(INSANE_MAGE_1).abilities(MageAbilities.TRAUMATIZE).build();
+	public final TurmoilSkill ECHO = builder("echo").noDescription().required(INSANE_MAGE_1).abilities(MageAbilities.ECHO).texture(MageAbilities.ECHO.getTexture()).build();
+	public final TurmoilSkill TRAUMATIZE = builder("traumatize").noDescription().required(INSANE_MAGE_1).abilities(MageAbilities.TRAUMATIZE).texture(MageAbilities.TRAUMATIZE.getTexture()).build();
 	public final TurmoilSkill INSANE_MAGE_2 = builder("insane_mage_2").noDescription().required(INSANE_MAGE_1).stats(stats -> stats.spellpower(2).cost(1)).build();
 	public final TurmoilSkill CONVERT = builder("convert").required(INSANE_MAGE_2).build();
 	public final TurmoilSkill DEMORALIZE = builder("demoralize").required(INSANE_MAGE_2).build();
