@@ -9,12 +9,11 @@ var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
     return {
         'nosnow': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.world.biome.Biome',
+                'class': 'net.minecraft.world.level.biome.Biome',
                 'methodName': ASM.mapMethod('m_47519_'), // shouldSnow
                 'methodDesc': '(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z'
             },
@@ -40,7 +39,7 @@ function initializeCoreMod() {
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'shouldSnow',
-                            '(ZLnet/minecraft/world/biome/Biome;)Z',
+                            '(ZLnet/minecraft/world/level/biome/Biome;)Z',
                             false
                             )
                         )
