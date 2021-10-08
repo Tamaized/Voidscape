@@ -25,6 +25,7 @@ import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.abilities.HealerAbilities;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
 import tamaized.voidscape.turmoil.abilities.MeleeAbilities;
+import tamaized.voidscape.turmoil.abilities.TankAbilities;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
 
@@ -43,11 +44,15 @@ public class ModEffects {
 	public static final RegistryObject<DotEffect> TRAUMATIZE = REGISTRY.register("traumatize", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0x7700FF).
 			texture(MageAbilities.TRAUMATIZE.getTexture())));
 	public static final RegistryObject<MobEffect> BULWARK = REGISTRY.register("bulwark", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0x00FFFF).
+			texture(TankAbilities.BULWARK.getTexture()).
 			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "360ac01a-0be0-4c85-a078-bbc0cf90a6e1", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 	public static final RegistryObject<MobEffect> ADRENALINE = REGISTRY.register("adrenaline", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFF7700).
+			texture(TankAbilities.ADRENALINE.getTexture()).
 			addAttributeModifier(ModAttributes.VOIDIC_RES.get(), "777e0d84-3984-4502-973e-851766de8bc7", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL));
-	public static final RegistryObject<MobEffect> TUNNEL_VISION = REGISTRY.register("tunnel_vision", () -> context(new StandardEffect(MobEffectCategory.BENEFICIAL, 0xFF0000)));
-	public static final RegistryObject<ToggleEffect> EMPOWER_SHIELD_2X_NULL = REGISTRY.register("empower_shield_2x_null", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower));
+	public static final RegistryObject<MobEffect> TUNNEL_VISION = REGISTRY.register("tunnel_vision", () -> context(new StandardEffect(MobEffectCategory.BENEFICIAL, 0xFF0000).
+			texture(TankAbilities.TUNNEL_VISION.getTexture())));
+	public static final RegistryObject<ToggleEffect> EMPOWER_SHIELD_2X_NULL = REGISTRY.register("empower_shield_2x_null", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower).
+			texture(TankAbilities.EMPOWER_SHIELD_2X_NULL.getTexture()));
 	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_SLICING = REGISTRY.register("empower_attack_slicing", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower).
 			texture(MeleeAbilities.EMPOWER_ATTACK_SLICING.getTexture()));
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_SLICING_DOT = REGISTRY.register("empower_attack_slicing_dot", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0xFF0000).

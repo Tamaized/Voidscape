@@ -21,7 +21,7 @@ public class TurmoilAbility {
 
 	private final int id;
 	private final String unloc;
-	private final ResourceLocation texture;
+	private ResourceLocation texture;
 	private final Toggle toggle;
 	private final Type type;
 	private final int cost;
@@ -146,6 +146,11 @@ public class TurmoilAbility {
 
 	public ResourceLocation getTexture() {
 		return texture;
+	}
+
+	public TurmoilAbility texture(ResourceLocation location) {
+		texture = location;
+		return this;
 	}
 
 	public enum Type {

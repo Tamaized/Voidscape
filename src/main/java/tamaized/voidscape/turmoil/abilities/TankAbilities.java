@@ -45,7 +45,7 @@ public class TankAbilities {
 				e.getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.mulHate(caster, 1.1D));
 		}
 		return true;
-	}).damage(1F);
+	}).damage(1F).texture(MageAbilities.ECHO.getTexture());
 	public static final TurmoilAbility ADRENALINE = new TurmoilAbility(unloc("adrenaline"), TurmoilAbility.Type.Insane, 300, 30 * 20, (spell, caster) -> {
 		if (!(caster.getMainHandItem().getItem() instanceof AxeItem))
 			return false;
