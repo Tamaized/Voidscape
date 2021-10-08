@@ -22,6 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.turmoil.SubCapability;
+import tamaized.voidscape.turmoil.abilities.HealerAbilities;
 import tamaized.voidscape.turmoil.abilities.MageAbilities;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
 import tamaized.voidscape.turmoil.caps.IEffectContext;
@@ -51,8 +52,10 @@ public class ModEffects {
 	public static final RegistryObject<ToggleEffect> EMPOWER_ATTACK_BLEED = REGISTRY.register("empower_attack_bleed", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFF0000, TurmoilAbility.Toggle.Empower));
 	public static final RegistryObject<DotEffect> EMPOWER_ATTACK_BLEED_DOT = REGISTRY.register("empower_attack_bleed_dot", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0xFF0000)));
 	public static final RegistryObject<MobEffect> SENSE_WEAKNESS = REGISTRY.register("sense_weakness", () -> context(new StandardEffect(MobEffectCategory.BENEFICIAL, 0xFF0000)));
-	public static final RegistryObject<DotEffect> MIND_WARP = REGISTRY.register("mind_warp", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0xFF0077)));
-	public static final RegistryObject<ToggleEffect> EMPOWER_SWORD_OSMOSIS = REGISTRY.register("empower_sword_osmosis", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower));
+	public static final RegistryObject<DotEffect> MIND_WARP = REGISTRY.register("mind_warp", () -> context(new DotEffect(MobEffectCategory.HARMFUL, 0xFF0077).
+			texture(HealerAbilities.MIND_WARP.getTexture())));
+	public static final RegistryObject<ToggleEffect> EMPOWER_SWORD_OSMOSIS = REGISTRY.register("empower_sword_osmosis", () -> new ToggleEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF, TurmoilAbility.Toggle.Empower).
+			texture(HealerAbilities.EMPOWER_SWORD_OSMOSIS.getTexture()));
 
 	private static <T extends MobEffect> T context(T effect) {
 		CONTEXT_EFFECTS.add(effect);

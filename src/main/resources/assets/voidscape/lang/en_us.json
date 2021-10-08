@@ -55,6 +55,17 @@
 
   "effect.voidscape.fire_arrow": "Flame Shot",
   "effect.voidscape.traumatize": "Traumatized",
+  "effect.voidscape.bulwark": "Bulwark",
+  "effect.voidscape.adrenaline": "Adrenaline",
+  "effect.voidscape.tunnel_vision": "Tunnel Vision",
+  "effect.voidscape.empower_shield_2x_null": "Double Null",
+  "effect.voidscape.empower_attack_slicing": "Slicing",
+  "effect.voidscape.empower_attack_slicing_dot": "Sliced",
+  "effect.voidscape.empower_attack_bleed": "Bleed",
+  "effect.voidscape.empower_attack_bleed_dot": "Bleeding",
+  "effect.voidscape.sense_weakness": "Sense Weakness",
+  "effect.voidscape.mind_warp": "Mind Warp",
+  "effect.voidscape.empower_sword_osmosis": "Osmosis",
 
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
