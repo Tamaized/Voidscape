@@ -49,7 +49,7 @@ public final class TurmoilAbilityInstance {
 	}
 
 	public boolean canExecute(LivingEntity caster) {
-		return caster.canUpdate() && cooldownRemaining(caster.level) <= 0 && canAfford(caster);
+		return !caster.isSpectator() && caster.canUpdate() && cooldownRemaining(caster.level) <= 0 && canAfford(caster);
 	}
 
 	public void executeClientSide(TurmoilStats stats, LivingEntity caster, int slot) {
