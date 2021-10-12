@@ -97,12 +97,12 @@ public class TurmoilScreen extends Screen {
 			return null;
 		}
 		Optional<SubCapability.ISubCap> cap = minecraft.player.getCapability(SubCapability.CAPABILITY).resolve();
-		if (!cap.isPresent()) {
+		if (cap.isEmpty()) {
 			onClose();
 			return null;
 		}
 		Optional<T> data = cap.get().get(key);
-		if (!data.isPresent()) {
+		if (data.isEmpty()) {
 			onClose();
 			return null;
 		}

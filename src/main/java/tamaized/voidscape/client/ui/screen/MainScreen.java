@@ -92,7 +92,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Configure Voidic Spells"),
+				new TranslatableComponent("Configure Voidic Spells"), // FIXME: localize
 
 				button -> minecraft.setScreen(new SpellsScreen())
 
@@ -109,7 +109,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Reset Voidic Skills"),
+				new TranslatableComponent("Reset Voidic Skills"), // FIXME: localize
 
 				button -> {
 					if (button.active) {
@@ -123,13 +123,15 @@ public class MainScreen extends TurmoilScreen {
 				(button, matrixStack, x, y) -> {
 					if (button.active || data == null || !data.hasCoreSkill())
 						return;
-					String text = data.getResetCooldown() > 0 ? ("%s Ticks Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
+					// FIXME: localize
+					boolean min = data.getResetCooldown() > 1200;
+					String text = data.getResetCooldown() > 0 ? ("%s %s Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
 					if (!text.isEmpty())
 						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(new TranslatableComponent(
 
 								text
 
-								, data.getResetCooldown()), Math.max(this.width / 2 - 43, 170)), x, y);
+								, data.getResetCooldown() / (min ? 1200 : 20), min ? "Minutes" : "Seconds"), Math.max(this.width / 2 - 43, 170)), x, y);
 				}
 
 		);
@@ -145,7 +147,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Duties"),
+				new TranslatableComponent("Duties"), // FIXME: localize
 
 				button -> {
 					if (ClientPartyInfo.host == null)
@@ -167,7 +169,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Close"),
+				new TranslatableComponent("Close"), // FIXME: localize
 
 				button -> onClose()
 
@@ -217,7 +219,7 @@ public class MainScreen extends TurmoilScreen {
 		}
 		o.ifPresent(cap -> {
 			Optional<Turmoil> t = cap.get(Voidscape.subCapTurmoilData);
-			if (!t.isPresent()) {
+			if (t.isEmpty()) {
 				onClose();
 				return;
 			}
