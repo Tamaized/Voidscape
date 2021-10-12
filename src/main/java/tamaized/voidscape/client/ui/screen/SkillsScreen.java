@@ -14,7 +14,6 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
@@ -53,7 +52,7 @@ public class SkillsScreen extends TurmoilScreen {
 		if (button instanceof SkillButton && GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
 			this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(((SkillButton) button).getTooltip(), Math.max(this.width / 2 - 43, 170)), x, y);
 	};
-	private final List<Triple<MutableVec2i, MutableVec2i, SkillButton>> lines = new ArrayList<>();
+	private final List<Data> lines = new ArrayList<>();
 	private int dragX;
 	private int dragY;
 	private int lastX;
@@ -87,26 +86,27 @@ public class SkillsScreen extends TurmoilScreen {
 			RenderSystem.disableCull();
 			RenderSystem.lineWidth(5F);
 			for (int offset = 0; offset < lines.size(); offset++) {
-				Triple<MutableVec2i, MutableVec2i, SkillButton> line = lines.get(offset);
-				line.getLeft().x += dragX;
-				line.getLeft().y += dragY;
-				line.getMiddle().x += dragX;
-				line.getMiddle().y += dragY;
+				Data line = lines.get(offset);
+				line.a().x += dragX;
+				line.a().y += dragY;
+				line.b().x += dragX;
+				line.b().y += dragY;
 				BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 				buffer.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_NORMAL);
-				MutableVec2i p1 = line.getLeft();
-				MutableVec2i p2 = line.getMiddle();
+				MutableVec2i p1 = line.a();
+				MutableVec2i p2 = line.b();
 				float theta = (float) Math.atan2(p1.y - p2.y, p1.x - p2.x);
 				float cos = Mth.cos(theta);
 				float sin = Mth.sin(theta);
 				float dist = Mth.sqrt(Mth.square(p2.x - p1.x) + Mth.square(p2.y - p1.y));
-				boolean hover = line.getRight().isHovered() || data.hasSkill(line.getRight().getSkill());
+				boolean hover = line.source().isHovered() || data.hasSkill(line.source().getSkill());
+				boolean missingReq = line.source().isHovered() && !data.hasSkill(line.dest().getSkill());
 				//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
 				for (float t = 0; t < dist + 1; t += 1F) {
 					float y = 8F * Mth.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + ClientUtil.tick)) * Mth.sin((float) Math.toRadians(t * Math.PI * 2F - ClientUtil.tick * 3F));
 					float xRot = t * cos - y * sin + p2.x;
 					float yRot = t * sin + y * cos + p2.y;
-					buffer.vertex(xRot, yRot, 0).color(hover ? 0F : 0.4F, hover ? 1F : 0F, hover ? 0F : 1F, 1F).normal(p2.x - p1.x, p2.y - p1.y, 0).endVertex();
+					buffer.vertex(xRot, yRot, 0).color(hover ? missingReq ? 1F : 0F : 0.4F, hover && !missingReq ? 1F : 0F, hover ? 0F : 1F, 1F).normal(p2.x - p1.x, p2.y - p1.y, 0).endVertex();
 				}
 				//buffer.vertex(p2.x, p2.y, 0).color(1f, 0, 0, 1f).endVertex();
 				Tesselator.getInstance().end();
@@ -159,7 +159,7 @@ public class SkillsScreen extends TurmoilScreen {
 			List<TurmoilSkill> req = button.getSkill().getRequired();
 			if (!req.isEmpty()) {
 				renderables.stream().filter(SkillButton.class::isInstance).map(SkillButton.class::cast).filter(b -> req.contains(b.getSkill())).
-						forEach(b -> lines.add(Triple.of(new MutableVec2i(button.x + buttonHeight / 2, button.y + buttonHeight / 2), new MutableVec2i(b.x + buttonHeight / 2, b.y + buttonHeight / 2), button)));
+						forEach(b -> lines.add(new Data(new MutableVec2i(button.x + buttonHeight / 2, button.y + buttonHeight / 2), new MutableVec2i(b.x + buttonHeight / 2, b.y + buttonHeight / 2), button, b)));
 			}
 		});
 		Collections.shuffle(lines);
@@ -225,6 +225,10 @@ public class SkillsScreen extends TurmoilScreen {
 			this.x = x;
 			this.y = y;
 		}
+	}
+
+	static record Data(MutableVec2i a, MutableVec2i b, SkillButton source, SkillButton dest) {
+
 	}
 
 }
