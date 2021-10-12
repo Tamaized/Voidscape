@@ -132,7 +132,7 @@ public class Voidscape {
 				event.setCanceled(true);
 		})));
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			if (event.player.level != null &&
+			if (event.player.level != null && !event.player.isSpectator() &&
 
 					(!event.player.level.isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
 							map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
