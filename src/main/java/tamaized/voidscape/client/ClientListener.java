@@ -5,16 +5,20 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -30,8 +34,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
+import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
+import tamaized.voidscape.network.DonatorHandler;
+import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.RegUtil;
 import tamaized.voidscape.turmoil.BindData;
@@ -42,6 +49,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -103,8 +111,16 @@ public class ClientListener {
 			}
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
-			if (event.phase == TickEvent.Phase.START)
+			if (event.phase == TickEvent.Phase.START) {
+				if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
+					Config.CLIENT_CONFIG.DONATOR.dirty = true;
+				else if (Config.CLIENT_CONFIG.DONATOR.dirty) {
+					Config.CLIENT_CONFIG.DONATOR.dirty = false;
+					if (DonatorHandler.donators.contains(Minecraft.getInstance().player.getUUID()))
+						Voidscape.NETWORK.sendToServer(new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(Config.CLIENT_CONFIG.DONATOR.enabled.get(), Config.CLIENT_CONFIG.DONATOR.color.get())));
+				}
 				return;
+			}
 			if (!Minecraft.getInstance().isPaused() && Minecraft.getInstance().player != null)
 				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(bind -> bind.tick(Minecraft.getInstance().player)));
 			if (!turmoilDown && KEY_TURMOIL.isDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
@@ -206,6 +222,18 @@ public class ClientListener {
 		};
 		info.setSkyRenderHandler(new VoidSkyRenderer());
 		DimensionSpecialEffects.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
+	}
+
+	@SubscribeEvent
+	public static void addLayers(EntityRenderersEvent.AddLayers event) {
+		event.getSkins().forEach(renderer -> {
+			LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
+			attachRenderLayers(Objects.requireNonNull(skin));
+		});
+	}
+
+	private static <T extends LivingEntity, M extends EntityModel<T>> void attachRenderLayers(LivingEntityRenderer<T, M> renderer) {
+		renderer.addLayer(new DonatorLayer<>(renderer));
 	}
 
 }

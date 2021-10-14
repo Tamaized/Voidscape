@@ -13,6 +13,7 @@ import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
 import tamaized.voidscape.network.server.ServerPacketCommenceDuty;
 import tamaized.voidscape.network.server.ServerPacketCreateParty;
 import tamaized.voidscape.network.server.ServerPacketDisbandParty;
+import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
 import tamaized.voidscape.network.server.ServerPacketRemovePartyMember;
 import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
 import tamaized.voidscape.network.server.ServerPacketRequestPartyInfo;
@@ -52,6 +53,7 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketRemovePartyMember.class, () -> new ServerPacketRemovePartyMember(0));
 		registerMessage(network, ServerPacketTurmoilResetSkills.class, ServerPacketTurmoilResetSkills::new);
 		registerMessage(network, ServerPacketSuccumbDeath.class, ServerPacketSuccumbDeath::new);
+		registerMessage(network, ServerPacketHandlerDonatorSettings.class, () -> new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(false, 0)));
 
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 		registerMessage(network, ClientPacketUpdatePartyInfo.class, () -> new ClientPacketUpdatePartyInfo(null, false));
