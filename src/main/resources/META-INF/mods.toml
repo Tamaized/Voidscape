@@ -12,7 +12,7 @@ description='''
 
 '''
 
-[[dependencies.twilightforest]]
+[[dependencies.voidscape]]
     modId="forge"
     mandatory=true
     versionRange="[37.0.75,)"
