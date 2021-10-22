@@ -28,7 +28,7 @@ public class HealerSkills implements ITurmoilSkills {
 	public final TurmoilSkill ASTUTE_UNDERSTANDING_4 = generic("astute_understanding_4").description("astute_understanding").required(ASTUTE_UNDERSTANDING_3).stats(stats -> stats.cost(2)).texture(GenericSkillIcons.ASTUTE_UNDERSTANDING).build();
 	public final TurmoilSkill ASTUTE_UNDERSTANDING_5 = generic("astute_understanding_5").description("astute_understanding").required(ASTUTE_UNDERSTANDING_4).stats(stats -> stats.cost(5)).texture(GenericSkillIcons.ASTUTE_UNDERSTANDING).build();
 
-	public final TurmoilSkill VOIDIC_CLERIC_1 = builder("voidic_cleric_1").noDescription().required(CORE).stats(stats -> stats.voidicDamageReductionPercentage(1).spellpower(1)).build();
+	public final TurmoilSkill VOIDIC_CLERIC_1 = builder("voidic_cleric_1").noDescription().required(CORE).stats(stats -> stats.voidicDamageReductionPercentage(1).spellpower(1)).texture("skills/healer/voidic_cleric").build();
 	public final TurmoilSkill HEALING_BOLT = builder("healing_bolt").noDescription().abilities(HealerAbilities.HEALING_BOLT).required(VOIDIC_CLERIC_1).texture(HealerAbilities.HEALING_BOLT.getTexture()).build();
 	public final TurmoilSkill HEALING_BLAST = builder("healing_blast").noDescription().abilities(HealerAbilities.HEALING_BLAST).required(VOIDIC_CLERIC_1).texture(HealerAbilities.HEALING_BLAST.getTexture()).build();
 	public final TurmoilSkill VOIDIC_CLERIC_2 = builder("voidic_cleric_2").noDescription().required(VOIDIC_CLERIC_1).stats(stats -> stats.voidicDamageReductionPercentage(1).spellpower(1)).build();
@@ -43,7 +43,7 @@ public class HealerSkills implements ITurmoilSkills {
 	public final TurmoilSkill VOIDIC_CLERIC_5 = builder("voidic_cleric_5").noDescription().required(VOIDIC_CLERIC_4).stats(stats -> stats.voidicDamageReductionPercentage(5).spellpower(5)).build();
 	public final TurmoilSkill STALWART_SHIELD = builder("stalwart_shield").required(VOIDIC_CLERIC_5).build();
 
-	public final TurmoilSkill MAD_PRIEST_1 = builder("mad_priest_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
+	public final TurmoilSkill MAD_PRIEST_1 = builder("mad_priest_1").required(CORE).stats(stats -> stats.spellpower(1)).texture("skills/healer/mad_priest").build();
 	public final TurmoilSkill MEND = builder("mend").noDescription().abilities(HealerAbilities.MEND).required(MAD_PRIEST_1).texture(HealerAbilities.MEND.getTexture()).build();
 	public final TurmoilSkill MIND_WARP = builder("mind_warp").noDescription().abilities(HealerAbilities.MIND_WARP).required(MAD_PRIEST_1).texture(HealerAbilities.MIND_WARP.getTexture()).build();
 	public final TurmoilSkill MAD_PRIEST_2 = builder("mad_priest_2").noDescription().required(MAD_PRIEST_1).stats(stats -> stats.spellpower(1)).build();
@@ -57,7 +57,7 @@ public class HealerSkills implements ITurmoilSkills {
 	public final TurmoilSkill MAD_PRIEST_5 = builder("mad_priest_5").noDescription().required(MAD_PRIEST_4).stats(stats -> stats.spellpower(5)).build();
 	public final TurmoilSkill MIND_LINK_NEG = builder("mind_link_neg").required(MAD_PRIEST_5).build();
 
-	public final TurmoilSkill VOIDS_FAVOR_1 = builder("voids_favor_1").required(CORE).stats(stats -> stats.spellpower(1)).build();
+	public final TurmoilSkill VOIDS_FAVOR_1 = builder("voids_favor_1").required(CORE).stats(stats -> stats.spellpower(1)).texture("skills/healer/voids_favor").build();
 	public final TurmoilSkill HEALING_AURA = builder("healing_aura").noDescription().abilities(HealerAbilities.HEALING_AURA).required(VOIDS_FAVOR_1).texture(HealerAbilities.HEALING_AURA.getTexture()).build();
 	public final TurmoilSkill EMPOWER_SWORD_OSMOSIS = builder("empower_sword_osmosis").noDescription().abilities(HealerAbilities.EMPOWER_SWORD_OSMOSIS).required(VOIDS_FAVOR_1).texture(HealerAbilities.EMPOWER_SWORD_OSMOSIS.getTexture()).build();
 	public final TurmoilSkill VOIDS_FAVOR_2 = builder("voids_favor_2").noDescription().required(VOIDS_FAVOR_1).stats(stats -> stats.spellpower(1)).build();
