@@ -66,7 +66,7 @@ public class EntitySpellAura extends Entity {
 	public void tick() {
 		if (level.isClientSide()) {
 			int color = entityData.get(COLOR);
-			for (int i = 0; i < 10; i++) {
+			if (tickCount % 2 == 0) {
 				Vec3 vec = position().add(0, 1.25F + (random.nextFloat() - 0.5F), 0).add(new Vec3(0.1D + random.nextDouble() * 2.9D, 0D, 0D).yRot((float) Math.toRadians(random.nextInt(360))));
 				level.addParticle(new ModParticles.ParticleSpellCloudData((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF), vec.x, vec.y, vec.z, 0, 0, 0);
 			}
