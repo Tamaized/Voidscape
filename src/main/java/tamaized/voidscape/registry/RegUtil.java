@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -53,14 +52,10 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.UpgradeRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructurePieceType;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IItemRenderProperties;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -81,7 +76,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 public class RegUtil {
 
@@ -93,7 +87,6 @@ public class RegUtil {
 	};
 	private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("86fda400-8542-4d95-b275-c6393de5b887")};
 	private static final List<DeferredRegister<?>> REGISTERS = new ArrayList<>();
-	private static final List<Runnable> CONFIGURED_FEATURES = new ArrayList<>();
 	private static final Map<Item, List<RegistryObject<Item>>> BOWS = new HashMap<>() {{
 		put(Items.BOW, new ArrayList<>());
 		put(Items.CROSSBOW, new ArrayList<>());
@@ -108,12 +101,6 @@ public class RegUtil {
 				return true;
 		}
 		return false;
-	}
-
-	static <FC extends FeatureConfiguration, F extends Feature<FC>> LazyLoadedValue<ConfiguredFeature<?, ?>> registerConfiguredFeature(RegistryObject<F> feature, FC inst, UnaryOperator<ConfiguredFeature<?, ?>> config) {
-		LazyLoadedValue<ConfiguredFeature<?, ?>> val = new LazyLoadedValue<>(() -> config.apply(new ConfiguredFeature<>(feature.get(), inst)));
-		CONFIGURED_FEATURES.add(() -> Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.getId(), val.get()));
-		return val;
 	}
 
 	public static StructurePieceType registerStructurePiece(String name, StructurePieceType piece) {
@@ -168,7 +155,6 @@ public class RegUtil {
 		});
 		for (DeferredRegister<?> register : REGISTERS)
 			register.register(bus);
-		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> CONFIGURED_FEATURES.forEach(Runnable::run));
 	}
 
 	static <R extends IForgeRegistryEntry<R>> DeferredRegister<R> create(IForgeRegistry<R> type) {

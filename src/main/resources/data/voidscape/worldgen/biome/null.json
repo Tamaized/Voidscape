@@ -48,7 +48,16 @@
 
   },
   "features": [
-	[ "voidscape:thunderspire" ]
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ "voidscape:thunderspire" ],
+	[ ],
+	[ ]
   ],
   "starts": [
 	"voidscape:configured_null"

@@ -27,6 +27,18 @@ public class ModSurfaceBuilders {
 
 		}
 	});
+	public static final RegistryObject<SurfaceBuilder<SurfaceBuilderBaseConfiguration>> EXACT_NOISE_TOP = REGISTRY.register("exact_noise_top", () -> new SurfaceBuilder<>(SurfaceBuilderBaseConfiguration.CODEC) {
+		@Override
+		public void apply(Random random, ChunkAccess chunkIn, Biome biomeIn, int x, int z, int y, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, int minSurfaceLevel, long seed, SurfaceBuilderBaseConfiguration config) {
+			BlockPos pos = new BlockPos(x & 15, y, z & 15);
+			int k = (int) (noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
+			boolean flag = Math.cos(k / 3.0D * Math.PI) > 0.0D;
+			if (chunkIn.getBlockState(pos).is(defaultBlock.getBlock())) {
+				chunkIn.setBlockState(pos, chunkIn.getBlockState(pos.above()).is(Blocks.AIR) && flag ? config.getTopMaterial() : config.getUnderMaterial(), false);
+			}
+
+		}
+	});
 
 	public static void classload() {
 

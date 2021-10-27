@@ -1,0 +1,12 @@
+{
+  "config": {
+	"feature": "minecraft:chorus_plant",
+	"decorator": {
+	  "config": {
+		"check_below": true
+	  },
+	  "type": "voidscape:seek"
+	}
+  },
+  "type": "minecraft:decorated"
+}

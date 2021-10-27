@@ -66,11 +66,6 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		return settings;
 	}
 
-	@Override
-	public int getGenDepth() {
-		return 0;
-	}
-
 	/*@Override
 	public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_158463_, StructureFeatureManager p_158464_, ChunkAccess p_158465_) {
 		return CompletableFuture.completedFuture(p_158465_);

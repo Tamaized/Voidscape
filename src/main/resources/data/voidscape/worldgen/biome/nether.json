@@ -31,10 +31,10 @@
 	}
   },
   "surface_builder": {
-	"type": "voidscape:exact",
+	"type": "voidscape:exact_noise_top",
 	"config": {
 	  "top_material": {
-		"Name": "netherrack"
+		"Name": "crimson_nylium"
 	  },
 	  "under_material": {
 		"Name": "netherrack"
@@ -48,7 +48,16 @@
 
   },
   "features": [
-
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ "minecraft:crimson_fungi" ],
+	[ ],
+	[ ]
   ],
   "starts": [
 
