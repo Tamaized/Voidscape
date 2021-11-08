@@ -94,7 +94,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				break;
 			case CONSUME:
 				if (!isTalking()) {
-					if (parent.getY() >= 12)
+					if (parent.getY() >= (parent.level.getMinBuildHeight() + 12))
 						setState(State.CLOSED);
 					else {
 						if (tick > 0)
