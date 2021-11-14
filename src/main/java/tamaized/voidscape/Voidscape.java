@@ -61,6 +61,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.client.ConfigScreen;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.ModAttributes;
@@ -331,7 +332,8 @@ public class Voidscape {
 			}
 		});
 		busForge.addListener((Consumer<LivingSpawnEvent.SpecialSpawn>) event -> {
-			if (event.getSpawnReason() == MobSpawnType.NATURAL && event.getEntity() instanceof LivingEntity && Voidscape.checkForVoidDimension(event.getEntity().level)) {
+			if (event.getSpawnReason() == MobSpawnType.NATURAL && event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof IEthereal) && Voidscape.
+					checkForVoidDimension(event.getEntity().level)) {
 				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
 						setInfusion(((LivingEntity) event.getEntity()).getRandom().nextInt(200) + 100)));
 			}
