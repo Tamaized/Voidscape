@@ -10,6 +10,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -74,7 +75,8 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				RenderSystem.disableCull();
 				RenderSystem.enableDepthTest();
 				ClientUtil.bindTexture(TEXTURE);
-				Shaders.WRAPPED_POS_TEX.invokeThenEndTesselator();
+				RenderSystem.setShaderTexture(1, TheEndPortalRenderer.END_PORTAL_LOCATION);
+				Shaders.VOIDSKY_WINGS.invokeThenEndTesselator();
 				RenderSystem.disableDepthTest();
 				RenderSystem.enableCull();
 				RenderSystem.disableBlend();

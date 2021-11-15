@@ -34,6 +34,7 @@ public class Shaders {
 	public static BindableShaderInstance LINES;
 	public static BindableShaderInstance VOIDSKY;
 	public static BindableShaderInstance VOIDSKY_ENTITY;
+	public static BindableShaderInstance VOIDSKY_WINGS;
 
 	public static void init() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<RegisterShadersEvent>) event -> {
@@ -56,6 +57,8 @@ public class Shaders {
 						POSITION), shader -> VOIDSKY = (BindableShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "voidsky/entity"), DefaultVertexFormat.
 						NEW_ENTITY), shader -> VOIDSKY_ENTITY = (BindableShaderInstance) shader);
+				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "voidsky/wings"), DefaultVertexFormat.
+						POSITION_TEX), shader -> VOIDSKY_WINGS = (BindableShaderInstance) shader);
 				event.registerShader(new BindableShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "lines/lines"), DefaultVertexFormat.
 						POSITION_COLOR_NORMAL), shader -> LINES = (BindableShaderInstance) shader);
 			} catch (IOException e) {
