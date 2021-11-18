@@ -90,6 +90,7 @@ public class ClientListener {
 
 	static {
 		Shaders.init();
+		DonatorLayer.setup();
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
 			if (!hackyRenderSkip && !event.getEntity().canUpdate() && event.getEntity().
 					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {

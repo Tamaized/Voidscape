@@ -8,7 +8,8 @@
   "fragment": "voidscape:voidsky/wings",
   "attributes": [
 	"Position",
-	"UV0"
+	"UV0",
+	"Color"
   ],
   "samplers": [
 	{ "name": "Sampler0" },

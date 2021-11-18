@@ -10,6 +10,7 @@ uniform vec4 ColorModulator;
 
 in vec4 texProj0;
 in vec2 texCoord0;
+in vec4 vertexColor;
 
 const mat4 SCALE_TRANSLATE = mat4(
 0.5, 0.0, 0.0, 0.25,
@@ -40,11 +41,11 @@ float mod(float a, float b) {
 out vec4 fragColor;
 
 void main() {
-    vec3 color = vec3(0.003);
+    vec3 color = vec3(0);
     float colorMod = 0.15;
     float fade = 0.1;
 
-    float exactTick = GameTime * 24000.0;
+    float exactTick = 0.5 * 24000.0;
     float dur = 3200.0;
     float phase = cos(radians((mod(exactTick, dur) / dur) * 360.0)) * 0.5 + 0.5;
     float maxPhases = 8.0;
@@ -57,5 +58,5 @@ void main() {
         color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vec3(fade);
     }
     vec3 alpha = vec3(texture(Sampler0, texCoord0).a);
-    fragColor = vec4(color * alpha, 1) * ColorModulator;
+    fragColor = vec4(color * alpha, 1) * vertexColor * ColorModulator;
 }
