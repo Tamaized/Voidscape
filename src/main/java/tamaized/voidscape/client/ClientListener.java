@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -29,9 +28,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Config;
@@ -52,7 +51,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientListener {
 
 	private static final String CATEGORY = Voidscape.MODID.substring(0, 1).toUpperCase(Locale.US).concat(Voidscape.MODID.substring(1));
@@ -88,10 +86,13 @@ public class ClientListener {
 	private static boolean hackyRenderSkip;
 	private static float capturedPartialTicks;
 
-	static {
-		Shaders.init();
+	public static void init() {
+		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus busForge = MinecraftForge.EVENT_BUS;
+		Shaders.init(busMod);
 		DonatorLayer.setup();
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
+		TintHandler.setup(busMod);
+		busForge.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
 			if (!hackyRenderSkip && !event.getEntity().canUpdate() && event.getEntity().
 					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {
 				event.setCanceled(true);
@@ -111,7 +112,7 @@ public class ClientListener {
 				hackyRenderSkip = false;
 			}
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
+		busForge.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
 			if (event.phase == TickEvent.Phase.START) {
 				if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
 					Config.CLIENT_CONFIG.DONATOR.dirty = true;
@@ -147,7 +148,7 @@ public class ClientListener {
 						data.tick(e);
 				})));
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
+		busForge.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
 				event.setRed(0.04F);
 				event.setGreen(0.03F);
@@ -158,15 +159,15 @@ public class ClientListener {
 					}));
 			}
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<AttackEntityEvent>) event -> {
+		busForge.addListener((Consumer<AttackEntityEvent>) event -> {
 			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<ArrowNockEvent>) event -> {
+		busForge.addListener((Consumer<ArrowNockEvent>) event -> {
 			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<FOVUpdateEvent>) event -> {
+		busForge.addListener((Consumer<FOVUpdateEvent>) event -> {
 			ItemStack itemstack = event.getEntity().getUseItem();
 			if (event.getEntity().isUsingItem()) {
 				if (RegUtil.isMyBow(itemstack, Items.BOW)) {
@@ -184,6 +185,39 @@ public class ClientListener {
 				}
 			}
 		});
+		busMod.addListener((Consumer<FMLClientSetupEvent>) event -> {
+			ClientRegistry.registerKeyBinding(KEY_TURMOIL);
+			ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
+
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.PLANT.get(), RenderType.cutoutMipped());
+
+			DimensionSpecialEffects info = new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
+				@Override
+				public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
+					return Vec3.ZERO;
+				}
+
+				@Override
+				public boolean isFoggyAt(int p_230493_1_, int p_230493_2_) {
+					return true;
+				}
+
+				@Override
+				@Nullable
+				public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
+					return null;
+				}
+			};
+			info.setSkyRenderHandler(new VoidSkyRenderer());
+			DimensionSpecialEffects.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
+		});
+		busMod.addListener((Consumer<EntityRenderersEvent.AddLayers>) event -> {
+			event.getSkins().forEach(renderer -> {
+				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
+				attachRenderLayers(Objects.requireNonNull(skin));
+			});
+		});
 	}
 
 	private static KeyMapping register(KeyMapping key) {
@@ -197,40 +231,6 @@ public class ClientListener {
 
 	private static String unloc(String k) {
 		return Voidscape.MODID.concat(".KeyMapping.".concat(k));
-	}
-
-	@SubscribeEvent
-	public static void setup(FMLClientSetupEvent event) {
-		ClientRegistry.registerKeyBinding(KEY_TURMOIL);
-		ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
-		ItemBlockRenderTypes.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
-		DimensionSpecialEffects info = new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
-			@Override
-			public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
-				return Vec3.ZERO;
-			}
-
-			@Override
-			public boolean isFoggyAt(int p_230493_1_, int p_230493_2_) {
-				return true;
-			}
-
-			@Override
-			@Nullable
-			public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
-				return null;
-			}
-		};
-		info.setSkyRenderHandler(new VoidSkyRenderer());
-		DimensionSpecialEffects.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
-	}
-
-	@SubscribeEvent
-	public static void addLayers(EntityRenderersEvent.AddLayers event) {
-		event.getSkins().forEach(renderer -> {
-			LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
-			attachRenderLayers(Objects.requireNonNull(skin));
-		});
 	}
 
 	private static <T extends LivingEntity, M extends EntityModel<T>> void attachRenderLayers(LivingEntityRenderer<T, M> renderer) {

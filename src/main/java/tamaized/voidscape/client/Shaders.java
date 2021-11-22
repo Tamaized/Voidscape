@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.unsafe.UnsafeHacks;
 import tamaized.voidscape.Voidscape;
 
@@ -36,8 +36,8 @@ public class Shaders {
 	public static BindableShaderInstance VOIDSKY_ENTITY;
 	public static BindableShaderInstance VOIDSKY_WINGS;
 
-	public static void init() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener((Consumer<RegisterShadersEvent>) event -> {
+	public static void init(IEventBus bus) {
+		bus.addListener((Consumer<RegisterShadersEvent>) event -> {
 			try {
 				event.registerShader(new AlphaShaderInstance(event.getResourceManager(), new ResourceLocation(Voidscape.MODID, "alpha/pos_color"), DefaultVertexFormat.
 						POSITION_COLOR), shader -> ALPHA_POS_COLOR = (AlphaShaderInstance) shader);

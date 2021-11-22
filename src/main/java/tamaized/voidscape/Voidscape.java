@@ -31,6 +31,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
@@ -46,6 +47,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -60,6 +62,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.voidscape.asm.ASMHooks;
+import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.client.ClientInitiator;
 import tamaized.voidscape.client.ConfigScreen;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
@@ -114,6 +118,7 @@ public class Voidscape {
 
 	public Voidscape() {
 		StartupMessageManager.addModMessage("Loading Turmoil");
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientInitiator::call);
 		DonatorHandler.start();
 		TurmoilSkill.classload();
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
@@ -149,22 +154,28 @@ public class Voidscape {
 				event.setCanceled(true);
 		})));
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			if (event.player.level != null && !event.player.isSpectator() &&
+			if (event.player.level != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level)) {
+				if ((!event.player.level.isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
+						map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
 
-					(!event.player.level.isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
-							map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
+						event.player.tickCount % 30 == 0 &&
 
-					checkForVoidDimension(event.player.level) &&
-
-					event.player.tickCount % 30 == 0 &&
-
-					event.player.getRandom().nextFloat() <= 0.20F) {
-				final int dist = 64;
-				final int rad = dist / 2;
-				final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
-				BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-				if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
-					event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
+						event.player.getRandom().nextFloat() <= 0.20F) {
+					final int dist = 64;
+					final int rad = dist / 2;
+					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
+					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
+					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
+						event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
+				}
+				if (!event.player.level.isClientSide() && event.player.tickCount % 15 == 0 && event.player.getRandom().nextFloat() <= 0.15F) {
+					final int dist = 64;
+					final int rad = dist / 2;
+					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
+					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
+					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()) && event.player.level.getBlockState(dest.above()).isAir())
+						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).getRegistryName()));
+				}
 			}
 		});
 		busForge.addListener((Consumer<LivingKnockBackEvent>) event -> {

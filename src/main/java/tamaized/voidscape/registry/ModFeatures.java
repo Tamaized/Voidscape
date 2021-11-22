@@ -29,7 +29,7 @@ public class ModFeatures {
 
 		public static final Codec<BooleanDecoratorConfig> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
 				BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, BooleanDecoratorConfig::new));
-		private boolean check_below;
+		private final boolean check_below;
 
 		public BooleanDecoratorConfig(boolean val) {
 			check_below = val;

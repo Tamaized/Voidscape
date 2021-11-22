@@ -183,7 +183,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void setInfusion(float amount) {
-		infusion = amount;
+		infusion = Mth.clamp(amount, 0, 600);
 		dirty = true;
 	}
 

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:decorated",
+  "config": {
+	"feature": {
+	  "type": "random_patch",
+	  "config": {
+		"state_provider": {
+		  "type": "simple_state_provider",
+		  "state": {
+			"Name": "minecraft:grass"
+		  }
+		},
+		"block_placer": {
+		  "type": "simple_block_placer"
+		},
+		"whitelist": [ ],
+		"blacklist": [ ],
+		"tries": 24,
+		"project": false
+	  }
+	},
+	"decorator": {
+	  "type": "voidscape:seek",
+	  "config": {
+		"check_below": true
+	  }
+	}
+  }
+}

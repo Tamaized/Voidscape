@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:decorated",
+  "config": {
+	"feature": {
+	  "type": "random_patch",
+	  "config": {
+		"state_provider": {
+		  "type": "simple_state_provider",
+		  "state": {
+			"Name": "voidscape:plant",
+			"Properties": {
+			  "state": "void"
+			}
+		  }
+		},
+		"block_placer": {
+		  "type": "simple_block_placer"
+		},
+		"whitelist": [
+		  {
+			"Name": "minecraft:bedrock"
+		  }
+		],
+		"blacklist": [ ],
+		"tries": 2,
+		"yspread": 0,
+		"xspread": 3,
+		"zspread": 3,
+		"project": false
+	  }
+	},
+	"decorator": {
+	  "type": "voidscape:seek",
+	  "config": {
+		"check_below": true
+	  }
+	}
+  }
+}

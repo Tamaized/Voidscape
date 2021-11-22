@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.entity.EntityAntiBolt;
 
 import java.util.Random;
@@ -98,6 +100,13 @@ public class ModBlocks {
 			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
 	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY.
 			register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), RegUtil.ItemProps.DEFAULT.get()));
+
+	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new BlockEtherealPlant(Block.Properties.of(Material.PLANT, MaterialColor.COLOR_PURPLE).
+			noCollission().
+			instabreak().
+			sound(SoundType.CROP)));
+	public static final RegistryObject<Item> PLANT_ITEM = ModItems.REGISTRY.
+			register(PLANT.getId().getPath(), () -> new BlockItem(PLANT.get(), RegUtil.ItemProps.DEFAULT.get()));
 
 	static void classload() {
 

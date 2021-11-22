@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:decorated",
+  "config": {
+	"feature": {
+	  "type": "random_patch",
+	  "config": {
+		"state_provider": {
+		  "type": "simple_state_provider",
+		  "state": {
+			"Name": "voidscape:plant",
+			"Properties": {
+			  "state": "overworld"
+			}
+		  }
+		},
+		"block_placer": {
+		  "type": "simple_block_placer"
+		},
+		"whitelist": [
+		  {
+			"Name": "minecraft:grass_block",
+			"Properties": {
+			  "snowy": "false"
+			}
+		  }
+		],
+		"blacklist": [ ],
+		"tries": 4,
+		"yspread": 3,
+		"xspread": 3,
+		"zspread": 3,
+		"project": false
+	  }
+	},
+	"decorator": {
+	  "type": "voidscape:seek",
+	  "config": {
+		"check_below": true
+	  }
+	}
+  }
+}

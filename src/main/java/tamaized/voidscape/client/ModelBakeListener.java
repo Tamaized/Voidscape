@@ -53,7 +53,7 @@ public class ModelBakeListener {
 		add(list, object, "inventory", extra);
 	}
 
-	private static void add(List<ModelResourceLocation> list, RegistryObject object, String loc, String... extra) {
+	private static void add(List<ModelResourceLocation> list, RegistryObject<?> object, String loc, String... extra) {
 		List<String> extras = new ArrayList<>();
 		extras.add("");
 		extras.addAll(Arrays.asList(extra));
@@ -72,6 +72,7 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
+		add(fullbrightList, ModItems.FRUIT);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
@@ -94,25 +95,36 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
 		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
 		addBlock(fullbrightList, ModBlocks.NULL_WHITE);
+		add(fullbrightList, ModBlocks.PLANT, "inventory");
+		add(fullbrightList, ModBlocks.PLANT, "state=void");
+		add(fullbrightList, ModBlocks.PLANT, "state=overworld");
+		add(fullbrightList, ModBlocks.PLANT, "state=nether");
+		add(fullbrightList, ModBlocks.PLANT, "state=end");
 		fullbrightList.forEach(mrl -> {
 			final BakedModel model = event.getModelRegistry().get(mrl);
-			event.getModelRegistry().put(mrl, new FullBrightModel(model));
+			if (model != null)
+				event.getModelRegistry().put(mrl, new FullBrightModel(model));
+			else
+				Voidscape.LOGGER.error("Null Model! " + mrl);
 		});
 		overlayList.forEach(mrl -> {
 			final BakedModel model = event.getModelRegistry().get(mrl);
-			event.getModelRegistry().put(mrl, new FullBrightModel(model) {
-				@Nonnull
-				@Override
-				public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
-					return cachedQuads.computeIfAbsent(side, (face) -> {
-						List<BakedQuad> quads = model.getQuads(state, side, rand);
-						for (BakedQuad quad : quads)
-							if (quads.indexOf(quad) == 1)
-								LightUtil.setLightData(quad, 0xF000F0);
-						return quads;
-					});
-				}
-			});
+			if (model != null)
+				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
+					@Nonnull
+					@Override
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+						return cachedQuads.computeIfAbsent(side, (face) -> {
+							List<BakedQuad> quads = model.getQuads(state, side, rand);
+							for (BakedQuad quad : quads)
+								if (quads.indexOf(quad) == 1)
+									LightUtil.setLightData(quad, 0xF000F0);
+							return quads;
+						});
+					}
+				});
+			else
+				Voidscape.LOGGER.error("Null Model! " + mrl);
 		});
 
 		impBroken(ModTools.VOIDIC_CRYSTAL_SWORD.get());
@@ -141,6 +153,8 @@ public class ModelBakeListener {
 		impXBow(ModTools.CORRUPT_XBOW.get());
 
 		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
+
+
 	}
 
 	private static void impBroken(Item item) {

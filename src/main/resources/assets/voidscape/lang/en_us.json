@@ -22,12 +22,14 @@
   "block.voidscape.antirock": "Anti Rock",
   "block.voidscape.null_black": "Null",
   "block.voidscape.null_white": "Null",
+  "block.voidscape.plant": "Ethereal Plant",
 
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "item.voidscape.thunderrock": "Thunder Rock",
   "item.voidscape.antirock": "Anti Rock",
   "item.voidscape.null_black": "Null",
   "item.voidscape.null_white": "Null",
+  "item.voidscape.fruit": "Ethereal Fruit",
 
   "item.voidscape.voidic_crystal": "Voidic Crystal",
   "item.voidscape.ethereal_essence": "Ethereal Essence",
