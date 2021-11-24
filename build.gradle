@@ -19,7 +19,7 @@ repositories {
     }
 }
 
-version = "1.${minecraftVersionMajor}-${modVersion}${modVersionValue}"
+version = "1.${minecraftVersionMajor}-${modVersion}" + (hasProperty("CIVersion") ? CIVersion : modVersionValue)
 group = "tamaized.voidscape"
 archivesBaseName = "Voidscape"
 
