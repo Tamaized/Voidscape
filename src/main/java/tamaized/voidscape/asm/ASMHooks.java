@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -14,6 +15,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.MappedRegistry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -169,6 +172,16 @@ public class ASMHooks {
 	 */
 	public static long seed(long seed) {
 		HackyWorldGen.seed = seed;
+		return seed;
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.world.level.storage.LevelStorageSource#readWorldGenSettings(Dynamic, DataFixer, int)}<br>
+	 * [BEFORE FIRST ASTORE]
+	 */
+	public static Dynamic<Tag> seed(Dynamic<Tag> seed) {
+		HackyWorldGen.seed = ((CompoundTag) seed.getValue()).getLong("seed");
 		return seed;
 	}
 
