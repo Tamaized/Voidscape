@@ -19,14 +19,14 @@ repositories {
     }
 }
 
-version = "1.${minecraftVersionMajor}-${modVersion}" + (hasProperty("CIVersion") ? CIVersion : modVersionValue)
+version = "${artifactor_minecraft_version}-${artifactor_mod_version}" + (hasProperty("CIVersion") ? CIVersion : ("." + mod_version))
 group = "tamaized.voidscape"
 archivesBaseName = "Voidscape"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings("${project.mappingType}", "${project.mappingVersion}")
+    mappings("${project.mapping_type}", "${project.mapping_version}")
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -85,14 +85,14 @@ jar {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.${project.minecraftVersionMajor}.${project.minecraftVersionMinor}-${project.forgeVersion}"
+    minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
-    runtimeOnly fg.deobf("mezz.jei:${project.jeiVersion}")
+    //runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
 }
 
 task incrBuildNum doLast {
     ant.propertyfile(file: "gradle.properties") {
-        entry(key: "modVersionValue", value: Integer.parseInt(project.modVersionValue) + 1)
+        entry(key: "mod_version", value: Integer.parseInt(project.mod_version) + 1)
     }
 }
 
