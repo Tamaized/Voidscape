@@ -12,7 +12,6 @@ import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -44,10 +43,10 @@ public class ModStructures {
 			register(event, NULL, CONFIGURED_NULL, new ResourceLocation(Voidscape.MODID, "null"), 1, 2);
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<WorldEvent.Load>) event -> {
-			if (event.getWorld() instanceof ServerLevel serverWorld && ((ServerLevel) event.getWorld()).getChunkSource().generator instanceof VoidChunkGenerator) {
-				Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
+			if (event.getWorld() instanceof ServerLevel serverWorld && ((ServerLevel) event.getWorld()).getChunkSource().getGenerator() instanceof VoidChunkGenerator) {
+				Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(serverWorld.getChunkSource().getGenerator().getSettings().structureConfig());
 				tempMap.putAll(SEPARATION_SETTINGS);
-				serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
+				serverWorld.getChunkSource().getGenerator().getSettings().structureConfig = tempMap;
 			}
 		});
 	}
@@ -60,7 +59,7 @@ public class ModStructures {
 				put(structure, seperation).build();
 		SEPARATION_SETTINGS.put(structure, seperation);
 		Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(name.getNamespace(), "configured_".concat(name.getPath())), config);
-		FlatLevelGeneratorSettings.STRUCTURE_FEATURES.put(structure, config);
+		//		FlatLevelGeneratorSettings.STRUCTURE_FEATURES.put(structure, config);
 	}
 
 }

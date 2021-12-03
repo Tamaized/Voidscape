@@ -4,6 +4,7 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -19,20 +20,19 @@ import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -72,7 +72,7 @@ public class HackyWorldGen {
 
 		public DeepFreezeChunkManager(ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
 			super(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkProgressListener, chunkStatusListener_, supplier_, int_, boolean_);
-			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), new File(levelSave_.getDimensionPath(serverWorld_.dimension()), "region"), boolean_, "chunk");
+			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), levelSave_.getDimensionPath(serverWorld_.dimension()).resolve("region"), boolean_, "chunk");
 		}
 
 		@Nullable
@@ -98,10 +98,10 @@ public class HackyWorldGen {
 		private final ResourceLocation location;
 		private final RegionFileStorage deepStorage;
 
-		protected DeepFreezeIOWorker(ResourceLocation location, File file_, boolean boolean_, String string_) {
+		protected DeepFreezeIOWorker(ResourceLocation location, Path file_, boolean boolean_, String string_) {
 			super(file_, boolean_, string_);
 			this.location = location;
-			this.deepStorage = new RegionFileStorage(new File(file_, "deepfreeze"), boolean_);
+			this.deepStorage = new RegionFileStorage(file_.resolve("deepfreeze"), boolean_);
 		}
 
 		@Nullable
@@ -121,7 +121,7 @@ public class HackyWorldGen {
 				try {
 					CompoundTag compoundnbt = this.deepStorage.read(chunkPos_);
 					if (compoundnbt == null || !compoundnbt.
-							contains(Voidscape.MODID, Constants.NBT.TAG_COMPOUND) || compoundnbt.
+							contains(Voidscape.MODID, Tag.TAG_COMPOUND) || compoundnbt.
 							getCompound(Voidscape.MODID).getLong("check") < System.currentTimeMillis() / 1000L) {
 						try (InputStream stream = getClass().getResourceAsStream("/data/".
 								concat(location.getNamespace()).
@@ -168,7 +168,7 @@ public class HackyWorldGen {
 	}
 
 	public static void main(String[] args) throws IOException {
-		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "pawn"), new File("./sanitized/region/"), false, "chunk");
+		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "pawn"), Path.of("./sanitized/region/"), false, "chunk");
 		List<String> regions;
 		try (InputStream stream = worker.getRegionFolder(); InputStreamReader ir = new InputStreamReader(Objects.requireNonNull(stream)); BufferedReader reader = new BufferedReader(ir)) {
 			regions = reader.lines().collect(Collectors.toList());

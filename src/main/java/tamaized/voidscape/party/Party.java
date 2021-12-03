@@ -2,7 +2,7 @@ package tamaized.voidscape.party;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketUpdatePartyInfo;
 import tamaized.voidscape.turmoil.Duties;

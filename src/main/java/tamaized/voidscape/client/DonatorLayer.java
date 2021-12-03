@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
@@ -53,7 +53,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	}
 
 	public static void setup() {
-		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderWorldLastEvent>) event -> BUFFERS.endBatch());
+		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderLevelLastEvent>) event -> BUFFERS.endBatch());
 	}
 
 	@Override

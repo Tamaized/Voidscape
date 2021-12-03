@@ -30,20 +30,6 @@
 	  "replace_current_music": true
 	}
   },
-  "surface_builder": {
-	"type": "voidscape:exact",
-	"config": {
-	  "top_material": {
-		"Name": "air"
-	  },
-	  "under_material": {
-		"Name": "air"
-	  },
-	  "underwater_material": {
-		"Name": "air"
-	  }
-	}
-  },
   "carvers": {
 
   },
@@ -55,7 +41,16 @@
 	[ ],
 	[ ],
 	[ ],
-	[ "voidscape:thunderspire", "voidscape:fruit_patch_null" ],
+	[
+	  {
+		"feature": "voidscape:thunderspire",
+		"placement": [ ]
+	  },
+	  {
+		"feature": "voidscape:fruit_patch_null",
+		"placement": [ ]
+	  }
+	],
 	[ ],
 	[ ]
   ],

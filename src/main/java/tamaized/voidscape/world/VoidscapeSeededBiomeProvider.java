@@ -8,16 +8,17 @@ import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.newbiome.area.Area;
-import net.minecraft.world.level.newbiome.area.AreaFactory;
-import net.minecraft.world.level.newbiome.area.LazyArea;
-import net.minecraft.world.level.newbiome.context.BigContext;
-import net.minecraft.world.level.newbiome.context.LazyAreaContext;
-import net.minecraft.world.level.newbiome.layer.Layer;
-import net.minecraft.world.level.newbiome.layer.ZoomLayer;
+import net.minecraft.world.level.biome.Climate;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.world.genlayer.GenLayerVoidBiomes;
+import tamaized.voidscape.world.genlayer.legacy.Area;
+import tamaized.voidscape.world.genlayer.legacy.AreaFactory;
+import tamaized.voidscape.world.genlayer.legacy.BigContext;
+import tamaized.voidscape.world.genlayer.legacy.Layer;
+import tamaized.voidscape.world.genlayer.legacy.LazyArea;
+import tamaized.voidscape.world.genlayer.legacy.LazyAreaContext;
+import tamaized.voidscape.world.genlayer.legacy.ZoomLayer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +116,11 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 		return new VoidscapeSeededBiomeProvider(l, registry);
 	}
 
+	@Override
+	public Biome getNoiseBiome(int x, int cy, int z, Climate.Sampler p_186738_) {
+		return getRealNoiseBiome(x, cy << 2, z);
+	}
+
 	public static final int[] LAYERS;
 
 	static {
@@ -124,11 +130,6 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 		final int sliceBottom = antiSpireY + split;
 		final int sliceTop = antiSpireY + split * 2;
 		LAYERS = new int[]{antiSpireY, sliceBottom, sliceTop, thunderSpireY};
-	}
-
-	@Override
-	public Biome getNoiseBiome(int x, int cy, int z) {
-		return getRealNoiseBiome(x, cy << 2, z);
 	}
 
 	public Biome getRealNoiseBiome(int x, int y, int z) {

@@ -17,9 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
@@ -31,7 +31,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
@@ -97,18 +96,18 @@ public class ClientListener {
 					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {
 				event.setCanceled(true);
 				hackyRenderSkip = true;
-				capturedPartialTicks = event.getPartialRenderTick();
+				capturedPartialTicks = event.getPartialTick();
 				event.getRenderer().render(event.getEntity(),
 
 						Mth.lerp(1F, event.getEntity().yRotO, event.getEntity().getYRot()),
 
 						1F,
 
-						event.getMatrixStack(),
+						event.getPoseStack(),
 
-						event.getBuffers(),
+						event.getMultiBufferSource(),
 
-						event.getLight());
+						event.getPackedLight());
 				hackyRenderSkip = false;
 			}
 		});
@@ -167,21 +166,23 @@ public class ClientListener {
 			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
-		busForge.addListener((Consumer<FOVUpdateEvent>) event -> {
-			ItemStack itemstack = event.getEntity().getUseItem();
-			if (event.getEntity().isUsingItem()) {
-				if (RegUtil.isMyBow(itemstack, Items.BOW)) {
-					int i = event.getEntity().getTicksUsingItem();
-					float f1 = (float) i / 20.0F;
-					if (f1 > 1.0F) {
-						f1 = 1.0F;
-					} else {
-						f1 = f1 * f1;
-					}
+		busForge.addListener((Consumer<EntityViewRenderEvent.FieldOfView>) event -> {
+			if (event.getCamera().getEntity() instanceof LivingEntity living) {
+				ItemStack itemstack = living.getUseItem();
+				if (living.isUsingItem()) {
+					if (RegUtil.isMyBow(itemstack, Items.BOW)) {
+						int i = living.getTicksUsingItem();
+						float f1 = (float) i / 20.0F;
+						if (f1 > 1.0F) {
+							f1 = 1.0F;
+						} else {
+							f1 = f1 * f1;
+						}
 
-					event.setNewfov(event.getFov() * (1.0F - f1 * 0.15F));
-				} else if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && event.getEntity().isScoping()) {
-					event.setNewfov(0.1F);
+						event.setFOV(event.getFOV() * (1.0F - f1 * 0.15F));
+					} else if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && living instanceof Player player && player.isScoping()) {
+						event.setFOV(0.1F);
+					}
 				}
 			}
 		});

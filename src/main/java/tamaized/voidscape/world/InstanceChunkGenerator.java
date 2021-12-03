@@ -10,13 +10,17 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.blending.Blender;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -63,7 +67,17 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public void buildSurfaceAndBedrock(WorldGenRegion worldGenRegion_, ChunkAccess chunk_) {
+	public Climate.Sampler climateSampler() {
+		return (p_188541_, p_188542_, p_188543_) -> Climate.target(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+	}
+
+	@Override
+	public void applyCarvers(WorldGenRegion p_187691_, long p_187692_, BiomeManager p_187693_, StructureFeatureManager p_187694_, ChunkAccess p_187695_, GenerationStep.Carving p_187696_) {
+
+	}
+
+	@Override
+	public void buildSurface(WorldGenRegion p_187697_, StructureFeatureManager p_187698_, ChunkAccess chunk_) {
 		ChunkPos pos = chunk_.getPos();
 		if (pos.x == 0 && pos.z == 0) {
 			BlockPos.MutableBlockPos bp = new BlockPos.MutableBlockPos();
@@ -76,13 +90,28 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
+	public void spawnOriginalMobs(WorldGenRegion p_62167_) {
+
+	}
+
+	@Override
 	public int getGenDepth() {
 		return 0;
 	}
 
 	@Override
-	public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, StructureFeatureManager structureManager_, ChunkAccess chunk_) {
+	public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender p_187749_, StructureFeatureManager structureManager_, ChunkAccess chunk_) {
 		return CompletableFuture.completedFuture(chunk_);
+	}
+
+	@Override
+	public int getSeaLevel() {
+		return 0;
+	}
+
+	@Override
+	public int getMinY() {
+		return 0;
 	}
 
 	@Override

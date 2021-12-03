@@ -2,8 +2,8 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import tamaized.voidscape.Voidscape;
 
 public class ModSounds {

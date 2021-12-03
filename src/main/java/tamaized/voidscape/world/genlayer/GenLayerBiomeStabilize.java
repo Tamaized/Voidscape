@@ -1,8 +1,8 @@
 package tamaized.voidscape.world.genlayer;
 
-import net.minecraft.world.level.newbiome.area.Area;
-import net.minecraft.world.level.newbiome.context.BigContext;
-import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer1;
+import tamaized.voidscape.world.genlayer.legacy.Area;
+import tamaized.voidscape.world.genlayer.legacy.AreaTransformer1;
+import tamaized.voidscape.world.genlayer.legacy.BigContext;
 
 public enum GenLayerBiomeStabilize implements AreaTransformer1 {
 

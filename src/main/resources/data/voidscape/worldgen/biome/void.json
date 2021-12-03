@@ -30,20 +30,6 @@
 	  "replace_current_music": true
 	}
   },
-  "surface_builder": {
-	"type": "nope",
-	"config": {
-	  "top_material": {
-		"Name": "bedrock"
-	  },
-	  "under_material": {
-		"Name": "bedrock"
-	  },
-	  "underwater_material": {
-		"Name": "bedrock"
-	  }
-	}
-  },
   "carvers": {
 
   },
@@ -55,7 +41,12 @@
 	[ ],
 	[ ],
 	[ ],
-	[ "voidscape:fruit_patch_void" ],
+	[
+	  {
+		"feature": "voidscape:fruit_patch_void",
+		"placement": [ ]
+	  }
+	],
 	[ ],
 	[ ]
   ],

@@ -152,7 +152,7 @@ public class ASMHooks {
 	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, File, DataFixer, boolean, Executor)}
 	 */
 	public static EntityStorage entityStorage(EntityStorage o, ChunkGenerator chunkGenerator_, ServerLevel level, LevelStorageSource.LevelStorageAccess file) {
-		return chunkGenerator_ instanceof InstanceChunkGenerator ? new EntityStorage(level, new File(file.getDimensionPath(level.dimension()), "entities"), level.getServer().getFixerUpper(), level.getServer().forceSynchronousWrites(), level.getServer()) {
+		return chunkGenerator_ instanceof InstanceChunkGenerator ? new EntityStorage(level, file.getDimensionPath(level.dimension()).resolve("entities"), level.getServer().getFixerUpper(), level.getServer().forceSynchronousWrites(), level.getServer()) {
 			@Override
 			public CompletableFuture<ChunkEntities<Entity>> loadEntities(ChunkPos pos) {
 				return CompletableFuture.completedFuture(new ChunkEntities<>(pos, ImmutableList.of()));

@@ -16,9 +16,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.entity.EntityAntiBolt;
 
@@ -32,8 +32,8 @@ public class ModBlocks {
 			strength(3F, 3F).
 			requiresCorrectToolForDrops()) {
 		@Override
-		public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-			boolean flag = super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+		public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+			boolean flag = super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
 			world.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), world.isClientSide() ? 11 : 3);
 			return flag;
 		}

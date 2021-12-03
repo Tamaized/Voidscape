@@ -2,6 +2,7 @@
   "forge:registry_name": "voidscape:nether",
   "precipitation": "none",
   "temperature": 0,
+  "temperature_modifier": "none",
   "downfall": 0.0,
   "category": "none",
   "depth": -3.0,
@@ -30,20 +31,6 @@
 	  "replace_current_music": true
 	}
   },
-  "surface_builder": {
-	"type": "voidscape:exact_noise_top",
-	"config": {
-	  "top_material": {
-		"Name": "crimson_nylium"
-	  },
-	  "under_material": {
-		"Name": "netherrack"
-	  },
-	  "underwater_material": {
-		"Name": "bedrock"
-	  }
-	}
-  },
   "carvers": {
 
   },
@@ -55,7 +42,21 @@
 	[ ],
 	[ ],
 	[ ],
-	[ "minecraft:crimson_fungi", "voidscape:fruit_patch_nether" ],
+	[
+	  {
+		"feature": "minecraft:crimson_fungus",
+		"placement": [
+		  {
+			"type": "minecraft:count",
+			"count": 6
+		  }
+		]
+	  },
+	  {
+		"feature": "voidscape:fruit_patch_nether",
+		"placement": [ ]
+	  }
+	],
 	[ ],
 	[ ]
   ],

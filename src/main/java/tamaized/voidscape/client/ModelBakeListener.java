@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -18,11 +19,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
@@ -224,7 +225,7 @@ public class ModelBakeListener {
 			if (location == null)
 				continue;
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			ModelLoader bakery = ModelLoader.instance();
+			ModelBakery bakery = ForgeModelBakery.instance();
 			if (bakery == null)
 				continue;
 			ResourceLocation rl = new ResourceLocation(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
@@ -238,7 +239,7 @@ public class ModelBakeListener {
 	}
 
 	public static void clearOldModels() {
-		ModelLoader bakery = ModelLoader.instance();
+		ModelBakery bakery = ForgeModelBakery.instance();
 		if (bakery == null)
 			return;
 		REMAPPER.keySet().forEach(location -> {

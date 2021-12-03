@@ -1,0 +1,9 @@
+{
+  "feature": "voidscape:fruit_patch_nether",
+  "placement": [
+	{
+	  "type": "voidscape:seek",
+	  "check_below": true
+	}
+  ]
+}

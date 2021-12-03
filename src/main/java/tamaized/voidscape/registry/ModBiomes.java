@@ -27,8 +27,6 @@ public class ModBiomes {
 		REGISTRY.register(id, () -> new Biome.BiomeBuilder().
 				precipitation(Biome.Precipitation.NONE).
 				biomeCategory(Biome.BiomeCategory.NONE).
-				depth(0).
-				scale(0).
 				temperature(0).
 				downfall(0).
 				specialEffects(new BiomeSpecialEffects.Builder().fogColor(0).skyColor(0).waterFogColor(0).waterColor(0).build()).

@@ -167,7 +167,7 @@ public class SpellsScreen extends TurmoilScreen {
 			RenderSystem.enableDepthTest();
 			Tesselator.getInstance().end();
 			RenderSystem.disableDepthTest();
-			if (this.isHovered())
+			if (this.isHoveredOrFocused())
 				this.renderToolTip(stack, mouseX, mouseY);
 		}
 	}

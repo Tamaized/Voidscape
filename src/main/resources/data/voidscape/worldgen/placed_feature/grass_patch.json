@@ -1,0 +1,9 @@
+{
+  "feature": "voidscape:grass_patch",
+  "placement": [
+	{
+	  "type": "voidscape:seek",
+	  "check_below": true
+	}
+  ]
+}

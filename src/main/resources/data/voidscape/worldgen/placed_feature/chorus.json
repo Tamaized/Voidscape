@@ -1,0 +1,9 @@
+{
+  "feature": "voidscape:chorus",
+  "placement": [
+	{
+	  "type": "voidscape:seek",
+	  "check_below": true
+	}
+  ]
+}

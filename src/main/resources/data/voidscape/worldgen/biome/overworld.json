@@ -30,23 +30,6 @@
 	  "replace_current_music": true
 	}
   },
-  "surface_builder": {
-	"type": "voidscape:exact",
-	"config": {
-	  "top_material": {
-		"Name": "grass_block",
-		"Properties": {
-		  "snowy": "false"
-		}
-	  },
-	  "under_material": {
-		"Name": "stone"
-	  },
-	  "underwater_material": {
-		"Name": "bedrock"
-	  }
-	}
-  },
   "carvers": {
 
   },
@@ -58,7 +41,20 @@
 	[ ],
 	[ ],
 	[ ],
-	[ "voidscape:oak", "voidscape:grass_patch", "voidscape:fruit_patch_overworld" ],
+	[
+	  {
+		"feature": "voidscape:oak",
+		"placement": [ ]
+	  },
+	  {
+		"feature": "voidscape:grass_patch",
+		"placement": [ ]
+	  },
+	  {
+		"feature": "voidscape:fruit_patch_overworld",
+		"placement": [ ]
+	  }
+	],
 	[ ],
 	[ ]
   ],

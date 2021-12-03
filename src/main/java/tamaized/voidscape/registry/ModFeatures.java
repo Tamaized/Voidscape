@@ -4,54 +4,62 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.DecoratorConfiguration;
-import net.minecraft.world.level.levelgen.placement.DecorationContext;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraft.world.level.levelgen.placement.PlacementContext;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.BooleanFeatureConfig;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
 
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ModFeatures {
 
 	private static final DeferredRegister<Feature<?>> REGISTRY = RegUtil.create(ForgeRegistries.FEATURES);
-	private static final DeferredRegister<FeatureDecorator<?>> DECO_REGISTRY = RegUtil.create(ForgeRegistries.DECORATORS);
 
-	public static class BooleanDecoratorConfig implements DecoratorConfiguration {
+	private static class SeekDownPlacementMod extends PlacementModifier {
 
-		public static final Codec<BooleanDecoratorConfig> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
-				BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, BooleanDecoratorConfig::new));
+		public static final Codec<SeekDownPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
+				BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, SeekDownPlacementMod::new));
+
+		public static PlacementModifierType<SeekDownPlacementMod> TYPE;
+
 		private final boolean check_below;
 
-		public BooleanDecoratorConfig(boolean val) {
+		public SeekDownPlacementMod(boolean val) {
 			check_below = val;
 		}
 
-		public boolean get() {
-			return check_below;
-		}
-	}
-
-	public static final RegistryObject<FeatureDecorator<BooleanDecoratorConfig>> SEEK_DOWN_PLACEMENT = DECO_REGISTRY.register("seek", () -> new FeatureDecorator<>(BooleanDecoratorConfig.CODEC) {
 		@Override
-		public Stream<BlockPos> getPositions(DecorationContext context, Random random, BooleanDecoratorConfig config, BlockPos pos) {
+		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
 			BlockPos.MutableBlockPos seek = pos.mutable().move(Direction.UP, random.nextInt(15));
 			BlockPos.MutableBlockPos check = seek.mutable().move(Direction.DOWN, 1);
-			while (seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(config.get() ? check : seek).isAir()) {
+			while (seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {
 				seek.move(Direction.DOWN, 1);
 				check.move(Direction.DOWN, 1);
 			}
 			return Stream.of(seek);
 		}
-	});
+
+		@Override
+		public PlacementModifierType<?> type() {
+			return TYPE;
+		}
+
+	}
 
 	public static final RegistryObject<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY.register("spire", () -> new Feature<>(BooleanFeatureConfig.CODEC) {
 		@Override
@@ -100,7 +108,14 @@ public class ModFeatures {
 		}
 	});
 
-	static void classload() {
+	static void classload(IEventBus bus) {
+		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
+			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
+		});
+	}
+
+	private static <T extends PlacementModifier> PlacementModifierType<T> registerPlacementMod(String name, Codec<T> codec) {
+		return Registry.register(Registry.PLACEMENT_MODIFIERS, new ResourceLocation(Voidscape.MODID, name), () -> codec);
 	}
 
 }

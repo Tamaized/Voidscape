@@ -1,0 +1,8 @@
+{
+  "feature": "voidscape:thunderspire",
+  "placement": [
+	{
+	  "type": "minecraft:in_square"
+	}
+  ]
+}

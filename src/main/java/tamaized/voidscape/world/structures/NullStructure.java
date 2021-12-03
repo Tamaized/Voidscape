@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -19,14 +18,15 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -36,12 +36,32 @@ import tamaized.voidscape.registry.RegUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 
 	public NullStructure() {
-		super(NoneFeatureConfiguration.CODEC);
+		super(NoneFeatureConfiguration.CODEC, new PieceGeneratorSupplier<NoneFeatureConfiguration>() {
+			@Override
+			public Optional<PieceGenerator<NoneFeatureConfiguration>> createGenerator(Context<NoneFeatureConfiguration> p_197348_) {
+				return Optional.of(new PieceGenerator<NoneFeatureConfiguration>() {
+					@Override
+					public void generatePieces(StructurePiecesBuilder builder, Context<NoneFeatureConfiguration> context) {
+						BlockPos blockpos = new BlockPos(context.chunkPos().getMinBlockX(), 0, context.chunkPos().getMinBlockZ());
+						Pieces.addPieces(context.structureManager(), blockpos, Pieces.TEMPLATE_ENTRANCE, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, builder);
+						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, builder);
+					}
+				});
+			}
+		});
 	}
 
 	@Override
@@ -50,33 +70,8 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeSource biomeSource, long p_160457_, WorldgenRandom rand, ChunkPos pos, Biome biome, ChunkPos potential, NoneFeatureConfiguration config, LevelHeightAccessor heightmap) {
+	public boolean canGenerate(RegistryAccess registry, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager manager, long seed, ChunkPos pos, NoneFeatureConfiguration config, LevelHeightAccessor height, Predicate<Biome> correctBiome) {
 		return pos.x == 0 && pos.z == 0;
-	}
-
-	@Override
-	public StructureStartFactory<NoneFeatureConfiguration> getStartFactory() {
-		return (config, pos, ref, seed) -> new StructureStart<>(config, pos, ref, seed) {
-
-			@Override
-			public CompoundTag createTag(ServerLevel p_163607_, ChunkPos p_163608_) {
-				return super.createTag(p_163607_, p_163608_);
-			}
-
-
-			@Override
-			public void generatePieces(RegistryAccess p_163615_, ChunkGenerator p_163616_, StructureManager manager, ChunkPos pos, Biome p_163619_, NoneFeatureConfiguration config, LevelHeightAccessor p_163621_) {
-				BlockPos blockpos = new BlockPos(pos.getMinBlockX(), 0, pos.getMinBlockZ());
-				Pieces.addPieces(manager, blockpos, Pieces.TEMPLATE_ENTRANCE, this);
-				Pieces.addPieces(manager, blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, this);
-				Pieces.addPieces(manager, blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, this);
-				Pieces.addPieces(manager, blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, this);
-				Pieces.addPieces(manager, blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, this);
-				Pieces.addPieces(manager, blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, this);
-				Pieces.addPieces(manager, blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, this);
-				Pieces.addPieces(manager, blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, this);
-			}
-		};
 	}
 
 	@Override
@@ -114,8 +109,8 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 					boundingBox = new BoundingBox(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxY() + 1, boundingBox.maxZ());
 			}
 
-			public Piece(ServerLevel level, CompoundTag tag) {
-				super(MAIN, tag, level, (location) -> makeSettings());
+			public Piece(StructureManager manager, CompoundTag tag) {
+				super(MAIN, tag, manager, (location) -> makeSettings());
 				if (boundingBox.maxY() == 0)
 					boundingBox = new BoundingBox(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxY() + 1, boundingBox.maxZ());
 			}
@@ -125,14 +120,9 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 			}
 
 			@Override
-			public boolean postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos pos, BlockPos bpos) {
+			public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos pos, BlockPos bpos) {
 				boundingBox = new BoundingBox(boundingBox.minX(), boundingBox.minY() - 1, boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxY(), boundingBox.maxZ());
-				return super.postProcess(level, manager, generator, random, boundingBox, pos, bpos);
-			}
-
-			@Override
-			protected void addAdditionalSaveData(ServerLevel level, CompoundTag tag) {
-				super.addAdditionalSaveData(level, tag);
+				super.postProcess(level, manager, generator, random, boundingBox, pos, bpos);
 			}
 
 			@Override

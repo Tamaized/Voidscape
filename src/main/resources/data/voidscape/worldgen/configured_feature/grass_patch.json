@@ -1,29 +1,19 @@
 {
-  "type": "minecraft:decorated",
+  "type": "minecraft:random_patch",
   "config": {
-	"feature": {
-	  "type": "random_patch",
-	  "config": {
-		"state_provider": {
-		  "type": "simple_state_provider",
-		  "state": {
-			"Name": "minecraft:grass"
-		  }
-		},
-		"block_placer": {
-		  "type": "simple_block_placer"
-		},
-		"whitelist": [ ],
-		"blacklist": [ ],
-		"tries": 24,
-		"project": false
+	"feature": "voidscape:grass_patch",
+	"state_provider": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "minecraft:grass"
 	  }
 	},
-	"decorator": {
-	  "type": "voidscape:seek",
-	  "config": {
-		"check_below": true
-	  }
-	}
+	"block_placer": {
+	  "type": "simple_block_placer"
+	},
+	"whitelist": [ ],
+	"blacklist": [ ],
+	"tries": 24,
+	"project": false
   }
 }

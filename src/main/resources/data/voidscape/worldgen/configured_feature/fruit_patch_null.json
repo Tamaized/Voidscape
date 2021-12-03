@@ -1,39 +1,29 @@
 {
-  "type": "minecraft:decorated",
+  "type": "minecraft:random_patch",
   "config": {
-	"feature": {
-	  "type": "random_patch",
-	  "config": {
-		"state_provider": {
-		  "type": "simple_state_provider",
-		  "state": {
-			"Name": "voidscape:plant",
-			"Properties": {
-			  "state": "null"
-			}
-		  }
-		},
-		"block_placer": {
-		  "type": "simple_block_placer"
-		},
-		"whitelist": [
-		  {
-			"Name": "minecraft:bedrock"
-		  }
-		],
-		"blacklist": [ ],
-		"tries": 4,
-		"yspread": 0,
-		"xspread": 3,
-		"zspread": 3,
-		"project": false
+	"feature": "voidscape:fruit_patch_null",
+	"state_provider": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "voidscape:plant",
+		"Properties": {
+		  "state": "null"
+		}
 	  }
 	},
-	"decorator": {
-	  "type": "voidscape:seek",
-	  "config": {
-		"check_below": true
+	"block_placer": {
+	  "type": "simple_block_placer"
+	},
+	"whitelist": [
+	  {
+		"Name": "minecraft:bedrock"
 	  }
-	}
+	],
+	"blacklist": [ ],
+	"tries": 4,
+	"yspread": 0,
+	"xspread": 3,
+	"zspread": 3,
+	"project": false
   }
 }

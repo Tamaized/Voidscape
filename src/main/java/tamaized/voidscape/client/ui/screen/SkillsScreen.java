@@ -99,8 +99,8 @@ public class SkillsScreen extends TurmoilScreen {
 				float cos = Mth.cos(theta);
 				float sin = Mth.sin(theta);
 				float dist = Mth.sqrt(Mth.square(p2.x - p1.x) + Mth.square(p2.y - p1.y));
-				boolean hover = line.source().isHovered() || data.hasSkill(line.source().getSkill());
-				boolean missingReq = line.source().isHovered() && !data.hasSkill(line.dest().getSkill());
+				boolean hover = line.source().isHoveredOrFocused() || data.hasSkill(line.source().getSkill());
+				boolean missingReq = line.source().isHoveredOrFocused() && !data.hasSkill(line.dest().getSkill());
 				//buffer.vertex(p1.x, p1.y, 0).color(1f, 0, 0, 1f).endVertex();
 				for (float t = 0; t < dist + 1; t += 1F) {
 					float y = 8F * Mth.sin((float) Math.toRadians(2F * Math.PI + offset * 31 + ClientUtil.tick)) * Mth.sin((float) Math.toRadians(t * Math.PI * 2F - ClientUtil.tick * 3F));
@@ -200,7 +200,7 @@ public class SkillsScreen extends TurmoilScreen {
 				return;
 			BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-			final float color = data.hasSkill(skill) || (isHovered() && !skill.disabled() && data.canClaim(skill)) ? 1.0F : 0.25F;
+			final float color = data.hasSkill(skill) || (isHoveredOrFocused() && !skill.disabled() && data.canClaim(skill)) ? 1.0F : 0.25F;
 			final float activeColor = active || data.hasSkill(skill) ? color : 0.0F;
 			final float alpha = 1.0F;
 			ClientUtil.bindTexture(skill.getTexture());
@@ -212,7 +212,7 @@ public class SkillsScreen extends TurmoilScreen {
 			RenderSystem.enableDepthTest();
 			Shaders.WRAPPED_POS_TEX_COLOR.invokeThenEndTesselator();
 			RenderSystem.disableDepthTest();
-			if (this.isHovered())
+			if (this.isHoveredOrFocused())
 				this.renderToolTip(stack, mouseX, mouseY);
 		}
 	}

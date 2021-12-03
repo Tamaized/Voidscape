@@ -2,8 +2,8 @@ package tamaized.voidscape.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.client.ClientPacketJoinPartyError;
 import tamaized.voidscape.network.client.ClientPacketResetPartyInfo;

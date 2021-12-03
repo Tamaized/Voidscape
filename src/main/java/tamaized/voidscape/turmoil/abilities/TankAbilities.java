@@ -14,6 +14,7 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ToolActions;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEffects;
@@ -62,7 +63,7 @@ public class TankAbilities {
 	public static final TurmoilAbility EMPOWER_SHIELD_2X_NULL = new TurmoilAbility(unloc("empower_shield_2x_null"), TurmoilAbility.Type.Voidic, 400, 5 * 20, (spell, caster) -> ModEffects.
 			apply(caster, ModEffects.EMPOWER_SHIELD_2X_NULL.get(), 10 * 20, 0));
 	public static final TurmoilAbility BACKSTEP = new TurmoilAbility(unloc("backstep"), TurmoilAbility.Type.Null, 200, 5 * 20, (spell, caster) -> {
-		if (!caster.getOffhandItem().isShield(caster))
+		if (!caster.getOffhandItem().canPerformAction(ToolActions.SHIELD_BLOCK))
 			return false;
 		caster.setDeltaMovement(caster.getLookAngle().yRot((float) Math.toRadians(180)).add(0F, 0.5F, 0F));
 		if (caster instanceof ServerPlayer)

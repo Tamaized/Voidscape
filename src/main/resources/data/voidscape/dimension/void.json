@@ -6,16 +6,6 @@
 	  "type": "voidscape:biomeprovider"
 	},
 	"settings": {
-	  "bedrock_roof_position": -10,
-	  "bedrock_floor_position": -10,
-	  "sea_level": 0,
-	  "noise_caves_enabled": false,
-	  "deepslate_enabled": false,
-	  "ore_veins_enabled": false,
-	  "noodle_caves_enabled": false,
-	  "min_surface_level": 0,
-	  "aquifers_enabled": false,
-	  "disable_mob_generation": false,
 	  "structures": {
 		"stronghold": {
 		  "distance": 0,
@@ -27,8 +17,8 @@
 		}
 	  },
 	  "noise": {
-		"height": 256,
 		"min_y": 0,
+		"height": 256,
 		"sampling": {
 		  "xz_scale": 0.9999999814507745,
 		  "y_scale": 3.0,
@@ -47,19 +37,130 @@
 		},
 		"size_horizontal": 1,
 		"size_vertical": 2,
-		"density_factor": 1.0,
-		"density_offset": -0.46875,
-		"simplex_surface_noise": false,
-		"random_density_offset": true,
-		"island_noise_override": false,
-		"amplified": false
+		"terrain_shaper": {
+		  "offset": {
+			"location": 0,
+			"value": 0,
+			"derivative": 0
+		  },
+		  "factor": {
+			"location": 0,
+			"value": 0,
+			"derivative": 0
+		  },
+		  "jaggedness": {
+			"location": 0,
+			"value": 0,
+			"derivative": 0
+		  }
+		}
 	  },
 	  "default_block": {
 		"Name": "minecraft:bedrock"
 	  },
 	  "default_fluid": {
 		"Name": "minecraft:air"
-	  }
+	  },
+	  "surface_rule": {
+		"sequence": [
+		  {
+			"condition": {
+			  "if_true": {
+				"biome": {
+				  "biome_is": [
+					"voidscape:void",
+					"voidscape:antispire",
+					"voidscape:thunderspire"
+				  ]
+				}
+			  },
+			  "then_run": {
+				"sequence": [
+				  {
+					"condition": {
+					  "if_true": "above_preliminary_surface",
+					  "then_run": {
+						"block": {
+						  "Name": "bedrock"
+						}
+					  }
+					}
+				  },
+				  {
+					"condition": {
+					  "if_true": {
+						"stone_depth": {
+						  "offset": -3,
+						  "add_surface_depth": true,
+						  "add_surface_secondary_depth": false,
+						  "surface_type": "ceiling"
+						}
+					  },
+					  "then_run": {
+						"block": {
+						  "Name": "bedrock"
+						}
+					  }
+					}
+				  }
+				]
+			  }
+			}
+		  },
+		  {
+			"condition": {
+			  "if_true": {
+				"biome": {
+				  "biome_is": [
+					"voidscape:overworld"
+				  ]
+				}
+			  },
+			  "then_run": {
+				"sequence": [
+				  {
+					"condition": {
+					  "if_true": "above_preliminary_surface",
+					  "then_run": {
+						"block": {
+						  "Name": "grass_block",
+						  "Properties": {
+							"snowy": "false"
+						  }
+						}
+					  }
+					}
+				  },
+				  {
+					"condition": {
+					  "if_true": {
+						"stone_depth": {
+						  "offset": -3,
+						  "add_surface_depth": true,
+						  "add_surface_secondary_depth": false,
+						  "surface_type": "ceiling"
+						}
+					  },
+					  "then_run": {
+						"block": {
+						  "Name": "stone"
+						}
+					  }
+					}
+				  }
+				]
+			  }
+			}
+		  }
+		]
+	  },
+	  "sea_level": 0,
+	  "disable_mob_generation": false,
+	  "aquifers_enabled": false,
+	  "noise_caves_enabled": false,
+	  "ore_veins_enabled": false,
+	  "noodle_caves_enabled": false,
+	  "legacy_random_source": true
 	}
   }
 }

@@ -1,16 +1,7 @@
 {
+  "type": "voidscape:spire",
   "config": {
-	"feature": {
-	  "config": {
-		"invert": true
-	  },
-	  "type": "voidscape:spire"
-	},
-	"decorator": {
-	  "config": {
-	  },
-	  "type": "minecraft:square"
-	}
-  },
-  "type": "minecraft:decorated"
+	"feature": "voidscape:antispire",
+	"invert": true
+  }
 }

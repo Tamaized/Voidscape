@@ -30,20 +30,6 @@
 	  "replace_current_music": true
 	}
   },
-  "surface_builder": {
-	"type": "voidscape:exact",
-	"config": {
-	  "top_material": {
-		"Name": "end_stone"
-	  },
-	  "under_material": {
-		"Name": "end_stone"
-	  },
-	  "underwater_material": {
-		"Name": "bedrock"
-	  }
-	}
-  },
   "carvers": {
 
   },
@@ -55,7 +41,16 @@
 	[ ],
 	[ ],
 	[ ],
-	[ "voidscape:chorus", "voidscape:fruit_patch_end" ],
+	[
+	  {
+		"feature": "voidscape:chorus",
+		"placement": [ ]
+	  },
+	  {
+		"feature": "voidscape:fruit_patch_end",
+		"placement": [ ]
+	  }
+	],
 	[ ],
 	[ ]
   ],

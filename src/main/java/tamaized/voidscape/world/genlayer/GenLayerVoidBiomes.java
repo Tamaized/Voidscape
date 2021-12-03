@@ -1,9 +1,9 @@
 package tamaized.voidscape.world.genlayer;
 
-import net.minecraft.world.level.newbiome.context.Context;
-import net.minecraft.world.level.newbiome.layer.traits.AreaTransformer0;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
+import tamaized.voidscape.world.genlayer.legacy.AreaTransformer0;
+import tamaized.voidscape.world.genlayer.legacy.Context;
 
 public enum GenLayerVoidBiomes implements AreaTransformer0 {
 	INSTANCE;

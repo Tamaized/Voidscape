@@ -1,0 +1,28 @@
+{
+  "feature": "voidscape:oak",
+  "placement": [
+	{
+	  "type": "minecraft:count",
+	  "count": {
+		"type": "weighted_list",
+		"distribution": [
+		  {
+			"weight": 0.1,
+			"data": 6
+		  },
+		  {
+			"weight": 0.9,
+			"data": 5
+		  }
+		]
+	  }
+	},
+	{
+	  "type": "minecraft:in_square"
+	},
+	{
+	  "type": "voidscape:seek",
+	  "check_below": true
+	}
+  ]
+}

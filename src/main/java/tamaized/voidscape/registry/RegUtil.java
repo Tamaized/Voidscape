@@ -57,11 +57,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryObject;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 
@@ -103,7 +103,7 @@ public class RegUtil {
 		return false;
 	}
 
-	public static StructurePieceType registerStructurePiece(String name, StructurePieceType piece) {
+	public static StructurePieceType registerStructurePiece(String name, StructurePieceType.StructureTemplateType piece) {
 		return Registry.register(Registry.STRUCTURE_PIECE, new ResourceLocation(Voidscape.MODID, name.toLowerCase(Locale.ROOT)), piece);
 	}
 
@@ -119,8 +119,7 @@ public class RegUtil {
 		ModTools.classload();
 		ModEntities.classload();
 		ModBiomes.classload();
-		ModSurfaceBuilders.classload();
-		ModFeatures.classload();
+		ModFeatures.classload(bus);
 		ModStructures.classload(bus);
 		class FixedUpgradeRecipe extends UpgradeRecipe {
 			public FixedUpgradeRecipe(ResourceLocation p_44523_, Ingredient p_44524_, Ingredient p_44525_, ItemStack p_44526_) {
@@ -446,11 +445,6 @@ public class RegUtil {
 					if (isBroken(stack))
 						tooltip.add(new TranslatableComponent(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
 					super.appendHoverText(stack, worldIn, tooltip, flagIn);
-				}
-
-				@Override
-				public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-					return true;
 				}
 
 				@Override
