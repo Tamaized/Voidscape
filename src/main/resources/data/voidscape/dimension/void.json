@@ -151,6 +151,132 @@
 				]
 			  }
 			}
+		  },
+		  {
+			"condition": {
+			  "if_true": {
+				"biome": {
+				  "biome_is": [
+					"voidscape:nether"
+				  ]
+				}
+			  },
+			  "then_run": {
+				"sequence": [
+				  {
+					"condition": {
+					  "if_true": "above_preliminary_surface",
+					  "then_run": {
+						"block": {
+						  "Name": "crimson_nylium"
+						}
+					  }
+					}
+				  },
+				  {
+					"condition": {
+					  "if_true": {
+						"stone_depth": {
+						  "offset": -3,
+						  "add_surface_depth": true,
+						  "add_surface_secondary_depth": false,
+						  "surface_type": "ceiling"
+						}
+					  },
+					  "then_run": {
+						"block": {
+						  "Name": "netherrack"
+						}
+					  }
+					}
+				  }
+				]
+			  }
+			}
+		  },
+		  {
+			"condition": {
+			  "if_true": {
+				"biome": {
+				  "biome_is": [
+					"voidscape:end"
+				  ]
+				}
+			  },
+			  "then_run": {
+				"sequence": [
+				  {
+					"condition": {
+					  "if_true": "above_preliminary_surface",
+					  "then_run": {
+						"block": {
+						  "Name": "end_stone"
+						}
+					  }
+					}
+				  },
+				  {
+					"condition": {
+					  "if_true": {
+						"stone_depth": {
+						  "offset": -3,
+						  "add_surface_depth": true,
+						  "add_surface_secondary_depth": false,
+						  "surface_type": "ceiling"
+						}
+					  },
+					  "then_run": {
+						"block": {
+						  "Name": "end_stone"
+						}
+					  }
+					}
+				  }
+				]
+			  }
+			}
+		  },
+		  {
+			"condition": {
+			  "if_true": {
+				"biome": {
+				  "biome_is": [
+					"voidscape:null"
+				  ]
+				}
+			  },
+			  "then_run": {
+				"sequence": [
+				  {
+					"condition": {
+					  "if_true": "above_preliminary_surface",
+					  "then_run": {
+						"block": {
+						  "Name": "air"
+						}
+					  }
+					}
+				  },
+				  {
+					"condition": {
+					  "if_true": {
+						"stone_depth": {
+						  "offset": -3,
+						  "add_surface_depth": true,
+						  "add_surface_secondary_depth": false,
+						  "surface_type": "ceiling"
+						}
+					  },
+					  "then_run": {
+						"block": {
+						  "Name": "air"
+						}
+					  }
+					}
+				  }
+				]
+			  }
+			}
 		  }
 		]
 	  },
