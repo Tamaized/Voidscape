@@ -16,7 +16,7 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'net.minecraft.server.level.ServerChunkCache',
                 'methodName': '<init>',
-                'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureManager;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/chunk/ChunkGenerator;IZLnet/minecraft/server/level/progress/ChunkProgressListener;Lnet/minecraft/world/level/entity/ChunkStatusUpdateListener;Ljava/util/function/Supplier;)V'
+                'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureManager;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/chunk/ChunkGenerator;IIZLnet/minecraft/server/level/progress/ChunkProgressListener;Lnet/minecraft/world/level/entity/ChunkStatusUpdateListener;Ljava/util/function/Supplier;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
@@ -41,18 +41,12 @@ function initializeCoreMod() {
                             'Lnet/minecraft/server/level/ServerChunkCache$MainThreadExecutor;'
                             ),
                         new VarInsnNode(Opcodes.ALOAD, 0),
-                        new VarInsnNode(Opcodes.ALOAD, 0),
-                        new MethodInsnNode(
-                            Opcodes.INVOKEVIRTUAL,
-                            'net/minecraft/server/level/ServerChunkCache',
-                            ASM.mapMethod('m_8481_'), // getGenerator
-                            '()Lnet/minecraft/world/level/chunk/ChunkGenerator;'
-                            ),
-                        new VarInsnNode(Opcodes.ALOAD, 9),
+                        new VarInsnNode(Opcodes.ALOAD, 6),
                         new VarInsnNode(Opcodes.ALOAD, 10),
                         new VarInsnNode(Opcodes.ALOAD, 11),
+                        new VarInsnNode(Opcodes.ALOAD, 12),
                         new VarInsnNode(Opcodes.ILOAD, 7),
-                        new VarInsnNode(Opcodes.ILOAD, 8),
+                        new VarInsnNode(Opcodes.ILOAD, 9),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
@@ -79,7 +73,7 @@ function initializeCoreMod() {
                         ASM.MethodType.SPECIAL,
                         'net/minecraft/world/level/chunk/storage/EntityStorage',
                         '<init>',
-                        '(Lnet/minecraft/server/level/ServerLevel;Ljava/io/File;Lcom/mojang/datafixers/DataFixer;ZLjava/util/concurrent/Executor;)V'
+                        '(Lnet/minecraft/server/level/ServerLevel;Ljava/nio/file/Path;Lcom/mojang/datafixers/DataFixer;ZLjava/util/concurrent/Executor;)V'
                         ),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 8),

@@ -4,7 +4,7 @@
   "axesareweps": "META-INF/asm/axesareweps.js",
   "camerahurt": "META-INF/asm/camerahurt.js",
   "death": "META-INF/asm/death.js",
-  //  "deepfreeze": "META-INF/asm/deepfreeze.js",
+  "deepfreeze": "META-INF/asm/deepfreeze.js",
   "elytra": "META-INF/asm/elytra.js",
   "entityalpha": "META-INF/asm/entityalpha.js",
   "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",

@@ -75,7 +75,7 @@ import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
 import tamaized.voidscape.world.InstanceChunkGenerator;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,7 +139,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, ChunkGenerator, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)}<br>
+	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, ChunkGenerator, int, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)}<br>
 	 * [AFTER] INVOKESPECIAL : {@link ChunkMap#ChunkMap(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, BlockableEventLoop, LightChunkGetter, ChunkGenerator, ChunkProgressListener, ChunkStatusUpdateListener, Supplier, int, boolean)}
 	 */
 	public static ChunkMap chunkManager(ChunkMap old, ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
@@ -149,7 +149,7 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, DimensionType, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}<br>
-	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, File, DataFixer, boolean, Executor)}
+	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, Path, DataFixer, boolean, Executor)}
 	 */
 	public static EntityStorage entityStorage(EntityStorage o, ChunkGenerator chunkGenerator_, ServerLevel level, LevelStorageSource.LevelStorageAccess file) {
 		return chunkGenerator_ instanceof InstanceChunkGenerator ? new EntityStorage(level, file.getDimensionPath(level.dimension()).resolve("entities"), level.getServer().getFixerUpper(), level.getServer().forceSynchronousWrites(), level.getServer()) {
