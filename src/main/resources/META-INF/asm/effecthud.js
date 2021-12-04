@@ -28,22 +28,22 @@ function initializeCoreMod() {
                         '(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/client/gui/GuiComponent;Lcom/mojang/blaze3d/vertex/PoseStack;IIFF)V'
                         ),
                     ASM.listOf(
-                        new VarInsnNode(Opcodes.ALOAD, 6),
-                        new VarInsnNode(Opcodes.ALOAD, 10),
-                        new VarInsnNode(Opcodes.ALOAD, 8),
+                        new VarInsnNode(Opcodes.ALOAD, 7),
+                        new VarInsnNode(Opcodes.ALOAD, 11),
+                        new VarInsnNode(Opcodes.ALOAD, 9),
                         new VarInsnNode(Opcodes.ALOAD, 0),
                         new VarInsnNode(Opcodes.ALOAD, 1),
-                        new VarInsnNode(Opcodes.ILOAD, 11),
                         new VarInsnNode(Opcodes.ILOAD, 12),
+                        new VarInsnNode(Opcodes.ILOAD, 13),
                         new VarInsnNode(Opcodes.ALOAD, 0),
                         new MethodInsnNode(
                             Opcodes.INVOKEVIRTUAL,
                             'net/minecraft/client/gui/Gui',
-                            ASM.mapMethod('m_93252_'),
+                            ASM.mapMethod('m_93252_'), // getBlitOffset
                             '()I'
                             ),
                         new InsnNode(Opcodes.I2F),
-                        new VarInsnNode(Opcodes.FLOAD, 13),
+                        new VarInsnNode(Opcodes.FLOAD, 14),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
