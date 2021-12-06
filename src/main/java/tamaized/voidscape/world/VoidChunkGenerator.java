@@ -6,11 +6,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.NoiseSamplingSettings;
+import net.minecraft.world.level.levelgen.NoiseSettings;
+import net.minecraft.world.level.levelgen.NoiseSlider;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.function.Supplier;
 
@@ -37,15 +40,44 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	private long seed;
 
 	private VoidChunkGenerator(Registry<NormalNoise.NoiseParameters> noiseRegistry, BiomeSource biomeProvider1, long seed, Supplier<NoiseGeneratorSettings> dimensionSettings) {
-		super(noiseRegistry, biomeProvider1, seed, dimensionSettings);
+		super(noiseRegistry, biomeProvider1, seed, fixSettings(dimensionSettings));
 		this.noises = noiseRegistry;
 		this.seed = seed;
-		// Vanilla constraints this to a multiple of 4, we want an even lower bound!
-		int cellWidth = dimensionSettings.get().noiseSettings().noiseSizeHorizontal() * 2;
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, cellWidth, "f_158375_"); // cellWidth
-		int noise = 16 / cellWidth;
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "f_158376_"); // cellCountX
-		ObfuscationReflectionHelper.setPrivateValue(NoiseBasedChunkGenerator.class, this, noise, "f_158378_"); // cellCountZ
+	}
+
+	/**
+	 * Lazy Load the ASM changes
+	 */
+	private static Supplier<NoiseGeneratorSettings> fixSettings(Supplier<NoiseGeneratorSettings> settings) {
+		return () -> fixSettings(settings.get());
+	}
+
+	/**
+	 * This is altered via ASM to extend the record {@link NoiseSettings} and change {@link NoiseSettings#getCellWidth()}
+	 * to instead return {@link CorrectedNoiseSettings#getCellWidth()}
+	 */
+	private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {
+		NoiseSettings s = settings.noiseSettings();
+		settings.noiseSettings = new NoiseSettings(s.minY(), s.height(), s.noiseSamplingSettings(), s.topSlideSettings(), s.bottomSlideSettings(), s.noiseSizeHorizontal(), s.noiseSizeVertical(), s.islandNoiseOverride(), s.isAmplified(), s.largeBiomes(), s.terrainShaper());
+		return settings;
+	}
+
+	/**
+	 * Invoked by {@link #fixSettings(NoiseGeneratorSettings)} asm, would be {@code value << 2} otherwise
+	 */
+	@SuppressWarnings("unused")
+	private static class CorrectedNoiseSettings {
+
+		private final int noiseSizeHorizontal;
+
+		private CorrectedNoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, boolean islandNoiseOverride, boolean isAmplified, boolean largeBiomes, TerrainShaper terrainShaper) {
+			this.noiseSizeHorizontal = noiseSizeHorizontal;
+		}
+
+		public int getCellWidth() {
+			return noiseSizeHorizontal << 1;
+		}
+
 	}
 
 	@Override

@@ -45,6 +45,8 @@ public class ModFeatures {
 
 		@Override
 		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+			if (true)
+				return Stream.of(pos);
 			BlockPos.MutableBlockPos seek = pos.mutable().move(Direction.UP, random.nextInt(15));
 			BlockPos.MutableBlockPos check = seek.mutable().move(Direction.DOWN, 1);
 			while (seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {

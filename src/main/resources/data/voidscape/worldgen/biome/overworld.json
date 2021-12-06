@@ -45,14 +45,14 @@
 	  {
 		"feature": "voidscape:oak",
 		"placement": [ ]
-	  },
-	  {
-		"feature": "voidscape:grass_patch",
-		"placement": [ ]
-	  },
-	  {
-		"feature": "voidscape:fruit_patch_overworld",
-		"placement": [ ]
+		//	  },
+		//	  {
+		//		"feature": "voidscape:grass_patch",
+		//		"placement": [ ]
+		//	  },
+		//	  {
+		//		"feature": "voidscape:fruit_patch_overworld",
+		//		"placement": [ ]
 	  }
 	],
 	[ ],

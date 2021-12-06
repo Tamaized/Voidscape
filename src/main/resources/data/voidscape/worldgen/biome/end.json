@@ -42,14 +42,14 @@
 	[ ],
 	[ ],
 	[
-	  {
-		"feature": "voidscape:chorus",
-		"placement": [ ]
-	  },
-	  {
-		"feature": "voidscape:fruit_patch_end",
-		"placement": [ ]
-	  }
+	  //	  {
+	  //		"feature": "voidscape:chorus",
+	  //		"placement": [ ]
+	  //	  },
+	  //	  {
+	  //		"feature": "voidscape:fruit_patch_end",
+	  //		"placement": [ ]
+	  //	  }
 	],
 	[ ],
 	[ ]

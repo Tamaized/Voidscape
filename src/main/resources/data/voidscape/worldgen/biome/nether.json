@@ -43,19 +43,19 @@
 	[ ],
 	[ ],
 	[
-	  {
-		"feature": "minecraft:crimson_fungus",
-		"placement": [
-		  {
-			"type": "minecraft:count",
-			"count": 6
-		  }
-		]
-	  },
-	  {
-		"feature": "voidscape:fruit_patch_nether",
-		"placement": [ ]
-	  }
+	  //	  {
+	  //		"feature": "minecraft:crimson_fungus",
+	  //		"placement": [
+	  //		  {
+	  //			"type": "minecraft:count",
+	  //			"count": 6
+	  //		  }
+	  //		]
+	  //	  },
+	  //	  {
+	  //		"feature": "voidscape:fruit_patch_nether",
+	  //		"placement": [ ]
+	  //	  }
 	],
 	[ ],
 	[ ]

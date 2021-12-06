@@ -39,16 +39,40 @@
 		"size_vertical": 2,
 		"terrain_shaper": {
 		  "offset": {
+			"coordinate": "continents",
+			"points": [
+			  {
+				"location": 0,
+				"value": 0,
+				"derivative": 0
+			  }
+			],
 			"location": 0,
 			"value": 0,
 			"derivative": 0
 		  },
 		  "factor": {
+			"coordinate": "continents",
+			"points": [
+			  {
+				"location": 0,
+				"value": 0,
+				"derivative": 0
+			  }
+			],
 			"location": 0,
 			"value": 0,
 			"derivative": 0
 		  },
 		  "jaggedness": {
+			"coordinate": "continents",
+			"points": [
+			  {
+				"location": 0,
+				"value": 0,
+				"derivative": 0
+			  }
+			],
 			"location": 0,
 			"value": 0,
 			"derivative": 0
@@ -62,220 +86,221 @@
 		"Name": "minecraft:air"
 	  },
 	  "surface_rule": {
+		"type": "sequence",
 		"sequence": [
 		  {
-			"condition": {
-			  "if_true": {
-				"biome": {
-				  "biome_is": [
-					"voidscape:void",
-					"voidscape:antispire",
-					"voidscape:thunderspire"
-				  ]
-				}
-			  },
-			  "then_run": {
-				"sequence": [
-				  {
-					"condition": {
-					  "if_true": "above_preliminary_surface",
-					  "then_run": {
-						"block": {
-						  "Name": "bedrock"
-						}
-					  }
-					}
+			"type": "condition",
+			"if_true": {
+			  "type": "biome",
+			  "biome_is": [
+				"voidscape:void",
+				"voidscape:antispire",
+				"voidscape:thunderspire"
+			  ]
+			},
+			"then_run": {
+			  "type": "sequence",
+			  "sequence": [
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "above_preliminary_surface"
 				  },
-				  {
-					"condition": {
-					  "if_true": {
-						"stone_depth": {
-						  "offset": -3,
-						  "add_surface_depth": true,
-						  "add_surface_secondary_depth": false,
-						  "surface_type": "ceiling"
-						}
-					  },
-					  "then_run": {
-						"block": {
-						  "Name": "bedrock"
-						}
-					  }
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "bedrock"
 					}
 				  }
-				]
-			  }
+				},
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "stone_depth",
+					"offset": -3,
+					"add_surface_depth": true,
+					"add_surface_secondary_depth": false,
+					"surface_type": "ceiling"
+				  },
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "bedrock"
+					}
+				  }
+				}
+			  ]
 			}
 		  },
 		  {
-			"condition": {
-			  "if_true": {
-				"biome": {
-				  "biome_is": [
-					"voidscape:overworld"
-				  ]
-				}
-			  },
-			  "then_run": {
-				"sequence": [
-				  {
-					"condition": {
-					  "if_true": "above_preliminary_surface",
-					  "then_run": {
-						"block": {
-						  "Name": "grass_block",
-						  "Properties": {
-							"snowy": "false"
-						  }
-						}
-					  }
-					}
+			"type": "condition",
+			"if_true": {
+			  "type": "biome",
+			  "biome_is": [
+				"voidscape:overworld"
+			  ]
+			},
+			"then_run": {
+			  "type": "sequence",
+			  "sequence": [
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "above_preliminary_surface"
 				  },
-				  {
-					"condition": {
-					  "if_true": {
-						"stone_depth": {
-						  "offset": -3,
-						  "add_surface_depth": true,
-						  "add_surface_secondary_depth": false,
-						  "surface_type": "ceiling"
-						}
-					  },
-					  "then_run": {
-						"block": {
-						  "Name": "stone"
-						}
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "grass_block",
+					  "Properties": {
+						"snowy": "false"
 					  }
 					}
 				  }
-				]
-			  }
+				},
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "stone_depth",
+					"offset": -3,
+					"add_surface_depth": true,
+					"add_surface_secondary_depth": false,
+					"surface_type": "ceiling"
+				  },
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "stone"
+					}
+				  }
+				}
+			  ]
 			}
 		  },
 		  {
-			"condition": {
-			  "if_true": {
-				"biome": {
-				  "biome_is": [
-					"voidscape:nether"
-				  ]
-				}
-			  },
-			  "then_run": {
-				"sequence": [
-				  {
-					"condition": {
-					  "if_true": "above_preliminary_surface",
-					  "then_run": {
-						"block": {
-						  "Name": "crimson_nylium"
-						}
-					  }
-					}
+			"type": "condition",
+			"if_true": {
+			  "type": "biome",
+			  "biome_is": [
+				"voidscape:nether"
+			  ]
+			},
+			"then_run": {
+			  "type": "sequence",
+			  "sequence": [
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "above_preliminary_surface"
 				  },
-				  {
-					"condition": {
-					  "if_true": {
-						"stone_depth": {
-						  "offset": -3,
-						  "add_surface_depth": true,
-						  "add_surface_secondary_depth": false,
-						  "surface_type": "ceiling"
-						}
-					  },
-					  "then_run": {
-						"block": {
-						  "Name": "netherrack"
-						}
-					  }
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "crimson_nylium"
 					}
 				  }
-				]
-			  }
+				},
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "stone_depth",
+					"offset": -3,
+					"add_surface_depth": true,
+					"add_surface_secondary_depth": false,
+					"surface_type": "ceiling"
+				  },
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "netherrack"
+					}
+				  }
+				}
+			  ]
 			}
 		  },
 		  {
-			"condition": {
-			  "if_true": {
-				"biome": {
-				  "biome_is": [
-					"voidscape:end"
-				  ]
-				}
-			  },
-			  "then_run": {
-				"sequence": [
-				  {
-					"condition": {
-					  "if_true": "above_preliminary_surface",
-					  "then_run": {
-						"block": {
-						  "Name": "end_stone"
-						}
-					  }
-					}
+			"type": "condition",
+			"if_true": {
+			  "type": "biome",
+			  "biome_is": [
+				"voidscape:end"
+			  ]
+			},
+			"then_run": {
+			  "type": "sequence",
+			  "sequence": [
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "above_preliminary_surface"
 				  },
-				  {
-					"condition": {
-					  "if_true": {
-						"stone_depth": {
-						  "offset": -3,
-						  "add_surface_depth": true,
-						  "add_surface_secondary_depth": false,
-						  "surface_type": "ceiling"
-						}
-					  },
-					  "then_run": {
-						"block": {
-						  "Name": "end_stone"
-						}
-					  }
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "end_stone"
 					}
 				  }
-				]
-			  }
+				},
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "stone_depth",
+					"offset": -3,
+					"add_surface_depth": true,
+					"add_surface_secondary_depth": false,
+					"surface_type": "ceiling"
+				  },
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "end_stone"
+					}
+				  }
+				}
+			  ]
 			}
 		  },
 		  {
-			"condition": {
-			  "if_true": {
-				"biome": {
-				  "biome_is": [
-					"voidscape:null"
-				  ]
-				}
-			  },
-			  "then_run": {
-				"sequence": [
-				  {
-					"condition": {
-					  "if_true": "above_preliminary_surface",
-					  "then_run": {
-						"block": {
-						  "Name": "air"
-						}
-					  }
-					}
+			"type": "condition",
+			"if_true": {
+			  "type": "biome",
+			  "biome_is": [
+				"voidscape:null"
+			  ]
+			},
+			"then_run": {
+			  "type": "sequence",
+			  "sequence": [
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "above_preliminary_surface"
 				  },
-				  {
-					"condition": {
-					  "if_true": {
-						"stone_depth": {
-						  "offset": -3,
-						  "add_surface_depth": true,
-						  "add_surface_secondary_depth": false,
-						  "surface_type": "ceiling"
-						}
-					  },
-					  "then_run": {
-						"block": {
-						  "Name": "air"
-						}
-					  }
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "air"
 					}
 				  }
-				]
-			  }
+				},
+				{
+				  "type": "condition",
+				  "if_true": {
+					"type": "stone_depth",
+					"offset": -3,
+					"add_surface_depth": true,
+					"add_surface_secondary_depth": false,
+					"surface_type": "ceiling"
+				  },
+				  "then_run": {
+					"type": "block",
+					"result_state": {
+					  "Name": "air"
+					}
+				  }
+				}
+			  ]
 			}
 		  }
 		]

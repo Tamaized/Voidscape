@@ -42,14 +42,14 @@
 	[ ],
 	[ ],
 	[
-	  {
-		"feature": "voidscape:thunderspire",
-		"placement": [ ]
-	  },
-	  {
-		"feature": "voidscape:fruit_patch_void",
-		"placement": [ ]
-	  }
+	  //	  {
+	  //		"feature": "voidscape:thunderspire",
+	  //		"placement": [ ]
+	  //	  },
+	  //	  {
+	  //		"feature": "voidscape:fruit_patch_void",
+	  //		"placement": [ ]
+	  //	  }
 	],
 	[ ],
 	[ ]
