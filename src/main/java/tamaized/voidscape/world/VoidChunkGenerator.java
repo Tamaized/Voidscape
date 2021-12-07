@@ -68,11 +68,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	private static class CorrectedNoiseSettings {
 
 		private final int noiseSizeHorizontal;
-		private final int noiseSizeVertical;
 
 		private CorrectedNoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, boolean islandNoiseOverride, boolean isAmplified, boolean largeBiomes, TerrainShaper terrainShaper) {
 			this.noiseSizeHorizontal = noiseSizeHorizontal;
-			this.noiseSizeVertical = noiseSizeVertical;
 		}
 
 		public int getCellWidth() {

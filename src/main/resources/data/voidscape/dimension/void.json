@@ -66,7 +66,7 @@
 				{
 				  "type": "condition",
 				  "if_true": {
-					"type": "above_preliminary_surface"
+					"type": "voidscape:air_above"
 				  },
 				  "then_run": {
 					"type": "block",
@@ -79,19 +79,9 @@
 				  }
 				},
 				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "stone_depth",
-					"offset": -3,
-					"add_surface_depth": true,
-					"add_surface_secondary_depth": false,
-					"surface_type": "ceiling"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "stone"
-					}
+				  "type": "block",
+				  "result_state": {
+					"Name": "stone"
 				  }
 				}
 			  ]
@@ -111,7 +101,7 @@
 				{
 				  "type": "condition",
 				  "if_true": {
-					"type": "above_preliminary_surface"
+					"type": "voidscape:air_above"
 				  },
 				  "then_run": {
 					"type": "block",
@@ -121,19 +111,9 @@
 				  }
 				},
 				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "stone_depth",
-					"offset": -3,
-					"add_surface_depth": true,
-					"add_surface_secondary_depth": false,
-					"surface_type": "ceiling"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "netherrack"
-					}
+				  "type": "block",
+				  "result_state": {
+					"Name": "netherrack"
 				  }
 				}
 			  ]

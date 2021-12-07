@@ -120,6 +120,7 @@ public class RegUtil {
 		ModEntities.classload();
 		ModBiomes.classload();
 		ModFeatures.classload(bus);
+		ModSurfaceRules.classload(bus);
 		ModStructures.classload(bus);
 		class FixedUpgradeRecipe extends UpgradeRecipe {
 			public FixedUpgradeRecipe(ResourceLocation p_44523_, Ingredient p_44524_, Ingredient p_44525_, ItemStack p_44526_) {
