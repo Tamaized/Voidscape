@@ -38,45 +38,9 @@
 		"size_horizontal": 1,
 		"size_vertical": 2,
 		"terrain_shaper": {
-		  "offset": {
-			"coordinate": "continents",
-			"points": [
-			  {
-				"location": 0,
-				"value": 0,
-				"derivative": 0
-			  }
-			],
-			"location": 0,
-			"value": 0,
-			"derivative": 0
-		  },
-		  "factor": {
-			"coordinate": "continents",
-			"points": [
-			  {
-				"location": 0,
-				"value": 0,
-				"derivative": 0
-			  }
-			],
-			"location": 0,
-			"value": 0,
-			"derivative": 0
-		  },
-		  "jaggedness": {
-			"coordinate": "continents",
-			"points": [
-			  {
-				"location": 0,
-				"value": 0,
-				"derivative": 0
-			  }
-			],
-			"location": 0,
-			"value": 0,
-			"derivative": 0
-		  }
+		  "offset": -0.46875,
+		  "factor": 0.30,
+		  "jaggedness": 0.0
 		}
 	  },
 	  "default_block": {
@@ -88,50 +52,6 @@
 	  "surface_rule": {
 		"type": "sequence",
 		"sequence": [
-		  {
-			"type": "condition",
-			"if_true": {
-			  "type": "biome",
-			  "biome_is": [
-				"voidscape:void",
-				"voidscape:antispire",
-				"voidscape:thunderspire"
-			  ]
-			},
-			"then_run": {
-			  "type": "sequence",
-			  "sequence": [
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "above_preliminary_surface"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "bedrock"
-					}
-				  }
-				},
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "stone_depth",
-					"offset": -3,
-					"add_surface_depth": true,
-					"add_surface_secondary_depth": false,
-					"surface_type": "ceiling"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "bedrock"
-					}
-				  }
-				}
-			  ]
-			}
-		  },
 		  {
 			"type": "condition",
 			"if_true": {
@@ -228,37 +148,10 @@
 			  ]
 			},
 			"then_run": {
-			  "type": "sequence",
-			  "sequence": [
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "above_preliminary_surface"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "end_stone"
-					}
-				  }
-				},
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "stone_depth",
-					"offset": -3,
-					"add_surface_depth": true,
-					"add_surface_secondary_depth": false,
-					"surface_type": "ceiling"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "end_stone"
-					}
-				  }
-				}
-			  ]
+			  "type": "block",
+			  "result_state": {
+				"Name": "end_stone"
+			  }
 			}
 		  },
 		  {
@@ -270,37 +163,21 @@
 			  ]
 			},
 			"then_run": {
-			  "type": "sequence",
-			  "sequence": [
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "above_preliminary_surface"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "air"
-					}
-				  }
+			  "type": "condition",
+			  "if_true": {
+				"type": "y_above",
+				"anchor": {
+				  "above_bottom": 0
 				},
-				{
-				  "type": "condition",
-				  "if_true": {
-					"type": "stone_depth",
-					"offset": -3,
-					"add_surface_depth": true,
-					"add_surface_secondary_depth": false,
-					"surface_type": "ceiling"
-				  },
-				  "then_run": {
-					"type": "block",
-					"result_state": {
-					  "Name": "air"
-					}
-				  }
+				"surface_depth_multiplier": 1,
+				"add_stone_depth": false
+			  },
+			  "then_run": {
+				"type": "block",
+				"result_state": {
+				  "Name": "air"
 				}
-			  ]
+			  }
 			}
 		  }
 		]

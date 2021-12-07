@@ -46,15 +46,14 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 
 	/**
-	 * Lazy Load the ASM changes
+	 * Lazy load the ASM changes
 	 */
 	private static Supplier<NoiseGeneratorSettings> fixSettings(Supplier<NoiseGeneratorSettings> settings) {
 		return () -> fixSettings(settings.get());
 	}
 
 	/**
-	 * This is altered via ASM to extend the record {@link NoiseSettings} and change {@link NoiseSettings#getCellWidth()}
-	 * to instead return {@link CorrectedNoiseSettings#getCellWidth()}
+	 * This is altered via ASM to use {@link CorrectedNoiseSettings} instead of {@link NoiseSettings}
 	 */
 	private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {
 		NoiseSettings s = settings.noiseSettings();
@@ -63,15 +62,17 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 
 	/**
-	 * Invoked by {@link #fixSettings(NoiseGeneratorSettings)} asm, would be {@code value << 2} otherwise
+	 * Extends {@link NoiseSettings)} via asm
 	 */
 	@SuppressWarnings("unused")
 	private static class CorrectedNoiseSettings {
 
 		private final int noiseSizeHorizontal;
+		private final int noiseSizeVertical;
 
 		private CorrectedNoiseSettings(int minY, int height, NoiseSamplingSettings noiseSamplingSettings, NoiseSlider topSlideSettings, NoiseSlider bottomSlideSettings, int noiseSizeHorizontal, int noiseSizeVertical, boolean islandNoiseOverride, boolean isAmplified, boolean largeBiomes, TerrainShaper terrainShaper) {
 			this.noiseSizeHorizontal = noiseSizeHorizontal;
+			this.noiseSizeVertical = noiseSizeVertical;
 		}
 
 		public int getCellWidth() {
