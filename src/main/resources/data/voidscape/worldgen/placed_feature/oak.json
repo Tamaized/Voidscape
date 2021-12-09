@@ -3,19 +3,7 @@
   "placement": [
 	{
 	  "type": "minecraft:count",
-	  "count": {
-		"type": "weighted_list",
-		"distribution": [
-		  {
-			"weight": 0.1,
-			"data": 6
-		  },
-		  {
-			"weight": 0.9,
-			"data": 5
-		  }
-		]
-	  }
+	  "count": 6
 	},
 	{
 	  "type": "minecraft:in_square"
@@ -23,6 +11,18 @@
 	{
 	  "type": "voidscape:seek",
 	  "check_below": true
+	},
+	{
+	  "type": "block_predicate_filter",
+	  "predicate": {
+		"type": "would_survive",
+		"state": {
+		  "Name": "oak_sapling",
+		  "Properties": {
+			"stage": 0
+		  }
+		}
+	  }
 	}
   ]
 }

@@ -45,15 +45,35 @@ public class ModFeatures {
 
 		@Override
 		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
-			if (true)
-				return Stream.of(pos);
+			final int y = pos.getY();
 			BlockPos.MutableBlockPos seek = pos.mutable().move(Direction.UP, random.nextInt(15));
 			BlockPos.MutableBlockPos check = seek.mutable().move(Direction.DOWN, 1);
-			while (seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {
+			while ((check_below ? check : seek).getY() > y && seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {
 				seek.move(Direction.DOWN, 1);
 				check.move(Direction.DOWN, 1);
 			}
 			return Stream.of(seek);
+		}
+
+		@Override
+		public PlacementModifierType<?> type() {
+			return TYPE;
+		}
+
+	}
+
+	private static class AirAbovePlacementMod extends PlacementModifier {
+
+		public static final Codec<AirAbovePlacementMod> CODEC = Codec.unit(AirAbovePlacementMod::new);
+
+		public static PlacementModifierType<AirAbovePlacementMod> TYPE;
+
+		public AirAbovePlacementMod() {
+		}
+
+		@Override
+		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+			return context.getBlockState(pos.above()).isAir() ? Stream.of(pos) : Stream.empty();
 		}
 
 		@Override
@@ -113,6 +133,7 @@ public class ModFeatures {
 	static void classload(IEventBus bus) {
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
 			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
+			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);
 		});
 	}
 

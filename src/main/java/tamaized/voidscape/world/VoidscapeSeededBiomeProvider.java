@@ -31,6 +31,12 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
 	public static final List<ResourceKey<Biome>> BIOMES = ImmutableList.of(
 
+			ModBiomes.THUNDER_SPIRES,
+
+			ModBiomes.ANTI_SPIRES,
+
+			ModBiomes.NULL,
+
 			ModBiomes.VOID,
 
 			ModBiomes.OVERWORLD,
@@ -54,7 +60,6 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
 	public VoidscapeSeededBiomeProvider(long seed, Registry<Biome> registryIn) {
 		super(BIOMES.stream().map(ResourceKey::location).map(registryIn::getOptional).filter(Optional::isPresent).map(opt -> opt::get));
-
 		this.seed = seed;
 		layerMergeRandom = new Random(seed);
 		registry = registryIn;

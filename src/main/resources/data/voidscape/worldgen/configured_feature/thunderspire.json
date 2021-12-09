@@ -1,7 +1,6 @@
 {
   "type": "voidscape:spire",
   "config": {
-	"feature": "voidscape:thunderspire",
 	"invert": false
   }
 }

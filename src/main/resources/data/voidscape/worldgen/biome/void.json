@@ -42,10 +42,7 @@
 	[ ],
 	[ ],
 	[
-	  //	  {
-	  //		"feature": "voidscape:fruit_patch_void",
-	  //		"placement": [ ]
-	  //	  }
+	  "voidscape:fruit_patch_void"
 	],
 	[ ],
 	[ ]

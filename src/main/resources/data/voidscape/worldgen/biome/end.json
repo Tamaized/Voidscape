@@ -42,14 +42,8 @@
 	[ ],
 	[ ],
 	[
-	  //	  {
-	  //		"feature": "voidscape:chorus",
-	  //		"placement": [ ]
-	  //	  },
-	  //	  {
-	  //		"feature": "voidscape:fruit_patch_end",
-	  //		"placement": [ ]
-	  //	  }
+	  "voidscape:chorus",
+	  "voidscape:fruit_patch_end"
 	],
 	[ ],
 	[ ]

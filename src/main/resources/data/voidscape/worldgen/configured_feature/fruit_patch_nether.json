@@ -1,18 +1,23 @@
 {
   "type": "minecraft:random_patch",
   "config": {
-	"feature": "voidscape:fruit_patch_nether",
-	"state_provider": {
-	  "type": "simple_state_provider",
-	  "state": {
-		"Name": "voidscape:plant",
-		"Properties": {
-		  "state": "nether"
+	"feature": {
+	  "feature": {
+		"type": "simple_block",
+		"config": {
+		  "to_place": {
+			"type": "simple_state_provider",
+			"state": {
+			  "Name": "voidscape:plant",
+			  "Properties": {
+				"state": "nether"
+			  }
+			}
+		  }
 		}
-	  }
-	},
-	"block_placer": {
-	  "type": "simple_block_placer"
+	  },
+	  "placement": [
+	  ]
 	},
 	"whitelist": [
 	  {

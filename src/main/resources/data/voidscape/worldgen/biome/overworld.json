@@ -42,18 +42,9 @@
 	[ ],
 	[ ],
 	[
-	  {
-		"feature": "voidscape:oak",
-		"placement": [ ]
-		//	  },
-		//	  {
-		//		"feature": "voidscape:grass_patch",
-		//		"placement": [ ]
-		//	  },
-		//	  {
-		//		"feature": "voidscape:fruit_patch_overworld",
-		//		"placement": [ ]
-	  }
+	  "voidscape:oak",
+	  "voidscape:grass_patch",
+	  "voidscape:fruit_patch_overworld"
 	],
 	[ ],
 	[ ]

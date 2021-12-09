@@ -1,5 +1,5 @@
 {
-  "feature": "voidscape:grass_patch",
+  "feature": "minecraft:crimson_fungus",
   "placement": [
 	{
 	  "type": "minecraft:count",
@@ -11,9 +11,6 @@
 	{
 	  "type": "voidscape:seek",
 	  "check_below": true
-	},
-	{
-	  "type": "voidscape:air_above"
 	}
   ]
 }

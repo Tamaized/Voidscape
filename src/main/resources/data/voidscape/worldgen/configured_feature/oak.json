@@ -1,7 +1,6 @@
 {
   "type": "minecraft:tree",
   "config": {
-	"feature": "voidscape:oak",
 	"trunk_provider": {
 	  "type": "simple_state_provider",
 	  "state": {

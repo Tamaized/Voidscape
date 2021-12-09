@@ -1,19 +1,31 @@
 {
   "type": "minecraft:random_patch",
   "config": {
-	"feature": "voidscape:grass_patch",
-	"state_provider": {
-	  "type": "simple_state_provider",
-	  "state": {
-		"Name": "minecraft:grass"
+	"feature": {
+	  "feature": {
+		"type": "simple_block",
+		"config": {
+		  "to_place": {
+			"type": "simple_state_provider",
+			"state": {
+			  "Name": "minecraft:grass"
+			}
+		  }
+		}
+	  },
+	  "placement": [
+	  ]
+	},
+	"whitelist": [
+	  {
+		"Name": "minecraft:grass_block",
+		"Properties": {
+		  "snowy": "false"
+		}
 	  }
-	},
-	"block_placer": {
-	  "type": "simple_block_placer"
-	},
-	"whitelist": [ ],
+	],
 	"blacklist": [ ],
-	"tries": 24,
+	"tries": 32,
 	"project": false
   }
 }

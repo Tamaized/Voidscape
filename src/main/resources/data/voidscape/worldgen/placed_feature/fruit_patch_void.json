@@ -4,6 +4,9 @@
 	{
 	  "type": "voidscape:seek",
 	  "check_below": true
+	},
+	{
+	  "type": "voidscape:air_above"
 	}
   ]
 }
