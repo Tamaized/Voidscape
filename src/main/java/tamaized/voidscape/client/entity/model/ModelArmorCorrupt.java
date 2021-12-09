@@ -108,6 +108,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 		definition.addOrReplaceChild("leftarm",
 				CubeListBuilder.create().texOffs(40, 16).
+						mirror().
 						addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
 						offset(5.0F, 2.0F, 0.0F));
 
@@ -123,6 +124,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 		definition.addOrReplaceChild("leftleg",
 				CubeListBuilder.create().texOffs(0, 48).
+						mirror().
 						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
 						offset(1.9F, 12.0F, 0.0F));
 
@@ -143,6 +145,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 		definition.addOrReplaceChild("leftfoot",
 				CubeListBuilder.create().texOffs(0, 16).
+						mirror().
 						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
 						offset(1.9F, 12.0F, 0.0F));
 
