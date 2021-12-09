@@ -276,11 +276,11 @@ public class RegUtil {
 						model.leftfoot.visible = true;
 						break;
 					case LEGS:
-						model.bodyToLeg.visible = true;
 						model.rightleg.visible = true;
 						model.leftleg.visible = true;
 						break;
 					case CHEST:
+						model.bodyToLeg.visible = true;
 						model.body.visible = true;
 						model.rightarm.visible = true;
 						model.leftarm.visible = true;
