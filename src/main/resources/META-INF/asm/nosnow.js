@@ -19,20 +19,33 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                var lastInstruction = null;
-                for (var index = 0; index < instructions.size(); index++) {
-                    var /*org.objectweb.asm.tree.InsnNode*/ node = instructions.get(index);
-                    if (lastInstruction == null &&
-
-                        node instanceof InsnNode &&
-
-                        node.getOpcode() === Opcodes.ICONST_1
-
-                    )
-                        lastInstruction = node;
-                }
                 instructions.insert(
-                    lastInstruction,
+                    ASM.findFirstInstruction(methodNode, Opcodes.ICONST_1),
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'shouldSnow',
+                            '(ZLnet/minecraft/world/level/biome/Biome;)Z',
+                            false
+                            )
+                        )
+                    );
+                return methodNode;
+            }
+        },
+        'noice': {
+            'target': {
+                'type': 'METHOD',
+                'class': 'net.minecraft.world.level.biome.Biome',
+                'methodName': ASM.mapMethod('m_47480_'), // shouldFreeze
+                'methodDesc': '(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z'
+            },
+            'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
+                var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
+                instructions.insert(
+                    ASM.findFirstInstruction(methodNode, Opcodes.ICONST_1),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 0),
                         new MethodInsnNode(
