@@ -36,7 +36,15 @@
   "features": [
 	[ ],
 	[ ],
-	[ ],
+	[
+	  "voidscape:copper",
+	  "voidscape:diamond",
+	  "voidscape:emerald",
+	  "voidscape:gold",
+	  "voidscape:iron",
+	  "voidscape:lapis",
+	  "voidscape:redstone"
+	],
 	[ ],
 	[ ],
 	[ ],
@@ -44,7 +52,8 @@
 	[
 	  "voidscape:oak",
 	  "voidscape:grass_patch",
-	  "voidscape:fruit_patch_overworld"
+	  "voidscape:fruit_patch_overworld",
+	  "voidscape:water"
 	],
 	[ ],
 	[ ]

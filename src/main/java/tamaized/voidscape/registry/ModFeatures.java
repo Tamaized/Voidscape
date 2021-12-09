@@ -83,6 +83,52 @@ public class ModFeatures {
 
 	}
 
+	private static class NotAirBelowPlacementMod extends PlacementModifier {
+
+		public static final Codec<NotAirBelowPlacementMod> CODEC = Codec.unit(NotAirBelowPlacementMod::new);
+
+		public static PlacementModifierType<NotAirBelowPlacementMod> TYPE;
+
+		public NotAirBelowPlacementMod() {
+		}
+
+		@Override
+		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+			return context.getBlockState(pos.below()).isAir() ? Stream.empty() : Stream.of(pos);
+		}
+
+		@Override
+		public PlacementModifierType<?> type() {
+			return TYPE;
+		}
+
+	}
+
+	private static class RandomYPlacementMod extends PlacementModifier {
+
+		public static final Codec<RandomYPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
+				INT.fieldOf("y").orElse(0).forGetter(c -> c.y)).apply(p_242803_0_, RandomYPlacementMod::new));
+
+		public static PlacementModifierType<RandomYPlacementMod> TYPE;
+
+		private final int y;
+
+		public RandomYPlacementMod(int y) {
+			this.y = y;
+		}
+
+		@Override
+		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+			return Stream.of(pos.above(random.nextInt(y) - y / 2));
+		}
+
+		@Override
+		public PlacementModifierType<?> type() {
+			return TYPE;
+		}
+
+	}
+
 	public static final RegistryObject<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY.register("spire", () -> new Feature<>(BooleanFeatureConfig.CODEC) {
 		@Override
 		public boolean place(FeaturePlaceContext<BooleanFeatureConfig> context) {
@@ -134,6 +180,8 @@ public class ModFeatures {
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
 			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
 			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);
+			NotAirBelowPlacementMod.TYPE = registerPlacementMod("not_air_below", NotAirBelowPlacementMod.CODEC);
+			RandomYPlacementMod.TYPE = registerPlacementMod("random_y", RandomYPlacementMod.CODEC);
 		});
 	}
 

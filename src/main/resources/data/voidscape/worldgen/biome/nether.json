@@ -37,14 +37,19 @@
   "features": [
 	[ ],
 	[ ],
-	[ ],
+	[
+	  "voidscape:debris",
+	  "voidscape:nether_gold",
+	  "voidscape:quartz"
+	],
 	[ ],
 	[ ],
 	[ ],
 	[ ],
 	[
 	  "voidscape:crimson_fungus",
-	  "voidscape:fruit_patch_nether"
+	  "voidscape:fruit_patch_nether",
+	  "voidscape:lava"
 	],
 	[ ],
 	[ ]

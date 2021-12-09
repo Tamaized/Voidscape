@@ -1,0 +1,25 @@
+{
+  "feature": "voidscape:copper",
+  "placement": [
+	{
+	  "type": "minecraft:count",
+	  "count": 8
+	},
+	{
+	  "type": "minecraft:in_square"
+	},
+	{
+	  "type": "voidscape:random_y",
+	  "y": 13
+	},
+	{
+	  "type": "block_predicate_filter",
+	  "predicate": {
+		"type": "matching_blocks",
+		"blocks": [
+		  "stone"
+		]
+	  }
+	}
+  ]
+}

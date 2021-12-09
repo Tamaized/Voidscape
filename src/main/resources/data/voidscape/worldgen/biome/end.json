@@ -36,7 +36,9 @@
   "features": [
 	[ ],
 	[ ],
-	[ ],
+	[
+	  "voidscape:amethyst"
+	],
 	[ ],
 	[ ],
 	[ ],
