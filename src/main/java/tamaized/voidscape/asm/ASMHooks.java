@@ -313,8 +313,7 @@ public class ASMHooks {
 		if (!o) // Short-Circuit
 			return false;
 		Entity camera = Objects.requireNonNull(Minecraft.getInstance().getCameraEntity());
-		return ((LivingEntity) camera).hurtTime == 0 || (!camera.canUpdate() && camera.
-				getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(bind -> !bind.isBound()).orElse(true)).orElse(true));
+		return camera.canUpdate() || camera.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(bind -> !bind.isBound()).orElse(true)).orElse(true);
 	}
 
 	/**
