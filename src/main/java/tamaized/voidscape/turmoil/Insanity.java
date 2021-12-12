@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,9 +19,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.IEthereal;
+import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.ModAttributes;
 
 import javax.annotation.Nullable;
@@ -69,8 +72,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClients(parent);
 			dirty = false;
 		}
-		if (parent instanceof LivingEntity)
-			calculateEffects((LivingEntity) parent);
+		if (parent instanceof LivingEntity living && parent.tickCount % 20 == 0)
+			calculateEffects(living);
 	}
 
 	private void calculateEffects(LivingEntity parent) {
@@ -86,8 +89,11 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
 				attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
 				final float maxHealth = parent.getMaxHealth();
-				if (parent.getHealth() > maxHealth)
+				if (parent.getHealth() > maxHealth) {
+					if (parent instanceof ServerPlayer player)
+						Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketNoFlashOnSetHealth());
 					parent.setHealth(parent.getMaxHealth());
+				}
 			}
 			if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
 				parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);

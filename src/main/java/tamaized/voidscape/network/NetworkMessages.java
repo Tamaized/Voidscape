@@ -6,6 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.client.ClientPacketJoinPartyError;
+import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketResetPartyInfo;
 import tamaized.voidscape.network.client.ClientPacketSendPartyList;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
@@ -60,6 +61,7 @@ public class NetworkMessages {
 		registerMessage(network, ClientPacketResetPartyInfo.class, () -> new ClientPacketResetPartyInfo(false));
 		registerMessage(network, ClientPacketSendPartyList.class, ClientPacketSendPartyList::new);
 		registerMessage(network, ClientPacketJoinPartyError.class, () -> new ClientPacketJoinPartyError(""));
+		registerMessage(network, ClientPacketNoFlashOnSetHealth.class, ClientPacketNoFlashOnSetHealth::new);
 	}
 
 	private static <M extends IMessage<M>> void registerMessage(SimpleChannel network, Class<M> type, Supplier<M> factory) {
