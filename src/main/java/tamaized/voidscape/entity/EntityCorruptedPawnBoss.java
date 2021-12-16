@@ -138,7 +138,7 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
 										ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
 												ifPresent(data -> {
-													if (data.getProgression() == Progression.CorruptPawnPre) {
+													if (data.getProgression() == Progression.PostPsychosis) {
 														data.talk(Talk.CORRUPT_PAWN);
 														level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), new ItemStack(ModItems.TENDRIL.get(), 8)));
 													}

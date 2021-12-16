@@ -52,7 +52,16 @@ public class Talk {
 			new TranslatableComponent(KEY_BASE + "corruptphantom"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.progressTo(Progression.CorruptPawnPre);
+				data.progressTo(Progression.Psychosis);
+				data.levelUp();
+			})));
+
+	public static Entry PSYCHOSIS = new Entry(new ResourceLocation(Voidscape.MODID, "psychosis"),
+
+			new TranslatableComponent(KEY_BASE + "psychosis"),
+
+			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+				data.progressTo(Progression.PostPsychosis);
 				data.levelUp();
 			})));
 
@@ -61,7 +70,7 @@ public class Talk {
 			new TranslatableComponent(KEY_BASE + "corruptpawn"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.progressTo(Progression.CorruptPawnPost);
+				data.progressTo(Progression.CorruptPawn);
 				data.levelUp();
 			})));
 

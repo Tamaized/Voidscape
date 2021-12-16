@@ -14,7 +14,8 @@ public class Duties {
 
 	private static final List<Duty> DUTY_LIST = new ArrayList<>();
 
-	public static final Duty PAWN = new Duty(rl("pawn"), Progression.CorruptPawnPre, "pawn");
+	public static final Duty PSYCHOSIS = new Duty(rl("psychosis"), Progression.Psychosis, "psychosis").onlyNormal();
+	public static final Duty PAWN = new Duty(rl("pawn"), Progression.PostPsychosis, "pawn");
 
 	public static List<Duty> duties() {
 		return ImmutableList.copyOf(DUTY_LIST);
@@ -40,12 +41,18 @@ public class Duties {
 		private final ResourceLocation group;
 		private final Progression req;
 		private final Component display;
+		private boolean onlyNormal;
 
 		Duty(ResourceLocation group, Progression req, String display) {
 			this.group = group;
 			this.req = req;
 			this.display = new TranslatableComponent(Voidscape.MODID + ".gui.duty." + display);
 			DUTY_LIST.add(this);
+		}
+
+		Duty onlyNormal() {
+			onlyNormal = true;
+			return this;
 		}
 
 		public ResourceLocation group() {
@@ -58,6 +65,10 @@ public class Duties {
 
 		public Component display() {
 			return display;
+		}
+
+		public boolean isOnlyNormal() {
+			return onlyNormal;
 		}
 
 	}

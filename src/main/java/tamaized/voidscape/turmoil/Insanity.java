@@ -128,7 +128,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 						1F);
 			if (!parent.level.isClientSide()) {
 				if (hunt == null && paranoia >= 600 && parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
-						getProgression().ordinal() >= Progression.PostTutorial.ordinal() && data.getProgression().ordinal() < Progression.CorruptPawnPost.ordinal()).orElse(false)).orElse(false)) {
+						getProgression().ordinal() >= Progression.PostTutorial.ordinal() && data.getProgression().ordinal() < Progression.CorruptPawn.ordinal()).orElse(false)).orElse(false)) {
 					hunt = new EntityCorruptedPawnPhantom(parent.level).target((Player) parent);
 					Vec3 vec = new Vec3(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat() * 2F - 1F);
 					hunt.setPos(parent.getX() + vec.x(), parent.getY() + vec.y(), parent.getZ() + vec.z());
@@ -181,7 +181,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	public float calcParanoiaRate(Entity parent) {
 		return 0.87F * parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
-				getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal() ? 0.1F : 1F).orElse(1F)).orElse(1F);
+				getProgression().ordinal() >= Progression.CorruptPawn.ordinal() ? 0.1F : 1F).orElse(1F)).orElse(1F);
 	}
 
 	public float getInfusion() {

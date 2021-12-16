@@ -46,43 +46,45 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Unrestricted"),
+				new TranslatableComponent(duty.isOnlyNormal() ? "Normal" : "Unrestricted"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Unrestricted))
 
 		));
-		addRenderableWidget(new Button(
+		if (!duty.isOnlyNormal()) {
+			addRenderableWidget(new Button(
 
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
+					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
 
-				buttonWidth,
+					buttonWidth,
 
-				buttonHeight,
+					buttonHeight,
 
-				new TranslatableComponent("Normal"),
+					new TranslatableComponent("Normal"),
 
-				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
+					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
 
-		));
-		Button insane = new Button(
+			));
+			Button insane = new Button(
 
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
+					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
 
-				buttonWidth,
+					buttonWidth,
 
-				buttonHeight,
+					buttonHeight,
 
-				new TranslatableComponent("Insane"),
+					new TranslatableComponent("Insane"),
 
-				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
+					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
 
-		);
-		insane.active = data.getProgression().ordinal() > duty.progression().ordinal();
-		addRenderableWidget(insane);
+			);
+			insane.active = data.getProgression().ordinal() > duty.progression().ordinal();
+			addRenderableWidget(insane);
+		}
 		addRenderableWidget(new Button(
 
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),

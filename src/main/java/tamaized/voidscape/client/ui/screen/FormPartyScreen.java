@@ -231,7 +231,7 @@ public class FormPartyScreen extends TurmoilScreen {
 			font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, window.getGuiScaledHeight() - buttonHeight * 3 - 5, 0xFFFFFFFF);
 		text = duty.display().getString();
 		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
-		text = type.name();
+		text = duty.isOnlyNormal() ? Instance.InstanceType.Normal.name() : type.name();
 		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, font.lineHeight + 12, 0xFFFFFFFF);
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);

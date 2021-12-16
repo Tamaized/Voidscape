@@ -263,7 +263,10 @@ public class ASMHooks {
 	 * [BEFORE FRETURN]
 	 */
 	public static float visibility(float o, Level level, int light) {
-		if (level.isClientSide() && Voidscape.checkForVoidDimension(level))
+		if (level.isClientSide() && (Voidscape.checkForVoidDimension(level) ||
+				(Minecraft.getInstance().player != null &&
+						(Minecraft.getInstance().player.isCreative() || Minecraft.getInstance().player.isSpectator()) &&
+						Voidscape.checkForVoidlikeInstance(level))))
 			return VoidVisibilityCache.value(o, light);
 		return o;
 	}
@@ -274,7 +277,7 @@ public class ASMHooks {
 	 * [AFTER FIRST FLOAD 6]
 	 */
 	public static float cancelNightVision(float o, Level level) {
-		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForPawnInstance(level)))
+		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForVoidlikeInstance(level)))
 			return 0;
 		return o;
 	}

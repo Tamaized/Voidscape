@@ -137,7 +137,7 @@ public final class Instance {
 
 	public void tick() {
 		InstanceSpecialEffects.doEffects(this);
-		level.players().forEach(player -> player.getAbilities().mayBuild = false);
+		level.players().forEach(player -> player.getAbilities().mayBuild = player.getAbilities().mayBuild && player.isCreative());
 		if (!active()) {
 			if (!level.players().isEmpty())
 				new ArrayList<>(level.players()).forEach(player -> {

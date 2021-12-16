@@ -4,7 +4,6 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -38,6 +37,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,6 +75,12 @@ public class HackyWorldGen {
 			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), levelSave_.getDimensionPath(serverWorld_.dimension()).resolve("region"), boolean_, "chunk");
 		}
 
+		@Override
+		public void write(ChunkPos p_63503_, CompoundTag p_63504_) {
+			super.write(p_63503_, p_63504_);
+			worker.store(p_63503_, p_63504_);
+		}
+
 		@Nullable
 		@Override
 		public CompoundTag read(ChunkPos chunkPos_) throws IOException {
@@ -97,11 +103,13 @@ public class HackyWorldGen {
 
 		private final ResourceLocation location;
 		private final RegionFileStorage deepStorage;
+		private final RegionFileStorage realStorage;
 
 		protected DeepFreezeIOWorker(ResourceLocation location, Path file_, boolean boolean_, String string_) {
 			super(file_, boolean_, string_);
 			this.location = location;
 			this.deepStorage = new RegionFileStorage(file_.resolve("deepfreeze"), boolean_);
+			this.realStorage = new RegionFileStorage(file_.resolve("store"), boolean_);
 		}
 
 		@Nullable
@@ -114,15 +122,27 @@ public class HackyWorldGen {
 					concat(location.getPath()));
 		}
 
+		@Override
+		public CompletableFuture<Void> store(ChunkPos chunkPos_, @Nullable CompoundTag nbt) {
+			return this.submitTask(() -> {
+				try {
+					realStorage.write(chunkPos_, nbt);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return Either.left(new CompletableFuture<Void>());
+			}).thenCompose(Function.identity());
+		}
+
 		@Nullable
 		@Override
 		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
 			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
 				try {
 					CompoundTag compoundnbt = this.deepStorage.read(chunkPos_);
-					if (compoundnbt == null || !compoundnbt.
+					if (compoundnbt == null/* || !compoundnbt.
 							contains(Voidscape.MODID, Tag.TAG_COMPOUND) || compoundnbt.
-							getCompound(Voidscape.MODID).getLong("check") < System.currentTimeMillis() / 1000L) {
+							getCompound(Voidscape.MODID).getLong("check") < System.currentTimeMillis() / 1000L*/) {
 						try (InputStream stream = getClass().getResourceAsStream("/data/".
 								concat(location.getNamespace()).
 								concat("/worldgen/").
@@ -168,7 +188,7 @@ public class HackyWorldGen {
 	}
 
 	public static void main(String[] args) throws IOException {
-		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "pawn"), Path.of("./sanitized/region/"), false, "chunk");
+		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "psychosis"), Path.of("./sanitized/region/"), false, "chunk");
 		List<String> regions;
 		try (InputStream stream = worker.getRegionFolder(); InputStreamReader ir = new InputStreamReader(Objects.requireNonNull(stream)); BufferedReader reader = new BufferedReader(ir)) {
 			regions = reader.lines().collect(Collectors.toList());

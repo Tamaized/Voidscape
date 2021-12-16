@@ -276,7 +276,7 @@ public class RenderTurmoil {
 	}
 
 	private static void renderParanoia(Turmoil data, Insanity insanity, PoseStack matrixStack, float partialTicks) {
-		if (insanity.getParanoia() < 500F || data.getProgression().ordinal() >= Progression.CorruptPawnPost.ordinal())
+		if (insanity.getParanoia() < 500F || data.getProgression().ordinal() < Progression.PostTutorial.ordinal() || data.getProgression().ordinal() >= Progression.CorruptPawn.ordinal())
 			return;
 		float perc = (insanity.getParanoia() - 500F) / 90F;
 		perc = Mth.clamp(perc, 0, 1);

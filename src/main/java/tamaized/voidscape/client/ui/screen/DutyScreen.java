@@ -27,7 +27,7 @@ public class DutyScreen extends TurmoilScreen {
 		Turmoil data = getData(Voidscape.subCapTurmoilData);
 		if (data == null)
 			return;
-		if (data.getProgression().ordinal() < Progression.CorruptPawnPre.ordinal()) {
+		if (data.getProgression().ordinal() < Progression.Psychosis.ordinal()) {
 			onClose();
 			return;
 		}

@@ -157,7 +157,7 @@ public class MainScreen extends TurmoilScreen {
 				}
 
 		);
-		instances.active = data != null && data.getProgression().ordinal() >= Progression.CorruptPawnPre.ordinal();
+		instances.active = data != null && data.getProgression().ordinal() >= Progression.Psychosis.ordinal();
 		addRenderableWidget(instances);
 		addRenderableWidget(new Button(
 

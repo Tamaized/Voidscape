@@ -329,7 +329,7 @@ public class Voidscape {
 				event.getEntity().getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.remove(event.getPotion()));
 		});
 		busForge.addListener((Consumer<BlockEvent.BreakEvent>) event -> {
-			if (event.getPlayer().level.dimension().location().getNamespace().equals(Voidscape.MODID) && event.getPlayer().level.dimension().location().getPath().contains("instance"))
+			if (!event.getPlayer().isCreative() && event.getPlayer().level.dimension().location().getNamespace().equals(Voidscape.MODID) && event.getPlayer().level.dimension().location().getPath().contains("instance"))
 				event.setCanceled(true);
 		});
 		busForge.addListener((Consumer<LivingSpawnEvent.CheckSpawn>) event -> {
@@ -417,9 +417,9 @@ public class Voidscape {
 		return world.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
-	public static boolean checkForPawnInstance(Level world) {
+	public static boolean checkForVoidlikeInstance(Level world) {
 		ResourceLocation loc = world.dimension().location();
-		return loc.getNamespace().equals(Voidscape.MODID) && loc.getPath().contains("_pawn_");
+		return loc.getNamespace().equals(Voidscape.MODID) && (loc.getPath().contains("_pawn_") || loc.getPath().contains("_psychosis_"));
 	}
 
 	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
