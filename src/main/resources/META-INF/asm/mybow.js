@@ -7,11 +7,11 @@ var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
 var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
-function transform(name, desc) {
+function transform(clazz, name, desc) {
     return {
         'target': {
             'type': 'METHOD',
-            'class': 'net.minecraft.client.renderer.ItemInHandRenderer',
+            'class': clazz,
             'methodName': name,
             'methodDesc': desc
         },
@@ -58,9 +58,30 @@ function transform(name, desc) {
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
     return {
-        'evaluatewhichhandstorender': transform(ASM.mapMethod('m_172914_'), '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'),
-        'selectionusingitemwhileholdingbowlike': transform(ASM.mapMethod('m_172916_'), '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'),
-        'ischargedcrossbow': transform(ASM.mapMethod('m_172912_'), '(Lnet/minecraft/world/item/ItemStack;)Z'),
-        'renderarmwithitem': transform(ASM.mapMethod('m_109371_'), '(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V')
+        'evaluatewhichhandstorender': transform(
+            'net.minecraft.client.renderer.ItemInHandRenderer',
+            ASM.mapMethod('m_172914_'),
+            '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'
+            ),
+        'selectionusingitemwhileholdingbowlike': transform(
+            'net.minecraft.client.renderer.ItemInHandRenderer',
+            ASM.mapMethod('m_172916_'),
+            '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'
+            ),
+        'ischargedcrossbow': transform(
+            'net.minecraft.client.renderer.ItemInHandRenderer',
+            ASM.mapMethod('m_172912_'),
+            '(Lnet/minecraft/world/item/ItemStack;)Z'
+            ),
+        'renderarmwithitem': transform(
+            'net.minecraft.client.renderer.ItemInHandRenderer',
+            ASM.mapMethod('m_109371_'),
+            '(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V'
+            ),
+        'getarmpose': transform(
+            'net.minecraft.client.renderer.entity.player.PlayerRenderer',
+            ASM.mapMethod('m_117794_'),
+            '(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;'
+            )
     }
 }
