@@ -14,5 +14,6 @@
   "visibility": "META-INF/asm/visibility.js",
   "effecthud": "META-INF/asm/effecthud.js",
   "mybow": "META-INF/asm/mybow.js",
-  "cellwidth": "META-INF/asm/cellwidth.js"
+  "cellwidth": "META-INF/asm/cellwidth.js",
+  "armoroverlay": "META-INF/asm/armoroverlay.js"
 }

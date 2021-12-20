@@ -91,12 +91,22 @@ public class RegUtil {
 		put(Items.BOW, new ArrayList<>());
 		put(Items.CROSSBOW, new ArrayList<>());
 	}};
+	private static final List<RegistryObject<Item>> ARMOR_OVERLAYS = new ArrayList<>();
+	public static boolean renderingArmorOverlay = false;
 
 	public static boolean isMyBow(ItemStack stack, Item check) {
 		List<RegistryObject<Item>> list = BOWS.get(check);
 		if (list == null)
 			return false;
 		for (RegistryObject<Item> o : list) {
+			if (stack.is(o.get()))
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isArmorOverlay(ItemStack stack) {
+		for (RegistryObject<Item> o : ARMOR_OVERLAYS) {
 			if (stack.is(o.get()))
 				return true;
 		}
@@ -249,11 +259,11 @@ public class RegUtil {
 	enum ArmorMaterial implements net.minecraft.world.item.ArmorMaterial { // KB Resist max = 0.25 (0.25 * 4 = 1 = 100%)
 		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
-		}, true),
+		}, true, false, false),
 
 		CORRUPT("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.21F, () -> {
-			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
-		}, true) {
+			return Ingredient.of(ModItems.TENDRIL.get());
+		}, false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
@@ -307,8 +317,8 @@ public class RegUtil {
 			}
 
 			@Override
-			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-				return Voidscape.MODID.concat(":textures/models/armor/corrupt.png");
+			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, @Nullable String type) {
+				return Voidscape.MODID.concat(":textures/models/armor/corrupt" + (type == null ? "" : "_overlay") + ".png");
 			}
 		};
 
@@ -322,8 +332,10 @@ public class RegUtil {
 		private final float knockbackResistance;
 		private final LazyLoadedValue<Ingredient> repairMaterial;
 		private final boolean fullbright;
+		private final boolean overlay;
+		private final boolean overlayFullbright;
 
-		ArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial, boolean fullbright) {
+		ArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial, boolean fullbright, boolean overlay, boolean overlayFullbright) {
 			this.name = name;
 			this.maxDamageFactor = maxDamageFactor;
 			this.damageReductionAmountArray = damageReductionAmountArray;
@@ -333,6 +345,8 @@ public class RegUtil {
 			this.knockbackResistance = knockbackResistance;
 			this.repairMaterial = new LazyLoadedValue<>(repairMaterial);
 			this.fullbright = fullbright;
+			this.overlay = overlay;
+			this.overlayFullbright = overlayFullbright;
 		}
 
 		@Nullable
@@ -802,7 +816,7 @@ public class RegUtil {
 		}
 
 		static RegistryObject<Item> helmet(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_helmet"), armorFactory(tier, EquipmentSlot.HEAD, properties, factory));
+			return wrapArmorItemRegistration(tier, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_helmet"), armorFactory(tier, EquipmentSlot.HEAD, properties, factory)));
 		}
 
 		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
@@ -810,15 +824,21 @@ public class RegUtil {
 		}
 
 		static RegistryObject<Item> chest(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, BiPredicate<ItemStack, Boolean> elytra) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlot.CHEST, properties, factory, elytra));
+			return wrapArmorItemRegistration(tier, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_chest"), armorFactory(tier, EquipmentSlot.CHEST, properties, factory, elytra)));
 		}
 
 		static RegistryObject<Item> legs(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_legs"), armorFactory(tier, EquipmentSlot.LEGS, properties, factory));
+			return wrapArmorItemRegistration(tier, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_legs"), armorFactory(tier, EquipmentSlot.LEGS, properties, factory)));
 		}
 
 		static RegistryObject<Item> boots(ArmorMaterial tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
-			return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlot.FEET, properties, factory));
+			return wrapArmorItemRegistration(tier, ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_boots"), armorFactory(tier, EquipmentSlot.FEET, properties, factory)));
+		}
+
+		private static RegistryObject<Item> wrapArmorItemRegistration(ArmorMaterial tier, RegistryObject<Item> object) {
+			if (tier.overlay)
+				ARMOR_OVERLAYS.add(object);
+			return object;
 		}
 
 		private static Supplier<ArmorItem> armorFactory(ArmorMaterial tier, EquipmentSlot slot, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory) {
@@ -885,11 +905,11 @@ public class RegUtil {
 						@Override
 						public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 							A tierModel = tier.getArmorModel(entityLiving, itemStack, armorSlot, _default);
-							return tierModel != null ? tierModel : tier.fullbright ? (A) new HumanoidModel<>(Minecraft.getInstance().getEntityModels().
+							return tierModel != null ? tierModel : (tier.fullbright || tier.overlay) ? (A) new HumanoidModel<>(Minecraft.getInstance().getEntityModels().
 									bakeLayer(slot == EquipmentSlot.LEGS ? ModelLayers.PLAYER_INNER_ARMOR : ModelLayers.PLAYER_OUTER_ARMOR)) {
 								@Override
 								public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-									super.renderToBuffer(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha);
+									super.renderToBuffer(matrixStackIn, bufferIn, (tier.fullbright || (tier.overlayFullbright && RegUtil.renderingArmorOverlay)) ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha);
 								}
 							} : IItemRenderProperties.super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 						}

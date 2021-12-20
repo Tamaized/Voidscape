@@ -9,10 +9,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +35,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -344,6 +349,22 @@ public class ASMHooks {
 	@OnlyIn(Dist.CLIENT)
 	public static boolean isMyBow(boolean o, ItemStack stack, Item item) {
 		return o || RegUtil.isMyBow(stack, item);
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)}<br>
+	 * [AFTER LAST INVOKEVIRTUAL {@link HumanoidArmorLayer#renderModel(PoseStack, MultiBufferSource, int, boolean, HumanoidModel, float, float, float, ResourceLocation)}]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, boolean p_117111_, HumanoidModel<?> model, net.minecraft.world.entity.Entity entity, ItemStack stack, EquipmentSlot slot) {
+		if (RegUtil.isArmorOverlay(stack)) {
+			RegUtil.renderingArmorOverlay = true;
+			ResourceLocation texture = layer.getArmorResource(entity, stack, slot, "overlay");
+			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, p_117111_);
+			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+			RegUtil.renderingArmorOverlay = false;
+		}
 	}
 
 }

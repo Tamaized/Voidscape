@@ -14,6 +14,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import tamaized.voidscape.registry.RegUtil;
 
 import java.util.function.Function;
 
@@ -176,6 +177,6 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		leftleg.copyFrom(super.leftLeg);
 		rightfoot.copyFrom(super.rightLeg);
 		leftfoot.copyFrom(super.leftLeg);
-		parts.forEach((modelRenderer_) -> modelRenderer_.render(matrixStackIn, bufferIn, 0xF000F0, packedOverlayIn, red, green, blue, alpha));
+		parts.forEach((modelRenderer_) -> modelRenderer_.render(matrixStackIn, bufferIn, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
 	}
 }
