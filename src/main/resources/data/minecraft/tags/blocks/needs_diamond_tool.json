@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-	"voidscape:voidic_crystal_ore"
+	"voidscape:voidic_crystal_ore",
+	"voidscape:voidic_crystal_block"
   ]
 }

@@ -93,6 +93,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.CORRUPT_LEGS);
 		add(fullbrightList, ModArmors.CORRUPT_BOOTS);
 		addBlock(overlayList, ModBlocks.VOIDIC_CRYSTAL_ORE);
+		addBlock(fullbrightList, ModBlocks.VOIDIC_CRYSTAL_BLOCK);
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
 		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
 		addBlock(fullbrightList, ModBlocks.NULL_WHITE);

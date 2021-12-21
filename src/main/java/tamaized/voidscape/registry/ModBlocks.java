@@ -41,6 +41,13 @@ public class ModBlocks {
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_ORE_ITEM = ModItems.REGISTRY.
 			register(VOIDIC_CRYSTAL_ORE.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_ORE.get(), RegUtil.ItemProps.VOIDIC_CRYSTAL.get()));
 
+	public static final RegistryObject<Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of(Material.AMETHYST, MaterialColor.COLOR_PURPLE).
+			strength(3F, 3F).
+			requiresCorrectToolForDrops().
+			sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY.
+			register(VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_BLOCK.get(), RegUtil.ItemProps.VOIDIC_CRYSTAL.get()));
+
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
