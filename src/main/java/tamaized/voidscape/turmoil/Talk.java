@@ -52,7 +52,7 @@ public class Talk {
 			new TranslatableComponent(KEY_BASE + "corruptphantom"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
-				data.progressTo(Progression.Psychosis);
+				data.progressTo(Progression.PostPsychosis); // TODO set to `Psychosis` once the first dungeon is finished
 				data.levelUp();
 			})));
 
