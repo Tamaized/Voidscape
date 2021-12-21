@@ -257,11 +257,11 @@ public class RegUtil {
 	}
 
 	enum ArmorMaterial implements net.minecraft.world.item.ArmorMaterial { // KB Resist max = 0.25 (0.25 * 4 = 1 = 100%)
-		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> {
+		VOIDIC_CRYSTAL(ModItems.VOIDIC_CRYSTAL.getId().toString(), 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 2F, 0.20F, () -> {
 			return Ingredient.of(ModItems.VOIDIC_CRYSTAL.get());
 		}, true, false, false),
 
-		CORRUPT("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.21F, () -> {
+		CORRUPT("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 4F, 0.21F, () -> {
 			return Ingredient.of(ModItems.TENDRIL.get());
 		}, false, true, true) {
 			@Override
