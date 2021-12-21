@@ -851,12 +851,16 @@ public class RegUtil {
 
 				@Override
 				public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
-					return elytra.test(stack, true) || super.elytraFlightTick(stack, entity, flightTicks);
+					boolean flag = !isBroken(stack) && (elytra.test(stack, true) || super.elytraFlightTick(stack, entity, flightTicks));
+					if (flag && !entity.level.isClientSide && (flightTicks + 1) % 20 == 0) {
+						stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(net.minecraft.world.entity.EquipmentSlot.CHEST));
+					}
+					return flag;
 				}
 
 				@Override
 				public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
-					return elytra.test(stack, false) || super.canElytraFly(stack, entity);
+					return !isBroken(stack) && (elytra.test(stack, false) || super.canElytraFly(stack, entity));
 				}
 
 				@Override
