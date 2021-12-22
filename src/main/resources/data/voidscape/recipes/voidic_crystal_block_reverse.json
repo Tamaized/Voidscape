@@ -1,0 +1,12 @@
+{
+  "result": {
+	"item": "voidscape:voidic_crystal",
+	"count": 9
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+	{
+	  "item": "voidscape:voidic_crystal_block"
+	}
+  ]
+}
