@@ -16,7 +16,7 @@
 	"grass_color": 2165762,
 	"particle": {
 	  "options": {
-		"type": "ash"
+		"type": "crimson_spore"
 	  },
 	  "probability": 0.025
 	},
