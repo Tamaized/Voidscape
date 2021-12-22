@@ -1,11 +1,18 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "voidscape:cluster",
   "config": {
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
 		"Name": "minecraft:amethyst_block"
 	  }
-	}
+	},
+	"predicate": {
+	  "type": "matching_blocks",
+	  "blocks": [
+		"end_stone"
+	  ]
+	},
+	"chance": 0.50
   }
 }

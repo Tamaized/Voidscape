@@ -1,11 +1,18 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "voidscape:cluster",
   "config": {
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
 		"Name": "minecraft:nether_gold_ore"
 	  }
-	}
+	},
+	"predicate": {
+	  "type": "matching_blocks",
+	  "blocks": [
+		"netherrack"
+	  ]
+	},
+	"chance": 0.50
   }
 }

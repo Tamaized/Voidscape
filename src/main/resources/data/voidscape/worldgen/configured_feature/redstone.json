@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "voidscape:cluster",
   "config": {
 	"to_place": {
 	  "type": "simple_state_provider",
@@ -9,6 +9,13 @@
 		  "lit": false
 		}
 	  }
-	}
+	},
+	"predicate": {
+	  "type": "matching_blocks",
+	  "blocks": [
+		"stone"
+	  ]
+	},
+	"chance": 0.75
   }
 }
