@@ -98,13 +98,15 @@ public class ModBlocks {
 	public static final RegistryObject<Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
-			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
+			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true).
+			sound(SoundType.AMETHYST)));
 	public static final RegistryObject<Item> NULL_BLACK_ITEM = ModItems.REGISTRY.
 			register(NULL_BLACK.getId().getPath(), () -> new BlockItem(NULL_BLACK.get(), RegUtil.ItemProps.DEFAULT.get()));
 	public static final RegistryObject<Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
-			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
+			isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true).
+			sound(SoundType.AMETHYST)));
 	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY.
 			register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), RegUtil.ItemProps.DEFAULT.get()));
 
