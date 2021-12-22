@@ -72,14 +72,21 @@ public final class VoidTeleporter implements ITeleporter {
 									)
 										continue;
 									pos.set(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
+									int xOff = 0;
+									int zOff = 0;
+									if (pos.getX() * pos.getX() + pos.getZ() * pos.getZ() <= 33800) {
+										xOff = pos.getX() > 0 ? 130 : -130;
+										zOff = pos.getZ() > 0 ? 130 : -130;
+									}
+									pos.set(oldEntity.getX() + x + xOff, oldEntity.getY() + y, oldEntity.getZ() + z + zOff);
 									if (destWorld.getBlockState(pos).entityCanStandOnFace(destWorld, pos, oldEntity, Direction.UP)) {
 										final int height = (int) (oldEntity.getBbHeight() + 1);
 										for (int c = 1; c < height; c++) {
-											pos.set(oldEntity.getX() + x, oldEntity.getY() + y + c, oldEntity.getZ() + z);
+											pos.set(oldEntity.getX() + x + xOff, oldEntity.getY() + y + c, oldEntity.getZ() + z + zOff);
 											if (!destWorld.isEmptyBlock(pos))
 												continue scan;
 										}
-										pos.set(oldEntity.getX() + x, oldEntity.getY() + y, oldEntity.getZ() + z);
+										pos.set(oldEntity.getX() + x + xOff, oldEntity.getY() + y, oldEntity.getZ() + z + zOff);
 										return new PortalInfo(new Vec3(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F), Vec3.ZERO, oldEntity.getYRot(), oldEntity.getXRot());
 									}
 								}
