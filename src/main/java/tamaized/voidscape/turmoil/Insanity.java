@@ -72,31 +72,33 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClients(parent);
 			dirty = false;
 		}
-		if (parent instanceof LivingEntity living && parent.tickCount % 20 == 0)
+		if (parent instanceof LivingEntity living)
 			calculateEffects(living);
 	}
 
 	private void calculateEffects(LivingEntity parent) {
 		float perc = infusion / 600F;
-		AttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
-		if (attribute != null) {
-			attribute.removeModifier(INFUSION_HEALTH_DECAY);
-			attribute.removeModifier(INFUSION_ATTACK_DAMAGE);
-			attribute.removeModifier(INFUSION_RESISTANCE);
-			if (perc > 0F) {
-				final float bound = 1F / parent.getMaxHealth();
-				attribute.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
-				attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
-				attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
-				final float maxHealth = parent.getMaxHealth();
-				if (parent.getHealth() > maxHealth) {
-					if (parent instanceof ServerPlayer player)
-						Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketNoFlashOnSetHealth());
-					parent.setHealth(parent.getMaxHealth());
+		if (parent.tickCount % 20 == 0) {
+			AttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
+			if (attribute != null) {
+				attribute.removeModifier(INFUSION_HEALTH_DECAY);
+				attribute.removeModifier(INFUSION_ATTACK_DAMAGE);
+				attribute.removeModifier(INFUSION_RESISTANCE);
+				if (perc > 0F) {
+					final float bound = 1F / parent.getMaxHealth();
+					attribute.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
+					attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
+					attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
+					final float maxHealth = parent.getMaxHealth();
+					if (parent.getHealth() > maxHealth) {
+						if (parent instanceof ServerPlayer player)
+							Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketNoFlashOnSetHealth());
+						parent.setHealth(parent.getMaxHealth());
+					}
 				}
+				if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
+					parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);
 			}
-			if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level))
-				parent.hurt(DamageSource.OUT_OF_WORLD, 1024F);
 		}
 		if (parent instanceof Player) {
 			float sanity = paranoia / 600F;
