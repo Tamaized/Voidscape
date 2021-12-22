@@ -289,6 +289,17 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
+	 * [AFTER GETFIELD {@link net.minecraft.client.Options#gamma}]
+	 */
+	public static double cancelGamma(double o, Level level) {
+		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForVoidlikeInstance(level)))
+			return 0;
+		return o;
+	}
+
+	/**
+	 * Injection Point:<br>
 	 * {@link net.minecraft.client.resources.model.ModelBakery#processLoading(ProfilerFiller, int)}<br>
 	 * [BEFORE GETSTATIC {@link net.minecraft.core.Registry#ITEM)]
 	 */
