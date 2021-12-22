@@ -1,4 +1,4 @@
-package tamaized.voidscape.world;
+package tamaized.voidscape.world.featureconfig;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

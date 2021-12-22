@@ -1,13 +1,10 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "voidscape:fluid",
   "config": {
-	"to_place": {
-	  "type": "simple_state_provider",
-	  "state": {
-		"Name": "minecraft:lava",
-		"Properties": {
-		  "falling": "true"
-		}
+	"state": {
+	  "Name": "minecraft:lava",
+	  "Properties": {
+		"falling": true
 	  }
 	}
   }

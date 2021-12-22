@@ -19,8 +19,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.world.BooleanFeatureConfig;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
+import tamaized.voidscape.world.featureconfig.BooleanFeatureConfig;
+import tamaized.voidscape.world.featureconfig.FluidFeatureConfig;
 
 import java.util.Random;
 import java.util.function.Consumer;
@@ -145,6 +146,7 @@ public class ModFeatures {
 			if (canGen) {
 				genSpire(context.level(), pos.set(pos.getX(), base + length * (context.config().get() ? 0 : 1), pos.getZ()), length, context.random(), 5, context.config().get());
 				context.level().setBlock(pos, (context.config().get() ? ModBlocks.ANTIROCK : ModBlocks.THUNDERROCK).get().defaultBlockState(), 16 | 2);
+				return true;
 			}
 			return false;
 		}
@@ -173,6 +175,15 @@ public class ModFeatures {
 					}
 				}
 			}
+		}
+	});
+
+	public static final RegistryObject<Feature<FluidFeatureConfig>> FLUID = REGISTRY.register("fluid", () -> new Feature<>(FluidFeatureConfig.CODEC) {
+		@Override
+		public boolean place(FeaturePlaceContext<FluidFeatureConfig> context) {
+			context.level().setBlock(context.origin(), context.config().state.createLegacyBlock(), 2);
+			context.level().scheduleTick(context.origin(), context.config().state.getType(), 0);
+			return true;
 		}
 	});
 
