@@ -283,7 +283,7 @@ public class RenderTurmoil {
 		perc *= 0.25F;
 		float endPerc = (insanity.getParanoia() - 590F) / 10F;
 		endPerc = Mth.clamp(endPerc, 0, 1);
-		endPerc *= 0.25F;
+		endPerc *= 0.15F;
 		perc += endPerc;
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
