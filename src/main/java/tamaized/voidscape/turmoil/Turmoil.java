@@ -45,6 +45,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
+		if (progression == Progression.Psychosis) // TODO remove when first dungeon is complete
+			progression = Progression.PostPsychosis;
 		if (resetCooldown > 0)
 			if (--resetCooldown <= 0)
 				dirty = true;
