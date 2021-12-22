@@ -83,12 +83,6 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	}
 
 	@Override
-	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
-		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
-		setYHeadRot(getYRot());
-	}
-
-	@Override
 	protected void tickDeath() {
 		super.tickDeath();
 		if (!level.isClientSide()) {

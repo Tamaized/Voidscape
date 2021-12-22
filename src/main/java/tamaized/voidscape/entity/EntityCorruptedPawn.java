@@ -40,6 +40,12 @@ public abstract class EntityCorruptedPawn extends Mob {
 	}
 
 	@Override
+	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
+		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
+		setYHeadRot(getYRot());
+	}
+
+	@Override
 	public void tick() {
 		if (level.isClientSide()) {
 			if (lastCast != isCasting()) {

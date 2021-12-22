@@ -70,6 +70,7 @@ public class EntityCorruptedPawnPhantom extends EntityCorruptedPawn implements I
 			}
 		} else if (target != null) {
 			target.lookAt(EntityAnchorArgument.Anchor.EYES, position());
+			lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 			if (target instanceof Player target && tickCount % 5 == 0)
 				level.playSound(target, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
 		}
