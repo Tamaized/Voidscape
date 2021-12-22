@@ -147,9 +147,9 @@
 			  "if_true": {
 				"type": "y_above",
 				"anchor": {
-				  "above_bottom": 0
+				  "above_bottom": 1
 				},
-				"surface_depth_multiplier": 1,
+				"surface_depth_multiplier": 0,
 				"add_stone_depth": false
 			  },
 			  "then_run": {

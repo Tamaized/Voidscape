@@ -9,7 +9,10 @@ import net.minecraft.CrashReport;
 import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
@@ -25,12 +28,17 @@ import net.minecraft.world.level.levelgen.NoiseSamplingSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.NoiseSlider;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
@@ -90,6 +98,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		return settings;
 	}
 
+	/**
+	 * Basically a copy of super with changes for Y sensitivity for our 3D biome system
+	 */
 	@Override
 	public void applyBiomeDecoration(WorldGenLevel worldGenRegion_, ChunkAccess chunk, StructureFeatureManager structureManager_) {
 		int centerX = chunk.getPos().x;
@@ -108,14 +119,37 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(seed));
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
 		try {
-			//b.generate(structureManager_, this, worldGenRegion_, seed, rand, pos);
-
+			Map<Integer, List<StructureFeature<?>>> map = Registry.STRUCTURE_FEATURE.stream().collect(Collectors.groupingBy(structure -> structure.step().ordinal()));
 			List<BiomeSource.StepFeatureData> list = this.biomeSource.featuresPerStep();
 			int j = list.size();
-			Registry<PlacedFeature> registry = worldGenRegion_.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
+			Registry<PlacedFeature> featureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
+			Registry<StructureFeature<?>> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registry.STRUCTURE_FEATURE_REGISTRY);
 			int k = Math.max(GenerationStep.Decoration.values().length, j);
 
 			for (int l = 0; l < k; ++l) {
+
+				int i1 = 0;
+				if (structureManager_.shouldGenerateFeatures()) {
+					for (StructureFeature<?> structurefeature : map.getOrDefault(l, Collections.emptyList())) {
+						rand.setFeatureSeed(seed, i1, l);
+						Supplier<String> supplier = () -> {
+							return structureRegistry.getResourceKey(structurefeature).map(Object::toString).orElseGet(structurefeature::toString);
+						};
+
+						try {
+							worldGenRegion_.setCurrentlyGenerating(supplier);
+							structureManager_.startsForFeature(SectionPos.of(chunk.getPos(), chunk.getMinSection()), structurefeature).forEach((p_196726_) -> {
+								p_196726_.placeInChunk(worldGenRegion_, structureManager_, this, rand, writableArea(chunk), chunk.getPos());
+							});
+						} catch (Exception exception) {
+							CrashReport crashreport1 = CrashReport.forThrowable(exception, "Feature placement");
+							crashreport1.addCategory("Feature").setDetail("Description", supplier::get);
+							throw new ReportedException(crashreport1);
+						}
+
+						++i1;
+					}
+				}
 
 				if (l < j) {
 					IntSet intset = new IntArraySet();
@@ -140,7 +174,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 						int l1 = aint[k1];
 						PlacedFeature placedfeature = biomesource$stepfeaturedata.features().get(l1);
 						Supplier<String> supplier1 = () -> {
-							return registry.getResourceKey(placedfeature).map(Object::toString).orElseGet(placedfeature::toString);
+							return featureRegistry.getResourceKey(placedfeature).map(Object::toString).orElseGet(placedfeature::toString);
 						};
 						rand.setFeatureSeed(seed, l1, l);
 
@@ -170,44 +204,15 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		}
 	}
 
-	/*@Override
-	public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_158463_, StructureFeatureManager p_158464_, ChunkAccess p_158465_) {
-		return CompletableFuture.completedFuture(p_158465_);
-	}*/
-
-	/*@Override
-	public void buildSurface(WorldGenRegion genRegion, StructureFeatureManager structureFeatureManager, ChunkAccess chunk) {
-		ChunkPos chunkpos = chunk.getPos();
-		WorldgenRandom sharedseedrandom = new WorldgenRandom(new LegacyRandomSource(chunkpos.toLong()));
-		final int xChunkBase = chunkpos.getMinBlockX();
-		final int zChunkBase = chunkpos.getMinBlockZ();
-		double d0 = 0.0625D;
-		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-		for (int xRelative = 0; xRelative < 16; ++xRelative) {
-			for (int zRelative = 0; zRelative < 16; ++zRelative) {
-				int xReal = xChunkBase + xRelative;
-				int zReal = zChunkBase + zRelative;
-//				double noise = this.surfaceNoise.getSurfaceNoiseValue((double) xReal * d0, (double) zReal * d0, d0, (double) xRelative * d0) * 15.0D;
-				for (int y = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, xRelative, zRelative); y > 0; y--) {
-//					genRegion.getBiome(blockpos$mutable.set(xReal, y, zReal)).
-//							buildSurfaceAt(sharedseedrandom, chunk, xReal, zReal, y, noise, this.defaultBlock, this.defaultFluid, this.getSeaLevel(), settings.get().getMinSurfaceLevel(), genRegion.getSeed());
-					this.surfaceSystem.buildSurface(
-							p_188636_.getBiomeManager(),
-
-							p_188636_.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY),
-
-							noisegeneratorsettings.useLegacyRandomSource(),
-
-							worldgenerationcontext, p_188638_,
-
-							noisechunk,
-
-							noisegeneratorsettings.surfaceRule());
-				}
-			}
-		}
-
-	}*/
+	private static BoundingBox writableArea(ChunkAccess p_187718_) { // TODO: make Y sensitive
+		ChunkPos chunkpos = p_187718_.getPos();
+		int i = chunkpos.getMinBlockX();
+		int j = chunkpos.getMinBlockZ();
+		LevelHeightAccessor levelheightaccessor = p_187718_.getHeightAccessorForGeneration();
+		int k = levelheightaccessor.getMinBuildHeight() + 1;
+		int l = levelheightaccessor.getMaxBuildHeight() - 1;
+		return new BoundingBox(i, k, j, i + 15, l, j + 15);
+	}
 
 	/**
 	 * Extends {@link NoiseSettings)} via asm

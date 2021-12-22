@@ -2,17 +2,13 @@ package tamaized.voidscape.world.structures;
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -24,9 +20,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -38,40 +31,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 
 	public NullStructure() {
-		super(NoneFeatureConfiguration.CODEC, new PieceGeneratorSupplier<NoneFeatureConfiguration>() {
-			@Override
-			public Optional<PieceGenerator<NoneFeatureConfiguration>> createGenerator(Context<NoneFeatureConfiguration> p_197348_) {
-				return Optional.of(new PieceGenerator<NoneFeatureConfiguration>() {
-					@Override
-					public void generatePieces(StructurePiecesBuilder builder, Context<NoneFeatureConfiguration> context) {
-						BlockPos blockpos = new BlockPos(context.chunkPos().getMinBlockX(), 0, context.chunkPos().getMinBlockZ());
-						Pieces.addPieces(context.structureManager(), blockpos, Pieces.TEMPLATE_ENTRANCE, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, builder);
-						Pieces.addPieces(context.structureManager(), blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, builder);
-					}
-				});
-			}
-		});
+		super(NoneFeatureConfiguration.CODEC, context -> context.chunkPos().x == 0 && context.chunkPos().z == 0 ? Optional.of((builder, generatorContext) -> {
+			BlockPos blockpos = new BlockPos(generatorContext.chunkPos().getMinBlockX(), 0, generatorContext.chunkPos().getMinBlockZ());
+			Pieces.addPieces(generatorContext.structureManager(), blockpos, Pieces.TEMPLATE_ENTRANCE, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, builder);
+			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, builder);
+		}) : Optional.empty());
 	}
 
 	@Override
 	public GenerationStep.Decoration step() {
 		return GenerationStep.Decoration.TOP_LAYER_MODIFICATION;
-	}
-
-	@Override
-	public boolean canGenerate(RegistryAccess registry, ChunkGenerator chunkGenerator, BiomeSource biomeSource, StructureManager manager, long seed, ChunkPos pos, NoneFeatureConfiguration config, LevelHeightAccessor height, Predicate<Biome> correctBiome) {
-		return pos.x == 0 && pos.z == 0;
 	}
 
 	@Override
