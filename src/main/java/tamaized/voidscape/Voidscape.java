@@ -219,7 +219,8 @@ public class Voidscape {
 								event.setAmount(event.getAmount() * 0.9F);
 							}
 						});
-				event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
+				if (event.getEntityLiving().attributes.hasAttribute(ModAttributes.VOIDIC_RES.get()))
+					event.setAmount((float) Math.max(0, event.getAmount() - event.getEntityLiving().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
 			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
 				if (event.getEntityLiving().getHealth() <= event.getAmount())
 					return;
