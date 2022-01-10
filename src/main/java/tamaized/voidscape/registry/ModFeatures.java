@@ -21,6 +21,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.VoidscapeSeededBiomeProvider;
 import tamaized.voidscape.world.featureconfig.BooleanFeatureConfig;
@@ -31,7 +33,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class ModFeatures {
+public class ModFeatures implements RegistryClass {
 
 	private static final DeferredRegister<Feature<?>> REGISTRY = RegUtil.create(ForgeRegistries.FEATURES);
 
@@ -224,7 +226,8 @@ public class ModFeatures {
 		}
 	});
 
-	static void classload(IEventBus bus) {
+	@Override
+	public void init(IEventBus bus) {
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
 			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
 			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);

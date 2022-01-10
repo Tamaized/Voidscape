@@ -20,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.structures.NullStructure;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ModStructures {
+public class ModStructures implements RegistryClass {
 
 	public static final Map<StructureFeature<?>, StructureFeatureConfiguration> SEPARATION_SETTINGS = new HashMap<>();
 
@@ -39,7 +40,8 @@ public class ModStructures {
 		// NO-OP
 	}
 
-	static void classload(IEventBus bus) {
+	@Override
+	public void init(IEventBus bus) {
 		classloadPieces(NullStructure.Pieces.MAIN);
 		bus.addGenericListener(StructureFeature.class, (Consumer<RegistryEvent.Register<StructureFeature<?>>>) event -> {
 			SEPARATION_SETTINGS.clear();

@@ -17,11 +17,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
@@ -42,7 +45,7 @@ import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModEntities {
+public class ModEntities implements RegistryClass {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITIES);
 
@@ -61,7 +64,8 @@ public class ModEntities {
 		return type;
 	});
 
-	static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 

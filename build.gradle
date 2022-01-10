@@ -88,6 +88,7 @@ processResources {
 }
 
 jar {
+    //noinspection GroovyAssignabilityCheck
     manifest {
         attributes(["Specification-Title"     : "Voidscape",
                     "Specification-Vendor"    : "Tamaized",
@@ -103,7 +104,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
-    def reg = "RegUtil:RegUtil-1.18.1:1.0.2"
+    def reg = "RegUtil:RegUtil-1.18.1:1.0.10"
     implementation fg.deobf(reg)
     shade reg
 }
@@ -113,5 +114,12 @@ task incrBuildNum doLast {
         entry(key: "mod_version", value: Integer.parseInt(project.mod_version) + 1)
     }
 }
+
+reobf {
+    shadowJar {}
+}
+
+build.dependsOn shadowJar
+build.dependsOn reobfShadowJar
 
 build.finalizedBy(incrBuildNum)

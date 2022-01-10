@@ -2,11 +2,14 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 
-public final class ModDataSerializers {
+public final class ModDataSerializers implements RegistryClass {
 
 	private static final DeferredRegister<DataSerializerEntry> REGISTRY = RegUtil.create(ForgeRegistries.DATA_SERIALIZERS);
 
@@ -27,11 +30,8 @@ public final class ModDataSerializers {
 		}
 	};
 
-	private ModDataSerializers() {
-
-	}
-
-	static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 		REGISTRY.register("long", () -> new DataSerializerEntry(LONG));
 	}
 

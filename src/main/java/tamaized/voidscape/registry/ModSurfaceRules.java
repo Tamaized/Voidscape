@@ -8,11 +8,12 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 
 import java.util.function.Consumer;
 
-public class ModSurfaceRules {
+public class ModSurfaceRules implements RegistryClass {
 
 	static class AirAboveConditionSource implements SurfaceRules.ConditionSource {
 
@@ -31,7 +32,8 @@ public class ModSurfaceRules {
 		}
 	}
 
-	static void classload(IEventBus bus) {
+	@Override
+	public void init(IEventBus bus) {
 		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
 			Registry.register(Registry.CONDITION, new ResourceLocation(Voidscape.MODID, "air_above"), AirAboveConditionSource.CODEC);
 		});

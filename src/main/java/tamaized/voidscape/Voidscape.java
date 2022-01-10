@@ -62,6 +62,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.client.ClientInitiator;
@@ -69,11 +70,21 @@ import tamaized.voidscape.client.ConfigScreen;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
+import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
+import tamaized.voidscape.registry.ModDataSerializers;
 import tamaized.voidscape.registry.ModEffects;
-import tamaized.voidscape.registry.RegUtil;
+import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.registry.ModFeatures;
+import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.ModParticles;
+import tamaized.voidscape.registry.ModSounds;
+import tamaized.voidscape.registry.ModStructures;
+import tamaized.voidscape.registry.ModSurfaceRules;
+import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.BindData;
 import tamaized.voidscape.turmoil.DonatorData;
 import tamaized.voidscape.turmoil.Insanity;
@@ -130,7 +141,28 @@ public class Voidscape {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight());
 			Config.CLIENT_CONFIG = specPair.getLeft();
 		}
-		RegUtil.register(busMod);
+		try {
+			Class.forName("tamaized.regutil.RegUtil");
+			Class.forName("tamaized.regutil.RegistryClass");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		RegUtil.setup(MODID, () -> ModItems.VOIDIC_CRYSTAL, busMod,
+				ModArmors::new,
+				ModAttributes::new,
+				ModBiomes::new,
+				ModBlocks::new,
+				ModDamageSource::new,
+				ModDataSerializers::new,
+				ModEffects::new,
+				ModEntities::new,
+				ModFeatures::new,
+				ModItems::new,
+				ModParticles::new,
+				ModSounds::new,
+				ModStructures::new,
+				ModSurfaceRules::new,
+				ModTools::new);
 		Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
 		SubCapability.init(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {

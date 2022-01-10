@@ -24,12 +24,12 @@ import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
-import tamaized.voidscape.registry.RegUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

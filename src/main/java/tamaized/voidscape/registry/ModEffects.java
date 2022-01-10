@@ -16,9 +16,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.client.EffectRenderer;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -35,7 +38,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ModEffects {
+public class ModEffects implements RegistryClass {
 
 	private static final List<MobEffect> CONTEXT_EFFECTS = new ArrayList<>();
 	private static final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(ForgeRegistries.MOB_EFFECTS);
@@ -100,7 +103,8 @@ public class ModEffects {
 		return self ? caster.addEffect(instance) : entity.addEffect(instance);
 	}
 
-	public static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 

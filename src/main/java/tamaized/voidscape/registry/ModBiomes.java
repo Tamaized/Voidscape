@@ -7,11 +7,14 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 
-public class ModBiomes {
+public class ModBiomes implements RegistryClass {
 
 	private static final DeferredRegister<Biome> REGISTRY = RegUtil.create(ForgeRegistries.BIOMES);
 
@@ -37,7 +40,8 @@ public class ModBiomes {
 		return ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Voidscape.MODID, id));
 	}
 
-	public static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 

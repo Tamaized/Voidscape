@@ -2,16 +2,20 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 
 import java.util.UUID;
 
-public class ModAttributes {
+public class ModAttributes implements RegistryClass {
 
-	static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 

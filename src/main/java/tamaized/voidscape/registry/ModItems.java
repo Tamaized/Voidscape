@@ -18,9 +18,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.network.server.ServerPacketTurmoilResetSkills;
@@ -28,10 +31,15 @@ import tamaized.voidscape.turmoil.SubCapability;
 
 import java.util.UUID;
 
-public class ModItems {
+public class ModItems implements RegistryClass {
+
+	static class ItemProps {
+		static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(() -> new Item.Properties().tab(RegUtil.creativeTab()));
+		static final RegUtil.ItemProps VOIDIC_CRYSTAL = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
+	}
 
 	static final DeferredRegister<Item> REGISTRY = RegUtil.create(ForgeRegistries.ITEMS);
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(RegUtil.ItemProps.VOIDIC_CRYSTAL.get()) {
+	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()) {
 		@Override
 		public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 			if (playerIn.getGameProfile().getId().equals(UUID.fromString("16fea09e-314e-4955-88c2-6b552ecf314a"))) {
@@ -42,7 +50,7 @@ public class ModItems {
 			return super.use(worldIn, playerIn, handIn);
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(RegUtil.ItemProps.VOIDIC_CRYSTAL.get()) {
+	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {
 			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(Blocks.BEDROCK)) {
@@ -60,8 +68,8 @@ public class ModItems {
 			return super.useOn(context);
 		}
 	});
-	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(RegUtil.ItemProps.VOIDIC_CRYSTAL.get()));
-	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(RegUtil.ItemProps.VOIDIC_CRYSTAL.get().
+	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()));
+	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
@@ -92,7 +100,8 @@ public class ModItems {
 		}
 	});
 
-	static void classload() {
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 
