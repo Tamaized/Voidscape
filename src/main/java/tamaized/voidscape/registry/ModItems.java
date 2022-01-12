@@ -86,7 +86,8 @@ public class ModItems implements RegistryClass {
 						case "end" -> BlockEtherealPlant.State.END;
 					};
 				switch (state) {
-					case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setInfusion(data.getInfusion() + 150)));
+					case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
+							setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
 					case NULL -> {
 						entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
 						entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setParanoia((int) data.getParanoia() - 150)));
