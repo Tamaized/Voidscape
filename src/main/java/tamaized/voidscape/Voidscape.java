@@ -141,12 +141,6 @@ public class Voidscape {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight());
 			Config.CLIENT_CONFIG = specPair.getLeft();
 		}
-		try {
-			Class.forName("tamaized.regutil.RegUtil");
-			Class.forName("tamaized.regutil.RegistryClass");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 		RegUtil.setup(MODID, () -> ModItems.VOIDIC_CRYSTAL, busMod,
 				ModArmors::new,
 				ModAttributes::new,
