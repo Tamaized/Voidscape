@@ -22,7 +22,7 @@ configurations {
 shadowJar {
     classifier = null
     configurations = [project.configurations.shade]
-    relocate 'tamaized.regutil', 'tamaized.frostfell.regutil'
+    relocate 'tamaized.regutil', 'tamaized.voidscape.regutil'
 }
 
 repositories {
