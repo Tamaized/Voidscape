@@ -1,0 +1,17 @@
+*
+!.gitignore
+!donator.properties
+!gradlew
+!gradlew.bat
+!/contributors/
+!/contributors/**
+!/gradle
+!/gradle/**
+!/src/
+!/src/**
+!/libs/
+!/libs/**
+!build.gradle
+!gradle.properties
+!LICENSE
+!README.md
