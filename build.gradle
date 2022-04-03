@@ -104,7 +104,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
-    def reg = "RegUtil:RegUtil-1.18.2:1.0.12"
+    def reg = "RegUtil:RegUtil-" + project.regutil_version
     implementation fg.deobf(reg)
     shade reg
 }
