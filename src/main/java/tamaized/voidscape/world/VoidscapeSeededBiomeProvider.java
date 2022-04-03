@@ -3,8 +3,9 @@ package tamaized.voidscape.world;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -47,8 +48,8 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
 	);
 	public static final Codec<VoidscapeSeededBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.
-			fieldOf("seed").stable().orElseGet(() -> HackyWorldGen.seed).forGetter((obj) -> obj.seed), RegistryLookupCodec.
-			create(Registry.BIOME_REGISTRY).forGetter(provider -> provider.registry)).apply(instance, instance.stable(VoidscapeSeededBiomeProvider::new)));
+			fieldOf("seed").stable().orElseGet(() -> HackyWorldGen.seed).forGetter((obj) -> obj.seed), RegistryOps.
+			retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(provider -> provider.registry)).apply(instance, instance.stable(VoidscapeSeededBiomeProvider::new)));
 	private final Map<ResourceKey<Biome>, Integer> idCache = new HashMap<>();
 	private final Map<Integer, Biome> biomeCache = new HashMap<>();
 	private final Registry<Biome> registry;
@@ -59,7 +60,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 	private final Random layerMergeRandom;
 
 	public VoidscapeSeededBiomeProvider(long seed, Registry<Biome> registryIn) {
-		super(BIOMES.stream().map(ResourceKey::location).map(registryIn::getOptional).filter(Optional::isPresent).map(opt -> opt::get));
+		super(BIOMES.stream().map(ResourceKey::location).map(registryIn::getOptional).filter(Optional::isPresent).map(opt -> Holder.direct(opt.get())));
 		this.seed = seed;
 		layerMergeRandom = new Random(seed);
 		registry = registryIn;
@@ -122,7 +123,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 	}
 
 	@Override
-	public Biome getNoiseBiome(int x, int cy, int z, Climate.Sampler p_186738_) {
+	public Holder<Biome> getNoiseBiome(int x, int cy, int z, Climate.Sampler p_186738_) {
 		return getRealNoiseBiome(x, cy << 2, z);
 	}
 
@@ -137,7 +138,7 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 		LAYERS = new int[]{antiSpireY, sliceBottom, sliceTop, thunderSpireY};
 	}
 
-	public Biome getRealNoiseBiome(int x, int y, int z) {
+	public Holder<Biome> getRealNoiseBiome(int x, int y, int z) {
 		// Debug code to render an image of the biome layout within the ide
 		/*final Map<Integer, Integer> remapColors = new HashMap<>();
 		remapColors.put(getBiomeId(ModBiomes.VOID), 0x000000);
@@ -161,13 +162,13 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 		}
  		System.out.println("breakpoint");*/
 		if (x * x + z * z <= 1225)
-			return getBiome(getBiomeId(ModBiomes.NULL));
+			return Holder.direct(getBiome(getBiomeId(ModBiomes.NULL)));
 		final int antiSpireY = LAYERS[0];
 		final int thunderSpireY = LAYERS[3];
 		final int m1 = LAYERS[1];
 		final int m2 = LAYERS[2];
 		layerMergeRandom.setSeed(seed + (x & -4) * 25117L + (z & -4) * 151121L);
-		return getBiome(
+		return Holder.direct(getBiome(
 
 				y < (antiSpireY - 2) ? getBiomeId(ModBiomes.ANTI_SPIRES) :
 
@@ -185,6 +186,6 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
 																		y <= (thunderSpireY + 2) ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.THUNDER_SPIRES) : genUpper.area.get(x, z) :
 
-																				getBiomeId(ModBiomes.THUNDER_SPIRES));
+																				getBiomeId(ModBiomes.THUNDER_SPIRES)));
 	}
 }

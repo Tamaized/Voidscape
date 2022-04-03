@@ -26,6 +26,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,6 +38,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -157,12 +159,14 @@ public class Voidscape {
 				ModStructures::new,
 				ModSurfaceRules::new,
 				ModTools::new);
-		Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
+		busMod.addGenericListener(Biome.class, (Consumer<RegistryEvent.Register<Biome>>) event -> {
+			Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
+		});
 		SubCapability.init(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
-			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
-			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
 		});
 		busForge.addListener((Consumer<ServerStartingEvent>) event ->
 
@@ -201,7 +205,7 @@ public class Voidscape {
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
 					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()) && event.player.level.getBlockState(dest.above()).isAir())
-						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).getRegistryName()));
+						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).value().getRegistryName()));
 				}
 			}
 		});

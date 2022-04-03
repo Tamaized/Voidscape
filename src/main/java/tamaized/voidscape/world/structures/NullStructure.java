@@ -1,34 +1,28 @@
 package tamaized.voidscape.world.structures;
 
-import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModEntities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -51,16 +45,6 @@ public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 	@Override
 	public GenerationStep.Decoration step() {
 		return GenerationStep.Decoration.TOP_LAYER_MODIFICATION;
-	}
-
-	@Override
-	public List<MobSpawnSettings.SpawnerData> getDefaultSpawnList(MobCategory category) {
-		return category == MobCategory.MONSTER ? Lists.newArrayList(new MobSpawnSettings.SpawnerData(ModEntities.NULL_SERVANT.get(), 10, 0, 1)) : new ArrayList<>();
-	}
-
-	@Override
-	public boolean getDefaultRestrictsSpawnsToInside() {
-		return true;
 	}
 
 	public static class Pieces {

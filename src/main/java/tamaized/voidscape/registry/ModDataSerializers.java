@@ -8,10 +8,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
+import tamaized.voidscape.Voidscape;
 
 public final class ModDataSerializers implements RegistryClass {
 
-	private static final DeferredRegister<DataSerializerEntry> REGISTRY = RegUtil.create(ForgeRegistries.DATA_SERIALIZERS);
+	private static final DeferredRegister<DataSerializerEntry> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.DATA_SERIALIZERS, Voidscape.MODID);
 
 	public static final EntityDataSerializer<Long> LONG = new EntityDataSerializer<>() {
 		@Override

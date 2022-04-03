@@ -40,7 +40,7 @@ public class BlockEtherealPlant extends BushBlock {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState state = super.getStateForPlacement(context);
-		return biomeState(state == null ? defaultBlockState() : state, context.getLevel().getBiome(context.getClickedPos()).getRegistryName());
+		return biomeState(state == null ? defaultBlockState() : state, context.getLevel().getBiome(context.getClickedPos()).value().getRegistryName());
 	}
 
 	public static BlockState biomeState(BlockState state, @Nullable ResourceLocation biome) {

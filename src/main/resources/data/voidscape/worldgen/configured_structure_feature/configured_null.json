@@ -1,4 +1,20 @@
 {
   "config": { },
-  "type": "voidscape:null"
+  "type": "voidscape:null",
+  "biomes": [
+	"voidscape:null"
+  ],
+  "spawn_overrides": {
+	"monster": {
+	  "bounding_box": "full",
+	  "spawns": [
+		{
+		  "type": "voidscape:nullservant",
+		  "weight": 10,
+		  "minCount": 0,
+		  "maxCount": 1
+		}
+	  ]
+	}
+  }
 }

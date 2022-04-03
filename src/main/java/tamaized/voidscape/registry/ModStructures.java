@@ -1,53 +1,35 @@
 package tamaized.voidscape.registry;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.StructureSettings;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.StructurePieceType;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.structures.NullStructure;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class ModStructures implements RegistryClass {
 
-	public static final Map<StructureFeature<?>, StructureFeatureConfiguration> SEPARATION_SETTINGS = new HashMap<>();
+	/*public static final Map<StructureFeature<?>, StructureFeatureConfiguration> SEPARATION_SETTINGS = new HashMap<>();
 
 	public static final StructureFeature<NoneFeatureConfiguration> NULL = new NullStructure();
-	public static final ConfiguredStructureFeature<?, ?> CONFIGURED_NULL = NULL.configured(FeatureConfiguration.NONE);
+	public static final ConfiguredStructureFeature<?, ?> CONFIGURED_NULL = NULL.configured(FeatureConfiguration.NONE);*/
 
 	private static void classloadPieces(StructurePieceType... noop) {
 		// NO-OP
 	}
 
 	@Override
-	public void init(IEventBus bus) {
-		classloadPieces(NullStructure.Pieces.MAIN);
+	public void init(IEventBus bus) { // TODO: It seems like all this commented out crap can be removed and moved to json. if so then use deferred register for StructureFeature
 		bus.addGenericListener(StructureFeature.class, (Consumer<RegistryEvent.Register<StructureFeature<?>>>) event -> {
-			SEPARATION_SETTINGS.clear();
+			classloadPieces(NullStructure.Pieces.MAIN);
+			//SEPARATION_SETTINGS.clear();
 
-			register(event, NULL, CONFIGURED_NULL, new ResourceLocation(Voidscape.MODID, "null"), 0, 1);
-		});
+			register(event, new NullStructure()/*NULL, CONFIGURED_NULL*/, new ResourceLocation(Voidscape.MODID, "null")/*, 0, 1*/);
+		});/*
 		MinecraftForge.EVENT_BUS.addListener((Consumer<WorldEvent.Load>) event -> {
 			if (event.getWorld() instanceof ServerLevel serverWorld && serverWorld.getChunkSource().getGenerator() instanceof VoidChunkGenerator) {
 				StructureSettings settings = serverWorld.getChunkSource().getGenerator().getSettings();
@@ -61,10 +43,10 @@ public class ModStructures implements RegistryClass {
 				tmpMap.forEach((key, value) -> tempStructureToMultiMap.put(key, ImmutableMultimap.copyOf(value)));
 				settings.configuredStructures = tempStructureToMultiMap.build();
 			}
-		});
+		});*/
 	}
 
-	@SafeVarargs
+	/*@SafeVarargs
 	private static void associateBiomeToConfiguredStructure(Map<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>> map, ConfiguredStructureFeature<?, ?> configuredStructureFeature, ResourceKey<Biome>... biomeRegistryKey) {
 		map.putIfAbsent(configuredStructureFeature.feature, HashMultimap.create());
 		HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>> configuredStructureToBiomeMultiMap = map.get(configuredStructureFeature.feature);
@@ -84,17 +66,17 @@ public class ModStructures implements RegistryClass {
 				configuredStructureToBiomeMultiMap.put(configuredStructureFeature, biome);
 			}
 		}
-	}
+	}*/
 
-	private static void register(RegistryEvent.Register<StructureFeature<?>> event, StructureFeature<?> structure, ConfiguredStructureFeature<?, ?> config, ResourceLocation name, int min, int max) {
+	private static void register(RegistryEvent.Register<StructureFeature<?>> event, StructureFeature<?> structure/*, ConfiguredStructureFeature<?, ?> config*/, ResourceLocation name/*, int min, int max*/) {
 		event.getRegistry().register(structure.setRegistryName(name));
-		StructureFeature.STRUCTURES_REGISTRY.put(name.toString(), structure);
-		StructureFeatureConfiguration seperation = new StructureFeatureConfiguration(max, min, 0);
+		//StructureFeature.STRUCTURES_REGISTRY.put(name.toString(), structure);
+		/*StructureFeatureConfiguration seperation = new StructureFeatureConfiguration(max, min, 0);
 		StructureSettings.DEFAULTS = ImmutableMap.<StructureFeature<?>, StructureFeatureConfiguration>builder().putAll(StructureSettings.DEFAULTS).
 				put(structure, seperation).build();
 		SEPARATION_SETTINGS.put(structure, seperation);
 		Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(name.getNamespace(), "configured_".concat(name.getPath())), config);
-		//		FlatLevelGeneratorSettings.STRUCTURE_FEATURES.put(structure, config);
+		//		FlatLevelGeneratorSettings.STRUCTURE_FEATURES.put(structure, config);*/
 	}
 
 }

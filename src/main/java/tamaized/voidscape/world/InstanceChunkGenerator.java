@@ -4,6 +4,7 @@ package tamaized.voidscape.world;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.ChunkPos;
@@ -19,31 +20,31 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class InstanceChunkGenerator extends ChunkGenerator {
 
-	public static final Codec<InstanceChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> p_236091_0_.
+	public static final Codec<InstanceChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> commonCodec(p_236091_0_).and(p_236091_0_.
 			group(BiomeSource.CODEC.
 					fieldOf("biome_source").
 					forGetter(ChunkGenerator::getBiomeSource), ResourceLocation.CODEC.
 					fieldOf("snapshot").
 					forGetter(InstanceChunkGenerator::snapshot), ResourceLocation.CODEC.
 					fieldOf("instance_group").
-					forGetter(InstanceChunkGenerator::group)).
+					forGetter(InstanceChunkGenerator::group))).
 			apply(p_236091_0_, p_236091_0_.stable(InstanceChunkGenerator::new)));
 
 	private final ResourceLocation snapshot;
 	private final ResourceLocation group;
 
-	private InstanceChunkGenerator(BiomeSource biomeProvider1, ResourceLocation snapshot, ResourceLocation group) {
-		super(biomeProvider1, new StructureSettings(Optional.empty(), new HashMap<>()));
+	private InstanceChunkGenerator(Registry<StructureSet> p_209112_, BiomeSource biomeProvider1, ResourceLocation snapshot, ResourceLocation group) {
+		super(p_209112_, Optional.empty(), biomeProvider1);
 		this.snapshot = snapshot;
 		this.group = group;
 	}
@@ -63,12 +64,12 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public ChunkGenerator withSeed(long seed) {
-		return new InstanceChunkGenerator(biomeSource.withSeed(seed), snapshot(), group());
+		return new InstanceChunkGenerator(structureSets, biomeSource.withSeed(seed), snapshot(), group());
 	}
 
 	@Override
 	public Climate.Sampler climateSampler() {
-		return (p_188541_, p_188542_, p_188543_) -> Climate.target(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+		return Climate.empty();
 	}
 
 	@Override
@@ -122,5 +123,10 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	@Override
 	public NoiseColumn getBaseColumn(int int_, int int1_, LevelHeightAccessor accessor) {
 		return new NoiseColumn(0, new BlockState[0]);
+	}
+
+	@Override
+	public void addDebugScreenInfo(List<String> p_208054_, BlockPos p_208055_) {
+
 	}
 }

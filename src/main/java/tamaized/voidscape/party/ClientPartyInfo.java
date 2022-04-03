@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class ClientPartyInfo {
 
 	// FIXME: localize
-	private static final Toast TOAST_DISBAND = new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TranslatableComponent("Voidscape"), new TranslatableComponent("Party Disbanded"));
+	private static final LazyLoadedValue<Toast> TOAST_DISBAND = new LazyLoadedValue<>(() -> new SystemToast(SystemToast.SystemToastIds.TUTORIAL_HINT, new TranslatableComponent("Voidscape"), new TranslatableComponent("Party Disbanded")));
 
 	public static GameProfile host;
 	public static List<GameProfile> members = new ArrayList<>();
@@ -48,7 +49,7 @@ public class ClientPartyInfo {
 
 	public static void reset(boolean toast) {
 		if (toast && host != null)
-			Minecraft.getInstance().getToasts().addToast(TOAST_DISBAND);
+			Minecraft.getInstance().getToasts().addToast(TOAST_DISBAND.get());
 		host = null;
 		members.clear();
 		password = "";
