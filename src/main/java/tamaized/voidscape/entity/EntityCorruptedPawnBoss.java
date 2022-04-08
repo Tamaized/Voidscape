@@ -10,6 +10,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -79,6 +80,8 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
+		if (getTarget() == null && source.getDirectEntity() instanceof LivingEntity living)
+			setTarget(living);
 		return super.hurt(source, ModDamageSource.check(ModDamageSource.ID_VOIDIC, source) ? amount : amount * 0.01F);
 	}
 
