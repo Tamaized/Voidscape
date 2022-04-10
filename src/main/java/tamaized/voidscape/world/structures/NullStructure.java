@@ -1,12 +1,15 @@
 package tamaized.voidscape.world.structures;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -16,30 +19,42 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModBiomes;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 public class NullStructure extends StructureFeature<NoneFeatureConfiguration> {
 
 	public NullStructure() {
-		super(NoneFeatureConfiguration.CODEC, context -> context.chunkPos().x == 0 && context.chunkPos().z == 0 ? Optional.of((builder, generatorContext) -> {
-			BlockPos blockpos = new BlockPos(generatorContext.chunkPos().getMinBlockX(), 0, generatorContext.chunkPos().getMinBlockZ());
-			Pieces.addPieces(generatorContext.structureManager(), blockpos, Pieces.TEMPLATE_ENTRANCE, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, builder);
-			Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, builder);
-		}) : Optional.empty());
+		super(NoneFeatureConfiguration.CODEC, context -> context.chunkPos().x == 0 && context.chunkPos().z == 0 && isValidBiome(context) ?
+				Optional.of((builder, generatorContext) -> {
+					BlockPos blockpos = new BlockPos(generatorContext.chunkPos().getMinBlockX(), 0, generatorContext.chunkPos().getMinBlockZ());
+					Pieces.addPieces(generatorContext.structureManager(), blockpos, Pieces.TEMPLATE_ENTRANCE, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(48, 0, 0), Pieces.TEMPLATE_ENTRANCE_PLATFORM, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 47, 0), Pieces.TEMPLATE_SECTION_ELEMENTS, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 48, 47), Pieces.TEMPLATE_SECTION_ELEMENTS_DOL, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(-47, 62, 0), Pieces.TEMPLATE_SECTION_ELEMENTS_ZOL, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 82, -47), Pieces.TEMPLATE_SECTION_ELEMENTS_YOL, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 94, 0), Pieces.TEMPLATE_SECTION_VIA, builder);
+					Pieces.addPieces(generatorContext.structureManager(), blockpos.offset(0, 141, 0), Pieces.TEMPLATE_SECTION_XIA, builder);
+				}) : Optional.empty());
+	}
+
+	static boolean isValidBiome(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context) {
+		int x = context.chunkPos().getMiddleBlockX();
+		int z = context.chunkPos().getMiddleBlockZ();
+		int y = 1;
+		Holder<Biome> holder = context.chunkGenerator().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z));
+		return Objects.equals(holder.value().getRegistryName(), ModBiomes.NULL.location());
 	}
 
 	@Override
