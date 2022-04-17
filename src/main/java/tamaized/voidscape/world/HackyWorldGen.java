@@ -4,6 +4,7 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -47,6 +48,8 @@ public class HackyWorldGen {
 
 	public static long seed;
 
+	private static final long VERSION = 1;
+
 	public static class DeepFreezeChunkManager extends ChunkMap {
 
 		private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
@@ -77,7 +80,6 @@ public class HackyWorldGen {
 
 		@Override
 		public void write(ChunkPos p_63503_, CompoundTag p_63504_) {
-			super.write(p_63503_, p_63504_);
 			worker.store(p_63503_, p_63504_);
 		}
 
@@ -103,13 +105,11 @@ public class HackyWorldGen {
 
 		private final ResourceLocation location;
 		private final RegionFileStorage deepStorage;
-		private final RegionFileStorage realStorage;
 
 		protected DeepFreezeIOWorker(ResourceLocation location, Path file_, boolean boolean_, String string_) {
 			super(file_, boolean_, string_);
 			this.location = location;
 			this.deepStorage = new RegionFileStorage(file_.resolve("deepfreeze"), boolean_);
-			this.realStorage = new RegionFileStorage(file_.resolve("store"), boolean_);
 		}
 
 		@Nullable
@@ -125,11 +125,11 @@ public class HackyWorldGen {
 		@Override
 		public CompletableFuture<Void> store(ChunkPos chunkPos_, @Nullable CompoundTag nbt) {
 			return this.submitTask(() -> {
-				try {
-					realStorage.write(chunkPos_, nbt);
+				/*try {
+					deepStorage.write(chunkPos_, nbt);
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
+				}*/
 				return Either.left(new CompletableFuture<Void>());
 			}).thenCompose(Function.identity());
 		}
@@ -139,10 +139,10 @@ public class HackyWorldGen {
 		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
 			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
 				try {
-					CompoundTag compoundnbt = this.deepStorage.read(chunkPos_);
-					if (compoundnbt == null/* || !compoundnbt.
+					CompoundTag compoundnbt = deepStorage.read(chunkPos_);
+					if (compoundnbt == null || !compoundnbt.
 							contains(Voidscape.MODID, Tag.TAG_COMPOUND) || compoundnbt.
-							getCompound(Voidscape.MODID).getLong("check") < System.currentTimeMillis() / 1000L*/) {
+							getCompound(Voidscape.MODID).getLong("check") != VERSION) {
 						try (InputStream stream = getClass().getResourceAsStream("/data/".
 								concat(location.getNamespace()).
 								concat("/worldgen/").
@@ -159,7 +159,7 @@ public class HackyWorldGen {
 								if (data != null) {
 									CompoundTag nbt = NbtIo.read(data);
 									CompoundTag check = new CompoundTag();
-									check.putLong("check", System.currentTimeMillis() / 1000L + (60L * 60L * 12L));
+									check.putLong("check", VERSION);
 									nbt.put(Voidscape.MODID, check);
 									deepStorage.write(chunkPos_, nbt);
 									compoundnbt = nbt;
@@ -167,6 +167,8 @@ public class HackyWorldGen {
 							}
 						}
 					}
+					if (compoundnbt != null)
+						sanitize(compoundnbt, null);
 					return Either.left(compoundnbt);
 				} catch (Exception exception) {
 					Voidscape.LOGGER.warn("Failed to read chunk {}", chunkPos_, exception);
@@ -210,7 +212,7 @@ public class HackyWorldGen {
 							final ChunkPos pos = new ChunkPos(px, pz);
 							final CompoundTag nbt = worker.load(pos);
 							if (nbt != null) {
-								nbt.getCompound("Level").remove("Biomes");
+								sanitize(nbt, () -> System.out.print("Sanitizing; "));
 								worker.deepStorage.write(pos, nbt);
 								System.out.print("Sanitized; ");
 							}
@@ -223,6 +225,14 @@ public class HackyWorldGen {
 			}
 		});
 		System.out.println("Finished");
+	}
+
+	private static void sanitize(CompoundTag nbt, @Nullable Runnable exec) {
+		nbt.getList("sections", Tag.TAG_COMPOUND).listIterator().forEachRemaining(tag -> {
+			((CompoundTag) tag).remove("biomes");
+			if (exec != null)
+				exec.run();
+		});
 	}
 
 }
