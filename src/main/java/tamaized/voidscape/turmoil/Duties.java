@@ -14,7 +14,7 @@ public class Duties {
 
 	private static final List<Duty> DUTY_LIST = new ArrayList<>();
 
-	//public static final Duty PSYCHOSIS = new Duty(rl("psychosis"), Progression.Psychosis, "psychosis").onlyNormal(); TODO enable when the first dungeon is finished
+	public static final Duty PSYCHOSIS = new Duty(rl("psychosis"), Progression.Psychosis, "psychosis").onlyNormal();
 	public static final Duty PAWN = new Duty(rl("pawn"), Progression.PostPsychosis, "pawn");
 
 	public static List<Duty> duties() {
