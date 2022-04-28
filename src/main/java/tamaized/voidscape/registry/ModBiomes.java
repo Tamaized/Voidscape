@@ -26,6 +26,9 @@ public class ModBiomes implements RegistryClass {
 	public static final ResourceKey<Biome> ANTI_SPIRES = register("antispires");
 	public static final ResourceKey<Biome> NULL = register("null");
 
+	public static final ResourceKey<Biome> PAWN = register("pawn");
+	public static final ResourceKey<Biome> PSYCHOSIS = register("psychosis");
+
 	private static ResourceKey<Biome> register(String id) {
 		REGISTRY.register(id, () -> new Biome.BiomeBuilder().
 				precipitation(Biome.Precipitation.NONE).

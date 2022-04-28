@@ -68,6 +68,7 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
+	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()));
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()));
 	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {

@@ -153,17 +153,42 @@ public class AITask<T extends Entity> {
 			this.condition = condition;
 		}
 
+		public void reset() {
+			super.reset();
+			triggered = false;
+		}
+
+		protected void trigger(T parent) {
+
+		}
+
 		@Override
 		public AITask<T> handle(T parent) {
 			if (finished)
 				return next.handle(parent);
-			if (!triggered && condition.test(parent))
+			if (!triggered && condition.test(parent)) {
+				trigger(parent);
 				triggered = true;
+			}
 			if (triggered)
 				exec.accept(parent, this);
 			else
 				next.handle(parent);
 			return this;
+		}
+	}
+
+	public static class RepeatedPendingAITask<T extends Entity> extends PendingAITask<T> {
+
+		public RepeatedPendingAITask(BiConsumer<T, AITask<T>> handle, Predicate<T> condition) {
+			super(handle, condition);
+		}
+
+		@Override
+		public AITask<T> handle(T parent) {
+			if (finished)
+				reset();
+			return super.handle(parent);
 		}
 	}
 

@@ -3,7 +3,9 @@ package tamaized.voidscape.world;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModBiomes;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -48,7 +51,7 @@ public class HackyWorldGen {
 
 	public static long seed;
 
-	private static final long VERSION = 1;
+	private static final long VERSION = 5;
 
 	public static class DeepFreezeChunkManager extends ChunkMap {
 
@@ -138,6 +141,7 @@ public class HackyWorldGen {
 		@Override
 		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
 			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
+				boolean write = false;
 				try {
 					CompoundTag compoundnbt = deepStorage.read(chunkPos_);
 					if (compoundnbt == null || !compoundnbt.
@@ -161,14 +165,16 @@ public class HackyWorldGen {
 									CompoundTag check = new CompoundTag();
 									check.putLong("check", VERSION);
 									nbt.put(Voidscape.MODID, check);
-									deepStorage.write(chunkPos_, nbt);
+									write = true;
 									compoundnbt = nbt;
 								}
 							}
 						}
 					}
 					if (compoundnbt != null)
-						sanitize(compoundnbt, null);
+						sanitize(location, compoundnbt, null);
+					if (write)
+						deepStorage.write(chunkPos_, compoundnbt);
 					return Either.left(compoundnbt);
 				} catch (Exception exception) {
 					Voidscape.LOGGER.warn("Failed to read chunk {}", chunkPos_, exception);
@@ -212,7 +218,7 @@ public class HackyWorldGen {
 							final ChunkPos pos = new ChunkPos(px, pz);
 							final CompoundTag nbt = worker.load(pos);
 							if (nbt != null) {
-								sanitize(nbt, () -> System.out.print("Sanitizing; "));
+								sanitize(worker.location, nbt, () -> System.out.print("Sanitizing; "));
 								worker.deepStorage.write(pos, nbt);
 								System.out.print("Sanitized; ");
 							}
@@ -227,9 +233,15 @@ public class HackyWorldGen {
 		System.out.println("Finished");
 	}
 
-	private static void sanitize(CompoundTag nbt, @Nullable Runnable exec) {
+	private static void sanitize(ResourceLocation location, CompoundTag nbt, @Nullable Runnable exec) {
 		nbt.getList("sections", Tag.TAG_COMPOUND).listIterator().forEachRemaining(tag -> {
-			((CompoundTag) tag).remove("biomes");
+			CompoundTag ct = ((CompoundTag) tag);
+			ct.remove("biomes");
+			CompoundTag biomes = new CompoundTag();
+			ListTag list = new ListTag();
+			list.add(StringTag.valueOf(location.toString()));
+			biomes.put("palette", list);
+			ct.put("biomes", biomes);
 			if (exec != null)
 				exec.run();
 		});

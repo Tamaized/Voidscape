@@ -15,6 +15,13 @@ public final class InstanceSpecialEffects {
 	private static final Map<ResourceLocation, List<Consumer<Instance>>> REGISTRY = new HashMap<>();
 
 	static {
+		registerEffect(new ResourceLocation(Voidscape.MODID, "psychosis"), (instance) -> instance.getLevel().players().forEach(player -> {
+			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
+				data.decrementEffects = false;
+				float rate = data.calcInfusionRate(player) * 0.01F;
+				data.setInfusion(data.getInfusion() + rate);
+			}));
+		}));
 		registerEffect(new ResourceLocation(Voidscape.MODID, "pawn"), (instance) -> instance.getLevel().players().forEach(player -> {
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
 				data.decrementEffects = false;

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -153,7 +154,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, DimensionType, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}<br>
+	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, Holder, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}<br>
 	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, Path, DataFixer, boolean, Executor)}
 	 */
 	public static EntityStorage entityStorage(EntityStorage o, ChunkGenerator chunkGenerator_, ServerLevel level, LevelStorageSource.LevelStorageAccess file) {

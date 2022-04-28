@@ -30,17 +30,20 @@ import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawnTentacle;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
+import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
 import tamaized.voidscape.client.entity.render.RenderAntiBolt;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawnTentacle;
 import tamaized.voidscape.client.entity.render.RenderNoOp;
 import tamaized.voidscape.client.entity.render.RenderNullServant;
 import tamaized.voidscape.client.entity.render.RenderSpellBolt;
+import tamaized.voidscape.client.entity.render.RenderVoidsWrath;
 import tamaized.voidscape.entity.EntityAntiBolt;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.EntityCorruptedPawnTentacle;
 import tamaized.voidscape.entity.EntityNullServant;
+import tamaized.voidscape.entity.EntityVoidsWrathBoss;
 import tamaized.voidscape.entity.abilities.EntitySpellAura;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
@@ -63,6 +66,7 @@ public class ModEntities implements RegistryClass {
 				new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
+	public static final RegistryObject<EntityType<EntityVoidsWrathBoss>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(EntityVoidsWrathBoss.class, EntityVoidsWrathBoss::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune()));
 
 	@Override
 	public void init(IEventBus bus) {
@@ -97,6 +101,7 @@ public class ModEntities implements RegistryClass {
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(CORRUPTED_PAWN_PHANTOM.get(), Mob.createMobAttributes().build());
 		event.put(CORRUPTED_PAWN_BOSS.get(), Mob.createMobAttributes().build());
+		event.put(VOIDS_WRATH.get(), Mob.createMobAttributes().build());
 		event.put(NULL_SERVANT.get(), EntityNullServant.createAttributes().build());
 		event.put(CORRUPTED_PAWN_TENTACLE.get(), LivingEntity.createLivingAttributes().build());
 	}
@@ -106,6 +111,7 @@ public class ModEntities implements RegistryClass {
 
 		public static final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
 		public static final ModelLayerLocation CORRUPTED_PAWN_TENTACLE = make("corruptedpawntentacle");
+		public static final ModelLayerLocation VOIDS_WRATH = make("voidswrath");
 		public static final ModelLayerLocation NULL_SERVANT = make("nullservant");
 
 		public static final ModelLayerLocation MODEL_ARMOR_INSANE_OUTER = make("insane_outer");
@@ -122,6 +128,7 @@ public class ModEntities implements RegistryClass {
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN, ModelCorruptedPawn::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN_TENTACLE, ModelCorruptedPawnTentacle::createMesh);
+		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH, ModelVoidsWrath::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.NULL_SERVANT, ModelNullServant::createMesh);
 
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
@@ -137,6 +144,7 @@ public class ModEntities implements RegistryClass {
 		event.registerEntityRenderer(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_BOSS.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN_TENTACLE.get(), RenderCorruptedPawnTentacle::new);
+		event.registerEntityRenderer(VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
 	}

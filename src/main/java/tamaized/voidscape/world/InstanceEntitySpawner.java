@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
+import tamaized.voidscape.entity.EntityVoidsWrathBoss;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,14 @@ public final class InstanceEntitySpawner {
 	private static final Map<ResourceLocation, List<BiConsumer<Level, Instance.InstanceType>>> REGISTRY = new HashMap<>();
 
 	static {
+		registerSpawner(new ResourceLocation(Voidscape.MODID, "psychosis"), (level, type) -> {
+			EntityVoidsWrathBoss boss = new EntityVoidsWrathBoss(level);
+			boss.initInstanceType(type);
+			boss.restrictTo(new BlockPos(42, 75, 4), 32);
+			boss.moveTo(boss.getRestrictCenter().getX() + 0.5F, boss.getRestrictCenter().getY(), boss.getRestrictCenter().getZ() + 0.5F);
+			boss.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(34.5F, 77, 4.5F));
+			level.addFreshEntity(boss);
+		});
 		registerSpawner(new ResourceLocation(Voidscape.MODID, "pawn"), (level, type) -> {
 			EntityCorruptedPawnBoss boss = new EntityCorruptedPawnBoss(level);
 			boss.initInstanceType(type);
