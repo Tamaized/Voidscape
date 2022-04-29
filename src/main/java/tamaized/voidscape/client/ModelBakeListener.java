@@ -71,9 +71,11 @@ public class ModelBakeListener {
 	public static void modelBake(ModelBakeEvent event) {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
+		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		add(fullbrightList, ModItems.FRUIT);
+		add(itemOverlayList, ModItems.CHARRED_BONE);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
@@ -120,6 +122,25 @@ public class ModelBakeListener {
 							List<BakedQuad> quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads)
 								if (quads.indexOf(quad) == 1)
+									LightUtil.setLightData(quad, 0xF000F0);
+							return quads;
+						});
+					}
+				});
+			else
+				Voidscape.LOGGER.error("Null Model! " + mrl);
+		});
+		itemOverlayList.forEach(mrl -> {
+			final BakedModel model = event.getModelRegistry().get(mrl);
+			if (model != null)
+				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
+					@Nonnull
+					@Override
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+						return cachedQuads.computeIfAbsent(side, (face) -> {
+							List<BakedQuad> quads = model.getQuads(state, side, rand);
+							for (BakedQuad quad : quads)
+								if (quad.getSprite().getName().getPath().contains("_overlay"))
 									LightUtil.setLightData(quad, 0xF000F0);
 							return quads;
 						});
