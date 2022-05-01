@@ -35,11 +35,11 @@ public class ModItems implements RegistryClass {
 
 	static class ItemProps {
 		static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(() -> new Item.Properties().tab(RegUtil.creativeTab()));
-		static final RegUtil.ItemProps VOIDIC_CRYSTAL = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
+		static final RegUtil.ItemProps LAVA_IMMUNE = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
 	}
 
 	static final DeferredRegister<Item> REGISTRY = RegUtil.create(ForgeRegistries.ITEMS);
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()) {
+	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 			if (playerIn.getGameProfile().getId().equals(UUID.fromString("16fea09e-314e-4955-88c2-6b552ecf314a"))) {
@@ -50,7 +50,7 @@ public class ModItems implements RegistryClass {
 			return super.use(worldIn, playerIn, handIn);
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()) {
+	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {
 			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(Blocks.BEDROCK)) {
@@ -68,9 +68,11 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
-	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()));
-	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get()));
-	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.VOIDIC_CRYSTAL.properties().get().
+	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> CHARRED_HAMMER_HEAD = REGISTRY.register("charred_hammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> CHARRED_HAMMER_ROD = REGISTRY.register("charred_hammer_rod", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
