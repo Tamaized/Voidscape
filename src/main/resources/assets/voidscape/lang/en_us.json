@@ -35,6 +35,8 @@
   "item.voidscape.voidic_crystal": "Voidic Crystal",
   "item.voidscape.ethereal_essence": "Ethereal Essence",
   "item.voidscape.tendril": "Tendril",
+  "item.voidscape.charred_bone": "Charred Bone",
+  "item.voidscape.charred_warhammer_head": "Charred War Hammer Head Piece",
 
   "item.voidscape.voidic_crystal_sword": "Voidic Crystal Sword",
   "item.voidscape.voidic_crystal_shield": "Voidic Crystal Shield",
@@ -46,6 +48,8 @@
   "item.voidscape.voidic_crystal_chest": "Voidic Crystal Chestplate",
   "item.voidscape.voidic_crystal_legs": "Voidic Crystal Leggings",
   "item.voidscape.voidic_crystal_boots": "Voidic Crystal Boots",
+
+  "item.voidscape.charred_warhammer": "Charred War Hammer",
 
   "item.voidscape.corrupt_sword": "Corrupt Sword",
   "item.voidscape.corrupt_bow": "Corrupt Bow",
