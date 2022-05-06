@@ -2,34 +2,34 @@
   "parent": "forge:item/default",
   "loader": "forge:separate-perspective",
   "base": {
-	"parent": "voidscape:item/charred_warhammer_in_hand"
+	"parent": "voidscape:item/charred/warhammer_in_hand"
   },
   "perspectives": {
 	"gui": {
 	  "parent": "item/generated",
 	  "textures": {
-		"layer0": "voidscape:items/charred_warhammer_small"
+		"layer0": "voidscape:items/charred/warhammer_small"
 	  },
 	  "overrides": [
 		{
 		  "predicate": {
 			"broken": 1
 		  },
-		  "model": "voidscape:items/charred_warhammer_small_broken"
+		  "model": "voidscape:item/charred/warhammer_small_broken"
 		}
 	  ]
 	},
 	"ground": {
 	  "parent": "item/generated",
 	  "textures": {
-		"layer0": "voidscape:items/charred_warhammer_small"
+		"layer0": "voidscape:items/charred/warhammer_small"
 	  },
 	  "overrides": [
 		{
 		  "predicate": {
 			"broken": 1
 		  },
-		  "model": "voidscape:items/charred_warhammer_small_broken"
+		  "model": "voidscape:item/charred/warhammer_small_broken"
 		}
 	  ]
 	}

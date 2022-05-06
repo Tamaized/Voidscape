@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-	"layer0": "voidscape:items/charred_warhammer"
+	"layer0": "voidscape:items/charred/warhammer_broken"
   },
   "display": {
 	"thirdperson_righthand": {
@@ -28,13 +28,5 @@
 	  "translation": [ 0, 3, 0 ],
 	  "scale": [ 0.8, 0.8, 0.6 ]
 	}
-  },
-  "overrides": [
-	{
-	  "predicate": {
-		"broken": 1
-	  },
-	  "model": "voidscape:item/charred_warhammer_broken"
-	}
-  ]
+  }
 }

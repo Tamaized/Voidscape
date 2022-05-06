@@ -72,11 +72,13 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
+
 		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		add(fullbrightList, ModItems.FRUIT);
 		add(itemOverlayList, ModItems.CHARRED_BONE);
-		add(itemOverlayList, ModTools.CHARRED_WARHAMMER);
+		add(fullbrightList, ModItems.CHARRED_WARHAMMER_HEAD);
+
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
@@ -87,6 +89,9 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_CHEST);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_LEGS);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_BOOTS);
+
+		//add(fullbrightList, ModTools.CHARRED_WARHAMMER);
+
 		add(fullbrightList, ModTools.CORRUPT_SWORD);
 		add(fullbrightList, ModTools.CORRUPT_BOW);
 		add(fullbrightList, ModTools.CORRUPT_XBOW);
@@ -95,6 +100,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.CORRUPT_CHEST);
 		add(fullbrightList, ModArmors.CORRUPT_LEGS);
 		add(fullbrightList, ModArmors.CORRUPT_BOOTS);
+
 		addBlock(overlayList, ModBlocks.VOIDIC_CRYSTAL_ORE);
 		addBlock(fullbrightList, ModBlocks.VOIDIC_CRYSTAL_BLOCK);
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
@@ -105,6 +111,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModBlocks.PLANT, "state=overworld");
 		add(fullbrightList, ModBlocks.PLANT, "state=nether");
 		add(fullbrightList, ModBlocks.PLANT, "state=end");
+
 		fullbrightList.forEach(mrl -> {
 			final BakedModel model = event.getModelRegistry().get(mrl);
 			if (model != null)
@@ -160,6 +167,8 @@ public class ModelBakeListener {
 		impBroken(ModArmors.VOIDIC_CRYSTAL_CHEST.get());
 		impBroken(ModArmors.VOIDIC_CRYSTAL_LEGS.get());
 		impBroken(ModArmors.VOIDIC_CRYSTAL_BOOTS.get());
+
+		impBroken(ModTools.CHARRED_WARHAMMER.get());
 
 		impBroken(ModTools.CORRUPT_SWORD.get());
 		impBroken(ModTools.CORRUPT_AXE.get());
@@ -231,6 +240,7 @@ public class ModelBakeListener {
 				VOIDIC_CRYSTAL_CHEST.get(), ModArmors.
 				VOIDIC_CRYSTAL_LEGS.get(), ModArmors.
 				VOIDIC_CRYSTAL_BOOTS.get());
+		redirectModelLocation("charred", "charred_", ModTools.CHARRED_WARHAMMER.get());
 		redirectModelLocation("corrupt", "corrupt_", ModTools.
 				CORRUPT_AXE.get(), ModTools.
 				CORRUPT_SWORD.get(), ModTools.
