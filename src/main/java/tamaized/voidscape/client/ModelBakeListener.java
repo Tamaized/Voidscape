@@ -90,7 +90,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_LEGS);
 		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_BOOTS);
 
-		//add(fullbrightList, ModTools.CHARRED_WARHAMMER);
+		add(fullbrightList, ModTools.CHARRED_WARHAMMER);
 
 		add(fullbrightList, ModTools.CORRUPT_SWORD);
 		add(fullbrightList, ModTools.CORRUPT_BOW);
