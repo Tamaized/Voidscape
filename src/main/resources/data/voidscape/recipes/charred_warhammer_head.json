@@ -1,0 +1,18 @@
+{
+  "result": {
+	"item": "voidscape:charred_warhammer_head"
+  },
+  "pattern": [
+	"BBB",
+	"BCB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"B": {
+	  "item": "voidscape:charred_bone"
+	},
+	"C": {
+	  "item": "voidscape:voidic_crystal"
+	}
+  }
+}

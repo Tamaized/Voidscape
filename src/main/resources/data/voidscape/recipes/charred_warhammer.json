@@ -1,0 +1,22 @@
+{
+  "result": {
+	"item": "voidscape:charred_warhammer"
+  },
+  "pattern": [
+	"H",
+	"N",
+	"C"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"H": {
+	  "item": "voidscape:charred_warhammer_head"
+	},
+	"N": {
+	  "item": "minecraft:netherite_ingot"
+	},
+	"C": {
+	  "item": "voidscape:voidic_crystal"
+	}
+  }
+}
