@@ -76,6 +76,7 @@ public class ModelBakeListener {
 		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		add(fullbrightList, ModItems.FRUIT);
 		add(itemOverlayList, ModItems.CHARRED_BONE);
+		add(itemOverlayList, ModTools.CHARRED_WARHAMMER);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
 		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);

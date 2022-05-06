@@ -76,6 +76,7 @@ import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
 import tamaized.voidscape.world.HackyWorldGen;
@@ -259,8 +260,8 @@ public class ASMHooks {
 	 * {@link net.minecraft.world.item.enchantment.EnchantmentCategory#canEnchant(Item)}<br>
 	 * [BEFORE IRETURN]
 	 */
-	public static boolean axesRWeps(boolean o, Item i) {
-		return o || i instanceof RegUtil.ToolAndArmorHelper.LootingAxe;
+	public static boolean axesRWeps(boolean o, Item i) { // TODO: why is this here? Can't we just use IForgeItem#canApplyAtEnchantingTable ??????
+		return o || i instanceof RegUtil.ToolAndArmorHelper.LootingAxe || i instanceof ModTools.LootingWarhammer;
 	}
 
 	/**
