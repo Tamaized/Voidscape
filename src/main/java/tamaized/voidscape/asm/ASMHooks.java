@@ -202,6 +202,7 @@ public class ASMHooks {
 		if (entity instanceof Player) {
 			if (Voidscape.checkForVoidDimension(entity.level)) {
 				entity.setHealth(entity.getMaxHealth() * 0.1F);
+				entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
 				if (!entity.level.isClientSide())
 					entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
 							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
