@@ -63,7 +63,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 			if (data.enabled) {
 				final boolean fabulous = Minecraft.getInstance().levelRenderer.getTranslucentTarget() != null;
 
-				VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
+				VertexConsumer buffer = (fabulous ? multibuffer : BUFFERS).getBuffer(WRAPPED_POS_TEX_COLOR);
 
 				float x1 = 0.10F;
 				float y1 = -0.75F;
@@ -103,7 +103,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				}
 				stack.popPose();
 
-				buffer = BUFFERS.getBuffer(WINGS);
+				buffer = (fabulous ? multibuffer : BUFFERS).getBuffer(WINGS);
 
 				color.unpack(data.color);
 
@@ -131,8 +131,6 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				}
 				stack.popPose();
 
-				if (fabulous)
-					BUFFERS.endBatch();
 			}
 		}));
 	}
