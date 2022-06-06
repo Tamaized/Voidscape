@@ -57,6 +57,10 @@ void main() {
 
         color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vec3(fade);
     }
-    vec3 alpha = vec3(texture(Sampler0, texCoord0).a);
+    float a = texture(Sampler0, texCoord0).a;
+    if (a < 0.1) {
+        discard;
+    }
+    vec3 alpha = vec3(a);
     fragColor = vec4(color * alpha, 1) * vertexColor * ColorModulator;
 }

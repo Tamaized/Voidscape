@@ -9,6 +9,7 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -60,6 +61,8 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapDonatorData).ifPresent(data -> {
 			if (data.enabled) {
+				final boolean fabulous = Minecraft.getInstance().levelRenderer.getTranslucentTarget() != null;
+
 				VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
 
 				float x1 = 0.10F;
@@ -74,7 +77,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 
 				Consumer<VertexConsumer> vertexColor = verticies -> verticies.color(color.bit16, color.bit8, color.bit0, color.bit24).endVertex();
 
-				color.set(0.25F, 0F, 0F, 0F);
+				color.set(fabulous ? 1F : 0.25F, 0F, 0F, 0F);
 
 				stack.pushPose();
 				{
@@ -127,6 +130,9 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 					vertexColor.accept(buffer.vertex(pose, x2 + offset, y2, z2).uv(1, 1));
 				}
 				stack.popPose();
+
+				if (fabulous)
+					BUFFERS.endBatch();
 			}
 		}));
 	}
