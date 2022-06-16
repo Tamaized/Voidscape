@@ -126,13 +126,16 @@ public class ModelBakeListener {
 					@Nonnull
 					@Override
 					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
-						return cachedQuads.computeIfAbsent(side, (face) -> {
-							List<BakedQuad> quads = model.getQuads(state, side, rand);
-							for (BakedQuad quad : quads)
+						List<BakedQuad> quads = cachedQuads.get(side);
+						if (quads == null) {
+							quads = model.getQuads(state, side, rand);
+							for (BakedQuad quad : quads) {
 								if (quads.indexOf(quad) == 1)
 									LightUtil.setLightData(quad, 0xF000F0);
-							return quads;
-						});
+							}
+							cachedQuads.put(side, quads);
+						}
+						return quads; // computeIfAbsent has issues, don't use it
 					}
 				});
 			else
@@ -145,13 +148,16 @@ public class ModelBakeListener {
 					@Nonnull
 					@Override
 					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
-						return cachedQuads.computeIfAbsent(side, (face) -> {
-							List<BakedQuad> quads = model.getQuads(state, side, rand);
-							for (BakedQuad quad : quads)
+						List<BakedQuad> quads = cachedQuads.get(side);
+						if (quads == null) {
+							quads = model.getQuads(state, side, rand);
+							for (BakedQuad quad : quads) {
 								if (quad.getSprite().getName().getPath().contains("_overlay"))
 									LightUtil.setLightData(quad, 0xF000F0);
-							return quads;
-						});
+							}
+							cachedQuads.put(side, quads);
+						}
+						return quads; // computeIfAbsent has issues, don't use it
 					}
 				});
 			else
