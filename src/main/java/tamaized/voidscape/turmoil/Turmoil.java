@@ -63,8 +63,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			}
 		}
 		if (instanced && getState() != State.CLOSED) {
-			if (!parent.level.isClientSide() && getState() == State.TELEPORT)
-				parent.changeDimension(Voidscape.getWorld(parent.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
+			if (!parent.level.isClientSide() && getState() == State.TELEPORT && parent instanceof ServerPlayer player)
+				parent.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
 			setState(State.CLOSED);
 		}
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
@@ -119,9 +119,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				break;
 			case TELEPORT:
 				tick = maxTick;
-				if (!parent.level.isClientSide()) {
+				if (!parent.level.isClientSide() && parent instanceof ServerPlayer player) {
 					if (Voidscape.checkForVoidDimension(parent.level))
-						parent.changeDimension(Voidscape.getWorld(parent.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
+						parent.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
 					else
 						parent.changeDimension(Voidscape.getWorld(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 				}

@@ -15,11 +15,11 @@ public class ServerPacketSuccumbDeath implements NetworkMessages.IMessage<Server
 
 	@Override
 	public void handle(@Nullable Player player) {
-		if (player instanceof ServerPlayer && player.getServer() != null)
+		if (player instanceof ServerPlayer serverPlayer && player.getServer() != null)
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
 				if (data.incapacitated) {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getPlayersSpawnWorld(serverPlayer), VoidTeleporter.INSTANCE);
 					data.incapacitated = false;
 				}
 			}));

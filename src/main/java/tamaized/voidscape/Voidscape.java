@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
@@ -455,6 +456,10 @@ public class Voidscape {
 
 	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
 		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
+	}
+
+	public static ServerLevel getPlayersSpawnWorld(ServerPlayer player) {
+		return getWorld(player.getLevel(), player.getRespawnDimension());
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {

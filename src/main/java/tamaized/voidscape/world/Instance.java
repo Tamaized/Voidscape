@@ -142,17 +142,17 @@ public final class Instance {
 			if (!level.players().isEmpty())
 				new ArrayList<>(level.players()).forEach(player -> {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
 				});
 			tick = 0;
 			locked = false;
 		} else if (!locked() && tick % (20 * 30) == 0)
 			locked = true;
 		if (!level.players().isEmpty())
-			level.players().stream().filter(player -> !players.contains(player)).collect(Collectors.toList()).
+			level.players().stream().filter(player -> !players.contains(player)).toList().
 					forEach(player -> {
 						player.setHealth(player.getMaxHealth() * 0.1F);
-						player.changeDimension(Voidscape.getWorld(player.level, Level.OVERWORLD), VoidTeleporter.INSTANCE);
+						player.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
 					});
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
 			if (unloadTick == 20 * 10)
