@@ -255,8 +255,7 @@ public class Voidscape {
 			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
 				if (event.getEntityLiving().getHealth() <= event.getAmount())
 					return;
-				if (e instanceof LivingEntity) {
-					LivingEntity attacker = (LivingEntity) e;
+				if (e instanceof LivingEntity attacker) {
 					if (!arrow) {
 						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
 								attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) : 0) *
@@ -286,8 +285,7 @@ public class Voidscape {
 						}
 					}
 				}
-				if (event.getSource().getDirectEntity() instanceof AbstractArrow) {
-					AbstractArrow arrowEntity = (AbstractArrow) event.getSource().getDirectEntity();
+				if (event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
 					arrowEntity.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> {
 						float voidic = data.active(IVoidicArrow.ID_VOIDIC);
 						if (voidic > 0) {

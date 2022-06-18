@@ -8,10 +8,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,14 +19,17 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PowerableMob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -54,11 +57,12 @@ import tamaized.voidscape.world.InstanceManager;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
+public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, PowerableMob {
 
 	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(EntityVoidsWrathBoss.class, EntityDataSerializers.BOOLEAN);
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 	public boolean beStill = false;
+	private boolean pause = false;
 	public boolean noKnockback = false;
 	public boolean armor = false;
 	public int aiTick;
@@ -81,6 +85,20 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 	}
 
 	@Override
+	@Nullable
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
+		this.populateDefaultEquipmentSlots(p_33283_);
+		this.populateDefaultEquipmentEnchantments(p_33283_);
+		return super.finalizeSpawn(p_33282_, p_33283_, p_33284_, p_33285_, p_33286_);
+	}
+
+	@Override
+	protected void populateDefaultEquipmentSlots(DifficultyInstance p_32136_) {
+		super.populateDefaultEquipmentSlots(p_32136_);
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModTools.CHARRED_WARHAMMER.get()));
+	}
+
+	@Override
 	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
 		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
 		setYHeadRot(getYRot());
@@ -92,27 +110,8 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 		entityData.define(GLOWING, false);
 	}
 
-	public boolean isGlowing() {
-		return entityData.get(GLOWING);
-	}
-
 	public void markGlowing(boolean glow) {
 		entityData.set(GLOWING, glow);
-	}
-
-	@Override
-	public Iterable<ItemStack> getArmorSlots() {
-		return NonNullList.create();
-	}
-
-	@Override
-	public ItemStack getItemBySlot(EquipmentSlot equipmentSlotType) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void setItemSlot(EquipmentSlot equipmentSlotType, ItemStack itemStack) {
-
 	}
 
 	@Override
@@ -121,12 +120,13 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+	public void checkDespawn() {
+		// NO-OP
 	}
 
 	@Override
-	public void checkDespawn() {
+	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
+		// NO-OP
 	}
 
 	@Override
@@ -192,11 +192,17 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 			ai = ai.handle(this);
 			lookAt(getTarget(), 10F, 10F);
 			if (!beStill) {
-				if (distanceTo(getTarget()) > 1) {
-					Vec3 angle = getLookAngle().scale(0.25F);
-					move(MoverType.SELF, new Vec3(angle.x(), 0, angle.z()));
-				}
-			}
+				if (!pause) {
+					if (distanceTo(getTarget()) > 1) {
+						Vec3 angle = getLookAngle().scale(0.25F);
+						move(MoverType.SELF, new Vec3(angle.x(), 0, angle.z()));
+					}
+					if (tickCount % 40 == 0 && random.nextInt(5) == 0)
+						pause = true;
+				} else if (tickCount % 35 == 0 && random.nextInt(3) == 0)
+					pause = false;
+			} else
+				pause = false;
 		}
 		if (!level.isClientSide() && getTarget() == null) {
 			Entity closest = null;
@@ -209,9 +215,9 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 		}
 
 		if (level.isClientSide()) {
-			if (lastGlow != isGlowing()) {
+			if (lastGlow != isPowered()) {
 				glowTick = tickCount;
-				lastGlow = isGlowing();
+				lastGlow = isPowered();
 			}
 		}
 		super.tick();
@@ -240,10 +246,15 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity {
 				.next(new AITask.RepeatedAITask<>((boss, ai) -> {
 					if (boss.tickCount % 20 == 0) {
 						boss.getLevel().getEntities(boss, boss.getBoundingBox().inflate(1F))
-								.forEach(e -> e.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), 4F));
+								.forEach(e -> e.hurt(DamageSource.mobAttack(boss), 2F));
 					}
 				}));
 		Objects.requireNonNull(getAttribute(Attributes.MAX_HEALTH)).addPermanentModifier(new AttributeModifier("Instanced Health", hp - 20, AttributeModifier.Operation.ADDITION));
 		setHealth(getMaxHealth());
+	}
+
+	@Override
+	public boolean isPowered() {
+		return this.entityData.get(GLOWING);
 	}
 }

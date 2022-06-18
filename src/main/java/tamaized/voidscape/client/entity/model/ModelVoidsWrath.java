@@ -11,6 +11,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
@@ -51,30 +52,30 @@ public class ModelVoidsWrath<T extends EntityVoidsWrathBoss> extends EntityModel
 		rightArm = parent.getChild("rightArm");
 	}
 
-	public static LayerDefinition createMesh() {
+	public static LayerDefinition createMesh(CubeDeformation deformation) {
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition definition = mesh.getRoot();
 
 		definition.addOrReplaceChild("head",
 				CubeListBuilder.create().texOffs(0, 0).
-						addBox(-4F, -8F, -4F, 8, 8, 8), PartPose.
+						addBox(-4F, -8F, -4F, 8, 8, 8, deformation), PartPose.
 						offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F));
 
 		definition.addOrReplaceChild("body",
-				CubeListBuilder.create().texOffs(32, 0).
-						addBox(-4F, 0F, -2F, 8, 12, 4), PartPose.
+				CubeListBuilder.create().texOffs(16, 16).
+						addBox(-4F, 0F, -2F, 8, 12, 4, deformation), PartPose.
 						offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F));
 
 
 		definition.addOrReplaceChild("leftArm",
-				CubeListBuilder.create().texOffs(16, 16).
-						addBox(-1F, -2F, -2F, 4, 12, 4), PartPose.
-						offsetAndRotation(5F, 2F, 0F, 0F, 0F, -0.10000736613927509F));
+				CubeListBuilder.create().texOffs(40, 16).mirror().
+						addBox(-1F, -2F, -2F, 4, 12, 4, deformation), PartPose.
+						offsetAndRotation(5F, 2F, 0F, 0F, 0F, 0F));
 
 		definition.addOrReplaceChild("rightArm",
-				CubeListBuilder.create().texOffs(0, 16).
-						addBox(-3F, -2F, -2F, 4, 12, 4), PartPose.
-						offsetAndRotation(-5F, 2F, 0F, 0F, 0F, 0.10000736613927509F));
+				CubeListBuilder.create().texOffs(40, 16).
+						addBox(-3F, -2F, -2F, 4, 12, 4, deformation), PartPose.
+						offsetAndRotation(-5F, 2F, 0F, 0F, 0F, 0F));
 
 		return LayerDefinition.create(mesh, 64, 32);
 	}

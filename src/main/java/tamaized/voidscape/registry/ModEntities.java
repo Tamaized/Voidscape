@@ -2,6 +2,7 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -101,7 +102,7 @@ public class ModEntities implements RegistryClass {
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(CORRUPTED_PAWN_PHANTOM.get(), Mob.createMobAttributes().build());
 		event.put(CORRUPTED_PAWN_BOSS.get(), Mob.createMobAttributes().build());
-		event.put(VOIDS_WRATH.get(), Mob.createMobAttributes().build());
+		event.put(VOIDS_WRATH.get(), Mob.createMobAttributes().add(ModAttributes.VOIDIC_DMG.get(), 3D).build());
 		event.put(NULL_SERVANT.get(), EntityNullServant.createAttributes().build());
 		event.put(CORRUPTED_PAWN_TENTACLE.get(), LivingEntity.createLivingAttributes().build());
 	}
@@ -112,6 +113,7 @@ public class ModEntities implements RegistryClass {
 		public static final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
 		public static final ModelLayerLocation CORRUPTED_PAWN_TENTACLE = make("corruptedpawntentacle");
 		public static final ModelLayerLocation VOIDS_WRATH = make("voidswrath");
+		public static final ModelLayerLocation VOIDS_WRATH_CHARGED = make("voidswrathcharged");
 		public static final ModelLayerLocation NULL_SERVANT = make("nullservant");
 
 		public static final ModelLayerLocation MODEL_ARMOR_INSANE_OUTER = make("insane_outer");
@@ -128,7 +130,8 @@ public class ModEntities implements RegistryClass {
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN, ModelCorruptedPawn::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN_TENTACLE, ModelCorruptedPawnTentacle::createMesh);
-		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH, ModelVoidsWrath::createMesh);
+		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH, () -> ModelVoidsWrath.createMesh(CubeDeformation.NONE));
+		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH_CHARGED, () -> ModelVoidsWrath.createMesh(new CubeDeformation(1.0F)));
 		event.registerLayerDefinition(ModelLayerLocations.NULL_SERVANT, ModelNullServant::createMesh);
 
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
