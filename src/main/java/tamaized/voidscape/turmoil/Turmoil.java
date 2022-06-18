@@ -399,8 +399,8 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
-		if (old instanceof Turmoil)
-			read(((Turmoil) old).write(new CompoundTag(), null), null);
+		if (old instanceof Turmoil o)
+			read(o.write(new CompoundTag(), null), null);
 	}
 
 	public enum State {
