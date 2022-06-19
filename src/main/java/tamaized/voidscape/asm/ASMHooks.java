@@ -54,7 +54,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.entity.ChunkEntities;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
@@ -276,7 +275,7 @@ public class ASMHooks {
 		if (level.isClientSide() && (Voidscape.checkForVoidDimension(level) ||
 				(Minecraft.getInstance().player != null &&
 						(Minecraft.getInstance().player.isCreative() || Minecraft.getInstance().player.isSpectator()) &&
-						Voidscape.checkForVoidlikeInstance(level))))
+						Voidscape.checkForDutyInstance(level))))
 			return VoidVisibilityCache.value(o, light);
 		return o;
 	}
@@ -287,7 +286,7 @@ public class ASMHooks {
 	 * [AFTER FIRST FLOAD 6]
 	 */
 	public static float cancelNightVision(float o, Level level) {
-		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForVoidlikeInstance(level)))
+		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForDutyInstance(level)))
 			return 0;
 		return o;
 	}
@@ -298,7 +297,7 @@ public class ASMHooks {
 	 * [AFTER GETFIELD {@link net.minecraft.client.Options#gamma}]
 	 */
 	public static double cancelGamma(double o, Level level) {
-		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForVoidlikeInstance(level)))
+		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForDutyInstance(level)))
 			return 0;
 		return o;
 	}

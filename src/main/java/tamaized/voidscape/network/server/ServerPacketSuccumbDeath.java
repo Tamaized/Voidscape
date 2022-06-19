@@ -3,7 +3,6 @@ package tamaized.voidscape.network.server;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -19,7 +18,7 @@ public class ServerPacketSuccumbDeath implements NetworkMessages.IMessage<Server
 			player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> {
 				if (data.incapacitated) {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getPlayersSpawnWorld(serverPlayer), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getPlayersSpawnLevel(serverPlayer), VoidTeleporter.INSTANCE);
 					data.incapacitated = false;
 				}
 			}));

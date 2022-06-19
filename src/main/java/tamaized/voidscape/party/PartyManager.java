@@ -60,7 +60,7 @@ public final class PartyManager {
 		if (event.phase == TickEvent.Phase.END)
 			return;
 		parties.forEach(Party::tick);
-		List<Party> toRemove = parties.stream().filter(party -> party.instance != null).collect(Collectors.toList());
+		List<Party> toRemove = parties.stream().filter(party -> party.instance != null).toList();
 		toRemove.forEach(party -> party.members().forEach(PartyManager::resetClientInfoSilently));
 		parties.removeAll(toRemove);
 	}

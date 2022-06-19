@@ -13,7 +13,6 @@ import tamaized.voidscape.Voidscape;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class Instance {
 
@@ -122,7 +121,7 @@ public final class Instance {
 		final int i = players.size();
 		final float p = 0.785F;
 		player.moveTo(Math.round(3F * Math.cos(p * i)) + 0.5F, player.getY(), Math.round(3F * Math.sin(p * i)) + 0.5F, -90F, 0F);
-		Entity entity = player.changeDimension(Voidscape.getWorld(player.level, location), InstanceTeleporter.INSTANCE);
+		Entity entity = player.changeDimension(Voidscape.getLevel(player.level, location), InstanceTeleporter.INSTANCE);
 		if (entity instanceof Player)
 			players.add((Player) entity);
 	}
@@ -142,7 +141,7 @@ public final class Instance {
 			if (!level.players().isEmpty())
 				new ArrayList<>(level.players()).forEach(player -> {
 					player.setHealth(player.getMaxHealth() * 0.1F);
-					player.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
+					player.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
 				});
 			tick = 0;
 			locked = false;
@@ -152,7 +151,7 @@ public final class Instance {
 			level.players().stream().filter(player -> !players.contains(player)).toList().
 					forEach(player -> {
 						player.setHealth(player.getMaxHealth() * 0.1F);
-						player.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
+						player.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
 					});
 		if (level.getChunkSource().getLoadedChunksCount() == 0) {
 			if (unloadTick == 20 * 10)

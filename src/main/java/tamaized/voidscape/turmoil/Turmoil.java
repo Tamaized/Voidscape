@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,9 +11,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.OverlayMessageHandler;
+import tamaized.voidscape.client.ui.screen.LeaveInstanceScreen;
 import tamaized.voidscape.network.server.ServerPacketTurmoilAction;
 import tamaized.voidscape.network.server.ServerPacketTurmoilTeleport;
 import tamaized.voidscape.turmoil.skills.TurmoilSkill;
@@ -64,7 +67,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		}
 		if (instanced && getState() != State.CLOSED) {
 			if (!parent.level.isClientSide() && getState() == State.TELEPORT && parent instanceof ServerPlayer player)
-				parent.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
+				parent.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
 			setState(State.CLOSED);
 		}
 		if (!hasStarted() && isTalking() && getState() == State.CLOSED)
@@ -121,9 +124,9 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 				tick = maxTick;
 				if (!parent.level.isClientSide() && parent instanceof ServerPlayer player) {
 					if (Voidscape.checkForVoidDimension(parent.level))
-						parent.changeDimension(Voidscape.getPlayersSpawnWorld(player), VoidTeleporter.INSTANCE);
+						parent.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
 					else
-						parent.changeDimension(Voidscape.getWorld(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
+						parent.changeDimension(Voidscape.getLevel(parent.level, Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 				}
 				setState(State.CLOSED);
 				break;
@@ -134,13 +137,18 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 		Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilTeleport());
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void clientAction() {
 		final boolean flag = !isTalking();
 		if (flag || OverlayMessageHandler.process()) {
 			talk(null);
-			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
-			if (flag && hasStarted())
-				commonAction();
+			if (Voidscape.checkForDutyInstance(Minecraft.getInstance().level)) {
+				Minecraft.getInstance().setScreen(new LeaveInstanceScreen());
+			} else {
+				Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
+				if (flag && hasStarted())
+					commonAction();
+			}
 		}
 	}
 

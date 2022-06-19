@@ -15,6 +15,7 @@ import tamaized.voidscape.network.server.ServerPacketCommenceDuty;
 import tamaized.voidscape.network.server.ServerPacketCreateParty;
 import tamaized.voidscape.network.server.ServerPacketDisbandParty;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
+import tamaized.voidscape.network.server.ServerPacketLeaveInstance;
 import tamaized.voidscape.network.server.ServerPacketRemovePartyMember;
 import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
 import tamaized.voidscape.network.server.ServerPacketRequestPartyInfo;
@@ -55,6 +56,7 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketTurmoilResetSkills.class, ServerPacketTurmoilResetSkills::new);
 		registerMessage(network, ServerPacketSuccumbDeath.class, ServerPacketSuccumbDeath::new);
 		registerMessage(network, ServerPacketHandlerDonatorSettings.class, () -> new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(false, 0)));
+		registerMessage(network, ServerPacketLeaveInstance.class, ServerPacketLeaveInstance::new);
 
 		registerMessage(network, ClientPacketSubCapSync.class, () -> new ClientPacketSubCapSync(null));
 		registerMessage(network, ClientPacketUpdatePartyInfo.class, () -> new ClientPacketUpdatePartyInfo(null, false));
@@ -78,7 +80,7 @@ public class NetworkMessages {
 			return factory.get().fromBytes(packet);
 		}
 
-		static void onMessage(IMessage message, Supplier<NetworkEvent.Context> context) {
+		static <M extends IMessage<M>> void onMessage(M message, Supplier<NetworkEvent.Context> context) {
 			context.get().enqueueWork(() -> message.handle(getSidedPlayer(context.get().getSender())));
 			context.get().setPacketHandled(true);
 		}

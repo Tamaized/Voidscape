@@ -3,6 +3,8 @@ package tamaized.voidscape.world;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -29,6 +31,10 @@ public final class InstanceManager {
 		server.getWorldData().worldGenSettings().dimensions().entrySet().stream().
 				filter(entry -> entry.getValue().generator() instanceof InstanceChunkGenerator).
 				forEach(entry -> instances.add(new Instance(entry.getKey(), entry.getValue())));
+	}
+
+	public static Optional<Instance> findByPlayer(Player player) {
+		return instances.stream().filter(instance -> instance.players().contains(player)).findFirst();
 	}
 
 	public static Optional<Instance> find(ResourceLocation loc) {

@@ -443,21 +443,25 @@ public class Voidscape {
 		return input * attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().threat / 100D).orElse(0.0D)).orElse(0.0D);
 	}
 
-	public static boolean checkForVoidDimension(Level world) {
-		return world.dimension().location().equals(WORLD_KEY_VOID.location());
+	public static boolean checkForVoidDimension(@Nullable Level level) {
+		if (level == null)
+			return false;
+		return level.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
-	public static boolean checkForVoidlikeInstance(Level world) {
-		ResourceLocation loc = world.dimension().location();
-		return loc.getNamespace().equals(Voidscape.MODID) && (loc.getPath().contains("_pawn_") || loc.getPath().contains("_psychosis_"));
+	public static boolean checkForDutyInstance(@Nullable Level level) {
+		if (level == null)
+			return false;
+		ResourceLocation loc = level.dimension().location();
+		return loc.getNamespace().equals(Voidscape.MODID) && (loc.getPath().startsWith("instance_"));
 	}
 
-	public static ServerLevel getWorld(Level world, ResourceKey<Level> dest) {
-		return Objects.requireNonNull(Objects.requireNonNull(world.getServer()).getLevel(dest));
+	public static ServerLevel getLevel(Level level, ResourceKey<Level> dest) {
+		return Objects.requireNonNull(Objects.requireNonNull(level.getServer()).getLevel(dest));
 	}
 
-	public static ServerLevel getPlayersSpawnWorld(ServerPlayer player) {
-		return getWorld(player.getLevel(), player.getRespawnDimension());
+	public static ServerLevel getPlayersSpawnLevel(ServerPlayer player) {
+		return getLevel(player.getLevel(), player.getRespawnDimension());
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
