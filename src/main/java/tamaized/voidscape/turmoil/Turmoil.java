@@ -144,11 +144,10 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			talk(null);
 			if (Voidscape.checkForDutyInstance(Minecraft.getInstance().level)) {
 				Minecraft.getInstance().setScreen(new LeaveInstanceScreen());
-			} else {
-				Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
-				if (flag && hasStarted())
-					commonAction();
 			}
+			Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilAction());
+			if (flag && hasStarted())
+				commonAction();
 		}
 	}
 
