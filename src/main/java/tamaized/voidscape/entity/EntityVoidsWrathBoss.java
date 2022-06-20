@@ -173,7 +173,7 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 										ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
 												ifPresent(data -> {
 													if (data.getProgression() == Progression.Psychosis) {
-														data.talk(Talk.CORRUPT_PAWN);
+														data.talk(Talk.PSYCHOSIS);
 														level.addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), new ItemStack(ModItems.CHARRED_BONE.get(), 8)));
 													}
 												}))));
