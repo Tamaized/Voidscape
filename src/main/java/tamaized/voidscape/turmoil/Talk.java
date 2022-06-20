@@ -58,7 +58,7 @@ public class Talk {
 
 	public static Entry PSYCHOSIS = new Entry(new ResourceLocation(Voidscape.MODID, "psychosis"),
 
-			new TranslatableComponent(KEY_BASE + "psychosis"),
+			new TranslatableComponent(KEY_BASE + "psychosis", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.PostPsychosis);
