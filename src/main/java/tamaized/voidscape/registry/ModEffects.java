@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.EffectRenderer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -161,6 +162,11 @@ public class ModEffects implements RegistryClass {
 
 		private StandardEffect(MobEffectCategory type, int color) {
 			super(type, color);
+		}
+
+		@Override
+		public List<ItemStack> getCurativeItems() {
+			return new ArrayList<>(); // Disable Milk
 		}
 
 		<T extends StandardEffect> T texture(String loc) {
