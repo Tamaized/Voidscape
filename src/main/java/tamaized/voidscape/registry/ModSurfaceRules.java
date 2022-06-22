@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.SurfaceRules;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.RegisterEvent;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 
@@ -17,10 +17,10 @@ public class ModSurfaceRules implements RegistryClass {
 
 	static class AirAboveConditionSource implements SurfaceRules.ConditionSource {
 
-		private static final Codec<AirAboveConditionSource> CODEC = Codec.unit(AirAboveConditionSource::new);
+		private static final KeyDispatchDataCodec<AirAboveConditionSource> CODEC = KeyDispatchDataCodec.of(Codec.unit(AirAboveConditionSource::new));
 
 		@Override
-		public Codec<? extends SurfaceRules.ConditionSource> codec() {
+		public KeyDispatchDataCodec<? extends SurfaceRules.ConditionSource> codec() {
 			return CODEC;
 		}
 
@@ -34,8 +34,8 @@ public class ModSurfaceRules implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
-			Registry.register(Registry.CONDITION, new ResourceLocation(Voidscape.MODID, "air_above"), AirAboveConditionSource.CODEC);
+		bus.addListener((Consumer<RegisterEvent>) event -> {
+			Registry.register(Registry.CONDITION, new ResourceLocation(Voidscape.MODID, "air_above"), AirAboveConditionSource.CODEC.codec());
 		});
 	}
 

@@ -118,11 +118,6 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 	}
 
 	@Override
-	public BiomeSource withSeed(long l) {
-		return new VoidscapeSeededBiomeProvider(l, registry);
-	}
-
-	@Override
 	public Holder<Biome> getNoiseBiome(int x, int cy, int z, Climate.Sampler p_186738_) {
 		return getRealNoiseBiome(x, cy << 2, z);
 	}

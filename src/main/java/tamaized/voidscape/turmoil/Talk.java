@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import tamaized.voidscape.Voidscape;
@@ -17,13 +18,13 @@ public class Talk {
 
 	public static Entry INTRO = new Entry(new ResourceLocation(Voidscape.MODID, "intro"),
 
-			new TranslatableComponent(KEY_BASE + "intro", format(FORMAT_KEYBIND)),
+			Component.translatable(KEY_BASE + "intro", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::start)));
 
 	public static Entry TUTORIAL = new Entry(new ResourceLocation(Voidscape.MODID, "tutorial"),
 
-			new TranslatableComponent(KEY_BASE + "tutorial"),
+			Component.translatable(KEY_BASE + "tutorial"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.EnteredVoid);
@@ -33,7 +34,7 @@ public class Talk {
 
 	public static Entry TUTORIAL_GUI = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialgui"),
 
-			new TranslatableComponent(KEY_BASE + "tutorialgui", format(FORMAT_KEYBIND)),
+			Component.translatable(KEY_BASE + "tutorialgui", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.MidTutorial);
@@ -41,7 +42,7 @@ public class Talk {
 
 	public static Entry TUTORIAL_SKILLS = new Entry(new ResourceLocation(Voidscape.MODID, "tutorialskills"),
 
-			new TranslatableComponent(KEY_BASE + "tutorialskills"),
+			Component.translatable(KEY_BASE + "tutorialskills"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.PostTutorial);
@@ -49,7 +50,7 @@ public class Talk {
 
 	public static Entry CORRUPT_PHANTOM = new Entry(new ResourceLocation(Voidscape.MODID, "corruptphantom"),
 
-			new TranslatableComponent(KEY_BASE + "corruptphantom"),
+			Component.translatable(KEY_BASE + "corruptphantom"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.setProgression(Progression.Psychosis);
@@ -58,7 +59,7 @@ public class Talk {
 
 	public static Entry PSYCHOSIS = new Entry(new ResourceLocation(Voidscape.MODID, "psychosis"),
 
-			new TranslatableComponent(KEY_BASE + "psychosis", format(FORMAT_KEYBIND)),
+			Component.translatable(KEY_BASE + "psychosis", format(FORMAT_KEYBIND)),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.PostPsychosis);
@@ -67,7 +68,7 @@ public class Talk {
 
 	public static Entry CORRUPT_PAWN = new Entry(new ResourceLocation(Voidscape.MODID, "corruptpawn"),
 
-			new TranslatableComponent(KEY_BASE + "corruptpawn"),
+			Component.translatable(KEY_BASE + "corruptpawn"),
 
 			(host) -> host.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				data.progressTo(Progression.CorruptPawn);
@@ -83,9 +84,9 @@ public class Talk {
 		private static final Map<ResourceLocation, Entry> REGISTRY = new HashMap<>();
 		private final ResourceLocation id;
 		private final Consumer<Entity> finish;
-		private final TranslatableComponent message;
+		private final MutableComponent message;
 
-		public Entry(ResourceLocation id, TranslatableComponent message, Consumer<Entity> finish) {
+		public Entry(ResourceLocation id, MutableComponent message, Consumer<Entity> finish) {
 			this.id = id;
 			this.finish = finish;
 			this.message = message;
@@ -107,7 +108,7 @@ public class Talk {
 			return id;
 		}
 
-		public TranslatableComponent getMessage() {
+		public MutableComponent getMessage() {
 			return message;
 		}
 

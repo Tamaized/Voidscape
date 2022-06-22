@@ -19,7 +19,7 @@ public class RenderNullServant<T extends EntityNullServant> extends LivingEntity
 
 	public RenderNullServant(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelNullServant<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.NULL_SERVANT)), 0F);
-		this.addLayer(new ItemInHandLayer<>(this));
+		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));
 		this.addLayer(new EyeLayer(this));
 	}
 

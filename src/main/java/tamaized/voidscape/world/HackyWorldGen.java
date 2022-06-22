@@ -19,12 +19,11 @@ import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.IOWorker;
 import net.minecraft.world.level.chunk.storage.RegionFileStorage;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModBiomes;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -38,6 +37,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
@@ -76,7 +76,7 @@ public class HackyWorldGen {
 
 		private final IOWorker worker;
 
-		public DeepFreezeChunkManager(ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
+		public DeepFreezeChunkManager(ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureTemplateManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
 			super(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkProgressListener, chunkStatusListener_, supplier_, int_, boolean_);
 			this.worker = new DeepFreezeIOWorker(((InstanceChunkGenerator) chunkGenerator_).snapshot(), levelSave_.getDimensionPath(serverWorld_.dimension()).resolve("region"), boolean_, "chunk");
 		}
@@ -86,10 +86,9 @@ public class HackyWorldGen {
 			worker.store(p_63503_, p_63504_);
 		}
 
-		@Nullable
 		@Override
-		public CompoundTag read(ChunkPos chunkPos_) throws IOException {
-			return worker.load(chunkPos_);
+		public CompletableFuture<Optional<CompoundTag>> read(ChunkPos chunkPos_) {
+			return worker.loadAsync(chunkPos_);
 		}
 
 		void unload() {
@@ -137,10 +136,9 @@ public class HackyWorldGen {
 			}).thenCompose(Function.identity());
 		}
 
-		@Nullable
 		@Override
-		public CompoundTag load(ChunkPos chunkPos_) throws IOException {
-			CompletableFuture<CompoundTag> completablefuture = this.submitTask(() -> {
+		public CompletableFuture<Optional<CompoundTag>> loadAsync(ChunkPos chunkPos_) {
+			return this.submitTask(() -> {
 				boolean write = false;
 				try {
 					CompoundTag compoundnbt = deepStorage.read(chunkPos_);
@@ -175,23 +173,12 @@ public class HackyWorldGen {
 						sanitize(location, compoundnbt, null);
 					if (write)
 						deepStorage.write(chunkPos_, compoundnbt);
-					return Either.left(compoundnbt);
+					return Either.left(Optional.ofNullable(compoundnbt));
 				} catch (Exception exception) {
 					Voidscape.LOGGER.warn("Failed to read chunk {}", chunkPos_, exception);
 					return Either.right(exception);
 				}
-
 			});
-
-			try {
-				return completablefuture.join();
-			} catch (CompletionException completionexception) {
-				if (completionexception.getCause() instanceof IOException) {
-					throw (IOException) completionexception.getCause();
-				} else {
-					throw completionexception;
-				}
-			}
 		}
 	}
 
@@ -214,17 +201,19 @@ public class HackyWorldGen {
 				for (int px = cx; px < (x + 1) << 5; px++) {
 					for (int pz = cz; pz < (z + 1) << 5; pz++) {
 						System.out.print("Reading " + px + " : " + pz + "; ");
-						try {
 							final ChunkPos pos = new ChunkPos(px, pz);
-							final CompoundTag nbt = worker.load(pos);
-							if (nbt != null) {
-								sanitize(worker.location, nbt, () -> System.out.print("Sanitizing; "));
-								worker.deepStorage.write(pos, nbt);
-								System.out.print("Sanitized; ");
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+							worker.loadAsync(pos).thenApplyAsync(nbt -> {
+								nbt.ifPresent(tag -> {
+									try {
+										sanitize(worker.location, tag, () -> System.out.print("Sanitizing; "));
+										worker.deepStorage.write(pos, tag);
+										System.out.print("Sanitized; ");
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								});
+								return nbt;
+							});
 					}
 				}
 				System.out.println("\nDone\n");

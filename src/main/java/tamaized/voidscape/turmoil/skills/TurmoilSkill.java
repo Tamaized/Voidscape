@@ -2,7 +2,8 @@ package tamaized.voidscape.turmoil.skills;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.turmoil.abilities.TurmoilAbility;
@@ -20,8 +21,8 @@ public class TurmoilSkill {
 
 	private final int id;
 
-	private final TranslatableComponent title;
-	private final TranslatableComponent description;
+	private final MutableComponent title;
+	private final MutableComponent description;
 	private final Supplier<Supplier<ResourceLocation>> texture;
 	private final int spentPoints;
 	private final int cost;
@@ -35,7 +36,7 @@ public class TurmoilSkill {
 		Null, Tank, Healer, Melee, Ranged
 	}
 
-	public TurmoilSkill(TranslatableComponent title, TranslatableComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, CoreType core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
+	public TurmoilSkill(MutableComponent title, MutableComponent desc, Supplier<Supplier<ResourceLocation>> texture, int spentPoints, int cost, CoreType core, TurmoilSkill[] required, TurmoilAbility[] abilities, Stats stats, boolean disabled) {
 		this.title = title;
 		this.description = desc;
 		this.texture = texture;
@@ -49,7 +50,7 @@ public class TurmoilSkill {
 		this.disabled = disabled;
 		desc.append("\n");
 		for (TurmoilAbility ability : this.abilities)
-			desc.append("\n").append(new TranslatableComponent(Voidscape.MODID + ".skills.ability").append(ability.getTitle()).append("\n").append(ability.getDescription())).append("\n");
+			desc.append("\n").append(Component.translatable(Voidscape.MODID + ".skills.ability").append(ability.getTitle()).append("\n").append(ability.getDescription())).append("\n");
 		stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(stat(desc,
 
 				"voidic_damage", stats.voidicDamage),
@@ -79,13 +80,13 @@ public class TurmoilSkill {
 
 	}
 
-	private static TranslatableComponent stat(TranslatableComponent parent, String name, Number stat) {
+	private static MutableComponent stat(MutableComponent parent, String name, Number stat) {
 		return stat(parent, name, stat, false);
 	}
 
-	private static TranslatableComponent stat(TranslatableComponent parent, String name, Number stat, boolean percent) {
+	private static MutableComponent stat(MutableComponent parent, String name, Number stat, boolean percent) {
 		if (stat.doubleValue() > 0)
-			parent.append("\n").append(new TranslatableComponent(Voidscape.MODID.concat(".skills.stats.".concat(name)), percent ? stat + "%" : stat));
+			parent.append("\n").append(Component.translatable(Voidscape.MODID.concat(".skills.stats.".concat(name)), percent ? stat + "%" : stat));
 		return parent;
 	}
 
@@ -104,11 +105,11 @@ public class TurmoilSkill {
 		Object classload = TurmoilSkills.MAGE_SKILLS;
 	}
 
-	public TranslatableComponent getTitle() {
+	public MutableComponent getTitle() {
 		return title;
 	}
 
-	public TranslatableComponent getDescription() {
+	public MutableComponent getDescription() {
 		return description;
 	}
 

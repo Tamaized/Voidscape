@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -16,10 +17,10 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
@@ -51,7 +52,7 @@ public class ModFeatures implements RegistryClass {
 		}
 
 		@Override
-		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+		public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
 			final int y = pos.getY();
 			BlockPos.MutableBlockPos seek = pos.mutable().move(Direction.UP, random.nextInt(15));
 			BlockPos.MutableBlockPos check = seek.mutable().move(Direction.DOWN, 1);
@@ -79,7 +80,7 @@ public class ModFeatures implements RegistryClass {
 		}
 
 		@Override
-		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+		public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
 			return context.getBlockState(pos.above()).isAir() ? Stream.of(pos) : Stream.empty();
 		}
 
@@ -100,7 +101,7 @@ public class ModFeatures implements RegistryClass {
 		}
 
 		@Override
-		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+		public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
 			return context.getBlockState(pos.below()).isAir() ? Stream.empty() : Stream.of(pos);
 		}
 
@@ -125,7 +126,7 @@ public class ModFeatures implements RegistryClass {
 		}
 
 		@Override
-		public Stream<BlockPos> getPositions(PlacementContext context, Random random, BlockPos pos) {
+		public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
 			return Stream.of(pos.above(random.nextInt(y) - y / 2));
 		}
 
@@ -170,7 +171,7 @@ public class ModFeatures implements RegistryClass {
 			return true;
 		}
 
-		private void genSpire(WorldGenLevel level, BlockPos pos, int len, Random rand, int chance, boolean invert) {
+		private void genSpire(WorldGenLevel level, BlockPos pos, int len, RandomSource rand, int chance, boolean invert) {
 			final int flag = 16 | 2;
 			for (int y = len; y > 0; y--) {
 				level.setBlock(invert ? pos.above(len - y) : pos.below(len - y), Blocks.BEDROCK.defaultBlockState(), flag);
@@ -228,7 +229,7 @@ public class ModFeatures implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-		bus.addGenericListener(Feature.class, (Consumer<RegistryEvent.Register<Feature<?>>>) event -> {
+		bus.addListener((Consumer<RegisterEvent>) event -> {
 			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
 			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);
 			NotAirBelowPlacementMod.TYPE = registerPlacementMod("not_air_below", NotAirBelowPlacementMod.CODEC);

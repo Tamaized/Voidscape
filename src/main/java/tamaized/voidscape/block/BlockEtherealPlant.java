@@ -1,6 +1,7 @@
 package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.StringRepresentable;
@@ -40,7 +41,7 @@ public class BlockEtherealPlant extends BushBlock {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState state = super.getStateForPlacement(context);
-		return biomeState(state == null ? defaultBlockState() : state, context.getLevel().getBiome(context.getClickedPos()).value().getRegistryName());
+		return biomeState(state == null ? defaultBlockState() : state, context.getLevel().getBiome(context.getClickedPos()).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")));
 	}
 
 	public static BlockState biomeState(BlockState state, @Nullable ResourceLocation biome) {
@@ -63,11 +64,6 @@ public class BlockEtherealPlant extends BushBlock {
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
 		return state.is(BlockTags.DIRT) || state.is(Blocks.BEDROCK) || state.is(BlockTags.BASE_STONE_NETHER) || state.is(BlockTags.NYLIUM) || state.is(Blocks.END_STONE);
-	}
-
-	@Override
-	public BlockBehaviour.OffsetType getOffsetType() {
-		return BlockBehaviour.OffsetType.XYZ;
 	}
 
 	public enum State implements StringRepresentable {

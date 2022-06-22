@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -87,14 +88,14 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 	@Override
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
-		this.populateDefaultEquipmentSlots(p_33283_);
-		this.populateDefaultEquipmentEnchantments(p_33283_);
+		this.populateDefaultEquipmentSlots(getRandom(), p_33283_);
+		this.populateDefaultEquipmentEnchantments(getRandom(), p_33283_);
 		return super.finalizeSpawn(p_33282_, p_33283_, p_33284_, p_33285_, p_33286_);
 	}
 
 	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance p_32136_) {
-		super.populateDefaultEquipmentSlots(p_32136_);
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_32136_) {
+		super.populateDefaultEquipmentSlots(random, p_32136_);
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModTools.CHARRED_WARHAMMER.get()));
 	}
 

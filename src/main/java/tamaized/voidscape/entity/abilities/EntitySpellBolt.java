@@ -106,7 +106,7 @@ public class EntitySpellBolt extends AbstractArrow implements IEntityAdditionalS
 	}
 
 	@Override
-	public float getBrightness() {
+	public float getLightLevelDependentMagicValue() {
 		return 1F;
 	}
 

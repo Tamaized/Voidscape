@@ -2,7 +2,7 @@ package tamaized.voidscape.network.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.screen.PartyListScreen;
@@ -25,7 +25,7 @@ public class ClientPacketJoinPartyError implements NetworkMessages.IMessage<Clie
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
-		ClientPartyInfo.error = new TranslatableComponent(error);
+		ClientPartyInfo.error = Component.translatable(error);
 		if (Minecraft.getInstance().screen instanceof PartyListScreen)
 			((PartyListScreen) Minecraft.getInstance().screen).joining = false;
 	}

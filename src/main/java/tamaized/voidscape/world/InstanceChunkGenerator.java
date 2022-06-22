@@ -10,7 +10,7 @@ import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
@@ -20,6 +20,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 
@@ -63,22 +64,12 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public ChunkGenerator withSeed(long seed) {
-		return new InstanceChunkGenerator(structureSets, biomeSource.withSeed(seed), snapshot(), group());
-	}
-
-	@Override
-	public Climate.Sampler climateSampler() {
-		return Climate.empty();
-	}
-
-	@Override
-	public void applyCarvers(WorldGenRegion p_187691_, long p_187692_, BiomeManager p_187693_, StructureFeatureManager p_187694_, ChunkAccess p_187695_, GenerationStep.Carving p_187696_) {
+	public void applyCarvers(WorldGenRegion p_223043_, long p_223044_, RandomState p_223045_, BiomeManager p_223046_, StructureManager p_223047_, ChunkAccess p_223048_, GenerationStep.Carving p_223049_) {
 
 	}
 
 	@Override
-	public void buildSurface(WorldGenRegion p_187697_, StructureFeatureManager p_187698_, ChunkAccess chunk_) {
+	public void buildSurface(WorldGenRegion p_223050_, StructureManager p_223051_, RandomState p_223052_, ChunkAccess chunk_) {
 		ChunkPos pos = chunk_.getPos();
 		if (pos.x == 0 && pos.z == 0) {
 			BlockPos.MutableBlockPos bp = new BlockPos.MutableBlockPos();
@@ -101,7 +92,7 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender p_187749_, StructureFeatureManager structureManager_, ChunkAccess chunk_) {
+	public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_223209_, Blender p_223210_, RandomState p_223211_, StructureManager p_223212_, ChunkAccess chunk_) {
 		return CompletableFuture.completedFuture(chunk_);
 	}
 
@@ -116,17 +107,17 @@ public class InstanceChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public int getBaseHeight(int x, int z, Heightmap.Types heightmapType, LevelHeightAccessor p_156156_) {
+	public int getBaseHeight(int p_223032_, int p_223033_, Heightmap.Types p_223034_, LevelHeightAccessor p_223035_, RandomState p_223036_) {
 		return 0;
 	}
 
 	@Override
-	public NoiseColumn getBaseColumn(int int_, int int1_, LevelHeightAccessor accessor) {
+	public NoiseColumn getBaseColumn(int p_223028_, int p_223029_, LevelHeightAccessor p_223030_, RandomState p_223031_) {
 		return new NoiseColumn(0, new BlockState[0]);
 	}
 
 	@Override
-	public void addDebugScreenInfo(List<String> p_208054_, BlockPos p_208055_) {
+	public void addDebugScreenInfo(List<String> p_223175_, RandomState p_223176_, BlockPos p_223177_) {
 
 	}
 }

@@ -3,7 +3,7 @@ package tamaized.voidscape.client.ui.screen;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketCreateParty;
 import tamaized.voidscape.party.ClientPartyInfo;
@@ -21,7 +21,7 @@ public class PartySearchScreen extends TurmoilScreen {
 	private long tick;
 
 	public PartySearchScreen(Duties.Duty duty, Instance.InstanceType type) {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.form")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
 		this.type = type;
 	}
@@ -47,7 +47,7 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Find Party"), // FIXME: localize
+				Component.translatable("Find Party"), // FIXME: localize
 
 				button -> minecraft.setScreen(new PartyListScreen(duty, type))
 
@@ -62,7 +62,7 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Start Party"),
+				Component.translatable("Start Party"),
 
 				button -> {
 					if (minecraft.player == null)
@@ -83,7 +83,7 @@ public class PartySearchScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"),
+				Component.translatable("Back"),
 
 				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
 

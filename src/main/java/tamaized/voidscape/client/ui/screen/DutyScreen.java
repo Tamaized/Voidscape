@@ -3,7 +3,7 @@ package tamaized.voidscape.client.ui.screen;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Duties;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class DutyScreen extends TurmoilScreen {
 
 	public DutyScreen() {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.duty")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.duty")));
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class DutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"), // FIXME: localizae
+				Component.translatable("Back"), // FIXME: localizae
 
 				button -> minecraft.setScreen(new MainScreen())
 

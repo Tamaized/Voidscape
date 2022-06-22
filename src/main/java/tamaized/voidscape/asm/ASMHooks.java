@@ -56,7 +56,6 @@ import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
 import net.minecraft.world.level.entity.ChunkEntities;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
@@ -66,7 +65,6 @@ import net.minecraftforge.client.EffectRenderer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
@@ -145,7 +143,7 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
+	 * Injection Point:<br> FIXME
 	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, ChunkGenerator, int, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)}<br>
 	 * [AFTER] INVOKESPECIAL : {@link ChunkMap#ChunkMap(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, BlockableEventLoop, LightChunkGetter, ChunkGenerator, ChunkProgressListener, ChunkStatusUpdateListener, Supplier, int, boolean)}
 	 */
@@ -154,7 +152,7 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
+	 * Injection Point:<br> FIXME
 	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, Holder, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}<br>
 	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, Path, DataFixer, boolean, Executor)}
 	 */
@@ -173,7 +171,7 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
+	 * Injection Point:<br> FIXME
 	 * {@link net.minecraft.world.level.levelgen.WorldGenSettings#WorldGenSettings(long, boolean, boolean, MappedRegistry, Optional)} <br>
 	 * [BEFORE FIRST PUTFIELD]
 	 */
@@ -228,7 +226,7 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
+	 * Injection Point:<br> FIXME
 	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.ClimateSettings, Biome.BiomeCategory, Float, Float, BiomeSpecialEffects, BiomeGenerationSettings, MobSpawnSettings, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}<br>
 	 * [AFTER GETSTATIC {@link MinecraftForge.EVENT_BUS}]
 	 */
@@ -267,7 +265,7 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
+	 * Injection Point:<br> FIXME
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(Level, int)}<br>
 	 * [BEFORE FRETURN]
 	 */

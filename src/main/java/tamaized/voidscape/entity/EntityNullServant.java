@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -68,14 +69,14 @@ public class EntityNullServant extends Monster implements IEthereal {
 	@Override
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
-		this.populateDefaultEquipmentSlots(p_33283_);
-		this.populateDefaultEquipmentEnchantments(p_33283_);
+		this.populateDefaultEquipmentSlots(getRandom(), p_33283_);
+		this.populateDefaultEquipmentEnchantments(getRandom(), p_33283_);
 		return super.finalizeSpawn(p_33282_, p_33283_, p_33284_, p_33285_, p_33286_);
 	}
 
 	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance p_32136_) {
-		super.populateDefaultEquipmentSlots(p_32136_);
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_32136_) {
+		super.populateDefaultEquipmentSlots(random, p_32136_);
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextBoolean() ? ModTools.CORRUPT_AXE.get() : ModTools.CORRUPT_SWORD.get()));
 	}
 

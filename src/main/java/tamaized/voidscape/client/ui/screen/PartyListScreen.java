@@ -13,7 +13,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.network.server.ServerPacketRequestJoinParty;
@@ -38,7 +37,7 @@ public class PartyListScreen extends TurmoilScreen {
 	private PartyList list;
 
 	public PartyListScreen(Duties.Duty duty, Instance.InstanceType type) {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.form")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
 		this.type = type;
 		ClientPartyInfo.error = null;
@@ -93,7 +92,7 @@ public class PartyListScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Join Party"), // FIXME: localize
+				Component.translatable("Join Party"), // FIXME: localize
 
 				button -> {
 					if (list.getSelected() == null)
@@ -119,7 +118,7 @@ public class PartyListScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Password")
+				Component.translatable("Password")
 
 		));
 		addRenderableWidget(new Button(
@@ -132,7 +131,7 @@ public class PartyListScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"),
+				Component.translatable("Back"),
 
 				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
 
@@ -172,7 +171,7 @@ public class PartyListScreen extends TurmoilScreen {
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		list.render(matrixStack, mouseX, mouseY, partialTicks);
 		password.render(matrixStack, mouseX, mouseY, partialTicks);
-		String text = new TranslatableComponent("Password:").getString();
+		String text = Component.translatable("Password:").getString();
 		font.draw(matrixStack, text, (int) (minecraft.getWindow().getGuiScaledWidth() / 4 - font.width(text) / 2F), (int) (minecraft.getWindow().getGuiScaledHeight() / 4F - 20F / 2F) + 30F, 0xFFFFFFFF);
 		text = duty.display().getString();
 		font.draw(matrixStack, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
@@ -273,7 +272,7 @@ public class PartyListScreen extends TurmoilScreen {
 			@Override
 			public Component getNarration() {
 				Optional<ClientPartyInfo.Party> party = ClientPartyInfo.PARTIES.stream().filter(p -> p.host.getId().equals(host)).findAny();
-				return new TranslatableComponent("narrator.select", party.isPresent() ? party.get().host.getName() : "Error: Null Party"); // FIXME: localize
+				return Component.translatable("narrator.select", party.isPresent() ? party.get().host.getName() : "Error: Null Party"); // FIXME: localize
 			}
 		}
 

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.util.LazyOptional;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
@@ -29,7 +29,7 @@ public class MainScreen extends TurmoilScreen {
 	private Button reset;
 
 	public MainScreen() {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.main")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.main")));
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Enter the Void"), // FIXME: localize
+				Component.translatable("Enter the Void"), // FIXME: localize
 
 				button -> {
 					if (minecraft.player != null)
@@ -73,7 +73,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Voidic Powers"), // FIXME: localize
+				Component.translatable("Voidic Powers"), // FIXME: localize
 
 				button -> {
 					if (data != null && data.getProgression() == Progression.MidTutorial)
@@ -92,7 +92,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Configure Voidic Spells"), // FIXME: localize
+				Component.translatable("Configure Voidic Spells"), // FIXME: localize
 
 				button -> minecraft.setScreen(new SpellsScreen())
 
@@ -109,7 +109,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Reset Voidic Skills"), // FIXME: localize
+				Component.translatable("Reset Voidic Skills"), // FIXME: localize
 
 				button -> {
 					if (button.active) {
@@ -127,7 +127,7 @@ public class MainScreen extends TurmoilScreen {
 					boolean min = data.getResetCooldown() > 1200;
 					String text = data.getResetCooldown() > 0 ? ("%s %s Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
 					if (!text.isEmpty())
-						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(new TranslatableComponent(
+						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(Component.translatable(
 
 								text
 
@@ -147,7 +147,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Duties"), // FIXME: localize
+				Component.translatable("Duties"), // FIXME: localize
 
 				button -> {
 					if (ClientPartyInfo.host == null)
@@ -169,7 +169,7 @@ public class MainScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Close"), // FIXME: localize
+				Component.translatable("Close"), // FIXME: localize
 
 				button -> onClose()
 

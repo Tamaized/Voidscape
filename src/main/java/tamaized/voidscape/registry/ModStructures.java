@@ -1,10 +1,9 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.RegisterEvent;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.structures.NullStructure;
@@ -19,7 +18,7 @@ public class ModStructures implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-		bus.addGenericListener(StructureFeature.class, (Consumer<RegistryEvent.Register<StructureFeature<?>>>) event -> {
+		bus.addListener((Consumer<RegisterEvent>) event -> {
 
 			classloadPieces(NullStructure.Pieces.MAIN);
 
@@ -28,7 +27,7 @@ public class ModStructures implements RegistryClass {
 		});
 	}
 
-	private static void register(RegistryEvent.Register<StructureFeature<?>> event, StructureFeature<?> structure, ResourceLocation name) {
+	private static void register(StructureFeature<?> structure, ResourceLocation name) {
 		event.getRegistry().register(structure.setRegistryName(name));
 	}
 

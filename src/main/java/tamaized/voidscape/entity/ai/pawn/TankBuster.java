@@ -1,6 +1,7 @@
 package tamaized.voidscape.entity.ai.pawn;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import tamaized.voidscape.entity.EntityCorruptedPawnBoss;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.registry.ModDamageSource;
@@ -10,7 +11,7 @@ import java.util.function.Predicate;
 
 public class TankBuster extends AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBoss> {
 
-	public TankBuster(float damage, boolean stick, Predicate<Random> rand) {
+	public TankBuster(float damage, boolean stick, Predicate<RandomSource> rand) {
 		super(rand);
 		next(next(new AITask.RepeatedAITask<>((boss, ai) -> {
 			if (boss.aiTick == 0) {

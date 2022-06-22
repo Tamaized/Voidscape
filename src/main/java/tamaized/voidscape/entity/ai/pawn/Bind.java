@@ -1,5 +1,6 @@
 package tamaized.voidscape.entity.ai.pawn;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import tamaized.voidscape.Voidscape;
@@ -19,7 +20,7 @@ public class Bind extends AITask.RandomAITask.ChanceAITask<EntityCorruptedPawnBo
 
 	private long cooldown;
 
-	public Bind(float health, long duration, float damage, Predicate<Random> rand) {
+	public Bind(float health, long duration, float damage, Predicate<RandomSource> rand) {
 		super(rand);
 		next(next(new RepeatedAITask<>((boss, ai) -> {
 			if (cooldown == 0)

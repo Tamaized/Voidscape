@@ -39,7 +39,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -62,6 +61,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.progress.StartupMessageManager;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -160,7 +160,7 @@ public class Voidscape {
 				ModStructures::new,
 				ModSurfaceRules::new,
 				ModTools::new);
-		busMod.addGenericListener(Biome.class, (Consumer<RegistryEvent.Register<Biome>>) event -> {
+		busMod.addListener((Consumer<RegisterEvent>) event -> {
 			Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
@@ -206,7 +206,7 @@ public class Voidscape {
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
 					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()) && event.player.level.getBlockState(dest.above()).isAir())
-						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).value().getRegistryName()));
+						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation(""))));
 				}
 			}
 		});

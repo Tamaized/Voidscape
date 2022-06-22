@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil.abilities;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -130,17 +131,17 @@ public class TurmoilAbility {
 		return id;
 	}
 
-	public TranslatableComponent getTitle() {
-		return new TranslatableComponent(unloc.concat(".title"));
+	public MutableComponent getTitle() {
+		return Component.translatable(unloc.concat(".title"));
 	}
 
-	public TranslatableComponent getDescription() {
-		TranslatableComponent desc = new TranslatableComponent(unloc.concat(".desc"));
-		desc.append("\n\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.cost", cost).append(" ").
-						append(new TranslatableComponent(Voidscape.MODID + ".ability.power." + type.name().toLowerCase(Locale.US)))).
-				append("\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.cooldown", cooldown));
+	public MutableComponent getDescription() {
+		MutableComponent desc = Component.translatable(unloc.concat(".desc"));
+		desc.append("\n\n").append(Component.translatable(Voidscape.MODID + ".ability.cost", cost).append(" ").
+						append(Component.translatable(Voidscape.MODID + ".ability.power." + type.name().toLowerCase(Locale.US)))).
+				append("\n").append(Component.translatable(Voidscape.MODID + ".ability.cooldown", cooldown));
 		if (damage > 0)
-			desc.append("\n").append(new TranslatableComponent(Voidscape.MODID + ".ability.damage", damage));
+			desc.append("\n").append(Component.translatable(Voidscape.MODID + ".ability.damage", damage));
 		return desc;
 	}
 

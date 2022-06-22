@@ -5,7 +5,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.server.ServerPacketSuccumbDeath;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -18,14 +17,14 @@ public class IncapacitatedScreen extends Screen {
 	private final Component resurrectText;
 
 	public IncapacitatedScreen() { // FIXME: localization
-		super(new TranslatableComponent("You are incapacitated"));
-		resurrectText = new TranslatableComponent("A Soul Mender may resurrect you");
+		super(Component.translatable("You are incapacitated"));
+		resurrectText = Component.translatable("A Soul Mender may resurrect you");
 	}
 
 	@Override
 	protected void init() {
 		this.delayTicker = 0;
-		this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 72, 200, 20, new TranslatableComponent("Succumb to death"), (button1_) -> {
+		this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 72, 200, 20, Component.translatable("Succumb to death"), (button1_) -> {
 			if (minecraft.player != null) {
 				Voidscape.NETWORK.sendToServer(new ServerPacketSuccumbDeath());
 				minecraft.player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> data.incapacitated = false));

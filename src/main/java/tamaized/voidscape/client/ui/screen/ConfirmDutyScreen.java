@@ -3,7 +3,7 @@ package tamaized.voidscape.client.ui.screen;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.party.ClientPartyInfo;
 import tamaized.voidscape.turmoil.Duties;
@@ -15,7 +15,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 	private final Duties.Duty duty;
 
 	public ConfirmDutyScreen(Duties.Duty duty) {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.confirm")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.confirm")));
 		this.duty = duty;
 	}
 
@@ -46,7 +46,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent(duty.isOnlyNormal() ? "Normal" : "Unrestricted"),
+				Component.translatable(duty.isOnlyNormal() ? "Normal" : "Unrestricted"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Unrestricted))
 
@@ -62,7 +62,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 					buttonHeight,
 
-					new TranslatableComponent("Normal"),
+					Component.translatable("Normal"),
 
 					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
 
@@ -77,7 +77,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 					buttonHeight,
 
-					new TranslatableComponent("Insane"),
+					Component.translatable("Insane"),
 
 					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
 
@@ -95,7 +95,7 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"),
+				Component.translatable("Back"),
 
 				button -> minecraft.setScreen(new DutyScreen())
 

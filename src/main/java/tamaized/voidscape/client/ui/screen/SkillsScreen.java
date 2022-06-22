@@ -10,9 +10,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.lwjgl.glfw.GLFW;
@@ -59,7 +58,7 @@ public class SkillsScreen extends TurmoilScreen {
 	private int lastY;
 
 	public SkillsScreen() {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.skills")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.skills")));
 	}
 
 	@Override
@@ -117,8 +116,8 @@ public class SkillsScreen extends TurmoilScreen {
 		lastX = mouseX;
 		lastY = mouseY;
 		super.render(stack, mouseX, mouseY, partialTicks);
-		font.draw(stack, new TranslatableComponent(Voidscape.MODID + ".gui.skills.level", data.getLevel()), 5, 5, 0xFFFF00);
-		font.draw(stack, new TranslatableComponent(Voidscape.MODID + ".gui.skills.points", data.getPoints()), 5, 10 + font.lineHeight, 0xFFFF00);
+		font.draw(stack, Component.translatable(Voidscape.MODID + ".gui.skills.level", data.getLevel()), 5, 5, 0xFFFF00);
+		font.draw(stack, Component.translatable(Voidscape.MODID + ".gui.skills.points", data.getPoints()), 5, 10 + font.lineHeight, 0xFFFF00);
 	}
 
 	@Override
@@ -148,7 +147,7 @@ public class SkillsScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"), // FIXME: localize
+				Component.translatable("Back"), // FIXME: localize
 
 				button -> minecraft.setScreen(new MainScreen())
 
@@ -175,7 +174,7 @@ public class SkillsScreen extends TurmoilScreen {
 		private final Turmoil data;
 
 		public SkillButton(Turmoil data, TurmoilSkill skill, int x, int y, int s) {
-			super(x, y, s, s, new TextComponent(""), button -> {
+			super(x, y, s, s, Component.literal(""), button -> {
 				if (!button.active)
 					return;
 				data.claimSkill(skill);

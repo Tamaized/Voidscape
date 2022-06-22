@@ -1,10 +1,10 @@
 package tamaized.voidscape.entity.ai;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
@@ -109,16 +109,16 @@ public class AITask<T extends Entity> {
 
 		public static class ChanceAITask<T extends Entity> extends AITask<T> {
 
-			private final Predicate<Random> random;
+			private final Predicate<RandomSource> random;
 
-			public ChanceAITask(Predicate<Random> rand) {
+			public ChanceAITask(Predicate<RandomSource> rand) {
 				super((e, a) -> {
 
 				});
 				random = rand;
 			}
 
-			public boolean execute(Random rand) {
+			public boolean execute(RandomSource rand) {
 				return random.test(rand);
 			}
 

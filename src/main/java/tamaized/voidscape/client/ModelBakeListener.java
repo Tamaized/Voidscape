@@ -11,6 +11,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -125,7 +126,7 @@ public class ModelBakeListener {
 				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
 					@Nonnull
 					@Override
-					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
 						List<BakedQuad> quads = cachedQuads.get(side);
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
@@ -147,7 +148,7 @@ public class ModelBakeListener {
 				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
 					@Nonnull
 					@Override
-					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
 						List<BakedQuad> quads = cachedQuads.get(side);
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
@@ -236,31 +237,32 @@ public class ModelBakeListener {
 
 	public static void redirectModels() {
 		redirectModelLocation("voidic", "voidic_crystal_", ModTools.
-				VOIDIC_CRYSTAL_AXE.get(), ModTools.
-				VOIDIC_CRYSTAL_PICKAXE.get(), ModTools.
-				VOIDIC_CRYSTAL_SWORD.get(), ModTools.
-				VOIDIC_CRYSTAL_SHIELD.get(), ModTools.
-				VOIDIC_CRYSTAL_BOW.get(), ModTools.
-				VOIDIC_CRYSTAL_XBOW.get(), ModArmors.
-				VOIDIC_CRYSTAL_HELMET.get(), ModArmors.
-				VOIDIC_CRYSTAL_CHEST.get(), ModArmors.
-				VOIDIC_CRYSTAL_LEGS.get(), ModArmors.
-				VOIDIC_CRYSTAL_BOOTS.get());
-		redirectModelLocation("charred", "charred_", ModTools.CHARRED_WARHAMMER.get());
+				VOIDIC_CRYSTAL_AXE, ModTools.
+				VOIDIC_CRYSTAL_PICKAXE, ModTools.
+				VOIDIC_CRYSTAL_SWORD, ModTools.
+				VOIDIC_CRYSTAL_SHIELD, ModTools.
+				VOIDIC_CRYSTAL_BOW, ModTools.
+				VOIDIC_CRYSTAL_XBOW, ModArmors.
+				VOIDIC_CRYSTAL_HELMET, ModArmors.
+				VOIDIC_CRYSTAL_CHEST, ModArmors.
+				VOIDIC_CRYSTAL_LEGS, ModArmors.
+				VOIDIC_CRYSTAL_BOOTS);
+		redirectModelLocation("charred", "charred_", ModTools.CHARRED_WARHAMMER);
 		redirectModelLocation("corrupt", "corrupt_", ModTools.
-				CORRUPT_AXE.get(), ModTools.
-				CORRUPT_SWORD.get(), ModTools.
-				CORRUPT_BOW.get(), ModTools.
-				CORRUPT_XBOW.get(), ModArmors.
-				CORRUPT_HELMET.get(), ModArmors.
-				CORRUPT_CHEST.get(), ModArmors.
-				CORRUPT_LEGS.get(), ModArmors.
-				CORRUPT_BOOTS.get());
+				CORRUPT_AXE, ModTools.
+				CORRUPT_SWORD, ModTools.
+				CORRUPT_BOW, ModTools.
+				CORRUPT_XBOW, ModArmors.
+				CORRUPT_HELMET, ModArmors.
+				CORRUPT_CHEST, ModArmors.
+				CORRUPT_LEGS, ModArmors.
+				CORRUPT_BOOTS);
 	}
 
-	private static void redirectModelLocation(String subfolder, String remove, Item... items) {
-		for (Item item : items) {
-			ResourceLocation location = item.getRegistryName();
+	@SafeVarargs
+	private static void redirectModelLocation(String subfolder, String remove, RegistryObject<Item>... items) {
+		for (RegistryObject<Item> item : items) {
+			ResourceLocation location = item.getId();
 			if (location == null)
 				continue;
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
@@ -273,7 +275,7 @@ public class ModelBakeListener {
 			bakery.loadTopLevel(mrl);
 			bakery.unbakedCache.put(oldMrl, bakery.unbakedCache.get(mrl));
 			Minecraft.getInstance().getItemRenderer().getItemModelShaper().
-					register(item, mrl);
+					register(item.get(), mrl);
 		}
 	}
 
@@ -301,7 +303,7 @@ public class ModelBakeListener {
 
 		@Nonnull
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand) {
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
 			List<BakedQuad> quads = cachedQuads.get(side);
 			if (quads == null) {
 				quads = model.getQuads(state, side, rand);

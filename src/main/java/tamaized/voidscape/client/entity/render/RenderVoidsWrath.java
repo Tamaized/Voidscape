@@ -23,7 +23,7 @@ public class RenderVoidsWrath<T extends EntityVoidsWrathBoss> extends LivingEnti
 
 	public RenderVoidsWrath(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.VOIDS_WRATH)), 0F);
-		this.addLayer(new ItemInHandLayer<>(this));
+		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));
 		this.addLayer(new OverlayLayer(this));
 		this.addLayer(new PowerLayer(this, rendererManager.getModelSet()));
 	}

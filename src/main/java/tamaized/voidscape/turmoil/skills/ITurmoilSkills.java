@@ -1,6 +1,7 @@
 package tamaized.voidscape.turmoil.skills;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
@@ -97,12 +98,12 @@ public interface ITurmoilSkills {
 			return this;
 		}
 
-		private static TranslatableComponent format(String loc, String append, Object... args) {
-			return new TranslatableComponent(Voidscape.MODID + ".skills." + loc + "." + append, args);
+		private static MutableComponent format(String loc, String append, Object... args) {
+			return Component.translatable(Voidscape.MODID + ".skills." + loc + "." + append, args);
 		}
 
 		TurmoilSkill build() {
-			return new TurmoilSkill(format(loc, name.concat(".title")), desc == null ? new TranslatableComponent("") : format(loc, desc.isEmpty() ? name.concat(".desc") : desc.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), stats.build(), disabled);
+			return new TurmoilSkill(format(loc, name.concat(".title")), desc == null ? Component.translatable("") : format(loc, desc.isEmpty() ? name.concat(".desc") : desc.concat(".desc")), texture, spent, cost, core, required.toArray(new TurmoilSkill[0]), abilities.toArray(new TurmoilAbility[0]), stats.build(), disabled);
 		}
 
 	}

@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -88,15 +88,15 @@ public final class VoidCommands {
 							executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, Turmoil::forceStart))).
 					then(Commands.literal("get").
 							then(Commands.literal("progress").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(data.getProgression().name()), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(Component.literal(data.getProgression().name()), false)))).
 							then(Commands.literal("state").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(data.getState().name()), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(Component.literal(data.getState().name()), false)))).
 							then(Commands.literal("level").
-									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getLevel())), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapTurmoilData, context, data -> context.getSource().sendSuccess(Component.literal(String.valueOf(data.getLevel())), false)))).
 							then(Commands.literal("infusion").
-									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getInfusion())), false)))).
+									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(Component.literal(String.valueOf(data.getInfusion())), false)))).
 							then(Commands.literal("paranoia").
-									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(new TextComponent(String.valueOf(data.getParanoia())), false))))).
+									executes(context -> getDataAndRun(Voidscape.subCapInsanity, context, data -> context.getSource().sendSuccess(Component.literal(String.valueOf(data.getParanoia())), false))))).
 					then(Commands.literal("set").
 							then(Commands.literal("progress").
 									then(Commands.argument("id", IntegerArgumentType.integer(0, Progression.values().length - 1)).

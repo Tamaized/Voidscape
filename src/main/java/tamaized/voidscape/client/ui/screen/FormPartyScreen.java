@@ -13,8 +13,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import tamaized.voidscape.Voidscape;
@@ -48,7 +47,7 @@ public class FormPartyScreen extends TurmoilScreen {
 	private List<Button> kickMemberButtons = new ArrayList<>();
 
 	public FormPartyScreen(Duties.Duty duty, Instance.InstanceType type) {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.form")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
 		this.type = type;
 	}
@@ -97,7 +96,7 @@ public class FormPartyScreen extends TurmoilScreen {
 		for (int i = 0; i < 7; i++) {
 			final int index = i;
 			Button b;
-			kickMemberButtons.add(addRenderableWidget(b = new Button(0, 0, 20, 20, new TextComponent("X"), button -> {
+			kickMemberButtons.add(addRenderableWidget(b = new Button(0, 0, 20, 20, Component.translatable("X"), button -> {
 				if (minecraft.player != null && ClientPartyInfo.host.getId().equals(minecraft.player.getUUID()) && ClientPartyInfo.members.size() > index) {
 					ClientPartyInfo.members.remove(index);
 					Voidscape.NETWORK.sendToServer(new ServerPacketRemovePartyMember(index));
@@ -115,7 +114,7 @@ public class FormPartyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Commence"), // FIXME: localize
+				Component.translatable("Commence"), // FIXME: localize
 
 				button -> {
 					ClientPartyInfo.reserving = true;
@@ -134,7 +133,7 @@ public class FormPartyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Disband"),
+				Component.translatable("Disband"),
 
 				button -> Voidscape.NETWORK.sendToServer(new ServerPacketDisbandParty())
 
@@ -151,7 +150,7 @@ public class FormPartyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Password")
+				Component.translatable("Password")
 
 		));
 		/*
@@ -180,7 +179,7 @@ public class FormPartyScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"),
+				Component.translatable("Back"),
 
 				button -> minecraft.setScreen(new PartySearchScreen(duty, type))
 

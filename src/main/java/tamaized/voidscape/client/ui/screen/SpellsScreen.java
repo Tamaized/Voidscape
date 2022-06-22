@@ -10,9 +10,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
@@ -38,7 +37,7 @@ public class SpellsScreen extends TurmoilScreen {
 	private TurmoilAbility drag = null;
 
 	public SpellsScreen() {
-		super(new TranslatableComponent(Voidscape.MODID.concat(".screen.spells")));
+		super(Component.translatable(Voidscape.MODID.concat(".screen.spells")));
 	}
 
 	@Override
@@ -120,7 +119,7 @@ public class SpellsScreen extends TurmoilScreen {
 
 				buttonHeight,
 
-				new TranslatableComponent("Back"), // FIXME: localize
+				Component.translatable("Back"), // FIXME: localize
 
 				button -> onClose()
 
@@ -136,7 +135,7 @@ public class SpellsScreen extends TurmoilScreen {
 		private final TurmoilAbility ability;
 
 		SpellButton(SpellsScreen parent, TurmoilAbility ability, int x, int y, int s) {
-			super(x, y, s, s, new TextComponent(""), button -> {
+			super(x, y, s, s, Component.literal(""), button -> {
 				if (!button.active)
 					return;
 				parent.drag = ability;
@@ -178,7 +177,7 @@ public class SpellsScreen extends TurmoilScreen {
 		private TurmoilAbility set;
 
 		SlotButton(int id, int x, int y) {
-			super(x, y, 16, 16, new TextComponent(""), button -> {
+			super(x, y, 16, 16, Component.literal(""), button -> {
 			});
 			this.id = id;
 		}
