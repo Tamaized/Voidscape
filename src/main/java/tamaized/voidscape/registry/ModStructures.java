@@ -1,34 +1,35 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.structures.NullStructure;
 
-import java.util.function.Consumer;
-
 public class ModStructures implements RegistryClass {
 
-	private static void classloadPieces(StructurePieceType... noop) {
-		// NO-OP
+	public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, Voidscape.MODID);
+	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, Voidscape.MODID);
+
+	public static class StructureTypes {
+
+		public static final RegistryObject<StructureType<NullStructure>> NULL = STRUCTURE_TYPES.register("null", () -> () -> NullStructure.CODEC);
+
+	}
+
+	public static class Pieces {
+
+		public static final RegistryObject<StructurePieceType> NULL_MAIN = STRUCTURE_PIECE_TYPES.register("nullmain", () -> NullStructure.Pieces.Piece::new);
+
 	}
 
 	@Override
 	public void init(IEventBus bus) {
-		bus.addListener((Consumer<RegisterEvent>) event -> {
 
-			classloadPieces(NullStructure.Pieces.MAIN);
-
-			register(event, new NullStructure(), new ResourceLocation(Voidscape.MODID, "null"));
-
-		});
-	}
-
-	private static void register(StructureFeature<?> structure, ResourceLocation name) {
-		event.getRegistry().register(structure.setRegistryName(name));
 	}
 
 }
