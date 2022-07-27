@@ -11,7 +11,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +44,7 @@ public class ModParticles implements RegistryClass {
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void registerFactories(ParticleFactoryRegisterEvent event) {
+	public static void registerFactories(RegisterParticleProvidersEvent event) {
 		ParticleEngine particles = Minecraft.getInstance().particleEngine;
 
 		particles.register(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);

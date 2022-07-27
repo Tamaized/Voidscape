@@ -10,9 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.ISkyRenderHandler;
 
-public class VoidSkyRenderer implements ISkyRenderHandler {
+public class VoidSkyRenderer {
 
 	/*private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
 	private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
@@ -21,8 +20,7 @@ public class VoidSkyRenderer implements ISkyRenderHandler {
 	private static final FloatBuffer PROJECTION = GLAllocation.createFloatBuffer(16);
 	private FloatBuffer buffer = GLAllocation.createFloatBuffer(16);*/
 
-	@Override
-	public void render(int ticks, float partialTicks, PoseStack matrixStack, ClientLevel world, Minecraft mc) {
+	public static void render(int ticks, float partialTicks, PoseStack matrixStack, ClientLevel world, Minecraft mc) {
 
 		BufferBuilder vertexbuffer = Tesselator.getInstance().getBuilder();
 		vertexbuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);

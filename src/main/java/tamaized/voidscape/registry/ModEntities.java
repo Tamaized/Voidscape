@@ -51,7 +51,7 @@ import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEntities implements RegistryClass {
 
-	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITIES);
+	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITY_TYPES);
 
 	public static final RegistryObject<EntityType<EntitySpellBolt>> SPELL_BOLT = REGISTRY.register("spell_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "spell_bolt"), EntitySpellBolt::new, MobCategory.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntitySpellAura>> SPELL_AURA = REGISTRY.register("spell_aura", () -> make(new ResourceLocation(Voidscape.MODID, "spell_aura"), EntitySpellAura::new, MobCategory.MISC, 0.5F, 0.5F));

@@ -18,10 +18,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.pipeline.LightUtil;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModelBakeListener {
@@ -64,12 +63,12 @@ public class ModelBakeListener {
 	}
 
 	@SubscribeEvent
-	public static void applyColors(ColorHandlerEvent.Block event) {
-		event.getBlockColors().register((blockState, iBlockDisplayReader, blockPos, i) -> 0x331166, ModBlocks.ANTIROCK.get());
+	public static void applyColors(RegisterColorHandlersEvent.Block event) {
+		event.register((blockState, iBlockDisplayReader, blockPos, i) -> 0x331166, ModBlocks.ANTIROCK.get());
 	}
 
 	@SubscribeEvent
-	public static void modelBake(ModelBakeEvent event) {
+	public static void modelBake(ModelEvent.BakingCompleted event) {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
@@ -114,16 +113,16 @@ public class ModelBakeListener {
 		add(fullbrightList, ModBlocks.PLANT, "state=end");
 
 		fullbrightList.forEach(mrl -> {
-			final BakedModel model = event.getModelRegistry().get(mrl);
+			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
-				event.getModelRegistry().put(mrl, new FullBrightModel(model));
+				event.getModels().put(mrl, new FullBrightModel(model));
 			else
 				Voidscape.LOGGER.error("Null Model! " + mrl);
 		});
 		overlayList.forEach(mrl -> {
-			final BakedModel model = event.getModelRegistry().get(mrl);
+			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
-				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
+				event.getModels().put(mrl, new FullBrightModel(model) {
 					@Nonnull
 					@Override
 					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
@@ -132,7 +131,7 @@ public class ModelBakeListener {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
 								if (quads.indexOf(quad) == 1)
-									LightUtil.setLightData(quad, 0xF000F0);
+									QuadTransformers.applyingLightmap(0xF000F0).process(quad);
 							}
 							cachedQuads.put(side, quads);
 						}
@@ -143,9 +142,9 @@ public class ModelBakeListener {
 				Voidscape.LOGGER.error("Null Model! " + mrl);
 		});
 		itemOverlayList.forEach(mrl -> {
-			final BakedModel model = event.getModelRegistry().get(mrl);
+			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
-				event.getModelRegistry().put(mrl, new FullBrightModel(model) {
+				event.getModels().put(mrl, new FullBrightModel(model) {
 					@Nonnull
 					@Override
 					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
@@ -154,7 +153,7 @@ public class ModelBakeListener {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
 								if (quad.getSprite().getName().getPath().contains("_overlay"))
-									LightUtil.setLightData(quad, 0xF000F0);
+									QuadTransformers.applyingLightmap(0xF000F0).process(quad);
 							}
 							cachedQuads.put(side, quads);
 						}
@@ -266,9 +265,7 @@ public class ModelBakeListener {
 			if (location == null)
 				continue;
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			ModelBakery bakery = ForgeModelBakery.instance();
-			if (bakery == null)
-				continue;
+			ModelBakery bakery = Minecraft.getInstance().getModelManager().getModelBakery();
 			ResourceLocation rl = new ResourceLocation(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
 			ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");
 			REMAPPER.put(location, rl);
@@ -280,9 +277,7 @@ public class ModelBakeListener {
 	}
 
 	public static void clearOldModels() {
-		ModelBakery bakery = ForgeModelBakery.instance();
-		if (bakery == null)
-			return;
+		ModelBakery bakery = Minecraft.getInstance().getModelManager().getModelBakery();
 		REMAPPER.keySet().forEach(location -> {
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
 			bakery.unbakedCache.remove(oldMrl);
@@ -308,7 +303,7 @@ public class ModelBakeListener {
 			if (quads == null) {
 				quads = model.getQuads(state, side, rand);
 				for (BakedQuad quad : quads) {
-					LightUtil.setLightData(quad, 0xF000F0);
+					QuadTransformers.applyingLightmap(0xF000F0).process(quad);
 					quad.shade = false;
 				}
 				cachedQuads.put(side, quads);

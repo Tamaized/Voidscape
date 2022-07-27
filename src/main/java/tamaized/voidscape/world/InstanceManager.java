@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tamaized.voidscape.Voidscape;
@@ -63,18 +63,18 @@ public final class InstanceManager {
 	}
 
 	@SubscribeEvent
-	public static void onLevelLoad(WorldEvent.Load event) {
-		if (event.getWorld().isClientSide())
+	public static void onLevelLoad(LevelEvent.Load event) {
+		if (event.getLevel().isClientSide())
 			return;
-		if (event.getWorld() instanceof ServerLevel)
-			load((ServerLevel) event.getWorld());
+		if (event.getLevel() instanceof ServerLevel)
+			load((ServerLevel) event.getLevel());
 	}
 
 	@SubscribeEvent
-	public static void onTick(TickEvent.WorldTickEvent event) {
-		if (event.phase == TickEvent.Phase.END || event.world.isClientSide())
+	public static void onTick(TickEvent.LevelTickEvent event) {
+		if (event.phase == TickEvent.Phase.END || event.level.isClientSide())
 			return;
-		instances.stream().filter(instance -> instance.getLevel() == event.world).forEach(Instance::tick);
+		instances.stream().filter(instance -> instance.getLevel() == event.level).forEach(Instance::tick);
 	}
 
 }

@@ -102,7 +102,7 @@ public class SubCapability {
 			if (event.getObject() instanceof Mob)
 				apply(event, CAPABILITY_AGGRO);
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingUpdateEvent>) event -> {
+		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingTickEvent>) event -> {
 			if (!event.getEntity().canUpdate())
 				return;
 			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
@@ -117,7 +117,7 @@ public class SubCapability {
 			if (event.getEntity() instanceof Mob)
 				event.getEntity().getCapability(CAPABILITY_AGGRO).ifPresent(cap -> cap.tick((Mob) event.getEntity()));
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getPlayer().getCapability(CAPABILITY).ifPresent(cap -> {
+		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getEntity().getCapability(CAPABILITY).ifPresent(cap -> {
 			event.getOriginal().reviveCaps();
 			event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()));
 			event.getOriginal().invalidateCaps();

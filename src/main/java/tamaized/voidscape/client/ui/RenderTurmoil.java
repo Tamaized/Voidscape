@@ -15,13 +15,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -45,7 +45,6 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Voidscape.MODID)
 public class RenderTurmoil {
@@ -104,174 +103,181 @@ public class RenderTurmoil {
 	}
 
 	@SubscribeEvent
-	public static void render(RenderGameOverlayEvent.Post event) {
+	public static void render(RenderGuiOverlayEvent.Post event) {
 		Level world = Minecraft.getInstance().level;
 		if (world != null && Minecraft.getInstance().player != null) {
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
 				if (data.hasCoreSkill()) {
 					cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-						if (event.getType() == RenderGameOverlayEvent.ElementType.LAYER && event instanceof RenderGameOverlayEvent.PostLayer layer) {
-							if (layer.getOverlay() == ForgeIngameGui.HOTBAR_ELEMENT) {
-								if (fadeTick <= 0 || fadeTick > ClientUtil.tick) {
-									renderSpellBar(event.getPoseStack(), 0, event.getPartialTick());
-									renderAbilityInstances(event.getPoseStack(), stats, event.getPartialTick());
-									renderAbilityActivates(event.getPoseStack(), event.getPartialTick());
-									renderAbilityToggle(event.getPoseStack(), stats, event.getPartialTick());
-									renderAbilityCooldowns(event.getPoseStack(), stats, event.getPartialTick());
+						if (event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id())) {
+							if (fadeTick <= 0 || fadeTick > ClientUtil.tick) {
+								renderSpellBar(event.getPoseStack(), 0, event.getPartialTick());
+								renderAbilityInstances(event.getPoseStack(), stats, event.getPartialTick());
+								renderAbilityActivates(event.getPoseStack(), event.getPartialTick());
+								renderAbilityToggle(event.getPoseStack(), stats, event.getPartialTick());
+								renderAbilityCooldowns(event.getPoseStack(), stats, event.getPartialTick());
+							}
+						} else if (event.getOverlay().id().equals(VanillaGuiOverlay.EXPERIENCE_BAR.id())) {
+							int xOffset = 124;
+							if (stats.getVoidicPower() < 1000) {
+								ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
+								Window window = event.getWindow();
+								int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
+								int k = (int) (stats.getVoidicPower() / 1000F * 26F);
+								int l = window.getGuiScaledHeight() - 25;
+								RenderSystem.setShaderColor(0.5F, 0F, 1F, 1F);
+								event.getPoseStack().pushPose();
+								event.getPoseStack().translate(x, l, 0);
+								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().translate(-x, -l, 0);
+								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
+								if (k > 0) {
+									Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
 								}
-							} else if (layer.getOverlay() == ForgeIngameGui.EXPERIENCE_BAR_ELEMENT) {
-								int xOffset = 124;
-								if (stats.getVoidicPower() < 1000) {
-									ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
-									Window window = event.getWindow();
-									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
-									int k = (int) (stats.getVoidicPower() / 1000F * 26F);
-									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.setShaderColor(0.5F, 0F, 1F, 1F);
-									event.getPoseStack().pushPose();
-									event.getPoseStack().translate(x, l, 0);
-									event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
-									event.getPoseStack().translate(-x, -l, 0);
-									Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
-									if (k > 0) {
-										Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
-									}
-									event.getPoseStack().popPose();
-									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+								event.getPoseStack().popPose();
+								RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
-									String s = stats.getVoidicPower() + "";
-									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
-									int j1 = l - 8;
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0x7700FF);
-									xOffset += 26;
-								}
-								if (stats.getNullPower() > 0) {
-									if (TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE == null) {
-										TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE = new ResourceLocation(Voidscape.MODID, "texture_gui_icons_location_grayscale");
-										Minecraft.getInstance().getResourceManager().getResource(AbstractWidget.GUI_ICONS_LOCATION).ifPresent(resource -> {
-											try (InputStream stream = resource.open()) {
-												NativeImage image = NativeImage.read(stream);
-												for (int x = 0; x < image.getWidth(); x++) {
-													for (int y = 0; y < image.getHeight(); y++) {
-														int pixel = image.getPixelRGBA(x, y);
-														int L = (int) (0.299D * ((pixel) & 0xFF) + 0.587D * ((pixel >> 8) & 0xFF) + 0.114D * ((pixel >> 16) & 0xFF));
-														image.setPixelRGBA(x, y, NativeImage.combine((pixel >> 24) & 0xFF, L, L, L));
-													}
+								String s = stats.getVoidicPower() + "";
+								int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
+								int j1 = l - 8;
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0x7700FF);
+								xOffset += 26;
+							}
+							if (stats.getNullPower() > 0) {
+								if (TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE == null) {
+									TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE = new ResourceLocation(Voidscape.MODID, "texture_gui_icons_location_grayscale");
+									Minecraft.getInstance().getResourceManager().getResource(AbstractWidget.GUI_ICONS_LOCATION).ifPresent(resource -> {
+										try (InputStream stream = resource.open()) {
+											NativeImage image = NativeImage.read(stream);
+											for (int x = 0; x < image.getWidth(); x++) {
+												for (int y = 0; y < image.getHeight(); y++) {
+													int pixel = image.getPixelRGBA(x, y);
+													int L = (int) (0.299D * ((pixel) & 0xFF) + 0.587D * ((pixel >> 8) & 0xFF) + 0.114D * ((pixel >> 16) & 0xFF));
+													image.setPixelRGBA(x, y, NativeImage.combine((pixel >> 24) & 0xFF, L, L, L));
 												}
-												Minecraft.getInstance().getTextureManager().register(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE, new AbstractTexture() {
-													@Override
-													public void load(@Nonnull ResourceManager manager) {
-														TextureUtil.prepareImage(this.getId(), 0, image.getWidth(), image.getHeight());
-														image.upload(0, 0, 0, 0, 0, image.getWidth(), image.getHeight(), false, false, false, true);
-													}
-												});
-											} catch (IOException e) {
-												e.printStackTrace();
 											}
-										});
-									}
-									ClientUtil.bindTexture(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE);
-									Window window = event.getWindow();
-									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
-									int k = (int) (stats.getNullPower() / 1000F * 26F);
-									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-									event.getPoseStack().pushPose();
-									event.getPoseStack().translate(x, l, 0);
-									event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
-									event.getPoseStack().translate(-x, -l, 0);
-									Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
-									if (k > 0) {
-										Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
-									}
-									event.getPoseStack().popPose();
-									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-
-									String s = stats.getNullPower() + "";
-									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
-									int j1 = l - 8;
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0xFFFFFF);
-									xOffset += 26;
+											Minecraft.getInstance().getTextureManager().register(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE, new AbstractTexture() {
+												@Override
+												public void load(@Nonnull ResourceManager manager) {
+													TextureUtil.prepareImage(this.getId(), 0, image.getWidth(), image.getHeight());
+													image.upload(0, 0, 0, 0, 0, image.getWidth(), image.getHeight(), false, false, false, true);
+												}
+											});
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									});
 								}
-								if (stats.getInsanePower() > 0) {
-									ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
-									Window window = event.getWindow();
-									int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
-									int k = (int) (stats.getInsanePower() / 1000F * 26F);
-									int l = window.getGuiScaledHeight() - 25;
-									RenderSystem.setShaderColor(1F, 0F, 0F, 1F);
-									event.getPoseStack().pushPose();
-									event.getPoseStack().translate(x, l, 0);
-									event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
-									event.getPoseStack().translate(-x, -l, 0);
-									Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
-									if (k > 0) {
-										Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
-									}
-									event.getPoseStack().popPose();
-									RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-
-									String s = stats.getInsanePower() + "";
-									int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
-									int j1 = l - 8;
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
-									Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0xFF0000);
+								ClientUtil.bindTexture(TEXTURE_GUI_ICONS_LOCATION_GRAYSCALE);
+								Window window = event.getWindow();
+								int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
+								int k = (int) (stats.getNullPower() / 1000F * 26F);
+								int l = window.getGuiScaledHeight() - 25;
+								RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+								event.getPoseStack().pushPose();
+								event.getPoseStack().translate(x, l, 0);
+								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().translate(-x, -l, 0);
+								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
+								if (k > 0) {
+									Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
 								}
+								event.getPoseStack().popPose();
+								RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+
+								String s = stats.getNullPower() + "";
+								int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
+								int j1 = l - 8;
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0xFFFFFF);
+								xOffset += 26;
+							}
+							if (stats.getInsanePower() > 0) {
+								ClientUtil.bindTexture(AbstractWidget.GUI_ICONS_LOCATION);
+								Window window = event.getWindow();
+								int x = window.getGuiScaledWidth() / 2 + xOffset + 2;
+								int k = (int) (stats.getInsanePower() / 1000F * 26F);
+								int l = window.getGuiScaledHeight() - 25;
+								RenderSystem.setShaderColor(1F, 0F, 0F, 1F);
+								event.getPoseStack().pushPose();
+								event.getPoseStack().translate(x, l, 0);
+								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().translate(-x, -l, 0);
+								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
+								if (k > 0) {
+									Minecraft.getInstance().gui.blit(event.getPoseStack(), x + 26 - k, l, 26 - k, 69, k, 5);
+								}
+								event.getPoseStack().popPose();
+								RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+
+								String s = stats.getInsanePower() + "";
+								int i1 = (window.getGuiScaledWidth() - Minecraft.getInstance().gui.getFont().width(s)) / 2 + xOffset;
+								int j1 = l - 8;
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 + 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) (i1 - 1), (float) j1, 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 + 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) (j1 - 1), 0);
+								Minecraft.getInstance().gui.getFont().draw(event.getPoseStack(), s, (float) i1, (float) j1, 0xFF0000);
 							}
 						}
 					});
 				}
-				if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
-					return;
-				cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(data, insanity, event.getPoseStack(), event.getPartialTick()));
-				float perc = Mth.clamp(
-
-						(deltaTick + (deltaPos == null ?
-
-								data.getState() == Turmoil.State.CONSUME ? -0.01F : 0 :
-
-								deltaPos ? 1F - event.getPartialTick() : event.getPartialTick())
-
-
-						) / data.getMaxTick(),
-
-						0F, 1F);
-				if (perc > 0) {
-					RenderSystem.enableBlend();
-					{
-
-						Window window = Minecraft.getInstance().getWindow();
-
-						float x = 0F;
-						float y = 0F;
-						float w = window.getGuiScaledWidth();
-						float h = window.getGuiScaledHeight();
-						float z = 401F; // Catch All
-
-						ClientUtil.bindTexture(TEXTURE_MASK);
-						Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
-						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
-
-						Color24.INSTANCE.set(0F, 0F, 0F, 1F).apply(false, x, y, z, w, h);
-						StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
-					}
-					RenderSystem.disableBlend();
-				}
 			}));
 		}
-		if (!(Minecraft.getInstance().screen instanceof TurmoilScreen))
-			OverlayMessageHandler.render(event.getPoseStack(), event.getPartialTick());
+	}
+
+	@SubscribeEvent
+	public static void render(RegisterGuiOverlaysEvent event) {
+		event.registerAboveAll("turmoil", (gui, poseStack, partialTick, width, height) -> {
+			Level world = Minecraft.getInstance().level;
+			if (world != null && Minecraft.getInstance().player != null) {
+				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(data -> {
+					cap.get(Voidscape.subCapInsanity).ifPresent(insanity -> renderInsanity(data, insanity, poseStack, partialTick));
+					float perc = Mth.clamp(
+
+							(deltaTick + (deltaPos == null ?
+
+									data.getState() == Turmoil.State.CONSUME ? -0.01F : 0 :
+
+									deltaPos ? 1F - partialTick : partialTick)
+
+
+							) / data.getMaxTick(),
+
+							0F, 1F);
+					if (perc > 0) {
+						RenderSystem.enableBlend();
+						{
+
+							Window window = Minecraft.getInstance().getWindow();
+
+							float x = 0F;
+							float y = 0F;
+							float w = window.getGuiScaledWidth();
+							float h = window.getGuiScaledHeight();
+							float z = 401F; // Catch All
+
+							ClientUtil.bindTexture(TEXTURE_MASK);
+							Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
+							StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
+
+							Color24.INSTANCE.set(0F, 0F, 0F, 1F).apply(false, x, y, z, w, h);
+							StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
+						}
+						RenderSystem.disableBlend();
+					}
+				}));
+			}
+			if (!(Minecraft.getInstance().screen instanceof TurmoilScreen))
+				OverlayMessageHandler.render(poseStack, partialTick);
+		});
 	}
 
 	private static void renderInsanity(Turmoil data, Insanity insanity, PoseStack matrixStack, float partialTicks) {

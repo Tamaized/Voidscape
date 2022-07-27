@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +16,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.EffectRenderer;
+import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -182,10 +182,10 @@ public class ModEffects implements RegistryClass {
 		public static boolean hackyRenderPerformanceSkip = true;
 
 		@Override
-		public void initializeClient(Consumer<EffectRenderer> consumer) {
-			consumer.accept(new EffectRenderer() {
+		public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
+			consumer.accept(new IClientMobEffectExtensions() {
 				@Override
-				public void renderInventoryEffect(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, float z) {
+				public boolean renderInventoryIcon(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, int z) {
 					RenderSystem.setShaderTexture(0, texture.get().get());
 					float x1 = x + 6;
 					float y1 = y + 7;
@@ -199,12 +199,13 @@ public class ModEffects implements RegistryClass {
 					buffer.vertex(x2, y1, z).uv(1, 0).endVertex();
 					buffer.vertex(x1, y1, z).uv(0, 0).endVertex();
 					Tesselator.getInstance().end();
+					return true;
 				}
 
 				@Override
-				public void renderHUDEffect(MobEffectInstance effect, GuiComponent gui, PoseStack mStack, int x, int y, float z, float alpha) {
+				public boolean renderGuiIcon(MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
 					if (hackyRenderPerformanceSkip)
-						return;
+						return false;
 					RenderSystem.setShaderTexture(0, texture.get().get());
 					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
 					float x1 = x + 3;
@@ -219,6 +220,7 @@ public class ModEffects implements RegistryClass {
 					buffer.vertex(x2, y1, z).uv(1, 0).endVertex();
 					buffer.vertex(x1, y1, z).uv(0, 0).endVertex();
 					Tesselator.getInstance().end();
+					return true;
 				}
 			});
 		}

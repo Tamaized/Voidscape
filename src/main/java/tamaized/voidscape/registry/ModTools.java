@@ -100,10 +100,10 @@ public class ModTools implements RegistryClass {
 	@Override
 	public void init(IEventBus bus) {
 		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerInteractEvent.LeftClickBlock>) event -> {
-			LAST_HIT_BLOCK_FACE.put(event.getPlayer().getUUID(), event.getFace());
+			LAST_HIT_BLOCK_FACE.put(event.getEntity().getUUID(), event.getFace());
 		});
 		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.PlayerLoggedOutEvent>) event -> {
-			LAST_HIT_BLOCK_FACE.remove(event.getPlayer().getUUID());
+			LAST_HIT_BLOCK_FACE.remove(event.getEntity().getUUID());
 		});
 	}
 

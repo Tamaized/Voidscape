@@ -3,13 +3,15 @@ package tamaized.voidscape.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,10 +19,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +32,6 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
 import tamaized.regutil.RegUtil;
@@ -38,7 +40,6 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
-import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.turmoil.BindData;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Turmoil;
@@ -147,7 +148,7 @@ public class ClientListener {
 						data.tick(e);
 				})));
 		});
-		busForge.addListener((Consumer<EntityViewRenderEvent.FogColors>) event -> {
+		busForge.addListener((Consumer<ViewportEvent.ComputeFogColor>) event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
 				event.setRed(0.04F);
 				event.setGreen(0.03F);
@@ -159,14 +160,14 @@ public class ClientListener {
 			}
 		});
 		busForge.addListener((Consumer<AttackEntityEvent>) event -> {
-			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
+			if (event.getEntity().level.isClientSide() && event.getEntity() instanceof LocalPlayer && event.getEntity() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
 		busForge.addListener((Consumer<ArrowNockEvent>) event -> {
-			if (event.getPlayer().level.isClientSide() && event.getPlayer() instanceof LocalPlayer && event.getPlayer() == Minecraft.getInstance().player)
+			if (event.getEntity().level.isClientSide() && event.getEntity() instanceof LocalPlayer && event.getEntity() == Minecraft.getInstance().player)
 				RenderTurmoil.resetFade();
 		});
-		busForge.addListener((Consumer<EntityViewRenderEvent.FieldOfView>) event -> {
+		busForge.addListener((Consumer<ViewportEvent.ComputeFov>) event -> {
 			if (event.getCamera().getEntity() instanceof LivingEntity living) {
 				ItemStack itemstack = living.getUseItem();
 				if (living.isUsingItem()) {
@@ -186,33 +187,34 @@ public class ClientListener {
 				}
 			}
 		});
-		busMod.addListener((Consumer<FMLClientSetupEvent>) event -> {
-			ClientRegistry.registerKeyBinding(KEY_TURMOIL);
-			ABILITY_KEYS.forEach(ClientRegistry::registerKeyBinding);
-
-			ItemBlockRenderTypes.setRenderLayer(ModBlocks.VOIDIC_CRYSTAL_ORE.get(), RenderType.cutoutMipped());
-			ItemBlockRenderTypes.setRenderLayer(ModBlocks.PLANT.get(), RenderType.cutoutMipped());
-
-			DimensionSpecialEffects info = new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
-				@Override
-				public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
-					return Vec3.ZERO;
-				}
-
-				@Override
-				public boolean isFoggyAt(int p_230493_1_, int p_230493_2_) {
-					return true;
-				}
-
-				@Override
-				@Nullable
-				public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
-					return null;
-				}
-			};
-			info.setSkyRenderHandler(new VoidSkyRenderer());
-			DimensionSpecialEffects.EFFECTS.put(Voidscape.WORLD_KEY_VOID.location(), info);
+		busMod.addListener((Consumer<RegisterKeyMappingsEvent>) event -> {
+			event.register(KEY_TURMOIL);
+			ABILITY_KEYS.forEach(event::register);
 		});
+		busMod.addListener((Consumer<RegisterDimensionSpecialEffectsEvent>) event -> event
+				.register(Voidscape.WORLD_KEY_VOID.location(), new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
+					@Override
+					public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
+						return Vec3.ZERO;
+					}
+
+					@Override
+					public boolean isFoggyAt(int p_230493_1_, int p_230493_2_) {
+						return true;
+					}
+
+					@Override
+					@Nullable
+					public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
+						return null;
+					}
+
+					@Override
+					public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+						VoidSkyRenderer.render(ticks, partialTick, poseStack, level, Minecraft.getInstance());
+						return true;
+					}
+				}));
 		busMod.addListener((Consumer<EntityRenderersEvent.AddLayers>) event -> {
 			event.getSkins().forEach(renderer -> {
 				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);

@@ -1,7 +1,7 @@
 package tamaized.voidscape.client;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.registry.ModBlocks;
@@ -16,8 +16,8 @@ public final class TintHandler {
 	}
 
 	public static void setup(IEventBus bus) {
-		bus.addListener((Consumer<ColorHandlerEvent.Block>) event -> {
-			event.getBlockColors().register((state, tintGetter, pos, color) -> switch (state.getValue(BlockEtherealPlant.STATE)) {
+		bus.addListener((Consumer<RegisterColorHandlersEvent.Block>) event -> {
+			event.register((state, tintGetter, pos, color) -> switch (state.getValue(BlockEtherealPlant.STATE)) {
 				case VOID -> 0x872BFF;
 				case NULL -> 0xFFFFFF;
 				case OVERWORLD -> 0x88BF40;
@@ -25,8 +25,8 @@ public final class TintHandler {
 				case END -> 0xBF40A6;
 			}, ModBlocks.PLANT.get());
 		});
-		bus.addListener((Consumer<ColorHandlerEvent.Item>) event -> {
-			event.getItemColors().register((stack, color) -> {
+		bus.addListener((Consumer<RegisterColorHandlersEvent.Item>) event -> {
+			event.register((stack, color) -> {
 				CompoundTag tag = stack.getTag();
 				if (tag == null)
 					return 0x872BFF;
@@ -38,7 +38,7 @@ public final class TintHandler {
 					case "end" -> 0xBF40A6;
 				};
 			}, ModItems.FRUIT.get());
-			event.getItemColors().register((stack, color) -> 0x872BFF, ModBlocks.PLANT_ITEM.get());
+			event.register((stack, color) -> 0x872BFF, ModBlocks.PLANT_ITEM.get());
 		});
 	}
 
