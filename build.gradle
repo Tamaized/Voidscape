@@ -30,7 +30,7 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/" // JEI
     }
     maven {
-        url = 'https://tamaized.com/artifacts/maven/' // RegUtil
+        url = 'https://maven.tamaized.com/releases/' // RegUtil
     }
 }
 
@@ -104,7 +104,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
-    def reg = "RegUtil:RegUtil-" + project.regutil_version
+    def reg = "tamaized:regutil:" + project.regutil_version
     implementation fg.deobf(reg)
     shade reg
 }
