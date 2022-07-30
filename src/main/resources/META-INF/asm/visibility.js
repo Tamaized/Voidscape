@@ -15,21 +15,20 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('m_109888_'), // getBrightness
-                'methodDesc': '(Lnet/minecraft/world/level/Level;I)F'
+                'methodName': ASM.mapMethod('m_234316_'), // getBrightness
+                'methodDesc': '(Lnet/minecraft/world/level/dimension/DimensionType;I)F'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
                 instructions.insertBefore(
                     ASM.findFirstInstruction(methodNode, Opcodes.FRETURN),
                     ASM.listOf(
-                        new VarInsnNode(Opcodes.ALOAD, 1),
-                        new VarInsnNode(Opcodes.ILOAD, 2),
+                        new VarInsnNode(Opcodes.ILOAD, 1),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'visibility',
-                            '(FLnet/minecraft/world/level/Level;I)F',
+                            '(FI)F',
                             false
                             )
                         )
@@ -85,31 +84,20 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                var lastInstruction = null;
-                for (var index = 0; index < instructions.size(); index++) {
-                    var /*org.objectweb.asm.tree.VarInsnNode*/ node = instructions.get(index);
-                    if (lastInstruction == null &&
-
-                        node instanceof FieldInsnNode &&
-
-                        node.getOpcode() === Opcodes.GETFIELD &&
-
-                        node.owner === 'net/minecraft/client/Options' &&
-
-                        node.name === ASM.mapField('f_92071_') // gamma
-
-                    )
-                        lastInstruction = node;
-                }
                 instructions.insert(
-                    lastInstruction,
+                    ASM.findFirstMethodCall(methodNode,
+                        ASM.MethodType.VIRTUAL,
+                        'net/minecraft/client/Options',
+                        ASM.mapMethod('m_231927_'), // gamma
+                        '()Lnet/minecraft/client/OptionInstance;'
+                        ).getNext().getNext().getNext(),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 2),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'cancelGamma',
-                            '(DLnet/minecraft/world/level/Level;)D',
+                            '(FLnet/minecraft/world/level/Level;)F',
                             false
                             )
                         )

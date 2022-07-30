@@ -23,9 +23,9 @@ function initializeCoreMod() {
                 instructions.insert(
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
-                        'net/minecraftforge/client/EffectRenderer',
+                        'net/minecraftforge/client/extensions/common/IClientMobEffectExtensions',
                         'renderHUDEffect',
-                        '(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/client/gui/GuiComponent;Lcom/mojang/blaze3d/vertex/PoseStack;IIFF)V'
+                        '(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/client/gui/Gui;Lcom/mojang/blaze3d/vertex/PoseStack;IIFF)V'
                         ),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 7),
@@ -48,7 +48,7 @@ function initializeCoreMod() {
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'renderEffectHUD',
-                            '(Ljava/util/List;Lnet/minecraftforge/client/EffectRenderer;Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/client/gui/GuiComponent;Lcom/mojang/blaze3d/vertex/PoseStack;IIFF)V'
+                            '(Ljava/util/List;Lnet/minecraftforge/client/extensions/common/IClientMobEffectExtensions;Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/client/gui/Gui;Lcom/mojang/blaze3d/vertex/PoseStack;IIFF)V'
                             )
                         )
                     );

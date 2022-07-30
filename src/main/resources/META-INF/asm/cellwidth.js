@@ -36,7 +36,7 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'tamaized.voidscape.world.VoidChunkGenerator$CorrectedNoiseSettings',
                 'methodName': '<init>',
-                'methodDesc': '(IILnet/minecraft/world/level/levelgen/NoiseSamplingSettings;Lnet/minecraft/world/level/levelgen/NoiseSlider;Lnet/minecraft/world/level/levelgen/NoiseSlider;IILnet/minecraft/world/level/biome/TerrainShaper;)V'
+                'methodDesc': '(IIII)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
@@ -49,17 +49,13 @@ function initializeCoreMod() {
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ILOAD, 1),
                         new VarInsnNode(Opcodes.ILOAD, 2),
-                        new VarInsnNode(Opcodes.ALOAD, 3),
-                        new VarInsnNode(Opcodes.ALOAD, 4),
-                        new VarInsnNode(Opcodes.ALOAD, 5),
-                        new VarInsnNode(Opcodes.ILOAD, 6),
-                        new VarInsnNode(Opcodes.ILOAD, 7),
-                        new VarInsnNode(Opcodes.ALOAD, 8),
+                        new VarInsnNode(Opcodes.ILOAD, 3),
+                        new VarInsnNode(Opcodes.ILOAD, 4),
                         new MethodInsnNode(
                             Opcodes.INVOKESPECIAL,
                             'net/minecraft/world/level/levelgen/NoiseSettings',
                             '<init>',
-                            '(IILnet/minecraft/world/level/levelgen/NoiseSamplingSettings;Lnet/minecraft/world/level/levelgen/NoiseSlider;Lnet/minecraft/world/level/levelgen/NoiseSlider;IILnet/minecraft/world/level/biome/TerrainShaper;)V'
+                            '(IIII)V'
                             )
                         )
                     );
@@ -88,7 +84,7 @@ function initializeCoreMod() {
                         Opcodes.INVOKESPECIAL,
                         'tamaized/voidscape/world/VoidChunkGenerator$CorrectedNoiseSettings',
                         '<init>',
-                        '(IILnet/minecraft/world/level/levelgen/NoiseSamplingSettings;Lnet/minecraft/world/level/levelgen/NoiseSlider;Lnet/minecraft/world/level/levelgen/NoiseSlider;IILnet/minecraft/world/level/biome/TerrainShaper;)V'
+                        '(IIII)V'
                         )
                     );
                 return methodNode;

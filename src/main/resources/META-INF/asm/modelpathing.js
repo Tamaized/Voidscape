@@ -14,8 +14,8 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.resources.model.ModelBakery',
-                'methodName': 'processLoading', // Added by Forge
-                'methodDesc': '(Lnet/minecraft/util/profiling/ProfilerFiller;I)V'
+                'methodName': '<init>',
+                'methodDesc': '(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;I)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
@@ -37,11 +37,12 @@ function initializeCoreMod() {
                     instructions.insertBefore(
                         lastInstruction,
                         ASM.listOf(
+                            new VarInsnNode(Opcodes.ALOAD, 0),
                             new MethodInsnNode(
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'redirectModels',
-                                '()V',
+                                '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
                                 false
                                 )
                             )
@@ -52,11 +53,12 @@ function initializeCoreMod() {
                         "newLinkedHashSet",
                         "()Ljava/util/LinkedHashSet;"),
                     ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'cleanModels',
-                            '()V',
+                            '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
                             false
                             )
                         )

@@ -234,8 +234,8 @@ public class ModelBakeListener {
 				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
-	public static void redirectModels() {
-		redirectModelLocation("voidic", "voidic_crystal_", ModTools.
+	public static void redirectModels(ModelBakery bakery) {
+		redirectModelLocation(bakery, "voidic", "voidic_crystal_", ModTools.
 				VOIDIC_CRYSTAL_AXE, ModTools.
 				VOIDIC_CRYSTAL_PICKAXE, ModTools.
 				VOIDIC_CRYSTAL_SWORD, ModTools.
@@ -246,8 +246,8 @@ public class ModelBakeListener {
 				VOIDIC_CRYSTAL_CHEST, ModArmors.
 				VOIDIC_CRYSTAL_LEGS, ModArmors.
 				VOIDIC_CRYSTAL_BOOTS);
-		redirectModelLocation("charred", "charred_", ModTools.CHARRED_WARHAMMER);
-		redirectModelLocation("corrupt", "corrupt_", ModTools.
+		redirectModelLocation(bakery, "charred", "charred_", ModTools.CHARRED_WARHAMMER);
+		redirectModelLocation(bakery, "corrupt", "corrupt_", ModTools.
 				CORRUPT_AXE, ModTools.
 				CORRUPT_SWORD, ModTools.
 				CORRUPT_BOW, ModTools.
@@ -259,13 +259,12 @@ public class ModelBakeListener {
 	}
 
 	@SafeVarargs
-	private static void redirectModelLocation(String subfolder, String remove, RegistryObject<Item>... items) {
+	private static void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, RegistryObject<Item>... items) {
 		for (RegistryObject<Item> item : items) {
 			ResourceLocation location = item.getId();
 			if (location == null)
 				continue;
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			ModelBakery bakery = Minecraft.getInstance().getModelManager().getModelBakery();
 			ResourceLocation rl = new ResourceLocation(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
 			ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");
 			REMAPPER.put(location, rl);
@@ -276,8 +275,7 @@ public class ModelBakeListener {
 		}
 	}
 
-	public static void clearOldModels() {
-		ModelBakery bakery = Minecraft.getInstance().getModelManager().getModelBakery();
+	public static void clearOldModels(ModelBakery bakery) {
 		REMAPPER.keySet().forEach(location -> {
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
 			bakery.unbakedCache.remove(oldMrl);

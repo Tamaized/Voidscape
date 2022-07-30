@@ -7,7 +7,6 @@
   "deepfreeze": "META-INF/asm/deepfreeze.js",
   "elytra": "META-INF/asm/elytra.js",
   "entityalpha": "META-INF/asm/entityalpha.js",
-  "itsmybiomebruh": "META-INF/asm/itsmybiomebruh.js",
   "modelpathing": "META-INF/asm/modelpathing.js",
   "nosnow": "META-INF/asm/nosnow.js",
   "seed": "META-INF/asm/seed.js",

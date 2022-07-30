@@ -5,9 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -17,9 +17,10 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +28,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.thread.BlockableEventLoop;
@@ -56,16 +59,15 @@ import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
 import net.minecraft.world.level.entity.ChunkEntities;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.EffectRenderer;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModelBakeListener;
@@ -143,17 +145,17 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br> FIXME
-	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, ChunkGenerator, int, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)}<br>
-	 * [AFTER] INVOKESPECIAL : {@link ChunkMap#ChunkMap(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureManager, Executor, BlockableEventLoop, LightChunkGetter, ChunkGenerator, ChunkProgressListener, ChunkStatusUpdateListener, Supplier, int, boolean)}
+	 * Injection Point:<br>
+	 * {@link net.minecraft.server.level.ServerChunkCache#ServerChunkCache(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureTemplateManager, Executor, ChunkGenerator, int, int, boolean, ChunkProgressListener, ChunkStatusUpdateListener, Supplier)}<br>
+	 * [AFTER] INVOKESPECIAL : {@link ChunkMap#ChunkMap(ServerLevel, LevelStorageSource.LevelStorageAccess, DataFixer, StructureTemplateManager, Executor, BlockableEventLoop, LightChunkGetter, ChunkGenerator, ChunkProgressListener, ChunkStatusUpdateListener, Supplier, int, boolean)}
 	 */
-	public static ChunkMap chunkManager(ChunkMap old, ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
+	public static ChunkMap chunkManager(ChunkMap old, ServerLevel serverWorld_, LevelStorageSource.LevelStorageAccess levelSave_, DataFixer dataFixer_, StructureTemplateManager templateManager_, Executor executor_, BlockableEventLoop<Runnable> threadTaskExecutor_, LightChunkGetter chunkLightProvider_, ChunkGenerator chunkGenerator_, ChunkProgressListener chunkProgressListener, ChunkStatusUpdateListener chunkStatusListener_, Supplier<DimensionDataStorage> supplier_, int int_, boolean boolean_) {
 		return chunkGenerator_ instanceof InstanceChunkGenerator ? new HackyWorldGen.DeepFreezeChunkManager(serverWorld_, levelSave_, dataFixer_, templateManager_, executor_, threadTaskExecutor_, chunkLightProvider_, chunkGenerator_, chunkProgressListener, chunkStatusListener_, supplier_, int_, boolean_) : old;
 	}
 
 	/**
-	 * Injection Point:<br> FIXME
-	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, Holder, ChunkProgressListener, ChunkGenerator, boolean, long, List, boolean)}<br>
+	 * Injection Point:<br>
+	 * {@link net.minecraft.server.level.ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, net.minecraft.world.level.dimension.LevelStem, ChunkProgressListener, boolean, long, List, boolean)}<br>
 	 * [AFTER] INVOKESPECIAL : {@link net.minecraft.world.level.chunk.storage.EntityStorage#EntityStorage(ServerLevel, Path, DataFixer, boolean, Executor)}
 	 */
 	public static EntityStorage entityStorage(EntityStorage o, ChunkGenerator chunkGenerator_, ServerLevel level, LevelStorageSource.LevelStorageAccess file) {
@@ -171,8 +173,8 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br> FIXME
-	 * {@link net.minecraft.world.level.levelgen.WorldGenSettings#WorldGenSettings(long, boolean, boolean, MappedRegistry, Optional)} <br>
+	 * Injection Point:<br>
+	 * {@link net.minecraft.world.level.levelgen.WorldGenSettings#WorldGenSettings(long, boolean, boolean, net.minecraft.core.Registry, Optional)} <br>
 	 * [BEFORE FIRST PUTFIELD]
 	 */
 	public static long seed(long seed) {
@@ -226,15 +228,6 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br> FIXME
-	 * {@link net.minecraftforge.common.ForgeHooks#enhanceBiome(ResourceLocation, Biome.ClimateSettings, Biome.BiomeCategory, Float, Float, BiomeSpecialEffects, BiomeGenerationSettings, MobSpawnSettings, RecordCodecBuilder.Instance, ForgeHooks.BiomeCallbackFunction)}<br>
-	 * [AFTER GETSTATIC {@link MinecraftForge.EVENT_BUS}]
-	 */
-	public static IEventBus fukUrBiomeEdits(IEventBus o, BiomeLoadingEvent event) {
-		return event.getName() != null && event.getName().getNamespace().equals(Voidscape.MODID) ? NoOpEventBus.INSTANCE : o;
-	}
-
-	/**
 	 * Injection Point:<br>
 	 * {@link Player#attack(Entity)}<br>
 	 * [AFTER INVOKEVIRTUAL {@link Player#getAttackStrengthScale(float)}]
@@ -249,8 +242,13 @@ public class ASMHooks {
 	 * {@link Biome#shouldSnow(LevelReader, BlockPos)} and {@link Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
 	 * [AFTER ICONST_1]
 	 */
-	public static boolean shouldSnow(boolean o, Biome biome) {
-		if (biome.getRegistryName() != null && biome.getRegistryName().getNamespace().equals(Voidscape.MODID))
+	public static boolean shouldSnow(boolean o, Biome biome, LevelReader level) {
+		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :
+				level instanceof WorldGenRegion worldGenRegion ? worldGenRegion.registryAccess() :
+						null;
+		if (registryAccess != null && registryAccess.ownedRegistryOrThrow(Registry.BIOME_REGISTRY).getResourceKey(biome)
+				.map(key -> key.location().getNamespace().equals(Voidscape.MODID))
+				.orElse(false))
 			return false;
 		return o;
 	}
@@ -265,15 +263,15 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br> FIXME
-	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(Level, int)}<br>
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
 	 * [BEFORE FRETURN]
 	 */
-	public static float visibility(float o, Level level, int light) {
-		if (level.isClientSide() && (Voidscape.checkForVoidDimension(level) ||
+	public static float visibility(float o, int light) {
+		if (Voidscape.checkForVoidDimension(Minecraft.getInstance().level) ||
 				(Minecraft.getInstance().player != null &&
 						(Minecraft.getInstance().player.isCreative() || Minecraft.getInstance().player.isSpectator()) &&
-						Voidscape.checkForDutyInstance(level))))
+						Voidscape.checkForDutyInstance(Minecraft.getInstance().level)))
 			return VoidVisibilityCache.value(o, light);
 		return o;
 	}
@@ -294,7 +292,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
 	 * [AFTER GETFIELD {@link net.minecraft.client.Options#gamma}]
 	 */
-	public static double cancelGamma(double o, Level level) {
+	public static float cancelGamma(float o, Level level) {
 		if (o > 0 && level.isClientSide() && (Voidscape.checkForVoidDimension(level) || Voidscape.checkForDutyInstance(level)))
 			return 0;
 		return o;
@@ -302,26 +300,26 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.resources.model.ModelBakery#processLoading(ProfilerFiller, int)}<br>
-	 * [BEFORE GETSTATIC {@link net.minecraft.core.Registry#ITEM)]
+	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(ResourceManager, BlockColors, ProfilerFiller, int)}<br>
+	 * [BEFORE FIRST GETSTATIC {@link net.minecraft.core.Registry#ITEM)]
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static void redirectModels() {
+	public static void redirectModels(ModelBakery bakery) {
 		try {
-			ModelBakeListener.redirectModels();
+			ModelBakeListener.redirectModels(bakery);
 		} catch (NullPointerException e) {
-			// Another mod crashed earlier on, this will throw a NPE when the registry isnt populated, just fail silently and let the game error properly later
+			// Another mod crashed earlier on, this will throw a NPE when the registry isn't populated, just fail silently and let the game error properly later
 		}
 	}
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.resources.model.ModelBakery#processLoading(ProfilerFiller, int)}<br>
-	 * [BEFORE INVOKESTATIC {@link com.google.common.collect.Sets#newLinkedHashSet()}]
+	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(ResourceManager, BlockColors, ProfilerFiller, int)}<br>
+	 * [BEFORE FIRST INVOKESTATIC {@link com.google.common.collect.Sets#newLinkedHashSet()}]
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static void cleanModels() {
-		ModelBakeListener.clearOldModels();
+	public static void cleanModels(ModelBakery bakery) {
+		ModelBakeListener.clearOldModels(bakery);
 	}
 
 	/**
@@ -340,15 +338,15 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.gui.Gui#renderEffects(PoseStack)}<br>
-	 * [AFTER INVOKEVIRTUAL {@link EffectRenderer#renderHUDEffect}]
+	 * [AFTER INVOKEVIRTUAL {@link IClientMobEffectExtensions#renderGuiIcon}]
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static void renderEffectHUD(List<Runnable> list, EffectRenderer renderer, MobEffectInstance effect, GuiComponent gui, PoseStack mStack, int x, int y, float z, float alpha) {
+	public static void renderEffectHUD(List<Runnable> list, IClientMobEffectExtensions renderer, MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
 		if (effect.getEffect() instanceof ModEffects.StandardEffect) {
 			list.remove(list.size() - 1);
 			list.add(() -> {
 				ModEffects.StandardEffect.hackyRenderPerformanceSkip = false;
-				renderer.renderHUDEffect(effect, gui, mStack, x, y, z, alpha);
+				renderer.renderGuiIcon(effect, gui, mStack, x, y, z, alpha);
 				ModEffects.StandardEffect.hackyRenderPerformanceSkip = true;
 			});
 		}

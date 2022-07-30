@@ -23,11 +23,12 @@ function initializeCoreMod() {
                     ASM.findFirstInstruction(methodNode, Opcodes.ICONST_1),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 1),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'shouldSnow',
-                            '(ZLnet/minecraft/world/level/biome/Biome;)Z',
+                            '(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z',
                             false
                             )
                         )
@@ -48,11 +49,12 @@ function initializeCoreMod() {
                     ASM.findFirstInstruction(methodNode, Opcodes.ICONST_1),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 1),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
                             'shouldSnow',
-                            '(ZLnet/minecraft/world/level/biome/Biome;)Z',
+                            '(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z',
                             false
                             )
                         )
