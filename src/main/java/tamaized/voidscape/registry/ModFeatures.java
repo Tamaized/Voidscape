@@ -230,6 +230,8 @@ public class ModFeatures implements RegistryClass {
 	@Override
 	public void init(IEventBus bus) {
 		bus.addListener((Consumer<RegisterEvent>) event -> {
+			if (!event.getRegistryKey().equals(Registry.FEATURE_REGISTRY))
+				return;
 			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
 			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);
 			NotAirBelowPlacementMod.TYPE = registerPlacementMod("not_air_below", NotAirBelowPlacementMod.CODEC);

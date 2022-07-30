@@ -35,6 +35,8 @@ public class ModSurfaceRules implements RegistryClass {
 	@Override
 	public void init(IEventBus bus) {
 		bus.addListener((Consumer<RegisterEvent>) event -> {
+			if (!event.getRegistryKey().equals(Registry.FEATURE_REGISTRY))
+				return;
 			Registry.register(Registry.CONDITION, new ResourceLocation(Voidscape.MODID, "air_above"), AirAboveConditionSource.CODEC.codec());
 		});
 	}

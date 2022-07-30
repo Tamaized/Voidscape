@@ -160,6 +160,8 @@ public class Voidscape {
 				ModSurfaceRules::new,
 				ModTools::new);
 		busMod.addListener((Consumer<RegisterEvent>) event -> {
+			if (!event.getRegistryKey().equals(Registry.BIOME_REGISTRY))
+				return;
 			Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
