@@ -341,7 +341,7 @@ public class ASMHooks {
 	 * [AFTER INVOKEVIRTUAL {@link IClientMobEffectExtensions#renderGuiIcon}]
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static void renderEffectHUD(List<Runnable> list, IClientMobEffectExtensions renderer, MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
+	public static boolean renderEffectHUD(boolean o, List<Runnable> list, IClientMobEffectExtensions renderer, MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
 		if (effect.getEffect() instanceof ModEffects.StandardEffect) {
 			list.remove(list.size() - 1);
 			list.add(() -> {
@@ -350,6 +350,7 @@ public class ASMHooks {
 				ModEffects.StandardEffect.hackyRenderPerformanceSkip = true;
 			});
 		}
+		return o;
 	}
 
 	/**
