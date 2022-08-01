@@ -6,14 +6,14 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.world.structures.NullStructure;
 
 public class ModStructures implements RegistryClass {
 
-	public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, Voidscape.MODID);
-	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, Voidscape.MODID);
+	public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = RegUtil.create(Registry.STRUCTURE_TYPE_REGISTRY);
+	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = RegUtil.create(Registry.STRUCTURE_PIECE_REGISTRY);
 
 	public static class StructureTypes {
 
@@ -29,7 +29,6 @@ public class ModStructures implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-
 	}
 
 }
