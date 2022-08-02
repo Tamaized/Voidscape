@@ -128,6 +128,9 @@ if (secretsFile.exists()) {
 
 jar.finalizedBy('reobfJar')
 
+def mavenUser = hasProperty("CIMUser") ? CIMUser : secrets.getProperty("maven_username")
+def mavenToken = hasProperty("CIMToken") ? CIMToken : secrets.getProperty("maven_password")
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -143,8 +146,8 @@ publishing {
         maven {
             url "https://maven.tamaized.com/releases"
             credentials {
-                username (hasProperty("CIMUser") ? CIMUser : secrets.getProperty("maven_username"))
-                password (hasProperty("CIMToken") ? CIMToken : secrets.getProperty("maven_password"))
+                username mavenUser
+                password mavenToken
             }
         }
     }
