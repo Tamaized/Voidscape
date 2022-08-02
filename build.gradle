@@ -109,6 +109,49 @@ dependencies {
     shade reg
 }
 
+def secrets = new Properties()
+file('secrets.properties').withInputStream {
+    stream -> secrets.load(stream)
+}
+
+fileTree("secrets").matching {
+    include "**/*.properties"
+}.each {
+    File file ->
+        file.withInputStream {
+            stream -> secrets.load(stream)
+        }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            afterEvaluate {
+                artifact project.jar
+                artifact project.sourceJar
+            }
+            setGroupId 'tamaized'
+            setArtifactId 'voidscape'
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.tamaized.com/releases"
+            credentials {
+                username (hasProperty("CIMUser") ? CIMUser : secrets.getProperty("maven_username"))
+                password (hasProperty("CIMToken") ? CIMToken : secrets.getProperty("maven_password"))
+            }
+        }
+    }
+}
+
+task sourceJar(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
 task incrBuildNum doLast {
     ant.propertyfile(file: "gradle.properties") {
         entry(key: "mod_version", value: Integer.parseInt(project.mod_version) + 1)
