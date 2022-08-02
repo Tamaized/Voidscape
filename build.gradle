@@ -110,17 +110,20 @@ dependencies {
 }
 
 def secrets = new Properties()
-file('secrets.properties').withInputStream {
-    stream -> secrets.load(stream)
-}
+def secretsFile = file('secrets.properties');
+if (secretsFile.exists()) {
+    secretsFile.withInputStream {
+        stream -> secrets.load(stream)
+    }
 
-fileTree("secrets").matching {
-    include "**/*.properties"
-}.each {
-    File file ->
-        file.withInputStream {
-            stream -> secrets.load(stream)
-        }
+    fileTree("secrets").matching {
+        include "**/*.properties"
+    }.each {
+        File file ->
+            file.withInputStream {
+                stream -> secrets.load(stream)
+            }
+    }
 }
 
 jar.finalizedBy('reobfJar')
