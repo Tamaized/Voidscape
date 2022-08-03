@@ -19,16 +19,26 @@ public class ModStructures implements RegistryClass {
 
 		public static final RegistryObject<StructureType<NullStructure>> NULL = STRUCTURE_TYPES.register("null", () -> () -> NullStructure.CODEC);
 
+		private static void classload() {
+
+		}
+
 	}
 
 	public static class Pieces {
 
 		public static final RegistryObject<StructurePieceType> NULL_MAIN = STRUCTURE_PIECE_TYPES.register("nullmain", () -> NullStructure.Pieces.Piece::new);
 
+		private static void classload() {
+
+		}
+
 	}
 
 	@Override
 	public void init(IEventBus bus) {
+		StructureTypes.classload();
+		Pieces.classload();
 	}
 
 }
