@@ -82,6 +82,7 @@ import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModFeatures;
 import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.ModNoiseGeneratorSettings;
 import tamaized.voidscape.registry.ModParticles;
 import tamaized.voidscape.registry.ModSounds;
 import tamaized.voidscape.registry.ModStructures;
@@ -154,6 +155,7 @@ public class Voidscape {
 				ModEntities::new,
 				ModFeatures::new,
 				ModItems::new,
+				ModNoiseGeneratorSettings::new,
 				ModParticles::new,
 				ModSounds::new,
 				ModStructures::new,

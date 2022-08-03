@@ -69,25 +69,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	private final long seed;
 
 	private VoidChunkGenerator(Registry<StructureSet> p_209106_, Registry<NormalNoise.NoiseParameters> noiseRegistry, BiomeSource biomeProvider1, long seed, Holder<NoiseGeneratorSettings> dimensionSettings) {
-		super(p_209106_, noiseRegistry, biomeProvider1, fixSettings(dimensionSettings));
+		super(p_209106_, noiseRegistry, biomeProvider1, dimensionSettings);
 		this.noises = noiseRegistry;
 		this.seed = seed;
-	}
-
-	/**
-	 * Lazy load the ASM changes
-	 */
-	private static Holder<NoiseGeneratorSettings> fixSettings(Holder<NoiseGeneratorSettings> settings) {
-		return Holder.direct(fixSettings(settings.value()));
-	}
-
-	/**
-	 * This is altered via ASM to use {@link CorrectedNoiseSettings} instead of {@link NoiseSettings}
-	 */
-	private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {
-		NoiseSettings s = settings.noiseSettings();
-		NoiseSettings noise = new NoiseSettings(s.minY(), s.height(),s.noiseSizeHorizontal(), s.noiseSizeVertical());
-		return new NoiseGeneratorSettings(noise, settings.defaultBlock(), settings.defaultFluid(), settings.noiseRouter(), settings.surfaceRule(), settings.spawnTarget(), settings.seaLevel(), settings.disableMobGeneration(), settings.aquifersEnabled(), settings.oreVeinsEnabled(), settings.useLegacyRandomSource());
 	}
 
 	@Override
@@ -221,24 +205,6 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int k = levelheightaccessor.getMinBuildHeight() + 1;
 		int l = levelheightaccessor.getMaxBuildHeight() - 1;
 		return new BoundingBox(i, k, j, i + 15, l, j + 15);
-	}
-
-	/**
-	 * Extends {@link NoiseSettings)} via asm
-	 */
-	@SuppressWarnings("unused")
-	private static class CorrectedNoiseSettings {
-
-		private final int noiseSizeHorizontal;
-
-		private CorrectedNoiseSettings(int minY, int height, int noiseSizeHorizontal, int noiseSizeVertical) {
-			this.noiseSizeHorizontal = noiseSizeHorizontal;
-		}
-
-		public int getCellWidth() {
-			return noiseSizeHorizontal << 1;
-		}
-
 	}
 
 }

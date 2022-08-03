@@ -24,7 +24,7 @@ function initializeCoreMod() {
         'extendclass': {
             'target': {
                 'type': 'CLASS',
-                'name': 'tamaized.voidscape.world.VoidChunkGenerator$CorrectedNoiseSettings'
+                'name': 'tamaized.voidscape.registry.ModNoiseGeneratorSettings$CorrectedNoiseSettings'
             },
             'transformer': function (/*org.objectweb.asm.tree.ClassNode*/ classNode) {
                 classNode.superName = 'net/minecraft/world/level/levelgen/NoiseSettings';
@@ -34,7 +34,7 @@ function initializeCoreMod() {
         'superctor': {
             'target': {
                 'type': 'METHOD',
-                'class': 'tamaized.voidscape.world.VoidChunkGenerator$CorrectedNoiseSettings',
+                'class': 'tamaized.voidscape.registry.ModNoiseGeneratorSettings$CorrectedNoiseSettings',
                 'methodName': '<init>',
                 'methodDesc': '(IIII)V'
             },
@@ -65,7 +65,7 @@ function initializeCoreMod() {
         'fix': {
             'target': {
                 'type': 'METHOD',
-                'class': 'tamaized.voidscape.world.VoidChunkGenerator',
+                'class': 'tamaized.voidscape.registry.ModNoiseGeneratorSettings',
                 'methodName': 'fixSettings',
                 'methodDesc': '(Lnet/minecraft/world/level/levelgen/NoiseGeneratorSettings;)Lnet/minecraft/world/level/levelgen/NoiseGeneratorSettings;'
             },
@@ -75,14 +75,14 @@ function initializeCoreMod() {
                     ASM.findFirstInstruction(methodNode, Opcodes.NEW),
                     new TypeInsnNode(
                         Opcodes.NEW,
-                        'tamaized/voidscape/world/VoidChunkGenerator$CorrectedNoiseSettings'
+                        'tamaized/voidscape/registry/ModNoiseGeneratorSettings$CorrectedNoiseSettings'
                         )
                     );
                 instructions.set(
                     ASM.findFirstInstruction(methodNode, Opcodes.INVOKESPECIAL),
                     new MethodInsnNode(
                         Opcodes.INVOKESPECIAL,
-                        'tamaized/voidscape/world/VoidChunkGenerator$CorrectedNoiseSettings',
+                        'tamaized/voidscape/registry/ModNoiseGeneratorSettings$CorrectedNoiseSettings',
                         '<init>',
                         '(IIII)V'
                         )

@@ -30,7 +30,6 @@ import tamaized.voidscape.world.featureconfig.BooleanFeatureConfig;
 import tamaized.voidscape.world.featureconfig.ClusterConfig;
 import tamaized.voidscape.world.featureconfig.FluidFeatureConfig;
 
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
