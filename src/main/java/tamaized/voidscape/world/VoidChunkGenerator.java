@@ -15,55 +15,103 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.FeatureSorter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Beardifier;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseChunk;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import org.apache.commons.lang3.mutable.MutableObject;
 import tamaized.voidscape.Voidscape;
 
+import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.OptionalInt;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 	public static final Codec<VoidChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> commonCodec(p_236091_0_).and(p_236091_0_.
-			group(RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).
-							forGetter((p_188716_) -> p_188716_.noises),
+					group(RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).
+									forGetter((p_188716_) -> p_188716_.noises),
 
-					BiomeSource.CODEC.
-							fieldOf("biome_source").
-							forGetter(ChunkGenerator::getBiomeSource),
+							BiomeSource.CODEC.
+									fieldOf("biome_source").
+									forGetter(ChunkGenerator::getBiomeSource),
 
-					Codec.LONG.
-							fieldOf("seed").orElseGet(() -> HackyWorldGen.seed).
-							forGetter(gen -> gen.seed),
+							Codec.LONG.
+									fieldOf("seed").orElseGet(() -> HackyWorldGen.seed).
+									forGetter(gen -> gen.seed),
 
-					NoiseGeneratorSettings.CODEC.
-							fieldOf("settings").
-							forGetter(VoidChunkGenerator::getDimensionSettings))).
+							NoiseGeneratorSettings.CODEC.
+									fieldOf("settings").
+									forGetter(VoidChunkGenerator::getDimensionSettings))).
 			apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
+
+	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
+	private static final Method BeardifierMarker_INSTANCE;
+	private static final MethodHandle handle_BeardifierMarker_INSTANCE;
+	private static final Object object_BeardifierMarker_INSTANCE;
+	private static final Field NoiseChunk_cellWidth;
+	private static final MethodHandle handle_setter_NoiseChunk_cellWidth;
+
+	static {
+		Method tmp_BeardifierMarker_values = null;
+		MethodHandle tmp_handle_BeardifierMarker_values = null;
+		Object[] tmp_object_BeardifierMarker_values = null;
+		Field tmp_NoiseChunk_cellWidth = null;
+		MethodHandle tmp_handle_setter_NoiseChunk_cellWidth = null;
+		try {
+			tmp_BeardifierMarker_values = ObfuscationReflectionHelper.findMethod(Class.forName("net.minecraft.world.level.levelgen.DensityFunctions$BeardifierMarker"), "values");
+			tmp_handle_BeardifierMarker_values= LOOKUP.unreflect(tmp_BeardifierMarker_values);
+			tmp_object_BeardifierMarker_values = (Object[]) tmp_handle_BeardifierMarker_values.invoke();
+			tmp_NoiseChunk_cellWidth = ObfuscationReflectionHelper.findField(NoiseChunk.class, "f_209170_");
+			tmp_handle_setter_NoiseChunk_cellWidth = LOOKUP.unreflectSetter(tmp_NoiseChunk_cellWidth);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		BeardifierMarker_INSTANCE = tmp_BeardifierMarker_values;
+		handle_BeardifierMarker_INSTANCE = tmp_handle_BeardifierMarker_values;
+		object_BeardifierMarker_INSTANCE = Objects.requireNonNull(tmp_object_BeardifierMarker_values)[0];
+		NoiseChunk_cellWidth = tmp_NoiseChunk_cellWidth;
+		handle_setter_NoiseChunk_cellWidth = tmp_handle_setter_NoiseChunk_cellWidth;
+	}
 
 	private final Registry<NormalNoise.NoiseParameters> noises;
 	private final long seed;
@@ -81,6 +129,78 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 	private Holder<NoiseGeneratorSettings> getDimensionSettings() {
 		return settings;
+	}
+
+	@Override
+	public NoiseChunk createNoiseChunk(ChunkAccess chunkAccess, StructureManager structureManager, Blender blender, RandomState randomState) {
+		NoiseSettings noisesettings = settings.value().noiseSettings().clampToHeightAccessor(chunkAccess);
+		ChunkPos chunkpos = chunkAccess.getPos();
+		int i = 16 / (noisesettings.getCellWidth() >> 1);
+		return new NoiseChunk(i, randomState, chunkpos.getMinBlockX(), chunkpos.getMinBlockZ(), noisesettings, Beardifier.forStructuresInChunk(structureManager, chunkAccess.getPos()), settings.value(), globalFluidPicker, blender);
+	}
+
+	@Override
+	protected OptionalInt iterateNoiseColumn(LevelHeightAccessor p_224240_, RandomState p_224241_, int p_224242_, int p_224243_, @Nullable MutableObject<NoiseColumn> p_224244_, @Nullable Predicate<BlockState> p_224245_) {
+		NoiseSettings noisesettings = this.settings.value().noiseSettings().clampToHeightAccessor(p_224240_);
+		int i = noisesettings.getCellHeight();
+		int j = noisesettings.minY();
+		int k = Mth.intFloorDiv(j, i);
+		int l = Mth.intFloorDiv(noisesettings.height(), i);
+		if (l <= 0) {
+			return OptionalInt.empty();
+		} else {
+			BlockState[] ablockstate;
+			if (p_224244_ == null) {
+				ablockstate = null;
+			} else {
+				ablockstate = new BlockState[noisesettings.height()];
+				p_224244_.setValue(new NoiseColumn(j, ablockstate));
+			}
+
+			int i1 = noisesettings.getCellWidth() >> 1;
+			int j1 = Math.floorDiv(p_224242_, i1);
+			int k1 = Math.floorDiv(p_224243_, i1);
+			int l1 = Math.floorMod(p_224242_, i1);
+			int i2 = Math.floorMod(p_224243_, i1);
+			int j2 = j1 * i1;
+			int k2 = k1 * i1;
+			double d0 = (double) l1 / (double) i1;
+			double d1 = (double) i2 / (double) i1;
+			NoiseChunk noisechunk = new NoiseChunk(1, p_224241_, j2, k2, noisesettings, (DensityFunctions.BeardifierOrMarker) object_BeardifierMarker_INSTANCE, this.settings.value(), this.globalFluidPicker, Blender.empty());
+			try {
+				handle_setter_NoiseChunk_cellWidth.invokeExact(noisechunk, settings.value().noiseSettings().getCellWidth() >> 1);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+			noisechunk.initializeForFirstCellX();
+			noisechunk.advanceCellX(0);
+
+			for (int l2 = l - 1; l2 >= 0; --l2) {
+				noisechunk.selectCellYZ(l2, 0);
+
+				for (int i3 = i - 1; i3 >= 0; --i3) {
+					int j3 = (k + l2) * i + i3;
+					double d2 = (double) i3 / (double) i;
+					noisechunk.updateForY(j3, d2);
+					noisechunk.updateForX(p_224242_, d0);
+					noisechunk.updateForZ(p_224243_, d1);
+					BlockState blockstate = noisechunk.blockStateRule.calculate(noisechunk);
+					BlockState blockstate1 = blockstate == null ? this.defaultBlock : blockstate;
+					if (ablockstate != null) {
+						int k3 = l2 * i + i3;
+						ablockstate[k3] = blockstate1;
+					}
+
+					if (p_224245_ != null && p_224245_.test(blockstate1)) {
+						noisechunk.stopInterpolation();
+						return OptionalInt.of(j3 + 1);
+					}
+				}
+			}
+
+			noisechunk.stopInterpolation();
+			return OptionalInt.empty();
+		}
 	}
 
 	/**
