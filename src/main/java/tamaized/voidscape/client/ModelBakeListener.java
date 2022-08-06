@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -283,13 +282,14 @@ public class ModelBakeListener {
 		});
 	}
 
-	private static class FullBrightModel implements BakedModel {
+	private static class FullBrightModel extends BakedModelWrapper<BakedModel> {
 
 		private final BakedModel model;
 		private final ItemOverrides overrides;
 		Map<Direction, List<BakedQuad>> cachedQuads = Maps.newHashMap();
 
 		private FullBrightModel(BakedModel delegate) {
+			super(delegate);
 			model = delegate;
 			overrides = new FullbrightItemOverrideList(delegate.getOverrides());
 		}
@@ -312,27 +312,6 @@ public class ModelBakeListener {
 		@Override
 		public boolean useAmbientOcclusion() {
 			return false;//model.useAmbientOcclusion();
-		}
-
-		@Override
-		public boolean isGui3d() {
-			return model.isGui3d();
-		}
-
-		@Override
-		public boolean usesBlockLight() {
-			return model.usesBlockLight();
-		}
-
-		@Override
-		public boolean isCustomRenderer() {
-			return model.isCustomRenderer();
-		}
-
-		@Nonnull
-		@Override
-		public TextureAtlasSprite getParticleIcon() {
-			return model.getParticleIcon();
 		}
 
 		@Nonnull
