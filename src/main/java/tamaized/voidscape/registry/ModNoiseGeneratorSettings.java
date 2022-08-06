@@ -67,25 +67,7 @@ public class ModNoiseGeneratorSettings implements RegistryClass {
 									DensityFunctions.constant(0.64D),
 									DensityFunctions.interpolated(
 											DensityFunctions.blendDensity(
-													DensityFunctions.add(
-															DensityFunctions.constant(2.5D),
-															DensityFunctions.mul(
-																	DensityFunctions.yClampedGradient(-8, 24, 1, 1),
-																	DensityFunctions.add(
-																			DensityFunctions.constant(-2.5D),
-																			DensityFunctions.add(
-																					DensityFunctions.constant(0.5D),
-																					DensityFunctions.mul(
-																							DensityFunctions.yClampedGradient(232, 256, 1, 1),
-																							DensityFunctions.add(
-																									DensityFunctions.constant(-0.5D),
-																									BlendedNoise.createUnseeded(0.09999999814507745D, 0.3D, 80D, 0.0166D, 1D)
-																							)
-																					)
-																			)
-																	)
-															)
-													)
+													BlendedNoise.createUnseeded(0.04999999907253873D, 3D, 40D, 0.0166D, 1D)
 											)
 									)
 							).squeeze(),

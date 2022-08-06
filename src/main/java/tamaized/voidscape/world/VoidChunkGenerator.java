@@ -10,6 +10,7 @@ import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.RegistryOps;
@@ -90,6 +91,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	private static final Object object_BeardifierMarker_INSTANCE;
 	private static final Field NoiseChunk_cellWidth;
 	private static final MethodHandle handle_setter_NoiseChunk_cellWidth;
+	private static final Field NoiseChunk_noiseSizeXZ;
+	private static final MethodHandle handle_setter_NoiseChunk_noiseSizeXZ;
 
 	static {
 		Method tmp_BeardifierMarker_values = null;
@@ -97,12 +100,18 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		Object[] tmp_object_BeardifierMarker_values = null;
 		Field tmp_NoiseChunk_cellWidth = null;
 		MethodHandle tmp_handle_setter_NoiseChunk_cellWidth = null;
+		Field tmp_NoiseChunk_noiseSizeXZ = null;
+		MethodHandle tmp_handle_setter_NoiseChunk_noiseSizeXZ = null;
+		Field tmp_NoiseChunk_FlatCache_values = null;
+		MethodHandle tmp_handle_getter_NoiseChunk_FlatCache_values = null;
 		try {
 			tmp_BeardifierMarker_values = ObfuscationReflectionHelper.findMethod(Class.forName("net.minecraft.world.level.levelgen.DensityFunctions$BeardifierMarker"), "values");
 			tmp_handle_BeardifierMarker_values= LOOKUP.unreflect(tmp_BeardifierMarker_values);
 			tmp_object_BeardifierMarker_values = (Object[]) tmp_handle_BeardifierMarker_values.invoke();
 			tmp_NoiseChunk_cellWidth = ObfuscationReflectionHelper.findField(NoiseChunk.class, "f_209170_");
 			tmp_handle_setter_NoiseChunk_cellWidth = LOOKUP.unreflectSetter(tmp_NoiseChunk_cellWidth);
+			tmp_NoiseChunk_noiseSizeXZ = ObfuscationReflectionHelper.findField(NoiseChunk.class, "f_209169_");
+			tmp_handle_setter_NoiseChunk_noiseSizeXZ = LOOKUP.unreflectSetter(tmp_NoiseChunk_noiseSizeXZ);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -111,6 +120,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		object_BeardifierMarker_INSTANCE = Objects.requireNonNull(tmp_object_BeardifierMarker_values)[0];
 		NoiseChunk_cellWidth = tmp_NoiseChunk_cellWidth;
 		handle_setter_NoiseChunk_cellWidth = tmp_handle_setter_NoiseChunk_cellWidth;
+		NoiseChunk_noiseSizeXZ = tmp_NoiseChunk_noiseSizeXZ;
+		handle_setter_NoiseChunk_noiseSizeXZ = tmp_handle_setter_NoiseChunk_noiseSizeXZ;
 	}
 
 	private final Registry<NormalNoise.NoiseParameters> noises;
@@ -131,17 +142,46 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		return settings;
 	}
 
+	private void setupNoiseChunk(NoiseChunk noisechunk, int i, int cellWidth, ChunkPos chunkpos, Blender blender) {
+		try {
+			handle_setter_NoiseChunk_cellWidth.invokeExact(noisechunk, cellWidth);
+			noisechunk.firstCellX = Math.floorDiv(chunkpos.getMinBlockX(), cellWidth);
+			noisechunk.firstCellZ = Math.floorDiv(chunkpos.getMinBlockZ(), cellWidth);
+			int noiseSizeXZ = QuartPos.fromBlock(i * cellWidth);
+			handle_setter_NoiseChunk_noiseSizeXZ.invokeExact(noisechunk, noiseSizeXZ);
+			int firstNoiseX = QuartPos.fromBlock(chunkpos.getMinBlockX());
+			int firstNoiseZ = QuartPos.fromBlock(chunkpos.getMinBlockZ());
+			for(int ii = 0; ii <= noiseSizeXZ; ++ii) {
+				int j = firstNoiseX + ii;
+				int k = QuartPos.toBlock(j);
+
+				for(int l = 0; l <= noiseSizeXZ; ++l) {
+					int i1 = firstNoiseZ + l;
+					int j1 = QuartPos.toBlock(i1);
+					Blender.BlendingOutput blender$blendingoutput = blender.blendOffsetAndFactor(k, j1);
+					noisechunk.blendAlpha.values[ii][l] = blender$blendingoutput.alpha();
+					noisechunk.blendOffset.values[ii][l] = blender$blendingoutput.blendingOffset();
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public NoiseChunk createNoiseChunk(ChunkAccess chunkAccess, StructureManager structureManager, Blender blender, RandomState randomState) {
 		NoiseSettings noisesettings = settings.value().noiseSettings().clampToHeightAccessor(chunkAccess);
 		ChunkPos chunkpos = chunkAccess.getPos();
-		int i = 16 / (noisesettings.getCellWidth() >> 1);
-		return new NoiseChunk(i, randomState, chunkpos.getMinBlockX(), chunkpos.getMinBlockZ(), noisesettings, Beardifier.forStructuresInChunk(structureManager, chunkAccess.getPos()), settings.value(), globalFluidPicker, blender);
+		int cellWidth = noisesettings.getCellWidth() >> 1;
+		int i = 16 / cellWidth;
+		NoiseChunk noisechunk =  new NoiseChunk(i, randomState, chunkpos.getMinBlockX(), chunkpos.getMinBlockZ(), noisesettings, Beardifier.forStructuresInChunk(structureManager, chunkAccess.getPos()), settings.value(), globalFluidPicker, blender);
+		setupNoiseChunk(noisechunk, i, cellWidth, chunkpos, blender);
+		return noisechunk;
 	}
 
 	@Override
-	protected OptionalInt iterateNoiseColumn(LevelHeightAccessor p_224240_, RandomState p_224241_, int p_224242_, int p_224243_, @Nullable MutableObject<NoiseColumn> p_224244_, @Nullable Predicate<BlockState> p_224245_) {
-		NoiseSettings noisesettings = this.settings.value().noiseSettings().clampToHeightAccessor(p_224240_);
+	protected OptionalInt iterateNoiseColumn(LevelHeightAccessor levelHeightAccessor, RandomState random, int x, int z, @Nullable MutableObject<NoiseColumn> noiseColumnMutableObject, @Nullable Predicate<BlockState> blockStatePredicate) {
+		NoiseSettings noisesettings = this.settings.value().noiseSettings().clampToHeightAccessor(levelHeightAccessor);
 		int i = noisesettings.getCellHeight();
 		int j = noisesettings.minY();
 		int k = Mth.intFloorDiv(j, i);
@@ -150,28 +190,24 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 			return OptionalInt.empty();
 		} else {
 			BlockState[] ablockstate;
-			if (p_224244_ == null) {
+			if (noiseColumnMutableObject == null) {
 				ablockstate = null;
 			} else {
 				ablockstate = new BlockState[noisesettings.height()];
-				p_224244_.setValue(new NoiseColumn(j, ablockstate));
+				noiseColumnMutableObject.setValue(new NoiseColumn(j, ablockstate));
 			}
 
 			int i1 = noisesettings.getCellWidth() >> 1;
-			int j1 = Math.floorDiv(p_224242_, i1);
-			int k1 = Math.floorDiv(p_224243_, i1);
-			int l1 = Math.floorMod(p_224242_, i1);
-			int i2 = Math.floorMod(p_224243_, i1);
+			int j1 = Math.floorDiv(x, i1);
+			int k1 = Math.floorDiv(z, i1);
+			int l1 = Math.floorMod(x, i1);
+			int i2 = Math.floorMod(z, i1);
 			int j2 = j1 * i1;
 			int k2 = k1 * i1;
 			double d0 = (double) l1 / (double) i1;
 			double d1 = (double) i2 / (double) i1;
-			NoiseChunk noisechunk = new NoiseChunk(1, p_224241_, j2, k2, noisesettings, (DensityFunctions.BeardifierOrMarker) object_BeardifierMarker_INSTANCE, this.settings.value(), this.globalFluidPicker, Blender.empty());
-			try {
-				handle_setter_NoiseChunk_cellWidth.invokeExact(noisechunk, settings.value().noiseSettings().getCellWidth() >> 1);
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
+			NoiseChunk noisechunk = new NoiseChunk(1, random, j2, k2, noisesettings, (DensityFunctions.BeardifierOrMarker) object_BeardifierMarker_INSTANCE, this.settings.value(), this.globalFluidPicker, Blender.empty());
+			setupNoiseChunk(noisechunk, 1, i1, new ChunkPos(x, z), Blender.empty());
 			noisechunk.initializeForFirstCellX();
 			noisechunk.advanceCellX(0);
 
@@ -182,8 +218,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 					int j3 = (k + l2) * i + i3;
 					double d2 = (double) i3 / (double) i;
 					noisechunk.updateForY(j3, d2);
-					noisechunk.updateForX(p_224242_, d0);
-					noisechunk.updateForZ(p_224243_, d1);
+					noisechunk.updateForX(x, d0);
+					noisechunk.updateForZ(z, d1);
 					BlockState blockstate = noisechunk.blockStateRule.calculate(noisechunk);
 					BlockState blockstate1 = blockstate == null ? this.defaultBlock : blockstate;
 					if (ablockstate != null) {
@@ -191,7 +227,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 						ablockstate[k3] = blockstate1;
 					}
 
-					if (p_224245_ != null && p_224245_.test(blockstate1)) {
+					if (blockStatePredicate != null && blockStatePredicate.test(blockstate1)) {
 						noisechunk.stopInterpolation();
 						return OptionalInt.of(j3 + 1);
 					}
