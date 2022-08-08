@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly fg.deobf("tamaized:voidscape:{version}")
+    implementation fg.deobf("tamaized:voidscape:{version}")
 }
 ```
 
