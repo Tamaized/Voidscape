@@ -233,7 +233,6 @@ public class RenderTurmoil {
 		}
 	}
 
-	@SubscribeEvent
 	public static void render(RegisterGuiOverlaysEvent event) {
 		event.registerAboveAll("turmoil", (gui, poseStack, partialTick, width, height) -> {
 			Level world = Minecraft.getInstance().level;

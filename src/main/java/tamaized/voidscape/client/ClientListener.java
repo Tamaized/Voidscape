@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.ViewportEvent;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -92,6 +94,7 @@ public class ClientListener {
 		Shaders.init(busMod);
 		DonatorLayer.setup();
 		TintHandler.setup(busMod);
+		busMod.addListener((Consumer<RegisterGuiOverlaysEvent>) RenderTurmoil::render);
 		busForge.addListener(EventPriority.HIGHEST, (Consumer<RenderLivingEvent.Pre<LivingEntity, ?>>) event -> {
 			if (!hackyRenderSkip && !event.getEntity().canUpdate() && event.getEntity().
 					getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapBind).map(BindData::isBound).orElse(false)).orElse(false)) {
