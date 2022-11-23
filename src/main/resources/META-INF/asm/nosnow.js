@@ -45,20 +45,28 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                instructions.insert(
-                    ASM.findFirstInstruction(methodNode, Opcodes.ICONST_1),
-                    ASM.listOf(
-                        new VarInsnNode(Opcodes.ALOAD, 0),
-                        new VarInsnNode(Opcodes.ALOAD, 1),
-                        new MethodInsnNode(
-                            Opcodes.INVOKESTATIC,
-                            'tamaized/voidscape/asm/ASMHooks',
-                            'shouldSnow',
-                            '(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z',
-                            false
+                var inst = [];
+                for (var index = 0; index < instructions.size(); index++) {
+                    var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
+                    if (node.getOpcode() === Opcodes.ICONST_1)
+                        inst.push(node);
+                }
+                inst.forEach(function (/*org.objectweb.asm.tree.AbstractInsnNode*/ value, index, array) {
+                    instructions.insert(
+                        value,
+                        ASM.listOf(
+                            new VarInsnNode(Opcodes.ALOAD, 0),
+                            new VarInsnNode(Opcodes.ALOAD, 1),
+                            new MethodInsnNode(
+                                Opcodes.INVOKESTATIC,
+                                'tamaized/voidscape/asm/ASMHooks',
+                                'shouldSnow',
+                                '(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z',
+                                false
+                                )
                             )
                         )
-                    );
+                });
                 return methodNode;
             }
         }
