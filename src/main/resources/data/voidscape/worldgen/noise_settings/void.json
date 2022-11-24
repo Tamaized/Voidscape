@@ -16,17 +16,28 @@
   "noise": {
 	"min_y": 0,
 	"height": 256,
-	"size_horizontal": 1,
-	"size_vertical": 2
+	"size_horizontal": 4,
+	"size_vertical": 4
   },
   "noise_router": {
+	"barrier": 0,
+	"fluid_level_floodedness": 0,
+	"fluid_level_spread": 0,
+	"lava": 0,
+	"temperature": 0,
+	"vegetation": 0,
+	"continents": 0,
+	"erosion": 0,
+	"depth": 0,
+	"ridges": 0,
+	"initial_density_without_jaggedness": 0,
 	"final_density": {
 	  "type": "minecraft:add",
 	  "argument1": {
 		"type": "minecraft:y_clamped_gradient",
-		"from_y": 255,
-		"to_y": 100,
-		"from_value": -0.175,
+		"from_y": 256,
+		"to_y": 140,
+		"from_value": -0.12,
 		"to_value": 0
 	  },
 	  "argument2": {
@@ -40,8 +51,8 @@
 			  "type": "minecraft:blend_density",
 			  "argument": {
 				"type": "minecraft:old_blended_noise",
-				"xz_scale": 0.249999995,
-				"y_scale": 0.375,
+				"xz_scale": 1,
+				"y_scale": 1,
 				"xz_factor": 80,
 				"y_factor": 0.0166,
 				"smear_scale_multiplier": 8
@@ -51,36 +62,9 @@
 		}
 	  }
 	},
-	"vein_toggle": 0.0,
-	"vein_ridged": 0.0,
-	"vein_gap": 0.0,
-	"erosion": 0.0,
-	"depth": 0.0,
-	"ridges": 0.0,
-	"initial_density_without_jaggedness": 0.0,
-	"lava": 0.0,
-	"temperature": {
-	  "xz_scale": 0.25,
-	  "y_scale": 0.0,
-	  "noise": "minecraft:temperature",
-	  "shift_x": "minecraft:shift_x",
-	  "shift_y": 0.0,
-	  "shift_z": "minecraft:shift_z",
-	  "type": "minecraft:shifted_noise"
-	},
-	"vegetation": {
-	  "xz_scale": 0.25,
-	  "y_scale": 0.0,
-	  "noise": "minecraft:vegetation",
-	  "shift_x": "minecraft:shift_x",
-	  "shift_y": 0.0,
-	  "shift_z": "minecraft:shift_z",
-	  "type": "minecraft:shifted_noise"
-	},
-	"continents": 0.0,
-	"barrier": 0.0,
-	"fluid_level_floodedness": 0.0,
-	"fluid_level_spread": 0.0
+	"vein_toggle": 0,
+	"vein_ridged": 0,
+	"vein_gap": 0
   },
   "surface_rule": {
 	"type": "sequence",
