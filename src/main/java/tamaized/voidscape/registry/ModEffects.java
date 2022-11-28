@@ -179,33 +179,28 @@ public class ModEffects implements RegistryClass {
 			return (T) this;
 		}
 
-		public static boolean hackyRenderPerformanceSkip = true;
-
 		@Override
 		public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
 			consumer.accept(new IClientMobEffectExtensions() {
 				@Override
 				public boolean renderInventoryIcon(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, int z) {
 					RenderSystem.setShaderTexture(0, texture.get().get());
-					float x1 = x + 6;
 					float y1 = y + 7;
-					float x2 = x1 + 18;
+					float x2 = x + 18;
 					float y2 = y1 + 18;
 					RenderSystem.setShader(GameRenderer::getPositionTexShader);
 					BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 					buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-					buffer.vertex(x1, y2, z).uv(0, 1).endVertex();
+					buffer.vertex(x, y2, z).uv(0, 1).endVertex();
 					buffer.vertex(x2, y2, z).uv(1, 1).endVertex();
 					buffer.vertex(x2, y1, z).uv(1, 0).endVertex();
-					buffer.vertex(x1, y1, z).uv(0, 0).endVertex();
+					buffer.vertex(x, y1, z).uv(0, 0).endVertex();
 					Tesselator.getInstance().end();
 					return true;
 				}
 
 				@Override
 				public boolean renderGuiIcon(MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
-					if (hackyRenderPerformanceSkip)
-						return false;
 					RenderSystem.setShaderTexture(0, texture.get().get());
 					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
 					float x1 = x + 3;

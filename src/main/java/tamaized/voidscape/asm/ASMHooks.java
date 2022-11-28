@@ -337,24 +337,6 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.gui.Gui#renderEffects(PoseStack)}<br>
-	 * [AFTER INVOKEVIRTUAL {@link IClientMobEffectExtensions#renderGuiIcon}]
-	 */
-	@OnlyIn(Dist.CLIENT)
-	public static boolean renderEffectHUD(boolean o, List<Runnable> list, IClientMobEffectExtensions renderer, MobEffectInstance effect, Gui gui, PoseStack mStack, int x, int y, float z, float alpha) {
-		if (effect.getEffect() instanceof ModEffects.StandardEffect) {
-			list.remove(list.size() - 1);
-			list.add(() -> {
-				ModEffects.StandardEffect.hackyRenderPerformanceSkip = false;
-				renderer.renderGuiIcon(effect, gui, mStack, x, y, z, alpha);
-				ModEffects.StandardEffect.hackyRenderPerformanceSkip = true;
-			});
-		}
-		return o;
-	}
-
-	/**
-	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.ItemInHandRenderer) all potential methods}<br>
 	 * [AFTER ALL INVOKESTATIC {@link ItemStack#is(Item)}]
 	 */
