@@ -183,7 +183,7 @@ public class HackyWorldGen {
 	}
 
 	public static void main(String[] args) throws IOException {
-		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "psychosis"), Path.of("./sanitized/region/"), false, "chunk");
+		DeepFreezeIOWorker worker = new DeepFreezeIOWorker(new ResourceLocation(Voidscape.MODID, "pawn"), Path.of("./sanitized/region/"), false, "chunk");
 		List<String> regions;
 		try (InputStream stream = worker.getRegionFolder(); InputStreamReader ir = new InputStreamReader(Objects.requireNonNull(stream)); BufferedReader reader = new BufferedReader(ir)) {
 			regions = reader.lines().collect(Collectors.toList());
