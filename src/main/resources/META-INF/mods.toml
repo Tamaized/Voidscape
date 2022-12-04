@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[43,)"
 issueTrackerURL="https://github.com/Tamaized/Voidscape/issues"
 license="All Rights Reserved"
 [[mods]]
@@ -15,6 +15,6 @@ description='''
 [[dependencies.voidscape]]
     modId="forge"
     mandatory=true
-    versionRange="[37.0.75,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
