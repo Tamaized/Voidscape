@@ -1,10 +1,12 @@
 package tamaized.voidscape.client;
 
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -14,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -51,7 +54,7 @@ public class ModelBakeListener {
 		add(list, object, "inventory", extra);
 	}
 
-	private static void add(List<ModelResourceLocation> list, RegistryObject<Item> object, String... extra) {
+	private static void addItem(List<ModelResourceLocation> list, RegistryObject<Item> object, String... extra) {
 		add(list, object, "inventory", extra);
 	}
 
@@ -74,33 +77,33 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
 
-		add(fullbrightList, ModItems.VOIDIC_CRYSTAL);
-		add(fullbrightList, ModItems.ETHEREAL_ESSENCE);
-		add(fullbrightList, ModItems.FRUIT);
-		add(itemOverlayList, ModItems.CHARRED_BONE);
-		add(fullbrightList, ModItems.CHARRED_WARHAMMER_HEAD);
+		addItem(fullbrightList, ModItems.VOIDIC_CRYSTAL);
+		addItem(fullbrightList, ModItems.ETHEREAL_ESSENCE);
+		addItem(fullbrightList, ModItems.FRUIT);
+		addItem(itemOverlayList, ModItems.CHARRED_BONE);
+		addItem(fullbrightList, ModItems.CHARRED_WARHAMMER_HEAD);
 
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_AXE);
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_PICKAXE);
-		add(fullbrightList, ModTools.VOIDIC_CRYSTAL_SHIELD);
-		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_HELMET);
-		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_CHEST);
-		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_LEGS);
-		add(fullbrightList, ModArmors.VOIDIC_CRYSTAL_BOOTS);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_BOW);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_XBOW);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_AXE);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_PICKAXE);
+		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_SHIELD);
+		addItem(fullbrightList, ModArmors.VOIDIC_CRYSTAL_HELMET);
+		addItem(fullbrightList, ModArmors.VOIDIC_CRYSTAL_CHEST);
+		addItem(fullbrightList, ModArmors.VOIDIC_CRYSTAL_LEGS);
+		addItem(fullbrightList, ModArmors.VOIDIC_CRYSTAL_BOOTS);
 
-		add(fullbrightList, ModTools.CHARRED_WARHAMMER);
+		addItem(fullbrightList, ModTools.CHARRED_WARHAMMER);
 
-		add(fullbrightList, ModTools.CORRUPT_SWORD);
-		add(fullbrightList, ModTools.CORRUPT_BOW);
-		add(fullbrightList, ModTools.CORRUPT_XBOW);
-		add(fullbrightList, ModTools.CORRUPT_AXE);
-		add(fullbrightList, ModArmors.CORRUPT_HELMET);
-		add(fullbrightList, ModArmors.CORRUPT_CHEST);
-		add(fullbrightList, ModArmors.CORRUPT_LEGS);
-		add(fullbrightList, ModArmors.CORRUPT_BOOTS);
+		addItem(fullbrightList, ModTools.CORRUPT_SWORD);
+		addItem(fullbrightList, ModTools.CORRUPT_BOW);
+		addItem(fullbrightList, ModTools.CORRUPT_XBOW);
+		addItem(fullbrightList, ModTools.CORRUPT_AXE);
+		addItem(fullbrightList, ModArmors.CORRUPT_HELMET);
+		addItem(fullbrightList, ModArmors.CORRUPT_CHEST);
+		addItem(fullbrightList, ModArmors.CORRUPT_LEGS);
+		addItem(fullbrightList, ModArmors.CORRUPT_BOOTS);
 
 		addBlock(overlayList, ModBlocks.VOIDIC_CRYSTAL_ORE);
 		addBlock(fullbrightList, ModBlocks.VOIDIC_CRYSTAL_BLOCK);
@@ -347,6 +350,17 @@ public class ModelBakeListener {
 		@SuppressWarnings("deprecation")
 		public net.minecraft.client.renderer.block.model.ItemTransforms getTransforms() {
 			return model.getTransforms();
+		}
+
+		@Override
+		public BakedModel applyTransform(ItemTransforms.TransformType cameraTransformType, PoseStack poseStack, boolean applyLeftHandTransform) {
+			super.applyTransform(cameraTransformType, poseStack, applyLeftHandTransform);
+			return this;
+		}
+
+		@Override
+		public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous) {
+			return List.of(this);
 		}
 
 		private static class FullbrightItemOverrideList extends ItemOverrides {
