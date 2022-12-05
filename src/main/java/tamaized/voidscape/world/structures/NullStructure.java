@@ -84,8 +84,6 @@ public class NullStructure extends Structure {
 
 	public static class Pieces {
 
-		public static final StructurePieceType MAIN = RegUtil.registerStructurePiece("NullMain", Piece::new);
-
 		private static final ResourceLocation TEMPLATE_ENTRANCE = new ResourceLocation(Voidscape.MODID, "null/entrance");
 		private static final ResourceLocation TEMPLATE_ENTRANCE_PLATFORM = new ResourceLocation(Voidscape.MODID, "null/entrance-platform");
 		private static final ResourceLocation TEMPLATE_SECTION_ELEMENTS = new ResourceLocation(Voidscape.MODID, "null/section/elements");
@@ -106,13 +104,13 @@ public class NullStructure extends Structure {
 			}
 
 			public Piece(StructureTemplateManager manager, ResourceLocation location, BlockPos pos) {
-				super(MAIN, 0, manager, location, location.toString(), makeSettings(), pos);
+				super(ModStructures.Pieces.NULL_MAIN.get(), 0, manager, location, location.toString(), makeSettings(), pos);
 				if (boundingBox.maxY() == 0)
 					boundingBox = new BoundingBox(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxY() + 1, boundingBox.maxZ());
 			}
 
 			public Piece(StructureTemplateManager manager, CompoundTag tag) {
-				super(MAIN, tag, manager, (location) -> makeSettings());
+				super(ModStructures.Pieces.NULL_MAIN.get(), tag, manager, (location) -> makeSettings());
 				if (boundingBox.maxY() == 0)
 					boundingBox = new BoundingBox(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxY() + 1, boundingBox.maxZ());
 			}
