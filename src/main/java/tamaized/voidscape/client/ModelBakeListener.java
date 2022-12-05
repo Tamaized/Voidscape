@@ -131,8 +131,10 @@ public class ModelBakeListener {
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
-								if (quads.indexOf(quad) == 1)
-									QuadTransformers.applyingLightmap(0xF000F0).process(quad);
+								if (quads.indexOf(quad) == 1) {
+									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
+									quad.shade = false;
+								}
 							}
 							cachedQuads.put(side, quads);
 						}
@@ -153,8 +155,10 @@ public class ModelBakeListener {
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
-								if (quad.getSprite().getName().getPath().contains("_overlay"))
-									QuadTransformers.applyingLightmap(0xF000F0).process(quad);
+								if (quad.getSprite().getName().getPath().contains("_overlay")) {
+									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
+									quad.shade = false;
+								}
 							}
 							cachedQuads.put(side, quads);
 						}
@@ -302,7 +306,7 @@ public class ModelBakeListener {
 			if (quads == null) {
 				quads = model.getQuads(state, side, rand);
 				for (BakedQuad quad : quads) {
-					QuadTransformers.applyingLightmap(0xF000F0).process(quad);
+					QuadTransformers.settingMaxEmissivity().processInPlace(quad);
 					quad.shade = false;
 				}
 				cachedQuads.put(side, quads);
