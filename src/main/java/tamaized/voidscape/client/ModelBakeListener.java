@@ -2,6 +2,7 @@ package tamaized.voidscape.client;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -21,9 +22,12 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.QuadTransformers;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
@@ -31,8 +35,6 @@ import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -122,9 +124,9 @@ public class ModelBakeListener {
 			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
 				event.getModels().put(mrl, new FullBrightModel(model) {
-					@Nonnull
+					@NotNull
 					@Override
-					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
 						List<BakedQuad> quads = cachedQuads.get(side);
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
@@ -144,9 +146,9 @@ public class ModelBakeListener {
 			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
 				event.getModels().put(mrl, new FullBrightModel(model) {
-					@Nonnull
+					@NotNull
 					@Override
-					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
 						List<BakedQuad> quads = cachedQuads.get(side);
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
@@ -294,9 +296,8 @@ public class ModelBakeListener {
 			overrides = new FullbrightItemOverrideList(delegate.getOverrides());
 		}
 
-		@Nonnull
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand) {
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
 			List<BakedQuad> quads = cachedQuads.get(side);
 			if (quads == null) {
 				quads = model.getQuads(state, side, rand);
@@ -309,18 +310,35 @@ public class ModelBakeListener {
 			return quads; // computeIfAbsent has issues, don't use it
 		}
 
+		@NotNull
 		@Override
-		public boolean useAmbientOcclusion() {
-			return false;//model.useAmbientOcclusion();
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+			return getQuads(state, side, rand);
 		}
 
-		@Nonnull
+
+		@Override
+		public boolean useAmbientOcclusion() {
+			return false;
+		}
+
+		@Override
+		public boolean useAmbientOcclusion(BlockState state) {
+			return false;
+		}
+
+		@Override
+		public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
+			return false;
+		}
+
+		@NotNull
 		@Override
 		public ItemOverrides getOverrides() {
 			return overrides;
 		}
 
-		@Nonnull
+		@NotNull
 		@Override
 		@SuppressWarnings("deprecation")
 		public net.minecraft.client.renderer.block.model.ItemTransforms getTransforms() {
