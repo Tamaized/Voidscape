@@ -103,7 +103,7 @@ jar {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
-    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+//    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
     def reg = "tamaized:regutil:" + project.regutil_version
     implementation fg.deobf(reg)
     shade reg
