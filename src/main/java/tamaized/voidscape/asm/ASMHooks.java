@@ -167,7 +167,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.world.level.levelgen.WorldGenSettings#WorldGenSettings(long, boolean, boolean, net.minecraft.core.Registry, Optional)} <br>
+	 * {@link net.minecraft.world.level.levelgen.WorldOptions#WorldOptions(long, boolean, boolean, Optional)} <br>
 	 * [BEFORE FIRST PUTFIELD]
 	 */
 	public static long seed(long seed) {
@@ -232,7 +232,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link Biome#shouldSnow(LevelReader, BlockPos)} and {@link Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
+	 * {@link net.minecraft.world.level.biome.Biome#shouldSnow(LevelReader, BlockPos)} and {@link net.minecraft.world.level.biome.Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
 	 * [AFTER ICONST_1]
 	 */
 	public static boolean shouldSnow(boolean o, Biome biome, LevelReader level) {

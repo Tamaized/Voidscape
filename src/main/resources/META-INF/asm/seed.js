@@ -13,9 +13,9 @@ function initializeCoreMod() {
         'worldcreate': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.world.level.levelgen.WorldGenSettings',
+                'class': 'net.minecraft.world.level.levelgen.WorldOptions',
                 'methodName': '<init>',
-                'methodDesc': '(JZZLnet/minecraft/core/Registry;Ljava/util/Optional;)V'
+                'methodDesc': '(JZZLjava/util/Optional;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
@@ -38,8 +38,8 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.level.storage.LevelStorageSource',
-                'methodName': ASM.mapMethod('m_78204_'), // readWorldGenSettings
-                'methodDesc': '(Lcom/mojang/serialization/Dynamic;Lcom/mojang/datafixers/DataFixer;I)Lcom/mojang/datafixers/util/Pair;'
+                'methodName': ASM.mapMethod('m_247212_'), // readWorldGenSettings
+                'methodDesc': '(Lcom/mojang/serialization/Dynamic;Lcom/mojang/datafixers/DataFixer;I)Lcom/mojang/serialization/DataResult;'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
