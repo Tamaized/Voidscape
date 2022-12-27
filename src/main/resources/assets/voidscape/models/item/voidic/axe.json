@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-	"layer0": "voidscape:items/voidic/axe"
+	"layer0": "voidscape:item/voidic/axe"
   },
   "overrides": [
 	{

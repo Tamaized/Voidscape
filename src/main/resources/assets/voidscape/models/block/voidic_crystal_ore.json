@@ -3,6 +3,6 @@
   "render_type": "cutout_mipped",
   "textures": {
 	"base": "block/bedrock",
-	"overlay": "voidscape:blocks/voidic_crystal_ore"
+	"overlay": "voidscape:block/voidic_crystal_ore"
   }
 }

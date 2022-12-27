@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "voidscape:items/voidic/xbow/crossbow_standby"
+	"layer0": "voidscape:item/voidic/xbow/crossbow_standby"
   },
   "display": {
 	"thirdperson_righthand": {

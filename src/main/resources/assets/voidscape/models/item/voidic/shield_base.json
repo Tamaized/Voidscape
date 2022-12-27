@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-	"0": "voidscape:models/shield/voidic_crystal"
+	"0": "voidscape:item/shield/voidic_crystal"
   },
   "elements": [
 	{

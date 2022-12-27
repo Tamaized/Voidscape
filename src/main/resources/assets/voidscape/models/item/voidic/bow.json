@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "voidscape:items/voidic/bow/bow"
+	"layer0": "voidscape:item/voidic/bow/bow"
   },
   "display": {
 	"thirdperson_righthand": {

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "voidscape:items/ethereal_essence"
+	"layer0": "voidscape:item/ethereal_essence"
   }
 }

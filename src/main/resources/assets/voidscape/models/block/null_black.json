@@ -2,7 +2,7 @@
   "parent": "block/cube",
   "ambientocclusion": false,
   "textures": {
-	"all": "voidscape:blocks/black",
+	"all": "voidscape:block/black",
 	"particle": "#all"
   },
   "elements": [

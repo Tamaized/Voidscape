@@ -1,6 +1,6 @@
 {
   "parent": "item/crossbow",
   "textures": {
-	"layer0": "voidscape:items/corrupt/xbow/crossbow_pulling_2"
+	"layer0": "voidscape:item/corrupt/xbow/crossbow_pulling_2"
   }
 }

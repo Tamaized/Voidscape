@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "voidscape:items/charred_warhammer_head"
+	"layer0": "voidscape:item/charred_warhammer_head"
   }
 }

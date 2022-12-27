@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "voidscape:items/corrupt/boots_broken"
+	"layer0": "voidscape:item/corrupt/boots_broken"
   }
 }

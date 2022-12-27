@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-	"layer0": "voidscape:items/corrupt/axe_broken"
+	"layer0": "voidscape:item/corrupt/axe_broken"
   }
 }
