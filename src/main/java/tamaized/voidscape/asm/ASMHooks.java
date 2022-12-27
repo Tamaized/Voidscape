@@ -7,7 +7,6 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -19,8 +18,8 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -36,7 +35,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -51,9 +49,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.biome.BiomeSpecialEffects;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.LightChunkGetter;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
@@ -65,7 +60,6 @@ import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
@@ -74,7 +68,6 @@ import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
-import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.SubCapability;
@@ -246,7 +239,7 @@ public class ASMHooks {
 		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :
 				level instanceof WorldGenRegion worldGenRegion ? worldGenRegion.registryAccess() :
 						null;
-		if (registryAccess != null && registryAccess.ownedRegistryOrThrow(Registry.BIOME_REGISTRY).getResourceKey(biome)
+		if (registryAccess != null && registryAccess.registryOrThrow(Registries.BIOME).getResourceKey(biome)
 				.map(key -> key.location().getNamespace().equals(Voidscape.MODID))
 				.orElse(false))
 			return false;

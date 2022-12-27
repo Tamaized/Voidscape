@@ -96,48 +96,37 @@ public class FormPartyScreen extends TurmoilScreen {
 		for (int i = 0; i < 7; i++) {
 			final int index = i;
 			Button b;
-			kickMemberButtons.add(addRenderableWidget(b = new Button(0, 0, 20, 20, Component.translatable("X"), button -> {
+			kickMemberButtons.add(addRenderableWidget(b = Button.builder(Component.translatable("X"), button -> {
 				if (minecraft.player != null && ClientPartyInfo.host.getId().equals(minecraft.player.getUUID()) && ClientPartyInfo.members.size() > index) {
 					ClientPartyInfo.members.remove(index);
 					Voidscape.NETWORK.sendToServer(new ServerPacketRemovePartyMember(index));
 				}
-			})));
+			}).bounds(0, 0, 20, 20).build()));
 			b.visible = false;
 		}
-		addRenderableWidget(commence = new Button(
-
-				10,
-
-				22,
-
-				buttonWidth,
-
-				buttonHeight,
-
-				Component.translatable("Commence"), // FIXME: localize
-
-				button -> {
-					ClientPartyInfo.reserving = true;
-					Voidscape.NETWORK.sendToServer(new ServerPacketCommenceDuty());
-				}
-
-		));
+		addRenderableWidget(commence = Button.builder(
+						Component.translatable("Commence"), // FIXME: localize
+						button -> {
+							ClientPartyInfo.reserving = true;
+							Voidscape.NETWORK.sendToServer(new ServerPacketCommenceDuty());
+						}
+				)
+				.bounds(
+						10,
+						22,
+						buttonWidth,
+						buttonHeight
+				).build());
 		commence.active = false;
-		addRenderableWidget(new Button(
-
-				window.getGuiScaledWidth() - buttonWidth - 10,
-
-				22,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Disband"),
-
 				button -> Voidscape.NETWORK.sendToServer(new ServerPacketDisbandParty())
-
-		));
+		).bounds(
+				window.getGuiScaledWidth() - buttonWidth - 10,
+				22,
+				buttonWidth,
+				buttonHeight
+		).build());
 		addRenderableWidget(passwordWidget = new EditBox(
 
 				font,
@@ -169,21 +158,15 @@ public class FormPartyScreen extends TurmoilScreen {
 		passwordWidget.visible = false;
 		passwordWidget.setValue(ClientPartyInfo.password);
 		passwordWidget.setResponder(pass -> this.password = pass);
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-
 				button -> minecraft.setScreen(new PartySearchScreen(duty, type))
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	@Override
@@ -259,8 +242,8 @@ public class FormPartyScreen extends TurmoilScreen {
 			if (ClientPartyInfo.host.getId().equals(minecraft.player.getUUID())) {
 				Button button = kickMemberButtons.get(i);
 				button.visible = true;
-				button.x = x + buttonWidth - 22;
-				button.y = y0 + 2;
+				button.setX(x + buttonWidth - 22);
+				button.setY(y0 + 2);
 			}
 			drawPartyBox(buffer, x, y0, false);
 			renderPlayerFactory.accept(i);

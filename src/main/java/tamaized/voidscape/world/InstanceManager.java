@@ -1,5 +1,6 @@
 package tamaized.voidscape.world;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -28,9 +29,9 @@ public final class InstanceManager {
 
 	public static void setup(MinecraftServer server) {
 		instances.clear();
-		server.getWorldData().worldGenSettings().dimensions().entrySet().stream().
-				filter(entry -> entry.getValue().generator() instanceof InstanceChunkGenerator).
-				forEach(entry -> instances.add(new Instance(entry.getKey(), entry.getValue())));
+		server.registries().compositeAccess().registryOrThrow(Registries.LEVEL_STEM).entrySet().stream()
+				.filter(entry -> entry.getValue().generator() instanceof InstanceChunkGenerator)
+				.forEach(entry -> instances.add(new Instance(entry.getKey(), entry.getValue())));
 	}
 
 	public static Optional<Instance> findByPlayer(Player player) {

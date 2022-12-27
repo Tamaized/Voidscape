@@ -2,15 +2,15 @@ package tamaized.voidscape.client.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.abilities.EntitySpellBolt;
 
@@ -46,8 +46,8 @@ public class RenderSpellBolt<T extends EntitySpellBolt> extends EntityRenderer<T
 		final float blue = (color & 0xFF) / 255F;
 		for (int i = 0; i < 8; i++) {
 			int deg = (45 * i + entityIn.tickCount * 2) % 360;
-			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(deg));
-			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(deg));
+			matrixStackIn.mulPose(Axis.XP.rotationDegrees(deg));
+			matrixStackIn.mulPose(Axis.YP.rotationDegrees(deg));
 			vertex(buffer, v, n, -size, -size, 0, red, green, blue, 0.75F, 0, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
 			vertex(buffer, v, n, -size, size, 0, red, green, blue, 0.75F, 0, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
 			vertex(buffer, v, n, size, size, 0, red, green, blue, 0.75F, 1, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);

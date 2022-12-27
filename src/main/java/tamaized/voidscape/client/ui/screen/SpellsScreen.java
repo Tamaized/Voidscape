@@ -7,11 +7,12 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
@@ -28,11 +29,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class SpellsScreen extends TurmoilScreen {
-
-	private final Button.OnTooltip tooltip = (button, matrixStack, x, y) -> {
-		if (button instanceof SpellButton && GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
-			this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(((SpellButton) button).getTooltip(), Math.max(this.width / 2 - 43, 170)), x, y);
-	};
 
 	private TurmoilAbility drag = null;
 
@@ -109,21 +105,15 @@ public class SpellsScreen extends TurmoilScreen {
 			addRenderableWidget(slot);
 		}
 
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"), // FIXME: localize
-
 				button -> onClose()
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	public void addSpell(TurmoilAbility ability, int x, int y) {
@@ -139,7 +129,7 @@ public class SpellsScreen extends TurmoilScreen {
 				if (!button.active)
 					return;
 				parent.drag = ability;
-			}, tooltip);
+			}, Button.DEFAULT_NARRATION);
 			this.ability = ability;
 		}
 
@@ -147,8 +137,15 @@ public class SpellsScreen extends TurmoilScreen {
 			return ability;
 		}
 
-		FormattedText getTooltip() {
+		Component getTooltip() {
 			return ability.getTitle().copy().append("\n\n").append(ability.getDescription());
+		}
+
+		private void updateTooltipData() {
+			if (GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
+				setTooltip(Tooltip.create(getTooltip()));
+			else
+				setTooltip(null);
 		}
 
 		@Override
@@ -159,15 +156,15 @@ public class SpellsScreen extends TurmoilScreen {
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 			ClientUtil.bindTexture(ability.getTexture());
 			Matrix4f matrix = stack.last().pose();
-			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).endVertex();
-			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
-			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
-			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
+			buffer.vertex(matrix, getX(), getY(), getBlitOffset()).uv(0, 0).endVertex();
+			buffer.vertex(matrix, getX(), getY() + height, getBlitOffset()).uv(0, 1).endVertex();
+			buffer.vertex(matrix, getX() + width, getY() + height, getBlitOffset()).uv(1, 1).endVertex();
+			buffer.vertex(matrix, getX() + width, getY(), getBlitOffset()).uv(1, 0).endVertex();
 			RenderSystem.enableDepthTest();
 			Tesselator.getInstance().end();
 			RenderSystem.disableDepthTest();
 			if (this.isHoveredOrFocused())
-				this.renderToolTip(stack, mouseX, mouseY);
+				updateTooltipData();
 		}
 	}
 
@@ -178,7 +175,7 @@ public class SpellsScreen extends TurmoilScreen {
 
 		SlotButton(int id, int x, int y) {
 			super(x, y, 16, 16, Component.literal(""), button -> {
-			});
+			}, Button.DEFAULT_NARRATION);
 			this.id = id;
 		}
 
@@ -190,10 +187,10 @@ public class SpellsScreen extends TurmoilScreen {
 			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 			ClientUtil.bindTexture(set.getTexture());
 			Matrix4f matrix = stack.last().pose();
-			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).endVertex();
-			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).endVertex();
-			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).endVertex();
-			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).endVertex();
+			buffer.vertex(matrix, getX(), getY(), getBlitOffset()).uv(0, 0).endVertex();
+			buffer.vertex(matrix, getX(), getY() + height, getBlitOffset()).uv(0, 1).endVertex();
+			buffer.vertex(matrix, getX() + width, getY() + height, getBlitOffset()).uv(1, 1).endVertex();
+			buffer.vertex(matrix, getX() + width, getY(), getBlitOffset()).uv(1, 0).endVertex();
 			Shaders.WRAPPED_POS_TEX.invokeThenEndTesselator();
 		}
 

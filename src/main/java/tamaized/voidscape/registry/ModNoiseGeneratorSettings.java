@@ -3,7 +3,6 @@ package tamaized.voidscape.registry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.KeyDispatchDataCodec;
@@ -35,7 +34,7 @@ import java.util.function.Consumer;
 
 public class ModNoiseGeneratorSettings implements RegistryClass {
 
-	private static final DeferredRegister<NoiseGeneratorSettings> REGISTRY = RegUtil.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
+//	private static final DeferredRegister<NoiseGeneratorSettings> REGISTRY = RegUtil.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
 
 	/*public static final RegistryObject<NoiseGeneratorSettings> VOID = REGISTRY.register("void", () ->
 			fixSettings(new NoiseGeneratorSettings(
@@ -120,9 +119,9 @@ public class ModNoiseGeneratorSettings implements RegistryClass {
 	public void init(IEventBus bus) {
 	}
 
-	private static DensityFunctions.HolderHolder getDensityFunction(String key) {
+	/*private static DensityFunctions.HolderHolder getDensityFunction(String key) {
 		return new DensityFunctions.HolderHolder(BuiltinRegistries.DENSITY_FUNCTION.getHolderOrThrow(ResourceKey.create(Registry.DENSITY_FUNCTION_REGISTRY, new ResourceLocation(key))));
-	}
+	}*/
 
 	/**
 	 * This is altered via ASM to use {@link ModNoiseGeneratorSettings.CorrectedNoiseSettings} instead of {@link NoiseSettings}

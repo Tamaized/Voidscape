@@ -1,8 +1,7 @@
 package tamaized.voidscape.client.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -14,6 +13,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import tamaized.voidscape.registry.ModParticles;
 
 import javax.annotation.Nonnull;
@@ -90,20 +91,20 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 		float lvt_5_1_ = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - lvt_4_1_.x());
 		float lvt_6_1_ = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - lvt_4_1_.y());
 		float lvt_7_1_ = (float) (Mth.lerp((double) partialTicks, this.zo, this.z) - lvt_4_1_.z());
-		Quaternion lvt_8_2_ = new Quaternion(entity.rotation());
+		Quaternionf lvt_8_2_ = new Quaternionf(entity.rotation());
 		if (this.roll != 0.0F) {
 			float lvt_9_1_ = Mth.lerp(partialTicks, this.oRoll, this.roll);
-			lvt_8_2_.mul(Vector3f.ZP.rotation(lvt_9_1_));
+			lvt_8_2_.mul(Axis.ZP.rotation(lvt_9_1_));
 		}
-		lvt_8_2_.mul(Vector3f.YP.rotation(Mth.cos((float) Math.toRadians(rot % 360F))));
+		lvt_8_2_.mul(Axis.YP.rotation(Mth.cos((float) Math.toRadians(rot % 360F))));
 		Vector3f lvt_9_2_ = new Vector3f(-1.0F, -1.0F, 0.0F);
-		lvt_9_2_.transform(lvt_8_2_);
+		lvt_9_2_.rotate(lvt_8_2_);
 		Vector3f[] lvt_10_1_ = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
 		float lvt_11_1_ = this.getQuadSize(partialTicks);
 
 		for (int lvt_12_1_ = 0; lvt_12_1_ < 4; ++lvt_12_1_) {
 			Vector3f lvt_13_1_ = lvt_10_1_[lvt_12_1_];
-			lvt_13_1_.transform(lvt_8_2_);
+			lvt_13_1_.rotate(lvt_8_2_);
 			lvt_13_1_.mul(lvt_11_1_);
 			lvt_13_1_.add(lvt_5_1_, lvt_6_1_, lvt_7_1_);
 		}

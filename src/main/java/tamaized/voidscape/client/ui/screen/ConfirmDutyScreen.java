@@ -36,70 +36,47 @@ public class ConfirmDutyScreen extends TurmoilScreen {
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
 		// FIXME: localization
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable(duty.isOnlyNormal() ? "Normal" : "Unrestricted"),
-
 				button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Unrestricted))
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
+				buttonWidth,
+				buttonHeight
+		).build());
 		if (!duty.isOnlyNormal()) {
-			addRenderableWidget(new Button(
-
-					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
-
-					buttonWidth,
-
-					buttonHeight,
-
-					Component.translatable("Normal"),
-
-					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
-
-			));
-			Button insane = new Button(
-
-					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
-
-					buttonWidth,
-
-					buttonHeight,
-
-					Component.translatable("Insane"),
-
-					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
-
+			addRenderableWidget(Button.builder(
+							Component.translatable("Normal"),
+							button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Normal))
+					).bounds(
+							(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+							(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
+							buttonWidth,
+							buttonHeight
+					).build()
 			);
+			Button insane = Button.builder(
+					Component.translatable("Insane"),
+					button -> minecraft.setScreen(new PartySearchScreen(duty, Instance.InstanceType.Insane))
+			).bounds(
+					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
+					buttonWidth,
+					buttonHeight
+			).build();
 			insane.active = data.getProgression().ordinal() > duty.progression().ordinal();
 			addRenderableWidget(insane);
 		}
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-
 				button -> minecraft.setScreen(new DutyScreen())
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	@Override

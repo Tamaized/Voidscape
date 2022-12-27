@@ -11,8 +11,8 @@ import tamaized.voidscape.Voidscape;
 
 public class ModSounds implements RegistryClass {
 
-	public static final RegistryObject<SoundEvent> AMBIENCE = RegUtil.create(ForgeRegistries.SOUND_EVENTS).register("ambience", () -> new SoundEvent(new ResourceLocation(Voidscape.MODID, "ambience")));
-	public static final RegistryObject<SoundEvent> MUSIC = RegUtil.create(ForgeRegistries.SOUND_EVENTS).register("music", () -> new SoundEvent(new ResourceLocation(Voidscape.MODID, "music")));
+	public static final RegistryObject<SoundEvent> AMBIENCE = RegUtil.create(ForgeRegistries.SOUND_EVENTS).register("ambience", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Voidscape.MODID, "ambience")));
+	public static final RegistryObject<SoundEvent> MUSIC = RegUtil.create(ForgeRegistries.SOUND_EVENTS).register("music", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Voidscape.MODID, "music")));
 
 	@Override
 	public void init(IEventBus bus) {

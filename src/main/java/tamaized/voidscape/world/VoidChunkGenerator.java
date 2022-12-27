@@ -13,6 +13,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -68,21 +69,16 @@ import java.util.stream.Collectors;
 
 public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
-	public static final Codec<VoidChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> commonCodec(p_236091_0_).and(p_236091_0_.
-					group(RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).
-									forGetter((p_188716_) -> p_188716_.noises),
-
-							BiomeSource.CODEC.
-									fieldOf("biome_source").
-									forGetter(ChunkGenerator::getBiomeSource),
-
-							Codec.LONG.
-									fieldOf("seed").orElseGet(() -> HackyWorldGen.seed).
-									forGetter(gen -> gen.seed),
-
-							NoiseGeneratorSettings.CODEC.
-									fieldOf("settings").
-									forGetter(VoidChunkGenerator::getDimensionSettings))).
+	public static final Codec<VoidChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> p_236091_0_.
+			group(BiomeSource.CODEC
+							.fieldOf("biome_source")
+							.forGetter(ChunkGenerator::getBiomeSource),
+					Codec.LONG
+							.fieldOf("seed").orElseGet(() -> HackyWorldGen.seed)
+							.forGetter(gen -> gen.seed),
+					NoiseGeneratorSettings.CODEC
+							.fieldOf("settings")
+							.forGetter(VoidChunkGenerator::generatorSettings)).
 			apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
@@ -124,22 +120,16 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		handle_setter_NoiseChunk_noiseSizeXZ = tmp_handle_setter_NoiseChunk_noiseSizeXZ;
 	}
 
-	private final Registry<NormalNoise.NoiseParameters> noises;
 	private final long seed;
 
-	private VoidChunkGenerator(Registry<StructureSet> p_209106_, Registry<NormalNoise.NoiseParameters> noiseRegistry, BiomeSource biomeProvider1, long seed, Holder<NoiseGeneratorSettings> dimensionSettings) {
-		super(p_209106_, noiseRegistry, biomeProvider1, dimensionSettings);
-		this.noises = noiseRegistry;
+	private VoidChunkGenerator(BiomeSource biomeProvider1, long seed, Holder<NoiseGeneratorSettings> dimensionSettings) {
+		super(biomeProvider1, dimensionSettings);
 		this.seed = seed;
 	}
 
 	@Override
 	protected Codec<? extends ChunkGenerator> codec() {
 		return codec;
-	}
-
-	private Holder<NoiseGeneratorSettings> getDimensionSettings() {
-		return settings;
 	}
 
 	private void setupNoiseChunk(NoiseChunk noisechunk, int i, int cellWidth, ChunkPos chunkpos, Blender blender) {
@@ -170,18 +160,18 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 	@Override
 	public NoiseChunk createNoiseChunk(ChunkAccess chunkAccess, StructureManager structureManager, Blender blender, RandomState randomState) {
-		NoiseSettings noisesettings = settings.value().noiseSettings().clampToHeightAccessor(chunkAccess);
+		NoiseSettings noisesettings = generatorSettings().value().noiseSettings().clampToHeightAccessor(chunkAccess);
 		ChunkPos chunkpos = chunkAccess.getPos();
 		int cellWidth = noisesettings.getCellWidth() >> 1;
 		int i = 16 / cellWidth;
-		NoiseChunk noisechunk =  new NoiseChunk(i, randomState, chunkpos.getMinBlockX(), chunkpos.getMinBlockZ(), noisesettings, Beardifier.forStructuresInChunk(structureManager, chunkAccess.getPos()), settings.value(), globalFluidPicker, blender);
+		NoiseChunk noisechunk =  new NoiseChunk(i, randomState, chunkpos.getMinBlockX(), chunkpos.getMinBlockZ(), noisesettings, Beardifier.forStructuresInChunk(structureManager, chunkAccess.getPos()), generatorSettings().value(), globalFluidPicker.get(), blender);
 		setupNoiseChunk(noisechunk, i, cellWidth, chunkpos, blender);
 		return noisechunk;
 	}
 
 	@Override
 	protected OptionalInt iterateNoiseColumn(LevelHeightAccessor levelHeightAccessor, RandomState random, int x, int z, @Nullable MutableObject<NoiseColumn> noiseColumnMutableObject, @Nullable Predicate<BlockState> blockStatePredicate) {
-		NoiseSettings noisesettings = this.settings.value().noiseSettings().clampToHeightAccessor(levelHeightAccessor);
+		NoiseSettings noisesettings = this.generatorSettings().value().noiseSettings().clampToHeightAccessor(levelHeightAccessor);
 		int i = noisesettings.getCellHeight();
 		int j = noisesettings.minY();
 		int k = Mth.intFloorDiv(j, i);
@@ -206,7 +196,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 			int k2 = k1 * i1;
 			double d0 = (double) l1 / (double) i1;
 			double d1 = (double) i2 / (double) i1;
-			NoiseChunk noisechunk = new NoiseChunk(1, random, j2, k2, noisesettings, (DensityFunctions.BeardifierOrMarker) object_BeardifierMarker_INSTANCE, this.settings.value(), this.globalFluidPicker, Blender.empty());
+			NoiseChunk noisechunk = new NoiseChunk(1, random, j2, k2, noisesettings, (DensityFunctions.BeardifierOrMarker) object_BeardifierMarker_INSTANCE, this.generatorSettings().value(), this.globalFluidPicker.get(), Blender.empty());
 			setupNoiseChunk(noisechunk, 1, i1, new ChunkPos(x, z), Blender.empty());
 			noisechunk.initializeForFirstCellX();
 			noisechunk.advanceCellX(0);
@@ -221,7 +211,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 					noisechunk.updateForX(x, d0);
 					noisechunk.updateForZ(z, d1);
 					BlockState blockstate = noisechunk.blockStateRule.calculate(noisechunk);
-					BlockState blockstate1 = blockstate == null ? this.defaultBlock : blockstate;
+					BlockState blockstate1 = blockstate == null ? this.generatorSettings().get().defaultBlock() : blockstate;
 					if (ablockstate != null) {
 						int k3 = l2 * i + i3;
 						ablockstate[k3] = blockstate1;
@@ -249,8 +239,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int x = centerX * 16;
 		int z = centerZ * 16;
 		int[] yIterator = new int[]{0};
-		boolean cast;
-		if (cast = biomeSource instanceof VoidscapeSeededBiomeProvider) {
+		boolean cast = biomeSource instanceof VoidscapeSeededBiomeProvider;
+		if (cast) {
 			final int[] layers = Arrays.stream(VoidscapeSeededBiomeProvider.LAYERS).map(i -> i + 3).toArray();
 			final int[] result = new int[yIterator.length + layers.length];
 			System.arraycopy(yIterator, 0, result, 0, yIterator.length);
@@ -259,12 +249,12 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		}
 		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(seed));
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
-		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
+		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.STRUCTURE);
 		try {
 			Map<Integer, List<Structure>> map = structureRegistry.stream().collect(Collectors.groupingBy(structure -> structure.step().ordinal()));
 			List<FeatureSorter.StepFeatureData> list = this.featuresPerStep.get();
 			int j = list.size();
-			Registry<PlacedFeature> featureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
+			Registry<PlacedFeature> featureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.PLACED_FEATURE);
 			int k = Math.max(GenerationStep.Decoration.values().length, j);
 
 			for (int l = 0; l < k; ++l) {
@@ -328,10 +318,10 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 												worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?
 														serverChunkCache.randomState().sampler() :
 														RandomState.create(
-																worldGenRegion_.registryAccess(),
-																getDimensionSettings().unwrapKey().orElse(ResourceKey.create(
-																		Registry.NOISE_GENERATOR_SETTINGS_REGISTRY,
-																		new ResourceLocation(Voidscape.MODID, "lol_i_guess_ill_die"))), // FIXME: need to separate the noise settings from the dimension json
+																worldGenRegion_.registryAccess().asGetterLookup(),
+																generatorSettings().unwrapKey().orElse(ResourceKey.create(
+																		Registries.NOISE_SETTINGS,
+																		new ResourceLocation(Voidscape.MODID, "void"))),
 																seed).sampler());
 								if (biome.value().getGenerationSettings().hasFeature(placedfeature)) {
 									BlockPos pos = new BlockPos(x, y, z);

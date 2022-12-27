@@ -82,18 +82,8 @@ public class PartyListScreen extends TurmoilScreen {
 			ClientPartyInfo.PARTIES.forEach(party -> list.children().add(list.new Entry(party.host.getId())));
 			initedOnce = true;
 		}
-		addRenderableWidget(join = new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(join = Button.builder(
 				Component.translatable("Join Party"), // FIXME: localize
-
 				button -> {
 					if (list.getSelected() == null)
 						return;
@@ -102,8 +92,12 @@ public class PartyListScreen extends TurmoilScreen {
 					password.active = false;
 					Voidscape.NETWORK.sendToServer(new ServerPacketRequestJoinParty(list.getSelected().host, password.getValue()));
 				}
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
+				buttonWidth,
+				buttonHeight
+		).build());
 		join.active = false;
 		// TODO: render characters as *
 		addRenderableWidget(password = new EditBox(
@@ -121,21 +115,15 @@ public class PartyListScreen extends TurmoilScreen {
 				Component.translatable("Password")
 
 		));
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-
 				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	@Override

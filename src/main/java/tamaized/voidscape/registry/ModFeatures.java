@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -31,18 +32,20 @@ import tamaized.voidscape.world.featureconfig.ClusterConfig;
 import tamaized.voidscape.world.featureconfig.FluidFeatureConfig;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ModFeatures implements RegistryClass {
 
-	private static final DeferredRegister<Feature<?>> REGISTRY = RegUtil.create(ForgeRegistries.FEATURES);
+	private static final DeferredRegister<Feature<?>> REGISTRY_FEATURES = RegUtil.create(ForgeRegistries.FEATURES);
+	private static final DeferredRegister<PlacementModifierType<?>> REGISTRY_PLACEMENT_MOD_TYPE = RegUtil.create(Registries.PLACEMENT_MODIFIER_TYPE);
 
 	private static class SeekDownPlacementMod extends PlacementModifier {
 
 		public static final Codec<SeekDownPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
 				BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, SeekDownPlacementMod::new));
 
-		public static PlacementModifierType<SeekDownPlacementMod> TYPE;
+		public static RegistryObject<PlacementModifierType<SeekDownPlacementMod>> TYPE = registerPlacementModifierType("seek", () -> () -> CODEC);
 
 		private final boolean check_below;
 
@@ -64,7 +67,7 @@ public class ModFeatures implements RegistryClass {
 
 		@Override
 		public PlacementModifierType<?> type() {
-			return TYPE;
+			return TYPE.get();
 		}
 
 	}
@@ -73,7 +76,7 @@ public class ModFeatures implements RegistryClass {
 
 		public static final Codec<AirAbovePlacementMod> CODEC = Codec.unit(AirAbovePlacementMod::new);
 
-		public static PlacementModifierType<AirAbovePlacementMod> TYPE;
+		public static RegistryObject<PlacementModifierType<AirAbovePlacementMod>> TYPE = registerPlacementModifierType("air_above", () -> () -> CODEC);
 
 		public AirAbovePlacementMod() {
 		}
@@ -85,7 +88,7 @@ public class ModFeatures implements RegistryClass {
 
 		@Override
 		public PlacementModifierType<?> type() {
-			return TYPE;
+			return TYPE.get();
 		}
 
 	}
@@ -94,7 +97,7 @@ public class ModFeatures implements RegistryClass {
 
 		public static final Codec<NotAirBelowPlacementMod> CODEC = Codec.unit(NotAirBelowPlacementMod::new);
 
-		public static PlacementModifierType<NotAirBelowPlacementMod> TYPE;
+		public static RegistryObject<PlacementModifierType<NotAirBelowPlacementMod>> TYPE = registerPlacementModifierType("not_air_below", () -> () -> CODEC);
 
 		public NotAirBelowPlacementMod() {
 		}
@@ -106,7 +109,7 @@ public class ModFeatures implements RegistryClass {
 
 		@Override
 		public PlacementModifierType<?> type() {
-			return TYPE;
+			return TYPE.get();
 		}
 
 	}
@@ -116,7 +119,7 @@ public class ModFeatures implements RegistryClass {
 		public static final Codec<RandomYPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
 				INT.fieldOf("y").orElse(0).forGetter(c -> c.y)).apply(p_242803_0_, RandomYPlacementMod::new));
 
-		public static PlacementModifierType<RandomYPlacementMod> TYPE;
+		public static RegistryObject<PlacementModifierType<RandomYPlacementMod>> TYPE = registerPlacementModifierType("random_y", () -> () -> CODEC);
 
 		private final int y;
 
@@ -131,12 +134,12 @@ public class ModFeatures implements RegistryClass {
 
 		@Override
 		public PlacementModifierType<?> type() {
-			return TYPE;
+			return TYPE.get();
 		}
 
 	}
 
-	public static final RegistryObject<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY.register("spire", () -> new Feature<>(BooleanFeatureConfig.CODEC) {
+	public static final RegistryObject<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY_FEATURES.register("spire", () -> new Feature<>(BooleanFeatureConfig.CODEC) {
 		@Override
 		public boolean place(FeaturePlaceContext<BooleanFeatureConfig> context) {
 			BlockPos.MutableBlockPos pos = context.origin().mutable();
@@ -184,7 +187,7 @@ public class ModFeatures implements RegistryClass {
 		}
 	});
 
-	public static final RegistryObject<Feature<FluidFeatureConfig>> FLUID = REGISTRY.register("fluid", () -> new Feature<>(FluidFeatureConfig.CODEC) {
+	public static final RegistryObject<Feature<FluidFeatureConfig>> FLUID = REGISTRY_FEATURES.register("fluid", () -> new Feature<>(FluidFeatureConfig.CODEC) {
 		@Override
 		public boolean place(FeaturePlaceContext<FluidFeatureConfig> context) {
 			context.level().setBlock(context.origin(), context.config().state.createLegacyBlock(), 2);
@@ -193,7 +196,7 @@ public class ModFeatures implements RegistryClass {
 		}
 	});
 
-	public static final RegistryObject<Feature<ClusterConfig>> CLUSTER = REGISTRY.register("cluster", () -> new Feature<>(ClusterConfig.CODEC) {
+	public static final RegistryObject<Feature<ClusterConfig>> CLUSTER = REGISTRY_FEATURES.register("cluster", () -> new Feature<>(ClusterConfig.CODEC) {
 		@Override
 		public boolean place(FeaturePlaceContext<ClusterConfig> context) {
 			boolean flag = false;
@@ -226,20 +229,17 @@ public class ModFeatures implements RegistryClass {
 		}
 	});
 
-	@Override
-	public void init(IEventBus bus) {
-		bus.addListener((Consumer<RegisterEvent>) event -> {
-			if (!event.getRegistryKey().equals(Registry.FEATURE_REGISTRY))
-				return;
-			SeekDownPlacementMod.TYPE = registerPlacementMod("seek", SeekDownPlacementMod.CODEC);
-			AirAbovePlacementMod.TYPE = registerPlacementMod("air_above", AirAbovePlacementMod.CODEC);
-			NotAirBelowPlacementMod.TYPE = registerPlacementMod("not_air_below", NotAirBelowPlacementMod.CODEC);
-			RandomYPlacementMod.TYPE = registerPlacementMod("random_y", RandomYPlacementMod.CODEC);
-		});
+	private static <P extends PlacementModifier> RegistryObject<PlacementModifierType<P>> registerPlacementModifierType(String name, Supplier<PlacementModifierType<P>> factory) {
+		return REGISTRY_PLACEMENT_MOD_TYPE.register(name, factory);
 	}
 
-	private static <T extends PlacementModifier> PlacementModifierType<T> registerPlacementMod(String name, Codec<T> codec) {
-		return Registry.register(Registry.PLACEMENT_MODIFIERS, new ResourceLocation(Voidscape.MODID, name), () -> codec);
+	@Override
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+	public void init(IEventBus bus) {
+		SeekDownPlacementMod.CODEC.getClass();
+		AirAbovePlacementMod.CODEC.getClass();
+		NotAirBelowPlacementMod.CODEC.getClass();
+		RandomYPlacementMod.CODEC.getClass();
 	}
 
 }

@@ -5,6 +5,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerChunkCache;
@@ -60,6 +62,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.progress.StartupMessageManager;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -123,7 +126,7 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(MODID, "void"));
+	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 	public static final SubCapability.ISubCap.SubCapKey<Turmoil> subCapTurmoilData = SubCapability.AttachedSubCap.register(Turmoil.class, Turmoil::new);
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	public static final SubCapability.ISubCap.SubCapKey<TurmoilStats> subCapTurmoilStats = SubCapability.AttachedSubCap.register(TurmoilStats.class, TurmoilStats::new);
@@ -144,7 +147,7 @@ public class Voidscape {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight());
 			Config.CLIENT_CONFIG = specPair.getLeft();
 		}
-		RegUtil.setup(MODID, () -> ModItems.VOIDIC_CRYSTAL, busMod,
+		RegUtil.setup(MODID, busMod,
 				ModArmors::new,
 				ModAttributes::new,
 				ModBiomes::new,
@@ -162,11 +165,11 @@ public class Voidscape {
 				ModSurfaceRules::new,
 				ModTools::new);
 		busMod.addListener((Consumer<RegisterEvent>) event -> {
-			if (!event.getRegistryKey().equals(Registry.BIOME_REGISTRY))
+			if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.RECIPE_SERIALIZERS))
 				return;
-			Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", VoidscapeSeededBiomeProvider.CODEC);
-			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
-			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
+			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeSeededBiomeProvider.CODEC);
+			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
+			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "instance"), InstanceChunkGenerator.codec);
 		});
 		SubCapability.init(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {

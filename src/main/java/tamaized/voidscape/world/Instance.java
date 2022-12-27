@@ -1,7 +1,7 @@
 package tamaized.voidscape.world;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +30,7 @@ public final class Instance {
 	public Instance(ResourceKey<LevelStem> loc, LevelStem dimension) {
 		if (!(dimension.generator() instanceof InstanceChunkGenerator))
 			throw new IllegalArgumentException("Dimension Generator must be of Type: " + InstanceChunkGenerator.class);
-		location = ResourceKey.create(Registry.DIMENSION_REGISTRY, loc.location());
+		location = ResourceKey.create(Registries.DIMENSION, loc.location());
 		this.dimension = dimension;
 	}
 

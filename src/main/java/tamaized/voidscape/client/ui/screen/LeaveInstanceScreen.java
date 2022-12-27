@@ -15,15 +15,15 @@ public class LeaveInstanceScreen extends Screen {
 
 	@Override
 	protected void init() {
-		this.addRenderableWidget(new Button(this.width / 2 - 170, this.height / 4 + 72, 150, 20, Component.translatable("Yes"), (button1_) -> {
+		this.addRenderableWidget(Button.builder(Component.translatable("Yes"), (button1_) -> {
 			if (minecraft.player != null) {
 				Voidscape.NETWORK.sendToServer(new ServerPacketLeaveInstance());
 			}
 			this.minecraft.setScreen(null);
-		}));
-		this.addRenderableWidget(new Button(this.width / 2 + 20, this.height / 4 + 72, 150, 20, Component.translatable("No"), (button1_) -> {
+		}).bounds(this.width / 2 - 170, this.height / 4 + 72, 150, 20).build());
+		this.addRenderableWidget(Button.builder(Component.translatable("No"), (button1_) -> {
 			this.minecraft.setScreen(null);
-		}));
+		}).bounds(this.width / 2 + 20, this.height / 4 + 72, 150, 20).build());
 	}
 
 	@Override

@@ -38,37 +38,25 @@ public class DutyScreen extends TurmoilScreen {
 		List<Duties.Duty> filtered = Duties.duties().stream().filter(duty -> duty.progression().ordinal() <= data.getProgression().ordinal()).collect(Collectors.toList());
 		for (int index = 0; index < filtered.size(); index++) {
 			Duties.Duty duty = filtered.get(index);
-			addRenderableWidget(new Button(
-
-					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * index,
-
-					buttonWidth,
-
-					buttonHeight,
-
+			addRenderableWidget(Button.builder(
 					duty.display(),
-
 					button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
-
-			));
+			).bounds(
+					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * index,
+					buttonWidth,
+					buttonHeight
+			).build());
 		}
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"), // FIXME: localizae
-
 				button -> minecraft.setScreen(new MainScreen())
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	@Override

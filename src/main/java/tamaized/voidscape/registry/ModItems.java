@@ -34,7 +34,7 @@ import java.util.UUID;
 public class ModItems implements RegistryClass {
 
 	static class ItemProps {
-		static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(() -> new Item.Properties().tab(RegUtil.creativeTab()));
+		static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(Item.Properties::new);
 		static final RegUtil.ItemProps LAVA_IMMUNE = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
 	}
 

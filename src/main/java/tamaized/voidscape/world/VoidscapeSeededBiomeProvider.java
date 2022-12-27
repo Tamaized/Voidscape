@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -48,19 +51,20 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 
 	);
 	public static final Codec<VoidscapeSeededBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.
-			fieldOf("seed").stable().orElseGet(() -> HackyWorldGen.seed).forGetter((obj) -> obj.seed), RegistryOps.
-			retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(provider -> provider.registry)).apply(instance, instance.stable(VoidscapeSeededBiomeProvider::new)));
+			fieldOf("seed").stable().orElseGet(() -> HackyWorldGen.seed).forGetter((obj) -> obj.seed), RegistryOps
+			.retrieveGetter(Registries.BIOME)).apply(instance, instance.stable(VoidscapeSeededBiomeProvider::new)));
 	private final Map<ResourceKey<Biome>, Integer> idCache = new HashMap<>();
-	private final Map<Integer, Holder<Biome>> biomeCache = new HashMap<>();
-	private final Registry<Biome> registry;
+	private final Map<Integer, Holder.Reference<Biome>> biomeCache = new HashMap<>();
+	private final HolderGetter<Biome> registry;
 	private final Layer genUpper;
 	private final Layer genMiddle;
 	private final Layer genLower;
 	private final long seed;
 	private final Random layerMergeRandom;
 
-	public VoidscapeSeededBiomeProvider(long seed, Registry<Biome> registryIn) {
-		super(BIOMES.stream().map(registryIn::getHolder).filter(Optional::isPresent).map(Optional::get));
+	public VoidscapeSeededBiomeProvider(long seed, HolderGetter<Biome> registryIn) {
+		super(BIOMES.stream().map(registryIn::get).filter(Optional::isPresent).map(Optional::get));
+		BIOMES.forEach(this::getBiomeId); // Allocate IDs
 		this.seed = seed;
 		layerMergeRandom = new Random(seed);
 		registry = registryIn;
@@ -73,16 +77,21 @@ public class VoidscapeSeededBiomeProvider extends BiomeSource {
 		Integer id = idCache.get(biome);
 		if (id != null)
 			return id;
-		id = registry.getId(registry.get(biome));
+		id = idCache.size();
 		idCache.put(biome, id);
 		return id;
 	}
 
+	private Optional<ResourceKey<Biome>> fromId(int id) {
+		return idCache.entrySet().stream().filter(e -> e.getValue() == id).map(Map.Entry::getKey).findAny();
+	}
+
 	public Holder<Biome> getBiome(int id) {
-		Optional<Holder<Biome>> biome = Optional.ofNullable(biomeCache.get(id));
+		Optional<Holder.Reference<Biome>> biome = Optional.ofNullable(biomeCache.get(id));
 		if (biome.isPresent())
 			return biome.get();
-		biome = registry.getHolder(id);
+		Optional<ResourceKey<Biome>> key = fromId(id);
+		biome = key.flatMap(registry::get);
 		if (biome.isEmpty())
 			throw new IllegalStateException("Unknown biome id emitted by layers: " + id);
 		biomeCache.put(id, biome.get());

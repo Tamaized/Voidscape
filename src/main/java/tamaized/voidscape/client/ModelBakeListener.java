@@ -62,8 +62,8 @@ public class ModelBakeListener {
 		List<String> extras = new ArrayList<>();
 		extras.add("");
 		extras.addAll(Arrays.asList(extra));
-		String location = REMAPPER.getOrDefault(object.getId(), object.getId()).toString();
-		extras.forEach(e -> list.add(new ModelResourceLocation(location.concat(e), loc)));
+		ResourceLocation location = REMAPPER.getOrDefault(object.getId(), object.getId());
+		extras.forEach(e -> list.add(new ModelResourceLocation(location.getNamespace(), location.getPath().concat(e), loc)));
 	}
 
 	@SubscribeEvent
@@ -72,7 +72,7 @@ public class ModelBakeListener {
 	}
 
 	@SubscribeEvent
-	public static void modelBake(ModelEvent.BakingCompleted event) {
+	public static void modelBake(ModelEvent.ModifyBakingResult event) {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
@@ -158,7 +158,7 @@ public class ModelBakeListener {
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
-								if (quad.getSprite().getName().getPath().contains("_overlay")) {
+								if (quad.getSprite().atlasLocation().getPath().contains("_overlay")) {
 									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
 									quad.shade = false;
 								}

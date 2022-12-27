@@ -31,21 +31,21 @@ import java.util.concurrent.Executor;
 
 public class InstanceChunkGenerator extends ChunkGenerator {
 
-	public static final Codec<InstanceChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> commonCodec(p_236091_0_).and(p_236091_0_.
+	public static final Codec<InstanceChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> p_236091_0_.
 			group(BiomeSource.CODEC.
 					fieldOf("biome_source").
 					forGetter(ChunkGenerator::getBiomeSource), ResourceLocation.CODEC.
 					fieldOf("snapshot").
 					forGetter(InstanceChunkGenerator::snapshot), ResourceLocation.CODEC.
 					fieldOf("instance_group").
-					forGetter(InstanceChunkGenerator::group))).
+					forGetter(InstanceChunkGenerator::group)).
 			apply(p_236091_0_, p_236091_0_.stable(InstanceChunkGenerator::new)));
 
 	private final ResourceLocation snapshot;
 	private final ResourceLocation group;
 
-	private InstanceChunkGenerator(Registry<StructureSet> p_209112_, BiomeSource biomeProvider1, ResourceLocation snapshot, ResourceLocation group) {
-		super(p_209112_, Optional.empty(), biomeProvider1);
+	private InstanceChunkGenerator(BiomeSource biomeProvider1, ResourceLocation snapshot, ResourceLocation group) {
+		super(biomeProvider1);
 		this.snapshot = snapshot;
 		this.group = group;
 	}

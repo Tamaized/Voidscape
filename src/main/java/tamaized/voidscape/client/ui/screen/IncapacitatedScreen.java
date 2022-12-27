@@ -24,13 +24,13 @@ public class IncapacitatedScreen extends Screen {
 	@Override
 	protected void init() {
 		this.delayTicker = 0;
-		this.addRenderableWidget(new Button(this.width / 2 - 100, this.height / 4 + 72, 200, 20, Component.translatable("Succumb to death"), (button1_) -> {
+		this.addRenderableWidget(Button.builder(Component.translatable("Succumb to death"), (button1_) -> {
 			if (minecraft.player != null) {
 				Voidscape.NETWORK.sendToServer(new ServerPacketSuccumbDeath());
 				minecraft.player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilTracked).ifPresent(data -> data.incapacitated = false));
 			}
 			this.minecraft.setScreen(null);
-		}));
+		}).bounds(this.width / 2 - 100, this.height / 4 + 72, 200, 20).build());
 		this.renderables.stream().filter(AbstractWidget.class::isInstance).map(AbstractWidget.class::cast).forEach(widget -> widget.active = false);
 	}
 

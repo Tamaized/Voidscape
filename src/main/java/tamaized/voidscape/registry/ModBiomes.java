@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -39,7 +40,7 @@ public class ModBiomes implements RegistryClass {
 				generationSettings(BiomeGenerationSettings.EMPTY).
 				temperatureAdjustment(Biome.TemperatureModifier.NONE).
 				build());
-		return ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Voidscape.MODID, id));
+		return ResourceKey.create(Registries.BIOME, new ResourceLocation(Voidscape.MODID, id));
 	}
 
 	@Override

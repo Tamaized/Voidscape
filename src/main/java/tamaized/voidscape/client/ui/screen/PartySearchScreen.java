@@ -37,33 +37,17 @@ public class PartySearchScreen extends TurmoilScreen {
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Find Party"), // FIXME: localize
-
 				button -> minecraft.setScreen(new PartyListScreen(duty, type))
-
-		));
-		addRenderableWidget(new Button(
-
+		).bounds(
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
-
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
 				buttonWidth,
-
-				buttonHeight,
-
+				buttonHeight
+		).build());
+		addRenderableWidget(Button.builder(
 				Component.translatable("Start Party"),
-
 				button -> {
 					if (minecraft.player == null)
 						return;
@@ -71,23 +55,21 @@ public class PartySearchScreen extends TurmoilScreen {
 					ClientPartyInfo.update(minecraft.player.getUUID(), new ArrayList<>(), "", Party.maxMembers(type), duty, type, false);
 					minecraft.setScreen(new FormPartyScreen(duty, type));
 				}
-
-		));
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
 				buttonWidth,
-
-				buttonHeight,
-
+				buttonHeight
+		).build());
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-
 				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 	}
 
 	@Override

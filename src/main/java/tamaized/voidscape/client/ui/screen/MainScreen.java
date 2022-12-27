@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.util.LazyOptional;
 import tamaized.voidscape.Voidscape;
@@ -22,11 +23,14 @@ import tamaized.voidscape.turmoil.TurmoilStats;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MainScreen extends TurmoilScreen {
 
 	private long tick;
 	private Button reset;
+	private Function<Button, Tooltip> resetTooltip;
 
 	public MainScreen() {
 		super(Component.translatable(Voidscape.MODID.concat(".screen.main")));
@@ -43,74 +47,46 @@ public class MainScreen extends TurmoilScreen {
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
-		Button teleport = new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
-
-				buttonWidth,
-
-				buttonHeight,
-
+		Button teleport = Button.builder(
 				Component.translatable("Enter the Void"), // FIXME: localize
-
 				button -> {
 					if (minecraft.player != null)
 						minecraft.player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).ifPresent(Turmoil::clientTeleport));
 				}
-
-		);
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
+				buttonWidth,
+				buttonHeight
+		).build();
 		teleport.active = !Voidscape.checkForVoidDimension(minecraft.level);
 		addRenderableWidget(teleport);
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Voidic Powers"), // FIXME: localize
-
 				button -> {
 					if (data != null && data.getProgression() == Progression.MidTutorial)
 						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilProgressTutorial());
 					minecraft.setScreen(new SkillsScreen());
 				}
-
-		));
-		Button spells = new Button(
-
+		).bounds(
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
-
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight,
 				buttonWidth,
-
-				buttonHeight,
-
+				buttonHeight
+		).build());
+		Button spells = Button.builder(
 				Component.translatable("Configure Voidic Spells"), // FIXME: localize
-
 				button -> minecraft.setScreen(new SpellsScreen())
-
-		);
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 2,
+				buttonWidth,
+				buttonHeight
+		).build();
 		spells.active = data != null && data.hasCoreSkill();
 		addRenderableWidget(spells);
-		reset = new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 3,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		reset = Button.builder(
 				Component.translatable("Reset Voidic Skills"), // FIXME: localize
-
 				button -> {
 					if (button.active) {
 						Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilResetSkills());
@@ -118,62 +94,55 @@ public class MainScreen extends TurmoilScreen {
 						if (data != null && stats != null)
 							data.resetSkills(stats);
 					}
-				},
-
-				(button, matrixStack, x, y) -> {
-					if (button.active || data == null || !data.hasCoreSkill())
-						return;
-					// FIXME: localize
-					boolean min = data.getResetCooldown() > 1200;
-					String text = data.getResetCooldown() > 0 ? ("%s %s Remaining before you can Reset again") : !minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
-					if (!text.isEmpty())
-						this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(Component.translatable(
-
-								text
-
-								, data.getResetCooldown() / (min ? 1200 : 20), min ? "Minutes" : "Seconds"), Math.max(this.width / 2 - 43, 170)), x, y);
 				}
-
-		);
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 3,
+				buttonWidth,
+				buttonHeight
+		).build();
+		resetTooltip = button -> {
+			if (button.active || data == null || !data.hasCoreSkill())
+				return null;
+			// FIXME: localize
+			boolean min = data.getResetCooldown() > 1200;
+			String text = data.getResetCooldown() > 0 ? ("%s %s Remaining before you can Reset again") :
+					!minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get()) ? "Voidic Crystal missing from Inventory" : "";
+			if (!text.isEmpty())
+				return Tooltip.create(Component.translatable(text, data.getResetCooldown() / (min ? 1200 : 20), min ? "Minutes" : "Seconds"));
+			return null;
+		};
 		reset.active = data != null && data.hasCoreSkill() && data.getResetCooldown() <= 0 && minecraft.player.inventory.contains(ServerPacketTurmoilResetSkills.VOIDIC_CRYSTAL.get());
 		addRenderableWidget(reset);
-		Button instances = new Button(
-
-				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
-
-				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 4,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		Button instances = Button.builder(
 				Component.translatable("Duties"), // FIXME: localize
-
 				button -> {
 					if (ClientPartyInfo.host == null)
 						minecraft.setScreen(new DutyScreen());
 					else
 						minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty, ClientPartyInfo.type));
 				}
-
-		);
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
+				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * 4,
+				buttonWidth,
+				buttonHeight
+		).build();
 		instances.active = data != null && data.getProgression().ordinal() >= Progression.Psychosis.ordinal();
 		addRenderableWidget(instances);
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Close"), // FIXME: localize
-
 				button -> onClose()
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
+	}
 
-		));
+	private void updateTooltips() {
+		reset.setTooltip(resetTooltip.apply(reset));
 	}
 
 	@Override
@@ -189,6 +158,7 @@ public class MainScreen extends TurmoilScreen {
 			onClose();
 			return;
 		}
+		updateTooltips();
 		RenderSystem.enableBlend();
 		{
 

@@ -9,7 +9,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -128,7 +128,7 @@ public class RenderTurmoil {
 								RenderSystem.setShaderColor(0.5F, 0F, 1F, 1F);
 								event.getPoseStack().pushPose();
 								event.getPoseStack().translate(x, l, 0);
-								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().mulPose(Axis.ZP.rotationDegrees(90));
 								event.getPoseStack().translate(-x, -l, 0);
 								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
 								if (k > 0) {
@@ -180,7 +180,7 @@ public class RenderTurmoil {
 								RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 								event.getPoseStack().pushPose();
 								event.getPoseStack().translate(x, l, 0);
-								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().mulPose(Axis.ZP.rotationDegrees(90));
 								event.getPoseStack().translate(-x, -l, 0);
 								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
 								if (k > 0) {
@@ -208,7 +208,7 @@ public class RenderTurmoil {
 								RenderSystem.setShaderColor(1F, 0F, 0F, 1F);
 								event.getPoseStack().pushPose();
 								event.getPoseStack().translate(x, l, 0);
-								event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(90));
+								event.getPoseStack().mulPose(Axis.ZP.rotationDegrees(90));
 								event.getPoseStack().translate(-x, -l, 0);
 								Minecraft.getInstance().gui.blit(event.getPoseStack(), x, l, 0, 64, 25, 5);
 								if (k > 0) {

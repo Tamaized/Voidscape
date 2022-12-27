@@ -7,13 +7,14 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.Mth;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ClientUtil;
@@ -47,10 +48,6 @@ public class SkillsScreen extends TurmoilScreen {
 		Collections.addAll(LAYOUTS, layouts);
 	}
 
-	private final Button.OnTooltip tooltip = (button, matrixStack, x, y) -> {
-		if (button instanceof SkillButton && GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
-			this.renderTooltip(matrixStack, Objects.requireNonNull(this.minecraft).font.split(((SkillButton) button).getTooltip(), Math.max(this.width / 2 - 43, 170)), x, y);
-	};
 	private final List<Data> lines = new ArrayList<>();
 	private int dragX;
 	private int dragY;
@@ -77,8 +74,8 @@ public class SkillsScreen extends TurmoilScreen {
 			dragY += mouseY - lastY;
 		}
 		renderables.stream().filter(SkillButton.class::isInstance).map(SkillButton.class::cast).forEach(button -> {
-			button.x += dragX;
-			button.y += dragY;
+			button.setX(button.getX() + dragX);
+			button.setY(button.getY() + dragY);
 			button.active = data.canClaim(button.getSkill());
 		});
 		Shaders.LINES.invokeThenClear(() -> {
@@ -137,28 +134,22 @@ public class SkillsScreen extends TurmoilScreen {
 		TriConsumer<TurmoilSkill, Integer, Integer> add = (skill, x, y) -> addSkill(data, skill, x, y);
 		LAYOUTS.forEach(layout -> layout.fill(centerX, centerY, add));
 
-		addRenderableWidget(new Button(
-
-				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
-
-				window.getGuiScaledHeight() - buttonHeight - 5,
-
-				buttonWidth,
-
-				buttonHeight,
-
+		addRenderableWidget(Button.builder(
 				Component.translatable("Back"), // FIXME: localize
-
 				button -> minecraft.setScreen(new MainScreen())
-
-		));
+		).bounds(
+				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
+				window.getGuiScaledHeight() - buttonHeight - 5,
+				buttonWidth,
+				buttonHeight
+		).build());
 
 		lines.clear();
 		renderables.stream().filter(SkillButton.class::isInstance).map(SkillButton.class::cast).forEach(button -> {
 			List<TurmoilSkill> req = button.getSkill().getRequired();
 			if (!req.isEmpty()) {
 				renderables.stream().filter(SkillButton.class::isInstance).map(SkillButton.class::cast).filter(b -> req.contains(b.getSkill())).
-						forEach(b -> lines.add(new Data(new MutableVec2i(button.x + buttonHeight / 2, button.y + buttonHeight / 2), new MutableVec2i(b.x + buttonHeight / 2, b.y + buttonHeight / 2), button, b)));
+						forEach(b -> lines.add(new Data(new MutableVec2i(button.getX() + buttonHeight / 2, button.getY() + buttonHeight / 2), new MutableVec2i(b.getX() + buttonHeight / 2, b.getY() + buttonHeight / 2), button, b)));
 			}
 		});
 		Collections.shuffle(lines);
@@ -179,7 +170,7 @@ public class SkillsScreen extends TurmoilScreen {
 					return;
 				data.claimSkill(skill);
 				Voidscape.NETWORK.sendToServer(new ServerPacketTurmoilSkillClaim(skill.getID()));
-			}, tooltip);
+			}, Button.DEFAULT_NARRATION);
 			this.skill = skill;
 			this.data = data;
 			active = !skill.disabled();
@@ -189,8 +180,15 @@ public class SkillsScreen extends TurmoilScreen {
 			return skill;
 		}
 
-		FormattedText getTooltip() {
+		Component getTooltip() {
 			return skill.getTitle().copy().append("\n\n").append(skill.getDescription());
+		}
+
+		private void updateTooltipData() {
+			if (GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_ALT) != GLFW.GLFW_PRESS)
+				setTooltip(Tooltip.create(getTooltip()));
+			else
+				setTooltip(null);
 		}
 
 		@Override
@@ -204,15 +202,15 @@ public class SkillsScreen extends TurmoilScreen {
 			final float alpha = 1.0F;
 			ClientUtil.bindTexture(skill.getTexture());
 			Matrix4f matrix = stack.last().pose();
-			buffer.vertex(matrix, x, y, getBlitOffset()).uv(0, 0).color(color, activeColor, activeColor, alpha).endVertex();
-			buffer.vertex(matrix, x, y + height, getBlitOffset()).uv(0, 1).color(color, activeColor, activeColor, alpha).endVertex();
-			buffer.vertex(matrix, x + width, y + height, getBlitOffset()).uv(1, 1).color(color, activeColor, activeColor, alpha).endVertex();
-			buffer.vertex(matrix, x + width, y, getBlitOffset()).uv(1, 0).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, getX(), getY(), getBlitOffset()).uv(0, 0).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, getX(), getY() + height, getBlitOffset()).uv(0, 1).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, getX() + width, getY() + height, getBlitOffset()).uv(1, 1).color(color, activeColor, activeColor, alpha).endVertex();
+			buffer.vertex(matrix, getX() + width, getY(), getBlitOffset()).uv(1, 0).color(color, activeColor, activeColor, alpha).endVertex();
 			RenderSystem.enableDepthTest();
 			Shaders.WRAPPED_POS_TEX_COLOR.invokeThenEndTesselator();
 			RenderSystem.disableDepthTest();
 			if (this.isHoveredOrFocused())
-				this.renderToolTip(stack, mouseX, mouseY);
+				updateTooltipData();
 		}
 	}
 

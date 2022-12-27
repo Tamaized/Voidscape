@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -12,8 +13,8 @@ import tamaized.voidscape.world.structures.NullStructure;
 
 public class ModStructures implements RegistryClass {
 
-	public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = RegUtil.create(Registry.STRUCTURE_TYPE_REGISTRY);
-	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = RegUtil.create(Registry.STRUCTURE_PIECE_REGISTRY);
+	public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = RegUtil.create(Registries.STRUCTURE_TYPE);
+	public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = RegUtil.create(Registries.STRUCTURE_PIECE);
 
 	public static class StructureTypes {
 
