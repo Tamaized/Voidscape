@@ -16,7 +16,7 @@ function initializeCoreMod() {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.resources.model.ModelBakery',
                 'methodName': '<init>',
-                'methodDesc': '(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;I)V'
+                'methodDesc': '(Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;Ljava/util/Map;Ljava/util/Map;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
@@ -29,7 +29,7 @@ function initializeCoreMod() {
 
                         node.getOpcode() === Opcodes.GETSTATIC &&
 
-                        node.name === ASM.mapField("f_122827_") // ITEM
+                        node.name === ASM.mapField("f_257033_") // ITEM
 
                     )
                         lastInstruction = node;
@@ -48,22 +48,34 @@ function initializeCoreMod() {
                                 )
                             )
                         );
-                instructions.insertBefore(
-                    ASM.findFirstMethodCall(methodNode, ASM.MethodType.STATIC,
-                        "com/google/common/collect/Sets",
-                        "newLinkedHashSet",
-                        "()Ljava/util/LinkedHashSet;"),
-                    ASM.listOf(
-                        new VarInsnNode(Opcodes.ALOAD, 0),
-                        new MethodInsnNode(
-                            Opcodes.INVOKESTATIC,
-                            'tamaized/voidscape/asm/ASMHooks',
-                            'cleanModels',
-                            '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
-                            false
+                lastInstruction = null;
+                for (var index = instructions.size() - 1; index > 0; index--) {
+                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
+                    if (lastInstruction == null &&
+
+                        node instanceof MethodInsnNode &&
+
+                        node.getOpcode() === Opcodes.INVOKESTATIC &&
+
+                        node.name === "newHashSet"
+
+                    )
+                        lastInstruction = node;
+                }
+                if (lastInstruction != null)
+                    instructions.insertBefore(
+                        lastInstruction,
+                        ASM.listOf(
+                            new VarInsnNode(Opcodes.ALOAD, 0),
+                            new MethodInsnNode(
+                                Opcodes.INVOKESTATIC,
+                                'tamaized/voidscape/asm/ASMHooks',
+                                'cleanModels',
+                                '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
+                                false
+                                )
                             )
-                        )
-                    );
+                        );
                 return methodNode;
             }
         }

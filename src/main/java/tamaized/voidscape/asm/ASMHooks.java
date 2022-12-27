@@ -29,7 +29,6 @@ import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.server.level.progress.ChunkProgressListener;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.thread.BlockableEventLoop;
@@ -77,6 +76,7 @@ import tamaized.voidscape.world.InstanceChunkGenerator;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -222,8 +222,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link Player#attack(Entity)}<br>
-	 * [AFTER INVOKEVIRTUAL {@link Player#getAttackStrengthScale(float)}]
+	 * {@link net.minecraft.world.entity.player.Player#attack(Entity)}<br>
+	 * [AFTER INVOKEVIRTUAL {@link net.minecraft.world.entity.player.Player#getAttackStrengthScale(float)}]
 	 */
 	public static synchronized float getAttackStrengthScale(float o) {
 		PlayerEntity_getAttackStrengthScale = o;
@@ -293,8 +293,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(ResourceManager, BlockColors, ProfilerFiller, int)}<br>
-	 * [BEFORE FIRST GETSTATIC {@link net.minecraft.core.Registry#ITEM)]
+	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(BlockColors, ProfilerFiller, Map, Map)}<br>
+	 * [BEFORE FIRST GETSTATIC {@link net.minecraft.core.registries.BuiltInRegistries#ITEM)}]
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static void redirectModels(ModelBakery bakery) {
@@ -307,8 +307,8 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(ResourceManager, BlockColors, ProfilerFiller, int)}<br>
-	 * [BEFORE FIRST INVOKESTATIC {@link com.google.common.collect.Sets#newLinkedHashSet()}]
+	 * {@link net.minecraft.client.resources.model.ModelBakery#ModelBakery(BlockColors, ProfilerFiller, Map, Map)}<br>
+	 * [BEFORE LAST INVOKESTATIC {@link com.google.common.collect.Sets#newHashSet()}]
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static void cleanModels(ModelBakery bakery) {
