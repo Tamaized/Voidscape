@@ -49,7 +49,7 @@
 			},
 			{
 			  "function": "minecraft:set_nbt",
-			  "tag": "{\"augment\": \"null\"}"
+			  "tag": "{\"voidscape\": {\"augment\": \"null\"}}"
 			}
 		  ],
 		  "name": "voidscape:fruit"
@@ -83,7 +83,7 @@
 			},
 			{
 			  "function": "minecraft:set_nbt",
-			  "tag": "{\"augment\": \"overworld\"}"
+			  "tag": "{\"voidscape\": {\"augment\": \"overworld\"}}"
 			}
 		  ],
 		  "name": "voidscape:fruit"
@@ -117,7 +117,7 @@
 			},
 			{
 			  "function": "minecraft:set_nbt",
-			  "tag": "{\"augment\": \"nether\"}"
+			  "tag": "{\"voidscape\": {\"augment\": \"nether\"}}"
 			}
 		  ],
 		  "name": "voidscape:fruit"
@@ -151,7 +151,7 @@
 			},
 			{
 			  "function": "minecraft:set_nbt",
-			  "tag": "{\"augment\": \"end\"}"
+			  "tag": "{\"voidscape\": {\"augment\": \"end\"}}"
 			}
 		  ],
 		  "name": "voidscape:fruit"

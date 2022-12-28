@@ -78,6 +78,7 @@ public class ModItems implements RegistryClass {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
 				CompoundTag tag = stack.getTag();
+				tag = tag == null ? null : tag.getCompound(Voidscape.MODID);
 				BlockEtherealPlant.State state = BlockEtherealPlant.State.VOID;
 				if (tag != null)
 					state = switch (tag.getString("augment")) {

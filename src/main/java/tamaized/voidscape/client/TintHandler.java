@@ -3,6 +3,7 @@ package tamaized.voidscape.client;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.BlockEtherealPlant;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
@@ -28,6 +29,7 @@ public final class TintHandler {
 		bus.addListener((Consumer<RegisterColorHandlersEvent.Item>) event -> {
 			event.register((stack, color) -> {
 				CompoundTag tag = stack.getTag();
+				tag = tag == null ? null : tag.getCompound(Voidscape.MODID);
 				if (tag == null)
 					return 0x872BFF;
 				return switch (tag.getString("augment")) {

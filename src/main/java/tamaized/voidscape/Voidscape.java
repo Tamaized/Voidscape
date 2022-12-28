@@ -79,6 +79,7 @@ import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.registry.ModCreativeTabs;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModDataSerializers;
 import tamaized.voidscape.registry.ModEffects;
@@ -152,6 +153,7 @@ public class Voidscape {
 				ModAttributes::new,
 				ModBiomes::new,
 				ModBlocks::new,
+				ModCreativeTabs::new,
 				ModDamageSource::new,
 				ModDataSerializers::new,
 				ModEffects::new,
