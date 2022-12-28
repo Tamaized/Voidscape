@@ -1,6 +1,7 @@
 package tamaized.voidscape.client;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.Voidscape;
@@ -29,6 +30,19 @@ public final class TintHandler {
 		bus.addListener((Consumer<RegisterColorHandlersEvent.Item>) event -> {
 			event.register((stack, color) -> {
 				CompoundTag tag = stack.getTag();
+				tag = tag == null ? null : tag.getCompound(BlockItem.BLOCK_STATE_TAG);
+				if (tag == null)
+					return 0x872BFF;
+				return switch (tag.getString("state")) {
+					default -> 0x872BFF;
+					case "null" -> 0xFFFFFF;
+					case "overworld" -> 0x88BF40;
+					case "nether" -> 0xBF4040;
+					case "end" -> 0xBF40A6;
+				};
+			}, ModBlocks.PLANT_ITEM.get());
+			event.register((stack, color) -> {
+				CompoundTag tag = stack.getTag();
 				tag = tag == null ? null : tag.getCompound(Voidscape.MODID);
 				if (tag == null)
 					return 0x872BFF;
@@ -40,7 +54,6 @@ public final class TintHandler {
 					case "end" -> 0xBF40A6;
 				};
 			}, ModItems.FRUIT.get());
-			event.register((stack, color) -> 0x872BFF, ModBlocks.PLANT_ITEM.get());
 		});
 	}
 

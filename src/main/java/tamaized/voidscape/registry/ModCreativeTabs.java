@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,6 +29,10 @@ public class ModCreativeTabs implements RegistryClass {
 						output.accept(ModBlocks.NULL_BLACK_ITEM.get());
 						output.accept(ModBlocks.NULL_WHITE_ITEM.get());
 						output.accept(ModBlocks.PLANT_ITEM.get());
+						output.accept(makePlant(BlockEtherealPlant.State.NULL));
+						output.accept(makePlant(BlockEtherealPlant.State.OVERWORLD));
+						output.accept(makePlant(BlockEtherealPlant.State.NETHER));
+						output.accept(makePlant(BlockEtherealPlant.State.END));
 						output.accept(ModItems.FRUIT.get());
 						output.accept(makeFruit(BlockEtherealPlant.State.NULL));
 						output.accept(makeFruit(BlockEtherealPlant.State.OVERWORLD));
@@ -59,6 +64,16 @@ public class ModCreativeTabs implements RegistryClass {
 						output.accept(ModArmors.CORRUPT_BOOTS.get());
 					}));
 		});
+	}
+
+	private ItemStack makePlant(BlockEtherealPlant.State state) {
+		CompoundTag tag = new CompoundTag();
+		CompoundTag stateTag = new CompoundTag();
+		stateTag.putString("state", state.getSerializedName());
+		tag.put(BlockItem.BLOCK_STATE_TAG, stateTag);
+		ItemStack stack = new ItemStack(ModBlocks.PLANT.get());
+		stack.setTag(tag);
+		return stack;
 	}
 
 	private ItemStack makeFruit(BlockEtherealPlant.State state) {
