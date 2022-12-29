@@ -48,10 +48,8 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 		packet.writeInt(list.size());
 		list.forEach(party -> {
 			packet.writeVarInt(Duties.getID(party.duty()));
-			packet.writeVarInt(party.instanceType().ordinal());
 			packet.writeBoolean(party.hasPassword());
 			packet.writeVarInt(party.size());
-			packet.writeVarInt(party.maxMembers());
 			packet.writeUUID(party.host().getUUID());
 		});
 	}
@@ -63,10 +61,8 @@ public class ClientPacketSendPartyList implements NetworkMessages.IMessage<Clien
 		for (int i = 0; i < len; i++) {
 			ClientPartyInfo.Party party = new ClientPartyInfo.Party();
 			party.duty = Duties.fromID(packet.readVarInt());
-			party.type = Instance.InstanceType.fromOrdinal(packet.readVarInt());
 			party.password = packet.readBoolean();
 			party.members = packet.readVarInt();
-			party.max = packet.readVarInt();
 			party.network_host = packet.readUUID();
 			data.add(party);
 		}

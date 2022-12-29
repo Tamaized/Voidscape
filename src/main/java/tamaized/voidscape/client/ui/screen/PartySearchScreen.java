@@ -16,14 +16,12 @@ import java.util.ArrayList;
 public class PartySearchScreen extends TurmoilScreen {
 
 	private final Duties.Duty duty;
-	private final Instance.InstanceType type;
 
 	private long tick;
 
-	public PartySearchScreen(Duties.Duty duty, Instance.InstanceType type) {
+	public PartySearchScreen(Duties.Duty duty) {
 		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
-		this.type = type;
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class PartySearchScreen extends TurmoilScreen {
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
 		addRenderableWidget(Button.builder(
 				Component.translatable("Find Party"), // FIXME: localize
-				button -> minecraft.setScreen(new PartyListScreen(duty, type))
+				button -> minecraft.setScreen(new PartyListScreen(duty))
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 				(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F),
@@ -47,13 +45,13 @@ public class PartySearchScreen extends TurmoilScreen {
 				buttonHeight
 		).build());
 		addRenderableWidget(Button.builder(
-				Component.translatable("Start Party"),
+				Component.translatable("Form Party"),
 				button -> {
 					if (minecraft.player == null)
 						return;
-					Voidscape.NETWORK.sendToServer(new ServerPacketCreateParty(duty, type));
-					ClientPartyInfo.update(minecraft.player.getUUID(), new ArrayList<>(), "", Party.maxMembers(type), duty, type, false);
-					minecraft.setScreen(new FormPartyScreen(duty, type));
+					Voidscape.NETWORK.sendToServer(new ServerPacketCreateParty(duty));
+					ClientPartyInfo.update(minecraft.player.getUUID(), new ArrayList<>(), "", duty, false);
+					minecraft.setScreen(new FormPartyScreen(duty));
 				}
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
@@ -63,7 +61,7 @@ public class PartySearchScreen extends TurmoilScreen {
 		).build());
 		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
+				button -> minecraft.setScreen(new DutyScreen())
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 				window.getGuiScaledHeight() - buttonHeight - 5,
@@ -74,8 +72,12 @@ public class PartySearchScreen extends TurmoilScreen {
 
 	@Override
 	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host != null) {
+		if (minecraft == null || minecraft.level == null || minecraft.player == null) {
 			onClose();
+			return;
+		}
+		if (ClientPartyInfo.host != null) {
+			minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty));
 			return;
 		}
 		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);

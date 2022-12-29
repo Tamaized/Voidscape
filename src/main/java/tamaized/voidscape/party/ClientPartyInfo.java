@@ -28,9 +28,7 @@ public class ClientPartyInfo {
 	public static GameProfile host;
 	public static List<GameProfile> members = new ArrayList<>();
 	public static String password = "";
-	public static int max;
 	public static Duties.Duty duty;
-	public static Instance.InstanceType type;
 	public static boolean reserving;
 	public static Component error;
 
@@ -38,10 +36,8 @@ public class ClientPartyInfo {
 
 	public static class Party {
 		public Duties.Duty duty;
-		public Instance.InstanceType type;
 		public boolean password;
 		public int members;
-		public int max;
 		public GameProfile host;
 		public UUID network_host;
 	}
@@ -52,13 +48,11 @@ public class ClientPartyInfo {
 		host = null;
 		members.clear();
 		password = "";
-		max = 0;
 		duty = null;
-		type = null;
 		reserving = false;
 	}
 
-	public static void update(UUID host, List<UUID> members, String password, int max, Duties.Duty duty, Instance.InstanceType type, boolean reserving) {
+	public static void update(UUID host, List<UUID> members, String password, Duties.Duty duty, boolean reserving) {
 		reset(false);
 		if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null)
 			return;
@@ -74,9 +68,7 @@ public class ClientPartyInfo {
 			ClientPartyInfo.members.add(player.getProfile());
 		}
 		ClientPartyInfo.password = password;
-		ClientPartyInfo.max = max;
 		ClientPartyInfo.duty = duty;
-		ClientPartyInfo.type = type;
 		ClientPartyInfo.reserving = reserving;
 	}
 

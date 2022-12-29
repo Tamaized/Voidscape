@@ -39,17 +39,15 @@ public class FormPartyScreen extends TurmoilScreen {
 	private static final int buttonHeight = 20;
 	private static final int spacingHeight = (int) (buttonHeight * 1.5F);
 	private final Duties.Duty duty;
-	private final Instance.InstanceType type;
 	private String oldPassword = "";
 	private String password = "";
 	private Button commence;
 	private EditBox passwordWidget;
 	private List<Button> kickMemberButtons = new ArrayList<>();
 
-	public FormPartyScreen(Duties.Duty duty, Instance.InstanceType type) {
+	public FormPartyScreen(Duties.Duty duty) {
 		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
-		this.type = type;
 	}
 
 	private static void quad(BufferBuilder buffer, float x, float y, float z, float w, float h, float r, float g, float b, float a) {
@@ -160,7 +158,7 @@ public class FormPartyScreen extends TurmoilScreen {
 		passwordWidget.setResponder(pass -> this.password = pass);
 		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-				button -> minecraft.setScreen(new PartySearchScreen(duty, type))
+				button -> minecraft.setScreen(new PartySearchScreen(duty))
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 				window.getGuiScaledHeight() - buttonHeight - 5,
@@ -182,8 +180,7 @@ public class FormPartyScreen extends TurmoilScreen {
 		passwordWidget.visible = ClientPartyInfo.host.getId().equals(minecraft.player.getUUID());
 		passwordWidget.active = !ClientPartyInfo.reserving;
 		passwordWidget.tick();
-		if (ClientPartyInfo.reserving || (ClientPartyInfo.members.size() != ClientPartyInfo.max - 1 && type != Instance.InstanceType.Unrestricted))
-			commence.active = false;
+		commence.active = !ClientPartyInfo.reserving;
 		if (!password.equals(oldPassword))
 			Voidscape.NETWORK.sendToServer(new ServerPacketSetPartyPassword(password));
 		oldPassword = password;
@@ -201,8 +198,12 @@ public class FormPartyScreen extends TurmoilScreen {
 
 	@Override
 	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host == null) {
+		if (minecraft == null || minecraft.level == null || minecraft.player == null) {
 			onClose();
+			return;
+		}
+		if (ClientPartyInfo.host == null) {
+			minecraft.setScreen(new MainScreen());
 			return;
 		}
 		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
@@ -213,8 +214,6 @@ public class FormPartyScreen extends TurmoilScreen {
 			font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, window.getGuiScaledHeight() - buttonHeight * 3 - 5, 0xFFFFFFFF);
 		text = duty.display().getString();
 		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
-		text = duty.isOnlyNormal() ? Instance.InstanceType.Normal.name() : type.name();
-		font.draw(p_230430_1_, text, window.getGuiScaledWidth() / 2F - font.width(text) / 2F, font.lineHeight + 12, 0xFFFFFFFF);
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		int x1 = (int) (window.getGuiScaledWidth() / 2F - 10 - buttonWidth);

@@ -120,7 +120,7 @@ public class MainScreen extends TurmoilScreen {
 					if (ClientPartyInfo.host == null)
 						minecraft.setScreen(new DutyScreen());
 					else
-						minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty, ClientPartyInfo.type));
+						minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty));
 				}
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),

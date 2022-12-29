@@ -35,12 +35,12 @@ public class DutyScreen extends TurmoilScreen {
 		final int buttonWidth = 180;
 		final int buttonHeight = 20;
 		final int spacingHeight = (int) (buttonHeight * 1.5F);
-		List<Duties.Duty> filtered = Duties.duties().stream().filter(duty -> duty.progression().ordinal() <= data.getProgression().ordinal()).collect(Collectors.toList());
+		List<Duties.Duty> filtered = Duties.duties().stream().filter(duty -> duty.progression().ordinal() <= data.getProgression().ordinal()).toList();
 		for (int index = 0; index < filtered.size(); index++) {
 			Duties.Duty duty = filtered.get(index);
 			addRenderableWidget(Button.builder(
 					duty.display(),
-					button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
+					button -> minecraft.setScreen(new PartySearchScreen(duty))
 			).bounds(
 					(int) (window.getGuiScaledWidth() / 4F - buttonWidth / 2F),
 					(int) (window.getGuiScaledHeight() / 4F - buttonHeight / 2F) + spacingHeight * index,
@@ -61,8 +61,12 @@ public class DutyScreen extends TurmoilScreen {
 
 	@Override
 	public void render(PoseStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-		if (minecraft == null || minecraft.level == null || minecraft.player == null || ClientPartyInfo.host != null) {
+		if (minecraft == null || minecraft.level == null || minecraft.player == null) {
 			onClose();
+			return;
+		}
+		if (ClientPartyInfo.host != null) {
+			minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty));
 			return;
 		}
 		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);

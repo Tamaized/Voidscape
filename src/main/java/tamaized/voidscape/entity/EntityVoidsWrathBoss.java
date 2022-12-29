@@ -61,7 +61,6 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 	public int aiTick;
 	public Entity lockonTarget;
 	private AITask<EntityVoidsWrathBoss> ai;
-	private Instance.InstanceType type;
 
 	public long glowTick;
 	private boolean lastGlow;
@@ -218,23 +217,7 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		type = Instance.InstanceType.fromOrdinal(tag.getCompound(Voidscape.MODID).getInt("instance") - 1);
-	}
-
-	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		CompoundTag nbt = new CompoundTag();
-		if (type != null)
-			nbt.putInt("instance", type.ordinal() + 1);
-		tag.put(Voidscape.MODID, nbt);
-	}
-
-	@Override
-	public void initInstanceType(Instance.InstanceType type) {
-		this.type = type;
+	public void initInstance() {
 		float hp = 100;
 		(ai = new Heal(boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F && boss.tickCount % (20 * 5) == 0 && boss.getRandom().nextInt(5) == 0))
 				.next(new AITask.RepeatedAITask<>((boss, ai) -> {

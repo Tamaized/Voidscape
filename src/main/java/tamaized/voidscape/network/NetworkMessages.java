@@ -49,7 +49,7 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketRequestPartyList.class, ServerPacketRequestPartyList::new);
 		registerMessage(network, ServerPacketRequestJoinParty.class, () -> new ServerPacketRequestJoinParty(null, null));
 		registerMessage(network, ServerPacketRequestPartyInfo.class, ServerPacketRequestPartyInfo::new);
-		registerMessage(network, ServerPacketCreateParty.class, () -> new ServerPacketCreateParty(null, null));
+		registerMessage(network, ServerPacketCreateParty.class, () -> new ServerPacketCreateParty(null));
 		registerMessage(network, ServerPacketCommenceDuty.class, ServerPacketCommenceDuty::new);
 		registerMessage(network, ServerPacketDisbandParty.class, ServerPacketDisbandParty::new);
 		registerMessage(network, ServerPacketRemovePartyMember.class, () -> new ServerPacketRemovePartyMember(0));

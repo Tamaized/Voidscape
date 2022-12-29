@@ -16,14 +16,14 @@ import java.util.List;
 
 public final class Instance {
 
+	public static final int MAX_PLAYERS = 8;
+
 	private final ResourceKey<Level> location;
 	private final LevelStem dimension;
 	public boolean locked;
 	public int tick;
 	private ServerLevel level;
 	private int unloadTick = 30 * 20;
-	private InstanceType type = InstanceType.Unrestricted;
-	private int maxPlayers = 1;
 	private List<Player> players = new ArrayList<>();
 	private boolean unloading;
 
@@ -40,24 +40,6 @@ public final class Instance {
 
 	public ResourceKey<Level> location() {
 		return location;
-	}
-
-	public Instance setType(InstanceType type) {
-		this.type = type;
-		return this;
-	}
-
-	public InstanceType type() {
-		return type;
-	}
-
-	public Instance maxPlayers(int a) {
-		maxPlayers = a;
-		return this;
-	}
-
-	public int maxPlayers() {
-		return maxPlayers;
 	}
 
 	public void init(ServerLevel level) {
@@ -84,7 +66,6 @@ public final class Instance {
 		locked = false;
 		tick = 0;
 		unloadTick++;
-		type = InstanceType.Unrestricted;
 		unloading = false;
 		Voidscape.LOGGER.info("Unloaded Instance: ".concat(this.location.location().toString()));
 	}
@@ -114,7 +95,7 @@ public final class Instance {
 	}
 
 	public void addPlayer(Player player) {
-		if ((unloadTick < 30 * 20 && !active()) || locked() || players.contains(player) || players.size() >= maxPlayers)
+		if ((unloadTick < 30 * 20 && !active()) || locked() || players.contains(player) || players.size() >= MAX_PLAYERS)
 			return;
 		if (!active() && !load())
 			return;
@@ -163,18 +144,6 @@ public final class Instance {
 		} else
 			unloadTick = 0;
 		tick++;
-	}
-
-	public enum InstanceType {
-		Unrestricted, Normal, Insane;
-		private static InstanceType[] VALUES = values();
-
-		@Nullable
-		public static InstanceType fromOrdinal(int ordinal) {
-			if (ordinal < 0 || ordinal >= VALUES.length)
-				return null;
-			return VALUES[ordinal];
-		}
 	}
 
 }

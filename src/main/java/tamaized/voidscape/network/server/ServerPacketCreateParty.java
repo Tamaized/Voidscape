@@ -18,21 +18,19 @@ import java.util.Optional;
 public class ServerPacketCreateParty implements NetworkMessages.IMessage<ServerPacketCreateParty> {
 
 	private Duties.Duty duty;
-	private Instance.InstanceType type;
 
-	public ServerPacketCreateParty(Duties.Duty duty, Instance.InstanceType type) {
+	public ServerPacketCreateParty(Duties.Duty duty) {
 		this.duty = duty;
-		this.type = type;
 	}
 
 	@Override
 	public void handle(@Nullable Player player) {
-		if (duty != null && type != null && player instanceof ServerPlayer && player.getServer() != null) {
+		if (duty != null && player instanceof ServerPlayer && player.getServer() != null) {
 			Optional<Party> o = PartyManager.findParty((ServerPlayer) player);
 			if (o.isPresent())
 				Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new ClientPacketUpdatePartyInfo(o.get(), true));
 			else
-				PartyManager.addParty(new Party(duty, type, (ServerPlayer) player));
+				PartyManager.addParty(new Party(duty, (ServerPlayer) player));
 
 		}
 	}
@@ -40,13 +38,11 @@ public class ServerPacketCreateParty implements NetworkMessages.IMessage<ServerP
 	@Override
 	public void toBytes(FriendlyByteBuf packet) {
 		packet.writeVarInt(Duties.getID(duty));
-		packet.writeVarInt(type.ordinal());
 	}
 
 	@Override
 	public ServerPacketCreateParty fromBytes(FriendlyByteBuf packet) {
 		duty = Duties.fromID(packet.readVarInt());
-		type = Instance.InstanceType.fromOrdinal(packet.readVarInt());
 		return this;
 	}
 

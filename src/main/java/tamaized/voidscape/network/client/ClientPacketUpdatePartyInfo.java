@@ -21,9 +21,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 	private UUID host;
 	private List<UUID> members = new ArrayList<>();
 	private String password;
-	private int max;
 	public Duties.Duty duty;
-	public Instance.InstanceType type;
 	public boolean reserving;
 
 	public ClientPacketUpdatePartyInfo(@Nullable Party party, boolean isHost) {
@@ -31,9 +29,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 			host = party.host().getUUID();
 			members.addAll(party.members().stream().filter(member -> member != party.host()).map(Entity::getUUID).collect(Collectors.toList()));
 			password = isHost ? party.password() : party.hasPassword() ? "secret" : "";
-			max = party.maxMembers();
 			duty = party.duty();
-			type = party.instanceType();
 			reserving = party.isReserving();
 		}
 	}
@@ -44,7 +40,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
 			return;
 		}
-		ClientPartyInfo.update(host, members, password, max, duty, type, reserving);
+		ClientPartyInfo.update(host, members, password, duty, reserving);
 	}
 
 	@Override
@@ -53,9 +49,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 		packet.writeVarInt(members.size());
 		members.forEach(packet::writeUUID);
 		packet.writeUtf(password);
-		packet.writeVarInt(max);
 		packet.writeVarInt(Duties.getID(duty));
-		packet.writeVarInt(type.ordinal());
 		packet.writeBoolean(reserving);
 	}
 
@@ -66,9 +60,7 @@ public class ClientPacketUpdatePartyInfo implements NetworkMessages.IMessage<Cli
 		for (int i = 0; i < len; i++)
 			members.add(packet.readUUID());
 		password = packet.readUtf(Short.MAX_VALUE);
-		max = packet.readVarInt();
 		duty = Duties.fromID(packet.readVarInt());
-		type = Instance.InstanceType.fromOrdinal(packet.readVarInt());
 		reserving = packet.readBoolean();
 		return this;
 	}

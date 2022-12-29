@@ -29,17 +29,15 @@ import java.util.stream.Collectors;
 public class PartyListScreen extends TurmoilScreen {
 
 	private final Duties.Duty duty;
-	private final Instance.InstanceType type;
 	public boolean joining;
 	private boolean initedOnce;
 	private Button join;
 	private EditBox password;
 	private PartyList list;
 
-	public PartyListScreen(Duties.Duty duty, Instance.InstanceType type) {
+	public PartyListScreen(Duties.Duty duty) {
 		super(Component.translatable(Voidscape.MODID.concat(".screen.form")));
 		this.duty = duty;
-		this.type = type;
 		ClientPartyInfo.error = null;
 	}
 
@@ -117,7 +115,7 @@ public class PartyListScreen extends TurmoilScreen {
 		));
 		addRenderableWidget(Button.builder(
 				Component.translatable("Back"),
-				button -> minecraft.setScreen(new ConfirmDutyScreen(duty))
+				button -> minecraft.setScreen(new PartySearchScreen(duty))
 		).bounds(
 				(int) (window.getGuiScaledWidth() / 2F - buttonWidth / 2F),
 				window.getGuiScaledHeight() - buttonHeight - 5,
@@ -153,7 +151,7 @@ public class PartyListScreen extends TurmoilScreen {
 			return;
 		}
 		if (ClientPartyInfo.host != null) {
-			minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty, ClientPartyInfo.type));
+			minecraft.setScreen(new FormPartyScreen(ClientPartyInfo.duty));
 			return;
 		}
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -163,8 +161,6 @@ public class PartyListScreen extends TurmoilScreen {
 		font.draw(matrixStack, text, (int) (minecraft.getWindow().getGuiScaledWidth() / 4 - font.width(text) / 2F), (int) (minecraft.getWindow().getGuiScaledHeight() / 4F - 20F / 2F) + 30F, 0xFFFFFFFF);
 		text = duty.display().getString();
 		font.draw(matrixStack, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(text) / 2F, 10, 0xFFFFFFFF);
-		text = type.name();
-		font.draw(matrixStack, text, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(text) / 2F, font.lineHeight + 12, 0xFFFFFFFF);
 		if (ClientPartyInfo.error != null) {
 			final String error = ClientPartyInfo.error.getString();
 			minecraft.font.draw(matrixStack, error, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F - font.width(error) / 2F, font.lineHeight * 2F + 16, 0xFFFF0000);
@@ -251,7 +247,7 @@ public class PartyListScreen extends TurmoilScreen {
 						FormPartyScreen.renderPlayerHead(network.getPlayerInfo(party.host.getId()), mStack, left - 2, top - 2);
 					}
 					Minecraft.getInstance().font.draw(mStack, party.host.getName(), left + 2 + 16 + 2, top + 2 + (entryHeight - 2) / 2F - Minecraft.getInstance().font.lineHeight / 2F, 0xFFFFFFFF);
-					final String text = party.members + "/" + party.max;
+					final String text = party.members + "/" + Instance.MAX_PLAYERS;
 					Minecraft.getInstance().font.draw(mStack, text, left + realWidth - 2 - Minecraft.getInstance().font.width(text), top + 2 + (entryHeight - 2) / 2F - Minecraft.getInstance().font.lineHeight / 2F, 0xFFFFFFFF);
 				});
 
