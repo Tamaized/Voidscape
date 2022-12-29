@@ -159,7 +159,7 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 				BlockEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
 					te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
-						cap.insertItem(0, new ItemStack(ModItems.CHARRED_BONE.get(), level.random.nextInt(5) + 1), false);
+						cap.insertItem(0, new ItemStack(ModItems.CHARRED_BONE.get(), level.random.nextInt(20) + 4), false);
 					});
 				InstanceManager.findByLevel(level).
 						ifPresent(instance -> instance.players().
