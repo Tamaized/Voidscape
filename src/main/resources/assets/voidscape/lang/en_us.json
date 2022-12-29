@@ -12,10 +12,11 @@
   "voidscape.tooltip.broken": "Broken",
   "voidscape.tooltip.elytra": "Elytra",
 
+  "entity.voidscape.null_servant": "Null Servant",
+  "entity.voidscape.voids_wrath": "Void's Wrath",
   "entity.voidscape.corrupted_pawn_phantom": "The Corrupted Pawn's Phantom",
   "entity.voidscape.corrupted_pawn_boss": "The Corrupted Pawn",
   "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
-  "entity.voidscape.null_servant": "Null Servant",
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "block.voidscape.voidic_crystal_block": "Voidic Crystal Block",
