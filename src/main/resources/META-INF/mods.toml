@@ -4,7 +4,7 @@ issueTrackerURL="https://github.com/Tamaized/Voidscape/issues"
 license="All Rights Reserved"
 [[mods]]
 modId="voidscape"
-version="${version}"
+version="${file.jarVersion}"
 displayName="Voidscape"
 credits=""
 authors="Tamaized"

@@ -82,7 +82,7 @@ minecraft {
 processResources {
     filesMatching("META-INF/mods.toml") {
         expand([
-                'version': "${project.version}"
+                'file': ['jarVersion': "${project.version}"]
         ])
     }
 }
