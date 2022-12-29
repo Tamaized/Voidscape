@@ -1,9 +1,6 @@
 package tamaized.voidscape.entity;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,17 +31,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.entity.ai.IInstanceEntity;
-import tamaized.voidscape.entity.ai.pawn.AutoAttack;
-import tamaized.voidscape.entity.ai.pawn.Bind;
-import tamaized.voidscape.entity.ai.pawn.TankBuster;
-import tamaized.voidscape.entity.ai.pawn.TentacleFall;
 import tamaized.voidscape.entity.ai.wrath.Heal;
-import tamaized.voidscape.registry.ModArmors;
+import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItems;
@@ -163,9 +155,10 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 				level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.BLAZE_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
+				level.setBlock(getRestrictCenter(), ModBlocks.EXIT_PORTAL.get().defaultBlockState(), 3);
 				BlockEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
-					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> {
+					te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
 						cap.insertItem(0, new ItemStack(ModItems.CHARRED_BONE.get(), level.random.nextInt(5) + 1), false);
 					});
 				InstanceManager.findByLevel(level).

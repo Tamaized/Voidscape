@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.entity.ai.IInstanceEntity;
@@ -31,6 +31,7 @@ import tamaized.voidscape.entity.ai.pawn.Bind;
 import tamaized.voidscape.entity.ai.pawn.TankBuster;
 import tamaized.voidscape.entity.ai.pawn.TentacleFall;
 import tamaized.voidscape.registry.ModArmors;
+import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItems;
@@ -93,9 +94,10 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 				level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
 				level.setBlock(getRestrictCenter().above(1), Blocks.CHEST.defaultBlockState(), 3);
+				level.setBlock(getRestrictCenter(), ModBlocks.EXIT_PORTAL.get().defaultBlockState(), 3);
 				BlockEntity te = level.getBlockEntity(getRestrictCenter().above(1));
 				if (te != null)
-					te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(cap -> {
+					te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
 						if (type != Instance.InstanceType.Insane)
 							cap.insertItem(0, new ItemStack(ModItems.TENDRIL.get(), level.random.nextInt(5) + 1), false);
 						if (type == Instance.InstanceType.Normal) {
