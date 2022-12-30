@@ -149,8 +149,12 @@ public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends EntityMod
 				float cosine = Mth.cos(rot) * 0.5F;
 				part.part.yRot = sine + cosine;
 				part.part.xRot = cosine - sine;
-			} else
+			} else if (entity.isSpin()) {
+				float lerp = (float) (entity.tickCount - entity.getSpinStart()) / (20F * 6F);
+				part.part.xRot = Mth.cos((float) Math.toRadians(-90 * lerp)) * 0.8F - 0.8F;
+			} else {
 				part.part.yRot = 0;
+			}
 			boolean state = ((entity.getTentacleBits() >> (7 - i)) & 0b1) == 1;
 			float perc = Mth.clamp(1F - (entity.tentacleTimes[i] - entity.tickCount + Minecraft.getInstance().getFrameTime()) / (20F * 5F), 0F, 1F);
 			float alpha = Mth.clamp(entity.tickCount >= entity.tentacleTimes[i] ? state ? 0F : 1F : state ? 1F - perc : perc, 0F, 1F);

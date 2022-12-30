@@ -20,14 +20,24 @@ public class AutoAttack extends AITask.RepeatedAITask<EntityCorruptedPawnBoss> {
 			} else if (boss.tickCount >= boss.aiTick) {
 				if (boss.lockonTarget == null || !boss.lockonTarget.isAlive())
 					boss.lockonTarget = boss.getTarget();
-				boss.aiTick = 0;
 				if (boss.lockonTarget != null && boss.lockonTarget.isAlive())
 					boss.lockonTarget.hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(boss), damage);
-				boss.setRayBits(0);
-				boss.setRayTarget(null);
+				clean(boss);
 				ai.finish();
 			}
 		});
+	}
+
+	@Override
+	public void clear(EntityCorruptedPawnBoss boss) {
+		super.clear(boss);
+		clean(boss);
+	}
+
+	private static void clean(EntityCorruptedPawnBoss boss) {
+		boss.setRayBits(0);
+		boss.setRayTarget(null);
+		boss.aiTick = 0;
 	}
 
 }

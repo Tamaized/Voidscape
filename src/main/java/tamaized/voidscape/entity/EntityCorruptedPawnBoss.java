@@ -1,7 +1,6 @@
 package tamaized.voidscape.entity;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -27,21 +25,19 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.AITask;
 import tamaized.voidscape.entity.ai.IInstanceEntity;
 import tamaized.voidscape.entity.ai.pawn.AutoAttack;
-import tamaized.voidscape.entity.ai.pawn.Bind;
+import tamaized.voidscape.entity.ai.pawn.Laser;
 import tamaized.voidscape.entity.ai.pawn.TankBuster;
 import tamaized.voidscape.entity.ai.pawn.TentacleFall;
-import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItems;
-import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.turmoil.Progression;
 import tamaized.voidscape.turmoil.SubCapability;
 import tamaized.voidscape.turmoil.Talk;
-import tamaized.voidscape.world.Instance;
 import tamaized.voidscape.world.InstanceManager;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +72,12 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
 		this.bossEvent.removePlayer(player);
+	}
+
+	@Nullable
+	public Player getRandomTarget() {
+		List<Player> players = level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(20F), e -> true);
+		return players.size() > 0 ? players.get(random.nextInt(players.size())) : null;
 	}
 
 	@Override
@@ -122,15 +124,15 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 		}
 		if (!level.isClientSide() && ai != null && getTarget() != null) {
 			ai = ai.handle(this);
-			lookAt(getTarget(), 10F, 10F);
 			if (!beStill) {
+				lookAt(getTarget(), 10F, 10F);
 				if (distanceTo(getTarget()) > 4) {
 					Vec3 angle = getLookAngle().scale(0.25F);
 					move(MoverType.SELF, new Vec3(angle.x(), 0, angle.z()));
 				}
 			}
 		}
-		if (!level.isClientSide() && getTarget() == null) {
+		if (!level.isClientSide() && (lockonTarget == null && getTarget() == null)) {
 			Entity closest = null;
 			for (Player p : level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(20F), e -> true)) {
 				if (closest == null || distanceTo(p) < distanceTo(closest))
@@ -164,12 +166,13 @@ public class EntityCorruptedPawnBoss extends EntityCorruptedPawn implements IIns
 	public void initInstance() {
 		float hp = 400;
 		( // TODO: change the ai up
-				ai = new TentacleFall(0, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F)).
-				next(new TentacleFall(1, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F)).
-				next(new TentacleFall(2, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F)).
-				next(new AITask.RandomAITask<>()).
-				next(new TankBuster(8F, false, rand -> rand.nextInt(3) == 0)).
-				next(new AutoAttack(4F));
+				ai = new TentacleFall(0, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.75F))
+				.next(new TentacleFall(1, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.5F))
+				.next(new TentacleFall(2, 25F, 80 * 20, 100F, boss -> boss.getHealth() / boss.getMaxHealth() <= 0.25F))
+				.next(new AITask.RandomAITask<>())
+				.next(new TankBuster(8F, false, rand -> rand.nextInt(3) == 0))
+				.next(new Laser(12F, rand -> (getHealth() / getMaxHealth() <= 0.5F) && rand.nextInt(4) == 0))
+				.next(new AutoAttack(4F));
 		Objects.requireNonNull(getAttribute(Attributes.MAX_HEALTH)).addPermanentModifier(new AttributeModifier("Instanced Health", hp - 20, AttributeModifier.Operation.ADDITION));
 		setHealth(getMaxHealth());
 	}

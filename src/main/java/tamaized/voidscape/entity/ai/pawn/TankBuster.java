@@ -39,11 +39,7 @@ public class TankBuster extends AITask.RandomAITask.ChanceAITask<EntityCorrupted
 			} else if (boss.lockonTarget != null && boss.lockonTarget.isAlive()) {
 				boss.lookAt(boss.lockonTarget, 10F, 10F);
 				if (!stick && boss.distanceToSqr(boss.lockonTarget) >= 100F) {
-					boss.beStill = false;
-					boss.markCasting(false);
-					boss.setRayBits(0);
-					boss.setRayTarget(null);
-					boss.aiTick = 0;
+					clean(boss);
 					boss.level.playSound(null, boss.xo, boss.yo, boss.zo, SoundEvents.ENDER_DRAGON_GROWL, boss.getSoundSource(), 0.75F, 0.25F + boss.getRandom().nextFloat() * 0.5F);
 					ai.finish();
 				}
@@ -51,4 +47,17 @@ public class TankBuster extends AITask.RandomAITask.ChanceAITask<EntityCorrupted
 		})));
 	}
 
+	@Override
+	public void clear(EntityCorruptedPawnBoss boss) {
+		super.clear(boss);
+		clean(boss);
+	}
+
+	private void clean(EntityCorruptedPawnBoss boss) {
+		boss.beStill = false;
+		boss.markCasting(false);
+		boss.setRayBits(0);
+		boss.setRayTarget(null);
+		boss.aiTick = 0;
+	}
 }

@@ -1,5 +1,6 @@
 package tamaized.voidscape.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import tamaized.voidscape.registry.ModDataSerializers;
 
@@ -27,6 +29,9 @@ public abstract class EntityCorruptedPawn extends Mob {
 	private static final EntityDataAccessor<Integer> RAY_TARGET = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Long> RAY_START = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
 	private static final EntityDataAccessor<Long> RAY_END = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
+	private static final EntityDataAccessor<Boolean> SPIN = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> SPIN_START = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> SPIN_END = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
 
 	public int lastTentacleState;
 	public long[] tentacleTimes = new long[8];
@@ -74,6 +79,9 @@ public abstract class EntityCorruptedPawn extends Mob {
 		entityData.define(RAY_TARGET, 0);
 		entityData.define(RAY_START, 0L);
 		entityData.define(RAY_END, 0L);
+		entityData.define(SPIN, false);
+		entityData.define(SPIN_START, 0);
+		entityData.define(SPIN_END, 0);
 	}
 
 	public boolean isCasting() {
@@ -147,6 +155,30 @@ public abstract class EntityCorruptedPawn extends Mob {
 		setTentacleBits(~((~getTentacleBits()) | bits));
 	}
 
+	public boolean isSpin() {
+		return entityData.get(SPIN);
+	}
+
+	public void markSpin(boolean spin) {
+		entityData.set(SPIN, spin);
+	}
+
+	public long getSpinStart() {
+		return entityData.get(SPIN_START);
+	}
+
+	public void updateSpinStart() {
+		entityData.set(SPIN_START, tickCount);
+	}
+
+	public long getSpinEnd() {
+		return entityData.get(SPIN_END);
+	}
+
+	public void updateSpinEnd(int len) {
+		entityData.set(SPIN_END, len);
+	}
+
 	public boolean shouldRender(@Nullable Player player) {
 		return true;
 	}
@@ -184,6 +216,11 @@ public abstract class EntityCorruptedPawn extends Mob {
 	@Override
 	public boolean canCollideWith(Entity p_241849_1_) {
 		return false;
+	}
+
+	@Override
+	protected void playStepSound(BlockPos p_20135_, BlockState p_20136_) {
+
 	}
 
 	@Override

@@ -41,6 +41,12 @@ public class AITask<T extends Entity> {
 		finished = false;
 	}
 
+	public void clear(T parent) {
+		reset();
+		if (next != null)
+			next.clear(parent);
+	}
+
 	private static class EmptyAITask<T extends Entity> extends AITask<T> {
 
 		private EmptyAITask() {
@@ -92,6 +98,12 @@ public class AITask<T extends Entity> {
 		public AITask<T> next(AITask<T> task) {
 			tasks.add(task);
 			return this;
+		}
+
+		@Override
+		public void clear(T parent) {
+			super.clear(parent);
+			tasks.forEach(task -> task.clear(parent));
 		}
 
 		@Override
@@ -167,6 +179,7 @@ public class AITask<T extends Entity> {
 			if (finished)
 				return next.handle(parent);
 			if (!triggered && condition.test(parent)) {
+				next.clear(parent);
 				trigger(parent);
 				triggered = true;
 			}

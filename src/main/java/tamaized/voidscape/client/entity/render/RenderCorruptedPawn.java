@@ -32,6 +32,7 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/corruptedpawn.png");
 	private static final RenderType OVERLAY = RenderType.eyes(new ResourceLocation(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
 	private static final ResourceLocation GUARDIAN_BEAM_LOCATION = new ResourceLocation("textures/entity/guardian_beam.png");
+	public static final ResourceLocation LASER_LOCATION = new ResourceLocation("textures/entity/beacon_beam.png");
 	private static final RenderType BEAM_RENDER_TYPE = RenderType.
 			create("entity_cutout_no_cull_fullbright", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder().
 					setShaderState(RenderStateAccessor.RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER()).
@@ -123,6 +124,67 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 		p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(0xF000F0).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
 	}
 
+	private static void renderBeaconBeam(PoseStack p_112177_, MultiBufferSource p_112178_, float partialTicks, long tick, int start, int length, float[] colors) {
+		renderBeaconBeam(p_112177_, p_112178_, LASER_LOCATION, partialTicks, 1.0F, tick, start, length, colors, 0.2F, 0.25F);
+	}
+
+	private static void renderBeaconBeam(PoseStack poseStack, MultiBufferSource multiBufferSource, ResourceLocation texture, float partialTicks, float scale, long tick, int start, int length, float[] colors, float p_112194_, float p_112195_) {
+		int i = start + length;
+		poseStack.pushPose();
+		poseStack.translate(0.5D, 0.0D, 0.5D);
+		float f = (float)Math.floorMod(tick, 40) + partialTicks;
+		float f1 = length < 0 ? f : -f;
+		float f2 = Mth.frac(f1 * 0.2F - (float)Mth.floor(f1 * 0.1F));
+		float red = colors[0];
+		float green = colors[1];
+		float blue = colors[2];
+		poseStack.pushPose();
+		poseStack.mulPose(Axis.YP.rotationDegrees(f * 2.25F - 45.0F));
+		float f6 = 0.0F;
+		float f8 = 0.0F;
+		float f9 = -p_112194_;
+		float f10 = 0.0F;
+		float f11 = 0.0F;
+		float f12 = -p_112194_;
+		float f13 = 0.0F;
+		float f14 = 1.0F;
+		float f15 = -1.0F + f2;
+		float f16 = (float)length * scale * (0.5F / p_112194_) + f15;
+		renderPart(poseStack, multiBufferSource.getBuffer(RenderType.beaconBeam(texture, false)), red, green, blue, 1.0F, start, i, 0.0F, p_112194_, p_112194_, 0.0F, f9, 0.0F, 0.0F, f12, 0.0F, 1.0F, f16, f15);
+		poseStack.popPose();
+		f6 = -p_112195_;
+		float f7 = -p_112195_;
+		f8 = -p_112195_;
+		f9 = -p_112195_;
+		f13 = 0.0F;
+		f14 = 1.0F;
+		f15 = -1.0F + f2;
+		f16 = (float)length * scale + f15;
+		renderPart(poseStack, multiBufferSource.getBuffer(RenderType.beaconBeam(texture, true)), red, green, blue, 0.125F, start, i, f6, f7, p_112195_, f8, f9, p_112195_, p_112195_, p_112195_, 0.0F, 1.0F, f16, f15);
+		poseStack.popPose();
+	}
+
+	private static void renderPart(PoseStack poseStack, VertexConsumer vertexConsumer, float red, float green, float blue, float alpha, int p_112162_, int p_112163_, float p_112164_, float p_112165_, float p_112166_, float p_112167_, float p_112168_, float p_112169_, float p_112170_, float p_112171_, float p_112172_, float p_112173_, float p_112174_, float p_112175_) {
+		PoseStack.Pose posestack$pose = poseStack.last();
+		Matrix4f matrix4f = posestack$pose.pose();
+		Matrix3f matrix3f = posestack$pose.normal();
+		renderQuad(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112162_, p_112163_, p_112164_, p_112165_, p_112166_, p_112167_, p_112172_, p_112173_, p_112174_, p_112175_);
+		renderQuad(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112162_, p_112163_, p_112170_, p_112171_, p_112168_, p_112169_, p_112172_, p_112173_, p_112174_, p_112175_);
+		renderQuad(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112162_, p_112163_, p_112166_, p_112167_, p_112170_, p_112171_, p_112172_, p_112173_, p_112174_, p_112175_);
+		renderQuad(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112162_, p_112163_, p_112168_, p_112169_, p_112164_, p_112165_, p_112172_, p_112173_, p_112174_, p_112175_);
+	}
+
+	private static void renderQuad(Matrix4f matrix4f, Matrix3f matrix3f, VertexConsumer vertexConsumer, float red, float green, float blue, float alpha, int p_112127_, int p_112128_, float p_112129_, float p_112130_, float p_112131_, float p_112132_, float p_112133_, float p_112134_, float p_112135_, float p_112136_) {
+		addVertex(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112128_, p_112129_, p_112130_, p_112134_, p_112135_);
+		addVertex(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112127_, p_112129_, p_112130_, p_112134_, p_112136_);
+		addVertex(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112127_, p_112131_, p_112132_, p_112133_, p_112136_);
+		addVertex(matrix4f, matrix3f, vertexConsumer, red, green, blue, alpha, p_112128_, p_112131_, p_112132_, p_112133_, p_112135_);
+	}
+
+	private static void addVertex(Matrix4f matrix4f, Matrix3f matrix3f, VertexConsumer vertexConsumer, float red, float green, float blue, float alpha, float y, float x, float z, float u, float v) {
+		vertexConsumer.vertex(matrix4f, x, y, z).color(red, green, blue, alpha).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+	}
+
 	@Override
 	protected boolean shouldShowName(T entityIn) {
 		return super.shouldShowName(entityIn) && (entityIn.shouldShowName() || entityIn.hasCustomName() && entityIn == this.entityRenderDispatcher.crosshairPickEntity);
@@ -149,6 +211,19 @@ public class RenderCorruptedPawn<T extends EntityCorruptedPawn, M extends ModelC
 						}
 					}
 				}
+			}
+
+			if (entity.isSpin() && (entity.tickCount - entity.getSpinStart()) > entity.getSpinEnd() - (20 * 3)) {
+				matrixStackIn.pushPose();
+				{
+					matrixStackIn.mulPose(Axis.YN.rotationDegrees(entity.getViewYRot(partialTicks) + 180F));
+					matrixStackIn.translate(-0.5F, 0F, -0.5F);
+					matrixStackIn.mulPose(Axis.XN.rotationDegrees(90));
+					matrixStackIn.scale(4F, 4F, 4F);
+					matrixStackIn.translate(-0.3575F, 0F, -0.15F);
+					renderBeaconBeam(matrixStackIn, bufferIn, partialTicks, entity.level.getGameTime(), 0, 10, new float[]{0.75F, 0F, 1F});
+				}
+				matrixStackIn.popPose();
 			}
 		}
 	}
