@@ -34,7 +34,7 @@ repositories {
     }
 }
 
-version = "${artifactor_minecraft_version}-${artifactor_mod_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
+version = "${minecraft_version}-${mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
 group = "tamaized.voidscape"
 archivesBaseName = "Voidscape"
 
@@ -101,7 +101,7 @@ jar {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
+    minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
 //    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
     def reg = "tamaized:regutil:" + project.regutil_version
