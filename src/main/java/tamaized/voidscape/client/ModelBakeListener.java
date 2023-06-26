@@ -110,6 +110,10 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
 		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
 		addBlock(fullbrightList, ModBlocks.NULL_WHITE);
+		addBlock(fullbrightList, ModBlocks.NULL_BROWN);
+		addBlock(fullbrightList, ModBlocks.NULL_GRAY);
+		addBlock(fullbrightList, ModBlocks.NULL_GREEN);
+		addBlock(fullbrightList, ModBlocks.NULL_BLUE);
 		add(fullbrightList, ModBlocks.PLANT, "inventory");
 		add(fullbrightList, ModBlocks.PLANT, "state=void");
 		add(fullbrightList, ModBlocks.PLANT, "state=overworld");

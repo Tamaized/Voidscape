@@ -56,10 +56,7 @@ public class Turmoil implements SubCapability.ISubCap.ISubCapData.All {
 			return;
 		if (!parent.level.isClientSide() && parent instanceof ServerPlayer) {
 			final boolean cachedInstanced = instanced;
-			if (parent.level instanceof ServerLevel && ((ServerLevel) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator)
-				instanced = true;
-			else
-				instanced = false;
+			instanced = parent.level instanceof ServerLevel && ((ServerLevel) parent.level).getChunkSource().getGenerator() instanceof InstanceChunkGenerator;
 			if (dirty || cachedInstanced != instanced) {
 				sendToClient((ServerPlayer) parent);
 				dirty = false;

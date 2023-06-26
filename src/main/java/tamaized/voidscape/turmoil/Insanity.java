@@ -18,8 +18,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.lang3.tuple.Pair;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
 import tamaized.voidscape.entity.IEthereal;
@@ -27,6 +29,8 @@ import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.ModAttributes;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
@@ -41,6 +45,10 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			SoundEvents.CREEPER_PRIMED, SoundEvents.ENDERMAN_AMBIENT, SoundEvents.ENDERMAN_SCREAM, SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT,
 
 			SoundEvents.ZOMBIFIED_PIGLIN_ANGRY, SoundEvents.ZOMBIFIED_PIGLIN_HURT, SoundEvents.CAT_HISS};
+
+	private static final List<StructureInfusion> STRUCTURE_NULL_INFUSION = new ArrayList<>(){{
+		add(new StructureInfusion(Progression.CorruptPawn, new AABB(1, 1, 1, -1, -1, -1)));
+	}};
 
 	private float paranoia;
 	private float infusion;
@@ -163,27 +171,47 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public float calcInfusionRate(Entity parent) {
+		float structureRate = calcStructureRate(parent);
+		if (structureRate > 0F)
+			return structureRate;
 		if (parent instanceof LivingEntity entity) {
 			return 2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get());
 		}
 		return 1F;
 	}
 
+	private float calcStructureRate(Entity parent) {
+		if (parent instanceof Player player && Voidscape.checkForVoidDimension(parent.level)) {
+			return player.getCapability(SubCapability.CAPABILITY)
+					.map(cap -> cap.get(Voidscape.subCapTurmoilData)
+							.map(data -> STRUCTURE_NULL_INFUSION.stream()
+									.map(s -> s.infusionRate(data.getProgression(), player))
+									.filter(v -> v > 0F)
+									.findAny()
+									.orElse(0F)
+							).orElse(0F)
+					).orElse(0F);
+		}
+		return 0F;
+	}
 
 	private void refreshEquipmentAttributes(LivingEntity entity) {
-		for (EquipmentSlot equipmentslottype : EquipmentSlot.values()) {
-			ItemStack itemstack = entity.getItemBySlot(equipmentslottype);
+		for (EquipmentSlot equipmentSlotType : EquipmentSlot.values()) {
+			ItemStack itemstack = entity.getItemBySlot(equipmentSlotType);
 			if (!itemstack.isEmpty()) {
-				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers(equipmentslottype));
-				entity.getAttributes().addTransientAttributeModifiers(itemstack.getAttributeModifiers(equipmentslottype));
+				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
+				entity.getAttributes().addTransientAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
 			}
 
 		}
 	}
 
 	public float calcParanoiaRate(Entity parent) {
-		return 0.87F * parent.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> data.
-				getProgression().ordinal() >= Progression.CorruptPawn.ordinal() ? 0.1F : 1F).orElse(1F)).orElse(1F);
+		return 0.87F * parent.getCapability(SubCapability.CAPABILITY)
+				.map(cap -> cap.get(Voidscape.subCapTurmoilData)
+						.map(data -> data.getProgression().ordinal() >= Progression.CorruptPawn.ordinal() ? 0.1F : 1F)
+						.orElse(1F))
+				.orElse(1F);
 	}
 
 	public float getInfusion() {
@@ -242,5 +270,13 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				paranoia = o.paranoia;
 			}
 		}
+	}
+
+	private record StructureInfusion(Progression progression, AABB bounds) {
+
+		public float infusionRate(Progression currentProgression, Entity entity) {
+			return currentProgression.ordinal() >= progression.ordinal() && bounds.contains(entity.getPosition(1F)) ? 50F : 0F;
+		}
+
 	}
 }

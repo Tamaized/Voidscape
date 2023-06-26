@@ -123,6 +123,34 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.AMETHYST)));
 	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY.
 			register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Block> NULL_BROWN = REGISTRY.register("null_brown", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+			.sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> NULL_BROWN_ITEM = ModItems.REGISTRY.
+			register(NULL_BROWN.getId().getPath(), () -> new BlockItem(NULL_BROWN.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Block> NULL_GRAY = REGISTRY.register("null_gray", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+			.sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> NULL_GRAY_ITEM = ModItems.REGISTRY.
+			register(NULL_GRAY.getId().getPath(), () -> new BlockItem(NULL_GRAY.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Block> NULL_GREEN = REGISTRY.register("null_green", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+			.sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> NULL_GREEN_ITEM = ModItems.REGISTRY.
+			register(NULL_GREEN.getId().getPath(), () -> new BlockItem(NULL_GREEN.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Block> NULL_BLUE = REGISTRY.register("null_blue", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+			.sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> NULL_BLUE_ITEM = ModItems.REGISTRY.
+			register(NULL_BLUE.getId().getPath(), () -> new BlockItem(NULL_BLUE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
 	public static final RegistryObject<Block> EXIT_PORTAL = REGISTRY.register("exit_portal", () -> new HalfTransparentBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
