@@ -12,6 +12,7 @@ configurations {
 }
 
 shadowJar {
+    archiveClassifier.set('')
     configurations = [project.configurations.shade]
     relocate 'tamaized.regutil', 'tamaized.voidscape.regutil'
 }
@@ -108,7 +109,7 @@ processResources {
     }
 }
 
-jar {
+tasks.named('jar', Jar).configure {
     //noinspection GroovyAssignabilityCheck
     manifest {
         attributes(["Specification-Title"     : "Voidscape",
@@ -119,6 +120,7 @@ jar {
                     "Implementation-Vendor"   : "Tamaized",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
+    finalizedBy 'reobfJar'
 }
 
 dependencies {
@@ -130,8 +132,6 @@ dependencies {
     implementation fg.deobf(reg)
     shade reg
 }
-
-jar.finalizedBy('reobfJar')
 
 def mavenUser = hasProperty("CIMUser") ? CIMUser : secrets.getProperty("maven_username")
 def mavenToken = hasProperty("CIMToken") ? CIMToken : secrets.getProperty("maven_password")
@@ -162,6 +162,11 @@ tasks.register('sourceJar', Jar) {
     dependsOn 'classes'
     from sourceSets.main.allSource
     archiveClassifier = 'sources'
+}
+
+tasks.register('reobfJar', net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace) {
+    dependsOn 'jar'
+    finalizedBy 'shadowJar'
 }
 
 tasks.withType(JavaCompile).configureEach {
