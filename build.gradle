@@ -164,9 +164,9 @@ tasks.register('sourceJar', Jar) {
     archiveClassifier = 'sources'
 }
 
-tasks.register('reobfJar', net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace) {
-    dependsOn 'jar'
-    finalizedBy 'shadowJar'
+jar.enabled = false
+afterEvaluate {
+    tasks.reobfJar.enabled = false
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -1,11 +1,11 @@
 {
   "forge:registry_name": "voidscape:null",
-  "precipitation": "none",
+	"has_precipitation": false,
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",
-  "depth": -5.0,
-  "scale": 1,
+	"depth": -3.0,
+	"scale": 1.8,
   "effects": {
 	"fog_color": 655628,
 	"water_color": 655628,
@@ -42,20 +42,22 @@
 	[ ],
 	[ ],
 	[
-	  "voidscape:thunderspire",
 	  "voidscape:fruit_patch_null"
 	],
 	[ ],
 	[ ]
   ],
   "starts": [
-	"voidscape:configured_null"
+
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
 
   },
   "spawn_costs": {
-
+	  "voidscape:null_servant": {
+		  "energy_budget": 0.15,
+		  "charge": 0.7
+	  }
   }
 }

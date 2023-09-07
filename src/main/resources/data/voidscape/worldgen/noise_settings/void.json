@@ -159,23 +159,12 @@
 			"voidscape:null"
 		  ]
 		},
-		"then_run": {
-		  "type": "condition",
-		  "if_true": {
-			"type": "y_above",
-			"anchor": {
-			  "above_bottom": 1
-			},
-			"surface_depth_multiplier": 0,
-			"add_stone_depth": false
-		  },
 		  "then_run": {
-			"type": "block",
-			"result_state": {
-			  "Name": "air"
-			}
+			  "type": "block",
+			  "result_state": {
+				  "Name": "voidscape:null_black"
+			  }
 		  }
-		}
 	  }
 	]
   }

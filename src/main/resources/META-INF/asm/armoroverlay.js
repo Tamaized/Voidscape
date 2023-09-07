@@ -25,7 +25,7 @@ function initializeCoreMod() {
                     if (node.getOpcode() === Opcodes.INVOKEVIRTUAL)
                         lastInstruction = node; // Get the last INVOKEVIRTUAL
                 }
-                if (lastInstruction != null) {
+                if (false && lastInstruction != null) { // TODO
                     instructions.insert(
                         lastInstruction,
                         ASM.listOf(

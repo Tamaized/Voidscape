@@ -1,6 +1,6 @@
 {
   "forge:registry_name": "voidscape:thunderspires",
-  "precipitation": "none",
+	"has_precipitation": false,
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",

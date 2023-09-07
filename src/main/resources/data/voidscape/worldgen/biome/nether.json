@@ -1,6 +1,6 @@
 {
   "forge:registry_name": "voidscape:nether",
-  "precipitation": "none",
+	"has_precipitation": false,
   "temperature": 0,
   "temperature_modifier": "none",
   "downfall": 0.0,
