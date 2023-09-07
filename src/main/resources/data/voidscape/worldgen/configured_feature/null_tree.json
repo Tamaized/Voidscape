@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:tree",
+  "config": {
+	"trunk_provider": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "voidscape:null_white",
+		"Properties": {
+		  "axis": "y"
+		}
+	  }
+	},
+	"trunk_placer": {
+	  "type": "straight_trunk_placer",
+	  "base_height": 4,
+	  "height_rand_a": 2,
+	  "height_rand_b": 0
+	},
+	"foliage_provider": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "voidscape:null_white",
+		"Properties": {
+		  "distance": 7,
+		  "persistent": false
+		}
+	  }
+	},
+	"foliage_placer": {
+	  "type": "blob_foliage_placer",
+	  "radius": 2,
+	  "offset": 0,
+	  "height": 3
+	},
+	"dirt_provider": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "voidscape:null_black",
+		"Properties": {
+		  "distance": 7,
+		  "persistent": false
+		}
+	  }
+	},
+	"minimum_size": {
+	  "type": "two_layers_feature_size",
+	  "limit": 1,
+	  "lower_size": 0,
+	  "upper_size": 1
+	},
+	"decorators": [ ],
+	"ignore_vines": true
+  }
+}

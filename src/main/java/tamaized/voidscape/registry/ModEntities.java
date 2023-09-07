@@ -49,10 +49,9 @@ public class ModEntities implements RegistryClass {
 	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, MobCategory.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntityNullServant>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
 		EntityType<EntityNullServant> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(EntityNullServant.class, EntityNullServant::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
-		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) -> !level.
-				getBlockState(pos.below()).is(Blocks.BEDROCK) && NaturalSpawner.
-				canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) && level.getEntities(null,
-				new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
+		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
+				NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) &&
+						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
 	public static final RegistryObject<EntityType<EntityVoidsWrathBoss>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(EntityVoidsWrathBoss.class, EntityVoidsWrathBoss::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune()));

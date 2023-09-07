@@ -42,17 +42,24 @@
 	[ ],
 	[ ],
 	[
+      "voidscape:null_tree",
 	  "voidscape:fruit_patch_null"
 	],
 	[ ],
 	[ ]
   ],
   "starts": [
-
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
-
+    "monster": [
+      {
+        "type": "voidscape:null_servant",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ]
   },
   "spawn_costs": {
 	  "voidscape:null_servant": {
