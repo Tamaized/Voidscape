@@ -1,83 +1,104 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
-        mavenCentral()
-        mavenLocal()
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
-    }
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations {
     shade
 }
 
 shadowJar {
-    classifier = null
     configurations = [project.configurations.shade]
     relocate 'tamaized.regutil', 'tamaized.voidscape.regutil'
 }
 
 repositories {
     maven {
-        url = "https://dvs1.progwml6.com/files/maven/" // JEI
+        name 'Jared\'s Maven' // JEI
+        url 'https://maven.blamejared.com/'
     }
     maven {
-        url = 'https://maven.tamaized.com/releases/' // RegUtil
+        name 'Tama\' Maven' // RegUtil
+        url 'https://maven.tamaized.com/releases/'
     }
 }
 
 version = "${minecraft_version}-${mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
 group = "tamaized.voidscape"
-archivesBaseName = "Voidscape"
+base {
+    archivesName = "Voidscape"
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation" << "-Werror"
+
+def secrets = new Properties()
+def secretsFile = file('secrets.properties')
+if (secretsFile.exists()) {
+    secretsFile.withInputStream {
+        stream -> secrets.load(stream)
+    }
+
+    fileTree("secrets").matching {
+        include "**/*.properties"
+    }.each {
+        File file ->
+            file.withInputStream {
+                stream -> secrets.load(stream)
+            }
+    }
+}
 
 minecraft {
-    mappings("${project.mapping_type}", "${project.mapping_version}")
+    mappings channel: project.mapping_type, version: project.mapping_version
+    copyIdeResources = true
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
+    def mod_id = 'voidscape'
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            property 'fml.earlyprogresswindow', 'false'
+            property 'mixin.env.disableRefMap', 'true'
 
             mods {
-                voidscape {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
+        }
+
+        client {
+            taskName "Minecraft_Client_${project.minecraft_version}"
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--username', secrets.getProperty("username")?: 'Dev', secrets.getProperty("uuid") ? '--uuid' : '', secrets.getProperty("uuid")?: ''
         }
 
         server {
-            workingDirectory project.file('run')
+            taskName "Minecraft_Server_${project.minecraft_version}"
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+        gameTestServer {
+            taskName "Minecraft_GameTestServer_${project.minecraft_version}"
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                voidscape {
-                    source sourceSets.main
-                }
-            }
+        data {
+            taskName "Minecraft_Data_${project.minecraft_version}"
+            workingDirectory project.file('run-data')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 processResources {
     filesMatching("META-INF/mods.toml") {
@@ -101,29 +122,13 @@ jar {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+    minecraft "net.neoforged:forge:${project.minecraft_version}-${project.forge_version}"
 
-//    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+
     def reg = "tamaized:regutil:" + project.regutil_version
     implementation fg.deobf(reg)
     shade reg
-}
-
-def secrets = new Properties()
-def secretsFile = file('secrets.properties');
-if (secretsFile.exists()) {
-    secretsFile.withInputStream {
-        stream -> secrets.load(stream)
-    }
-
-    fileTree("secrets").matching {
-        include "**/*.properties"
-    }.each {
-        File file ->
-            file.withInputStream {
-                stream -> secrets.load(stream)
-            }
-    }
 }
 
 jar.finalizedBy('reobfJar')
@@ -153,9 +158,14 @@ publishing {
     }
 }
 
-task sourceJar(type: Jar, dependsOn: 'classes') {
+tasks.register('sourceJar', Jar) {
+    dependsOn 'classes'
     from sourceSets.main.allSource
-    classifier = 'sources'
+    archiveClassifier = 'sources'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
 
 task incrBuildNum doLast {
