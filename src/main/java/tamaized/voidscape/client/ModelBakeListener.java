@@ -155,7 +155,7 @@ public class ModelBakeListener {
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
-								if (quad.getSprite().atlasLocation().getPath().contains("_overlay")) {
+								if (quad.getSprite().contents().name().getPath().contains("_overlay")) {
 									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
 									quad.shade = false;
 								}
