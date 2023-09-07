@@ -198,7 +198,6 @@ public class ModelBakeListener {
 
 		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
 
-
 	}
 
 	private static void impBroken(Item item) {
