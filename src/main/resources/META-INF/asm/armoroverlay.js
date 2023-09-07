@@ -22,10 +22,12 @@ function initializeCoreMod() {
                 var lastInstruction = null;
                 for (var index = 0; index < instructions.size(); index++) {
                     var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
-                    if (node.getOpcode() === Opcodes.INVOKEVIRTUAL)
+                    if (node.getOpcode() === Opcodes.INVOKEVIRTUAL &&
+                        node.owner === 'net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer' &&
+                        node.name === ASM.mapMethod('m_289609_')) // renderModel
                         lastInstruction = node; // Get the last INVOKEVIRTUAL
                 }
-                if (false && lastInstruction != null) { // TODO
+                if (lastInstruction != null) {
                     instructions.insert(
                         lastInstruction,
                         ASM.listOf(
@@ -33,8 +35,8 @@ function initializeCoreMod() {
                             new VarInsnNode(Opcodes.ALOAD, 1),
                             new VarInsnNode(Opcodes.ALOAD, 2),
                             new VarInsnNode(Opcodes.ILOAD, 5),
-                            new VarInsnNode(Opcodes.ILOAD, 10),
-                            new VarInsnNode(Opcodes.ALOAD, 6),
+                            new VarInsnNode(Opcodes.ILOAD, 11),
+                            new VarInsnNode(Opcodes.ALOAD, 10),
                             new VarInsnNode(Opcodes.ALOAD, 3),
                             new VarInsnNode(Opcodes.ALOAD, 7),
                             new VarInsnNode(Opcodes.ALOAD, 4),
@@ -42,7 +44,7 @@ function initializeCoreMod() {
                                 Opcodes.INVOKESTATIC,
                                 'tamaized/voidscape/asm/ASMHooks',
                                 'armorOverlay',
-                                '(Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IZLnet/minecraft/client/model/HumanoidModel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)V',
+                                '(Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IZLnet/minecraft/client/model/Model;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)V',
                                 false
                                 )
                             )

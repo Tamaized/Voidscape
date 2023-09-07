@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -266,10 +267,10 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)}<br>
-	 * [AFTER LAST INVOKEVIRTUAL {@link HumanoidArmorLayer#renderModel(PoseStack, MultiBufferSource, int, boolean, HumanoidModel, float, float, float, ResourceLocation)}]
+	 * [AFTER LAST INVOKEVIRTUAL {@link HumanoidArmorLayer#renderModel(PoseStack, MultiBufferSource, int, net.minecraft.world.item.ArmorItem, Model, boolean, float, float, float, ResourceLocation)}]
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, boolean p_117111_, HumanoidModel<?> model, Entity entity, ItemStack stack, EquipmentSlot slot) {
+	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, boolean p_117111_, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
 		if (RegUtil.isArmorOverlay(stack)) {
 			RegUtil.renderingArmorOverlay = true;
 			ResourceLocation texture = layer.getArmorResource(entity, stack, slot, "overlay");
