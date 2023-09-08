@@ -6,12 +6,10 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.NaturalSpawner;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,17 +33,14 @@ import tamaized.voidscape.client.entity.render.RenderAntiBolt;
 import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
 import tamaized.voidscape.client.entity.render.RenderNullServant;
 import tamaized.voidscape.client.entity.render.RenderVoidsWrath;
-import tamaized.voidscape.entity.EntityAntiBolt;
-import tamaized.voidscape.entity.EntityCorruptedPawnPhantom;
-import tamaized.voidscape.entity.EntityNullServant;
-import tamaized.voidscape.entity.EntityVoidsWrathBoss;
+import tamaized.voidscape.entity.*;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEntities implements RegistryClass {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITY_TYPES);
 
-	public static final RegistryObject<EntityType<EntityCorruptedPawnPhantom>> CORRUPTED_PAWN_PHANTOM = REGISTRY.register("corrupted_pawn_phantom", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn_phantom"), makeCastedBuilder(EntityCorruptedPawnPhantom.class, EntityCorruptedPawnPhantom::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
+	public static final RegistryObject<EntityType<EntityCorruptedPawn>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(EntityCorruptedPawn.class, EntityCorruptedPawn::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
 	public static final RegistryObject<EntityType<EntityAntiBolt>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), EntityAntiBolt::new, MobCategory.MISC, 0.5F, 0.5F));
 	public static final RegistryObject<EntityType<EntityNullServant>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
 		EntityType<EntityNullServant> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(EntityNullServant.class, EntityNullServant::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
@@ -87,7 +82,7 @@ public class ModEntities implements RegistryClass {
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
-		event.put(CORRUPTED_PAWN_PHANTOM.get(), Mob.createMobAttributes().build());
+		event.put(CORRUPTED_PAWN.get(), EntityCorruptedPawn.createAttributes().build());
 		event.put(VOIDS_WRATH.get(), Mob.createMobAttributes().add(ModAttributes.VOIDIC_DMG.get(), 3D).build());
 		event.put(NULL_SERVANT.get(), EntityNullServant.createAttributes().build());
 	}
@@ -125,7 +120,7 @@ public class ModEntities implements RegistryClass {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderer(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(CORRUPTED_PAWN_PHANTOM.get(), RenderCorruptedPawn::factory);
+		event.registerEntityRenderer(CORRUPTED_PAWN.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);

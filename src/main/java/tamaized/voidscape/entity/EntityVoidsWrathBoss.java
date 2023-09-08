@@ -134,7 +134,7 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 	public boolean hurt(DamageSource source, float amount) {
 		if (getTarget() == null && source.getDirectEntity() instanceof LivingEntity living)
 			setTarget(living);
-		return super.hurt(source, (ModDamageSource.check(ModDamageSource.ID_VOIDIC, source) ? amount : amount * 0.01F) * (armor ? 0.25F : 1F));
+		return super.hurt(source, (source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.01F) * (armor ? 0.25F : 1F));
 	}
 
 	@Override
@@ -156,17 +156,6 @@ public class EntityVoidsWrathBoss extends Mob implements IInstanceEntity, Powera
 					te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(cap -> {
 						cap.insertItem(0, new ItemStack(ModItems.CHARRED_BONE.get(), level().random.nextInt(20) + 4), false);
 					});
-				// TODO
-				/*InstanceManager.findByLevel(level).
-						ifPresent(instance -> instance.players().
-								forEach(player -> player.getCapability(SubCapability.CAPABILITY).
-										ifPresent(cap -> cap.get(Voidscape.subCapTurmoilData).
-												ifPresent(data -> {
-													if (data.getProgression() == Progression.Psychosis) {
-														data.talk(Talk.PSYCHOSIS);
-														level().addFreshEntity(new ItemEntity(level, player.getX(), player.getY(), player.getZ(), new ItemStack(ModItems.CHARRED_BONE.get(), 8)));
-													}
-												}))));*/
 			}
 		}
 	}

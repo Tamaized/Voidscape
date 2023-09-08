@@ -4,30 +4,23 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -36,16 +29,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -64,8 +50,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.asm.ASMHooks;
+import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.capability.Insanity;
+import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ClientInitiator;
 import tamaized.voidscape.client.ConfigScreen;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.*;
@@ -92,6 +83,7 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
+	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 
 	public Voidscape() {
@@ -111,7 +103,7 @@ public class Voidscape {
 				ModBiomes::new,
 				ModBlocks::new,
 				ModCreativeTabs::new,
-//				ModDamageSource::new,
+				ModDamageSource::new,
 				ModDataSerializers::new,
 //				ModEffects::new,
 				ModEntities::new,
@@ -129,7 +121,7 @@ public class Voidscape {
 			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeLayeredBiomeProvider.CODEC);
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 		});
-//		SubCapability.init(busMod);
+		SubCapability.init(busMod);
 		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
 		});
@@ -139,19 +131,9 @@ public class Voidscape {
 						then(VoidCommands.Debug.register()))
 
 		);
-		busForge.addListener((Consumer<TickEvent.LevelTickEvent>) event -> {
-			if (event.phase == TickEvent.Phase.START)
-				return;
-//			if (event.level instanceof ServerLevel)
-//				((ServerLevel) event.level).getAllEntities().forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> data.tick(e))));
-		});
-		/*busForge.addListener((Consumer<AttackEntityEvent>) event -> event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapBind).ifPresent(data -> {
-			if (data.isBound())
-				event.setCanceled(true);
-		})));*/
 		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
-			/*if (event.player.level != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level)) {
-				if ((!event.player.level.isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
+			if (event.player.level() != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level())) {
+				if ((!event.player.level().isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
 						map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
 
 						event.player.tickCount % 30 == 0 &&
@@ -161,189 +143,89 @@ public class Voidscape {
 					final int rad = dist / 2;
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
-						event.player.level.setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
+					if (event.player.level().getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
+						event.player.level().setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
 				}
-				if (!event.player.level.isClientSide() && event.player.tickCount % 15 == 0 && event.player.getRandom().nextFloat() <= 0.15F) {
+				if (!event.player.level().isClientSide() && event.player.tickCount % 15 == 0 && event.player.getRandom().nextFloat() <= 0.15F) {
 					final int dist = 64;
 					final int rad = dist / 2;
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-					if (event.player.level.getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()) && event.player.level.getBlockState(dest.above()).isAir())
-						event.player.level.setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level.getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation(""))));
+					BlockState state = event.player.level().getBlockState(dest);
+					if ((state.equals(Blocks.BEDROCK.defaultBlockState()) || state.equals(ModBlocks.NULL_BLACK.get().defaultBlockState())) && event.player.level().getBlockState(dest.above()).isAir())
+						event.player.level().setBlockAndUpdate(dest.above(), BlockEtherealPlant.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation(""))));
 				}
-			}*/
-		});
-		busForge.addListener((Consumer<LivingKnockBackEvent>) event -> {
-			/*if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
-				event.setCanceled(true);
-			}*/
+			}
 		});
 		busForge.addListener((Consumer<LivingAttackEvent>) event -> {
-			/*if (event.getEntity().isAlive() && ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource()))
-				event.getEntity().invulnerableTime = 0;*/
+			if (event.getEntity().isAlive() && event.getSource().is(ModDamageSource.VOIDIC))
+				event.getEntity().invulnerableTime = 0;
 		});
 		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
-			/*if (event.getEntity().getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilTracked).map(data -> data.incapacitated).orElse(false)).orElse(false)) {
-				event.setCanceled(true);
-				return;
-			}
-			Entity e = event.getSource() instanceof IndirectEntityDamageSource ? event.getSource().getEntity() : event.getSource().getDirectEntity();
-			if (e instanceof LivingEntity && event.getEntity() instanceof Mob)
-				event.getEntity().getCapability(SubCapability.CAPABILITY_AGGRO).ifPresent(cap -> cap.
-						addHate((LivingEntity) e, calculateHate(event.getAmount(), (LivingEntity) e) * (((LivingEntity) e).
-								hasEffect(ModEffects.TUNNEL_VISION.get()) && e.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-								map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.1F : 1F), false));
 			Boolean arrow;
-			if (ModDamageSource.check(ModDamageSource.ID_VOIDIC, event.getSource())) {
-				event.getEntity().getCapability(SubCapability.CAPABILITY).
-						ifPresent(cap -> {
-							if (event.getEntity().getMainHandItem().getItem() instanceof AxeItem && cap.
-									get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1)).orElse(false))
-								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.
-										setInsanePower(Math.min(1000, stats.getInsanePower() + (int) event.getAmount() * (event.getEntity().
-												hasEffect(ModEffects.TUNNEL_VISION.get()) ? event.getEntity().getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-												map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == e ? 2 : 1).orElse(1)).orElse(1) : 1))));
-							if (event.getEntity().getOffhandItem().canPerformAction(ToolActions.SHIELD_BLOCK) && event.getEntity().isBlocking() && cap.
-									get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.TACTICIAN_1)).orElse(false)) {
-								cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-									stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) event.getAmount() * (event.getEntity().
-											hasEffect(ModEffects.EMPOWER_SHIELD_2X_NULL.get()) ? 2 : 1)));
-									event.getEntity().removeEffect(ModEffects.EMPOWER_SHIELD_2X_NULL.get());
-								});
-								event.setAmount(event.getAmount() * 0.9F);
-							}
-						});
-				if (event.getEntity().attributes.hasAttribute(ModAttributes.VOIDIC_RES.get()))
-					event.setAmount((float) Math.max(0, event.getAmount() - event.getEntity().getAttributeValue(ModAttributes.VOIDIC_RES.get())));
-			} else if ((arrow = meleeOrArrowSource(event.getSource())) != null) {
+			if (!event.getSource().is(ModDamageSource.VOIDIC) && (arrow = meleeOrArrowSource(event.getSource())) != null) {
 				if (event.getEntity().getHealth() <= event.getAmount())
 					return;
+				Entity e = event.getSource().isIndirect() ? event.getSource().getEntity() : event.getSource().getDirectEntity();
 				if (e instanceof LivingEntity attacker) {
 					if (!arrow) {
 						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
 								attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) : 0) *
-								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * (attacker.
-								hasEffect(ModEffects.SENSE_WEAKNESS.get()) && attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-								map(cap -> cap.context(ModEffects.SENSE_WEAKNESS.get()).map(context -> context.source() == event.getEntity()).orElse(false)).orElse(false) ? 1.5F : 1F);
+								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F);
 						if (dmg > 0) {
 							event.getEntity().invulnerableTime = 0;
-							event.getEntity().hurt(ModDamageSource.VOIDIC_WITH_ENTITY.apply(attacker), dmg);
-							attacker.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
-								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.TANK_SKILLS.INSANE_BEAST_1) || data.hasSkill(TurmoilSkills.MELEE_SKILLS.CHAOS_BLADE_1)).
-										orElse(false) && attacker.getMainHandItem().getItem() instanceof AxeItem)
-									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) dmg * (attacker.
-											hasEffect(ModEffects.TUNNEL_VISION.get()) ? attacker.getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).
-											map(context -> context.context(ModEffects.TUNNEL_VISION.get()).map(c -> c.source() == event.getEntity() ? 2 : 1).orElse(1)).orElse(1) : 1))));
-								if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.VOIDS_FAVOR_1)).
-										orElse(false) && attacker.getMainHandItem().getItem() instanceof SwordItem)
-									cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> {
-										stats.setNullPower(Math.min(1000, stats.getNullPower() + (int) (dmg + stats.stats().spellpower * (attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F))));
-										if (attacker.hasEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get())) {
-											attacker.removeEffect(ModEffects.EMPOWER_SWORD_OSMOSIS.get());
-											stats.setVoidicPower(Math.min(1000, stats.getVoidicPower() + (int) (150F * (stats.stats().spellpower / 100F))));
-										}
-									});
-							});
-							applyEffects(event.getEntity(), attacker);
+							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(event.getEntity().level(), ModDamageSource.VOIDIC, attacker), dmg);
 						}
 					}
 				}
 				if (event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
 					arrowEntity.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> {
-						float voidic = data.active(IVoidicArrow.ID_VOIDIC);
+						float voidic = data.getDamage();
 						if (voidic > 0) {
 							if (event.getEntity().getHealth() <= event.getAmount())
 								return;
 							event.getEntity().invulnerableTime = 0;
-							event.getEntity().hurt(arrowEntity.getOwner() instanceof LivingEntity ? ModDamageSource.
-									VOIDIC_WITH_ENTITY.apply((LivingEntity) arrowEntity.getOwner()) : ModDamageSource.VOIDIC, voidic);
-						}
-						float fire = data.active(IVoidicArrow.ID_FIRE);
-						if (fire > 0) {
-							if (event.getEntity().getHealth() <= event.getAmount())
-								return;
-							float dmg = arrowEntity.isOnFire() ? fire : fire * 0.25F;
-							event.getEntity().invulnerableTime = 0;
-							event.getEntity().hurt(DamageSource.ON_FIRE, dmg);
+							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
 						}
 					});
 				}
-			}*/
-		});
-		busForge.addListener((Consumer<LivingHealEvent>) event -> {
-			/*event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
-				cap.get(subCapTurmoilTracked).ifPresent(data -> {
-					if (data.incapacitated)
-						event.setCanceled(true);
-				});
-				cap.get(subCapTurmoilStats).ifPresent(stats -> {
-					if (stats.stats().healAmp > 0)
-						event.setAmount(event.getAmount() * (1F + stats.stats().healAmp));
-				});
-			});*/
+			}
 		});
 		busForge.addListener((Consumer<EntityJoinLevelEvent>) event -> {
-			/*if (event.getEntity() instanceof AbstractArrow) {
-				AbstractArrow arrow = (AbstractArrow) event.getEntity();
+			if (event.getEntity() instanceof AbstractArrow arrow) {
 				Entity entity = arrow.getOwner();
-				if (entity instanceof LivingEntity) {
-					LivingEntity shooter = (LivingEntity) entity;
+				if (entity instanceof LivingEntity shooter) {
 					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
 						return;
-					LazyOptional<SubCapability.ISubCap> c = shooter.getCapability(SubCapability.CAPABILITY);
-					float voidic = (float) (((shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get()) + arrow.getBaseDamage()) * c.
-							map(cap -> cap.get(Voidscape.subCapTurmoilData).map(data -> (
-									data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_5) ? 2.00F :
-
-											data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_4) ? 1.75F :
-
-													data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_3) ? 1.50F :
-
-															data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_2) ? 1.25F :
-
-																	data.hasSkill(TurmoilSkills.MAGE_SKILLS.VOIDIC_ARCHER_1) ? 1.10F :
-
-																			1F)).orElse(1F)).orElse(1F)) * c.map(cap -> cap.get(Voidscape.subCapTurmoilStats).
-							map(stats -> stats.isActive(MageAbilities.ARROW_IMBUE_SPELLLIKE) ? 1F + (stats.stats().spellpower / 100F) : 1F).
-							orElse(1F)).orElse(1F) - arrow.getBaseDamage());
+					float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get());
 					if (voidic > 0)
-						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.mark(IVoidicArrow.ID_VOIDIC, voidic));
-					if (shooter.hasEffect(ModEffects.FIRE_ARROW.get())) {
-						if (event.getLevel().random.nextInt(4) == 0)
-							arrow.setSecondsOnFire(100);
-						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.mark(IVoidicArrow.ID_FIRE, (float) arrow.getBaseDamage()));
-						shooter.removeEffect(ModEffects.FIRE_ARROW.get());
-					}
+						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.setDamage(voidic));
 				}
-			}*/
+			}
 		});
-		busForge.addListener((Consumer<MobEffectEvent.Remove>) event -> {
-//			if (ModEffects.hasContext(event.getEffect()))
-//				event.getEntity().getCapability(SubCapability.CAPABILITY_EFFECTCONTEXT).ifPresent(cap -> cap.remove(event.getEffect()));
-		});
-		busForge.addListener((Consumer<BlockEvent.BreakEvent>) event -> {
-//			if (!event.getPlayer().isCreative() && event.getPlayer().level.dimension().location().getNamespace().equals(Voidscape.MODID) && event.getPlayer().level.dimension().location().getPath().contains("instance"))
-//				event.setCanceled(true);
-		});
-		/*busForge.addListener((Consumer<LivingSpawnEvent.CheckSpawn>) event -> {
-			if (event.getSpawnReason() == MobSpawnType.NATURAL && event.getLevel() instanceof ServerLevel && event.getEntity() instanceof Mob && Voidscape.
-					checkForVoidDimension(event.getEntity().level)) {
+		busForge.addListener((Consumer<MobSpawnEvent.PositionCheck>) event -> {
+			if (event.getSpawnType() == MobSpawnType.NATURAL &&
+					Voidscape.checkForVoidDimension(event.getLevel().getLevel())) {
 				Player player = event.getLevel().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
-				if (player != null && Voidscape.isValidPositionForMob((ServerLevel) event.getLevel(), event.getEntity(), player.
-						distanceToSqr(event.getX(), event.getY(), event.getZ()), new BlockPos(event.getX(), event.getY(), event.getZ())))
+				if (player != null &&
+						Voidscape.isValidPositionForMob(
+								event.getLevel().getLevel(),
+								event.getEntity(),
+								player.distanceToSqr(event.getX(), event.getY(), event.getZ()),
+								BlockPos.containing(event.getX(), event.getY(), event.getZ())))
 					event.setResult(Event.Result.ALLOW);
 				else
 					event.setResult(Event.Result.DENY);
 			}
-		});*/
-		/*busForge.addListener((Consumer<LivingSpawnEvent.SpecialSpawn>) event -> {
-			if (event.getSpawnReason() == MobSpawnType.NATURAL && !(event.getEntity() instanceof IEthereal) && Voidscape.
-					checkForVoidDimension(event.getEntity().level)) {
+		});
+		busForge.addListener((Consumer<MobSpawnEvent.FinalizeSpawn>) event -> {
+			if (event.getSpawnType() == MobSpawnType.NATURAL &&
+					!(event.getEntity() instanceof IEthereal) &&
+					Voidscape.checkForVoidDimension(event.getEntity().level())) {
 				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
 						setInfusion(event.getEntity().getRandom().nextInt(200) + 100)));
 			}
-		});*/
+		});
 	}
 
 	private static boolean isValidPositionForMob(ServerLevel serverWorld_, Mob mobEntity_, double double_, BlockPos pos) {
@@ -355,57 +237,14 @@ public class Voidscape {
 		}
 	}
 
-	/*@Nullable
+	@Nullable
 	private static Boolean meleeOrArrowSource(DamageSource source) {
-		if (!(source instanceof EntityDamageSource))
-			return null;
-		switch (source.getMsgId()) {
-			case "player":
-			case "mob":
-				return false;
-			case "arrow":
-				return true;
-			default:
-				return null;
-		}
-	}*/
-
-	public static void applyEffects(LivingEntity entity, LivingEntity attacker) {
-		/*if (attacker.hasEffect(ModEffects.EMPOWER_ATTACK_SLICING.get())) {
-			attacker.removeEffect(ModEffects.EMPOWER_ATTACK_SLICING.get());
-			ModEffects.dot(attacker, entity, ModEffects.EMPOWER_ATTACK_SLICING_DOT.get(), 10 * 20, 0, 1);
-		}
-		if (attacker.hasEffect(ModEffects.EMPOWER_ATTACK_BLEED.get())) {
-			attacker.removeEffect(ModEffects.EMPOWER_ATTACK_BLEED.get());
-			ModEffects.dot(attacker, entity, ModEffects.EMPOWER_ATTACK_BLEED_DOT.get(), 15 * 20, 0, 1);
-		}*/
+		if (source.is(DamageTypes.PLAYER_ATTACK) || source.is(DamageTypes.MOB_ATTACK))
+			return false;
+		if (source.is(DamageTypes.ARROW))
+			return true;
+		return null;
 	}
-
-	/*public static boolean healTargetAndAggro(LivingEntity target, LivingEntity caster, float heal) {
-		if (target.level instanceof ServerLevel && ((ServerChunkCache) target.level.getChunkSource()).getGenerator() instanceof InstanceChunkGenerator && !(target instanceof Player))
-			return false;
-		float val = target.getHealth();
-		target.heal(heal);
-		if (val == target.getHealth())
-			return false;
-		caster.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
-			if (cap.get(Voidscape.subCapTurmoilData).map(data -> data.hasSkill(TurmoilSkills.HEALER_SKILLS.MAD_PRIEST_1)).orElse(false))
-				cap.get(Voidscape.subCapTurmoilStats).ifPresent(stats -> stats.setInsanePower(Math.min(1000, stats.getInsanePower() + (int) (target.getHealth() - val))));
-
-		});
-		for (int i = 0; i < 10; i++) {
-			Vec3 pos = new Vec3(0.25F + target.getRandom().nextFloat() * 0.75F, 0, 0).
-					yRot((float) Math.toRadians(target.getRandom().nextInt(360))).add(target.getX(), target.getEyeY() - 0.5F + target.getRandom().nextFloat(), target.getZ());
-			((ServerLevel) caster.level).sendParticles(ParticleTypes.HEART, pos.x, pos.y, pos.z, 0, 0, 0, 0, 1);
-		}
-		target.level.getEntities(caster, target.getBoundingBox().inflate(10F), e -> e instanceof Mob && e != target).forEach(e -> e.getCapability(SubCapability.CAPABILITY_AGGRO).
-				ifPresent(cap -> cap.addHate(caster, calculateHate(heal, caster), true)));
-		return true;
-	}*/
-
-	/*public static double calculateHate(double input, LivingEntity attacker) {
-		return input * attacker.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapTurmoilStats).map(stats -> stats.stats().threat / 100D).orElse(0.0D)).orElse(0.0D);
-	}*/
 
 	public static boolean checkForVoidDimension(@Nullable Level level) {
 		if (level == null)

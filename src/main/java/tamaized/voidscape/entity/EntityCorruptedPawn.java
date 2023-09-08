@@ -1,48 +1,79 @@
 package tamaized.voidscape.entity;
 
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import tamaized.voidscape.registry.ModDataSerializers;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.registry.*;
 
 import javax.annotation.Nullable;
 
-public abstract class EntityCorruptedPawn extends Mob {
+public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnData {
 
-	private static final EntityDataAccessor<Integer> TENTACLES = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Boolean> CASTING = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Integer> RAYS = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> RAY_TARGET = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Long> RAY_START = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
-	private static final EntityDataAccessor<Long> RAY_END = SynchedEntityData.defineId(EntityCorruptedPawn.class, ModDataSerializers.LONG);
-	private static final EntityDataAccessor<Boolean> SPIN = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Integer> SPIN_START = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> SPIN_END = SynchedEntityData.defineId(EntityCorruptedPawn.class, EntityDataSerializers.INT);
+	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+	private Entity target;
 
-	public int lastTentacleState;
-	public long[] tentacleTimes = new long[8];
+	public EntityCorruptedPawn(Level level) {
+		this(ModEntities.CORRUPTED_PAWN.get(), level);
+	}
 
-	public long castTick;
-	private boolean lastCast;
-
-	private Entity targetCache;
-
-	protected EntityCorruptedPawn(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, Level p_i48577_2_) {
+	public EntityCorruptedPawn(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, Level p_i48577_2_) {
 		super(p_i48577_1_, p_i48577_2_);
+		setNoGravity(true);
+		noPhysics = true;
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		return Monster.createMonsterAttributes().
+				add(Attributes.MAX_HEALTH, 20.0D);
+	}
+
+	@Override
+	public void startSeenByPlayer(ServerPlayer player) {
+		super.startSeenByPlayer(player);
+		if (player == target)
+			this.bossEvent.addPlayer(player);
+	}
+
+	@Override
+	public void stopSeenByPlayer(ServerPlayer player) {
+		super.stopSeenByPlayer(player);
+		if (player == target)
+			this.bossEvent.removePlayer(player);
+	}
+
+	public EntityCorruptedPawn target(Player player) {
+		target = player;
+		return this;
 	}
 
 	@Override
@@ -51,136 +82,71 @@ public abstract class EntityCorruptedPawn extends Mob {
 		setYHeadRot(getYRot());
 	}
 
+	public boolean shouldRender(@Nullable Player player) {
+		return player != null && player.equals(target);
+	}
+
 	@Override
 	public void tick() {
-		if (level().isClientSide()) {
-			if (lastCast != isCasting()) {
-				castTick = tickCount;
-				lastCast = isCasting();
+		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+		if (!level().isClientSide()) {
+			if (target == null || !target.isAlive())
+				remove(RemovalReason.DISCARDED);
+			else {
+				target.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
+					if (!equals(data.getHunter()))
+						remove(RemovalReason.DISCARDED);
+					else {
+						lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+						setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
+					}
+				}));
 			}
-			for (int i = 0; i < tentacleTimes.length; i++) {
-				int shift = 7 - i;
-				int cbit = (getTentacleBits() >> shift) & 0b1;
-				int obit = (lastTentacleState >> shift) & 0b1;
-				if (cbit != obit)
-					tentacleTimes[i] = tickCount + 20 * 5;
-			}
-			lastTentacleState = getTentacleBits();
+		} else if (target != null) {
+			target.lookAt(EntityAnchorArgument.Anchor.EYES, position());
+			lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+			if (target instanceof Player target && tickCount % 5 == 0)
+				level().playSound(target, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
 		}
 		super.tick();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		entityData.define(TENTACLES, 0b00000000);
-		entityData.define(CASTING, false);
-		entityData.define(RAYS, 0b000000000);
-		entityData.define(RAY_TARGET, 0);
-		entityData.define(RAY_START, 0L);
-		entityData.define(RAY_END, 0L);
-		entityData.define(SPIN, false);
-		entityData.define(SPIN_START, 0);
-		entityData.define(SPIN_END, 0);
+	public void writeSpawnData(FriendlyByteBuf buffer) {
+		buffer.writeVarInt(target == null ? -1 : target.getId());
 	}
 
-	public boolean isCasting() {
-		return entityData.get(CASTING);
+	@Override
+	public void readSpawnData(FriendlyByteBuf additionalData) {
+		target = level().getEntity(additionalData.readVarInt());
 	}
 
-	public void markCasting(boolean cast) {
-		entityData.set(CASTING, cast);
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		float dmg = source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F;
+		if (super.hurt(source, dmg)) {
+			if (getHealth() - dmg > 0F) {
+				Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat() * 2F - 1F);
+				moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
+			}
+			return true;
+		}
+		return false;
 	}
 
-	/**
-	 * Tentacles are represented by each bit, ordered from the left most bit down, the Tentacle order starts from the very top and goes around clockwise<p /><pre>
-	 *   8
-	 *  1 7
-	 * 2   6
-	 *  3 5
-	 *   4</pre>
-	 */
-	public int getTentacleBits() {
-		return entityData.get(TENTACLES);
-	}
-
-	protected void setTentacleBits(int bits) {
-		entityData.set(TENTACLES, bits & 0b11111111);
-	}
-
-	/**
-	 * Ray bits are the same as {@link #getTentacleBits()} except the 9th bit is head ray
-	 */
-	public int getRayBits() {
-		return entityData.get(RAYS);
-	}
-
-	public void setRayBits(int bits) {
-		entityData.set(RAYS, bits & 0b111111111);
-	}
-
-	@Nullable
-	public Entity getRayTarget() {
-		final int id = entityData.get(RAY_TARGET);
-		if (targetCache == null || targetCache.getId() != id)
-			targetCache = id >= 0 ? level().getEntity(id) : null;
-		return targetCache;
-	}
-
-	public void setRayTarget(@Nullable Entity entity) {
-		entityData.set(RAY_TARGET, entity == null ? -1 : entity.getId());
-	}
-
-	public long getRayStart() {
-		return entityData.get(RAY_START);
-	}
-
-	public void updateRayStart() {
-		entityData.set(RAY_START, level().getGameTime());
-	}
-
-	public long getRayEnd() {
-		return entityData.get(RAY_END);
-	}
-
-	public void updateRayEnd(long len) {
-		entityData.set(RAY_END, level().getGameTime() + len);
-	}
-
-	public void disableTentacles(int bits) {
-		setTentacleBits(getTentacleBits() | bits);
-	}
-
-	public void enableTentacles(int bits) {
-		setTentacleBits(~((~getTentacleBits()) | bits));
-	}
-
-	public boolean isSpin() {
-		return entityData.get(SPIN);
-	}
-
-	public void markSpin(boolean spin) {
-		entityData.set(SPIN, spin);
-	}
-
-	public long getSpinStart() {
-		return entityData.get(SPIN_START);
-	}
-
-	public void updateSpinStart() {
-		entityData.set(SPIN_START, tickCount);
-	}
-
-	public long getSpinEnd() {
-		return entityData.get(SPIN_END);
-	}
-
-	public void updateSpinEnd(int len) {
-		entityData.set(SPIN_END, len);
-	}
-
-	public boolean shouldRender(@Nullable Player player) {
-		return true;
+	@Override
+	protected void tickDeath() {
+		super.tickDeath();
+		if (!level().isClientSide()) {
+			if (deathTime == 1)
+				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
+			if (deathTime == 20) {
+				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(ModItems.TENDRIL.get(), 1)));
+				target.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
+					data.setParanoia(0);
+				}));
+			}
+		}
 	}
 
 	@Override
