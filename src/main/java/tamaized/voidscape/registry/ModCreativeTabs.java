@@ -40,6 +40,7 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(makeFruit(BlockEtherealPlant.State.END));
 				output.accept(ModItems.ETHEREAL_ESSENCE.get());
 				output.accept(ModItems.VOIDIC_CRYSTAL.get());
+				output.accept(ModItems.VOIDIC_TEMPLATE.get());
 				output.accept(ModTools.VOIDIC_CRYSTAL_SWORD.get());
 				output.accept(ModTools.VOIDIC_CRYSTAL_AXE.get());
 				output.accept(ModTools.VOIDIC_CRYSTAL_PICKAXE.get());

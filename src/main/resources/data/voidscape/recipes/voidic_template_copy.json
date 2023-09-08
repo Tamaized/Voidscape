@@ -1,0 +1,20 @@
+{
+  "result": {
+	"item": "voidscape:voidic_template",
+    "count": 2
+  },
+  "pattern": [
+	"CCC",
+	"CTC",
+	"CCC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"C": {
+	  "item": "voidscape:voidic_crystal"
+	},
+    "T": {
+      "item": "voidscape:voidic_template"
+    }
+  }
+}
