@@ -61,7 +61,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean shouldTeleport(Entity parent) {
 		return parent.tickCount % 20 == 0 &&
-				parent.level().getRandom().nextBoolean() &&
+				parent.level().getRandom().nextInt(8) == 0 &&
 				canTeleport(parent);
 	}
 
@@ -77,7 +77,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 					nextTeleportStep = false;
 				} else if (!nextTeleportStep && shouldTeleport(parent)) {
 					if (parent.level().isClientSide())
-						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 1F, 1F);
+						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
 					nextTeleportStep = true;
 				}
 				if (nextTeleportStep) {
@@ -89,14 +89,14 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				teleportTick--;
 				if (shouldTeleport(parent)) {
 					if (parent.level().isClientSide())
-						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 1F, 1F);
+						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
 					teleporting = true;
 					nextTeleportStep = true;
 				}
 			}
 		}
-		teleportTick = Mth.clamp(teleportTick, 0, 100);
-		if (inVoid && teleportTick >= 100) {
+		teleportTick = Mth.clamp(teleportTick, 0, 200);
+		if (!inVoid && teleportTick >= 200) {
 			parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
 			return;
 		}

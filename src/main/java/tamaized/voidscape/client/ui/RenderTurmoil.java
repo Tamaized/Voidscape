@@ -58,7 +58,7 @@ public class RenderTurmoil {
 			if (world != null && Minecraft.getInstance().player != null) {
 				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
 					renderInsanity(data, poseStack.pose(), partialTick);
-					float perc = Mth.clamp(Mth.lerp(partialTick, lastDeltaTick, deltaTick) / 100F, 0F, 1F);
+					float perc = Mth.clamp(Mth.lerp(partialTick, lastDeltaTick, deltaTick) / 200F, 0F, 1F);
 					if (perc > 0) {
 						RenderSystem.enableBlend();
 						{
