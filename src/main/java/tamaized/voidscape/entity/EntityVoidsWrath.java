@@ -83,6 +83,11 @@ public class EntityVoidsWrath extends Monster implements PowerableMob, IEthereal
 	}
 
 	@Override
+	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
+		// NO-OP
+	}
+
+	@Override
 	public void lookAt(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
 		super.lookAt(entityIn, maxYawIncrease, maxPitchIncrease);
 		setYHeadRot(getYRot());
