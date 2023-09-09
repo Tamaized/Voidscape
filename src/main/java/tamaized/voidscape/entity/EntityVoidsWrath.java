@@ -1,9 +1,12 @@
 package tamaized.voidscape.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import tamaized.voidscape.entity.ai.wrath.ChargedExplosionGoal;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
@@ -122,5 +126,25 @@ public class EntityVoidsWrath extends Monster implements PowerableMob, IEthereal
 	public void knockback(double p_147241_, double p_147242_, double p_147243_) {
 		if (!isPowered())
 			super.knockback(p_147241_, p_147242_, p_147243_);
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.BLAZE_AMBIENT;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource p_33579_) {
+		return SoundEvents.BLAZE_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.BLAZE_DEATH;
+	}
+
+	@Override
+	protected void playStepSound(BlockPos p_32159_, BlockState p_32160_) {
+		// NO-OP
 	}
 }
