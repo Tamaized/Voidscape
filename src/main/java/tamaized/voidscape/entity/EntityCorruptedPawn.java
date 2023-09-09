@@ -50,8 +50,8 @@ public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnDa
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Monster.createMonsterAttributes().
-				add(Attributes.MAX_HEALTH, 20.0D);
+		return Monster.createMonsterAttributes()
+				.add(Attributes.MAX_HEALTH, 20.0D);
 	}
 
 	@Override

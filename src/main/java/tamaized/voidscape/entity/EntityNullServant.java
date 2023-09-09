@@ -45,14 +45,14 @@ public class EntityNullServant extends Monster implements IEthereal {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Monster.createMonsterAttributes().
-				add(Attributes.MAX_HEALTH, 50.0D).
-				add(Attributes.FOLLOW_RANGE, 15.0D).
-				add(Attributes.MOVEMENT_SPEED, 0.23F).
-				add(Attributes.ATTACK_DAMAGE, 3.0D).
-				add(Attributes.ARMOR, 10.0D).
-				add(ModAttributes.VOIDIC_DMG.get(), 2.0D).
-				add(ModAttributes.VOIDIC_RES.get(), 3.0D);
+		return Monster.createMonsterAttributes()
+				.add(Attributes.MAX_HEALTH, 50.0D)
+				.add(Attributes.FOLLOW_RANGE, 15.0D)
+				.add(Attributes.MOVEMENT_SPEED, 0.23F)
+				.add(Attributes.ATTACK_DAMAGE, 3.0D)
+				.add(Attributes.ARMOR, 10.0D)
+				.add(ModAttributes.VOIDIC_DMG.get(), 2.0D)
+				.add(ModAttributes.VOIDIC_RES.get(), 3.0D);
 	}
 
 	@Override

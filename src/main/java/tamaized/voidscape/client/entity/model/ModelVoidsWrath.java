@@ -1,10 +1,7 @@
 package tamaized.voidscape.client.entity.model;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -16,21 +13,16 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
-import tamaized.voidscape.client.RenderStateAccessor;
-import tamaized.voidscape.client.Shaders;
-import tamaized.voidscape.entity.EntityNullServant;
-import tamaized.voidscape.entity.EntityVoidsWrathBoss;
+import tamaized.voidscape.entity.EntityVoidsWrath;
 
 import java.util.function.Function;
 
-public class ModelVoidsWrath<T extends EntityVoidsWrathBoss> extends EntityModel<T> implements ArmedModel {
+public class ModelVoidsWrath<T extends EntityVoidsWrath> extends EntityModel<T> implements ArmedModel {
 
 	public ModelPart head;
 	public ModelPart body;

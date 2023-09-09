@@ -1,6 +1,0 @@
-@MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
-package tamaized.voidscape.client.layout;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;

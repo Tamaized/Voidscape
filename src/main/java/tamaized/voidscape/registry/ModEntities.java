@@ -9,6 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -49,7 +50,14 @@ public class ModEntities implements RegistryClass {
 						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
-	public static final RegistryObject<EntityType<EntityVoidsWrathBoss>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(EntityVoidsWrathBoss.class, EntityVoidsWrathBoss::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune()));
+	public static final RegistryObject<EntityType<EntityVoidsWrath>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> {
+		EntityType<EntityVoidsWrath> type = build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(EntityVoidsWrath.class, EntityVoidsWrath::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune());
+		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
+				rand.nextInt(3) == 0 &&
+						NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) &&
+						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
+		return type;
+	});
 
 	@Override
 	public void init(IEventBus bus) {
@@ -83,7 +91,7 @@ public class ModEntities implements RegistryClass {
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(CORRUPTED_PAWN.get(), EntityCorruptedPawn.createAttributes().build());
-		event.put(VOIDS_WRATH.get(), Mob.createMobAttributes().add(ModAttributes.VOIDIC_DMG.get(), 3D).build());
+		event.put(VOIDS_WRATH.get(), EntityVoidsWrath.createAttributes().build());
 		event.put(NULL_SERVANT.get(), EntityNullServant.createAttributes().build());
 	}
 
