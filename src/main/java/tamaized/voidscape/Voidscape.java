@@ -256,13 +256,6 @@ public class Voidscape {
 		return level.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
-	public static boolean checkForDutyInstance(@Nullable Level level) {
-		if (level == null)
-			return false;
-		ResourceLocation loc = level.dimension().location();
-		return loc.getNamespace().equals(Voidscape.MODID) && (loc.getPath().startsWith("instance_"));
-	}
-
 	public static ServerLevel getLevel(Level level, ResourceKey<Level> dest) {
 		return Objects.requireNonNull(Objects.requireNonNull(level.getServer()).getLevel(dest));
 	}
