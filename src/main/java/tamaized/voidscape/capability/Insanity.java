@@ -247,7 +247,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		return paranoia;
 	}
 
-	public void setParanoia(int amount) {
+	public void setParanoia(float amount) {
 		paranoia = amount;
 		dirty = true;
 	}

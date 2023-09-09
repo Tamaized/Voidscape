@@ -6,6 +6,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -21,8 +23,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.BlockEtherealPlant;
-
-import java.util.UUID;
+import tamaized.voidscape.capability.SubCapability;
 
 public class ModItems implements RegistryClass {
 
@@ -73,16 +74,15 @@ public class ModItems implements RegistryClass {
 						case "end" -> BlockEtherealPlant.State.END;
 					};
 				switch (state) {
-					// TODO
-					/*case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
-							setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
-					case NULL -> {
-						entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
-						entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setParanoia((int) data.getParanoia() - 150)));
-					}
-					case OVERWORLD -> entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60 * 20, 3));
-					case NETHER -> entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 60 * 20, 3));
-					case END -> entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3));*/
+					case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+							.ifPresent(data -> data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
+					case NULL -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+							.ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
+					case OVERWORLD -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+							.ifPresent(data -> data.setParanoia(data.getParanoia() - 150)));
+					case NETHER -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+							.ifPresent(data -> data.setParanoia(data.getParanoia() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))))));
+					case END -> entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3));
 				}
 			}
 			return itemstack;
