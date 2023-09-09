@@ -52,6 +52,7 @@ import org.apache.logging.log4j.Logger;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.capability.DonatorData;
 import tamaized.voidscape.capability.Insanity;
 import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ClientInitiator;
@@ -83,7 +84,10 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
+
 	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
+	public static final SubCapability.ISubCap.SubCapKey<DonatorData> subCapDonatorData = SubCapability.AttachedSubCap.register(DonatorData.class, DonatorData::new);
+
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 
 	public Voidscape() {

@@ -20,9 +20,12 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.client.ui.RenderTurmoil;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -52,12 +55,15 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	}
 
 	public static void setup() {
-//		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderLevelLastEvent>) event -> BUFFERS.endBatch()); // FIXME
+		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderLevelStageEvent>) event -> {
+			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL)
+				BUFFERS.endBatch();
+		});
 	}
 
 	@Override
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		/*entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapDonatorData).ifPresent(data -> {
+		entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapDonatorData).ifPresent(data -> {
 			if (data.enabled) {
 				final boolean fabulous = Minecraft.getInstance().levelRenderer.getTranslucentTarget() != null;
 
@@ -130,6 +136,6 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				stack.popPose();
 
 			}
-		}));*/
+		}));
 	}
 }
