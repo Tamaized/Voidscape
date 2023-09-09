@@ -211,7 +211,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	public float calcInfusionRate(Entity parent) {
 		if (parent instanceof LivingEntity entity) {
-			return 2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get());
+			return Mth.clamp(2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()), 0F, 1F);
 		}
 		return 1F;
 	}
@@ -228,7 +228,10 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public float calcParanoiaRate(Entity parent) {
-		return 0.9F; // Attribute to reduce paranoia
+		if (parent instanceof LivingEntity entity) {
+			return Mth.clamp(2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()), 0F, 1F) * 0.9F;
+		}
+		return 1F;
 	}
 
 	public float getInfusion() {

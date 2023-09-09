@@ -51,6 +51,7 @@ public final class VoidCommands {
                                 ItemStack stack = new ItemStack(ModArmors.CORRUPT_HELMET.get());
                                 stack.addAttributeModifier(ModAttributes.VOIDIC_VISIBILITY.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlot.HEAD);
                                 stack.addAttributeModifier(ModAttributes.VOIDIC_INFUSION_RES.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlot.HEAD);
+                                stack.addAttributeModifier(ModAttributes.VOIDIC_PARANOIA_RES.get(), new AttributeModifier("god", 1, AttributeModifier.Operation.MULTIPLY_BASE), EquipmentSlot.HEAD);
                                 me.inventory.add(stack);
                                 return 0;
                             }))

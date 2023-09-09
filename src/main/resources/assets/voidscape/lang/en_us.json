@@ -14,8 +14,7 @@
 
   "entity.voidscape.null_servant": "Null Servant",
   "entity.voidscape.voids_wrath": "Void's Wrath",
-  "entity.voidscape.corrupted_pawn_phantom": "The Corrupted Pawn's Phantom",
-  "entity.voidscape.corrupted_pawn_boss": "The Corrupted Pawn",
+  "entity.voidscape.corrupted_pawn": "The Corrupted Pawn",
   "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
@@ -62,6 +61,7 @@
   "item.voidscape.corrupt_boots": "Corrupt Boots",
 
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
+  "voidscape.attribute.voidic_paranoia_res": "Voidic Paranoia Resistance",
   "voidscape.attribute.voidic_res": "Voidic Damage Resistance",
   "voidscape.attribute.voidic_dmg": "Voidic Damage",
   "voidscape.attribute.voidic_arrow_dmg": "Voidic Arrow Damage",
