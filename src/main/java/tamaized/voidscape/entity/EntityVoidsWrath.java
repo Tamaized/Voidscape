@@ -38,9 +38,6 @@ public class EntityVoidsWrath extends Monster implements PowerableMob, IEthereal
 
 	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(EntityVoidsWrath.class, EntityDataSerializers.BOOLEAN);
 
-	public long glowTick;
-	private boolean lastGlow;
-
 	public EntityVoidsWrath(Level level) {
 		this(ModEntities.VOIDS_WRATH.get(), level);
 	}
