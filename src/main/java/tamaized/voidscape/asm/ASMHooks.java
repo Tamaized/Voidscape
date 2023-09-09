@@ -1,10 +1,7 @@
 package tamaized.voidscape.asm;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.DataFixer;
-import com.mojang.serialization.Dynamic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.model.EntityModel;
@@ -21,18 +18,12 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -45,40 +36,25 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.LightChunkGetter;
-import net.minecraft.world.level.chunk.storage.EntityStorage;
-import net.minecraft.world.level.entity.ChunkEntities;
-import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.world.VoidTeleporter;
 
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.function.Supplier;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
@@ -121,7 +97,7 @@ public class ASMHooks {
 	 * [BEFORE] INVOKEVIRTUAL : {@link EntityModel#renderToBuffer(PoseStack, VertexConsumer, int, int, float, float, float, float)}
 	 */
 	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
-		return alpha;//TODO Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> Mth.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
+		return Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> Mth.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
 	}
 
 	/**
@@ -140,21 +116,19 @@ public class ASMHooks {
 	 * [BEFORE FIRST GETSTATIC]
 	 */
 	public static boolean death(LivingEntity entity, DamageSource source) {
-		if (entity instanceof Player) {
-			if (Voidscape.checkForVoidDimension(entity.level())) {
-				entity.setHealth(entity.getMaxHealth() * 0.1F);
-				entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
-				/*if (!entity.level().isClientSide()) TODO: do actual teleport logic here
-					entity.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
-							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));*/
+		if (entity instanceof ServerPlayer player) {
+			if (Voidscape.checkForVoidDimension(player.level())) {
+				player.setHealth(entity.getMaxHealth() * 0.1F);
+				player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+				if (!player.level().isClientSide())
+					player.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
 				return true;
 			}
 		} else {
-			// TODO
-			/*if ((source.getDirectEntity() instanceof Player || source.getEntity() instanceof Player) && Voidscape.checkForVoidDimension(entity.level()) && entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.
+			if ((source.getDirectEntity() instanceof Player || source.getEntity() instanceof Player) && Voidscape.checkForVoidDimension(entity.level()) && entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.
 					getInfusion() > 200).orElse(false)).orElse(false) && entity.getRandom().nextInt(3) == 0) {
 				Containers.dropItemStack(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.ETHEREAL_ESSENCE.get()));
-			}*/
+			}
 		}
 		return MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, source));
 	}
