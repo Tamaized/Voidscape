@@ -29,8 +29,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.entity.EntityAntiBolt;
 
 import java.util.Random;
 
@@ -98,11 +98,11 @@ public class ModBlocks implements RegistryClass {
 		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 				return;
-			/*EntityAntiBolt lit = ModEntities.ANTI_BOLT.get().create(level); // TODO
+			EntityAntiBolt lit = ModEntities.ANTI_BOLT.get().create(level);
 			if (lit != null) {
 				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
 				level.addFreshEntity(lit);
-			}*/
+			}
 		}
 
 		@Override
