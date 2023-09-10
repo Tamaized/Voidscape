@@ -56,7 +56,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 
 	public static void setup() {
 		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderLevelStageEvent>) event -> {
-			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL)
+			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
 				BUFFERS.endBatch();
 		});
 	}
@@ -65,9 +65,8 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapDonatorData).ifPresent(data -> {
 			if (data.enabled) {
-				final boolean fabulous = Minecraft.getInstance().levelRenderer.getTranslucentTarget() != null;
 
-				VertexConsumer buffer = (fabulous ? multibuffer : BUFFERS).getBuffer(WRAPPED_POS_TEX_COLOR);
+				VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
 
 				float x1 = 0.10F;
 				float y1 = -0.75F;
@@ -81,7 +80,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 
 				Consumer<VertexConsumer> vertexColor = verticies -> verticies.color(color.bit16, color.bit8, color.bit0, color.bit24).endVertex();
 
-				color.set(fabulous ? 1F : 0.25F, 0F, 0F, 0F);
+				color.set(0.25F, 0F, 0F, 0F);
 
 				stack.pushPose();
 				{
@@ -107,7 +106,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				}
 				stack.popPose();
 
-				buffer = (fabulous ? multibuffer : BUFFERS).getBuffer(WINGS);
+				buffer = BUFFERS.getBuffer(WINGS);
 
 				color.unpack(data.color);
 
