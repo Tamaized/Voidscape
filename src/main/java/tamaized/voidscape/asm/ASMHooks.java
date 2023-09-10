@@ -245,7 +245,7 @@ public class ASMHooks {
 		if (RegUtil.isArmorOverlay(stack)) {
 			RegUtil.renderingArmorOverlay = true;
 			ResourceLocation texture = layer.getArmorResource(entity, stack, slot, "overlay");
-			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, p_117111_);
+			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, false);
 			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 			RegUtil.renderingArmorOverlay = false;
 		}
