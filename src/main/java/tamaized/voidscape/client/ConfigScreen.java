@@ -17,7 +17,7 @@ public class ConfigScreen extends Screen {
 	private final Screen parent;
 	private EditBox input;
 	private Checkbox enabled;
-	private static final String TEXT_DONATOR_COLOR = "Donator Color (Hex Format AARRGGBB):";
+	private static final String TEXT_DONATOR_COLOR = "Donator Color (Hex Format RRGGBB):";
 
 	public ConfigScreen(Minecraft mc, Screen parent) {
 		super(Component.translatable(Voidscape.MODID + "_config"));

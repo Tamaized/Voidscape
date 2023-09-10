@@ -37,7 +37,7 @@ public class DonatorHandler {
 
 	public static final class DonatorSettings {
 		public boolean enabled = true;
-		public int color = 0xFFFFFFFF;
+		public int color = 0xFFFFFF;
 
 		public DonatorSettings(boolean enabled, int color) {
 			this.enabled = enabled;

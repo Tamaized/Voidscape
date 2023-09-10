@@ -34,8 +34,8 @@ public class Config {
 						define("enabled", false);
 				color = builder.
 						translation(translation("color")).
-						comment("Changes the Donator Wing Render Color, Format: 24 Bit AARRGGBB Hex").
-						defineInRange("color", 0xCC7700FF, Integer.MIN_VALUE, Integer.MAX_VALUE);
+						comment("Changes the Donator Wing Render Color, Format: RRGGBB Hex").
+						defineInRange("color", 0x7700FF, Integer.MIN_VALUE, Integer.MAX_VALUE);
 			}
 
 		}

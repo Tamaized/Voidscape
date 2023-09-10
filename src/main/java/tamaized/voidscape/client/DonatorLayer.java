@@ -109,6 +109,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 				buffer = BUFFERS.getBuffer(WINGS);
 
 				color.unpack(data.color);
+				color.bit24 = (int) (0.25F * 255);
 
 				stack.pushPose();
 				{
