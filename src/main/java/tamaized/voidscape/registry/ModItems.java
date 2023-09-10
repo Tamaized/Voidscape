@@ -1,20 +1,27 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,7 +60,42 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
-	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public InteractionResult useOn(UseOnContext context) {
+			Player player = context.getPlayer();
+			Level level = context.getLevel();
+			BlockPos blockpos = context.getClickedPos();
+			BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
+
+			if (canCreatePortal(level.getBlockState(blockpos1), level, blockpos1)) {
+				level.playSound(player, blockpos1, SoundEvents.TRIDENT_THUNDER, SoundSource.BLOCKS, 1F, 0.75F + context.getLevel().getRandom().nextFloat() * 0.5F);
+				ModBlocks.PORTAL.get().tryToCreatePortal(level, blockpos1);
+				ItemStack stack = context.getItemInHand();
+
+				if (player instanceof ServerPlayer) {
+					stack.shrink(1);
+				}
+
+				return InteractionResult.SUCCESS;
+			} else {
+				return InteractionResult.FAIL;
+			}
+		}
+
+		public static boolean canCreatePortal(BlockState state, Level level, BlockPos pos) {
+			boolean flag = false;
+
+			for (Direction direction : Direction.Plane.HORIZONTAL) {
+				BlockState s = level.getBlockState(pos.relative(direction));
+				if ((s.is(ModBlocks.VOIDIC_CRYSTAL_BLOCK.get()) || s.is(ModBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get())) && ModBlocks.PORTAL.get().isPortal(level, pos) != null) {
+					flag = true;
+				}
+			}
+
+			return state.isAir() && flag;
+		}
+	});
 	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().

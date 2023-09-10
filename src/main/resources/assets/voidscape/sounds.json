@@ -1,47 +1,57 @@
 {
   "ambience": {
-	"sounds": [
-	  "ambient/underwater/additions/dark1",
-	  {
-		"name": "ambient/underwater/additions/dark2",
-		"volume": 0.7
-	  },
-	  "ambient/underwater/additions/dark3",
-	  "ambient/underwater/additions/dark4",
-	  "ambient/underwater/additions/earth_crack",
-	  {
-		"name": "ambient/underwater/additions/crackles1",
-		"volume": 0.7
-	  },
-	  "ambient/underwater/additions/crackles2"
-	]
+    "sounds": [
+      "ambient/underwater/additions/dark1",
+      {
+        "name": "ambient/underwater/additions/dark2",
+        "volume": 0.7
+      },
+      "ambient/underwater/additions/dark3",
+      "ambient/underwater/additions/dark4",
+      "ambient/underwater/additions/earth_crack",
+      {
+        "name": "ambient/underwater/additions/crackles1",
+        "volume": 0.7
+      },
+      "ambient/underwater/additions/crackles2"
+    ]
+  },
+  "portal": {
+    "sounds": [
+      "ambient/underwater/additions/earth_crack",
+      {
+        "name": "ambient/underwater/additions/crackles1",
+        "volume": 0.7
+      },
+      "ambient/underwater/additions/crackles2"
+    ]
   },
   "music": {
-	"sounds": [
-	  {
-		"type": "event",
-		"name": "music.end"
-	  },
-	  {
-		"type": "event",
-		"name": "music.nether.basalt_deltas"
-	  },
-	  {
-		"type": "event",
-		"name": "music.nether.nether_wastes"
-	  },
-	  {
-		"type": "event",
-		"name": "music.nether.soul_sand_valley"
-	  },
-	  {
-		"type": "event",
-		"name": "music.nether.crimson_forest"
-	  },
-	  {
-		"type": "event",
-		"name": "music.nether.warped_forest"
-	  }
-	]
+    "sounds": [
+      {
+        "type": "event",
+        "name": "music.end"
+      },
+      {
+        "type": "event",
+        "name": "music.nether.basalt_deltas"
+      },
+      {
+        "type": "event",
+        "name": "music.nether.nether_wastes"
+      },
+      {
+        "type": "event",
+        "name": "music.nether.soul_sand_valley"
+      },
+      {
+        "type": "event",
+        "name": "music.nether.crimson_forest"
+      },
+      {
+        "type": "event",
+        "name": "music.nether.warped_forest"
+      }
+    ]
   }
 }

@@ -30,6 +30,7 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.block.BlockPortal;
 import tamaized.voidscape.entity.EntityAntiBolt;
 
 import java.util.Random;
@@ -61,6 +62,15 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.AMETHYST)));
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY.
 			register(VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("fragile_voidic_crystal_block", () -> new Block(Block.Properties.of()
+			.sound(SoundType.AMETHYST)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.strength(3F, 3F)
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY.
+			register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
@@ -132,28 +142,14 @@ public class ModBlocks implements RegistryClass {
 	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY.
 			register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	/*public static final RegistryObject<Block> EXIT_PORTAL = REGISTRY.register("exit_portal", () -> new HalfTransparentBlock(Block.Properties.of()
+	public static final RegistryObject<BlockPortal> PORTAL = REGISTRY.register("portal", () -> new BlockPortal(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noOcclusion()
 			.noLootTable()
 			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
-			.sound(SoundType.AMETHYST)) {
-		@Override
-		@SuppressWarnings("deprecation")
-		public InteractionResult use(BlockState p_60503_, Level p_60504_, BlockPos p_60505_, Player player, InteractionHand p_60507_, BlockHitResult p_60508_) {
-			if (Voidscape.checkForDutyInstance(player.level())) {
-				if (!player.level().isClientSide())
-					player.getCapability(SubCapability.CAPABILITY).ifPresent(c -> c.get(Voidscape.subCapTurmoilData).
-							ifPresent(data -> data.setState(Turmoil.State.TELEPORT)));
-				return InteractionResult.SUCCESS;
-			}
-			return super.use(p_60503_, p_60504_, p_60505_, player, p_60507_, p_60508_);
-		}
-	});*/
-	/*public static final RegistryObject<Item> EXIT_PORTAL_ITEM = ModItems.REGISTRY.
-			register(EXIT_PORTAL.getId().getPath(), () -> new BlockItem(EXIT_PORTAL.get(), ModItems.ItemProps.DEFAULT.properties().get()));*/
+			.sound(SoundType.AMETHYST)));
 
 	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new BlockEtherealPlant(Block.Properties.of()
 			.sound(SoundType.CROP)

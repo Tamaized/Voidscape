@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "axis=x": { "model": "voidscape:block/portal_ns" },
+    "axis=z": { "model": "voidscape:block/portal_ew" }
+  }
+}

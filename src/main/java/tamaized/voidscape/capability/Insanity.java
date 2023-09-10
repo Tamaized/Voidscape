@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
@@ -25,6 +26,7 @@ import tamaized.voidscape.entity.EntityCorruptedPawn;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.world.VoidPortalTeleporter;
 import tamaized.voidscape.world.VoidTeleporter;
 
 import javax.annotation.Nullable;
@@ -43,6 +45,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 			SoundEvents.ZOMBIFIED_PIGLIN_ANGRY, SoundEvents.ZOMBIFIED_PIGLIN_HURT, SoundEvents.CAT_HISS};
 
+	private boolean inPortal;
+	private boolean pleaseLeavePortal;
 	private boolean teleporting;
 	private boolean nextTeleportStep;
 	private int teleportTick;
@@ -53,6 +57,10 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private EntityCorruptedPawn hunt;
 
 	private boolean dirty;
+
+	public void setInPortal(boolean flag) {
+		inPortal = flag;
+	}
 
 	private boolean canTeleport(Entity parent) {
 		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
@@ -67,38 +75,52 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
-		boolean inVoid = false;
-		if (inVoid = Voidscape.checkForVoidDimension(parent.level())) {
-			teleportTick--;
-		} else {
-			if (teleporting) {
-				if (!canTeleport(parent)) {
-					teleporting = false;
-					nextTeleportStep = false;
-				} else if (!nextTeleportStep && shouldTeleport(parent)) {
-					if (parent.level().isClientSide())
-						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
-					nextTeleportStep = true;
-				}
-				if (nextTeleportStep) {
-					teleportTick++;
-					if (teleportTick % 20 == 0)
-						nextTeleportStep = false;
-				}
-			} else {
-				teleportTick--;
-				if (shouldTeleport(parent)) {
-					if (parent.level().isClientSide())
-						parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
-					teleporting = true;
-					nextTeleportStep = true;
+		if (inPortal) {
+			inPortal = false;
+			teleportTick++;
+			teleportTick = Mth.clamp(teleportTick, 0, 200);
+			if (!pleaseLeavePortal && teleportTick >= 200 && !parent.level().isClientSide()) {
+				if(Voidscape.checkForVoidDimension(parent.level())) {
+					parent.changeDimension(Voidscape.getLevel(parent.level(), Level.OVERWORLD), VoidPortalTeleporter.INSTANCE);
+				} else {
+					parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidPortalTeleporter.INSTANCE);
 				}
 			}
-		}
-		teleportTick = Mth.clamp(teleportTick, 0, 200);
-		if (!inVoid && teleportTick >= 200) {
-			parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
-			return;
+		} else {
+			pleaseLeavePortal = false;
+			boolean inVoid;
+			if (inVoid = Voidscape.checkForVoidDimension(parent.level())) {
+				teleportTick--;
+			} else {
+				if (teleporting) {
+					if (!canTeleport(parent)) {
+						teleporting = false;
+						nextTeleportStep = false;
+					} else if (!nextTeleportStep && shouldTeleport(parent)) {
+						if (parent.level().isClientSide())
+							parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
+						nextTeleportStep = true;
+					}
+					if (nextTeleportStep) {
+						teleportTick++;
+						if (teleportTick % 20 == 0)
+							nextTeleportStep = false;
+					}
+				} else {
+					teleportTick--;
+					if (shouldTeleport(parent)) {
+						if (parent.level().isClientSide())
+							parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
+						teleporting = true;
+						nextTeleportStep = true;
+					}
+				}
+			}
+			teleportTick = Mth.clamp(teleportTick, 0, 200);
+			if (!inVoid && teleportTick >= 200) {
+				parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
+				return;
+			}
 		}
 		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity()) {
 			paranoia = 0;
@@ -256,6 +278,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
 		nbt.putFloat("paranoia", paranoia);
 		nbt.putFloat("infusion", infusion);
+		nbt.putBoolean("inPortal", inPortal);
+		nbt.putBoolean("pleaseLeavePortal", pleaseLeavePortal);
+		nbt.putInt("teleportTick", teleportTick);
 		return nbt;
 	}
 
@@ -263,6 +288,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	public void read(CompoundTag nbt, @Nullable Direction side) {
 		paranoia = nbt.getFloat("paranoia");
 		infusion = nbt.getFloat("infusion");
+		inPortal = nbt.getBoolean("inPortal");
+		pleaseLeavePortal = nbt.getBoolean("pleaseLeavePortal");
+		teleportTick = nbt.getInt("teleportTick");
 	}
 
 	@Override
@@ -288,6 +316,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			if (!death) {
 				infusion = o.infusion;
 				paranoia = o.paranoia;
+				inPortal = o.inPortal;
+				pleaseLeavePortal = o.pleaseLeavePortal;
+				teleportTick = o.teleportTick;
 			}
 		}
 	}

@@ -1,7 +1,8 @@
 {
   "parent": "block/cube",
   "textures": {
-	"all": "voidscape:block/voidic_crystal_block"
+	"all": "voidscape:block/voidic_crystal_block",
+	  "particle": "#all"
   },
   "elements": [
 	{

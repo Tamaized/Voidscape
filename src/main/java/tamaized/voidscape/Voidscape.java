@@ -115,6 +115,7 @@ public class Voidscape {
 				ModItems::new,
 				ModNoiseGeneratorSettings::new,
 				ModParticles::new,
+				ModPOIs::new,
 				ModSounds::new,
 				ModStructures::new,
 				ModSurfaceRules::new,
