@@ -13,6 +13,7 @@ public class VoidVisibilityCache {
 		if (Minecraft.getInstance().player == null)
 			return o;
 		double attribute = Minecraft.getInstance().player.getAttributeValue(ModAttributes.VOIDIC_VISIBILITY.get());
+		o = -0.3F; // hardcode for now, need to get this value from the DimType
 		double light = o + (2D - o) * (attribute - 1D);
 		if (brightnessCache == null || attributeCache != attribute) {
 			brightnessCache = fillBrightnessRamp((float) light);
