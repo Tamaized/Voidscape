@@ -138,7 +138,7 @@ public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnDa
 			if (deathTime == 1)
 				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
-				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(ModItems.TENDRIL.get(), 1)));
+				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(ModItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
 				target.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setParanoia(0)));
 			}
 		}
