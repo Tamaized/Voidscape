@@ -99,7 +99,7 @@ public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnDa
 					}
 				}));
 			}
-		} else if (target != null) {
+		} else if (isAlive() && target != null) {
 			target.lookAt(EntityAnchorArgument.Anchor.EYES, position());
 			lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 			if (target instanceof Player target && tickCount % 5 == 0)
