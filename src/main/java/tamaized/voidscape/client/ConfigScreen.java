@@ -55,9 +55,9 @@ public class ConfigScreen extends Screen {
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		renderBackground(pGuiGraphics);
 		pGuiGraphics.drawCenteredString(font, Component.literal("Voidscape Config"), (int) (Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F), 5, 0xFFFFFFFF);
-		int color = 0xFFFFFFFF;
+		int color = 0xFFFFFF;
 		try {
-			color = Integer.decode(input.getValue());
+			color = Integer.decode("0x" + input.getValue());
 		} catch (NumberFormatException e) {
 			// NO-OP
 		}
