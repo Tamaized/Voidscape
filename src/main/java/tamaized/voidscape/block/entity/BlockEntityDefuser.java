@@ -75,12 +75,14 @@ public class BlockEntityDefuser extends BlockEntity {
             AtomicBoolean process = new AtomicBoolean(false);
             AtomicBoolean particle = new AtomicBoolean(false);
             level.getEntities(null, new AABB(blockPos).inflate(32D)).forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-                data.decrementInfusion(1);
-                process.set(true);
-                Vec3 dir = new Vec3(blockPos.getX() + 0.5D, blockPos.getY() - 0.5D, blockPos.getZ() + 0.5D).subtract(e.position()).normalize().scale(0.15D);
-                if (level.getRandom().nextInt(100) == 0) {
-                    packet.queueParticle(ParticleTypes.END_ROD, false, e.getX(), e.getY() + e.getBbHeight() / 2F, e.getZ(), dir.x(), dir.y(), dir.z());
-                    particle.set(true);
+                if (data.getInfusion() > 0) {
+                    data.decrementInfusion(1);
+                    process.set(true);
+                    Vec3 dir = new Vec3(blockPos.getX() + 0.5D, blockPos.getY() - 0.5D, blockPos.getZ() + 0.5D).subtract(e.position()).normalize().scale(0.15D);
+                    if (level.getRandom().nextInt(100) == 0) {
+                        packet.queueParticle(ParticleTypes.END_ROD, false, e.getX(), e.getY() + e.getBbHeight() / 2F, e.getZ(), dir.x(), dir.y(), dir.z());
+                        particle.set(true);
+                    }
                 }
             })));
             if (process.get()) {
