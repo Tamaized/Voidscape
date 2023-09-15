@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "voidscape:machine_defuser"
+  },
+  "pattern": [
+    "VBV",
+    "BCB",
+    "VBV"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "V": {
+      "item": "voidscape:voidic_crystal"
+    },
+    "B": {
+      "item": "voidscape:charred_bone"
+    },
+    "C": {
+      "item": "voidscape:machine_core"
+    }
+  }
+}

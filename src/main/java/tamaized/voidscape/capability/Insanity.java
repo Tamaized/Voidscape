@@ -52,7 +52,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private int teleportTick;
 	private float paranoia;
 	private float infusion;
-	public boolean decrementEffects = true;
+	public float decrementInfusion;
 
 	private EntityCorruptedPawn hunt;
 
@@ -129,12 +129,15 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		}
 		if (Voidscape.checkForVoidDimension(parent.level()) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
-			infusion += calcInfusionRate(parent) / 20F;
-		} else if (parent.isSpectator() || decrementEffects) {
+			if (decrementInfusion <= 0)
+				infusion += calcInfusionRate(parent) / 20F;
+			else
+				infusion -= decrementInfusion;
+		} else {
 			paranoia = 0;
 			infusion--;
 		}
-		decrementEffects = true;
+		decrementInfusion = 0;
 		paranoia = Mth.clamp(paranoia, 0, 600);
 		infusion = Mth.clamp(infusion, 0, 600);
 		if (parent instanceof LivingEntity && !parent.level().isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
@@ -260,9 +263,14 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		return infusion;
 	}
 
+	public void decrementInfusion(float amount) {
+		decrementInfusion = amount;
+	}
+
 	public void setInfusion(float amount) {
+		float prev = infusion;
 		infusion = Mth.clamp(amount, 0, 600);
-		dirty = true;
+		dirty = prev != infusion;
 	}
 
 	public float getParanoia() {
@@ -270,8 +278,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	public void setParanoia(float amount) {
-		paranoia = amount;
-		dirty = true;
+		float prev = paranoia;
+		paranoia = Mth.clamp(amount, 0, 600);
+		dirty = prev != paranoia;
 	}
 
 	@Override

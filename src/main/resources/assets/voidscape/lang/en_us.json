@@ -17,6 +17,9 @@
   "entity.voidscape.corrupted_pawn": "The Corrupted Pawn",
   "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
 
+  "fluid_type.voidscape.voidic": "Liquid Voidic Crystal",
+  "item.voidscape.voidic_bucket": "Liquid Voidic Crystal Bucket",
+
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "block.voidscape.voidic_crystal_block": "Voidic Crystal",
   "block.voidscape.fragile_voidic_crystal_block": "Fragile Voidic Crystal",
@@ -25,6 +28,9 @@
   "block.voidscape.antirock": "Anti Rock",
   "block.voidscape.null_black": "Null",
   "block.voidscape.null_white": "Null",
+  "block.voidscape.machine_core": "Voidic Core",
+  "block.voidscape.machine_liquifier": "Voidic Liquifier",
+  "block.voidscape.machine_defuser": "Voidic Defuser",
   "block.voidscape.plant": "Ethereal Plant",
 
   "item.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
@@ -34,6 +40,9 @@
   "item.voidscape.antirock": "Anti Rock",
   "item.voidscape.null_black": "Null",
   "item.voidscape.null_white": "Null",
+  "item.voidscape.machine_core": "Voidic Core",
+  "item.voidscape.machine_liquifier": "Voidic Liquifier",
+  "item.voidscape.machine_defuser": "Voidic Defuser",
   "item.voidscape.fruit": "Ethereal Fruit",
 
   "item.voidscape.voidic_crystal": "Voidic Crystal",

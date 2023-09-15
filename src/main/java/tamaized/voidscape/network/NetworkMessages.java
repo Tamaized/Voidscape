@@ -6,6 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
+import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
 
@@ -21,6 +22,7 @@ public class NetworkMessages {
 
 		registerMessage(network, ClientPacketNoFlashOnSetHealth.class, ClientPacketNoFlashOnSetHealth::new);
 		registerMessage(network, ClientPacketSubCapSync.class, ClientPacketSubCapSync::new);
+		registerMessage(network, ClientPacketSendParticles.class, ClientPacketSendParticles::new);
 	}
 
 	private static <M extends IMessage<M>> void registerMessage(SimpleChannel network, Class<M> type, Supplier<M> factory) {
@@ -47,7 +49,7 @@ public class NetworkMessages {
 			return test == null ? ClientUtil.getClientPlayerSafely() : test;
 		}
 
-		void handle(@Nullable Player sup);
+		void handle(@Nullable Player player);
 
 		void toBytes(FriendlyByteBuf packet);
 

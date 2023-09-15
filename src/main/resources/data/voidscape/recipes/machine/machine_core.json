@@ -1,0 +1,19 @@
+{
+  "result": {
+	"item": "voidscape:machine_core"
+  },
+  "pattern": [
+	"TTT",
+	"TRT",
+	"TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"T": {
+	  "item": "voidscape:tendril"
+	},
+	"R": {
+	  "item": "minecraft:redstone"
+	}
+  }
+}

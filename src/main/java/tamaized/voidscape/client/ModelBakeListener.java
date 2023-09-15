@@ -72,12 +72,12 @@ public class ModelBakeListener {
 	public static void modelBake(ModelEvent.ModifyBakingResult event) {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
-		List<ModelResourceLocation> itemOverlayList = new ArrayList<>();
+		List<ModelResourceLocation> textureNameOverlayList = new ArrayList<>();
 
 		addItem(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		addItem(fullbrightList, ModItems.ETHEREAL_ESSENCE);
 		addItem(fullbrightList, ModItems.FRUIT);
-		addItem(itemOverlayList, ModItems.CHARRED_BONE);
+		addItem(textureNameOverlayList, ModItems.CHARRED_BONE);
 		addItem(fullbrightList, ModItems.CHARRED_WARHAMMER_HEAD);
 
 		addItem(fullbrightList, ModTools.VOIDIC_CRYSTAL_SWORD);
@@ -107,6 +107,9 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.ANTIROCK);
 		addBlock(fullbrightList, ModBlocks.NULL_BLACK);
 		addBlock(fullbrightList, ModBlocks.NULL_WHITE);
+		addBlock(fullbrightList, ModBlocks.MACHINE_CORE);
+		addBlock(textureNameOverlayList, ModBlocks.MACHINE_LIQUIFIER);
+		addBlock(fullbrightList, ModBlocks.MACHINE_DEFUSER);
 		add(fullbrightList, ModBlocks.PLANT, "inventory");
 		add(fullbrightList, ModBlocks.PLANT, "state=void");
 		add(fullbrightList, ModBlocks.PLANT, "state=overworld");
@@ -144,7 +147,7 @@ public class ModelBakeListener {
 			else
 				Voidscape.LOGGER.error("Null Model! " + mrl);
 		});
-		itemOverlayList.forEach(mrl -> {
+		textureNameOverlayList.forEach(mrl -> {
 			final BakedModel model = event.getModels().get(mrl);
 			if (model != null)
 				event.getModels().put(mrl, new FullBrightModel(model) {

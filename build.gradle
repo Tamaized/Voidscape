@@ -19,12 +19,16 @@ shadowJar {
 
 repositories {
     maven {
-        name 'Jared\'s Maven' // JEI
+        name 'JEI'
         url 'https://maven.blamejared.com/'
     }
     maven {
-        name 'Tama\' Maven' // RegUtil
+        name 'RegUtil'
         url 'https://maven.tamaized.com/releases/'
+    }
+    maven {
+        name 'EnderIO'
+        url "https://api.modrinth.com/maven"
     }
 }
 
@@ -127,6 +131,7 @@ dependencies {
     minecraft "net.neoforged:forge:${project.minecraft_version}-${project.forge_version}"
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
 
     def reg = "tamaized:regutil:" + project.regutil_version
     implementation fg.deobf(reg)

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
 	"voidscape:voidic_crystal_ore",
-	"voidscape:voidic_crystal_block"
+	"voidscape:voidic_crystal_block",
+    "voidscape:machine_liquifier",
+    "voidscape:machine_defuser"
   ]
 }

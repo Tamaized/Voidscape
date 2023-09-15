@@ -28,6 +28,9 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.ANTIROCK_ITEM.get());
 				output.accept(ModBlocks.NULL_BLACK_ITEM.get());
 				output.accept(ModBlocks.NULL_WHITE_ITEM.get());
+				output.accept(ModBlocks.MACHINE_CORE_ITEM.get());
+				output.accept(ModBlocks.MACHINE_LIQUIFIER_ITEM.get());
+				output.accept(ModBlocks.MACHINE_DEFUSER_ITEM.get());
 				output.accept(ModBlocks.PLANT_ITEM.get());
 				output.accept(makePlant(BlockEtherealPlant.State.NULL));
 				output.accept(makePlant(BlockEtherealPlant.State.OVERWORLD));
