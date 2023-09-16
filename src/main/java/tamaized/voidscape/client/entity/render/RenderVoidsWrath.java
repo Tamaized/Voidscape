@@ -14,10 +14,10 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
-import tamaized.voidscape.entity.EntityVoidsWrath;
+import tamaized.voidscape.entity.VoidsWrathEntity;
 import tamaized.voidscape.registry.ModEntities;
 
-public class RenderVoidsWrath<T extends EntityVoidsWrath> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
+public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/voidswrath.png");
 

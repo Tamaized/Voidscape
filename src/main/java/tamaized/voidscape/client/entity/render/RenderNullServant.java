@@ -12,10 +12,10 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
-import tamaized.voidscape.entity.EntityNullServant;
+import tamaized.voidscape.entity.NullServantEntity;
 import tamaized.voidscape.registry.ModEntities;
 
-public class RenderNullServant<T extends EntityNullServant> extends LivingEntityRenderer<T, ModelNullServant<T>> {
+public class RenderNullServant<T extends NullServantEntity> extends LivingEntityRenderer<T, ModelNullServant<T>> {
 
 	public RenderNullServant(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelNullServant<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.NULL_SERVANT)), 0F);

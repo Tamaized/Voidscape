@@ -8,9 +8,9 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
-public class EntityAntiBolt extends LightningBolt {
+public class AntiBoltEntity extends LightningBolt {
 
-	public EntityAntiBolt(EntityType<? extends EntityAntiBolt> entityType_, Level worldIn) {
+	public AntiBoltEntity(EntityType<? extends AntiBoltEntity> entityType_, Level worldIn) {
 		super(entityType_, worldIn);
 	}
 

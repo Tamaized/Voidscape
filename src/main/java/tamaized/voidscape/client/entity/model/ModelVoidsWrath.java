@@ -18,11 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
-import tamaized.voidscape.entity.EntityVoidsWrath;
+import tamaized.voidscape.entity.VoidsWrathEntity;
 
 import java.util.function.Function;
 
-public class ModelVoidsWrath<T extends EntityVoidsWrath> extends EntityModel<T> implements ArmedModel {
+public class ModelVoidsWrath<T extends VoidsWrathEntity> extends EntityModel<T> implements ArmedModel {
 
 	public ModelPart head;
 	public ModelPart body;

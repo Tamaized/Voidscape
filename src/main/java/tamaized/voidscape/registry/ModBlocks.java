@@ -27,7 +27,7 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.*;
-import tamaized.voidscape.entity.EntityAntiBolt;
+import tamaized.voidscape.entity.AntiBoltEntity;
 
 public class ModBlocks implements RegistryClass {
 
@@ -102,7 +102,7 @@ public class ModBlocks implements RegistryClass {
 		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 				return;
-			EntityAntiBolt lit = ModEntities.ANTI_BOLT.get().create(level);
+			AntiBoltEntity lit = ModEntities.ANTI_BOLT.get().create(level);
 			if (lit != null) {
 				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
 				level.addFreshEntity(lit);

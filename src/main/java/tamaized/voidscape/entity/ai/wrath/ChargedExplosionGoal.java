@@ -2,16 +2,16 @@ package tamaized.voidscape.entity.ai.wrath;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
-import tamaized.voidscape.entity.EntityVoidsWrath;
+import tamaized.voidscape.entity.VoidsWrathEntity;
 
 import java.util.EnumSet;
 
 public class ChargedExplosionGoal extends Goal {
 
-    private final EntityVoidsWrath parent;
+    private final VoidsWrathEntity parent;
     private int tick;
 
-    public ChargedExplosionGoal(EntityVoidsWrath parent) {
+    public ChargedExplosionGoal(VoidsWrathEntity parent) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.parent = parent;
     }

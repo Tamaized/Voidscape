@@ -33,13 +33,13 @@ import tamaized.voidscape.registry.ModTools;
 
 import javax.annotation.Nullable;
 
-public class EntityNullServant extends Monster implements IEthereal {
+public class NullServantEntity extends Monster implements IEthereal {
 
-	public EntityNullServant(Level level) {
+	public NullServantEntity(Level level) {
 		this(ModEntities.NULL_SERVANT.get(), level);
 	}
 
-	public EntityNullServant(EntityType<? extends EntityNullServant> type, Level level) {
+	public NullServantEntity(EntityType<? extends NullServantEntity> type, Level level) {
 		super(type, level);
 		xpReward = 10;
 	}

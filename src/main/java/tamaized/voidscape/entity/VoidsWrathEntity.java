@@ -38,15 +38,15 @@ import tamaized.voidscape.registry.ModTools;
 
 import javax.annotation.Nullable;
 
-public class EntityVoidsWrath extends Monster implements PowerableMob, IEthereal {
+public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal {
 
-	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(EntityVoidsWrath.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(VoidsWrathEntity.class, EntityDataSerializers.BOOLEAN);
 
-	public EntityVoidsWrath(Level level) {
+	public VoidsWrathEntity(Level level) {
 		this(ModEntities.VOIDS_WRATH.get(), level);
 	}
 
-	public EntityVoidsWrath(EntityType<? extends EntityVoidsWrath> p_i48577_1_, Level p_i48577_2_) {
+	public VoidsWrathEntity(EntityType<? extends VoidsWrathEntity> p_i48577_1_, Level p_i48577_2_) {
 		super(p_i48577_1_, p_i48577_2_);
 	}
 

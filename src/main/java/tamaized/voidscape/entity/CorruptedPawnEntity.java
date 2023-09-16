@@ -34,16 +34,16 @@ import tamaized.voidscape.registry.*;
 
 import javax.annotation.Nullable;
 
-public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnData {
+public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnData {
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 	private Entity target;
 
-	public EntityCorruptedPawn(Level level) {
+	public CorruptedPawnEntity(Level level) {
 		this(ModEntities.CORRUPTED_PAWN.get(), level);
 	}
 
-	public EntityCorruptedPawn(EntityType<? extends EntityCorruptedPawn> p_i48577_1_, Level p_i48577_2_) {
+	public CorruptedPawnEntity(EntityType<? extends CorruptedPawnEntity> p_i48577_1_, Level p_i48577_2_) {
 		super(p_i48577_1_, p_i48577_2_);
 		setNoGravity(true);
 		noPhysics = true;
@@ -68,7 +68,7 @@ public class EntityCorruptedPawn extends Mob implements IEntityAdditionalSpawnDa
 			this.bossEvent.removePlayer(player);
 	}
 
-	public EntityCorruptedPawn target(Player player) {
+	public CorruptedPawnEntity target(Player player) {
 		target = player;
 		return this;
 	}

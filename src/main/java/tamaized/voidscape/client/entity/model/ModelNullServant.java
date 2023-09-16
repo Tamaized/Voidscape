@@ -24,11 +24,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.client.Shaders;
-import tamaized.voidscape.entity.EntityNullServant;
+import tamaized.voidscape.entity.NullServantEntity;
 
 import java.util.function.Function;
 
-public class ModelNullServant<T extends EntityNullServant> extends EntityModel<T> implements ArmedModel {
+public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T> implements ArmedModel {
 
 	private static final Function<ResourceLocation, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {
 		RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().

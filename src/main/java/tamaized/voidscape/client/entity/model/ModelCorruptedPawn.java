@@ -3,7 +3,6 @@ package tamaized.voidscape.client.entity.model;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,11 +13,11 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import tamaized.voidscape.entity.EntityCorruptedPawn;
+import tamaized.voidscape.entity.CorruptedPawnEntity;
 
 import java.util.function.Function;
 
-public class ModelCorruptedPawn<T extends EntityCorruptedPawn> extends EntityModel<T> {
+public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityModel<T> {
 
 	private static final int[] CAST_MOVEMENT = {225, 315, 135, 270, 45, 180, 0, 90};
 

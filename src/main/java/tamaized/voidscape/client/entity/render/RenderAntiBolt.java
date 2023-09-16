@@ -15,11 +15,11 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import tamaized.voidscape.client.RenderStateAccessor;
-import tamaized.voidscape.entity.EntityAntiBolt;
+import tamaized.voidscape.entity.AntiBoltEntity;
 
 import java.util.Random;
 
-public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
+public class RenderAntiBolt extends EntityRenderer<AntiBoltEntity> {
 
 	protected static final RenderStateShard.TransparencyStateShard ANTI_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("antibolt_transparency", () -> {
 		RenderSystem.enableBlend();
@@ -41,7 +41,7 @@ public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 	}
 
 	@Override
-	public void render(EntityAntiBolt p_225623_1_, float p_225623_2_, float p_225623_3_, PoseStack p_225623_4_, MultiBufferSource p_225623_5_, int p_225623_6_) {
+	public void render(AntiBoltEntity p_225623_1_, float p_225623_2_, float p_225623_3_, PoseStack p_225623_4_, MultiBufferSource p_225623_5_, int p_225623_6_) {
 		float[] lvt_7_1_ = new float[8];
 		float[] lvt_8_1_ = new float[8];
 		float lvt_9_1_ = 0.0F;
@@ -122,7 +122,7 @@ public class RenderAntiBolt extends EntityRenderer<EntityAntiBolt> {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(EntityAntiBolt p_110775_1_) {
+	public ResourceLocation getTextureLocation(AntiBoltEntity p_110775_1_) {
 		return TextureAtlas.LOCATION_BLOCKS;
 	}
 }
