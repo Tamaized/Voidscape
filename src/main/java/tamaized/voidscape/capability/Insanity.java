@@ -81,9 +81,9 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			teleportTick = Mth.clamp(teleportTick, 0, 200);
 			if (!pleaseLeavePortal && teleportTick >= 200 && !parent.level().isClientSide()) {
 				if(Voidscape.checkForVoidDimension(parent.level())) {
-					parent.changeDimension(Voidscape.getLevel(parent.level(), Level.OVERWORLD), VoidPortalTeleporter.INSTANCE);
+					Voidscape.getLevel(parent.level(), Level.OVERWORLD).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
 				} else {
-					parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidPortalTeleporter.INSTANCE);
+					Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
 				}
 			}
 		} else {
@@ -118,7 +118,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			}
 			teleportTick = Mth.clamp(teleportTick, 0, 200);
 			if (!inVoid && teleportTick >= 200) {
-				parent.changeDimension(Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID), VoidTeleporter.INSTANCE);
+				Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidTeleporter.INSTANCE));
 				return;
 			}
 		}

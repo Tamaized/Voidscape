@@ -121,7 +121,7 @@ public class ASMHooks {
 				player.setHealth(entity.getMaxHealth() * 0.1F);
 				player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
 				if (!player.level().isClientSide())
-					player.changeDimension(Voidscape.getPlayersSpawnLevel(player), VoidTeleporter.INSTANCE);
+					Voidscape.getPlayersSpawnLevel(player).ifPresent(level -> player.changeDimension(level, VoidTeleporter.INSTANCE));
 				return true;
 			}
 		} else {

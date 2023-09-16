@@ -48,6 +48,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.block.EtherealPlantBlock;
@@ -63,7 +64,6 @@ import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -258,11 +258,11 @@ public class Voidscape {
 		return level.dimension().location().equals(WORLD_KEY_VOID.location());
 	}
 
-	public static ServerLevel getLevel(Level level, ResourceKey<Level> dest) {
-		return Objects.requireNonNull(Objects.requireNonNull(level.getServer()).getLevel(dest));
+	public static Optional<ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
+		return Optional.ofNullable(Objects.requireNonNull(level.getServer()).getLevel(dest));
 	}
 
-	public static ServerLevel getPlayersSpawnLevel(ServerPlayer player) {
+	public static Optional<ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
 		return getLevel(player.level(), player.getRespawnDimension());
 	}
 
