@@ -84,7 +84,7 @@ public class BlockEntityLiquifier extends BlockEntity {
             for (Direction face : Direction.values()) {
                 BlockEntity other = level.getBlockEntity(blockPos.relative(face));
                 if (other != null) {
-                    other.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(cap -> {
+                    other.getCapability(ForgeCapabilities.FLUID_HANDLER, face.getOpposite()).ifPresent(cap -> {
                         int amount = cap.fill(new FluidStack(fluid.getFluidInTank(0).getFluid(), Math.min(fluid.getFluidInTank(0).getAmount(), 1000)), IFluidHandler.FluidAction.EXECUTE);
                         fluid.drain(amount, IFluidHandler.FluidAction.EXECUTE);
                     });
