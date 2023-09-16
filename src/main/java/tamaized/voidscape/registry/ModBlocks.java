@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -28,6 +29,8 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.AntiBoltEntity;
+
+import java.util.function.Consumer;
 
 public class ModBlocks implements RegistryClass {
 
@@ -166,6 +169,14 @@ public class ModBlocks implements RegistryClass {
 	));
 	public static final RegistryObject<Item> THUNDER_ROOTS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_ROOTS_POT = REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
+			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
+			THUNDER_ROOTS,
+			BlockBehaviour.Properties.of()
+					.instabreak()
+					.noOcclusion()
+					.pushReaction(PushReaction.DESTROY)
+	));
 	public static final RegistryObject<Block> THUNDER_FUNGUS = REGISTRY.register("thunder_fungus", () -> new FungusBlock(BlockBehaviour.Properties.of()
 			.sound(SoundType.FUNGUS)
 			.mapColor(MapColor.COLOR_PURPLE)
@@ -232,6 +243,8 @@ public class ModBlocks implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-
+		bus.addListener((Consumer<FMLCommonSetupEvent>) event -> {
+			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(THUNDER_ROOTS.getId(), THUNDER_ROOTS_POT);
+		});
 	}
 }
