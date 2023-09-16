@@ -1,0 +1,20 @@
+{
+  "parent": "voidscape:block/overlay/base",
+  "textures": {
+	"particle": "#top",
+
+	"down": "#bottom",
+	"up": "#top",
+	"north": "#side",
+	"east": "#side",
+	"south": "#side",
+	"west": "#side",
+
+	"overlay-down": "#overlay-bottom",
+	"overlay-up": "#overlay-top",
+	"overlay-north": "#overlay-side",
+	"overlay-east": "#overlay-side",
+	"overlay-south": "#overlay-side",
+	"overlay-west": "#overlay-side"
+  }
+}

@@ -5,7 +5,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.block.EtherealPlantBlock;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
 
@@ -19,7 +19,7 @@ public final class TintHandler {
 
 	public static void setup(IEventBus bus) {
 		bus.addListener((Consumer<RegisterColorHandlersEvent.Block>) event -> {
-			event.register((state, tintGetter, pos, color) -> switch (state.getValue(BlockEtherealPlant.STATE)) {
+			event.register((state, tintGetter, pos, color) -> switch (state.getValue(EtherealPlantBlock.STATE)) {
 				case VOID -> 0x872BFF;
 				case NULL -> 0xFFFFFF;
 				case OVERWORLD -> 0x88BF40;

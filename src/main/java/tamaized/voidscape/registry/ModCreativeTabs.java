@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.block.EtherealPlantBlock;
 
 public class ModCreativeTabs implements RegistryClass {
 
@@ -22,28 +22,36 @@ public class ModCreativeTabs implements RegistryClass {
 			.title(Component.translatable(Voidscape.MODID + ".item_group"))
 			.icon(() -> new ItemStack(ModItems.VOIDIC_CRYSTAL.get()))
 			.displayItems((parameters, output) -> {
+				//// Blocks
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_ORE_ITEM.get());
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_BLOCK_ITEM.get());
 				output.accept(ModBlocks.THUNDERROCK_ITEM.get());
 				output.accept(ModBlocks.ANTIROCK_ITEM.get());
 				output.accept(ModBlocks.NULL_BLACK_ITEM.get());
 				output.accept(ModBlocks.NULL_WHITE_ITEM.get());
+				// Machine
 				output.accept(ModBlocks.MACHINE_CORE_ITEM.get());
 				output.accept(ModBlocks.MACHINE_LIQUIFIER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_DEFUSER_ITEM.get());
+				// Biome - Thunder Forest
+				output.accept(ModBlocks.THUNDER_NYLIUM_ITEM.get());
+				output.accept(ModBlocks.THUNDER_ROOTS_ITEM.get());
+				// Crops
 				output.accept(ModBlocks.PLANT_ITEM.get());
-				output.accept(makePlant(BlockEtherealPlant.State.NULL));
-				output.accept(makePlant(BlockEtherealPlant.State.OVERWORLD));
-				output.accept(makePlant(BlockEtherealPlant.State.NETHER));
-				output.accept(makePlant(BlockEtherealPlant.State.END));
+				output.accept(makePlant(EtherealPlantBlock.State.NULL));
+				output.accept(makePlant(EtherealPlantBlock.State.OVERWORLD));
+				output.accept(makePlant(EtherealPlantBlock.State.NETHER));
+				output.accept(makePlant(EtherealPlantBlock.State.END));
 				output.accept(ModItems.FRUIT.get());
-				output.accept(makeFruit(BlockEtherealPlant.State.NULL));
-				output.accept(makeFruit(BlockEtherealPlant.State.OVERWORLD));
-				output.accept(makeFruit(BlockEtherealPlant.State.NETHER));
-				output.accept(makeFruit(BlockEtherealPlant.State.END));
+				output.accept(makeFruit(EtherealPlantBlock.State.NULL));
+				output.accept(makeFruit(EtherealPlantBlock.State.OVERWORLD));
+				output.accept(makeFruit(EtherealPlantBlock.State.NETHER));
+				output.accept(makeFruit(EtherealPlantBlock.State.END));
+				//// Items
 				output.accept(ModItems.ETHEREAL_ESSENCE.get());
 				output.accept(ModItems.VOIDIC_CRYSTAL.get());
 				output.accept(ModItems.VOIDIC_TEMPLATE.get());
+				// Gear - Voidic
 				output.accept(ModTools.VOIDIC_CRYSTAL_SWORD.get());
 				output.accept(ModTools.VOIDIC_CRYSTAL_AXE.get());
 				output.accept(ModTools.VOIDIC_CRYSTAL_PICKAXE.get());
@@ -54,9 +62,11 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModArmors.VOIDIC_CRYSTAL_CHEST.get());
 				output.accept(ModArmors.VOIDIC_CRYSTAL_LEGS.get());
 				output.accept(ModArmors.VOIDIC_CRYSTAL_BOOTS.get());
+				// Gear - Charred
 				output.accept(ModItems.CHARRED_BONE.get());
 				output.accept(ModItems.CHARRED_WARHAMMER_HEAD.get());
 				output.accept(ModTools.CHARRED_WARHAMMER.get());
+				// Gear - Corrupt
 				output.accept(ModItems.TENDRIL.get());
 				output.accept(ModTools.CORRUPT_SWORD.get());
 				output.accept(ModTools.CORRUPT_AXE.get());
@@ -69,7 +79,7 @@ public class ModCreativeTabs implements RegistryClass {
 			})
 			.build());
 
-	private static ItemStack makePlant(BlockEtherealPlant.State state) {
+	private static ItemStack makePlant(EtherealPlantBlock.State state) {
 		CompoundTag tag = new CompoundTag();
 		CompoundTag stateTag = new CompoundTag();
 		stateTag.putString("state", state.getSerializedName());
@@ -79,7 +89,7 @@ public class ModCreativeTabs implements RegistryClass {
 		return stack;
 	}
 
-	private static ItemStack makeFruit(BlockEtherealPlant.State state) {
+	private static ItemStack makeFruit(EtherealPlantBlock.State state) {
 		CompoundTag tag = new CompoundTag();
 		CompoundTag t = new CompoundTag();
 		t.putString("augment", state.getSerializedName());

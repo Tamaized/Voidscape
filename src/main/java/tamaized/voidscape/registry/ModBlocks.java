@@ -1,10 +1,9 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.player.Player;
@@ -12,13 +11,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -28,13 +26,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.block.BlockDefuser;
-import tamaized.voidscape.block.BlockEtherealPlant;
-import tamaized.voidscape.block.BlockLiquifier;
-import tamaized.voidscape.block.BlockPortal;
+import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.EntityAntiBolt;
-
-import java.util.Random;
 
 public class ModBlocks implements RegistryClass {
 
@@ -59,7 +52,8 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
-			.requiresCorrectToolForDrops()));
+			.requiresCorrectToolForDrops()
+	));
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
@@ -67,7 +61,8 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
-			.noLootTable()));
+			.noLootTable()
+	));
 	public static final RegistryObject<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
@@ -127,7 +122,8 @@ public class ModBlocks implements RegistryClass {
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+	));
 	public static final RegistryObject<Item> NULL_BLACK_ITEM = ModItems.REGISTRY
 			.register(NULL_BLACK.getId().getPath(), () -> new BlockItem(NULL_BLACK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 	public static final RegistryObject<Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of()
@@ -135,33 +131,75 @@ public class ModBlocks implements RegistryClass {
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
+	));
 	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY
 			.register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<BlockPortal> PORTAL = REGISTRY.register("portal", () -> new BlockPortal(Block.Properties.of()
+	public static final RegistryObject<PortalBlock> PORTAL = REGISTRY.register("portal", () -> new PortalBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noOcclusion()
 			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)));
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
+	));
 
-	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new BlockEtherealPlant(Block.Properties.of()
+	// Biome - Thunder Forest
+	public static final RegistryObject<Block> THUNDER_NYLIUM = REGISTRY.register("thunder_nylium", () -> new ThunderNyliumBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.NYLIUM)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
+	public static final RegistryObject<Item> THUNDER_NYLIUM_ITEM = ModItems.REGISTRY
+			.register(THUNDER_NYLIUM.getId().getPath(), () -> new BlockItem(THUNDER_NYLIUM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_ROOTS = REGISTRY.register("thunder_roots", () -> new RootsBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.ROOTS)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.noCollission()
+			.instabreak()
+			.replaceable()
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
+	public static final RegistryObject<Item> THUNDER_ROOTS_ITEM = ModItems.REGISTRY
+			.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_FUNGUS = REGISTRY.register("thunder_fungus", () -> new FungusBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.FUNGUS)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.noCollission()
+			.instabreak()
+			.replaceable()
+			.pushReaction(PushReaction.DESTROY),
+			TreeFeatures.CRIMSON_FUNGUS_PLANTED,
+			THUNDER_NYLIUM.get()
+	));
+	public static final RegistryObject<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
+			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	// Crops
+
+	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.noCollission()
 			.instabreak()
-			.offsetType(BlockBehaviour.OffsetType.XYZ)));
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
 	public static final RegistryObject<Item> PLANT_ITEM = ModItems.REGISTRY
 			.register(PLANT.getId().getPath(), () -> new BlockItem(PLANT.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	/// Machines
 
 	public static final RegistryObject<Block> MACHINE_CORE = REGISTRY.register("machine_core", () -> new Block(Block.Properties.of()
 			.sound(SoundType.CANDLE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(1F, 1F)
 			.noOcclusion()
-			.isValidSpawn((t1, t2, t3, t4) -> false)){
+			.isValidSpawn((t1, t2, t3, t4) -> false)) {
 		private static final VoxelShape SHAPE = Block.box(3.0D, 3.0D, 3.0D, 13.0D, 13.0D, 13.0D);
 		@Override
 		public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
@@ -171,22 +209,24 @@ public class ModBlocks implements RegistryClass {
 	public static final RegistryObject<Item> MACHINE_CORE_ITEM = ModItems.REGISTRY
 			.register(MACHINE_CORE.getId().getPath(), () -> new BlockItem(MACHINE_CORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new BlockLiquifier(Block.Properties.of()
+	public static final RegistryObject<Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new LiquifierBlock(Block.Properties.of()
 			.sound(SoundType.BONE_BLOCK)
 			.mapColor(MapColor.COLOR_RED)
 			.strength(3F, 3F)
 			.requiresCorrectToolForDrops()
-			.isValidSpawn((t1, t2, t3, t4) -> false)));
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
 	public static final RegistryObject<Item> MACHINE_LIQUIFIER_ITEM = ModItems.REGISTRY
 			.register(MACHINE_LIQUIFIER.getId().getPath(), () -> new BlockItem(MACHINE_LIQUIFIER.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new BlockDefuser(Block.Properties.of()
+	public static final RegistryObject<Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new DefuserBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
 			.noOcclusion()
 			.requiresCorrectToolForDrops()
-			.isValidSpawn((t1, t2, t3, t4) -> false)));
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
 	public static final RegistryObject<Item> MACHINE_DEFUSER_ITEM = ModItems.REGISTRY
 			.register(MACHINE_DEFUSER.getId().getPath(), () -> new BlockItem(MACHINE_DEFUSER.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 

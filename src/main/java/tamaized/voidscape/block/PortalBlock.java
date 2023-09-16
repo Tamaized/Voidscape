@@ -26,13 +26,13 @@ import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModSounds;
 
-public class BlockPortal extends HalfTransparentBlock {
+public class PortalBlock extends HalfTransparentBlock {
 
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     protected static final VoxelShape X_AABB = Block.box(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
     protected static final VoxelShape Z_AABB = Block.box(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 
-    public BlockPortal(Properties pProperties) {
+    public PortalBlock(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
     }
@@ -50,7 +50,7 @@ public class BlockPortal extends HalfTransparentBlock {
     }
 
     public boolean tryToCreatePortal(Level level, BlockPos pos) {
-        BlockPortal.Size size = this.isPortal(level, pos);
+        PortalBlock.Size size = this.isPortal(level, pos);
         if (size != null && (level.dimension().location().equals(Level.OVERWORLD.location()) || Voidscape.checkForVoidDimension(level))) {
             size.placePortalBlocks();
             return true;
@@ -60,12 +60,12 @@ public class BlockPortal extends HalfTransparentBlock {
     }
 
     @Nullable
-    public BlockPortal.Size isPortal(LevelAccessor world, BlockPos pos) {
-        BlockPortal.Size sizeX = new BlockPortal.Size(world, pos, Direction.Axis.X);
+    public PortalBlock.Size isPortal(LevelAccessor world, BlockPos pos) {
+        PortalBlock.Size sizeX = new PortalBlock.Size(world, pos, Direction.Axis.X);
         if (sizeX.isValid() && sizeX.portalBlockCount == 0) {
             return sizeX;
         } else {
-            BlockPortal.Size sizeZ = new BlockPortal.Size(world, pos, Direction.Axis.Z);
+            PortalBlock.Size sizeZ = new PortalBlock.Size(world, pos, Direction.Axis.Z);
             return sizeZ.isValid() && sizeZ.portalBlockCount == 0 ? sizeZ : null;
         }
     }
@@ -76,7 +76,7 @@ public class BlockPortal extends HalfTransparentBlock {
         Direction.Axis directionAxis = facing.getAxis();
         Direction.Axis directionAxis1 = stateIn.getValue(AXIS);
         boolean flag = directionAxis1 != directionAxis && directionAxis.isHorizontal();
-        return !flag && facingState.getBlock() != this && !(new BlockPortal.Size(worldIn, currentPos, directionAxis1)).canCreatePortal() ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !flag && facingState.getBlock() != this && !(new PortalBlock.Size(worldIn, currentPos, directionAxis1)).canCreatePortal() ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class BlockPortal extends HalfTransparentBlock {
         }
 
         public void placePortalBlocks() {
-            BlockState state = PORTAL.defaultBlockState().setValue(BlockPortal.AXIS, this.axis);
+            BlockState state = PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, this.axis);
             BlockPos.betweenClosed(bottomLeft, bottomLeft.relative(Direction.UP, height - 1).relative(rightDir, width - 1)).forEach((pos) -> this.world.setBlock(pos, state, 18));
         }
 

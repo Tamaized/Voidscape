@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,13 +25,13 @@ import tamaized.voidscape.registry.ModFluids;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BlockEntityDefuser extends BlockEntity {
+public class DefuserBlockEntity extends BlockEntity {
 
     private final LazyOptional<FluidTank> fluids = LazyOptional.of(() -> new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get()));
 
     private int processTick;
 
-    public BlockEntityDefuser(BlockPos pPos, BlockState pBlockState) {
+    public DefuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.DEFUSER.get(), pPos, pBlockState);
     }
 
@@ -64,7 +63,7 @@ public class BlockEntityDefuser extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-        if (!(be instanceof BlockEntityDefuser entity))
+        if (!(be instanceof DefuserBlockEntity entity))
             return;
         IFluidHandler fluid = entity.fluids.resolve().orElseThrow();
         if (entity.processTick <= 0 && fluid.getFluidInTank(0).getAmount() > 0) {

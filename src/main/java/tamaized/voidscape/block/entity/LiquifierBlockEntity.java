@@ -20,7 +20,7 @@ import tamaized.voidscape.registry.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 import tamaized.voidscape.registry.ModItems;
 
-public class BlockEntityLiquifier extends BlockEntity {
+public class LiquifierBlockEntity extends BlockEntity {
 
     private final LazyOptional<ItemStackHandler> items = LazyOptional.of(() -> new ItemStackHandler(1));
     private final LazyOptional<FluidTank> fluids = LazyOptional.of(() -> new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get()));
@@ -28,7 +28,7 @@ public class BlockEntityLiquifier extends BlockEntity {
     private int tick;
     private int processTick;
 
-    public BlockEntityLiquifier(BlockPos pPos, BlockState pBlockState) {
+    public LiquifierBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.LIQUIFIER.get(), pPos, pBlockState);
     }
 
@@ -65,7 +65,7 @@ public class BlockEntityLiquifier extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-        if (!(be instanceof BlockEntityLiquifier entity))
+        if (!(be instanceof LiquifierBlockEntity entity))
             return;
         entity.tick++;
         IFluidHandler fluid = entity.fluids.resolve().orElseThrow();

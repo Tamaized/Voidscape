@@ -10,7 +10,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -25,11 +24,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.BlockPortal;
+import tamaized.voidscape.block.PortalBlock;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModPOIs;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
@@ -74,7 +72,7 @@ public final class VoidPortalTeleporter implements ITeleporter {
 			if (existing.isPresent()) {
 				return existing;
 			} else {
-				return this.makePortal(level, pos, entity.level().getBlockState(entity.blockPosition()).getOptionalValue(BlockPortal.AXIS).orElse(Direction.Axis.X));
+				return this.makePortal(level, pos, entity.level().getBlockState(entity.blockPosition()).getOptionalValue(PortalBlock.AXIS).orElse(Direction.Axis.X));
 			}
 		} else {
 			return existing;
@@ -181,7 +179,7 @@ public final class VoidPortalTeleporter implements ITeleporter {
 		}
 
 		//Place the portal blocks
-		BlockState portal = ModBlocks.PORTAL.get().defaultBlockState().setValue(BlockPortal.AXIS, axis);
+		BlockState portal = ModBlocks.PORTAL.get().defaultBlockState().setValue(PortalBlock.AXIS, axis);
 		for (int pWidth = 0; pWidth < 2; ++pWidth) {
 			for (int pHeight = 0; pHeight < 3; ++pHeight) {
 				mutable.setWithOffset(blockpos, pWidth * direction.getStepX(), pHeight, pWidth * direction.getStepZ());

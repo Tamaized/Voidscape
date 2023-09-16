@@ -7,8 +7,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.block.entity.BlockEntityDefuser;
-import tamaized.voidscape.block.entity.BlockEntityLiquifier;
+import tamaized.voidscape.block.entity.DefuserBlockEntity;
+import tamaized.voidscape.block.entity.LiquifierBlockEntity;
 
 @SuppressWarnings("ConstantConditions")
 public class ModBlockEntities implements RegistryClass {
@@ -20,10 +20,10 @@ public class ModBlockEntities implements RegistryClass {
 
 	private static final DeferredRegister<BlockEntityType<?>> REGISTERY = RegUtil.create(ForgeRegistries.BLOCK_ENTITY_TYPES);
 
-	public static final RegistryObject<BlockEntityType<BlockEntityLiquifier>> LIQUIFIER = REGISTERY
-			.register("liquifier", () -> BlockEntityType.Builder.of(BlockEntityLiquifier::new, ModBlocks.MACHINE_LIQUIFIER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<LiquifierBlockEntity>> LIQUIFIER = REGISTERY
+			.register("liquifier", () -> BlockEntityType.Builder.of(LiquifierBlockEntity::new, ModBlocks.MACHINE_LIQUIFIER.get()).build(null));
 
-	public static final RegistryObject<BlockEntityType<BlockEntityDefuser>> DEFUSER = REGISTERY
-			.register("defuser", () -> BlockEntityType.Builder.of(BlockEntityDefuser::new, ModBlocks.MACHINE_DEFUSER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<DefuserBlockEntity>> DEFUSER = REGISTERY
+			.register("defuser", () -> BlockEntityType.Builder.of(DefuserBlockEntity::new, ModBlocks.MACHINE_DEFUSER.get()).build(null));
 
 }

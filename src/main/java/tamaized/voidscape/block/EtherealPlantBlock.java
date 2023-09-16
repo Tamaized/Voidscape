@@ -10,7 +10,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -23,12 +22,12 @@ import javax.annotation.Nullable;
 import java.util.Locale;
 
 @SuppressWarnings("deprecation")
-public class BlockEtherealPlant extends BushBlock {
+public class EtherealPlantBlock extends BushBlock {
 
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 
-	public BlockEtherealPlant(Properties prop) {
+	public EtherealPlantBlock(Properties prop) {
 		super(prop);
 		registerDefaultState(getStateDefinition().any().setValue(STATE, State.VOID));
 	}

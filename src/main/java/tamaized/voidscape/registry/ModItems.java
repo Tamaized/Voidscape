@@ -1,6 +1,5 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -29,7 +27,7 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.BlockEtherealPlant;
+import tamaized.voidscape.block.EtherealPlantBlock;
 import tamaized.voidscape.capability.SubCapability;
 
 public class ModItems implements RegistryClass {
@@ -106,14 +104,14 @@ public class ModItems implements RegistryClass {
 			if (!level.isClientSide) {
 				CompoundTag tag = stack.getTag();
 				tag = tag == null ? null : tag.getCompound(Voidscape.MODID);
-				BlockEtherealPlant.State state = BlockEtherealPlant.State.VOID;
+				EtherealPlantBlock.State state = EtherealPlantBlock.State.VOID;
 				if (tag != null)
 					state = switch (tag.getString("augment")) {
-						default -> BlockEtherealPlant.State.VOID;
-						case "null" -> BlockEtherealPlant.State.NULL;
-						case "overworld" -> BlockEtherealPlant.State.OVERWORLD;
-						case "nether" -> BlockEtherealPlant.State.NETHER;
-						case "end" -> BlockEtherealPlant.State.END;
+						default -> EtherealPlantBlock.State.VOID;
+						case "null" -> EtherealPlantBlock.State.NULL;
+						case "overworld" -> EtherealPlantBlock.State.OVERWORLD;
+						case "nether" -> EtherealPlantBlock.State.NETHER;
+						case "end" -> EtherealPlantBlock.State.END;
 					};
 				switch (state) {
 					case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
