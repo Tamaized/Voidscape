@@ -78,6 +78,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
 	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static boolean capeLayer(boolean o, ItemStack stack) {
 		return o || stack.is(ModArmors.CORRUPT_CHEST.get()) || ModArmors.elytra(stack);
 	}
@@ -87,6 +88,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}<br>
 	 * [BEFORE] IRETURN
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static boolean elytraLayer(boolean o, ItemStack stack) {
 		return o || ModArmors.elytra(stack);
 	}
@@ -96,6 +98,7 @@ public class ASMHooks {
 	 * {@link LivingEntityRenderer#render(LivingEntity, float, float, PoseStack, MultiBufferSource, int)}<br>
 	 * [BEFORE] INVOKEVIRTUAL : {@link EntityModel#renderToBuffer(PoseStack, VertexConsumer, int, int, float, float, float, float)}
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
 		return Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> Mth.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
 	}
@@ -173,6 +176,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
 	 * [BEFORE FRETURN]
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static float visibility(float o, int light) {
 		if (Voidscape.checkForVoidDimension(Minecraft.getInstance().level))
 			return VoidVisibilityCache.value(o, light);
@@ -184,6 +188,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
 	 * [AFTER FIRST FLOAD 6]
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static float cancelNightVision(float o, Level level) {
 		if (o > 0 && level.isClientSide() && Voidscape.checkForVoidDimension(level))
 			return 0;
@@ -195,6 +200,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
 	 * [AFTER GETFIELD {@link net.minecraft.client.Options#gamma}]
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static float cancelGamma(float o, Level level) {
 		if (o > 0 && level.isClientSide() && Voidscape.checkForVoidDimension(level))
 			return 0;
