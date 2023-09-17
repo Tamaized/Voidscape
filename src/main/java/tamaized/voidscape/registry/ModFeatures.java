@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
@@ -39,6 +41,8 @@ public class ModFeatures implements RegistryClass {
 
 	private static final DeferredRegister<Feature<?>> REGISTRY_FEATURES = RegUtil.create(ForgeRegistries.FEATURES);
 	private static final DeferredRegister<PlacementModifierType<?>> REGISTRY_PLACEMENT_MOD_TYPE = RegUtil.create(Registries.PLACEMENT_MODIFIER_TYPE);
+
+	public static final ResourceKey<ConfiguredFeature<?, ?>> THUNDER_FUNGUS = ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Voidscape.MODID, "thunder_fungus"));
 
 	private static class SeekDownPlacementMod extends PlacementModifier {
 

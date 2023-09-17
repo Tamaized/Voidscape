@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -184,11 +185,42 @@ public class ModBlocks implements RegistryClass {
 			.instabreak()
 			.replaceable()
 			.pushReaction(PushReaction.DESTROY),
-			TreeFeatures.CRIMSON_FUNGUS_PLANTED,
+			ModFeatures.THUNDER_FUNGUS,
 			THUNDER_NYLIUM.get()
 	));
 	public static final RegistryObject<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_STEM = REGISTRY.register("thunder_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.STEM)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_STEM_ITEM = ModItems.REGISTRY
+			.register(THUNDER_STEM.getId().getPath(), () -> new BlockItem(THUNDER_STEM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_HYPHAE = REGISTRY.register("thunder_hyphae", () -> new Block(BlockBehaviour.Properties.of()
+			.sound(SoundType.STEM)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_HYPHAE_ITEM = ModItems.REGISTRY
+			.register(THUNDER_HYPHAE.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_PLANKS = REGISTRY.register("thunder_planks", () -> new Block(BlockBehaviour.Properties.of()
+			.sound(SoundType.NETHER_WOOD)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_PLANKS_ITEM = ModItems.REGISTRY
+			.register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Block> THUNDER_WART = REGISTRY.register("thunder_wart", () -> new Block(BlockBehaviour.Properties.of()
+			.sound(SoundType.WART_BLOCK)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.strength(1.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_WART_ITEM = ModItems.REGISTRY
+			.register(THUNDER_WART.getId().getPath(), () -> new BlockItem(THUNDER_WART.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	// Crops
 
