@@ -184,6 +184,10 @@ task incrBuildNum doLast {
     }
 }
 
+shadowJar {
+    finalizedBy 'reobfShadowJar'
+}
+
 reobf {
     shadowJar {}
 }
