@@ -36,12 +36,12 @@ public class ModCreativeTabs implements RegistryClass {
 				// Biome - Thunder Forest
 				output.accept(ModBlocks.THUNDER_NYLIUM_ITEM.get());
 				output.accept(ModBlocks.THUNDER_ROOTS_ITEM.get());
+                output.accept(ModBlocks.THUNDER_WART_ITEM.get());
+                output.accept(ModBlocks.THUNDER_VINES_ITEM.get());
 				output.accept(ModBlocks.THUNDER_FUNGUS_ITEM.get());
 				output.accept(ModBlocks.THUNDER_STEM_ITEM.get());
 				output.accept(ModBlocks.THUNDER_HYPHAE_ITEM.get());
-				output.accept(ModBlocks.THUNDER_PLANKS_ITEM.get());
-				output.accept(ModBlocks.THUNDER_WART_ITEM.get());
-				output.accept(ModBlocks.THUNDER_VINES_ITEM.get());
+                output.accept(ModBlocks.THUNDER_PLANKS_ITEM.get());
 				// Crops
 				output.accept(ModBlocks.PLANT_ITEM.get());
 				output.accept(makePlant(EtherealPlantBlock.State.NULL));

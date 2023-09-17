@@ -1,0 +1,12 @@
+{
+  "result": {
+	"item": "voidscape:thunder_planks",
+	"count": 4
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+	{
+	  "tag": "voidscape:thunder_stems"
+	}
+  ]
+}

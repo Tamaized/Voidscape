@@ -1,8 +1,9 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.worldgen.features.TreeFeatures;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
@@ -14,7 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -28,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.AntiBoltEntity;
 
@@ -190,30 +194,6 @@ public class ModBlocks implements RegistryClass {
 	));
 	public static final RegistryObject<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_STEM = REGISTRY.register("thunder_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.STEM)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.instrument(NoteBlockInstrument.BASS)
-			.strength(2.0F)
-	));
-	public static final RegistryObject<Item> THUNDER_STEM_ITEM = ModItems.REGISTRY
-			.register(THUNDER_STEM.getId().getPath(), () -> new BlockItem(THUNDER_STEM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_HYPHAE = REGISTRY.register("thunder_hyphae", () -> new Block(BlockBehaviour.Properties.of()
-			.sound(SoundType.STEM)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.instrument(NoteBlockInstrument.BASS)
-			.strength(2.0F)
-	));
-	public static final RegistryObject<Item> THUNDER_HYPHAE_ITEM = ModItems.REGISTRY
-			.register(THUNDER_HYPHAE.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_PLANKS = REGISTRY.register("thunder_planks", () -> new Block(BlockBehaviour.Properties.of()
-			.sound(SoundType.NETHER_WOOD)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.instrument(NoteBlockInstrument.BASS)
-			.strength(2.0F, 3.0F)
-	));
-	public static final RegistryObject<Item> THUNDER_PLANKS_ITEM = ModItems.REGISTRY
-			.register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Block> THUNDER_WART = REGISTRY.register("thunder_wart", () -> new Block(BlockBehaviour.Properties.of()
 			.sound(SoundType.WART_BLOCK)
 			.mapColor(MapColor.COLOR_PURPLE)
@@ -249,6 +229,44 @@ public class ModBlocks implements RegistryClass {
     });
     public static final RegistryObject<Item> THUNDER_VINES_ITEM = ModItems.REGISTRY
             .register(THUNDER_VINES.getId().getPath(), () -> new BlockItem(THUNDER_VINES.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+    public static final RegistryObject<Block> THUNDER_STEM = REGISTRY.register("thunder_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+            .sound(SoundType.STEM)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .instrument(NoteBlockInstrument.BASS)
+            .strength(2.0F)
+    ));
+    public static final RegistryObject<Item> THUNDER_STEM_ITEM = ModItems.REGISTRY
+            .register(THUNDER_STEM.getId().getPath(), () -> new BlockItem(THUNDER_STEM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+    public static final RegistryObject<Block> THUNDER_HYPHAE = REGISTRY.register("thunder_hyphae", () -> new Block(BlockBehaviour.Properties.of()
+            .sound(SoundType.STEM)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .instrument(NoteBlockInstrument.BASS)
+            .strength(2.0F)
+    ));
+    public static final RegistryObject<Item> THUNDER_HYPHAE_ITEM = ModItems.REGISTRY
+            .register(THUNDER_HYPHAE.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+    public static final BlockSetType THUNDER_SET = new BlockSetType(
+            new ResourceLocation(Voidscape.MODID, "thunder").toString(),
+            true,
+            SoundType.NETHER_WOOD,
+            SoundEvents.NETHER_WOOD_DOOR_CLOSE,
+            SoundEvents.NETHER_WOOD_DOOR_OPEN,
+            SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE,
+            SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN,
+            SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF,
+            SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON,
+            SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF,
+            SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON
+    );
+    public static final WoodType THUNDER_WOOD_TYPE = WoodType.register(new WoodType(THUNDER_SET.name(), THUNDER_SET));
+    public static final RegistryObject<Block> THUNDER_PLANKS = REGISTRY.register("thunder_planks", () -> new Block(BlockBehaviour.Properties.of()
+            .sound(SoundType.NETHER_WOOD)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .instrument(NoteBlockInstrument.BASS)
+            .strength(2.0F, 3.0F)
+    ));
+    public static final RegistryObject<Item> THUNDER_PLANKS_ITEM = ModItems.REGISTRY
+            .register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	// Crops
 
