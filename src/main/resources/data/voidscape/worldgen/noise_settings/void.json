@@ -165,7 +165,39 @@
 				  "Name": "voidscape:null_black"
 			  }
 		  }
-	  }
-	]
+	  },
+      {
+        "type": "condition",
+        "if_true": {
+          "type": "biome",
+          "biome_is": [
+            "voidscape:thunder_forest"
+          ]
+        },
+        "then_run": {
+          "type": "sequence",
+          "sequence": [
+            {
+              "type": "condition",
+              "if_true": {
+                "type": "voidscape:air_above"
+              },
+              "then_run": {
+                "type": "block",
+                "result_state": {
+                  "Name": "voidscape:thunder_nylium"
+                }
+              }
+            },
+            {
+              "type": "block",
+              "result_state": {
+                "Name": "bedrock"
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

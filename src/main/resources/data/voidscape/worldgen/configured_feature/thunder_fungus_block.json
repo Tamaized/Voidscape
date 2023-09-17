@@ -8,10 +8,7 @@
 		  "to_place": {
 			"type": "simple_state_provider",
 			"state": {
-			  "Name": "voidscape:plant",
-			  "Properties": {
-				"state": "void"
-			  }
+			  "Name": "voidscape:thunder_fungus"
 			}
 		  }
 		}
@@ -20,9 +17,6 @@
 	  ]
 	},
 	"whitelist": [
-	  {
-		"Name": "minecraft:bedrock"
-	  },
       {
         "Name": "voidscape:thunder_nylium"
       }

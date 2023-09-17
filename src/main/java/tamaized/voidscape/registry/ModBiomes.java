@@ -24,6 +24,7 @@ public class ModBiomes implements RegistryClass {
 	public static final ResourceKey<Biome> NETHER = register("nether");
 	public static final ResourceKey<Biome> END = register("end");
 	public static final ResourceKey<Biome> THUNDER_SPIRES = register("thunderspires");
+	public static final ResourceKey<Biome> THUNDER_FOREST = register("thunder_forest");
 	public static final ResourceKey<Biome> ANTI_SPIRES = register("antispires");
 	public static final ResourceKey<Biome> NULL = register("null");
 

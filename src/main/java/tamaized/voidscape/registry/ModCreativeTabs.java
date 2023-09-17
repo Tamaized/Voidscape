@@ -41,6 +41,7 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.THUNDER_HYPHAE_ITEM.get());
 				output.accept(ModBlocks.THUNDER_PLANKS_ITEM.get());
 				output.accept(ModBlocks.THUNDER_WART_ITEM.get());
+				output.accept(ModBlocks.THUNDER_VINES_ITEM.get());
 				// Crops
 				output.accept(ModBlocks.PLANT_ITEM.get());
 				output.accept(makePlant(EtherealPlantBlock.State.NULL));

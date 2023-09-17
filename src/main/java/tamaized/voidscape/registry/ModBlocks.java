@@ -221,6 +221,34 @@ public class ModBlocks implements RegistryClass {
 	));
 	public static final RegistryObject<Item> THUNDER_WART_ITEM = ModItems.REGISTRY
 			.register(THUNDER_WART.getId().getPath(), () -> new BlockItem(THUNDER_WART.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+    public static final RegistryObject<GrowingPlantHeadBlock> THUNDER_VINES = REGISTRY.register("thunder_vines", () -> new WeepingVinesBlock(BlockBehaviour.Properties.of()
+            .sound(SoundType.WEEPING_VINES)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .randomTicks()
+            .noCollission()
+            .instabreak()
+            .pushReaction(PushReaction.DESTROY)
+    ) {
+        @Override
+        protected Block getBodyBlock() {
+            return THUNDER_VINES_PLANT.get();
+        }
+    });
+    public static final RegistryObject<Block> THUNDER_VINES_PLANT = REGISTRY.register("thunder_vines_plant", () -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
+            .sound(SoundType.WEEPING_VINES)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .randomTicks()
+            .noCollission()
+            .instabreak()
+            .pushReaction(PushReaction.DESTROY)
+    ) {
+        @Override
+        protected GrowingPlantHeadBlock getHeadBlock() {
+            return THUNDER_VINES.get();
+        }
+    });
+    public static final RegistryObject<Item> THUNDER_VINES_ITEM = ModItems.REGISTRY
+            .register(THUNDER_VINES.getId().getPath(), () -> new BlockItem(THUNDER_VINES.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	// Crops
 

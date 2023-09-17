@@ -1,4 +1,4 @@
-package tamaized.voidscape.world.featureconfig;
+package tamaized.voidscape.world.feature.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.PrimitiveCodec;

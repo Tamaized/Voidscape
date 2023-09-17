@@ -1,7 +1,8 @@
 {
-  "forge:registry_name": "voidscape:antispires",
+  "forge:registry_name": "voidscape:thunder_forest",
   "has_precipitation": false,
   "temperature": 0,
+  "temperature_modifier": "none",
   "downfall": 0.0,
   "category": "none",
   "depth": -3.0,
@@ -11,11 +12,11 @@
 	"water_color": 655628,
 	"water_fog_color": 655628,
 	"sky_color": 655628,
-	"foliage_color": 655628,
-	"grass_color": 655628,
+	"foliage_color": 5446026,
+	"grass_color": 5446026,
 	"particle": {
 	  "options": {
-		"type": "ash"
+		"type": "witch"
 	  },
 	  "probability": 0.025
 	},
@@ -42,20 +43,19 @@
 	[ ],
 	[ ],
 	[
-	  "voidscape:antispire",
+	  "voidscape:thunder_fungus",
 	  "voidscape:fruit_patch_void"
 	],
 	[ ],
-	[ ]
+	[
+      "voidscape:thunder_fungus_block",
+      "voidscape:thunder_vines"
+    ]
   ],
   "starts": [
 
   ],
   "creature_spawn_probability": 0.0,
-  "spawners": {
-
-  },
-  "spawn_costs": {
-
-  }
+  "spawners": { },
+  "spawn_costs": { }
 }

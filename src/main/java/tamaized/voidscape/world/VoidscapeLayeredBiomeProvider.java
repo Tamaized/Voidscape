@@ -14,14 +14,9 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
+import tamaized.voidscape.world.genlayer.GenLayerThunderBiomes;
 import tamaized.voidscape.world.genlayer.GenLayerVoidBiomes;
-import tamaized.voidscape.world.genlayer.legacy.Area;
-import tamaized.voidscape.world.genlayer.legacy.AreaFactory;
-import tamaized.voidscape.world.genlayer.legacy.BigContext;
-import tamaized.voidscape.world.genlayer.legacy.Layer;
-import tamaized.voidscape.world.genlayer.legacy.LazyArea;
-import tamaized.voidscape.world.genlayer.legacy.LazyAreaContext;
-import tamaized.voidscape.world.genlayer.legacy.ZoomLayer;
+import tamaized.voidscape.world.genlayer.legacy.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +31,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 	public static final List<ResourceKey<Biome>> BIOMES = ImmutableList.of(
 
 			ModBiomes.THUNDER_SPIRES,
+
+			ModBiomes.THUNDER_FOREST,
 
 			ModBiomes.ANTI_SPIRES,
 
@@ -56,6 +53,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 	private final Map<ResourceKey<Biome>, Integer> idCache = new HashMap<>();
 	private final Map<Integer, Holder.Reference<Biome>> biomeCache = new HashMap<>();
 	private final HolderGetter<Biome> registry;
+	private final Layer genThunder;
 	private final Layer genUpper;
 	private final Layer genMiddle;
 	private final Layer genLower;
@@ -68,9 +66,11 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		this.seed = seed;
 		layerMergeRandom = new Random(seed);
 		registry = registryIn;
-		genUpper = makeLayers(seed);
-		genMiddle = makeLayers(seed + 1);
-		genLower = makeLayers(seed + 2);
+		genThunder = makeLayers(seed, GenLayerThunderBiomes.INSTANCE.setup(this));
+        GenLayerVoidBiomes voidBiomes = GenLayerVoidBiomes.INSTANCE.setup(this);
+		genUpper = makeLayers(seed, voidBiomes);
+		genMiddle = makeLayers(seed + 1, voidBiomes);
+		genLower = makeLayers(seed + 2, voidBiomes);
 	}
 
 	@Override
@@ -103,8 +103,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		return biome.get();
 	}
 
-	private <T extends Area, C extends BigContext<T>> AreaFactory<T> makeLayers(LongFunction<C> seed) {
-		AreaFactory<T> biomes = GenLayerVoidBiomes.INSTANCE.setup(this).run(seed.apply(1L));
+	private <T extends Area, C extends BigContext<T>> AreaFactory<T> makeLayers(LongFunction<C> seed, AreaTransformer0 genLayerBiomes) {
+		AreaFactory<T> biomes = genLayerBiomes.run(seed.apply(1L));
 
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1000L), biomes);
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1001L), biomes);
@@ -116,8 +116,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		return biomes;
 	}
 
-	public Layer makeLayers(long seed) {
-		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context));
+	public Layer makeLayers(long seed, AreaTransformer0 genLayerBiomes) {
+		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), genLayerBiomes);
 		return new Layer(areaFactory) {
 			@Override
 			public Holder<Biome> get(Registry<Biome> p_242936_1_, int x, int y) {
@@ -191,8 +191,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
 																y < (thunderSpireY - 2) ? genUpper.area.get(x, z) :
 
-																		y <= (thunderSpireY + 2) ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.THUNDER_SPIRES) : genUpper.area.get(x, z) :
+																		y <= (thunderSpireY + 2) ? layerMergeRandom.nextBoolean() ? genThunder.area.get(x, z) : genUpper.area.get(x, z) :
 
-																				getBiomeId(ModBiomes.THUNDER_SPIRES));
+                                                                                genThunder.area.get(x, z));
 	}
 }

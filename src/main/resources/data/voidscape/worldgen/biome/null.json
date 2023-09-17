@@ -1,11 +1,11 @@
 {
   "forge:registry_name": "voidscape:null",
-	"has_precipitation": false,
+  "has_precipitation": false,
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",
-	"depth": -3.0,
-	"scale": 1.8,
+  "depth": -3.0,
+  "scale": 1.8,
   "effects": {
 	"fog_color": 655628,
 	"water_color": 655628,
@@ -24,7 +24,7 @@
 	  "tick_chance": 0.0015
 	},
 	"music": {
-	  "sound": "music.end",
+      "sound": "voidscape:music",
 	  "min_delay": 12000,
 	  "max_delay": 24000,
 	  "replace_current_music": true

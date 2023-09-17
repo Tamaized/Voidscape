@@ -1,6 +1,6 @@
 {
   "forge:registry_name": "voidscape:thunderspires",
-	"has_precipitation": false,
+  "has_precipitation": false,
   "temperature": 0,
   "downfall": 0.0,
   "category": "none",
@@ -24,7 +24,7 @@
 	  "tick_chance": 0.0015
 	},
 	"music": {
-	  "sound": "music.end",
+      "sound": "voidscape:music",
 	  "min_delay": 12000,
 	  "max_delay": 24000,
 	  "replace_current_music": true

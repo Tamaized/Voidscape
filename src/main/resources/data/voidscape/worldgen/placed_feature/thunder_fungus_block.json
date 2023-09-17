@@ -1,0 +1,12 @@
+{
+  "feature": "voidscape:thunder_fungus_block",
+  "placement": [
+	{
+	  "type": "voidscape:seek",
+	  "check_below": true
+	},
+	{
+	  "type": "voidscape:air_above"
+	}
+  ]
+}
