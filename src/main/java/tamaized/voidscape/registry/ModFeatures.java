@@ -8,8 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -24,7 +22,6 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 import tamaized.voidscape.world.feature.ClusterFeature;
 import tamaized.voidscape.world.feature.SpireFeature;
 import tamaized.voidscape.world.feature.ThunderVinesFeature;
@@ -41,6 +38,7 @@ public class ModFeatures implements RegistryClass {
 	private static final DeferredRegister<PlacementModifierType<?>> REGISTRY_PLACEMENT_MOD_TYPE = RegUtil.create(Registries.PLACEMENT_MODIFIER_TYPE);
 
 	public static final ResourceKey<ConfiguredFeature<?, ?>> THUNDER_FUNGUS = ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Voidscape.MODID, "thunder_fungus"));
+	public static final ResourceKey<ConfiguredFeature<?, ?>> THUNDER_FOREST_VEGETATION_BONEMEAL = ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Voidscape.MODID, "thunder_forest_vegetation_bonemeal"));
 
 	private static class SeekDownPlacementMod extends PlacementModifier {
 

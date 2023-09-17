@@ -26,6 +26,9 @@
 	],
 	"blacklist": [ ],
 	"tries": 32,
+    "yspread": 3,
+    "xspread": 3,
+    "zspread": 3,
 	"project": false
   }
 }

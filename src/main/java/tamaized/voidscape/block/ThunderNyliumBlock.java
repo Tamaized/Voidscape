@@ -10,11 +10,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import tamaized.voidscape.registry.ModFeatures;
 
-public class ThunderNyliumBlock extends Block {
+public class ThunderNyliumBlock extends Block implements BonemealableBlock {
 
     public ThunderNyliumBlock(Properties pProperties) {
         super(pProperties);
@@ -29,11 +31,10 @@ public class ThunderNyliumBlock extends Block {
     }
 
     public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
-        BlockState blockstate = pLevel.getBlockState(pPos);
         BlockPos blockpos = pPos.above();
         ChunkGenerator chunkgenerator = pLevel.getChunkSource().getGenerator();
         Registry<ConfiguredFeature<?, ?>> registry = pLevel.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-        this.place(registry, NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL, pLevel, chunkgenerator, pRandom, blockpos); // TODO
+        this.place(registry, ModFeatures.THUNDER_FOREST_VEGETATION_BONEMEAL, pLevel, chunkgenerator, pRandom, blockpos); // TODO
 
     }
 
