@@ -145,7 +145,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             afterEvaluate {
-                artifact project.jar
+                artifact project.shadowJar
                 artifact project.sourceJar
             }
             setGroupId 'tamaized'
