@@ -48,11 +48,14 @@
 	[ ],
 	[
 	  "voidscape:crimson_fungus",
-	  "voidscape:fruit_patch_nether",
 	  "voidscape:lava"
 	],
 	[ ],
-	[ ]
+	[
+      "voidscape:crimson_fungus_block",
+      "voidscape:crimson_roots",
+      "voidscape:fruit_patch_nether"
+    ]
   ],
   "starts": [
 

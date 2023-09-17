@@ -8,10 +8,7 @@
 		  "to_place": {
 			"type": "simple_state_provider",
 			"state": {
-			  "Name": "voidscape:plant",
-			  "Properties": {
-				"state": "overworld"
-			  }
+			  "Name": "minecraft:crimson_fungus"
 			}
 		  }
 		}
@@ -20,15 +17,12 @@
 	  ]
 	},
 	"whitelist": [
-	  {
-		"Name": "minecraft:grass_block",
-		"Properties": {
-		  "snowy": "false"
-		}
-	  }
+      {
+        "Name": "minecraft:crimson_nylium"
+      }
 	],
 	"blacklist": [ ],
-	"tries": 16,
+	"tries": 48,
 	"yspread": 3,
 	"xspread": 3,
 	"zspread": 3,
