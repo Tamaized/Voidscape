@@ -38,7 +38,7 @@ public class LiquifierBlockEntity extends BlockEntity {
             return items.cast();
         if (cap == ForgeCapabilities.FLUID_HANDLER)
             return fluids.cast();
-        return super.getCapability(cap);
+        return super.getCapability(cap, side);
     }
 
     @Override

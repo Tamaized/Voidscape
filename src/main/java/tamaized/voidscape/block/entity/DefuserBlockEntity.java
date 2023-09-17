@@ -39,7 +39,7 @@ public class DefuserBlockEntity extends BlockEntity {
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER)
             return fluids.cast();
-        return super.getCapability(cap);
+        return super.getCapability(cap, side);
     }
 
     @Override
