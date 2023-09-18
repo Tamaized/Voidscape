@@ -1,12 +1,25 @@
 {
   "feature": "voidscape:fruit_patch_null",
   "placement": [
-	{
-	  "type": "voidscape:seek",
-	  "check_below": true
-	},
-	{
-	  "type": "voidscape:air_above"
-	}
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "voidscape:seek",
+      "check_below": true
+    },
+    {
+      "type": "voidscape:air_above"
+    },
+    {
+      "type": "voidscape:not_air_below"
+    },
+    {
+      "type": "voidscape:not_in_block"
+    }
   ]
 }

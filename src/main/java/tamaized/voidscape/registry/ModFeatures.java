@@ -114,6 +114,27 @@ public class ModFeatures implements RegistryClass {
 
 	}
 
+    private static class NotInBlockPlacementMod extends PlacementModifier {
+
+        public static final Codec<NotInBlockPlacementMod> CODEC = Codec.unit(NotInBlockPlacementMod::new);
+
+        public static RegistryObject<PlacementModifierType<NotInBlockPlacementMod>> TYPE = registerPlacementModifierType("not_in_block", () -> () -> CODEC);
+
+        public NotInBlockPlacementMod() {
+        }
+
+        @Override
+        public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+            return context.getBlockState(pos).isAir() ? Stream.of(pos) : Stream.empty();
+        }
+
+        @Override
+        public PlacementModifierType<?> type() {
+            return TYPE.get();
+        }
+
+    }
+
 	private static class RandomYPlacementMod extends PlacementModifier {
 
 		public static final Codec<RandomYPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
@@ -164,6 +185,7 @@ public class ModFeatures implements RegistryClass {
 		SeekDownPlacementMod.CODEC.getClass();
 		AirAbovePlacementMod.CODEC.getClass();
 		NotAirBelowPlacementMod.CODEC.getClass();
+		NotInBlockPlacementMod.CODEC.getClass();
 		RandomYPlacementMod.CODEC.getClass();
 	}
 

@@ -17,6 +17,9 @@
 		}
 	  },
 	  "placement": [
+        {
+          "type": "voidscape:not_in_block"
+        }
 	  ]
 	},
 	"whitelist": [

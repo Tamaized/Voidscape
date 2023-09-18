@@ -12,8 +12,14 @@
 	  "type": "voidscape:seek",
 	  "check_below": true
 	},
-	{
-	  "type": "voidscape:air_above"
-	}
+    {
+      "type": "voidscape:air_above"
+    },
+    {
+      "type": "voidscape:not_air_below"
+    },
+    {
+      "type": "voidscape:not_in_block"
+    }
   ]
 }
