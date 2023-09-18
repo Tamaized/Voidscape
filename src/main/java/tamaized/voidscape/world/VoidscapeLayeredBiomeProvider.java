@@ -80,9 +80,9 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		this.layerThreeSlicesBetween = layerThreeSlicesBetween;
 		this.layerBottomDownwards = layerBottomDownwards;
 		this.genTopUpwards = Suppliers.memoize(() -> makeLayers(0L, layerTopUpwards));
-		this.genUpper =  Suppliers.memoize(() -> makeLayers(0L, layerThreeSlicesBetween));
-		this.genMiddle =  Suppliers.memoize(() -> makeLayers(1L, layerThreeSlicesBetween));
-		this.genLower =  Suppliers.memoize(() -> makeLayers(2L, layerThreeSlicesBetween));
+		this.genUpper = Suppliers.memoize(() -> makeLayers(0L, layerThreeSlicesBetween));
+		this.genMiddle = Suppliers.memoize(() -> makeLayers(1L, layerThreeSlicesBetween));
+		this.genLower = Suppliers.memoize(() -> makeLayers(2L, layerThreeSlicesBetween));
 		this.genBottomDownwards = Suppliers.memoize(() -> makeLayers(0L, layerBottomDownwards));
 	}
 
@@ -177,6 +177,6 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
 																		y <= (layerTopUpwardsStart + 2) ? layerMergeRandom.nextBoolean() ? genTopUpwards.get().area.get(x, z) : genUpper.get().area.get(x, z) :
 
-                                                                                genTopUpwards.get().area.get(x, z));
+																				genTopUpwards.get().area.get(x, z));
 	}
 }

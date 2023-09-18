@@ -1,9 +1,9 @@
 {
   "type": "voidscape:void",
   "generator": {
-	"type": "voidscape:void",
-	"biome_source": {
-	  "type": "voidscape:biomeprovider",
+    "type": "voidscape:void",
+    "biome_source": {
+      "type": "voidscape:biomeprovider",
       "possibleBiomes": [
         "voidscape:thunderspires",
         "voidscape:thunder_forest",
@@ -39,6 +39,6 @@
         "chance": 4
       }
     },
-	"settings": "voidscape:void"
+    "settings": "voidscape:void"
   }
 }

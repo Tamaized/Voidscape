@@ -24,7 +24,7 @@ public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 
 	private VoidscapeLayeredBiomeProvider provider;
 
-    GenLayerRandomWithOneMajorBiomes(List<ResourceKey<Biome>> biomes, ResourceKey<Biome> majorBiome, int chance) {
+	GenLayerRandomWithOneMajorBiomes(List<ResourceKey<Biome>> biomes, ResourceKey<Biome> majorBiome, int chance) {
 		this.biomes = biomes;
 		this.majorBiome = majorBiome;
 		this.chance = chance;
