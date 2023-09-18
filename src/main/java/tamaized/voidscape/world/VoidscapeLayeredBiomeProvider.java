@@ -1,6 +1,6 @@
 package tamaized.voidscape.world;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -12,10 +12,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
-import tamaized.voidscape.registry.ModBiomes;
+import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
-import tamaized.voidscape.world.genlayer.GenLayerThunderBiomes;
-import tamaized.voidscape.world.genlayer.GenLayerVoidBiomes;
+import tamaized.voidscape.world.genlayer.GenLayerRandomWithOneMajorBiomes;
 import tamaized.voidscape.world.genlayer.legacy.*;
 
 import java.util.HashMap;
@@ -24,58 +23,76 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.LongFunction;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
-	public static final List<ResourceKey<Biome>> BIOMES = ImmutableList.of(
+	public static final Codec<VoidscapeLayeredBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
+			RegistryOps.retrieveGetter(Registries.BIOME),
+			Codec.list(ResourceKey.codec(Registries.BIOME)).fieldOf("possibleBiomes").stable().forGetter(obj -> obj.possibleBiomes),
+			Codec.INT.fieldOf("layerBottomDownwardsStart").stable().forGetter(obj -> obj.layerBottomDownwardsStart),
+			Codec.INT.fieldOf("layerTopUpwardsStart").stable().forGetter(obj -> obj.layerTopUpwardsStart),
+			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerTopUpwards").stable().forGetter(obj -> obj.layerTopUpwards),
+			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerThreeSlicesBetween").stable().forGetter(obj -> obj.layerThreeSlicesBetween),
+			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerBottomDownwards").stable().forGetter(obj -> obj.layerBottomDownwards)
+	).apply(instance, instance.stable(VoidscapeLayeredBiomeProvider::new)));
 
-			ModBiomes.THUNDER_SPIRES,
+	private final HolderGetter<Biome> registry;
+	private final List<ResourceKey<Biome>> possibleBiomes;
+	private final int layerBottomDownwardsStart;
+	private final int layerTopUpwardsStart;
+	private final GenLayerRandomWithOneMajorBiomes layerTopUpwards;
+	private final GenLayerRandomWithOneMajorBiomes layerThreeSlicesBetween;
+	private final GenLayerRandomWithOneMajorBiomes layerBottomDownwards;
 
-			ModBiomes.THUNDER_FOREST,
-
-			ModBiomes.ANTI_SPIRES,
-
-			ModBiomes.NULL,
-
-			ModBiomes.VOID,
-
-			ModBiomes.OVERWORLD,
-
-			ModBiomes.NETHER,
-
-			ModBiomes.END
-
-	);
-	public static final Codec<VoidscapeLayeredBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(Codec.LONG.
-			fieldOf("seed").stable().orElseGet(() -> /*HackyWorldGen.seed*/0L).forGetter((obj) -> obj.seed), RegistryOps
-			.retrieveGetter(Registries.BIOME)).apply(instance, instance.stable(VoidscapeLayeredBiomeProvider::new)));
+	private final int[] layers;
 	private final Map<ResourceKey<Biome>, Integer> idCache = new HashMap<>();
 	private final Map<Integer, Holder.Reference<Biome>> biomeCache = new HashMap<>();
-	private final HolderGetter<Biome> registry;
-	private final Layer genThunder;
-	private final Layer genUpper;
-	private final Layer genMiddle;
-	private final Layer genLower;
-	private final long seed;
-	private final Random layerMergeRandom;
+	private final Supplier<Layer> genTopUpwards;
+	private final Supplier<Layer> genUpper;
+	private final Supplier<Layer> genMiddle;
+	private final Supplier<Layer> genLower;
+	private final Supplier<Layer> genBottomDownwards;
+	private final Random layerMergeRandom = new Random();
 
-	public VoidscapeLayeredBiomeProvider(long seed, HolderGetter<Biome> registryIn) {
+	public VoidscapeLayeredBiomeProvider(
+			HolderGetter<Biome> registryIn,
+			List<ResourceKey<Biome>> possibleBiomes,
+			int layerBottomDownwardsStart,
+			int layerTopUpwardsStart,
+			GenLayerRandomWithOneMajorBiomes layerTopUpwards,
+			GenLayerRandomWithOneMajorBiomes layerThreeSlicesBetween,
+			GenLayerRandomWithOneMajorBiomes layerBottomDownwards) {
 		super();
-		BIOMES.forEach(this::getBiomeId); // Allocate IDs
-		this.seed = seed;
-		layerMergeRandom = new Random(seed);
-		registry = registryIn;
-		genThunder = makeLayers(seed, GenLayerThunderBiomes.INSTANCE.setup(this));
-        GenLayerVoidBiomes voidBiomes = GenLayerVoidBiomes.INSTANCE.setup(this);
-		genUpper = makeLayers(seed, voidBiomes);
-		genMiddle = makeLayers(seed + 1, voidBiomes);
-		genLower = makeLayers(seed + 2, voidBiomes);
+		this.registry = registryIn;
+		this.possibleBiomes = possibleBiomes;
+		possibleBiomes.forEach(this::getBiomeId); // Allocate IDs
+
+		this.layerBottomDownwardsStart = layerBottomDownwardsStart;
+		this.layerTopUpwardsStart = layerTopUpwardsStart;
+		final int split = (layerTopUpwardsStart - (layerBottomDownwardsStart * 2)) / 3;
+		final int sliceBottom = layerBottomDownwardsStart + split;
+		final int sliceTop = layerBottomDownwardsStart + split * 2;
+		this.layers = new int[]{layerBottomDownwardsStart, sliceBottom, sliceTop, layerTopUpwardsStart};
+
+		this.layerTopUpwards = layerTopUpwards;
+		this.layerThreeSlicesBetween = layerThreeSlicesBetween;
+		this.layerBottomDownwards = layerBottomDownwards;
+		this.genTopUpwards = Suppliers.memoize(() -> makeLayers(0L, layerTopUpwards));
+		this.genUpper =  Suppliers.memoize(() -> makeLayers(0L, layerThreeSlicesBetween));
+		this.genMiddle =  Suppliers.memoize(() -> makeLayers(1L, layerThreeSlicesBetween));
+		this.genLower =  Suppliers.memoize(() -> makeLayers(2L, layerThreeSlicesBetween));
+		this.genBottomDownwards = Suppliers.memoize(() -> makeLayers(0L, layerBottomDownwards));
+	}
+
+	public int getLayerY(int index) {
+		return layers[index];
 	}
 
 	@Override
 	protected Stream<Holder<Biome>> collectPossibleBiomes() {
-		return BIOMES.stream().map(registry::get).filter(Optional::isPresent).map(Optional::get);
+		return possibleBiomes.stream().map(registry::get).filter(Optional::isPresent).map(Optional::get);
 	}
 
 	public int getBiomeId(ResourceKey<Biome> biome) {
@@ -103,8 +120,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		return biome.get();
 	}
 
-	private <T extends Area, C extends BigContext<T>> AreaFactory<T> makeLayers(LongFunction<C> seed, AreaTransformer0 genLayerBiomes) {
-		AreaFactory<T> biomes = genLayerBiomes.run(seed.apply(1L));
+	private <T extends Area, C extends BigContext<T>> AreaFactory<T> makeLayers(LongFunction<C> seed, GenLayerRandomWithOneMajorBiomes layer) {
+		AreaFactory<T> biomes = layer.setup(this).run(seed.apply(1L));
 
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1000L), biomes);
 		biomes = ZoomLayer.NORMAL.run(seed.apply(1001L), biomes);
@@ -116,8 +133,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		return biomes;
 	}
 
-	public Layer makeLayers(long seed, AreaTransformer0 genLayerBiomes) {
-		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, seed, context), genLayerBiomes);
+	public Layer makeLayers(long salt, GenLayerRandomWithOneMajorBiomes layer) {
+		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, ASMHooks.seed + salt, context), layer);
 		return new Layer(areaFactory) {
 			@Override
 			public Holder<Biome> get(Registry<Biome> p_242936_1_, int x, int y) {
@@ -136,63 +153,30 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		return getRealNoiseBiome(x, cy << 2, z);
 	}
 
-	public static final int[] LAYERS;
-
-	static {
-		final int antiSpireY = 32;
-		final int thunderSpireY = 192 - antiSpireY;
-		final int split = (thunderSpireY - (antiSpireY * 2)) / 3;
-		final int sliceBottom = antiSpireY + split;
-		final int sliceTop = antiSpireY + split * 2;
-		LAYERS = new int[]{antiSpireY, sliceBottom, sliceTop, thunderSpireY};
-	}
-
 	public Holder<Biome> getRealNoiseBiome(int x, int y, int z) {
-		// Debug code to render an image of the biome layout within the ide
-		/*final Map<Integer, Integer> remapColors = new HashMap<>();
-		remapColors.put(getBiomeId(ModBiomes.VOID), 0x000000);
-		remapColors.put(getBiomeId(ModBiomes.OVERWORLD), 0x00FF00);
-		remapColors.put(getBiomeId(ModBiomes.NETHER), 0xFF0000);
-		remapColors.put(getBiomeId(ModBiomes.END), 0x0000FF);
-		BufferedImage imageL = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageM = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imageU = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
-		for(int ii = 0; ii < 3; ii++) {
-			BufferedImage image = ii == 0 ? imageL : ii == 1 ? imageM : imageU;
-			Graphics2D display = image.createGraphics();
-			LazyArea area = (ii == 0 ? genLower : ii == 1 ? genMiddle : genUpper).area;
-			for (int xx = 0; xx < image.getWidth(); xx++) {
-				for (int zz = 0; zz < image.getHeight(); zz++) {
-					int c = area.get(xx, zz);
-					display.setColor(new Color(remapColors.getOrDefault(c, c)));
-					display.drawRect(xx, zz, 1, 1);
-				}
-			}
-		}
- 		System.out.println("breakpoint");*/
-		final int antiSpireY = LAYERS[0];
-		final int thunderSpireY = LAYERS[3];
-		final int m1 = LAYERS[1];
-		final int m2 = LAYERS[2];
-		layerMergeRandom.setSeed(seed + (x & -4) * 25117L + (z & -4) * 151121L);
+		final int layerBottomDownwardsStart = layers[0];
+		final int layerTopUpwardsStart = layers[3];
+		final int m1 = layers[1];
+		final int m2 = layers[2];
+		layerMergeRandom.setSeed(ASMHooks.seed + (x & -4) * 25117L + (z & -4) * 151121L);
 		return getBiome(
 
-				y < (antiSpireY - 2) ? getBiomeId(ModBiomes.ANTI_SPIRES) :
+				y < (layerBottomDownwardsStart - 2) ? genBottomDownwards.get().area.get(x, z) :
 
-						y <= (antiSpireY + 2) ? layerMergeRandom.nextBoolean() ? getBiomeId(ModBiomes.ANTI_SPIRES) : genLower.area.get(x, z) :
+						y <= (layerBottomDownwardsStart + 2) ? layerMergeRandom.nextBoolean() ? genBottomDownwards.get().area.get(x, z) : genLower.get().area.get(x, z) :
 
-								y < (m1 - 2) ? genLower.area.get(x, z) :
+								y < (m1 - 2) ? genLower.get().area.get(x, z) :
 
-										y <= (m1 + 2) ? (layerMergeRandom.nextBoolean() ? genLower : genMiddle).area.get(x, z) :
+										y <= (m1 + 2) ? (layerMergeRandom.nextBoolean() ? genLower : genMiddle).get().area.get(x, z) :
 
-												y < (m2 - 2) ? genMiddle.area.get(x, z) :
+												y < (m2 - 2) ? genMiddle.get().area.get(x, z) :
 
-														y <= (m2 + 2) ? (layerMergeRandom.nextBoolean() ? genMiddle : genUpper).area.get(x, z) :
+														y <= (m2 + 2) ? (layerMergeRandom.nextBoolean() ? genMiddle : genUpper).get().area.get(x, z) :
 
-																y < (thunderSpireY - 2) ? genUpper.area.get(x, z) :
+																y < (layerTopUpwardsStart - 2) ? genUpper.get().area.get(x, z) :
 
-																		y <= (thunderSpireY + 2) ? layerMergeRandom.nextBoolean() ? genThunder.area.get(x, z) : genUpper.area.get(x, z) :
+																		y <= (layerTopUpwardsStart + 2) ? layerMergeRandom.nextBoolean() ? genTopUpwards.get().area.get(x, z) : genUpper.get().area.get(x, z) :
 
-                                                                                genThunder.area.get(x, z));
+                                                                                genTopUpwards.get().area.get(x, z));
 	}
 }

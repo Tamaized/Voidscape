@@ -30,10 +30,10 @@ public class SpireFeature extends Feature<BooleanFeatureConfig> {
         int base = pos.getY();
         int length = context.random().nextInt(25) + 5;
         boolean canGen = false;
-        while ((context.config().get() ? base + length < VoidscapeLayeredBiomeProvider.LAYERS[0] : base < 255 - length) &&
-
-                !(canGen = checkForRoom(context.level(), pos.set(pos.getX(), context.config().get() ? base + length : base, pos.getZ()), length, context.config().get())))
-            base++;
+		int antiYLimit = context.chunkGenerator().getBiomeSource() instanceof VoidscapeLayeredBiomeProvider provider ? provider.getLayerY(0) : context.level().getMinBuildHeight() + 32;
+		while ((context.config().get() ? base + length < antiYLimit : base < context.level().getMaxBuildHeight() - length) &&
+				!(canGen = checkForRoom(context.level(), pos.set(pos.getX(), context.config().get() ? base + length : base, pos.getZ()), length, context.config().get())))
+			base++;
         if (canGen) {
             genSpire(context.level(), pos.set(pos.getX(), base + length * (context.config().get() ? 0 : 1), pos.getZ()), length, context.random(), 5, context.config().get());
             context.level().setBlock(pos, (context.config().get() ? ModBlocks.ANTIROCK : ModBlocks.THUNDERROCK).get().defaultBlockState(), 16 | 2);

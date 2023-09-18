@@ -51,6 +51,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.mutable.MutableObject;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.asm.ASMHooks;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
@@ -232,7 +233,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int centerZ = chunk.getPos().z;
 		int x = centerX * 16;
 		int z = centerZ * 16;
-		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(0L)); // TODO seed
+		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(ASMHooks.seed));
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
 		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.STRUCTURE);
 		try {

@@ -3,8 +3,42 @@
   "generator": {
 	"type": "voidscape:void",
 	"biome_source": {
-	  "type": "voidscape:biomeprovider"
-	},
+	  "type": "voidscape:biomeprovider",
+      "possibleBiomes": [
+        "voidscape:thunderspires",
+        "voidscape:thunder_forest",
+        "voidscape:antispires",
+        "voidscape:null",
+        "voidscape:void",
+        "voidscape:overworld",
+        "voidscape:nether",
+        "voidscape:end"
+      ],
+      "layerBottomDownwardsStart": 32,
+      "layerTopUpwardsStart": 160,
+      "layerTopUpwards": {
+        "biomes": [
+          "voidscape:thunder_forest"
+        ],
+        "majorBiome": "voidscape:thunderspires",
+        "chance": 4
+      },
+      "layerThreeSlicesBetween": {
+        "biomes": [
+          "voidscape:null",
+          "voidscape:overworld",
+          "voidscape:nether",
+          "voidscape:end"
+        ],
+        "majorBiome": "voidscape:void",
+        "chance": 4
+      },
+      "layerBottomDownwards": {
+        "biomes": [],
+        "majorBiome": "voidscape:antispires",
+        "chance": 4
+      }
+    },
 	"settings": "voidscape:void"
   }
 }
