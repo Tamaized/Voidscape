@@ -232,15 +232,6 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int centerZ = chunk.getPos().z;
 		int x = centerX * 16;
 		int z = centerZ * 16;
-		int[] yIterator = new int[]{0};
-		boolean cast = biomeSource instanceof VoidscapeLayeredBiomeProvider;
-		if (cast) {
-			final int[] layers = Arrays.stream(VoidscapeLayeredBiomeProvider.LAYERS).map(i -> i + 3).toArray();
-			final int[] result = new int[yIterator.length + layers.length];
-			System.arraycopy(yIterator, 0, result, 0, yIterator.length);
-			System.arraycopy(layers, 0, result, yIterator.length, layers.length);
-			yIterator = result;
-		}
 		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(0L)); // TODO seed
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
 		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.STRUCTURE);
@@ -305,8 +296,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 						try {
 							worldGenRegion_.setCurrentlyGenerating(supplier1);
-							for (int y : yIterator) {
-								Holder<Biome> biome = cast ? ((VoidscapeLayeredBiomeProvider) biomeSource).
+							for (int y = worldGenRegion_.getMinBuildHeight(); y < worldGenRegion_.getMaxBuildHeight() - 15; y += 15) {
+								Holder<Biome> biome = biomeSource instanceof VoidscapeLayeredBiomeProvider voidscapeLayeredBiomeProvider ? voidscapeLayeredBiomeProvider.
 										getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) : this.biomeSource.
 										getNoiseBiome((centerX << 2) + 2, (y >> 2), (centerZ << 2) + 2,
 												worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?
