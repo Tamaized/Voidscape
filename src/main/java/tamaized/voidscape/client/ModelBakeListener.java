@@ -17,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -49,6 +50,13 @@ public class ModelBakeListener {
 	private static void addBlock(List<ModelResourceLocation> list, RegistryObject<? extends Block> object, String... extra) {
 		add(list, object, "", extra);
 		add(list, object, "inventory", extra);
+	}
+
+	private static void addBlockStates(List<ModelResourceLocation> list, RegistryObject<? extends Block> object, String... extra) {
+		add(list, object, "inventory", extra);
+		object.get().getStateDefinition().getPossibleStates()
+				.forEach(state -> state.getValues().entrySet().stream().map(StateHolder.PROPERTY_ENTRY_TO_STRING_FUNCTION)
+						.forEach(p -> add(list, object, p, extra)));
 	}
 
 	private static void addItem(List<ModelResourceLocation> list, RegistryObject<? extends Item> object, String... extra) {
@@ -119,18 +127,11 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.THUNDER_WART);
 		addBlock(fullbrightList, ModBlocks.THUNDER_VINES);
 		addBlock(fullbrightList, ModBlocks.THUNDER_VINES_PLANT);
-		add(fullbrightList, ModBlocks.THUNDER_STEM, "inventory");
-		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=x");
-		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=y");
-		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=z");
+		addBlockStates(fullbrightList, ModBlocks.THUNDER_STEM);
 		addBlock(fullbrightList, ModBlocks.THUNDER_HYPHAE);
 		addBlock(fullbrightList, ModBlocks.THUNDER_PLANKS);
 
-		add(fullbrightList, ModBlocks.PLANT, "inventory");
-		add(fullbrightList, ModBlocks.PLANT, "state=void");
-		add(fullbrightList, ModBlocks.PLANT, "state=overworld");
-		add(fullbrightList, ModBlocks.PLANT, "state=nether");
-		add(fullbrightList, ModBlocks.PLANT, "state=end");
+		addBlockStates(fullbrightList, ModBlocks.PLANT);
 
 		fullbrightList.forEach(mrl -> {
 			final BakedModel model = event.getModels().get(mrl);
