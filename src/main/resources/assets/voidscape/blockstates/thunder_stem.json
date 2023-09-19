@@ -1,8 +1,16 @@
 {
   "variants": {
-	"": {
-	  "model": "voidscape:block/thunder_stem"
-	}
-
+    "axis=x": {
+      "model": "voidscape:block/thunder_stem",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "voidscape:block/thunder_stem"
+    },
+    "axis=z": {
+      "model": "voidscape:block/thunder_stem",
+      "x": 90
+    }
   }
 }
