@@ -46,12 +46,12 @@ public class ModelBakeListener {
 
 	private static final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
 
-	private static void addBlock(List<ModelResourceLocation> list, RegistryObject<Block> object, String... extra) {
+	private static void addBlock(List<ModelResourceLocation> list, RegistryObject<? extends Block> object, String... extra) {
 		add(list, object, "", extra);
 		add(list, object, "inventory", extra);
 	}
 
-	private static void addItem(List<ModelResourceLocation> list, RegistryObject<Item> object, String... extra) {
+	private static void addItem(List<ModelResourceLocation> list, RegistryObject<? extends Item> object, String... extra) {
 		add(list, object, "inventory", extra);
 	}
 
@@ -73,6 +73,7 @@ public class ModelBakeListener {
 		List<ModelResourceLocation> fullbrightList = new ArrayList<>();
 		List<ModelResourceLocation> overlayList = new ArrayList<>();
 		List<ModelResourceLocation> textureNameOverlayList = new ArrayList<>();
+		List<ModelResourceLocation> flowerPotList = new ArrayList<>();
 
 		addItem(fullbrightList, ModItems.VOIDIC_CRYSTAL);
 		addItem(fullbrightList, ModItems.ETHEREAL_ESSENCE);
@@ -110,6 +111,21 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocks.MACHINE_CORE);
 		addBlock(textureNameOverlayList, ModBlocks.MACHINE_LIQUIFIER);
 		addBlock(fullbrightList, ModBlocks.MACHINE_DEFUSER);
+
+		addBlock(overlayList, ModBlocks.THUNDER_NYLIUM);
+		addBlock(fullbrightList, ModBlocks.THUNDER_ROOTS);
+		addBlock(flowerPotList, ModBlocks.THUNDER_ROOTS_POT);
+		addBlock(fullbrightList, ModBlocks.THUNDER_FUNGUS);
+		addBlock(fullbrightList, ModBlocks.THUNDER_WART);
+		addBlock(fullbrightList, ModBlocks.THUNDER_VINES);
+		addBlock(fullbrightList, ModBlocks.THUNDER_VINES_PLANT);
+		add(fullbrightList, ModBlocks.THUNDER_STEM, "inventory");
+		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=x");
+		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=y");
+		add(fullbrightList, ModBlocks.THUNDER_STEM, "axis=z");
+		addBlock(fullbrightList, ModBlocks.THUNDER_HYPHAE);
+		addBlock(fullbrightList, ModBlocks.THUNDER_PLANKS);
+
 		add(fullbrightList, ModBlocks.PLANT, "inventory");
 		add(fullbrightList, ModBlocks.PLANT, "state=void");
 		add(fullbrightList, ModBlocks.PLANT, "state=overworld");
@@ -159,6 +175,30 @@ public class ModelBakeListener {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
 								if (quad.getSprite().contents().name().getPath().contains("_overlay")) {
+									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
+									quad.shade = false;
+								}
+							}
+							cachedQuads.put(side, quads);
+						}
+						return quads; // computeIfAbsent has issues, don't use it
+					}
+				});
+			else
+				Voidscape.LOGGER.error("Null Model! " + mrl);
+		});
+		flowerPotList.forEach(mrl -> {
+			final BakedModel model = event.getModels().get(mrl);
+			if (model != null)
+				event.getModels().put(mrl, new FullBrightModel(model) {
+					@NotNull
+					@Override
+					public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
+						List<BakedQuad> quads = cachedQuads.get(side);
+						if (quads == null) {
+							quads = model.getQuads(state, side, rand);
+							for (BakedQuad quad : quads) {
+								if (quad.getSprite().contents().name().getPath().equals("plant")) {
 									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
 									quad.shade = false;
 								}
