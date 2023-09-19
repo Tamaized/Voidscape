@@ -13,6 +13,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.EtherealPlantBlock;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
 public class ModCreativeTabs implements RegistryClass {
 
@@ -34,14 +35,14 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.MACHINE_LIQUIFIER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_DEFUSER_ITEM.get());
 				// Biome - Thunder Forest
-				output.accept(ModBlocks.THUNDER_NYLIUM_ITEM.get());
-				output.accept(ModBlocks.THUNDER_ROOTS_ITEM.get());
-                output.accept(ModBlocks.THUNDER_WART_ITEM.get());
-                output.accept(ModBlocks.THUNDER_VINES_ITEM.get());
-				output.accept(ModBlocks.THUNDER_FUNGUS_ITEM.get());
-				output.accept(ModBlocks.THUNDER_STEM_ITEM.get());
-				output.accept(ModBlocks.THUNDER_HYPHAE_ITEM.get());
-                output.accept(ModBlocks.THUNDER_PLANKS_ITEM.get());
+				output.accept(ModBlocksThunderForestBiome.THUNDER_NYLIUM_ITEM.get());
+				output.accept(ModBlocksThunderForestBiome.THUNDER_ROOTS_ITEM.get());
+                output.accept(ModBlocksThunderForestBiome.THUNDER_WART_ITEM.get());
+                output.accept(ModBlocksThunderForestBiome.THUNDER_VINES_ITEM.get());
+				output.accept(ModBlocksThunderForestBiome.THUNDER_FUNGUS_ITEM.get());
+				output.accept(ModBlocksThunderForestBiome.THUNDER_STEM_ITEM.get());
+				output.accept(ModBlocksThunderForestBiome.THUNDER_HYPHAE_ITEM.get());
+                output.accept(ModBlocksThunderForestBiome.THUNDER_PLANKS_ITEM.get());
 				// Crops
 				output.accept(ModBlocks.PLANT_ITEM.get());
 				output.accept(makePlant(EtherealPlantBlock.State.NULL));

@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 import tamaized.voidscape.world.feature.config.ClusterConfig;
 
 public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
@@ -35,7 +36,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
             return false;
         } else {
             BlockState blockstate = worldgenlevel.getBlockState(blockpos.above());
-            if (!blockstate.is(ModBlocks.THUNDER_WART.get())) {
+            if (!blockstate.is(ModBlocksThunderForestBiome.THUNDER_WART.get())) {
                 return false;
             } else {
                 this.placeRoofWart(worldgenlevel, randomsource, blockpos);
@@ -46,7 +47,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void placeRoofWart(LevelAccessor pLevel, RandomSource pRandom, BlockPos pPos) {
-        pLevel.setBlock(pPos, ModBlocks.THUNDER_WART.get().defaultBlockState(), 2);
+        pLevel.setBlock(pPos, ModBlocksThunderForestBiome.THUNDER_WART.get().defaultBlockState(), 2);
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         BlockPos.MutableBlockPos blockpos$mutableblockpos1 = new BlockPos.MutableBlockPos();
 
@@ -57,7 +58,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
 
                 for(Direction direction : DIRECTIONS) {
                     BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos1.setWithOffset(blockpos$mutableblockpos, direction));
-                    if (blockstate.is(ModBlocks.THUNDER_WART.get())) {
+                    if (blockstate.is(ModBlocksThunderForestBiome.THUNDER_WART.get())) {
                         ++j;
                     }
 
@@ -67,7 +68,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
                 }
 
                 if (j == 1) {
-                    pLevel.setBlock(blockpos$mutableblockpos, ModBlocks.THUNDER_WART.get().defaultBlockState(), 2);
+                    pLevel.setBlock(blockpos$mutableblockpos, ModBlocksThunderForestBiome.THUNDER_WART.get().defaultBlockState(), 2);
                 }
             }
         }
@@ -81,7 +82,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
             blockpos$mutableblockpos.setWithOffset(pPos, pRandom.nextInt(8) - pRandom.nextInt(8), pRandom.nextInt(2) - pRandom.nextInt(7), pRandom.nextInt(8) - pRandom.nextInt(8));
             if (pLevel.isEmptyBlock(blockpos$mutableblockpos)) {
                 BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos.above());
-                if (blockstate.is(ModBlocks.THUNDER_WART.get())) {
+                if (blockstate.is(ModBlocksThunderForestBiome.THUNDER_WART.get())) {
                     int j = Mth.nextInt(pRandom, 1, 8);
                     if (pRandom.nextInt(6) == 0) {
                         j *= 2;
@@ -104,11 +105,11 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
         for(int i = 0; i <= pHeight; ++i) {
             if (pLevel.isEmptyBlock(pPos)) {
                 if (i == pHeight || !pLevel.isEmptyBlock(pPos.below())) {
-                    pLevel.setBlock(pPos, ModBlocks.THUNDER_VINES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(pRandom, pMinAge, pMaxAge)), 2);
+                    pLevel.setBlock(pPos, ModBlocksThunderForestBiome.THUNDER_VINES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(pRandom, pMinAge, pMaxAge)), 2);
                     break;
                 }
 
-                pLevel.setBlock(pPos, ModBlocks.THUNDER_VINES_PLANT.get().defaultBlockState(), 2);
+                pLevel.setBlock(pPos, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT.get().defaultBlockState(), 2);
             }
 
             pPos.move(Direction.DOWN);

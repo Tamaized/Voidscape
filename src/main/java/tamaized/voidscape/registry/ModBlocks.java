@@ -34,12 +34,13 @@ import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.AntiBoltEntity;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
 import java.util.function.Consumer;
 
 public class ModBlocks implements RegistryClass {
 
-	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
+	public static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
 
 	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
@@ -153,121 +154,6 @@ public class ModBlocks implements RegistryClass {
 			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
 	));
 
-	// Biome - Thunder Forest
-	public static final RegistryObject<Block> THUNDER_NYLIUM = REGISTRY.register("thunder_nylium", () -> new ThunderNyliumBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.NYLIUM)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.isValidSpawn((t1, t2, t3, t4) -> false)
-	));
-	public static final RegistryObject<Item> THUNDER_NYLIUM_ITEM = ModItems.REGISTRY
-			.register(THUNDER_NYLIUM.getId().getPath(), () -> new BlockItem(THUNDER_NYLIUM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_ROOTS = REGISTRY.register("thunder_roots", () -> new RootsBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.ROOTS)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.noCollission()
-			.instabreak()
-			.replaceable()
-			.pushReaction(PushReaction.DESTROY)
-			.offsetType(BlockBehaviour.OffsetType.XYZ)
-	));
-	public static final RegistryObject<Item> THUNDER_ROOTS_ITEM = ModItems.REGISTRY
-			.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_ROOTS_POT = REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
-			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
-			THUNDER_ROOTS,
-			BlockBehaviour.Properties.of()
-					.instabreak()
-					.noOcclusion()
-					.pushReaction(PushReaction.DESTROY)
-	));
-	public static final RegistryObject<Block> THUNDER_FUNGUS = REGISTRY.register("thunder_fungus", () -> new FungusBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.FUNGUS)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.noCollission()
-			.instabreak()
-			.replaceable()
-			.pushReaction(PushReaction.DESTROY),
-			ModFeatures.THUNDER_FUNGUS,
-			THUNDER_NYLIUM.get()
-	));
-	public static final RegistryObject<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
-			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Block> THUNDER_WART = REGISTRY.register("thunder_wart", () -> new Block(BlockBehaviour.Properties.of()
-			.sound(SoundType.WART_BLOCK)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(1.0F)
-	));
-	public static final RegistryObject<Item> THUNDER_WART_ITEM = ModItems.REGISTRY
-			.register(THUNDER_WART.getId().getPath(), () -> new BlockItem(THUNDER_WART.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-    public static final RegistryObject<GrowingPlantHeadBlock> THUNDER_VINES = REGISTRY.register("thunder_vines", () -> new WeepingVinesBlock(BlockBehaviour.Properties.of()
-            .sound(SoundType.WEEPING_VINES)
-            .mapColor(MapColor.COLOR_PURPLE)
-            .randomTicks()
-            .noCollission()
-            .instabreak()
-            .pushReaction(PushReaction.DESTROY)
-    ) {
-        @Override
-        protected Block getBodyBlock() {
-            return THUNDER_VINES_PLANT.get();
-        }
-    });
-    public static final RegistryObject<Block> THUNDER_VINES_PLANT = REGISTRY.register("thunder_vines_plant", () -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
-            .sound(SoundType.WEEPING_VINES)
-            .mapColor(MapColor.COLOR_PURPLE)
-            .randomTicks()
-            .noCollission()
-            .instabreak()
-            .pushReaction(PushReaction.DESTROY)
-    ) {
-        @Override
-        protected GrowingPlantHeadBlock getHeadBlock() {
-            return THUNDER_VINES.get();
-        }
-    });
-    public static final RegistryObject<Item> THUNDER_VINES_ITEM = ModItems.REGISTRY
-            .register(THUNDER_VINES.getId().getPath(), () -> new BlockItem(THUNDER_VINES.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-    public static final RegistryObject<Block> THUNDER_STEM = REGISTRY.register("thunder_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
-            .sound(SoundType.STEM)
-            .mapColor(MapColor.COLOR_PURPLE)
-            .instrument(NoteBlockInstrument.BASS)
-            .strength(2.0F)
-    ));
-    public static final RegistryObject<Item> THUNDER_STEM_ITEM = ModItems.REGISTRY
-            .register(THUNDER_STEM.getId().getPath(), () -> new BlockItem(THUNDER_STEM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-    public static final RegistryObject<Block> THUNDER_HYPHAE = REGISTRY.register("thunder_hyphae", () -> new Block(BlockBehaviour.Properties.of()
-            .sound(SoundType.STEM)
-            .mapColor(MapColor.COLOR_PURPLE)
-            .instrument(NoteBlockInstrument.BASS)
-            .strength(2.0F)
-    ));
-    public static final RegistryObject<Item> THUNDER_HYPHAE_ITEM = ModItems.REGISTRY
-            .register(THUNDER_HYPHAE.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-    public static final BlockSetType THUNDER_SET = new BlockSetType(
-            new ResourceLocation(Voidscape.MODID, "thunder").toString(),
-            true,
-            SoundType.NETHER_WOOD,
-            SoundEvents.NETHER_WOOD_DOOR_CLOSE,
-            SoundEvents.NETHER_WOOD_DOOR_OPEN,
-            SoundEvents.NETHER_WOOD_TRAPDOOR_CLOSE,
-            SoundEvents.NETHER_WOOD_TRAPDOOR_OPEN,
-            SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF,
-            SoundEvents.NETHER_WOOD_PRESSURE_PLATE_CLICK_ON,
-            SoundEvents.NETHER_WOOD_BUTTON_CLICK_OFF,
-            SoundEvents.NETHER_WOOD_BUTTON_CLICK_ON
-    );
-    public static final WoodType THUNDER_WOOD_TYPE = WoodType.register(new WoodType(THUNDER_SET.name(), THUNDER_SET));
-    public static final RegistryObject<Block> THUNDER_PLANKS = REGISTRY.register("thunder_planks", () -> new Block(BlockBehaviour.Properties.of()
-            .sound(SoundType.NETHER_WOOD)
-            .mapColor(MapColor.COLOR_PURPLE)
-            .instrument(NoteBlockInstrument.BASS)
-            .strength(2.0F, 3.0F)
-    ));
-    public static final RegistryObject<Item> THUNDER_PLANKS_ITEM = ModItems.REGISTRY
-            .register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
 	// Crops
 
 	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new EtherealPlantBlock(Block.Properties.of()
@@ -321,8 +207,9 @@ public class ModBlocks implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
+		new ModBlocksThunderForestBiome().init(bus);
 		bus.addListener((Consumer<FMLCommonSetupEvent>) event -> {
-			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(THUNDER_ROOTS.getId(), THUNDER_ROOTS_POT);
+			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocksThunderForestBiome.THUNDER_ROOTS.getId(), ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
 		});
 	}
 }

@@ -35,6 +35,7 @@ import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItems;
 import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,16 +121,16 @@ public class ModelBakeListener {
 		addBlock(textureNameOverlayList, ModBlocks.MACHINE_LIQUIFIER);
 		addBlock(fullbrightList, ModBlocks.MACHINE_DEFUSER);
 
-		addBlock(overlayList, ModBlocks.THUNDER_NYLIUM);
-		addBlock(fullbrightList, ModBlocks.THUNDER_ROOTS);
-		addBlock(flowerPotList, ModBlocks.THUNDER_ROOTS_POT);
-		addBlock(fullbrightList, ModBlocks.THUNDER_FUNGUS);
-		addBlock(fullbrightList, ModBlocks.THUNDER_WART);
-		addBlock(fullbrightList, ModBlocks.THUNDER_VINES);
-		addBlock(fullbrightList, ModBlocks.THUNDER_VINES_PLANT);
-		addBlockStates(fullbrightList, ModBlocks.THUNDER_STEM);
-		addBlock(fullbrightList, ModBlocks.THUNDER_HYPHAE);
-		addBlock(fullbrightList, ModBlocks.THUNDER_PLANKS);
+		addBlock(overlayList, ModBlocksThunderForestBiome.THUNDER_NYLIUM);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_ROOTS);
+		addBlock(flowerPotList, ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_FUNGUS);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_WART);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT);
+		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_PLANKS);
 
 		addBlockStates(fullbrightList, ModBlocks.PLANT);
 

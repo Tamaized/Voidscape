@@ -32,12 +32,12 @@ import tamaized.voidscape.capability.SubCapability;
 
 public class ModItems implements RegistryClass {
 
-	static class ItemProps {
-		static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(Item.Properties::new);
-		static final RegUtil.ItemProps LAVA_IMMUNE = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
+	public static class ItemProps {
+		public static final RegUtil.ItemProps DEFAULT = new RegUtil.ItemProps(Item.Properties::new);
+		public static final RegUtil.ItemProps LAVA_IMMUNE = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
 	}
 
-	static final DeferredRegister<Item> REGISTRY = RegUtil.create(ForgeRegistries.ITEMS);
+	public static final DeferredRegister<Item> REGISTRY = RegUtil.create(ForgeRegistries.ITEMS);
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> VOIDIC_TEMPLATE = REGISTRY.register("voidic_template", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
