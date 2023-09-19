@@ -1,0 +1,16 @@
+{
+  "result": {
+	"item": "voidscape:thunder_hyphae_stripped",
+	"count": 3
+  },
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "voidscape:thunder_stem_stripped"
+    }
+  }
+}
