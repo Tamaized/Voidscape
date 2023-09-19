@@ -47,16 +47,20 @@
 	],
 	[ ],
 	[ ],
-	[ ],
+	[
+      "voidscape:water"
+    ],
 	[ ],
 	[
 	  "voidscape:oak",
-	  "voidscape:grass_patch",
-	  "voidscape:fruit_patch_overworld",
-	  "voidscape:water"
+	  "voidscape:cherry"
 	],
 	[ ],
-	[ ]
+	[
+      "voidscape:flower_cherry",
+      "voidscape:grass_patch",
+      "voidscape:fruit_patch_overworld"
+    ]
   ],
   "starts": [
 

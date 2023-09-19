@@ -1,13 +1,6 @@
 {
-  "feature": "minecraft:oak",
+  "feature": "minecraft:cherry",
   "placement": [
-	{
-	  "type": "minecraft:count",
-	  "count": 6
-	},
-	{
-	  "type": "minecraft:in_square"
-	},
 	{
 	  "type": "voidscape:seek",
 	  "check_below": true
@@ -17,7 +10,7 @@
 	  "predicate": {
 		"type": "would_survive",
 		"state": {
-		  "Name": "oak_sapling",
+		  "Name": "cherry_sapling",
 		  "Properties": {
 			"stage": 0
 		  }
