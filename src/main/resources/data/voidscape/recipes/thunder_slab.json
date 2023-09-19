@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "voidscape:thunder_slab",
+    "count": 6
+  },
+  "pattern": [
+    "PPP"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "voidscape:thunder_planks"
+    }
+  }
+}

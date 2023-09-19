@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "voidscape:block/thunder_slab"
+    },
+    "type=double": {
+      "model": "voidscape:block/thunder_planks"
+    },
+    "type=top": {
+      "model": "voidscape:block/thunder_slab_top"
+    }
+  }
+}

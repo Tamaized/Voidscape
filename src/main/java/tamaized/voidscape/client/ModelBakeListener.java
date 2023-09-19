@@ -18,7 +18,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -134,7 +133,7 @@ public class ModelBakeListener {
 		addBlock(flowerPotList, ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_FUNGUS);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_WART);
-		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
+		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM_STRIPPED);
@@ -142,6 +141,7 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE_STRIPPED);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_PLANKS);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STAIRS);
+		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_SLAB);
 
 		addBlockStates(fullbrightList, ModBlocks.PLANT);
 

@@ -194,6 +194,15 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 	public static final RegistryObject<Item> THUNDER_STAIRS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_STAIRS.getId().getPath(), () -> new BlockItem(THUNDER_STAIRS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final RegistryObject<Block> THUNDER_SLAB = ModBlocks.REGISTRY.register("thunder_slab", () -> new SlabBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.NETHER_WOOD)
+			.mapColor(MapColor.COLOR_CYAN)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_SLAB_ITEM = ModItems.REGISTRY
+			.register(THUNDER_SLAB.getId().getPath(), () -> new BlockItem(THUNDER_SLAB.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 
 	@Override
 	public void init(IEventBus bus) {
