@@ -128,7 +128,7 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 
 	public static final RegistryObject<Block> THUNDER_STEM_STRIPPED = ModBlocks.REGISTRY.register("thunder_stem_stripped", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
 			.sound(SoundType.STEM)
-			.mapColor(MapColor.COLOR_PURPLE)
+			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
 	));
@@ -154,7 +154,7 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 
 	public static final RegistryObject<Block> THUNDER_HYPHAE_STRIPPED = ModBlocks.REGISTRY.register("thunder_hyphae_stripped", () -> new Block(BlockBehaviour.Properties.of()
 			.sound(SoundType.STEM)
-			.mapColor(MapColor.COLOR_PURPLE)
+			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
 	));
@@ -178,12 +178,21 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 
 	public static final RegistryObject<Block> THUNDER_PLANKS = ModBlocks.REGISTRY.register("thunder_planks", () -> new Block(BlockBehaviour.Properties.of()
 			.sound(SoundType.NETHER_WOOD)
-			.mapColor(MapColor.COLOR_PURPLE)
+			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F, 3.0F)
 	));
 	public static final RegistryObject<Item> THUNDER_PLANKS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> THUNDER_STAIRS = ModBlocks.REGISTRY.register("thunder_stairs", () -> new StairBlock(() -> THUNDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+			.sound(SoundType.NETHER_WOOD)
+			.mapColor(MapColor.COLOR_CYAN)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_STAIRS_ITEM = ModItems.REGISTRY
+			.register(THUNDER_STAIRS.getId().getPath(), () -> new BlockItem(THUNDER_STAIRS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 
 	@Override

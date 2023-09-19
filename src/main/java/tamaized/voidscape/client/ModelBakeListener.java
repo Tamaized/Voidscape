@@ -18,6 +18,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModelBakeListener {
@@ -56,8 +58,14 @@ public class ModelBakeListener {
 	private static void addBlockStates(List<ModelResourceLocation> list, RegistryObject<? extends Block> object, String... extra) {
 		add(list, object, "inventory", extra);
 		object.get().getStateDefinition().getPossibleStates()
-				.forEach(state -> state.getValues().entrySet().stream().map(StateHolder.PROPERTY_ENTRY_TO_STRING_FUNCTION)
-						.forEach(p -> add(list, object, p, extra)));
+				.forEach(state -> add(
+						list,
+						object,
+						state.getValues().entrySet().stream()
+								.map(StateHolder.PROPERTY_ENTRY_TO_STRING_FUNCTION)
+								.collect(Collectors.joining(",")),
+						extra)
+				);
 	}
 
 	private static void addItem(List<ModelResourceLocation> list, RegistryObject<? extends Item> object, String... extra) {
@@ -133,6 +141,7 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE_STRIPPED);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_PLANKS);
+		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STAIRS);
 
 		addBlockStates(fullbrightList, ModBlocks.PLANT);
 

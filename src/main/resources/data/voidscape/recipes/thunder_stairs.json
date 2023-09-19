@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "voidscape:thunder_stairs",
+    "count": 3
+  },
+  "pattern": [
+    "P ",
+    "PP ",
+    "PPP"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "voidscape:thunder_planks"
+    }
+  }
+}
