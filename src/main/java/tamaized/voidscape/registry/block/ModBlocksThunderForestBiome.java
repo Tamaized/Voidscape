@@ -2,17 +2,23 @@ package tamaized.voidscape.registry.block;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.ThunderNyliumBlock;
@@ -108,18 +114,52 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 			.mapColor(MapColor.COLOR_PURPLE)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
-	));
+	) {
+		@Override
+		public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+			if (ToolActions.AXE_STRIP == toolAction) {
+				return THUNDER_STEM_STRIPPED.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
+			}
+			return super.getToolModifiedState(state, context, toolAction, simulate);
+		}
+	});
 	public static final RegistryObject<Item> THUNDER_STEM_ITEM = ModItems.REGISTRY
 			.register(THUNDER_STEM.getId().getPath(), () -> new BlockItem(THUNDER_STEM.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> THUNDER_STEM_STRIPPED = ModBlocks.REGISTRY.register("thunder_stem_stripped", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.STEM)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_STEM_STRIPPED_ITEM = ModItems.REGISTRY
+			.register(THUNDER_STEM_STRIPPED.getId().getPath(), () -> new BlockItem(THUNDER_STEM_STRIPPED.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final RegistryObject<Block> THUNDER_HYPHAE = ModBlocks.REGISTRY.register("thunder_hyphae", () -> new Block(BlockBehaviour.Properties.of()
 			.sound(SoundType.STEM)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
-	));
+	) {
+		@Override
+		public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+			if (ToolActions.AXE_STRIP == toolAction) {
+				return THUNDER_HYPHAE_STRIPPED.get().defaultBlockState();
+			}
+			return super.getToolModifiedState(state, context, toolAction, simulate);
+		}
+	});
 	public static final RegistryObject<Item> THUNDER_HYPHAE_ITEM = ModItems.REGISTRY
 			.register(THUNDER_HYPHAE.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> THUNDER_HYPHAE_STRIPPED = ModBlocks.REGISTRY.register("thunder_hyphae_stripped", () -> new Block(BlockBehaviour.Properties.of()
+			.sound(SoundType.STEM)
+			.mapColor(MapColor.COLOR_PURPLE)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+	));
+	public static final RegistryObject<Item> THUNDER_HYPHAE_STRIPPED_ITEM = ModItems.REGISTRY
+			.register(THUNDER_HYPHAE_STRIPPED.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final BlockSetType THUNDER_SET = new BlockSetType(
 			new ResourceLocation(Voidscape.MODID, "thunder").toString(),

@@ -129,7 +129,9 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM);
+		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM_STRIPPED);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE);
+		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE_STRIPPED);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_PLANKS);
 
 		addBlockStates(fullbrightList, ModBlocks.PLANT);
