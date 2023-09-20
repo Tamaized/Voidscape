@@ -130,11 +130,11 @@ public class ModelBakeListener {
 
 		addBlock(overlayList, ModBlocksThunderForestBiome.THUNDER_NYLIUM);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_ROOTS);
-		addBlock(flowerPotList, ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
+		add(flowerPotList, ModBlocksThunderForestBiome.THUNDER_ROOTS_POT, "");
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_FUNGUS);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_WART);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
-		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT);
+		add(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT, "");
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_STEM_STRIPPED);
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_HYPHAE);
@@ -211,7 +211,7 @@ public class ModelBakeListener {
 						if (quads == null) {
 							quads = model.getQuads(state, side, rand);
 							for (BakedQuad quad : quads) {
-								if (quad.getSprite().contents().name().getPath().equals("plant")) {
+								if (quad.getSprite().contents().name().getPath().contains("_pot_plant")) {
 									QuadTransformers.settingMaxEmissivity().processInPlace(quad);
 									quad.shade = false;
 								}

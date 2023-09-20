@@ -2,6 +2,6 @@
   "parent": "minecraft:block/flower_pot_cross",
   "render_type": "cutout_mipped",
   "textures": {
-    "plant": "voidscape:block/thunder_roots_pot"
+    "plant": "voidscape:block/thunder_roots_pot_plant"
   }
 }
