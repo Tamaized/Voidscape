@@ -208,8 +208,5 @@ public class ModBlocks implements RegistryClass {
 	@Override
 	public void init(IEventBus bus) {
 		new ModBlocksThunderForestBiome().init(bus);
-		bus.addListener((Consumer<FMLCommonSetupEvent>) event -> {
-			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocksThunderForestBiome.THUNDER_ROOTS.getId(), ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
-		});
 	}
 }

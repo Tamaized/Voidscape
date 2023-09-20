@@ -17,6 +17,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegistryClass;
@@ -25,6 +26,8 @@ import tamaized.voidscape.block.ThunderNyliumBlock;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModFeatures;
 import tamaized.voidscape.registry.ModItems;
+
+import java.util.function.Consumer;
 
 public class ModBlocksThunderForestBiome implements RegistryClass {
 
@@ -50,7 +53,6 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 	));
 	public static final RegistryObject<Item> THUNDER_ROOTS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
 	public static final RegistryObject<Block> THUNDER_ROOTS_POT = ModBlocks.REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
 			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
 			THUNDER_ROOTS,
@@ -59,6 +61,7 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 					.noOcclusion()
 					.pushReaction(PushReaction.DESTROY)
 	));
+
 	public static final RegistryObject<Block> THUNDER_FUNGUS = ModBlocks.REGISTRY.register("thunder_fungus", () -> new FungusBlock(BlockBehaviour.Properties.of()
 			.sound(SoundType.FUNGUS)
 			.mapColor(MapColor.COLOR_PURPLE)
@@ -71,6 +74,15 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 	));
 	public static final RegistryObject<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> THUNDER_FUNGUS_POT = ModBlocks.REGISTRY.register("thunder_fungus_pot", () -> new FlowerPotBlock(
+			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
+			THUNDER_FUNGUS,
+			BlockBehaviour.Properties.of()
+					.instabreak()
+					.noOcclusion()
+					.pushReaction(PushReaction.DESTROY)
+	));
 
 	public static final RegistryObject<Block> THUNDER_WART = ModBlocks.REGISTRY.register("thunder_wart", () -> new Block(BlockBehaviour.Properties.of()
 			.sound(SoundType.WART_BLOCK)
@@ -206,7 +218,10 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-
+		bus.addListener((Consumer<FMLCommonSetupEvent>) event -> {
+			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocksThunderForestBiome.THUNDER_ROOTS.getId(), ModBlocksThunderForestBiome.THUNDER_ROOTS_POT);
+			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocksThunderForestBiome.THUNDER_FUNGUS.getId(), ModBlocksThunderForestBiome.THUNDER_FUNGUS_POT);
+		});
 	}
 
 }

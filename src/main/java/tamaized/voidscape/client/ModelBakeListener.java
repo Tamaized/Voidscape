@@ -132,6 +132,7 @@ public class ModelBakeListener {
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_ROOTS);
 		add(flowerPotList, ModBlocksThunderForestBiome.THUNDER_ROOTS_POT, "");
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_FUNGUS);
+		add(flowerPotList, ModBlocksThunderForestBiome.THUNDER_FUNGUS_POT, "");
 		addBlock(fullbrightList, ModBlocksThunderForestBiome.THUNDER_WART);
 		addBlockStates(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES);
 		add(fullbrightList, ModBlocksThunderForestBiome.THUNDER_VINES_PLANT, "");
