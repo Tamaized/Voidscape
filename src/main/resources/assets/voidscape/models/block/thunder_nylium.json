@@ -6,7 +6,7 @@
 	"bottom": "block/bedrock",
 	"side": "block/bedrock",
 	"overlay-top": "voidscape:block/thunder_nylium_top",
-	"overlay-bottom": "block/bedrock",
+	"overlay-bottom": "voidscape:block/blank",
 	"overlay-side": "voidscape:block/thunder_nylium_side",
     "particle": "#overlay-top"
   }
