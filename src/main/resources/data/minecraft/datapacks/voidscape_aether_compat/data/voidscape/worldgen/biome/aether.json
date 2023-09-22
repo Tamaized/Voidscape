@@ -1,0 +1,70 @@
+{
+  "forge:registry_name": "voidscape:aether",
+  "has_precipitation": false,
+  "temperature": 0,
+  "downfall": 0.0,
+  "category": "none",
+  "depth": -3.0,
+  "scale": 1.8,
+  "effects": {
+	"fog_color": 9671612,
+	"water_color": 4159204,
+	"water_fog_color": 329011,
+	"sky_color": 12632319,
+	"foliage_color": 11665355,
+	"grass_color": 11665355,
+	"particle": {
+	  "options": {
+		"type": "aether:portal"
+	  },
+	  "probability": 0.025
+	},
+	"additions_sound": {
+	  "sound": "voidscape:ambience",
+	  "tick_chance": 0.0015
+	},
+	"music": {
+      "sound": "voidscape:music",
+	  "min_delay": 12000,
+	  "max_delay": 24000,
+	  "replace_current_music": true
+	}
+  },
+  "carvers": {
+
+  },
+  "features": [
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[ ],
+	[
+      "voidscape:aether/aether_dirt_ore",
+      "voidscape:aether/icestone_ore",
+      "voidscape:aether/ambrosium_ore",
+      "voidscape:aether/zanite_ore",
+      "voidscape:aether/gravitite_ore_buried",
+      "voidscape:aether/gravitite_ore"
+    ],
+	[ ],
+	[
+      "voidscape:aether/skyroot_meadow_trees",
+      "voidscape:aether/grass_patch",
+      "voidscape:aether/tall_grass_patch",
+      "voidscape:aether/white_flower_patch",
+      "voidscape:aether/purple_flower_patch",
+      "voidscape:aether/berry_bush_patch"
+    ],
+	[ ]
+  ],
+  "starts": [
+
+  ],
+  "creature_spawn_probability": 0.0,
+  "spawners": {
+  },
+  "spawn_costs": {
+  }
+}

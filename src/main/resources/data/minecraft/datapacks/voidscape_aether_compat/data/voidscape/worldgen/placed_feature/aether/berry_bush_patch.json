@@ -1,0 +1,19 @@
+{
+  "feature": "aether:berry_bush_patch",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "voidscape:seek",
+      "check_below": true
+    },
+    {
+      "type": "voidscape:air_above"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ plugins {
     id 'net.neoforged.gradle' version '[6.0.18,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'io.github.0ffz.github-packages' version '1.+'
 }
 
 configurations {
@@ -30,6 +31,7 @@ repositories {
         name 'EnderIO'
         url "https://api.modrinth.com/maven"
     }
+    maven githubPackage.invoke("The-Aether-Team/The-Aether")
 }
 
 version = "${minecraft_version}-${mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
@@ -132,6 +134,7 @@ dependencies {
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
     runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
+    runtimeOnly fg.deobf("com.aetherteam.aether:aether:1.20.1-1.0.0-beta.1.2-neoforge")
 
     def reg = "tamaized:regutil:" + project.regutil_version
     implementation fg.deobf(reg)

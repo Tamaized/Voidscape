@@ -1,5 +1,6 @@
 package tamaized.voidscape.world.genlayer;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
@@ -13,19 +14,21 @@ import java.util.List;
 
 public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 	public static final Codec<GenLayerRandomWithOneMajorBiomes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.list(ResourceKey.codec(Registries.BIOME)).fieldOf("biomes").stable().forGetter(obj -> obj.biomes),
+			Codec.list(VoidscapeLayeredBiomeProvider.conditionalModLoadedBiome()).fieldOf("biomes").stable().forGetter(obj -> obj.biomes),
 			ResourceKey.codec(Registries.BIOME).fieldOf("majorBiome").stable().forGetter(obj -> obj.majorBiome),
 			Codec.INT.fieldOf("chance").stable().forGetter(obj -> obj.chance)
 	).apply(instance, instance.stable(GenLayerRandomWithOneMajorBiomes::new)));
 
-	private final List<ResourceKey<Biome>> biomes;
+	private final List<Either<ResourceKey<Biome>, VoidscapeLayeredBiomeProvider.ConditionalBiomeHolder>> biomes;
+	private final List<ResourceKey<Biome>> loadedBiomes;
 	private final ResourceKey<Biome> majorBiome;
 	private final int chance;
 
 	private VoidscapeLayeredBiomeProvider provider;
 
-	GenLayerRandomWithOneMajorBiomes(List<ResourceKey<Biome>> biomes, ResourceKey<Biome> majorBiome, int chance) {
+	GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, VoidscapeLayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
 		this.biomes = biomes;
+		this.loadedBiomes = VoidscapeLayeredBiomeProvider.getConditionalBiomes(biomes);
 		this.majorBiome = majorBiome;
 		this.chance = chance;
 	}
@@ -37,11 +40,11 @@ public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 
 	@Override
 	public int applyPixel(Context iNoiseRandom, int x, int y) {
-		return !biomes.isEmpty() && iNoiseRandom.nextRandom(chance) == 0 ? getRandomBiome(iNoiseRandom) : provider.getBiomeId(majorBiome);
+		return !loadedBiomes.isEmpty() && iNoiseRandom.nextRandom(chance) == 0 ? getRandomBiome(iNoiseRandom) : provider.getBiomeId(majorBiome);
 	}
 
 	private int getRandomBiome(Context random) {
-		return provider.getBiomeId(biomes.get(random.nextRandom(biomes.size())));
+		return provider.getBiomeId(loadedBiomes.get(random.nextRandom(loadedBiomes.size())));
 	}
 
 }

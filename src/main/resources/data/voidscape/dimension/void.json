@@ -12,7 +12,11 @@
         "voidscape:void",
         "voidscape:overworld",
         "voidscape:nether",
-        "voidscape:end"
+        "voidscape:end",
+        {
+          "biome": "voidscape:aether",
+          "modid": "aether"
+        }
       ],
       "layerBottomDownwardsStart": 32,
       "layerTopUpwardsStart": 160,
@@ -28,7 +32,11 @@
           "voidscape:null",
           "voidscape:overworld",
           "voidscape:nether",
-          "voidscape:end"
+          "voidscape:end",
+          {
+            "biome": "voidscape:aether",
+            "modid": "aether"
+          }
         ],
         "majorBiome": "voidscape:void",
         "chance": 4

@@ -6,10 +6,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -29,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -36,6 +42,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -121,6 +128,14 @@ public class Voidscape {
 				ModStructures::new,
 				ModSurfaceRules::new,
 				ModTools::new);
+		busMod.addListener((Consumer<AddPackFindersEvent>) event -> {
+			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {
+				var resourcePath = ModList.get().getModFileById(MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat");
+				var pack = Pack.readMetaAndCreate("voidscape_aether_compat", Component.literal("Voidscape Aether Integration"), true,
+						name -> new PathPackResources(name, resourcePath, false), PackType.SERVER_DATA, Pack.Position.TOP, PackSource.FEATURE);
+				event.addRepositorySource(packConsumer -> packConsumer.accept(pack));
+			}
+		});
 		busMod.addListener((Consumer<RegisterEvent>) event -> {
 			if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.RECIPE_SERIALIZERS))
 				return;

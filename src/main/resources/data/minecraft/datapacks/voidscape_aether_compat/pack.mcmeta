@@ -1,0 +1,9 @@
+{
+  "pack": {
+    "description": {
+      "translate": "pack.voidscape.voidscape_aether_compat"
+    },
+    "forge:server_data_pack_format": 12,
+    "pack_format": 13
+  }
+}

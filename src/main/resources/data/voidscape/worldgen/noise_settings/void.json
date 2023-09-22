@@ -197,6 +197,45 @@
             }
           ]
         }
+      },
+      {
+        "type": "condition",
+        "if_true": {
+          "type": "biome",
+          "biome_is": [
+            "voidscape:aether"
+          ]
+        },
+        "then_run": {
+          "type": "sequence",
+          "sequence": [
+            {
+              "type": "condition",
+              "if_true": {
+                "type": "voidscape:air_above"
+              },
+              "then_run": {
+                "type": "block",
+                "result_state": {
+                  "Name": "aether:aether_grass_block",
+                  "Properties": {
+                    "snowy": "false",
+                    "double_drops": "false"
+                  }
+                }
+              }
+            },
+            {
+              "type": "block",
+              "result_state": {
+                "Name": "aether:holystone",
+                "Properties": {
+                  "double_drops": "false"
+                }
+              }
+            }
+          ]
+        }
       }
     ]
   }

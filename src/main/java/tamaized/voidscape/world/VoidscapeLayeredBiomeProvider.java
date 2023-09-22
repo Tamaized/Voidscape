@@ -1,6 +1,8 @@
 package tamaized.voidscape.world;
 
 import com.google.common.base.Suppliers;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -12,16 +14,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
+import net.minecraftforge.fml.ModList;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.world.genlayer.GenLayerRandomWithOneMajorBiomes;
 import tamaized.voidscape.world.genlayer.legacy.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.LongFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -30,7 +30,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
 	public static final Codec<VoidscapeLayeredBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
 			RegistryOps.retrieveGetter(Registries.BIOME),
-			Codec.list(ResourceKey.codec(Registries.BIOME)).fieldOf("possibleBiomes").stable().forGetter(obj -> obj.possibleBiomes),
+			Codec.list(conditionalModLoadedBiome()).fieldOf("possibleBiomes").stable().forGetter(obj -> obj.possibleBiomes),
 			Codec.INT.fieldOf("layerBottomDownwardsStart").stable().forGetter(obj -> obj.layerBottomDownwardsStart),
 			Codec.INT.fieldOf("layerTopUpwardsStart").stable().forGetter(obj -> obj.layerTopUpwardsStart),
 			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerTopUpwards").stable().forGetter(obj -> obj.layerTopUpwards),
@@ -38,8 +38,36 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerBottomDownwards").stable().forGetter(obj -> obj.layerBottomDownwards)
 	).apply(instance, instance.stable(VoidscapeLayeredBiomeProvider::new)));
 
+	public static Codec<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> conditionalModLoadedBiome() {
+		return Codec.either(
+				ResourceKey.codec(Registries.BIOME),
+				RecordCodecBuilder.create(c -> c.group(
+						ResourceKey.codec(Registries.BIOME).fieldOf("biome").stable().forGetter(o -> o.biome),
+						Codec.STRING.fieldOf("modid").stable().forGetter(o -> o.modid)
+				).apply(c, c.stable(ConditionalBiomeHolder::new)))
+		);
+	}
+
+	public record ConditionalBiomeHolder(ResourceKey<Biome> biome, String modid) {
+
+	}
+
+	public static List<ResourceKey<Biome>> getConditionalBiomes(List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> biomes) {
+		return biomes.stream().map(e -> {
+			AtomicReference<ResourceKey<Biome>> result = new AtomicReference<>();
+			e.ifLeft(result::set);
+			e.ifRight(r -> {
+				if (ModList.get().isLoaded(r.modid())) {
+					result.set(r.biome());
+				}
+			});
+			return result.get();
+		}).filter(Objects::nonNull).toList();
+	}
+
 	private final HolderGetter<Biome> registry;
-	private final List<ResourceKey<Biome>> possibleBiomes;
+	private final List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> possibleBiomes;
+	private final List<ResourceKey<Biome>> possibleBiomesLoaded;
 	private final int layerBottomDownwardsStart;
 	private final int layerTopUpwardsStart;
 	private final GenLayerRandomWithOneMajorBiomes layerTopUpwards;
@@ -58,7 +86,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
 	public VoidscapeLayeredBiomeProvider(
 			HolderGetter<Biome> registryIn,
-			List<ResourceKey<Biome>> possibleBiomes,
+			List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> possibleBiomes,
 			int layerBottomDownwardsStart,
 			int layerTopUpwardsStart,
 			GenLayerRandomWithOneMajorBiomes layerTopUpwards,
@@ -67,7 +95,8 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 		super();
 		this.registry = registryIn;
 		this.possibleBiomes = possibleBiomes;
-		possibleBiomes.forEach(this::getBiomeId); // Allocate IDs
+		this.possibleBiomesLoaded = getConditionalBiomes(possibleBiomes);
+		this.possibleBiomesLoaded.forEach(this::getBiomeId); // Allocate IDs
 
 		this.layerBottomDownwardsStart = layerBottomDownwardsStart;
 		this.layerTopUpwardsStart = layerTopUpwardsStart;
@@ -92,7 +121,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 
 	@Override
 	protected Stream<Holder<Biome>> collectPossibleBiomes() {
-		return possibleBiomes.stream().map(registry::get).filter(Optional::isPresent).map(Optional::get);
+		return possibleBiomesLoaded.stream().map(registry::get).filter(Optional::isPresent).map(Optional::get);
 	}
 
 	public int getBiomeId(ResourceKey<Biome> biome) {

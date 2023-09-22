@@ -1,0 +1,16 @@
+{
+  "feature": "aether:trees_skyroot_and_golden_oak",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "voidscape:seek",
+      "check_below": true
+    }
+  ]
+}

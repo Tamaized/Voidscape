@@ -1,0 +1,16 @@
+{
+  "feature": "aether:ambrosium_ore",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 20
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "voidscape:random_y",
+      "y": 13
+    }
+  ]
+}
