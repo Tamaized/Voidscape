@@ -54,7 +54,7 @@ function initializeCoreMod() {
 
                         node.getOpcode() === Opcodes.FLOAD &&
 
-                        node.var === 6
+                        node.var === 9
 
                     )
                         lastInstruction = node;

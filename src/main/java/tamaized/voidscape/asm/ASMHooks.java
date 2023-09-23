@@ -198,7 +198,7 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
-	 * [AFTER FIRST FLOAD 6]
+	 * [AFTER FIRST FLOAD 9]
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static float cancelNightVision(float o, Level level) {
