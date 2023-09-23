@@ -117,7 +117,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				}
 			}
 			teleportTick = Mth.clamp(teleportTick, 0, 200);
-			if (!inVoid && teleportTick >= 200) {
+			if (!parent.level().isClientSide() && !inVoid && teleportTick >= 200) {
 				Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidTeleporter.INSTANCE));
 				return;
 			}
