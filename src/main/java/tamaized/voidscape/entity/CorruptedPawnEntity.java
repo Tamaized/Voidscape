@@ -100,7 +100,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 				}));
 			}
 		} else if (isAlive() && target != null) {
-			target.lookAt(EntityAnchorArgument.Anchor.EYES, position());
+			target.lookAt(EntityAnchorArgument.Anchor.EYES, getEyePosition());
 			lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 			if (target instanceof Player target && tickCount % 5 == 0)
 				level().playSound(target, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
@@ -122,8 +122,8 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 	public boolean hurt(DamageSource source, float amount) {
 		float dmg = source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F;
 		if (super.hurt(source, dmg)) {
-			if (getHealth() - dmg > 0F) {
-				Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat() * 2F - 1F);
+			if (isAlive()) {
+				Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
 				moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
 			}
 			return true;

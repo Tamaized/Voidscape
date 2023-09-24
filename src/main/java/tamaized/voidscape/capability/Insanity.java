@@ -208,7 +208,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			if (!parent.level().isClientSide()) {
 				if (hunt == null && paranoia >= 600) {
 					hunt = new CorruptedPawnEntity(parent.level()).target((Player) parent);
-					Vec3 vec = new Vec3(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat() * 2F - 1F);
+					Vec3 vec = new Vec3(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat());
 					hunt.setPos(parent.getX() + vec.x(), parent.getY() + vec.y(), parent.getZ() + vec.z());
 					parent.level().addFreshEntity(hunt);
 				}
@@ -217,7 +217,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 						hunt = null;
 					} else if (!hunt.isAlive()) {
 						paranoia = 0;
-					}else if (!Voidscape.checkForVoidDimension(parent.level()) || paranoia < 600) {
+					} else if (!Voidscape.checkForVoidDimension(parent.level()) || paranoia < 600) {
 						hunt.remove(Entity.RemovalReason.DISCARDED);
 						hunt = null;
 					} else {
