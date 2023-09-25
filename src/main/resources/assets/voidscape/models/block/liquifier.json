@@ -301,84 +301,84 @@
 			"from": [3, 3, 3],
 			"to": [13, 13, 13],
 			"faces": {
-				"north": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"},
-				"east": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"},
-				"south": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"},
-				"west": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"},
-				"up": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"},
-				"down": {"uv": [0, 0, 10, 10], "texture": "#0_overlay"}
+				"north": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [0, 0, 10, 10], "texture": "#0_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [1, 1, -0.001],
 			"to": [15, 15, -0.001],
 			"faces": {
-				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay"},
-				"south": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"west": {"uv": [0, 0, 0, 14], "texture": "#face_overlay"},
-				"up": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"down": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"}
+				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [1, 1, 16.001],
 			"to": [15, 15, 16.001],
 			"faces": {
-				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay"},
-				"south": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"west": {"uv": [0, 0, 0, 14], "texture": "#face_overlay"},
-				"up": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"down": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"}
+				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [16.001, 1, 1],
 			"to": [16.001, 15, 15],
 			"faces": {
-				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"south": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"west": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"up": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"down": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"}
+				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [-0.001, 1, 1],
 			"to": [-0.001, 15, 15],
 			"faces": {
-				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"south": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"west": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"up": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"},
-				"down": {"uv": [0, 0, 2, 14], "texture": "#face_overlay"}
+				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [1, 16.001, 1],
 			"to": [15, 16.001, 15],
 			"faces": {
-				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"south": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"west": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"up": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"down": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"}
+				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		},
 		{
 			"from": [1, -0.001, 1],
 			"to": [15, -0.001, 15],
 			"faces": {
-				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"south": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"west": {"uv": [0, 0, 14, 0], "texture": "#face_overlay"},
-				"up": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"},
-				"down": {"uv": [1, 1, 15, 15], "texture": "#face_overlay"}
+				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"south": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"west": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"up": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } },
+				"down": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "forge_data": { "block_light": 15, "sky_light": 15 } }
 			}
 		}
 	]

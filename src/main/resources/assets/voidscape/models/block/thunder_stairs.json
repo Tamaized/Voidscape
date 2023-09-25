@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/stairs",
+  "parent": "voidscape:block/fullbright/stairs",
   "textures": {
     "bottom": "voidscape:block/thunder_planks",
     "side": "voidscape:block/thunder_planks",

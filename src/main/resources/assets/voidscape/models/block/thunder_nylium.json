@@ -1,5 +1,5 @@
 {
-  "parent": "voidscape:block/overlay/side_top",
+  "parent": "voidscape:block/overlay/side_top_fullbright_overlay",
   "render_type": "cutout_mipped",
   "textures": {
 	"top": "block/bedrock",

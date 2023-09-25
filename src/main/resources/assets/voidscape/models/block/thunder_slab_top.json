@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/slab_top",
+  "parent": "voidscape:block/fullbright/slab_top",
   "textures": {
     "bottom": "voidscape:block/thunder_planks",
     "side": "voidscape:block/thunder_planks",

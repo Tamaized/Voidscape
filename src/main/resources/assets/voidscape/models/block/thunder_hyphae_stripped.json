@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "voidscape:block/fullbright/cube_all",
   "textures": {
 	"all": "voidscape:block/thunder_stem_stripped",
     "particle": "#all"

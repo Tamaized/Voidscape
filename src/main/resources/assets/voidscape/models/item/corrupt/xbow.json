@@ -1,5 +1,15 @@
+
 {
   "parent": "item/generated",
+  "forge_data": {
+    "layers": {
+      "0": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "loader": "forge:item_layers",
   "textures": {
 	"layer0": "voidscape:item/corrupt/xbow/crossbow_standby"
   },

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "voidscape:block/fullbright/cube_column",
   "textures": {
     "end": "voidscape:block/thunder_stem_stripped_top",
     "side": "voidscape:block/thunder_stem_stripped"
