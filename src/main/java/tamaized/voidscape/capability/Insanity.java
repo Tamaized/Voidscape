@@ -75,51 +75,60 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	@Override
 	public void tick(Entity parent) {
-		if (inPortal) {
-			inPortal = false;
-			teleportTick++;
-			teleportTick = Mth.clamp(teleportTick, 0, 200);
-			if (!pleaseLeavePortal && teleportTick >= 200 && !parent.level().isClientSide()) {
-				if(Voidscape.checkForVoidDimension(parent.level())) {
-					Voidscape.getLevel(parent.level(), Level.OVERWORLD).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
-				} else {
-					Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
+		if (!parent.level().isClientSide()) {
+			if (inPortal) {
+				inPortal = false;
+				teleportTick++;
+				if (teleportTick % 20 == 0) {
+					dirty = true;
 				}
-			}
-		} else {
-			pleaseLeavePortal = false;
-			boolean inVoid;
-			if (inVoid = Voidscape.checkForVoidDimension(parent.level())) {
-				teleportTick--;
+				teleportTick = Mth.clamp(teleportTick, 0, 200);
+				if (!pleaseLeavePortal && teleportTick >= 200) {
+					if (Voidscape.checkForVoidDimension(parent.level())) {
+						Voidscape.getLevel(parent.level(), Level.OVERWORLD).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
+					} else {
+						Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
+					}
+				}
 			} else {
-				if (teleporting) {
-					if (!canTeleport(parent)) {
-						teleporting = false;
-						nextTeleportStep = false;
-					} else if (!nextTeleportStep && shouldTeleport(parent)) {
-						if (parent.level().isClientSide())
-							parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
-						nextTeleportStep = true;
-					}
-					if (nextTeleportStep) {
-						teleportTick++;
-						if (teleportTick % 20 == 0)
-							nextTeleportStep = false;
-					}
-				} else {
+				pleaseLeavePortal = false;
+				boolean inVoid;
+				if (inVoid = Voidscape.checkForVoidDimension(parent.level())) {
+					int prev = teleportTick;
 					teleportTick--;
-					if (shouldTeleport(parent)) {
-						if (parent.level().isClientSide())
-							parent.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
-						teleporting = true;
-						nextTeleportStep = true;
+					if ((teleportTick > 0 && teleportTick % 20 == 0) || teleportTick <= 0 && prev > 0)
+						dirty = true;
+				} else {
+					if (teleporting) {
+						if (!canTeleport(parent)) {
+							teleporting = false;
+							nextTeleportStep = false;
+						} else if (!nextTeleportStep && shouldTeleport(parent)) {
+							nextTeleportStep = true;
+						}
+						if (nextTeleportStep) {
+							teleportTick++;
+							if (teleportTick % 20 == 0) {
+								nextTeleportStep = false;
+								dirty = true;
+							}
+						}
+					} else {
+						int prev = teleportTick;
+						teleportTick--;
+						if ((teleportTick > 0 && teleportTick % 20 == 0) || teleportTick <= 0 && prev > 0)
+							dirty = true;
+						if (shouldTeleport(parent)) {
+							teleporting = true;
+							nextTeleportStep = true;
+						}
 					}
 				}
-			}
-			teleportTick = Mth.clamp(teleportTick, 0, 200);
-			if (!parent.level().isClientSide() && !inVoid && teleportTick >= 200) {
-				Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidTeleporter.INSTANCE));
-				return;
+				teleportTick = Mth.clamp(teleportTick, 0, 200);
+				if (!inVoid && teleportTick >= 200) {
+					Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidTeleporter.INSTANCE));
+					return;
+				}
 			}
 		}
 		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity()) {
@@ -311,12 +320,14 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	public void write(FriendlyByteBuf buffer) {
 		buffer.writeFloat(paranoia);
 		buffer.writeFloat(infusion);
+		buffer.writeInt(teleportTick);
 	}
 
 	@Override
 	public void read(FriendlyByteBuf buffer) {
 		paranoia = buffer.readFloat();
 		infusion = buffer.readFloat();
+		teleportTick = buffer.readInt();
 	}
 
 	@Override

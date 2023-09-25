@@ -9,6 +9,8 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -28,22 +30,22 @@ public class RenderTurmoil {
 	static final ResourceLocation TEXTURE_WATCHINGYOU = new ResourceLocation(Voidscape.MODID, "textures/ui/watchingyou.png");
 	private static float deltaTick;
 	private static float lastDeltaTick;
-	private static float fadeTick = 0;
-
-	public static void resetFade() {
-		fadeTick = ClientUtil.tick + 10 * 30;
-	}
+	private static float lastTeleportTick;
 
 	public static void tick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START || Minecraft.getInstance().isPaused() || Minecraft.getInstance().level == null)
 			return;
 		lastDeltaTick = deltaTick;
 		ClientUtil.tick++;
-		if (fadeTick <= 0)
-			resetFade();
 		if (Minecraft.getInstance().player != null)
 			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
 				cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
+					if (data.getTeleportTick() >= (lastTeleportTick + 20) || (lastTeleportTick == 0 && data.getTeleportTick() > 0)) {
+						Minecraft.getInstance().player.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
+						lastTeleportTick = data.getTeleportTick();
+					}
+					if (data.getTeleportTick() < lastTeleportTick)
+						lastTeleportTick = data.getTeleportTick();
 					if (data.getTeleportTick() > deltaTick)
 						deltaTick++;
 					else if (data.getTeleportTick() < deltaTick)
@@ -131,10 +133,6 @@ public class RenderTurmoil {
 		RenderSystem.enableBlend();
 		Shaders.OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR.invokeThenEndTesselator(0F);
 		RenderSystem.disableBlend();
-	}
-
-	private static float fade(float base, float partialTicks) {
-		return fadeTick <= 0 || fadeTick - ClientUtil.tick > 20 * 5 ? base : Math.max(0, base * ((fadeTick - (ClientUtil.tick + partialTicks)) / (20F * 5F)));
 	}
 
 	public static class Color24 {
