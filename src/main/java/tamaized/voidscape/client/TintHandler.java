@@ -19,6 +19,7 @@ public final class TintHandler {
 
 	public static void setup(IEventBus bus) {
 		bus.addListener((Consumer<RegisterColorHandlersEvent.Block>) event -> {
+			event.register((blockState, iBlockDisplayReader, blockPos, i) -> 0x331166, ModBlocks.ANTIROCK.get());
 			event.register((state, tintGetter, pos, color) -> switch (state.getValue(EtherealPlantBlock.STATE)) {
 				case VOID -> 0x872BFF;
 				case NULL -> 0xFFFFFF;
