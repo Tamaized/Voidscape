@@ -11,16 +11,14 @@ import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -29,6 +27,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -135,8 +134,8 @@ public class ModTools implements RegistryClass {
 				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
 				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
 			});
-	public static final RegistryObject<Item> TITANITE_HOE = RegUtil.ToolAndArmorHelper.
-			hoe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
+	public static final RegistryObject<Item> TITANITE_HOE =
+			bonemealHoe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {
 				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
 				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
@@ -154,6 +153,81 @@ public class ModTools implements RegistryClass {
 
 	private static RegistryObject<Item> hammer(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_warhammer"), () -> new LootingWarhammer(factory, tier, 7, -3.5F, properties, tooltipConsumer));
+	}
+
+	private static RegistryObject<Item> bonemealHoe(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_hoe"), () -> new HoeItem(tier, -3, 0.0F, properties) {
+
+			@Override
+			@OnlyIn(Dist.CLIENT)
+			public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+				if (RegUtil.ToolAndArmorHelper.isBroken(stack))
+					tooltip.add(Component.translatable(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
+				tooltipConsumer.accept(new RegUtil.ToolAndArmorHelper.TooltipContext(stack, worldIn, tooltip, flagIn));
+				super.appendHoverText(stack, worldIn, tooltip, flagIn);
+			}
+
+			@Override
+			public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+				int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
+				if (amount >= remaining)
+					onBroken.accept(entity);
+				return Math.min(remaining, amount);
+			}
+
+			@Override
+			public float getDestroySpeed(ItemStack stack, BlockState state) {
+				return RegUtil.ToolAndArmorHelper.isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
+			}
+
+			@Override
+			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+				return !RegUtil.ToolAndArmorHelper.isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+			}
+
+			@Override
+			public InteractionResult useOn(UseOnContext context) {
+				if (RegUtil.ToolAndArmorHelper.isBroken(context.getItemInHand()))
+				return InteractionResult.FAIL;
+				InteractionResult result = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? InteractionResult.PASS : super.useOn(context);
+				if (result == InteractionResult.PASS) {
+					result = Items.BONE_MEAL.useOn(new UseOnContext(
+							context.getLevel(),
+							context.getPlayer(),
+							context.getHand(),
+							new ItemStack(Items.BONE_MEAL),
+							new BlockHitResult(
+									context.getClickLocation(),
+									context.getHorizontalDirection(),
+									context.getClickedPos(),
+									context.isInside()
+							)));
+					if ((result == InteractionResult.SUCCESS || result == InteractionResult.CONSUME) && context.getPlayer() != null) {
+						// This must remain an anon class to spoof the reobfuscator from mapping to the wrong SRG name
+						//noinspection Convert2Lambda
+						context.getItemInHand().hurtAndBreak(20, context.getPlayer(), new Consumer<LivingEntity>() {
+							@Override
+							public void accept(LivingEntity entityIn1) {
+								entityIn1.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+							}
+						});
+					}
+					return result;
+				}
+				return result;
+			}
+
+			@Override
+			public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+				ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+				if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
+					map.putAll(super.getDefaultAttributeModifiers(slot));
+					if (slot == EquipmentSlot.MAINHAND)
+						map.putAll(factory.apply(null));
+				}
+				return map.build();
+			}
+		});
 	}
 
 	public static class LootingWarhammer extends PickaxeItem {

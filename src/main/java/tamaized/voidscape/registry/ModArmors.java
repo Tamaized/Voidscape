@@ -91,7 +91,7 @@ public class ModArmors implements RegistryClass {
 		};
 
 		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.
-				ArmorMaterial("titanite", 39, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), true, false, false);
+				ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), true, false, false);
 	}
 
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_HELMET = RegUtil.ToolAndArmorHelper.
