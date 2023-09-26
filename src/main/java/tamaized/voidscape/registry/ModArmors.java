@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -88,46 +89,83 @@ public class ModArmors implements RegistryClass {
 				return Voidscape.MODID.concat(":textures/models/armor/corrupt" + (type == null ? "" : "_overlay") + ".png");
 			}
 		};
+
+		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.
+				ArmorMaterial("titanite", 39, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), true, false, false);
 	}
 
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_HELMET = RegUtil.ToolAndArmorHelper.
 			helmet(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)));
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_CHEST = RegUtil.ToolAndArmorHelper.
 			chest(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), (stack, tick) -> ModArmors.elytra(stack));
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), (stack, tick) -> ModArmors.elytra(stack), tooltip -> {});
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_LEGS = RegUtil.ToolAndArmorHelper.
 			legs(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)));
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BOOTS = RegUtil.ToolAndArmorHelper.
 			boots(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)));
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
 
 	public static final RegistryObject<Item> CORRUPT_HELMET = RegUtil.ToolAndArmorHelper.
 			helmet(ArmorMaterial.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 2D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.1D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)));
+					AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)), tooltip -> {});
 	public static final RegistryObject<Item> CORRUPT_CHEST = RegUtil.ToolAndArmorHelper.
 			chest(ArmorMaterial.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 2D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), (stack, tick) -> true);
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), (stack, tick) -> true, tooltip -> {});
 	public static final RegistryObject<Item> CORRUPT_LEGS = RegUtil.ToolAndArmorHelper.
 			legs(ArmorMaterial.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 2D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)));
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 	public static final RegistryObject<Item> CORRUPT_BOOTS = RegUtil.ToolAndArmorHelper.
 			boots(ArmorMaterial.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 2D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.1D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)));
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
+
+	public static final RegistryObject<Item> TITANITE_HELMET = RegUtil.ToolAndArmorHelper.
+			helmet(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D)), tooltip -> {
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
+			});
+	public static final RegistryObject<Item> TITANITE_CHEST = RegUtil.ToolAndArmorHelper.
+			chest(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), (stack, tick) -> ModArmors.elytra(stack), tooltip -> {
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
+			});
+	public static final RegistryObject<Item> TITANITE_LEGS = RegUtil.ToolAndArmorHelper.
+			legs(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
+			});
+	public static final RegistryObject<Item> TITANITE_BOOTS = RegUtil.ToolAndArmorHelper.
+			boots(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
+				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
+			});
 
 	@Override
 	public void init(IEventBus bus) {
@@ -137,7 +175,7 @@ public class ModArmors implements RegistryClass {
 	public static boolean elytra(ItemStack stack) {
 		if (stack.isEmpty())
 			return false;
-		if (!(stack.is(VOIDIC_CRYSTAL_CHEST.get())))
+		if (!stack.is(VOIDIC_CRYSTAL_CHEST.get()) && !stack.is(TITANITE_CHEST.get()))
 			return false; // Quick fail for performance, no nbt polling needed
 		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
 		return nbt != null && nbt.getBoolean("elytra");

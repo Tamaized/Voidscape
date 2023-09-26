@@ -49,9 +49,11 @@ public class ModelBakeListener {
 
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
+		impBow(ModTools.TITANITE_BOW.get());
 
 		impXBow(ModTools.VOIDIC_CRYSTAL_XBOW.get());
 		impXBow(ModTools.CORRUPT_XBOW.get());
+		impXBow(ModTools.TITANITE_XBOW.get());
 
 		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
 
@@ -117,6 +119,17 @@ public class ModelBakeListener {
 				CORRUPT_CHEST, ModArmors.
 				CORRUPT_LEGS, ModArmors.
 				CORRUPT_BOOTS);
+		redirectModelLocation(bakery, "titanite", "titanite_", ModTools.
+				TITANITE_AXE, ModTools.
+				TITANITE_PICKAXE, ModTools.
+				TITANITE_HOE, ModTools.
+				TITANITE_SWORD, ModTools.
+				TITANITE_BOW, ModTools.
+				TITANITE_XBOW, ModArmors.
+				TITANITE_HELMET, ModArmors.
+				TITANITE_CHEST, ModArmors.
+				TITANITE_LEGS, ModArmors.
+				TITANITE_BOOTS);
 	}
 
 	@SafeVarargs

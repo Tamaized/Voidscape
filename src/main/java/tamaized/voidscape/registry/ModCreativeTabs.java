@@ -91,6 +91,16 @@ public class ModCreativeTabs implements RegistryClass {
 				// Gear - Titanite
 				output.accept(ModItems.TITANITE_CHUNK.get());
 				output.accept(ModItems.TITANITE_SHARD.get());
+				output.accept(ModTools.TITANITE_SWORD.get());
+				output.accept(ModTools.TITANITE_AXE.get());
+				output.accept(ModTools.TITANITE_PICKAXE.get());
+				output.accept(ModTools.TITANITE_HOE.get());
+				output.accept(ModTools.TITANITE_BOW.get());
+				output.accept(ModTools.TITANITE_XBOW.get());
+				output.accept(ModArmors.TITANITE_HELMET.get());
+				output.accept(ModArmors.TITANITE_CHEST.get());
+				output.accept(ModArmors.TITANITE_LEGS.get());
+				output.accept(ModArmors.TITANITE_BOOTS.get());
 			})
 			.build());
 

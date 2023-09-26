@@ -11,6 +11,8 @@
 
   "voidscape.tooltip.broken": "Broken",
   "voidscape.tooltip.elytra": "Elytra",
+  "voidscape.tooltip.wip": "Work In Progress",
+  "voidscape.tooltip.textures": "Textures Not Final",
 
   "entity.voidscape.null_servant": "Null Servant",
   "entity.voidscape.null_servant.titanite": "Titanite Servant",
@@ -80,6 +82,17 @@
   "item.voidscape.corrupt_chest": "Corrupt Chestplate",
   "item.voidscape.corrupt_legs": "Corrupt Leggings",
   "item.voidscape.corrupt_boots": "Corrupt Boots",
+
+  "item.voidscape.titanite_sword": "Titanite Sword",
+  "item.voidscape.titanite_bow": "Titanite Bow",
+  "item.voidscape.titanite_xbow": "Titanite Crossbow",
+  "item.voidscape.titanite_axe": "Titanite Axe",
+  "item.voidscape.titanite_pickaxe": "Titanite Pickaxe",
+  "item.voidscape.titanite_hoe": "Titanite Hoe",
+  "item.voidscape.titanite_helmet": "Titanite Helmet",
+  "item.voidscape.titanite_chest": "Titanite Chestplate",
+  "item.voidscape.titanite_legs": "Titanite Leggings",
+  "item.voidscape.titanite_boots": "Titanite Boots",
 
   "voidscape.attribute.voidic_infusion_res": "Voidic Infusion Resistance",
   "voidscape.attribute.voidic_paranoia_res": "Voidic Paranoia Resistance",
