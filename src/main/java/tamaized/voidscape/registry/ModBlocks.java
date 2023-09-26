@@ -75,6 +75,14 @@ public class ModBlocks implements RegistryClass {
 	public static final RegistryObject<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final RegistryObject<Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+			.sound(SoundType.NETHER_GOLD_ORE)
+			.mapColor(MapColor.COLOR_LIGHT_GREEN)
+			.strength(6F, 6F)
+			.requiresCorrectToolForDrops()));
+	public static final RegistryObject<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
+			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)

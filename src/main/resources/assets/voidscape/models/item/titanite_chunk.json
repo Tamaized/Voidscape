@@ -1,0 +1,16 @@
+{
+  "parent": "item/generated",
+  "forge_data": {
+    "layers": {
+      "1": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "loader": "forge:item_layers",
+  "textures": {
+	"layer0": "voidscape:item/titanite_chunk",
+    "layer1": "voidscape:item/titanite_chunk_overlay"
+  }
+}

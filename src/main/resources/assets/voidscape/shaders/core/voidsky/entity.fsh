@@ -8,6 +8,7 @@ uniform sampler2D Sampler1;
 uniform float GameTime;
 
 in vec4 texProj0;
+in vec4 vertexColor;
 
 const mat4 SCALE_TRANSLATE = mat4(
 0.5, 0.0, 0.0, 0.25,
@@ -55,5 +56,5 @@ void main() {
         color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vec3(fade);
     }
 
-    fragColor = vec4(color, 1.0);
+    fragColor = vec4(color, 1.0) * vertexColor;
 }

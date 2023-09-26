@@ -4,7 +4,10 @@
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
-		"Name": "minecraft:emerald_ore"
+		"Name": "minecraft:coal_ore",
+		"Properties": {
+		  "lit": false
+		}
 	  }
 	},
 	"predicate": {
@@ -13,7 +16,7 @@
 		"stone"
 	  ]
 	},
-	"chance": 0.25,
-    "max": 5
+	"chance": 0.75,
+    "max": 9
   }
 }

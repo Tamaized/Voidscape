@@ -13,6 +13,7 @@
 		"netherrack"
 	  ]
 	},
-	"chance": 0.75
+	"chance": 0.75,
+    "max": 9
   }
 }

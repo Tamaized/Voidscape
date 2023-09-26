@@ -13,6 +13,7 @@
   "voidscape.tooltip.elytra": "Elytra",
 
   "entity.voidscape.null_servant": "Null Servant",
+  "entity.voidscape.null_servant.titanite": "Titanite Servant",
   "entity.voidscape.voids_wrath": "Void's Wrath",
   "entity.voidscape.corrupted_pawn": "The Corrupted Pawn",
   "entity.voidscape.corrupted_pawn_tentacle": "The Corrupted Pawn's Tentacle",
@@ -22,6 +23,7 @@
 
   "block.voidscape.voidic_crystal_ore": "Voidic Crystal Ore",
   "block.voidscape.voidic_crystal_block": "Voidic Crystal",
+  "block.voidscape.titanite_ore": "Titanite Ore",
   "block.voidscape.fragile_voidic_crystal_block": "Fragile Voidic Crystal",
   "block.voidscape.portal": "Voidic Portal",
   "block.voidscape.thunderrock": "Thunder Rock",
@@ -53,6 +55,8 @@
   "item.voidscape.tendril": "Tendril",
   "item.voidscape.charred_bone": "Charred Bone",
   "item.voidscape.charred_warhammer_head": "Charred War Hammer Head Piece",
+  "item.voidscape.titanite_chunk": "Titanite Chunk",
+  "item.voidscape.titanite_shard": "Purified Titanite Shard",
   "item.voidscape.fruit": "Ethereal Fruit",
 
   "item.voidscape.voidic_crystal_sword": "Voidic Crystal Sword",

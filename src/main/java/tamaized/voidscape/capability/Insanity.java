@@ -165,16 +165,18 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private void calculateEffects(LivingEntity parent) {
 		float perc = infusion / 600F;
 		if (parent.tickCount % 20 == 0) {
-			AttributeInstance attribute = parent.getAttribute(Attributes.MAX_HEALTH);
-			if (attribute != null) {
-				attribute.removeModifier(INFUSION_HEALTH_DECAY);
-				attribute.removeModifier(INFUSION_ATTACK_DAMAGE);
-				attribute.removeModifier(INFUSION_RESISTANCE);
+			AttributeInstance attributeMaxHealth = parent.getAttribute(Attributes.MAX_HEALTH);
+			AttributeInstance attributeVoidicAttackDamage = parent.getAttribute(ModAttributes.VOIDIC_DMG.get());
+			AttributeInstance attributeVoidicResistance = parent.getAttribute(ModAttributes.VOIDIC_RES.get());
+			if (attributeMaxHealth != null && attributeVoidicAttackDamage != null && attributeVoidicResistance != null) {
+				attributeMaxHealth.removeModifier(INFUSION_HEALTH_DECAY);
+				attributeVoidicAttackDamage.removeModifier(INFUSION_ATTACK_DAMAGE);
+				attributeVoidicResistance.removeModifier(INFUSION_RESISTANCE);
 				if (perc > 0F) {
 					final float bound = 1F / parent.getMaxHealth();
-					attribute.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
-					attribute.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
-					attribute.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
+					attributeMaxHealth.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
+					attributeVoidicAttackDamage.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
+					attributeVoidicResistance.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
 					final float maxHealth = parent.getMaxHealth();
 					if (parent.getHealth() > maxHealth) {
 						if (parent instanceof ServerPlayer player)

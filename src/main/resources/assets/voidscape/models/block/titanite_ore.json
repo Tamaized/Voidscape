@@ -1,0 +1,9 @@
+{
+  "parent": "voidscape:block/overlay/full_fullbright_overlay",
+  "render_type": "cutout_mipped",
+  "textures": {
+	"base": "block/stone",
+	"overlay": "voidscape:block/titanite_ore",
+    "particle": "#base"
+  }
+}

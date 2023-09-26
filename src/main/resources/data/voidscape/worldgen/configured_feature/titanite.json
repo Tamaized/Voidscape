@@ -4,7 +4,7 @@
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
-		"Name": "minecraft:emerald_ore"
+		"Name": "voidscape:titanite_ore"
 	  }
 	},
 	"predicate": {
@@ -13,7 +13,7 @@
 		"stone"
 	  ]
 	},
-	"chance": 0.25,
-    "max": 5
+	"chance": 0.15,
+    "max": 1
   }
 }

@@ -96,6 +96,8 @@ public class ModItems implements RegistryClass {
 	});
 	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
