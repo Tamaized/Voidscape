@@ -1,0 +1,15 @@
+{
+	"type": "voidscape:smithing",
+	"template": {
+		"item": "voidscape:voidic_template"
+	},
+	"base": {
+		"item": "voidscape:corrupt_axe"
+	},
+	"addition": {
+		"item": "voidscape:titanite_shard"
+	},
+	"result": {
+		"item": "voidscape:titanite_axe"
+	}
+}
