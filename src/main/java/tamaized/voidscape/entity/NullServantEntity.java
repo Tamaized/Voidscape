@@ -165,6 +165,13 @@ public class NullServantEntity extends Monster implements IEthereal {
 			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 50F, AttributeModifier.Operation.ADDITION));
 			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 1F, AttributeModifier.Operation.ADDITION));
 			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 1F, AttributeModifier.Operation.ADDITION));
+			ItemStack stack = ItemStack.EMPTY;
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
+				stack = new ItemStack(ModTools.TITANITE_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
+				stack = new ItemStack(ModTools.TITANITE_AXE.get());
+			if (!stack.isEmpty())
+				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		}
 
 		setHealth(getMaxHealth());
