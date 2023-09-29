@@ -28,10 +28,7 @@ import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
-import tamaized.voidscape.client.entity.render.RenderAntiBolt;
-import tamaized.voidscape.client.entity.render.RenderCorruptedPawn;
-import tamaized.voidscape.client.entity.render.RenderNullServant;
-import tamaized.voidscape.client.entity.render.RenderVoidsWrath;
+import tamaized.voidscape.client.entity.render.*;
 import tamaized.voidscape.entity.*;
 
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -39,8 +36,12 @@ public class ModEntities implements RegistryClass {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITY_TYPES);
 
-	public static final RegistryObject<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () -> build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
-	public static final RegistryObject<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () -> make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), AntiBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
+	public static final RegistryObject<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
+			build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
+
+	public static final RegistryObject<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
+			make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), AntiBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
+
 	public static final RegistryObject<EntityType<NullServantEntity>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
 		EntityType<NullServantEntity> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(NullServantEntity.class, NullServantEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
 		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
@@ -48,6 +49,9 @@ public class ModEntities implements RegistryClass {
 						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
+	public static final RegistryObject<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = REGISTRY.register("null_servant_augment_block", () ->
+			make(new ResourceLocation(Voidscape.MODID, "null_servant_augment_block"), NullServantAugmentBlockEntity::new, MobCategory.MISC, 1F, 1F));
+
 	public static final RegistryObject<EntityType<VoidsWrathEntity>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> {
 		EntityType<VoidsWrathEntity> type = build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(VoidsWrathEntity.class, VoidsWrathEntity::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune());
 		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
@@ -91,6 +95,7 @@ public class ModEntities implements RegistryClass {
 		event.put(CORRUPTED_PAWN.get(), CorruptedPawnEntity.createAttributes().build());
 		event.put(VOIDS_WRATH.get(), VoidsWrathEntity.createAttributes().build());
 		event.put(NULL_SERVANT.get(), NullServantEntity.createAttributes().build());
+		event.put(NULL_SERVANT_AUGMENT_BLOCK.get(), NullServantAugmentBlockEntity.createAttributes().build());
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -129,6 +134,7 @@ public class ModEntities implements RegistryClass {
 		event.registerEntityRenderer(CORRUPTED_PAWN.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
+		event.registerEntityRenderer(NULL_SERVANT_AUGMENT_BLOCK.get(), RenderNullServantAugmentBlock::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
 	}
 

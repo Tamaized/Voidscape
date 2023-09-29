@@ -2,6 +2,8 @@ package tamaized.voidscape.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,6 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkHooks;
 import tamaized.voidscape.entity.ai.wrath.ChargedExplosionGoal;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
@@ -146,5 +149,10 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	@Override
 	protected void playStepSound(BlockPos p_32159_, BlockState p_32160_) {
 		// NO-OP
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }
