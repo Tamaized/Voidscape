@@ -1,0 +1,43 @@
+{
+  "parent": "voidscape:armor",
+  "criteria": {
+    "pawn": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "voidscape:corrupted_pawn",
+              "location": {
+                "dimension": "voidscape:void"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.psychosis.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:tendril"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.psychosis"
+    }
+  },
+  "requirements": [
+    [
+      "pawn"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

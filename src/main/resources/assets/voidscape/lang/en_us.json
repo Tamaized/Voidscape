@@ -9,6 +9,15 @@
   "biome.voidscape.nether": "Nether",
   "biome.voidscape.end": "End",
 
+  "advancement.voidscape.root": "The Void",
+  "advancement.voidscape.root.desc": "Get sucked into the Void",
+  "advancement.voidscape.gear": "Voidic Protection",
+  "advancement.voidscape.gear.desc": "Equip a piece of Voidic armor to protect yourself from the Void's harmful effects",
+  "advancement.voidscape.psychosis": "Psychosis",
+  "advancement.voidscape.psychosis.desc": "Experience complete paranoia and defeat the Corrupted Pawn",
+  "advancement.voidscape.purified": "Purified",
+  "advancement.voidscape.purified.desc": "Use a Titanite Chunk on a Null Servant",
+
   "voidscape.tooltip.broken": "Broken",
   "voidscape.tooltip.elytra": "Elytra",
   "voidscape.tooltip.wip": "Work In Progress",

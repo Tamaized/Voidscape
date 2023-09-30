@@ -1,0 +1,32 @@
+{
+  "parent": "voidscape:psychosis",
+  "criteria": {
+    "purified": {
+      "conditions": {
+        "item": "voidscape:titanite_chunk"
+      },
+      "trigger": "voidscape:item_used_on_null_servant"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.purified.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:titanite_shard"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.purified"
+    }
+  },
+  "requirements": [
+    [
+      "purified"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

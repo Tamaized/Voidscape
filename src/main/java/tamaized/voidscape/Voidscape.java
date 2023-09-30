@@ -108,6 +108,7 @@ public class Voidscape {
 			Config.CLIENT_CONFIG = specPair.getLeft();
 		}
 		RegUtil.setup(MODID, busMod,
+				ModAdvancementTriggers::new,
 				ModArmors::new,
 				ModAttributes::new,
 				ModBiomes::new,

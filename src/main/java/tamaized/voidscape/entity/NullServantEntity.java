@@ -45,10 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.nullservant.SpecialAugmentGoal;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
-import tamaized.voidscape.registry.ModAttributes;
-import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.ModItems;
-import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.*;
 
 import java.util.UUID;
 
@@ -117,6 +114,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 			if (pPlayer.getItemInHand(pHand).is(ModItems.TITANITE_CHUNK.get())) {
 				setAugment(AUGMENT_TITANITE);
 				doAugmentEffectsAndTrackBossBar();
+				if (pPlayer instanceof ServerPlayer player)
+					ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.trigger(player, pPlayer.getItemInHand(pHand));
 				if (!pPlayer.isCreative())
 					pPlayer.getItemInHand(pHand).shrink(1);
 				return InteractionResult.SUCCESS;
