@@ -174,8 +174,14 @@ public class Voidscape {
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
 					BlockState state = event.player.level().getBlockState(dest);
-					if ((state.equals(Blocks.BEDROCK.defaultBlockState()) || state.equals(ModBlocks.NULL_BLACK.get().defaultBlockState())) && event.player.level().getBlockState(dest.above()).isAir())
-						event.player.level().setBlockAndUpdate(dest.above(), EtherealPlantBlock.biomeState(ModBlocks.PLANT.get().defaultBlockState(), event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation(""))));
+					if (event.player.level().getBlockState(dest.above()).isAir() && ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(event.player.level(), dest))
+						event.player.level().setBlockAndUpdate(dest.above(), switch (event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")).getPath()) {
+							default -> ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState();
+							case "null" -> ModBlocks.ETHEREAL_FRUIT_NULL.get().defaultBlockState();
+							case "overworld" -> ModBlocks.ETHEREAL_FRUIT_OVERWORLD.get().defaultBlockState();
+							case "nether" -> ModBlocks.ETHEREAL_FRUIT_NETHER.get().defaultBlockState();
+							case "end" -> ModBlocks.ETHEREAL_FRUIT_END.get().defaultBlockState();
+					});
 				}
 			}
 		});

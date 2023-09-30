@@ -10,6 +10,6 @@
   },
   "loader": "forge:item_layers",
   "textures": {
-	"layer0": "voidscape:item/fruit"
+	"layer0": "voidscape:item/ethereal_fruit_null"
   }
 }

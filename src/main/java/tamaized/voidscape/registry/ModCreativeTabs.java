@@ -49,16 +49,16 @@ public class ModCreativeTabs implements RegistryClass {
                 output.accept(ModBlocksThunderForestBiome.THUNDER_STAIRS_ITEM.get());
                 output.accept(ModBlocksThunderForestBiome.THUNDER_SLAB_ITEM.get());
 				// Crops
-				output.accept(ModBlocks.PLANT_ITEM.get());
-				output.accept(makePlant(EtherealPlantBlock.State.NULL));
-				output.accept(makePlant(EtherealPlantBlock.State.OVERWORLD));
-				output.accept(makePlant(EtherealPlantBlock.State.NETHER));
-				output.accept(makePlant(EtherealPlantBlock.State.END));
-				output.accept(ModItems.FRUIT.get());
-				output.accept(makeFruit(EtherealPlantBlock.State.NULL));
-				output.accept(makeFruit(EtherealPlantBlock.State.OVERWORLD));
-				output.accept(makeFruit(EtherealPlantBlock.State.NETHER));
-				output.accept(makeFruit(EtherealPlantBlock.State.END));
+				output.accept(ModBlocks.ETHEREAL_FRUIT_VOID.get());
+				output.accept(ModBlocks.ETHEREAL_FRUIT_NULL.get());
+				output.accept(ModBlocks.ETHEREAL_FRUIT_OVERWORLD.get());
+				output.accept(ModBlocks.ETHEREAL_FRUIT_NETHER.get());
+				output.accept(ModBlocks.ETHEREAL_FRUIT_END.get());
+				output.accept(ModItems.ETHEREAL_FRUIT_VOID.get());
+				output.accept(ModItems.ETHEREAL_FRUIT_NULL.get());
+				output.accept(ModItems.ETHEREAL_FRUIT_OVERWORLD.get());
+				output.accept(ModItems.ETHEREAL_FRUIT_NETHER.get());
+				output.accept(ModItems.ETHEREAL_FRUIT_END.get());
 				//// Items
 				output.accept(ModItems.ETHEREAL_ESSENCE.get());
 				output.accept(ModItems.VOIDIC_CRYSTAL.get());
@@ -103,26 +103,6 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModArmors.TITANITE_BOOTS.get());
 			})
 			.build());
-
-	private static ItemStack makePlant(EtherealPlantBlock.State state) {
-		CompoundTag tag = new CompoundTag();
-		CompoundTag stateTag = new CompoundTag();
-		stateTag.putString("state", state.getSerializedName());
-		tag.put(BlockItem.BLOCK_STATE_TAG, stateTag);
-		ItemStack stack = new ItemStack(ModBlocks.PLANT.get());
-		stack.setTag(tag);
-		return stack;
-	}
-
-	private static ItemStack makeFruit(EtherealPlantBlock.State state) {
-		CompoundTag tag = new CompoundTag();
-		CompoundTag t = new CompoundTag();
-		t.putString("augment", state.getSerializedName());
-		tag.put(Voidscape.MODID, t);
-		ItemStack stack = new ItemStack(ModItems.FRUIT.get());
-		stack.setTag(tag);
-		return stack;
-	}
 
 	@Override
 	public void init(IEventBus bus) {

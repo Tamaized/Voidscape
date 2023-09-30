@@ -3,7 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -24,11 +25,13 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.EtherealPlantBlock;
 import tamaized.voidscape.capability.SubCapability;
+
+import java.util.List;
 
 public class ModItems implements RegistryClass {
 
@@ -98,36 +101,94 @@ public class ModItems implements RegistryClass {
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> FRUIT = REGISTRY.register("fruit", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				CompoundTag tag = stack.getTag();
-				tag = tag == null ? null : tag.getCompound(Voidscape.MODID);
-				EtherealPlantBlock.State state = EtherealPlantBlock.State.VOID;
-				if (tag != null)
-					state = switch (tag.getString("augment")) {
-						default -> EtherealPlantBlock.State.VOID;
-						case "null" -> EtherealPlantBlock.State.NULL;
-						case "overworld" -> EtherealPlantBlock.State.OVERWORLD;
-						case "nether" -> EtherealPlantBlock.State.NETHER;
-						case "end" -> EtherealPlantBlock.State.END;
-					};
-				switch (state) {
-					case VOID -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-							.ifPresent(data -> data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
-					case NULL -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-							.ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
-					case OVERWORLD -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-							.ifPresent(data -> data.setParanoia(data.getParanoia() - 150)));
-					case NETHER -> entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-							.ifPresent(data -> data.setParanoia(data.getParanoia() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))))));
-					case END -> entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3));
-				}
+				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+						.ifPresent(data -> data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
 			}
 			return itemstack;
+		}
+
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+		}
+	});
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
+			if (!level.isClientSide) {
+				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+						.ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
+			}
+			return itemstack;
+		}
+
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+		}
+	});
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
+			if (!level.isClientSide) {
+				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+						.ifPresent(data -> data.setParanoia(data.getParanoia() - 150)));
+			}
+			return itemstack;
+		}
+
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+		}
+	});
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
+			if (!level.isClientSide) {
+				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
+						.ifPresent(data -> data.setParanoia(data.getParanoia() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))))));
+			}
+			return itemstack;
+		}
+
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+		}
+	});
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
+			if (!level.isClientSide) {
+				entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3));
+			}
+			return itemstack;
+		}
+
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
 		}
 	});
 

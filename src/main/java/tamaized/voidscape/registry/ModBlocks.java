@@ -164,7 +164,7 @@ public class ModBlocks implements RegistryClass {
 
 	// Crops
 
-	public static final RegistryObject<Block> PLANT = REGISTRY.register("plant", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final RegistryObject<Block> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.noCollission()
@@ -172,8 +172,52 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> PLANT_ITEM = ModItems.REGISTRY
-			.register(PLANT.getId().getPath(), () -> new BlockItem(PLANT.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID_ITEM = ModItems.REGISTRY
+			.register(ETHEREAL_FRUIT_VOID.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_VOID.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	public static final RegistryObject<Block> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealPlantBlock(Block.Properties.of()
+			.sound(SoundType.CROP)
+			.mapColor(MapColor.COLOR_BLACK)
+			.noCollission()
+			.instabreak()
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_NULL_ITEM = ModItems.REGISTRY
+			.register(ETHEREAL_FRUIT_NULL.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_NULL.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	public static final RegistryObject<Block> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealPlantBlock(Block.Properties.of()
+			.sound(SoundType.CROP)
+			.mapColor(MapColor.COLOR_CYAN)
+			.noCollission()
+			.instabreak()
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_OVERWORLD_ITEM = ModItems.REGISTRY
+			.register(ETHEREAL_FRUIT_OVERWORLD.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_OVERWORLD.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	public static final RegistryObject<Block> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealPlantBlock(Block.Properties.of()
+			.sound(SoundType.CROP)
+			.mapColor(MapColor.COLOR_RED)
+			.noCollission()
+			.instabreak()
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER_ITEM = ModItems.REGISTRY
+			.register(ETHEREAL_FRUIT_NETHER.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_NETHER.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	public static final RegistryObject<Block> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealPlantBlock(Block.Properties.of()
+			.sound(SoundType.CROP)
+			.mapColor(MapColor.COLOR_PINK)
+			.noCollission()
+			.instabreak()
+			.pushReaction(PushReaction.DESTROY)
+			.offsetType(BlockBehaviour.OffsetType.XYZ)
+	));
+	public static final RegistryObject<Item> ETHEREAL_FRUIT_END_ITEM = ModItems.REGISTRY
+			.register(ETHEREAL_FRUIT_END.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_END.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
 	/// Machines
 
