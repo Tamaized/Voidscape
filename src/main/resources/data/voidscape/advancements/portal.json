@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:root",
+  "criteria": {
+    "portal": {
+      "conditions": {},
+      "trigger": "voidscape:activate_portal"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.portal.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:voidic_crystal_block"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.portal"
+    }
+  },
+  "requirements": [
+    [
+      "portal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -211,6 +211,8 @@ public class ModTools implements RegistryClass {
 								entityIn1.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 							}
 						});
+						if (this == TITANITE_HOE.get() && context.getPlayer() instanceof ServerPlayer player)
+							ModAdvancementTriggers.TITANITE_HOE_TRIGGER.trigger(player);
 					}
 					return result;
 				}
@@ -299,6 +301,8 @@ public class ModTools implements RegistryClass {
 							area.add(pos.offset(x, y, 0));
 				}
 			}
+			if (this == CHARRED_WARHAMMER.get() && area.size() > 1)
+				ModAdvancementTriggers.CHARRED_BONE_WAR_HAMMER_TRIGGER.trigger(player);
 			// Using TCon's hardness division check
 			area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
 				final BlockState state = p.right();

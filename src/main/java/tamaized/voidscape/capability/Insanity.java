@@ -25,6 +25,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
+import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.world.VoidPortalTeleporter;
 import tamaized.voidscape.world.VoidTeleporter;
@@ -184,8 +185,11 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 						parent.setHealth(parent.getMaxHealth());
 					}
 				}
-				if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level()))
+				if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level())) {
+					if (parent instanceof ServerPlayer player)
+						ModAdvancementTriggers.INFUSED_TRIGGER.trigger(player);
 					parent.hurt(parent.damageSources().fellOutOfWorld(), 1024F);
+				}
 			}
 		}
 		if (parent instanceof Player) {

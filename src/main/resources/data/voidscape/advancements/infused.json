@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:root",
+  "criteria": {
+    "infused": {
+      "conditions": {},
+      "trigger": "voidscape:infused"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.infused.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:ethereal_fruit_void"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.infused"
+    }
+  },
+  "requirements": [
+    [
+      "infused"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -74,8 +74,10 @@ public class ModItems implements RegistryClass {
 				ModBlocks.PORTAL.get().tryToCreatePortal(level, blockpos1);
 				ItemStack stack = context.getItemInHand();
 
-				if (player instanceof ServerPlayer) {
-					stack.shrink(1);
+				if (player instanceof ServerPlayer serverPlayer) {
+					ModAdvancementTriggers.ACTIVATE_PORTAL_TRIGGER.trigger(serverPlayer);
+					if (!serverPlayer.isCreative())
+						stack.shrink(1);
 				}
 
 				return InteractionResult.SUCCESS;

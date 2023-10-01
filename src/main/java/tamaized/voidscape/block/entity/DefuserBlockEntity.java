@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
+import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 
@@ -76,6 +78,8 @@ public class DefuserBlockEntity extends BlockEntity {
             level.getEntities(null, new AABB(blockPos).inflate(32D)).forEach(e -> e.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
                 if (data.getInfusion() > 0) {
                     data.decrementInfusion(1);
+					if (e instanceof ServerPlayer player)
+						ModAdvancementTriggers.DEFUSER_TRIGGER.trigger(player);
                     process.set(true);
                     Vec3 dir = new Vec3(blockPos.getX() + 0.5D, blockPos.getY() - 0.5D, blockPos.getZ() + 0.5D).subtract(e.position()).normalize().scale(0.15D);
                     if (level.getRandom().nextInt(100) == 0) {

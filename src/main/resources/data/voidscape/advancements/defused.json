@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:psychosis",
+  "criteria": {
+    "defused": {
+      "conditions": {},
+      "trigger": "voidscape:defuser"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.defused.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:machine_defuser"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.defused"
+    }
+  },
+  "requirements": [
+    [
+      "defused"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

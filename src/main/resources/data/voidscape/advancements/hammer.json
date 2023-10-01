@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:root",
+  "criteria": {
+    "hammer": {
+      "conditions": {},
+      "trigger": "voidscape:charred_bone_warhammer"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.hammer.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:charred_warhammer"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.hammer"
+    }
+  },
+  "requirements": [
+    [
+      "hammer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

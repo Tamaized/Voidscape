@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:purified",
+  "criteria": {
+    "hoe": {
+      "conditions": {},
+      "trigger": "voidscape:titanite_hoe"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.hoe.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:titanite_hoe"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.hoe"
+    }
+  },
+  "requirements": [
+    [
+      "hoe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
