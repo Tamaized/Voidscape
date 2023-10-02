@@ -178,8 +178,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 					attributeMaxHealth.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
 					attributeVoidicAttackDamage.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
 					attributeVoidicResistance.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
-					final float maxHealth = parent.getMaxHealth();
-					if (parent.getHealth() > maxHealth) {
+					if (parent.getHealth() > parent.getMaxHealth()) {
 						if (parent instanceof ServerPlayer player)
 							Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketNoFlashOnSetHealth());
 						parent.setHealth(parent.getMaxHealth());
