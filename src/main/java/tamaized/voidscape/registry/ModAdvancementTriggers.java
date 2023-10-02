@@ -11,6 +11,7 @@ public class ModAdvancementTriggers implements RegistryClass {
 	public static final ActivatePortalTrigger ACTIVATE_PORTAL_TRIGGER = CriteriaTriggers.register(new ActivatePortalTrigger());
 	public static final InfusedTrigger INFUSED_TRIGGER = CriteriaTriggers.register(new InfusedTrigger());
 	public static final TitaniteHoeTrigger TITANITE_HOE_TRIGGER = CriteriaTriggers.register(new TitaniteHoeTrigger());
+	public static final LiquifierTrigger LIQUIFIER_TRIGGER = CriteriaTriggers.register(new LiquifierTrigger());
 	public static final DefuserTrigger DEFUSER_TRIGGER = CriteriaTriggers.register(new DefuserTrigger());
 	public static final CharredBoneWarHammerTrigger CHARRED_BONE_WAR_HAMMER_TRIGGER = CriteriaTriggers.register(new CharredBoneWarHammerTrigger());
 

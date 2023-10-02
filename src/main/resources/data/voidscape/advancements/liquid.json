@@ -1,29 +1,29 @@
 {
-  "parent": "voidscape:liquid",
+  "parent": "voidscape:psychosis",
   "criteria": {
-    "defused": {
+    "liquid": {
       "conditions": {},
-      "trigger": "voidscape:defuser"
+      "trigger": "voidscape:liquifier"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancement.voidscape.defused.desc"
+      "translate": "advancement.voidscape.liquid.desc"
     },
-    "frame": "challenge",
+    "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "voidscape:machine_defuser"
+      "item": "voidscape:machine_liquifier"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancement.voidscape.defused"
+      "translate": "advancement.voidscape.liquid"
     }
   },
   "requirements": [
     [
-      "defused"
+      "liquid"
     ]
   ],
   "sends_telemetry_event": true

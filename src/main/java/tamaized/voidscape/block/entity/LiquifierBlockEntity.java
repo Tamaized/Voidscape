@@ -3,9 +3,12 @@ package tamaized.voidscape.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -16,6 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 import tamaized.voidscape.registry.ModItems;
@@ -76,6 +80,10 @@ public class LiquifierBlockEntity extends BlockEntity {
                 entity.processTick = 0;
                 fluid.fill(new FluidStack(ModFluids.VOIDIC_SOURCE.get(), 250), IFluidHandler.FluidAction.EXECUTE);
                 item.getStackInSlot(0).shrink(1);
+				level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
+						.filter(e -> e instanceof ServerPlayer)
+						.map(ServerPlayer.class::cast)
+						.forEach(ModAdvancementTriggers.LIQUIFIER_TRIGGER::trigger);
             }
         } else {
             entity.processTick = 0;
