@@ -106,40 +106,28 @@ public class ModTools implements RegistryClass {
 
 	public static final RegistryObject<Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.
 			sword(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)),
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.
 			bow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D)),
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.
 			xbow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D)),
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.
 			axe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D)), 
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.
 			pickaxe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D)), 
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_HOE =
 			bonemealHoe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), 
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 
 	@Override
 	public void init(IEventBus bus) {
@@ -211,8 +199,8 @@ public class ModTools implements RegistryClass {
 								entityIn1.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 							}
 						});
-						if (this == TITANITE_HOE.get() && context.getPlayer() instanceof ServerPlayer player)
-							ModAdvancementTriggers.TITANITE_HOE_TRIGGER.trigger(player);
+						if (context.getPlayer() instanceof ServerPlayer player)
+							ModAdvancementTriggers.HOE_BONEMEAL_TRIGGER.trigger(player);
 					}
 					return result;
 				}

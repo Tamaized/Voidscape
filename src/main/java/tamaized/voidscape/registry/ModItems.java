@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -101,8 +102,20 @@ public class ModItems implements RegistryClass {
 	});
 	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
+		}
+	});
+	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
+		}
+	});
 
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
@@ -119,7 +132,7 @@ public class ModItems implements RegistryClass {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
@@ -137,7 +150,7 @@ public class ModItems implements RegistryClass {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
@@ -155,7 +168,7 @@ public class ModItems implements RegistryClass {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
@@ -173,7 +186,7 @@ public class ModItems implements RegistryClass {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
@@ -190,7 +203,7 @@ public class ModItems implements RegistryClass {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures"));
+			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 

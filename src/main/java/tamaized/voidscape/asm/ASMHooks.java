@@ -92,7 +92,7 @@ public class ASMHooks {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static boolean capeLayer(boolean o, ItemStack stack) {
-		return o || stack.is(ModArmors.CORRUPT_CHEST.get()) || ModArmors.elytra(stack);
+		return o || stack.is(ModArmors.CORRUPT_CHEST.get()) || ModArmors.elytra(stack); // TODO verify the corrupt chest check? It's not making any sense to me why this is here??
 	}
 
 	/**

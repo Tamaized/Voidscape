@@ -106,8 +106,10 @@ public class ModEntities implements RegistryClass {
 		public static final ModelLayerLocation VOIDS_WRATH_CHARGED = make("voidswrathcharged");
 		public static final ModelLayerLocation NULL_SERVANT = make("nullservant");
 
-		public static final ModelLayerLocation MODEL_ARMOR_INSANE_OUTER = make("insane_outer");
-		public static final ModelLayerLocation MODEL_ARMOR_INSANE_INNER = make("insane_inner");
+		public static final ModelLayerLocation MODEL_ARMOR_CORRUPT_OUTER = make("corrupt_outer");
+		public static final ModelLayerLocation MODEL_ARMOR_CORRUPT_INNER = make("corrupt_inner");
+		public static final ModelLayerLocation MODEL_ARMOR_TITANITE_OUTER = make("titanite_outer");
+		public static final ModelLayerLocation MODEL_ARMOR_TITANITE_INNER = make("titanite_inner");
 
 		private static ModelLayerLocation make(String name) {
 			return new ModelLayerLocation(new ResourceLocation(Voidscape.MODID, "main"), name);
@@ -123,8 +125,10 @@ public class ModEntities implements RegistryClass {
 		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH_CHARGED, () -> ModelVoidsWrath.createMesh(new CubeDeformation(1.0F)));
 		event.registerLayerDefinition(ModelLayerLocations.NULL_SERVANT, ModelNullServant::createMesh);
 
-		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
-		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_INSANE_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_TITANITE_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_TITANITE_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
 
 	}
 

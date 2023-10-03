@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +38,7 @@ public class ModArmors implements RegistryClass {
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_INSANE_OUTER));
+						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER));
 				model.rightfoot.visible = false;
 				model.leftfoot.visible = false;
 				model.bodyToLeg.visible = false;
@@ -91,7 +92,56 @@ public class ModArmors implements RegistryClass {
 		};
 
 		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.
-				ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), true, false, false);
+				ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
+			@Override
+			@OnlyIn(Dist.CLIENT)
+			@SuppressWarnings("unchecked")
+			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
+						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE_OUTER));
+				model.rightfoot.visible = false;
+				model.leftfoot.visible = false;
+				model.bodyToLeg.visible = false;
+				model.rightleg.visible = false;
+				model.leftleg.visible = false;
+				model.body.visible = false;
+				model.rightarm.visible = false;
+				model.leftarm.visible = false;
+				model.head.visible = false;
+				model.headoverlay.visible = false;
+				switch (armorSlot) {
+					case FEET:
+						model.rightfoot.visible = true;
+						model.leftfoot.visible = true;
+						break;
+					case LEGS:
+						model.rightleg.visible = true;
+						model.leftleg.visible = true;
+						break;
+					case CHEST:
+						model.bodyToLeg.visible = true;
+						model.body.visible = true;
+						model.rightarm.visible = true;
+						model.leftarm.visible = true;
+						model.topLeftTentacle.visible = false;
+						model.topRightTentacle.visible = false;
+						model.bottomLeftTentacle.visible = false;
+						model.bottomRightTentacle.visible = false;
+						break;
+					case HEAD:
+						model.head.visible = true;
+						model.headoverlay.visible = true;
+						break;
+					default:
+				}
+				return (A) model;
+			}
+
+			@Override
+			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, @Nullable String type) {
+				return Voidscape.MODID.concat(":textures/models/armor/titanite" + (type == null ? "" : "_overlay") + ".png");
+			}
+		};
 	}
 
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_HELMET = RegUtil.ToolAndArmorHelper.
@@ -138,34 +188,27 @@ public class ModArmors implements RegistryClass {
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D)), 
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_CHEST = RegUtil.ToolAndArmorHelper.
 			chest(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), (stack, tick) -> ModArmors.elytra(stack), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
+					(stack, tick) -> ModArmors.elytra(stack), 
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_LEGS = RegUtil.ToolAndArmorHelper.
 			legs(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 	public static final RegistryObject<Item> TITANITE_BOOTS = RegUtil.ToolAndArmorHelper.
 			boots(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), RegUtil.
 					AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), RegUtil.
-					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.wip"));
-				tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures"));
-			});
+					AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
+					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 
 	@Override
 	public void init(IEventBus bus) {

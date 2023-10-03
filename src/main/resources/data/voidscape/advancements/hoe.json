@@ -3,7 +3,7 @@
   "criteria": {
     "hoe": {
       "conditions": {},
-      "trigger": "voidscape:titanite_hoe"
+      "trigger": "voidscape:hoe_bonemeal"
     }
   },
   "display": {

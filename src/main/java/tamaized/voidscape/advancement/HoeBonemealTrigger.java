@@ -9,9 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import tamaized.voidscape.Voidscape;
 
-public class TitaniteHoeTrigger extends SimpleCriterionTrigger<TitaniteHoeTrigger.Instance> {
+public class HoeBonemealTrigger extends SimpleCriterionTrigger<HoeBonemealTrigger.Instance> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "titanite_hoe");
+	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "hoe_bonemeal");
 
 	@Override
 	public ResourceLocation getId() {
@@ -19,8 +19,8 @@ public class TitaniteHoeTrigger extends SimpleCriterionTrigger<TitaniteHoeTrigge
 	}
 
 	@Override
-	public TitaniteHoeTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
-		return new TitaniteHoeTrigger.Instance(player);
+	public HoeBonemealTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
+		return new HoeBonemealTrigger.Instance(player);
 	}
 
 	public void trigger(ServerPlayer player) {

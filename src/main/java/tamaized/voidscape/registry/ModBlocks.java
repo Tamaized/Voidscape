@@ -1,6 +1,8 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -10,6 +12,8 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -29,6 +33,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -36,6 +41,7 @@ import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.AntiBoltEntity;
 import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ModBlocks implements RegistryClass {
@@ -79,7 +85,13 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
 			.strength(6F, 6F)
-			.requiresCorrectToolForDrops()));
+			.requiresCorrectToolForDrops()) {
+		@Override
+		public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+			super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
+			pTooltip.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
+		}
+	});
 	public static final RegistryObject<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
 			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
