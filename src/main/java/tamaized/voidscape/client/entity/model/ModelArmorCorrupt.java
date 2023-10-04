@@ -84,7 +84,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 		PartDefinition bodyDefinition = definition.addOrReplaceChild("realbody",
 				CubeListBuilder.create().texOffs(16, 16).
-						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, deformation), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
 
 		bodyDefinition.addOrReplaceChild("bottomLeftTentacle",
@@ -110,49 +110,49 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		definition.addOrReplaceChild("leftarm",
 				CubeListBuilder.create().texOffs(40, 16).
 						mirror().
-						addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
+						addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation).mirror(), PartPose.
 						offset(5.0F, 2.0F, 0.0F));
 
 		definition.addOrReplaceChild("rightarm",
 				CubeListBuilder.create().texOffs(40, 16).
-						addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.
 						offset(-5.0F, 2.0F, 0.0F));
 
 		definition.addOrReplaceChild("headoverlay",
 				CubeListBuilder.create().texOffs(32, 0).
-						addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(1.0F)), PartPose.
+						addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, deformation.extend(0.5F)), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
 
 		definition.addOrReplaceChild("leftleg",
 				CubeListBuilder.create().texOffs(0, 48).
 						mirror().
-						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
+						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation).mirror(), PartPose.
 						offset(1.9F, 12.0F, 0.0F));
 
 		definition.addOrReplaceChild("bodyToLeg",
 				CubeListBuilder.create().texOffs(16, 48).
-						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, deformation), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
 
 		definition.addOrReplaceChild("realhead",
 				CubeListBuilder.create().texOffs(0, 0).
-						addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, deformation), PartPose.
 						offset(0.0F, 0.0F, 0.0F));
 
 		definition.addOrReplaceChild("rightfoot",
 				CubeListBuilder.create().texOffs(0, 16).
-						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.
 						offset(-1.9F, 12.0F, 0.0F));
 
 		definition.addOrReplaceChild("leftfoot",
 				CubeListBuilder.create().texOffs(0, 16).
 						mirror().
-						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)).mirror(), PartPose.
+						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation).mirror(), PartPose.
 						offset(1.9F, 12.0F, 0.0F));
 
 		definition.addOrReplaceChild("rightleg",
 				CubeListBuilder.create().texOffs(0, 48).
-						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)), PartPose.
+						addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, deformation), PartPose.
 						offset(-1.9F, 12.0F, 0.0F));
 
 		return LayerDefinition.create(mesh, 64, 64);
@@ -178,5 +178,14 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		rightfoot.copyFrom(super.rightLeg);
 		leftfoot.copyFrom(super.leftLeg);
 		parts.forEach((modelRenderer_) -> modelRenderer_.render(matrixStackIn, bufferIn, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
+	}
+
+	@Override
+	public ModelPart getHead() {
+		return head;
+	}
+
+	public ModelPart getHeadoverlay() {
+		return headoverlay;
 	}
 }
