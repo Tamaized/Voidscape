@@ -42,6 +42,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.nullservant.SpecialAugmentGoal;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
@@ -53,6 +54,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
+	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 	public static final int AUGMENT_TITANITE = 1;
 
 	private static final UUID AUGMENT_HEALTH = UUID.fromString("f65da6bd-3e6b-468a-addc-a08335a954f2");
@@ -213,6 +216,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 		super.defineSynchedData();
 		entityData.define(AUGMENT, 0);
 		entityData.define(AUGMENT_ATTACK, false);
+		entityData.define(AUGMENT_ATTACK_AOE1, new Vector3f());
+		entityData.define(AUGMENT_ATTACK_AOE2, new Vector3f());
 	}
 
 	public Integer getAugment() {
@@ -233,6 +238,11 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	public void setAugmentAttack(boolean attack) {
 		entityData.set(AUGMENT_ATTACK, attack);
+	}
+
+	public void setAugmentAttackAoes(Vector3f aoe1, Vector3f aoe2) {
+		entityData.set(AUGMENT_ATTACK_AOE1, aoe1);
+		entityData.set(AUGMENT_ATTACK_AOE2, aoe2);
 	}
 
 	@Override
@@ -344,6 +354,19 @@ public class NullServantEntity extends Monster implements IEthereal {
 						0D,
 						0D);
 			}
+			for (int i = 0; i < 3; i++) {
+				doAoeParticles(entityData.get(AUGMENT_ATTACK_AOE1));
+				doAoeParticles(entityData.get(AUGMENT_ATTACK_AOE2));
+			}
+		}
+	}
+
+	private void doAoeParticles(Vector3f aoe) {
+		if (aoe.x() != 0 || aoe.y() != 0 || aoe.z() != 0) {
+			Vec3 rot = new Vec3(4, 0, 0).yRot((float) Math.toRadians(getRandom().nextFloat() * 360F)).xRot((float) Math.toRadians(getRandom().nextFloat() * 360F));
+			Vec3 pos = new Vec3(aoe).add(rot);
+			Vec3 dir = new Vec3(aoe.x(), aoe.y(), aoe.z()).subtract(pos).normalize().scale(0.35D);
+			level().addParticle(ParticleTypes.END_ROD, false, pos.x(), pos.y(), pos.z(), dir.x(), dir.y(), dir.z());
 		}
 	}
 

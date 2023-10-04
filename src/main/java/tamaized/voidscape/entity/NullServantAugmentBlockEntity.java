@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -29,12 +30,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityAdditionalSpawnData {
 
@@ -71,33 +74,42 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 
 	}
 
+	@Nullable
+	public static Vec3 randomPos(Level level, RandomSource random, Vec3 from, @Nullable Entity clipSource) {
+		for (int i = 0; i < 10; i++) {
+			Vec3 vec = new Vec3(5, 0.125, 0).yRot(Mth.DEG_TO_RAD * (random.nextFloat() * 360F)).add(from);
+			BlockHitResult result = level.clip(new ClipContext(vec, from, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, clipSource));
+			if (result.getType() != HitResult.Type.BLOCK) {
+				return vec;
+			}
+		}
+		return null;
+	}
+
 	public void randomPosOrDiscard() {
 		if (level().isClientSide())
 			return;
-		for (int i = 0; i < 10; i++) {
-			Vec3 vec = new Vec3(5, 0.125, 0).yRot(Mth.DEG_TO_RAD * (random.nextFloat() * 360F)).add(parent.position());
-			BlockHitResult result = level().clip(new ClipContext(vec, parent.position(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-			if (result.getType() != HitResult.Type.BLOCK) {
-				moveTo(vec);
-				playSound(SoundEvents.ITEM_PICKUP, 1F, 0.2F + random.nextFloat() * 0.3F);
-				ClientPacketSendParticles particles = new ClientPacketSendParticles();
-				for (int j = 0; j < 50; j++) {
-					particles.queueParticle(
-							ParticleTypes.END_ROD,
-							false,
-							position().x() - 0.5D + random.nextFloat(),
-							position().y() - 0.5D + random.nextFloat(),
-							position().z() - 0.5D + random.nextFloat(),
-							0D,
-							0D,
-							0D
-					);
-				}
-				Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), particles);
-				return;
+		Vec3 pos;
+		if ((pos = randomPos(level(), getRandom(), parent.position(), this)) != null) {
+			moveTo(pos);
+			playSound(SoundEvents.ITEM_PICKUP, 1F, 0.2F + random.nextFloat() * 0.3F);
+			ClientPacketSendParticles particles = new ClientPacketSendParticles();
+			for (int j = 0; j < 50; j++) {
+				particles.queueParticle(
+						ParticleTypes.END_ROD,
+						false,
+						position().x() - 0.5D + random.nextFloat(),
+						position().y() - 0.5D + random.nextFloat(),
+						position().z() - 0.5D + random.nextFloat(),
+						0D,
+						0D,
+						0D
+				);
 			}
+			Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), particles);
+		} else {
+			discard();
 		}
-		discard();
 	}
 
 	@Override
