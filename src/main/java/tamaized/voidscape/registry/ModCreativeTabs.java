@@ -107,6 +107,9 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModItems.ICHOR.get());
 				output.accept(ModItems.ICHOR_CRYSTAL.get());
 				output.accept(ModTools.ICHOR_TOME.get());
+				output.accept(ModTools.VOIDIC_TOME.get());
+				output.accept(ModTools.CORRUPT_TOME.get());
+				output.accept(ModTools.TITANITE_TOME.get());
 				output.accept(ModTools.ICHOR_PICKAXE.get());
 			})
 			.build());

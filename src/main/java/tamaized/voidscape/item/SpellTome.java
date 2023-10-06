@@ -1,5 +1,7 @@
 package tamaized.voidscape.item;
 
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +40,9 @@ public class SpellTome extends Item {
 	public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
 		if (getUseDuration(stack) - timeLeft > 15) {
 			action.accept(new ActionContext(stack, level, entity));
+			level.playSound(null, entity.position().x(), entity.position().y(), entity.position().z(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1F, 0.5F + entity.getRandom().nextFloat() * 0.25F);
+			if (entity instanceof Player player)
+				player.getCooldowns().addCooldown(this, 20 * 60);
 		}
 	}
 

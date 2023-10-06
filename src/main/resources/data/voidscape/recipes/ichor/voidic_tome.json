@@ -1,0 +1,15 @@
+{
+	"type": "voidscape:smithing",
+	"template": {
+		"item": "voidscape:voidic_template"
+	},
+	"base": {
+		"item": "voidscape:ichor_tome"
+	},
+	"addition": {
+		"item": "voidscape:voidic_crystal"
+	},
+	"result": {
+		"item": "voidscape:voidic_tome"
+	}
+}
