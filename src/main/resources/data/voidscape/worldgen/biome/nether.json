@@ -38,9 +38,10 @@
 	[ ],
 	[ ],
 	[
-	  "voidscape:debris",
+	  "voidscape:soul_sand",
+      "voidscape:quartz",
 	  "voidscape:nether_gold",
-	  "voidscape:quartz",
+      "voidscape:debris",
 	  "voidscape:flesh"
 	],
 	[ ],

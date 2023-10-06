@@ -1,0 +1,19 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+	"to_place": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "minecraft:soul_sand"
+	  }
+	},
+	"predicate": {
+	  "type": "matching_blocks",
+	  "blocks": [
+		"netherrack"
+	  ]
+	},
+	"chance": 0.90,
+    "max": 9
+  }
+}
