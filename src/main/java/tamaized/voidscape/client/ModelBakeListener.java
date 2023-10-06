@@ -47,6 +47,8 @@ public class ModelBakeListener {
 		impBroken(ModArmors.CORRUPT_LEGS.get());
 		impBroken(ModArmors.CORRUPT_BOOTS.get());
 
+		impBroken(ModTools.ICHOR_PICKAXE.get());
+
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
 		impBow(ModTools.TITANITE_BOW.get());
@@ -98,38 +100,44 @@ public class ModelBakeListener {
 	}
 
 	public static void redirectModels(ModelBakery bakery) {
-		redirectModelLocation(bakery, "voidic", "voidic_crystal_", ModTools.
-				VOIDIC_CRYSTAL_AXE, ModTools.
-				VOIDIC_CRYSTAL_PICKAXE, ModTools.
-				VOIDIC_CRYSTAL_SWORD, ModTools.
-				VOIDIC_CRYSTAL_SHIELD, ModTools.
-				VOIDIC_CRYSTAL_BOW, ModTools.
-				VOIDIC_CRYSTAL_XBOW, ModArmors.
-				VOIDIC_CRYSTAL_HELMET, ModArmors.
-				VOIDIC_CRYSTAL_CHEST, ModArmors.
-				VOIDIC_CRYSTAL_LEGS, ModArmors.
-				VOIDIC_CRYSTAL_BOOTS);
+		redirectModelLocation(bakery, "voidic", "voidic_crystal_",
+				ModTools.VOIDIC_CRYSTAL_AXE,
+				ModTools.VOIDIC_CRYSTAL_PICKAXE,
+				ModTools.VOIDIC_CRYSTAL_SWORD,
+				ModTools.VOIDIC_CRYSTAL_SHIELD,
+				ModTools.VOIDIC_CRYSTAL_BOW,
+				ModTools.VOIDIC_CRYSTAL_XBOW,
+				ModArmors.VOIDIC_CRYSTAL_HELMET,
+				ModArmors.VOIDIC_CRYSTAL_CHEST,
+				ModArmors.VOIDIC_CRYSTAL_LEGS,
+				ModArmors.VOIDIC_CRYSTAL_BOOTS
+		);
 		redirectModelLocation(bakery, "charred", "charred_", ModTools.CHARRED_WARHAMMER);
-		redirectModelLocation(bakery, "corrupt", "corrupt_", ModTools.
-				CORRUPT_AXE, ModTools.
-				CORRUPT_SWORD, ModTools.
-				CORRUPT_BOW, ModTools.
-				CORRUPT_XBOW, ModArmors.
-				CORRUPT_HELMET, ModArmors.
-				CORRUPT_CHEST, ModArmors.
-				CORRUPT_LEGS, ModArmors.
-				CORRUPT_BOOTS);
-		redirectModelLocation(bakery, "titanite", "titanite_", ModTools.
-				TITANITE_AXE, ModTools.
-				TITANITE_PICKAXE, ModTools.
-				TITANITE_HOE, ModTools.
-				TITANITE_SWORD, ModTools.
-				TITANITE_BOW, ModTools.
-				TITANITE_XBOW, ModArmors.
-				TITANITE_HELMET, ModArmors.
-				TITANITE_CHEST, ModArmors.
-				TITANITE_LEGS, ModArmors.
-				TITANITE_BOOTS);
+		redirectModelLocation(bakery, "corrupt", "corrupt_",
+				ModTools.CORRUPT_AXE,
+				ModTools.CORRUPT_SWORD,
+				ModTools.CORRUPT_BOW,
+				ModTools.CORRUPT_XBOW,
+				ModArmors.CORRUPT_HELMET,
+				ModArmors.CORRUPT_CHEST,
+				ModArmors.CORRUPT_LEGS,
+				ModArmors.CORRUPT_BOOTS
+		);
+		redirectModelLocation(bakery, "titanite", "titanite_",
+				ModTools.TITANITE_AXE,
+				ModTools.TITANITE_PICKAXE,
+				ModTools.TITANITE_HOE,
+				ModTools.TITANITE_SWORD,
+				ModTools.TITANITE_BOW,
+				ModTools.TITANITE_XBOW,
+				ModArmors.TITANITE_HELMET,
+				ModArmors.TITANITE_CHEST,
+				ModArmors.TITANITE_LEGS,
+				ModArmors.TITANITE_BOOTS
+		);
+		redirectModelLocation(bakery, "ichor", "ichor_",
+				ModTools.ICHOR_PICKAXE
+		);
 	}
 
 	@SafeVarargs
