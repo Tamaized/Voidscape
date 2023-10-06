@@ -47,6 +47,17 @@ public class ModelBakeListener {
 		impBroken(ModArmors.CORRUPT_LEGS.get());
 		impBroken(ModArmors.CORRUPT_BOOTS.get());
 
+		impBroken(ModTools.TITANITE_SWORD.get());
+		impBroken(ModTools.TITANITE_AXE.get());
+		impBroken(ModTools.TITANITE_PICKAXE.get());
+		impBroken(ModTools.TITANITE_HOE.get());
+		impBroken(ModTools.TITANITE_BOW.get());
+		impBroken(ModTools.TITANITE_XBOW.get());
+		impBroken(ModArmors.TITANITE_HELMET.get());
+		impBroken(ModArmors.TITANITE_CHEST.get());
+		impBroken(ModArmors.TITANITE_LEGS.get());
+		impBroken(ModArmors.TITANITE_BOOTS.get());
+
 		impBroken(ModTools.ICHOR_PICKAXE.get());
 
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
