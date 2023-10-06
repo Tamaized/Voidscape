@@ -1,0 +1,19 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+	"to_place": {
+	  "type": "simple_state_provider",
+	  "state": {
+		"Name": "voidscape:flesh_ore"
+	  }
+	},
+	"predicate": {
+	  "type": "matching_blocks",
+	  "blocks": [
+		"netherrack"
+	  ]
+	},
+	"chance": 0.15,
+    "max": 1
+  }
+}

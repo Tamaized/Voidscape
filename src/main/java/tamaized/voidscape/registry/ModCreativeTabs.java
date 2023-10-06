@@ -27,6 +27,7 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_ORE_ITEM.get());
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_BLOCK_ITEM.get());
 				output.accept(ModBlocks.TITANITE_ORE_ITEM.get());
+				output.accept(ModBlocks.FLESH_ORE_ITEM.get());
 				output.accept(ModBlocks.THUNDERROCK_ITEM.get());
 				output.accept(ModBlocks.ANTIROCK_ITEM.get());
 				output.accept(ModBlocks.NULL_BLACK_ITEM.get());
@@ -101,6 +102,10 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModArmors.TITANITE_CHEST.get());
 				output.accept(ModArmors.TITANITE_LEGS.get());
 				output.accept(ModArmors.TITANITE_BOOTS.get());
+				// Gear - Ichor
+				output.accept(ModItems.FLESH_CHUNK.get());
+				output.accept(ModItems.ICHOR.get());
+				output.accept(ModItems.ICHOR_CYSTAL.get());
 			})
 			.build());
 

@@ -84,7 +84,7 @@ public class ModBlocks implements RegistryClass {
 	public static final RegistryObject<Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
-			.strength(6F, 6F)
+			.strength(4F, 6F)
 			.requiresCorrectToolForDrops()) {
 		@Override
 		public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
@@ -94,6 +94,15 @@ public class ModBlocks implements RegistryClass {
 	});
 	public static final RegistryObject<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
 			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+			.sound(SoundType.HONEY_BLOCK)
+			.mapColor(MapColor.COLOR_LIGHT_GREEN)
+			.strength(4F, 9F)
+			.requiresCorrectToolForDrops()));
+	public static final RegistryObject<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
+			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)

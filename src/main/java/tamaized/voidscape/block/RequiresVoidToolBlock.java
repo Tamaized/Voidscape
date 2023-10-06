@@ -18,6 +18,7 @@ public class RequiresVoidToolBlock extends Block {
 	public static final TagKey<Block> NEEDS_VOIDIC_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_voidic_tool"));
 	public static final TagKey<Block> NEEDS_CORRUPT_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_corrupt_tool"));
 	public static final TagKey<Block> NEEDS_TITANITE_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_titanite_tool"));
+	public static final TagKey<Block> NEEDS_ICHOR_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_ichor_tool"));
 
 	public RequiresVoidToolBlock(Properties pProperties) {
 		super(pProperties);
@@ -45,6 +46,8 @@ public class RequiresVoidToolBlock extends Block {
 			} else if (state.is(NEEDS_CORRUPT_TOOL) && tier.getLevel() >= ModTools.ItemTier.CORRUPT.getLevel()) {
 				return true;
 			} else if (state.is(NEEDS_TITANITE_TOOL) && tier.getLevel() >= ModTools.ItemTier.TITANITE.getLevel()) {
+				return true;
+			} else if (state.is(NEEDS_ICHOR_TOOL) && tier.getLevel() >= ModTools.ItemTier.TITANITE.getLevel()) {
 				return true;
 			}
 		}

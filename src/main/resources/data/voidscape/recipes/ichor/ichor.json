@@ -1,0 +1,15 @@
+{
+	"type": "voidscape:smithing",
+	"template": {
+		"item": "minecraft:nether_star"
+	},
+	"base": {
+		"item": "voidscape:flesh_chunk"
+	},
+	"addition": {
+		"item": "voidscape:ethereal_fruit_nether"
+	},
+	"result": {
+		"item": "voidscape:ichor"
+	}
+}
