@@ -105,7 +105,8 @@ public class ModCreativeTabs implements RegistryClass {
 				// Gear - Ichor
 				output.accept(ModItems.FLESH_CHUNK.get());
 				output.accept(ModItems.ICHOR.get());
-				output.accept(ModItems.ICHOR_CYSTAL.get());
+				output.accept(ModItems.ICHOR_CRYSTAL.get());
+				output.accept(ModTools.ICHOR_TOME.get());
 			})
 			.build());
 

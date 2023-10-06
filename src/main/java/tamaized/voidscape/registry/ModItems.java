@@ -118,7 +118,7 @@ public class ModItems implements RegistryClass {
 	});
 	public static final RegistryObject<Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ICHOR = REGISTRY.register("ichor", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> ICHOR_CYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
