@@ -117,7 +117,7 @@ public class Voidscape {
 				ModCreativeTabs::new,
 				ModDamageSource::new,
 				ModDataSerializers::new,
-//				ModEffects::new,
+				ModEffects::new,
 				ModEntities::new,
 				ModFeatures::new,
 				ModFluids::new,
@@ -215,6 +215,16 @@ public class Voidscape {
 							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
 						}
 					});
+				}
+			} else if (event.getSource().is(ModDamageSource.VOIDIC)) {
+				if (event.getEntity().hasEffect(ModEffects.ICHOR.get())) {
+					event.setAmount(event.getAmount() * 2F);
+				}
+				if (event.getEntity().hasEffect(ModEffects.FORTIFIED.get())) {
+					event.setAmount(event.getAmount() * 0.25F);
+					if (event.getEntity().getRandom().nextInt(4) == 0) {
+						event.getEntity().removeEffect(ModEffects.FORTIFIED.get());
+					}
 				}
 			}
 		});
