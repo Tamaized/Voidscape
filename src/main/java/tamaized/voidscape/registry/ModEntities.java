@@ -42,6 +42,9 @@ public class ModEntities implements RegistryClass {
 	public static final RegistryObject<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
 			make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), AntiBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
 
+	public static final RegistryObject<EntityType<IchorBoltEntity>> ICHOR_BOLT = REGISTRY.register("ichor_bolt", () ->
+			make(new ResourceLocation(Voidscape.MODID, "ichor_bolt"), IchorBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
+
 	public static final RegistryObject<EntityType<NullServantEntity>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
 		EntityType<NullServantEntity> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(NullServantEntity.class, NullServantEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
 		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
@@ -140,6 +143,7 @@ public class ModEntities implements RegistryClass {
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(NULL_SERVANT_AUGMENT_BLOCK.get(), RenderNullServantAugmentBlock::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
+		event.registerEntityRenderer(ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF7700));
 	}
 
 }

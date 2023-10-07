@@ -46,7 +46,7 @@ public class ModParticles implements RegistryClass {
 		});
 	}
 
-	public record ParticleSpellCloudData(int r, int g, int b) implements ParticleOptions {
+	public record ParticleSpellCloudData(int color) implements ParticleOptions {
 
 		@Nonnull
 		@Override
@@ -56,23 +56,19 @@ public class ModParticles implements RegistryClass {
 
 		public static Codec<ParticleSpellCloudData> codec() {
 			return RecordCodecBuilder.create((instance) -> instance.group(
-					Codec.INT.fieldOf("r").forGetter((obj) -> obj.r),
-					Codec.INT.fieldOf("g").forGetter((obj) -> obj.g),
-					Codec.INT.fieldOf("b").forGetter((obj) -> obj.b)
+					Codec.INT.fieldOf("color").forGetter((obj) -> obj.color)
 			).apply(instance, ParticleSpellCloudData::new));
 		}
 
 		@Override
 		public void writeToNetwork(@Nonnull FriendlyByteBuf buf) {
-			buf.writeVarInt(r);
-			buf.writeVarInt(g);
-			buf.writeVarInt(b);
+			buf.writeInt(color);
 		}
 
 		@Nonnull
 		@Override
 		public String writeToString() {
-			return String.format("%d %d %d", r, g, b);
+			return String.format("%d", color);
 		}
 
 		public static class Deserializer implements ParticleOptions.Deserializer<ParticleSpellCloudData> {
@@ -80,18 +76,14 @@ public class ModParticles implements RegistryClass {
 			@Override
 			public ParticleSpellCloudData fromCommand(@Nonnull ParticleType<ParticleSpellCloudData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
 				reader.skipWhitespace();
-				int r = reader.readInt();
-				reader.skipWhitespace();
-				int g = reader.readInt();
-				reader.skipWhitespace();
-				int b = reader.readInt();
-				return new ParticleSpellCloudData(r, g, b);
+				int color = reader.readInt();
+				return new ParticleSpellCloudData(color);
 			}
 
 			@Nonnull
 			@Override
 			public ParticleSpellCloudData fromNetwork(@Nonnull ParticleType<ParticleSpellCloudData> type, FriendlyByteBuf buf) {
-				return new ParticleSpellCloudData(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
+				return new ParticleSpellCloudData(buf.readInt());
 			}
 		}
 	}

@@ -175,7 +175,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 						.yRot((float) Math.toRadians(entity.getRandom().nextInt(360)))
 						.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
 						.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
-				entity.level().addParticle(new ModParticles.ParticleSpellCloudData(0x77, 0x00, 0xFF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
+				entity.level().addParticle(new ModParticles.ParticleSpellCloudData(0x7700FF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
 			}
 		} else if (entity.tickCount % 20 == 0) {
 			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D))

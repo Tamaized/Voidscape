@@ -42,6 +42,7 @@ import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.entity.IchorBoltEntity;
 import tamaized.voidscape.item.SpellTome;
 
 import javax.annotation.Nullable;
@@ -135,7 +136,7 @@ public class ModTools implements RegistryClass {
 					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 
 	public static final RegistryObject<Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 60, context -> {
-		// TODO
+		context.level().addFreshEntity(new IchorBoltEntity(context.level(), context.parent()));
 	}));
 	public static final RegistryObject<Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 60, context -> {
 		context.parent().addEffect(new MobEffectInstance(ModEffects.AURA.get(), 20 * 30));
