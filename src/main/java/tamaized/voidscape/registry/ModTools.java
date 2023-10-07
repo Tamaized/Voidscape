@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -132,16 +133,16 @@ public class ModTools implements RegistryClass {
 					AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), 
 					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
 
-	public static final RegistryObject<Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), context -> {
+	public static final RegistryObject<Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 60, context -> {
 		// TODO
 	}));
-	public static final RegistryObject<Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), context -> {
+	public static final RegistryObject<Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 60, context -> {
 		// TODO
 	}));
-	public static final RegistryObject<Item> CORRUPT_TOME = ModItems.REGISTRY.register("corrupt_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), context -> {
-		// TODO
+	public static final RegistryObject<Item> CORRUPT_TOME = ModItems.REGISTRY.register("corrupt_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 15, context -> {
+		context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
 	}));
-	public static final RegistryObject<Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), context -> {
+	public static final RegistryObject<Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 20 * 60, context -> {
 		// TODO
 	}));
 	public static final RegistryObject<Item> ICHOR_PICKAXE = RegUtil.ToolAndArmorHelper.

@@ -15,10 +15,12 @@ import java.util.function.Consumer;
 
 public class SpellTome extends Item {
 
+	private final int cooldown;
 	private final Consumer<ActionContext> action;
 
-	public SpellTome(Properties properties, Consumer<ActionContext> action) {
+	public SpellTome(Properties properties, int cooldown, Consumer<ActionContext> action) {
 		super(properties);
+		this.cooldown = cooldown;
 		this.action = action;
 	}
 
@@ -42,7 +44,7 @@ public class SpellTome extends Item {
 			action.accept(new ActionContext(stack, level, entity));
 			level.playSound(null, entity.position().x(), entity.position().y(), entity.position().z(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1F, 0.5F + entity.getRandom().nextFloat() * 0.25F);
 			if (entity instanceof Player player)
-				player.getCooldowns().addCooldown(this, 20 * 60);
+				player.getCooldowns().addCooldown(this, cooldown);
 		}
 	}
 
