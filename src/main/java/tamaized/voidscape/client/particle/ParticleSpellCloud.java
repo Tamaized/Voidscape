@@ -136,7 +136,7 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 		@Override
 		public Particle createParticle(ModParticles.ParticleSpellCloudData data, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			ParticleSpellCloud particle = new ParticleSpellCloud(world, x, y, z, xSpeed, ySpeed, zSpeed);
-			particle.setColor(data.r / 255F, data.g / 255F, data.b / 255F);
+			particle.setColor(data.r() / 255F, data.g() / 255F, data.b() / 255F);
 			particle.pickSprite(this.spriteSet);
 			return particle;
 		}

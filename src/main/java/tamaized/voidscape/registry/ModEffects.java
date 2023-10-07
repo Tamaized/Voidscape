@@ -32,7 +32,7 @@ public class ModEffects implements RegistryClass {
 
 	public static final RegistryObject<MobEffect> ICHOR = REGISTRY.register("ichor", () -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700, true)
 			.texture("effect/ichor.png"));
-	public static final RegistryObject<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0xFF0077, false)
+	public static final RegistryObject<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF, false)
 			.texture("effect/aura.png"));
 	public static final RegistryObject<MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA, false)
 			.texture("effect/fortified.png"));

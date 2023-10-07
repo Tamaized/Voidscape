@@ -19,14 +19,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
-import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidPortalTeleporter;
 import tamaized.voidscape.world.VoidTeleporter;
 
@@ -54,6 +54,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private float paranoia;
 	private float infusion;
 	public float decrementInfusion;
+	private boolean aura;
 
 	private CorruptedPawnEntity hunt;
 
@@ -135,7 +136,6 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity()) {
 			paranoia = 0;
 			infusion = 0;
-			return;
 		}
 		if (Voidscape.checkForVoidDimension(parent.level()) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
@@ -155,8 +155,35 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			sendToClients(parent);
 			dirty = false;
 		}
-		if (parent instanceof LivingEntity living)
+		if (parent instanceof LivingEntity living) {
 			calculateEffects(living);
+			if (!living.level().isClientSide()) {
+				if (living.hasEffect(ModEffects.AURA.get()))
+					aura = true;
+				else
+					aura = false;
+			}
+			if (aura)
+				handleAura(living);
+		}
+	}
+
+	private void handleAura(LivingEntity entity) {
+		if (entity.level().isClientSide()) {
+			for (int i = 0; i < 5; i++) {
+				Vec3 pos = new Vec3(2, 0, 0)
+						.yRot((float) Math.toRadians(entity.getRandom().nextInt(360)))
+						.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
+						.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
+				entity.level().addParticle(new ModParticles.ParticleSpellCloudData(0x77, 0x00, 0xFF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
+			}
+		} else if (entity.tickCount % 20 == 0) {
+			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D))
+					.forEach(e -> e.hurt(
+							ModDamageSource.getEntityDamageSource(entity.level(), ModDamageSource.VOIDIC, entity),
+							(float) (2D + entity.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) / 2D)
+					));
+		}
 	}
 
 	public int getTeleportTick() {
@@ -326,6 +353,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		buffer.writeFloat(paranoia);
 		buffer.writeFloat(infusion);
 		buffer.writeInt(teleportTick);
+		buffer.writeBoolean(aura);
 	}
 
 	@Override
@@ -333,6 +361,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		paranoia = buffer.readFloat();
 		infusion = buffer.readFloat();
 		teleportTick = buffer.readInt();
+		aura = buffer.readBoolean();
 	}
 
 	@Override
