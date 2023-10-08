@@ -58,6 +58,8 @@ public class ModelBakeListener {
 		impBroken(ModArmors.TITANITE_LEGS.get());
 		impBroken(ModArmors.TITANITE_BOOTS.get());
 
+		impBroken(ModTools.ICHOR_SWORD.get());
+		impBroken(ModTools.ICHOR_AXE.get());
 		impBroken(ModTools.ICHOR_PICKAXE.get());
 
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
@@ -147,6 +149,8 @@ public class ModelBakeListener {
 				ModArmors.TITANITE_BOOTS
 		);
 		redirectModelLocation(bakery, "ichor", "ichor_",
+				ModTools.ICHOR_SWORD,
+				ModTools.ICHOR_AXE,
 				ModTools.ICHOR_PICKAXE
 		);
 	}
