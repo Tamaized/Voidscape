@@ -1,6 +1,7 @@
 package tamaized.voidscape.capability;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -55,6 +56,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private float infusion;
 	public float decrementInfusion;
 	private boolean aura;
+	private int leapParticles;
 
 	private CorruptedPawnEntity hunt;
 
@@ -62,6 +64,11 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	public void setInPortal(boolean flag) {
 		inPortal = flag;
+	}
+
+	public void enableLeapParticles() {
+		leapParticles = 30;
+		dirty = true;
 	}
 
 	private boolean canTeleport(Entity parent) {
@@ -78,6 +85,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	@Override
 	public void tick(Entity parent) {
 		if (!parent.level().isClientSide()) {
+			if (leapParticles > 0)
+				leapParticles--;
 			if (inPortal) {
 				inPortal = false;
 				teleportTick++;
@@ -132,6 +141,16 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 					return;
 				}
 			}
+		} else if (leapParticles > 0) {
+			for (int i = 0; i < 2; i++) {
+				parent.level().addParticle(
+						ParticleTypes.FIREWORK,
+						parent.getX() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
+						parent.getY() + parent.getBbHeight() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbHeight() / 4F)),
+						parent.getZ() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
+						0, 0, 0);
+			}
+			leapParticles--;
 		}
 		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity()) {
 			paranoia = 0;
@@ -354,6 +373,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		buffer.writeFloat(infusion);
 		buffer.writeInt(teleportTick);
 		buffer.writeBoolean(aura);
+		buffer.writeInt(leapParticles);
 	}
 
 	@Override
@@ -362,6 +382,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		infusion = buffer.readFloat();
 		teleportTick = buffer.readInt();
 		aura = buffer.readBoolean();
+		leapParticles = buffer.readInt();
 	}
 
 	@Override
