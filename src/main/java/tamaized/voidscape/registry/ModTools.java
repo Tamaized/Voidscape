@@ -142,6 +142,8 @@ public class ModTools implements RegistryClass {
 			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {});
+	public static final RegistryObject<Item> ICHOR_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 5D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),

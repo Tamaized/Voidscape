@@ -26,6 +26,7 @@ public class ModelBakeListener {
 
 	@SubscribeEvent
 	public static void modelBake(ModelEvent.ModifyBakingResult event) {
+		// Broken Variants
 		impBroken(ModTools.VOIDIC_CRYSTAL_SWORD.get());
 		impBroken(ModTools.VOIDIC_CRYSTAL_AXE.get());
 		impBroken(ModTools.VOIDIC_CRYSTAL_BOW.get());
@@ -62,16 +63,21 @@ public class ModelBakeListener {
 		impBroken(ModTools.ICHOR_AXE.get());
 		impBroken(ModTools.ICHOR_PICKAXE.get());
 		impBroken(ModTools.ICHOR_BOW.get());
+		impBroken(ModTools.ICHOR_XBOW.get());
 
+		// Bows
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
 		impBow(ModTools.TITANITE_BOW.get());
 		impBow(ModTools.ICHOR_BOW.get());
 
+		// XBows
 		impXBow(ModTools.VOIDIC_CRYSTAL_XBOW.get());
 		impXBow(ModTools.CORRUPT_XBOW.get());
 		impXBow(ModTools.TITANITE_XBOW.get());
+		impXBow(ModTools.ICHOR_XBOW.get());
 
+		// Shields
 		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
 
 	}
@@ -154,7 +160,8 @@ public class ModelBakeListener {
 				ModTools.ICHOR_SWORD,
 				ModTools.ICHOR_AXE,
 				ModTools.ICHOR_PICKAXE,
-				ModTools.ICHOR_BOW
+				ModTools.ICHOR_BOW,
+				ModTools.ICHOR_XBOW
 		);
 	}
 

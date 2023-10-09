@@ -114,6 +114,7 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModTools.ICHOR_AXE.get());
 				output.accept(ModTools.ICHOR_PICKAXE.get());
 				output.accept(ModTools.ICHOR_BOW.get());
+				output.accept(ModTools.ICHOR_XBOW.get());
 			})
 			.build());
 
