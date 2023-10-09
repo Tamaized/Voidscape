@@ -1,0 +1,83 @@
+{
+  "parent": "voidscape:ichor",
+  "criteria": {
+    "voidic_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:voidic_tome"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "corrupt_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:corrupt_tome"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "titanite_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:titanite_tome"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:ichor_tome"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.voidmancer.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:voidic_tome"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.voidmancer"
+    }
+  },
+  "requirements": [
+    [
+      "voidic_tome"
+    ],
+    [
+      "corrupt_tome"
+    ],
+    [
+      "titanite_tome"
+    ],
+    [
+      "ichor_tome"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
