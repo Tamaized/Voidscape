@@ -197,7 +197,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				entity.level().addParticle(new ModParticles.ParticleSpellCloudData(0x7700FF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
 			}
 		} else if (entity.tickCount % 20 == 0) {
-			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D))
+			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D), e -> e instanceof LivingEntity)
 					.forEach(e -> e.hurt(
 							ModDamageSource.getEntityDamageSource(entity.level(), ModDamageSource.VOIDIC, entity),
 							(float) (2D + entity.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) / 2D)

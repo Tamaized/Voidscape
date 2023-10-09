@@ -13,8 +13,8 @@ public class IchorBoltEntity extends SpellBoltEntity {
 		super(type, level, 0xFF7700);
 	}
 
-	public IchorBoltEntity(Level worldIn, LivingEntity shooter) {
-		super(ModEntities.ICHOR_BOLT.get(), worldIn, shooter, 0xFF7700);
+	public IchorBoltEntity(LivingEntity shooter) {
+		super(ModEntities.ICHOR_BOLT.get(), shooter, 0xFF7700);
 	}
 
 	@Override

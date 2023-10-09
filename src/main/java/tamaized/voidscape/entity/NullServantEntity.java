@@ -57,6 +57,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 	public static final int AUGMENT_TITANITE = 1;
+	public static final int AUGMENT_ICHOR = 2;
 
 	private static final UUID AUGMENT_HEALTH = UUID.fromString("f65da6bd-3e6b-468a-addc-a08335a954f2");
 	private static final UUID AUGMENT_ATTACK_DAMAGE = UUID.fromString("5ae68488-df12-40c6-9517-357917341afa");
@@ -115,16 +116,23 @@ public class NullServantEntity extends Monster implements IEthereal {
 	protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		if (!level().isClientSide() && getAugment() <= 0) {
 			if (pPlayer.getItemInHand(pHand).is(ModItems.TITANITE_CHUNK.get())) {
-				setAugment(AUGMENT_TITANITE);
-				doAugmentEffectsAndTrackBossBar();
-				if (pPlayer instanceof ServerPlayer player)
-					ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.trigger(player, pPlayer.getItemInHand(pHand));
-				if (!pPlayer.isCreative())
-					pPlayer.getItemInHand(pHand).shrink(1);
+				doAugment(AUGMENT_TITANITE, pPlayer, pHand);
+				return InteractionResult.SUCCESS;
+			} else if (pPlayer.getItemInHand(pHand).is(ModItems.ICHOR.get())) {
+				doAugment(AUGMENT_ICHOR, pPlayer, pHand);
 				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.mobInteract(pPlayer, pHand);
+	}
+
+	private void doAugment(int augment, Player player, InteractionHand hand) {
+		setAugment(augment);
+		doAugmentEffectsAndTrackBossBar();
+		if (player instanceof ServerPlayer serverPlayer)
+			ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.trigger(serverPlayer, player.getItemInHand(hand));
+		if (!player.isCreative())
+			player.getItemInHand(hand).shrink(1);
 	}
 
 	private void doAugmentEffectsAndTrackBossBar() {
@@ -153,6 +161,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private void initBossBar() {
 		if (getAugment() == AUGMENT_TITANITE) {
 			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.titanite"), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+		} else if (getAugment() == AUGMENT_ICHOR) {
+			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.ichor"), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
 		}
 	}
 
@@ -175,6 +185,17 @@ public class NullServantEntity extends Monster implements IEthereal {
 				stack = new ItemStack(ModTools.TITANITE_SWORD.get());
 			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
 				stack = new ItemStack(ModTools.TITANITE_AXE.get());
+			if (!stack.isEmpty())
+				setItemSlot(EquipmentSlot.MAINHAND, stack);
+		} else if (getAugment() == AUGMENT_ICHOR) {
+			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 150F, AttributeModifier.Operation.ADDITION));
+			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 4F, AttributeModifier.Operation.ADDITION));
+			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 2F, AttributeModifier.Operation.ADDITION));
+			ItemStack stack = ItemStack.EMPTY;
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
+				stack = new ItemStack(ModTools.ICHOR_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
+				stack = new ItemStack(ModTools.ICHOR_AXE.get());
 			if (!stack.isEmpty())
 				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		}
@@ -265,6 +286,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
 		if (getAugment() == AUGMENT_TITANITE) {
 			this.spawnAtLocation(new ItemStack(ModItems.TITANITE_SHARD.get()));
+		} else if (getAugment() == AUGMENT_ICHOR) {
+			this.spawnAtLocation(new ItemStack(ModItems.ICHOR_CRYSTAL.get()));
 		}
 	}
 

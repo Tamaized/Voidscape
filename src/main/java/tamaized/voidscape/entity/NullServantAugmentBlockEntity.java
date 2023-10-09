@@ -66,6 +66,8 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 			return;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE) {
 			entityData.set(MIMIC, random.nextBoolean() ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.STONE.defaultBlockState());
+		} else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR) {
+			entityData.set(MIMIC, random.nextBoolean() ? Blocks.CRIMSON_NYLIUM.defaultBlockState() : Blocks.NETHERRACK.defaultBlockState());
 		}
 		initAugmentHealth();
 	}
@@ -155,7 +157,12 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	public boolean hurt(DamageSource pSource, float pAmount) {
 		if (pSource.is(DamageTypes.IN_WALL))
 			return false;
-		return super.hurt(pSource, pSource.is(ModDamageSource.VOIDIC) ? pAmount : pAmount * 0.1F);
+		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
+			return super.hurt(pSource, pSource.is(ModDamageSource.VOIDIC) ? pAmount : pAmount * 0.1F);
+		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
+			return super.hurt(pSource, pSource.getEntity() == parent ? pAmount : pAmount * 0.1F);
+		else
+			return super.hurt(pSource, pAmount);
 	}
 
 	@Override

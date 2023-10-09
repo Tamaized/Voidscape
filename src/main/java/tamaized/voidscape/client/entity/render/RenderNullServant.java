@@ -56,6 +56,10 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 			COLOR_STATE.red = 0F;
 			COLOR_STATE.green = 1F;
 			COLOR_STATE.blue = 0F;
+		} else if (entity.getAugment() == NullServantEntity.AUGMENT_ICHOR) {
+			COLOR_STATE.red = 1F;
+			COLOR_STATE.green = 0.5F;
+			COLOR_STATE.blue = 0F;
 		} else {
 			COLOR_STATE.reset();
 		}

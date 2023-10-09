@@ -2,7 +2,9 @@ package tamaized.voidscape.entity.ai.nullservant;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -11,8 +13,11 @@ import org.joml.Vector3f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.NullServantAugmentBlockEntity;
 import tamaized.voidscape.entity.NullServantEntity;
+import tamaized.voidscape.entity.NullServantIchorBoltEntity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
+import tamaized.voidscape.registry.ModEffects;
+import tamaized.voidscape.registry.ModParticles;
 
 import java.util.EnumSet;
 
@@ -36,7 +41,15 @@ public class SpecialAugmentGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
-		return !parent.getAugmentAttack() && parent.getAugment() > 0 && parent.getHealth() < parent.getMaxHealth() / 2F && cooldown-- <= 0;
+		return !parent.getAugmentAttack() && parent.getAugment() > 0 && (parent.getHealth() / parent.getMaxHealth()) <= getTriggerPerc() && cooldown-- <= 0;
+	}
+
+	private float getTriggerPerc() {
+		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
+			return 0.5F;
+		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
+			return 0.75F;
+		return 0;
 	}
 
 	@Override
@@ -93,6 +106,29 @@ public class SpecialAugmentGoal extends Goal {
 					}
 				}
 			}
+			case NullServantEntity.AUGMENT_ICHOR -> {
+				if (tick++ % 60 == 0)
+					parent.heal(1F);
+				if (tick % 50 == 0) {
+					parent.playSound(SoundEvents.BLAZE_SHOOT, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
+					parent.level().addFreshEntity(new NullServantIchorBoltEntity(parent));
+				}
+				if (tick % 100 == 0) {
+					if (aoe1 == null && aoe2 == null) {
+						aoe1 = NullServantAugmentBlockEntity.randomPos(parent.level(), parent.getRandom(), parent.position().add(0.0D, 0.75D, 0.0D), null);
+						aoe2 = NullServantAugmentBlockEntity.randomPos(parent.level(), parent.getRandom(), parent.position().add(0.0D, 0.75D, 0.0D), null);
+						parent.setAugmentAttackAoes(aoe1.toVector3f(), aoe2.toVector3f());
+					} else if (aoe1 != null) {
+						ichor(aoe1);
+						parent.setAugmentAttackAoes(new Vector3f(), aoe2.toVector3f());
+						aoe1 = null;
+					} else {
+						ichor(aoe2);
+						parent.setAugmentAttackAoes(new Vector3f(), new Vector3f());
+						aoe2 = null;
+					}
+				}
+			}
 		}
 	}
 
@@ -105,6 +141,26 @@ public class SpecialAugmentGoal extends Goal {
 		parent.playSound(SoundEvents.GENERIC_EXPLODE, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
 		ClientPacketSendParticles particles = new ClientPacketSendParticles();
 		particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, false, pos, Vec3.ZERO);
+		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> parent), particles);
+	}
+
+	private void ichor(Vec3 pos) {
+		parent.level().getEntities(
+				(Entity) null,
+				new AABB(pos.x(), pos.y(), pos.z(), pos.x() + 1, pos.y() + 1, pos.z() + 1).inflate(6D),
+				e -> !(e instanceof NullServantAugmentBlockEntity) && e != parent && e.distanceToSqr(pos) <= 25D
+				).forEach(e -> {
+					if (e instanceof LivingEntity livingEntity)
+						livingEntity.addEffect(new MobEffectInstance(ModEffects.ICHOR.get(), 20 * 60 * 5));
+		});
+		parent.playSound(SoundEvents.BLAZE_SHOOT, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
+		ClientPacketSendParticles particles = new ClientPacketSendParticles();
+		for (int i = 0; i < 200; i++) {
+			Vec3 dir = new Vec3(0.125D, 0, 0)
+					.yRot((float) Math.toRadians(parent.getRandom().nextInt(360)))
+					.xRot((float) Math.toRadians(parent.getRandom().nextInt(360)));
+			particles.queueParticle(new ModParticles.ParticleSpellCloudData(0xFF7700), false, pos, dir.add(0, 0.25D, 0));
+		}
 		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> parent), particles);
 	}
 }

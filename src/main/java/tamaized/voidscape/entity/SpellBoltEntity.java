@@ -26,7 +26,7 @@ import tamaized.voidscape.registry.ModParticles;
 
 public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
 
-	private LivingEntity shootingEntity;
+	protected LivingEntity shootingEntity;
 	private int particleColor;
 
 	private int ticksInAir;
@@ -44,12 +44,12 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAd
 		this.particleColor = color;
 	}
 
-	public SpellBoltEntity(EntityType<? extends SpellBoltEntity> type, Level worldIn, LivingEntity shooter, int color) {
-		this(type, worldIn, color);
+	public SpellBoltEntity(EntityType<? extends SpellBoltEntity> type, LivingEntity shooter, int color) {
+		this(type, shooter.level(), color);
 		shootingEntity = shooter;
-		setPos(shooter.getEyePosition().add(shooter.getLookAngle().normalize().scale(0.5D)));
+		setPos(shooter.getEyePosition().add(shooter.getViewVector(1F).normalize().scale(0.5D)));
 		startingPoint = position();
-		setTheVelocity(shooter.getLookAngle());
+		setTheVelocity(shooter.getViewVector(1F));
 	}
 
 	@SuppressWarnings("SuspiciousNameCombination")
@@ -202,7 +202,7 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAd
 	}
 
 	protected void onBlockHit(BlockState state, BlockPos pos) {
-		// NO-OP
+		remove(RemovalReason.DISCARDED);
 	}
 
 	@Override

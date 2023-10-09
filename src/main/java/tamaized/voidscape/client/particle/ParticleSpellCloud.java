@@ -29,14 +29,11 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 	}
 
 	ParticleSpellCloud(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, float scale) {
-		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		super(world, x, y, z, vx, vy, vz);
 		target = new Vec3(x, y, z);
-		this.xd *= 0.10000000149011612D;
-		this.yd *= 0.10000000149011612D;
-		this.zd *= 0.10000000149011612D;
-		this.xd += vx * 0.4D;
-		this.yd += vy * 0.4D;
-		this.xd += vz * 0.4D;
+		this.xd = vx;
+		this.yd = vy;
+		this.zd = vz;
 		this.rCol = this.gCol = this.bCol = 1.0F;
 		this.alpha = 0F;
 		this.quadSize *= 1.5F * (random.nextBoolean() ? -1F : 1F);
