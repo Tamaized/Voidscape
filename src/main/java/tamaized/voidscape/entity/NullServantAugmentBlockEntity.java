@@ -160,7 +160,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
 			return super.hurt(pSource, pSource.is(ModDamageSource.VOIDIC) ? pAmount : pAmount * 0.1F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
-			return super.hurt(pSource, pSource.getEntity() == parent ? pAmount : pAmount * 0.1F);
+			return super.hurt(pSource, pSource.getEntity() == parent ? pAmount : pAmount * 0.01F);
 		else
 			return super.hurt(pSource, pAmount);
 	}
