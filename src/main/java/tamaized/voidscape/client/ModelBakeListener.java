@@ -61,10 +61,12 @@ public class ModelBakeListener {
 		impBroken(ModTools.ICHOR_SWORD.get());
 		impBroken(ModTools.ICHOR_AXE.get());
 		impBroken(ModTools.ICHOR_PICKAXE.get());
+		impBroken(ModTools.ICHOR_BOW.get());
 
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
 		impBow(ModTools.TITANITE_BOW.get());
+		impBow(ModTools.ICHOR_BOW.get());
 
 		impXBow(ModTools.VOIDIC_CRYSTAL_XBOW.get());
 		impXBow(ModTools.CORRUPT_XBOW.get());
@@ -151,7 +153,8 @@ public class ModelBakeListener {
 		redirectModelLocation(bakery, "ichor", "ichor_",
 				ModTools.ICHOR_SWORD,
 				ModTools.ICHOR_AXE,
-				ModTools.ICHOR_PICKAXE
+				ModTools.ICHOR_PICKAXE,
+				ModTools.ICHOR_BOW
 		);
 	}
 
