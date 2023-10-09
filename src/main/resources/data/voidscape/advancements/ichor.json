@@ -1,0 +1,32 @@
+{
+  "parent": "voidscape:purified",
+  "criteria": {
+    "ichor": {
+      "conditions": {
+        "item": "voidscape:ichor"
+      },
+      "trigger": "voidscape:item_used_on_null_servant"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.ichor.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:ichor_crystal"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.ichor"
+    }
+  },
+  "requirements": [
+    [
+      "ichor"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
