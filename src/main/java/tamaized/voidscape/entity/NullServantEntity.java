@@ -70,7 +70,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	public NullServantEntity(EntityType<? extends NullServantEntity> type, Level level) {
 		super(type, level);
-		xpReward = 10;
+		xpReward = 25;
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
