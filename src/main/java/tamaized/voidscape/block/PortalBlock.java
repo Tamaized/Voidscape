@@ -26,6 +26,7 @@ import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModSounds;
 
+@SuppressWarnings("deprecation")
 public class PortalBlock extends HalfTransparentBlock {
 
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
