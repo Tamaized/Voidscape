@@ -64,6 +64,10 @@ public class ModelBakeListener {
 		impBroken(ModTools.ICHOR_PICKAXE.get());
 		impBroken(ModTools.ICHOR_BOW.get());
 		impBroken(ModTools.ICHOR_XBOW.get());
+		impBroken(ModArmors.ICHOR_HELMET.get());
+		impBroken(ModArmors.ICHOR_CHEST.get());
+		impBroken(ModArmors.ICHOR_LEGS.get());
+		impBroken(ModArmors.ICHOR_BOOTS.get());
 
 		// Bows
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
@@ -161,7 +165,11 @@ public class ModelBakeListener {
 				ModTools.ICHOR_AXE,
 				ModTools.ICHOR_PICKAXE,
 				ModTools.ICHOR_BOW,
-				ModTools.ICHOR_XBOW
+				ModTools.ICHOR_XBOW,
+				ModArmors.ICHOR_HELMET,
+				ModArmors.ICHOR_CHEST,
+				ModArmors.ICHOR_LEGS,
+				ModArmors.ICHOR_BOOTS
 		);
 	}
 
