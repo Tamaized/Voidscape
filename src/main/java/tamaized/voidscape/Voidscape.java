@@ -173,8 +173,8 @@ public class Voidscape {
 					final int rad = dist / 2;
 					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
 					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-					if (event.player.level().getBlockState(dest.above()).isAir() && ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(event.player.level(), dest))
-						event.player.level().setBlockAndUpdate(dest.above(), switch (event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")).getPath()) {
+					if (event.player.level().getBlockState(dest).isAir() && ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(event.player.level(), dest))
+						event.player.level().setBlockAndUpdate(dest, switch (event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")).getPath()) {
 							default -> ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState();
 							case "null" -> ModBlocks.ETHEREAL_FRUIT_NULL.get().defaultBlockState();
 							case "overworld" -> ModBlocks.ETHEREAL_FRUIT_OVERWORLD.get().defaultBlockState();
