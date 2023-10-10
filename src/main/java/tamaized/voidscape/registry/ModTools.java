@@ -319,7 +319,7 @@ public class ModTools implements RegistryClass {
 				final float h = state.getDestroySpeed(level, p.left());
 				if (h < 0)
 					return false;
-				return (hardness == 0 ? h == 0 : hardness / h <= 3) && isCorrectToolForDrops(stack, state);
+				return (hardness == 0 ? h == 0 : h / hardness <= 3) && isCorrectToolForDrops(stack, state);
 			}).forEach(p -> {
 				final BlockPos blockPos = p.left();
 				final BlockState state = p.right();
