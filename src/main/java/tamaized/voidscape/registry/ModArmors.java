@@ -237,27 +237,23 @@ public class ModArmors implements RegistryClass {
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D), 
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D)), 
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D)), tooltip -> {});
 	public static final RegistryObject<Item> TITANITE_CHEST = RegUtil.ToolAndArmorHelper.
 			chest(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					(stack, tick) -> ModArmors.elytra(stack), 
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+					(stack, tick) -> ModArmors.elytra(stack), tooltip -> {});
 	public static final RegistryObject<Item> TITANITE_LEGS = RegUtil.ToolAndArmorHelper.
 			legs(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), 
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 	public static final RegistryObject<Item> TITANITE_BOOTS = RegUtil.ToolAndArmorHelper.
 			boots(ArmorMaterial.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 3D), 
 					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D), 
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 
 	public static final RegistryObject<Item> ICHOR_HELMET = RegUtil.ToolAndArmorHelper.
 			helmet(ArmorMaterial.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
