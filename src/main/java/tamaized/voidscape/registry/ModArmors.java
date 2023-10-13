@@ -22,6 +22,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
+import tamaized.voidscape.client.entity.model.ModelArmorTitanite;
 
 import javax.annotation.Nullable;
 
@@ -37,8 +38,11 @@ public class ModArmors implements RegistryClass {
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER));
+				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(
+						armorSlot == EquipmentSlot.LEGS ?
+								ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER :
+								ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER
+				));
 				model.rightfoot.visible = false;
 				model.leftfoot.visible = false;
 				model.bodyToLeg.visible = false;
@@ -97,42 +101,35 @@ public class ModArmors implements RegistryClass {
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE_OUTER));
-				model.rightfoot.visible = false;
-				model.leftfoot.visible = false;
-				model.bodyToLeg.visible = false;
-				model.rightleg.visible = false;
-				model.leftleg.visible = false;
-				model.body.visible = false;
-				model.rightarm.visible = false;
-				model.leftarm.visible = false;
+				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().
+						bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE));
 				model.head.visible = false;
 				model.headoverlay.visible = false;
+				model.body.visible = false;
+				model.leftarm.visible = false;
+				model.rightarm.visible = false;
+				model.leftleg.visible = false;
+				model.rightleg.visible = false;
+				model.leftfoot.visible = false;
+				model.rightfoot.visible = false;
 				switch (armorSlot) {
-					case FEET:
+					case FEET -> {
 						model.rightfoot.visible = true;
 						model.leftfoot.visible = true;
-						break;
-					case LEGS:
+					}
+					case LEGS -> {
 						model.rightleg.visible = true;
 						model.leftleg.visible = true;
-						break;
-					case CHEST:
-						model.bodyToLeg.visible = true;
+					}
+					case CHEST -> {
 						model.body.visible = true;
 						model.rightarm.visible = true;
 						model.leftarm.visible = true;
-						model.topLeftTentacle.visible = false;
-						model.topRightTentacle.visible = false;
-						model.bottomLeftTentacle.visible = false;
-						model.bottomRightTentacle.visible = false;
-						break;
-					case HEAD:
+					}
+					case HEAD -> {
 						model.head.visible = true;
 						model.headoverlay.visible = true;
-						break;
-					default:
+					}
 				}
 				return (A) model;
 			}

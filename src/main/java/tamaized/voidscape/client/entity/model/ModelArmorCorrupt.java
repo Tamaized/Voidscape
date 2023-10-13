@@ -185,7 +185,4 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		return head;
 	}
 
-	public ModelPart getHeadoverlay() {
-		return headoverlay;
-	}
 }
