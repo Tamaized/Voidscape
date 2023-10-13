@@ -290,7 +290,7 @@ public class ModArmors implements RegistryClass {
 	public static boolean elytra(ItemStack stack) {
 		if (stack.isEmpty())
 			return false;
-		if (!stack.is(VOIDIC_CRYSTAL_CHEST.get()) && !stack.is(TITANITE_CHEST.get()))
+		if (!stack.is(VOIDIC_CRYSTAL_CHEST.get()) && !stack.is(TITANITE_CHEST.get()) && !stack.is(ICHOR_CHEST.get()))
 			return false; // Quick fail for performance, no nbt polling needed
 		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
 		return nbt != null && nbt.getBoolean("elytra");
