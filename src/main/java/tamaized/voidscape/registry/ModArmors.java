@@ -146,42 +146,35 @@ public class ModArmors implements RegistryClass {
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(armorSlot == EquipmentSlot.LEGS ? ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR_INNER : ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR_OUTER));
-				model.rightfoot.visible = false;
-				model.leftfoot.visible = false;
-				model.bodyToLeg.visible = false;
-				model.rightleg.visible = false;
-				model.leftleg.visible = false;
-				model.body.visible = false;
-				model.rightarm.visible = false;
-				model.leftarm.visible = false;
+				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().
+						bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR));
 				model.head.visible = false;
 				model.headoverlay.visible = false;
+				model.body.visible = false;
+				model.leftarm.visible = false;
+				model.rightarm.visible = false;
+				model.leftleg.visible = false;
+				model.rightleg.visible = false;
+				model.leftfoot.visible = false;
+				model.rightfoot.visible = false;
 				switch (armorSlot) {
-					case FEET:
+					case FEET -> {
 						model.rightfoot.visible = true;
 						model.leftfoot.visible = true;
-						break;
-					case LEGS:
+					}
+					case LEGS -> {
 						model.rightleg.visible = true;
 						model.leftleg.visible = true;
-						break;
-					case CHEST:
-						model.bodyToLeg.visible = true;
+					}
+					case CHEST -> {
 						model.body.visible = true;
 						model.rightarm.visible = true;
 						model.leftarm.visible = true;
-						model.topLeftTentacle.visible = false;
-						model.topRightTentacle.visible = false;
-						model.bottomLeftTentacle.visible = false;
-						model.bottomRightTentacle.visible = false;
-						break;
-					case HEAD:
+					}
+					case HEAD -> {
 						model.head.visible = true;
 						model.headoverlay.visible = true;
-						break;
-					default:
+					}
 				}
 				return (A) model;
 			}
@@ -260,27 +253,23 @@ public class ModArmors implements RegistryClass {
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 4D), 
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.17D), 
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D), 
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_CHEST = RegUtil.ToolAndArmorHelper.
 			chest(ArmorMaterial.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 4D), 
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.17D), 
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					(stack, tick) -> ModArmors.elytra(stack),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+					(stack, tick) -> ModArmors.elytra(stack), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_LEGS = RegUtil.ToolAndArmorHelper.
 			legs(ArmorMaterial.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 4D), 
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.17D), 
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_BOOTS = RegUtil.ToolAndArmorHelper.
 			boots(ArmorMaterial.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 4D),
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.17D),
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
-					tooltip -> tooltip.tooltip().add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN)));
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 
 	@Override
 	public void init(IEventBus bus) {
