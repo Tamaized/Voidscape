@@ -33,7 +33,7 @@ public class ModArmors implements RegistryClass {
 				RegUtil.ArmorMaterial("voidic_crystal", 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 2F, 0.10F, () -> Ingredient.of(ModItems.VOIDIC_CRYSTAL.get()), true, false, false);
 
 		static final RegUtil.ArmorMaterial CORRUPT = new 
-				RegUtil.ArmorMaterial("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 4F, 0.15F, () -> Ingredient.of(ModItems.TENDRIL.get()), false, true, true) {
+				RegUtil.ArmorMaterial("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3F, 0.15F, () -> Ingredient.of(ModItems.TENDRIL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ public class ModArmors implements RegistryClass {
 		};
 
 		static final RegUtil.ArmorMaterial TITANITE = new 
-				RegUtil.ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
+				RegUtil.ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
@@ -141,7 +141,7 @@ public class ModArmors implements RegistryClass {
 		};
 
 		static final RegUtil.ArmorMaterial ICHOR = new 
-				RegUtil.ArmorMaterial("ichor", 45, new int[]{3, 6, 8, 3}, 23, SoundEvents.ARMOR_EQUIP_DIAMOND, 8F, 0.25F, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()), false, true, true) {
+				RegUtil.ArmorMaterial("ichor", 45, new int[]{3, 6, 8, 3}, 23, SoundEvents.ARMOR_EQUIP_DIAMOND, 5F, 0.25F, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
