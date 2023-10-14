@@ -1,0 +1,15 @@
+{
+	"type": "voidscape:smithing",
+	"template": {
+		"item": "voidscape:voidic_template"
+	},
+	"base": {
+		"item": "voidscape:titanite_boots"
+	},
+	"addition": {
+		"item": "voidscape:ichor_crystal"
+	},
+	"result": {
+		"item": "voidscape:ichor_boots"
+	}
+}
