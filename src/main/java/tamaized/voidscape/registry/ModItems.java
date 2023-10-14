@@ -102,20 +102,8 @@ public class ModItems implements RegistryClass {
 	});
 	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
-	});
-	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
-	});
+	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ICHOR = REGISTRY.register("ichor", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
@@ -167,12 +155,6 @@ public class ModItems implements RegistryClass {
 			}
 			return itemstack;
 		}
-
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
@@ -185,12 +167,6 @@ public class ModItems implements RegistryClass {
 			}
 			return itemstack;
 		}
-
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
 	});
 	public static final RegistryObject<Item> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
@@ -201,12 +177,6 @@ public class ModItems implements RegistryClass {
 				entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3));
 			}
 			return itemstack;
-		}
-
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 
