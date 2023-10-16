@@ -4,23 +4,17 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.client.particle.ParticleSpellCloud;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class ModParticles implements RegistryClass {
 
@@ -33,17 +27,9 @@ public class ModParticles implements RegistryClass {
 		}
 	});
 
-	@SuppressWarnings({"Convert2Lambda", "Anonymous2MethodRef"}) // Classloading issues
 	@Override
 	public void init(IEventBus bus) {
-		bus.addListener((Consumer<RegisterParticleProvidersEvent>) event -> {
-			event.registerSpriteSet(ModParticles.SPELL_CLOUD.get(), new ParticleEngine.SpriteParticleRegistration<>() {
-				@Override
-				public ParticleProvider<ParticleSpellCloudData> create(SpriteSet s) {
-					return new ParticleSpellCloud.Factory(s);
-				}
-			});
-		});
+
 	}
 
 	public record ParticleSpellCloudData(int color) implements ParticleOptions {

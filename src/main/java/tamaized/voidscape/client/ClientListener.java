@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -26,9 +27,11 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.client.particle.ParticleSpellCloud;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
+import tamaized.voidscape.registry.ModParticles;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -43,6 +46,9 @@ public class ClientListener {
 		DonatorLayer.setup();
 		TintHandler.setup(busMod);
 		busMod.addListener(RenderTurmoil::render);
+		busMod.addListener((Consumer<RegisterParticleProvidersEvent>) event -> {
+			event.registerSpriteSet(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);
+		});
 		busForge.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
 			RenderTurmoil.tick(event);
 			if (event.phase == TickEvent.Phase.START) {
