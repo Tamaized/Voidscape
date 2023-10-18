@@ -14,10 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -73,23 +70,13 @@ public class ClientListener {
 					}));
 			}
 		});
-		busForge.addListener((Consumer<ViewportEvent.ComputeFov>) event -> {
-			if (event.getCamera().getEntity() instanceof LivingEntity living) {
-				ItemStack itemstack = living.getUseItem();
-				if (living.isUsingItem()) {
-					if (RegUtil.isMyBow(itemstack, Items.BOW)) {
-						int i = living.getTicksUsingItem();
-						float f1 = (float) i / 20.0F;
-						if (f1 > 1.0F) {
-							f1 = 1.0F;
-						} else {
-							f1 = f1 * f1;
-						}
-
-						event.setFOV(event.getFOV() * (1.0F - f1 * 0.15F));
-					} else if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && living instanceof Player player && player.isScoping()) {
-						event.setFOV(0.1F);
-					}
+		busForge.addListener((Consumer<ComputeFovModifierEvent>) event -> {
+			ItemStack itemstack = event.getPlayer().getUseItem();
+			if (event.getPlayer().isUsingItem()) {
+				if (RegUtil.isMyBow(itemstack, Items.BOW)) {
+					float f1 = (float) event.getPlayer().getTicksUsingItem() / 20.0F;
+					f1 = f1 > 1.0F ? 1.0F : f1 * f1;
+					event.setNewFovModifier((float) Mth.lerp(Minecraft.getInstance().options.fovEffectScale().get(), 1.0D, event.getFovModifier() * (1.0F - f1 * 0.15F)));
 				}
 			}
 		});
