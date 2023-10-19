@@ -85,13 +85,7 @@ public class ModBlocks implements RegistryClass {
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
 			.strength(4F, 6F)
-			.requiresCorrectToolForDrops()) {
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-			super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
-			pTooltip.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
-	});
+			.requiresCorrectToolForDrops()));
 	public static final RegistryObject<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
 			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
