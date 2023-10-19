@@ -80,7 +80,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 	}
 
 	public boolean shouldRender(@Nullable Player player) {
-		return player != null && player.equals(target);
+		return isNoAi() || (player != null && player.equals(target));
 	}
 
 	@Override
