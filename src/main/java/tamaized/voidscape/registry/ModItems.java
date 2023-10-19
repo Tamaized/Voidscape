@@ -57,6 +57,8 @@ public class ModItems implements RegistryClass {
 								getClickedPos().getX() + context.getLevel().getRandom().nextFloat(), context.
 								getClickedPos().getY() + context.getLevel().getRandom().nextFloat(), context.
 								getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(), 0, 0, 0, 0, 1F);
+				if (context.getPlayer() instanceof ServerPlayer serverPlayer)
+					ModAdvancementTriggers.ETHEREAL_ESSENCE_TRIGGER.trigger(serverPlayer);
 				return InteractionResult.SUCCESS;
 			}
 			return super.useOn(context);

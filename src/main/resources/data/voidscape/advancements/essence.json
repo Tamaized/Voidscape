@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:root",
+  "criteria": {
+    "essence": {
+      "conditions": {},
+      "trigger": "voidscape:ethereal_essence"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.essence.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:ethereal_essence"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.essence"
+    }
+  },
+  "requirements": [
+    [
+      "essence"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

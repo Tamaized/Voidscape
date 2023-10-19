@@ -7,6 +7,7 @@ import tamaized.voidscape.advancement.*;
 
 public class ModAdvancementTriggers implements RegistryClass {
 
+	public static final EtherealEssenceTrigger ETHEREAL_ESSENCE_TRIGGER = CriteriaTriggers.register(new EtherealEssenceTrigger());
 	public static final ItemUsedOnNullServantTrigger ITEM_USED_ON_NULL_SERVANT_TRIGGER = CriteriaTriggers.register(new ItemUsedOnNullServantTrigger());
 	public static final ActivatePortalTrigger ACTIVATE_PORTAL_TRIGGER = CriteriaTriggers.register(new ActivatePortalTrigger());
 	public static final InfusedTrigger INFUSED_TRIGGER = CriteriaTriggers.register(new InfusedTrigger());
