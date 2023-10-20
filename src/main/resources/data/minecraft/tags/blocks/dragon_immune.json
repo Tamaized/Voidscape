@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+	"voidscape:thunderrock",
+	"voidscape:antirock",
+	"voidscape:null_black",
+	"voidscape:null_white"
+  ]
+}
