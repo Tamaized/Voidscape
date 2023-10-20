@@ -157,5 +157,7 @@
 
   "effect.voidscape.aura": "Voidic Aura",
   "effect.voidscape.fortified": "Voidic Fortification",
-  "effect.voidscape.ichor": "Ichor"
+  "effect.voidscape.ichor": "Ichor",
+
+  "pack.voidscape.voidscape_aether_compat": "Enables Aether integration"
 }
