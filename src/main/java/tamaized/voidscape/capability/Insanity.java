@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -152,10 +153,6 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 			}
 			leapParticles--;
 		}
-		if (parent instanceof IEthereal ethereal && ethereal.insanityImmunity()) {
-			paranoia = 0;
-			infusion = 0;
-		}
 		if (Voidscape.checkForVoidDimension(parent.level()) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
 			if (decrementInfusion <= 0)
@@ -169,13 +166,20 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		decrementInfusion = 0;
 		paranoia = Mth.clamp(paranoia, 0, 600);
 		infusion = Mth.clamp(infusion, 0, 600);
+		boolean infusionImmune = parent instanceof ArmorStand || (parent instanceof IEthereal ethereal && ethereal.insanityImmunity());
+		if (infusionImmune) {
+			paranoia = 0;
+			infusion = 0;
+		}
 		if (parent instanceof LivingEntity && !parent.level().isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
-			refreshEquipmentAttributes((LivingEntity) parent);
+			if (!infusionImmune)
+				refreshEquipmentAttributes((LivingEntity) parent);
 			sendToClients(parent);
 			dirty = false;
 		}
 		if (parent instanceof LivingEntity living) {
-			calculateEffects(living);
+			if (!infusionImmune)
+				calculateEffects(living);
 			if (!living.level().isClientSide()) {
 				if (living.hasEffect(ModEffects.AURA.get()))
 					aura = true;
