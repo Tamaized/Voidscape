@@ -69,6 +69,8 @@ public class ModelBakeListener {
 		impBroken(ModArmors.ICHOR_LEGS.get());
 		impBroken(ModArmors.ICHOR_BOOTS.get());
 
+		impBroken(ModTools.ASTRAL_PICKAXE.get());
+
 		// Bows
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
@@ -170,6 +172,9 @@ public class ModelBakeListener {
 				ModArmors.ICHOR_CHEST,
 				ModArmors.ICHOR_LEGS,
 				ModArmors.ICHOR_BOOTS
+		);
+		redirectModelLocation(bakery, "astral", "astral_",
+				ModTools.ASTRAL_PICKAXE
 		);
 	}
 

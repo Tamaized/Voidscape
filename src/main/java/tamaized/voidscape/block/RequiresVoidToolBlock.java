@@ -19,6 +19,7 @@ public class RequiresVoidToolBlock extends Block {
 	public static final TagKey<Block> NEEDS_CORRUPT_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_corrupt_tool"));
 	public static final TagKey<Block> NEEDS_TITANITE_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_titanite_tool"));
 	public static final TagKey<Block> NEEDS_ICHOR_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_ichor_tool"));
+	public static final TagKey<Block> NEEDS_ASTRAL_TOOL = TagKey.create(Registries.BLOCK, new ResourceLocation(Voidscape.MODID, "needs_astral_tool"));
 
 	public RequiresVoidToolBlock(Properties pProperties) {
 		super(pProperties);
@@ -47,7 +48,9 @@ public class RequiresVoidToolBlock extends Block {
 				return true;
 			} else if (state.is(NEEDS_TITANITE_TOOL) && tier.getLevel() >= ModTools.ItemTier.TITANITE.getLevel()) {
 				return true;
-			} else if (state.is(NEEDS_ICHOR_TOOL) && tier.getLevel() >= ModTools.ItemTier.TITANITE.getLevel()) {
+			} else if (state.is(NEEDS_ICHOR_TOOL) && tier.getLevel() >= ModTools.ItemTier.ICHOR.getLevel()) {
+				return true;
+			} else if (state.is(NEEDS_ASTRAL_TOOL) && tier.getLevel() >= ModTools.ItemTier.ASTRAL.getLevel()) {
 				return true;
 			}
 		}

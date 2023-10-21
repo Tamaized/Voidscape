@@ -80,24 +80,18 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 			apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-	private static final Method BeardifierMarker_INSTANCE;
-	private static final MethodHandle handle_BeardifierMarker_INSTANCE;
 	private static final Object object_BeardifierMarker_INSTANCE;
-	private static final Field NoiseChunk_cellWidth;
 	private static final MethodHandle handle_setter_NoiseChunk_cellWidth;
-	private static final Field NoiseChunk_noiseSizeXZ;
 	private static final MethodHandle handle_setter_NoiseChunk_noiseSizeXZ;
 
 	static {
-		Method tmp_BeardifierMarker_values = null;
-		MethodHandle tmp_handle_BeardifierMarker_values = null;
+		Method tmp_BeardifierMarker_values;
+		MethodHandle tmp_handle_BeardifierMarker_values;
 		Object[] tmp_object_BeardifierMarker_values = null;
-		Field tmp_NoiseChunk_cellWidth = null;
+		Field tmp_NoiseChunk_cellWidth;
 		MethodHandle tmp_handle_setter_NoiseChunk_cellWidth = null;
-		Field tmp_NoiseChunk_noiseSizeXZ = null;
+		Field tmp_NoiseChunk_noiseSizeXZ;
 		MethodHandle tmp_handle_setter_NoiseChunk_noiseSizeXZ = null;
-		Field tmp_NoiseChunk_FlatCache_values = null;
-		MethodHandle tmp_handle_getter_NoiseChunk_FlatCache_values = null;
 		try {
 			tmp_BeardifierMarker_values = ObfuscationReflectionHelper.findMethod(Class.forName("net.minecraft.world.level.levelgen.DensityFunctions$BeardifierMarker"), "values");
 			tmp_handle_BeardifierMarker_values= LOOKUP.unreflect(tmp_BeardifierMarker_values);
@@ -109,12 +103,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		BeardifierMarker_INSTANCE = tmp_BeardifierMarker_values;
-		handle_BeardifierMarker_INSTANCE = tmp_handle_BeardifierMarker_values;
 		object_BeardifierMarker_INSTANCE = Objects.requireNonNull(tmp_object_BeardifierMarker_values)[0];
-		NoiseChunk_cellWidth = tmp_NoiseChunk_cellWidth;
 		handle_setter_NoiseChunk_cellWidth = tmp_handle_setter_NoiseChunk_cellWidth;
-		NoiseChunk_noiseSizeXZ = tmp_NoiseChunk_noiseSizeXZ;
 		handle_setter_NoiseChunk_noiseSizeXZ = tmp_handle_setter_NoiseChunk_noiseSizeXZ;
 	}
 

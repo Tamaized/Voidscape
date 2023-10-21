@@ -71,13 +71,15 @@ public class ModTools implements RegistryClass {
 		public static final RegUtil.ItemTier CORRUPT = new RegUtil.ItemTier("corrupt", 6, 3041, 10.0F, 6F, 19, () -> Ingredient.of(ModItems.TENDRIL.get()));
 		public static final RegUtil.ItemTier TITANITE = new RegUtil.ItemTier("titanite", 7, 3544, 10.5F, 7F, 21, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()));
 		public static final RegUtil.ItemTier ICHOR = new RegUtil.ItemTier("ichor", 8, 4047, 11.0F, 8F, 23, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()));
+		public static final RegUtil.ItemTier ASTRAL = new RegUtil.ItemTier("astral", 9, 4550, 11.5F, 9F, 25, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()));
 
 		public static boolean check(Tier tier) {
 			return tier == VOIDIC_CRYSTAL ||
 					tier == CHARRED ||
 					tier == CORRUPT ||
 					tier == TITANITE ||
-					tier == ICHOR;
+					tier == ICHOR ||
+					tier == ASTRAL;
 		}
 	}
 
@@ -142,6 +144,9 @@ public class ModTools implements RegistryClass {
 			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 5D)), tooltip -> {});
 	public static final RegistryObject<Item> ICHOR_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 							RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {});
+
+	public static final RegistryObject<Item> ASTRAL_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {});
 
 	@Override
 	public void init(IEventBus bus) {
