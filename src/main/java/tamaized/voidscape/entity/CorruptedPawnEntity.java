@@ -34,7 +34,7 @@ import tamaized.voidscape.registry.*;
 
 import javax.annotation.Nullable;
 
-public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnData {
+public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnData, IEthereal {
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 	private Entity target;

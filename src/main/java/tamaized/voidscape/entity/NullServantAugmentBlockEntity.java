@@ -39,7 +39,7 @@ import tamaized.voidscape.registry.ModEntities;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityAdditionalSpawnData {
+public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityAdditionalSpawnData, IEthereal {
 
 	private static final EntityDataAccessor<BlockState> MIMIC = SynchedEntityData.defineId(NullServantAugmentBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
 
