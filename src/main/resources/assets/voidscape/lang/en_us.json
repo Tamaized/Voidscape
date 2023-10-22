@@ -3,12 +3,14 @@
   "itemGroup.voidscape.item_group": "Voidscape",
 
   "biome.voidscape.void": "The Void",
+  "biome.voidscape.null": "Null",
   "biome.voidscape.antispires": "Antispires",
   "biome.voidscape.thunderspires": "Thunderspires",
   "biome.voidscape.thunder_forest": "Thunder Forest",
   "biome.voidscape.overworld": "Overworld",
   "biome.voidscape.nether": "Nether",
   "biome.voidscape.end": "End",
+  "biome.voidscape.aether": "Aether",
 
   "advancement.voidscape.root": "The Void",
   "advancement.voidscape.root.desc": "Get sucked into the Void",
