@@ -91,11 +91,19 @@ public class ModBlocks implements RegistryClass {
 
 	public static final RegistryObject<Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
-			.mapColor(MapColor.COLOR_LIGHT_GREEN)
+			.mapColor(MapColor.COLOR_ORANGE)
 			.strength(4F, 9F)
 			.requiresCorrectToolForDrops()));
 	public static final RegistryObject<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
 			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final RegistryObject<Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+			.sound(SoundType.AMETHYST)
+			.mapColor(MapColor.COLOR_PINK)
+			.strength(4F, 12F)
+			.requiresCorrectToolForDrops()));
+	public static final RegistryObject<Item> STRANGE_ORE_ITEM = ModItems.REGISTRY
+			.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(STRANGE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 
 	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
@@ -148,6 +156,40 @@ public class ModBlocks implements RegistryClass {
 	});
 	public static final RegistryObject<Item> ANTIROCK_ITEM = ModItems.REGISTRY
 			.register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+
+	public static final RegistryObject<Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
+			.sound(SoundType.STONE)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
+		@Override
+		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
+				return;
+			AntiBoltEntity lit = ModEntities.ANTI_BOLT.get().create(level);
+			if (lit != null) {
+				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
+				level.addFreshEntity(lit);
+				level.setBlockAndUpdate(pos, CRACKED_ASTRALROCK.get().defaultBlockState());
+			}
+		}
+
+		@Override
+		public boolean isRandomlyTicking(BlockState state) {
+			return true;
+		}
+	});
+	public static final RegistryObject<Item> ASTRALROCK_ITEM = ModItems.REGISTRY
+			.register(ASTRALROCK.getId().getPath(), () -> new BlockItem(ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
+	public static final RegistryObject<Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
+			.sound(SoundType.AMETHYST)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(4F, 12F)
+			.requiresCorrectToolForDrops()
+	));
+	public static final RegistryObject<Item> CRACKED_ASTRALROCK_ITEM = ModItems.REGISTRY
+			.register(CRACKED_ASTRALROCK.getId().getPath(), () -> new BlockItem(CRACKED_ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
 	public static final RegistryObject<Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)

@@ -54,7 +54,8 @@ public class ModItems implements RegistryClass {
 		public InteractionResult useOn(UseOnContext context) {
 			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(Blocks.BEDROCK)) {
 				context.getLevel().setBlockAndUpdate(context.getClickedPos(), ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
-				context.getItemInHand().shrink(1);
+				if (context.getPlayer() == null || !context.getPlayer().isCreative())
+					context.getItemInHand().shrink(1);
 				context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1F, 0.5F + context.getLevel().getRandom().nextFloat() * 0.5F);
 				if (context.getLevel() instanceof ServerLevel)
 					for (int i = 0; i < 50; i++)
@@ -127,14 +128,32 @@ public class ModItems implements RegistryClass {
 			}
 
 			pPlayer.awardStat(Stats.ITEM_USED.get(this));
-			if (!pPlayer.getAbilities().instabuild) {
+			if (!pPlayer.isCreative()) {
 				itemstack.shrink(1);
 			}
 
 			return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());
 		}
 	});
-	public static final RegistryObject<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public InteractionResult useOn(UseOnContext context) {
+			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(ModBlocks.ANTIROCK.get())) {
+				context.getLevel().setBlockAndUpdate(context.getClickedPos(), ModBlocks.ASTRALROCK.get().defaultBlockState());
+				if (context.getPlayer() == null || !context.getPlayer().isCreative())
+					context.getItemInHand().shrink(1);
+				context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1F, 0.5F + context.getLevel().getRandom().nextFloat() * 0.5F);
+				if (context.getLevel() instanceof ServerLevel)
+					for (int i = 0; i < 50; i++)
+						((ServerLevel) context.getLevel()).sendParticles(ParticleTypes.WITCH, context.
+								getClickedPos().getX() + context.getLevel().getRandom().nextFloat(), context.
+								getClickedPos().getY() + context.getLevel().getRandom().nextFloat(), context.
+								getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(), 0, 0, 0, 0, 1F);
+				return InteractionResult.SUCCESS;
+			}
+			return super.useOn(context);
+		}
+	});
 	public static final RegistryObject<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ASTRAL_CRYSTAL = REGISTRY.register("astral_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 
