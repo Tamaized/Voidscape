@@ -145,8 +145,18 @@ public class ModTools implements RegistryClass {
 	public static final RegistryObject<Item> ICHOR_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 							RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {});
 
+	public static final RegistryObject<Item> ASTRAL_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 5D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 6D)), tooltip -> {});
 	public static final RegistryObject<Item> ASTRAL_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_SHOVEL = threeByThreeShovel(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 5D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
+			RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 5D)), tooltip -> {});
 
 	@Override
 	public void init(IEventBus bus) {
@@ -160,6 +170,10 @@ public class ModTools implements RegistryClass {
 
 	private static RegistryObject<Item> hammer(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_warhammer"), () -> new LootingWarhammer(factory, tier, 7, -3.5F, properties, tooltipConsumer));
+	}
+
+	private static RegistryObject<Item> threeByThreeShovel(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shovel"), () -> new ThreeByThreeShovel(factory, tier, 1.5F, -3.0F, properties, tooltipConsumer));
 	}
 
 	private static RegistryObject<Item> bonemealHoe(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
@@ -282,81 +296,10 @@ public class ModTools implements RegistryClass {
 
 		@Override
 		public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player pl) {
-			if (pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || RegUtil.ToolAndArmorHelper.isBroken(stack))
+			Boolean state = ModTools.threeByThreeBreak(this, stack, pos, pl);
+			if (state == null)
 				return super.onBlockStartBreak(stack, pos, pl);
-			final ServerLevel level = player.serverLevel();
-			final BlockState oState = level.getBlockState(pos);
-			if (!isCorrectToolForDrops(stack, oState))
-				return false;
-			final float hardness = oState.getDestroySpeed(level, pos);
-			List<BlockPos> area = new ArrayList<>();
-			switch (LAST_HIT_BLOCK_FACE.get(player.getUUID())) {
-				default -> area.add(pos);
-				case DOWN, UP -> {
-					for (int x = -1; x <= 1; x++)
-						for (int z = -1; z <= 1; z++)
-							area.add(pos.offset(x, 0, z));
-				}
-				case EAST, WEST -> {
-					for (int y = -1; y <= 1; y++)
-						for (int z = -1; z <= 1; z++)
-							area.add(pos.offset(0, y, z));
-				}
-				case NORTH, SOUTH -> {
-					for (int y = -1; y <= 1; y++)
-						for (int x = -1; x <= 1; x++)
-							area.add(pos.offset(x, y, 0));
-				}
-			}
-			if (this == CHARRED_WARHAMMER.get() && area.size() > 1)
-				ModAdvancementTriggers.CHARRED_BONE_WAR_HAMMER_TRIGGER.trigger(player);
-			// Using TCon's hardness division check
-			area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
-				final BlockState state = p.right();
-				if (state.isAir())
-					return false;
-				final float h = state.getDestroySpeed(level, p.left());
-				if (h < 0)
-					return false;
-				return (hardness == 0 ? h == 0 : h / hardness <= 3) && isCorrectToolForDrops(stack, state);
-			}).forEach(p -> {
-				final BlockPos blockPos = p.left();
-				final BlockState state = p.right();
-				int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(level, player.gameMode.getGameModeForPlayer(), player, blockPos);
-				if (exp != -1 && !player.blockActionRestricted(level, blockPos, player.gameMode.getGameModeForPlayer())) {
-					if (player.isCreative()) {
-						removeBlock(level, player, blockPos, false);
-					} else {
-						BlockEntity blockentity = level.getBlockEntity(blockPos);
-						ItemStack cloneStack = stack.copy();
-						boolean flag1 = state.canHarvestBlock(level, blockPos, player);
-						stack.mineBlock(level, state, blockPos, player);
-						if (stack.isEmpty() && !cloneStack.isEmpty())
-							net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, cloneStack, InteractionHand.MAIN_HAND);
-						boolean flag = removeBlock(level, player, blockPos, flag1);
-
-						if (flag && flag1) {
-							state.getBlock().playerDestroy(level, player, blockPos, state, blockentity, cloneStack);
-						}
-
-						if (flag && exp > 0)
-							state.getBlock().popExperience(level, blockPos, exp);
-
-						level.globalLevelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(state));
-						player.connection.send(new ClientboundBlockUpdatePacket(level, blockPos));
-
-					}
-				}
-			});
-			return true;
-		}
-
-		private static boolean removeBlock(Level level, Player player, BlockPos pos, boolean canHarvest) {
-			BlockState state = level.getBlockState(pos);
-			boolean removed = state.onDestroyedByPlayer(level, pos, player, canHarvest, level.getFluidState(pos));
-			if (removed)
-				state.getBlock().destroy(level, pos, state);
-			return removed;
+			else return state;
 		}
 
 		@Override
@@ -376,6 +319,149 @@ public class ModTools implements RegistryClass {
 
 			return map.build();
 		}
+	}
+
+	public static class ThreeByThreeShovel extends ShovelItem {
+
+		private final Function<Integer, Multimap<Attribute, AttributeModifier>> factory;
+		private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer;
+
+		public ThreeByThreeShovel(Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Tier tier, float attackDamage, float speed, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+			super(tier, attackDamage, speed, properties);
+			this.factory = factory;
+			this.tooltipConsumer = tooltipConsumer;
+		}
+
+		@Override
+		@OnlyIn(Dist.CLIENT)
+		public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+			if (RegUtil.ToolAndArmorHelper.isBroken(stack)) {
+				tooltip.add((Component.translatable(Voidscape.MODID + ".tooltip.broken")).withStyle(ChatFormatting.DARK_RED));
+			}
+			tooltipConsumer.accept(new RegUtil.ToolAndArmorHelper.TooltipContext(stack, worldIn, tooltip, flagIn));
+			super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		}
+
+		@Override
+		public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+			int remaining = stack.getMaxDamage() - 1 - stack.getDamageValue();
+			if (amount >= remaining) {
+				onBroken.accept(entity);
+			}
+
+			return Math.min(remaining, amount);
+		}
+
+		@Override
+		public float getDestroySpeed(ItemStack stack, BlockState state) {
+			return RegUtil.ToolAndArmorHelper.isBroken(stack) ? 0.0F : super.getDestroySpeed(stack, state) / 3F;
+		}
+
+		@Override
+		public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player pl) {
+			Boolean state = ModTools.threeByThreeBreak(this, stack, pos, pl);
+			if (state == null)
+				return super.onBlockStartBreak(stack, pos, pl);
+			else return state;
+		}
+
+		@Override
+		public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+			return !RegUtil.ToolAndArmorHelper.isBroken(stack) && super.hurtEnemy(stack, target, attacker);
+		}
+
+		@Override
+		public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+			ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
+			if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
+				map.putAll(super.getDefaultAttributeModifiers(slot));
+				if (slot == EquipmentSlot.MAINHAND) {
+					map.putAll(factory.apply(null));
+				}
+			}
+
+			return map.build();
+		}
+	}
+
+	// Null return = call super
+	@Nullable
+	public static Boolean threeByThreeBreak(Item item, ItemStack stack, BlockPos pos, Player pl) {
+		if (pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || RegUtil.ToolAndArmorHelper.isBroken(stack))
+			return null;
+		final ServerLevel level = player.serverLevel();
+		final BlockState oState = level.getBlockState(pos);
+		if (!item.isCorrectToolForDrops(stack, oState))
+			return false;
+		final float hardness = oState.getDestroySpeed(level, pos);
+		List<BlockPos> area = new ArrayList<>();
+		switch (LAST_HIT_BLOCK_FACE.get(player.getUUID())) {
+			default -> area.add(pos);
+			case DOWN, UP -> {
+				for (int x = -1; x <= 1; x++)
+					for (int z = -1; z <= 1; z++)
+						area.add(pos.offset(x, 0, z));
+			}
+			case EAST, WEST -> {
+				for (int y = -1; y <= 1; y++)
+					for (int z = -1; z <= 1; z++)
+						area.add(pos.offset(0, y, z));
+			}
+			case NORTH, SOUTH -> {
+				for (int y = -1; y <= 1; y++)
+					for (int x = -1; x <= 1; x++)
+						area.add(pos.offset(x, y, 0));
+			}
+		}
+		if (item == CHARRED_WARHAMMER.get() && area.size() > 1)
+			ModAdvancementTriggers.CHARRED_BONE_WAR_HAMMER_TRIGGER.trigger(player);
+		// Using TCon's hardness division check
+		area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
+			final BlockState state = p.right();
+			if (state.isAir())
+				return false;
+			final float h = state.getDestroySpeed(level, p.left());
+			if (h < 0)
+				return false;
+			return (hardness == 0 ? h == 0 : h / hardness <= 3) && item.isCorrectToolForDrops(stack, state);
+		}).forEach(p -> {
+			final BlockPos blockPos = p.left();
+			final BlockState state = p.right();
+			int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(level, player.gameMode.getGameModeForPlayer(), player, blockPos);
+			if (exp != -1 && !player.blockActionRestricted(level, blockPos, player.gameMode.getGameModeForPlayer())) {
+				if (player.isCreative()) {
+					removeBlock(level, player, blockPos, false);
+				} else {
+					BlockEntity blockentity = level.getBlockEntity(blockPos);
+					ItemStack cloneStack = stack.copy();
+					boolean flag1 = state.canHarvestBlock(level, blockPos, player);
+					stack.mineBlock(level, state, blockPos, player);
+					if (stack.isEmpty() && !cloneStack.isEmpty())
+						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, cloneStack, InteractionHand.MAIN_HAND);
+					boolean flag = removeBlock(level, player, blockPos, flag1);
+
+					if (flag && flag1) {
+						state.getBlock().playerDestroy(level, player, blockPos, state, blockentity, cloneStack);
+					}
+
+					if (flag && exp > 0)
+						state.getBlock().popExperience(level, blockPos, exp);
+
+					level.globalLevelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(state));
+					player.connection.send(new ClientboundBlockUpdatePacket(level, blockPos));
+
+				}
+			}
+		});
+		return true;
+	}
+
+	private static boolean removeBlock(Level level, Player player, BlockPos pos, boolean canHarvest) {
+		BlockState state = level.getBlockState(pos);
+		boolean removed = state.onDestroyedByPlayer(level, pos, player, canHarvest, level.getFluidState(pos));
+		if (removed)
+			state.getBlock().destroy(level, pos, state);
+		return removed;
 	}
 
 }

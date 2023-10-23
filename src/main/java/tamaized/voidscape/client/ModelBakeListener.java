@@ -69,19 +69,26 @@ public class ModelBakeListener {
 		impBroken(ModArmors.ICHOR_LEGS.get());
 		impBroken(ModArmors.ICHOR_BOOTS.get());
 
+		impBroken(ModTools.ASTRAL_SWORD.get());
+		impBroken(ModTools.ASTRAL_AXE.get());
 		impBroken(ModTools.ASTRAL_PICKAXE.get());
+		impBroken(ModTools.ASTRAL_SHOVEL.get());
+		impBroken(ModTools.ASTRAL_BOW.get());
+		impBroken(ModTools.ASTRAL_XBOW.get());
 
 		// Bows
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
 		impBow(ModTools.CORRUPT_BOW.get());
 		impBow(ModTools.TITANITE_BOW.get());
 		impBow(ModTools.ICHOR_BOW.get());
+		impBow(ModTools.ASTRAL_BOW.get());
 
 		// XBows
 		impXBow(ModTools.VOIDIC_CRYSTAL_XBOW.get());
 		impXBow(ModTools.CORRUPT_XBOW.get());
 		impXBow(ModTools.TITANITE_XBOW.get());
 		impXBow(ModTools.ICHOR_XBOW.get());
+		impXBow(ModTools.ASTRAL_XBOW.get());
 
 		// Shields
 		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
@@ -174,7 +181,12 @@ public class ModelBakeListener {
 				ModArmors.ICHOR_BOOTS
 		);
 		redirectModelLocation(bakery, "astral", "astral_",
-				ModTools.ASTRAL_PICKAXE
+				ModTools.ASTRAL_SWORD,
+				ModTools.ASTRAL_AXE,
+				ModTools.ASTRAL_PICKAXE,
+				ModTools.ASTRAL_SHOVEL,
+				ModTools.ASTRAL_BOW,
+				ModTools.ASTRAL_XBOW
 		);
 	}
 
