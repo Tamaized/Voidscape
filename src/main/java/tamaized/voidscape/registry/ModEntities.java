@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -63,6 +64,9 @@ public class ModEntities implements RegistryClass {
 						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
+
+	public static final RegistryObject<EntityType<StrangePearlEntity>> STRANGE_PEARL = REGISTRY.register("strange_pearl", () ->
+			make(new ResourceLocation(Voidscape.MODID, "strange_pearl"), StrangePearlEntity::new, MobCategory.MISC, 1F, 1F));
 
 	@Override
 	public void init(IEventBus bus) {
@@ -145,6 +149,7 @@ public class ModEntities implements RegistryClass {
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
 		event.registerEntityRenderer(ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF7700));
 		event.registerEntityRenderer(NULL_SERVANT_ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF0000));
+		event.registerEntityRenderer(STRANGE_PEARL.get(), context -> new ThrownItemRenderer<>(context, 1F, true));
 	}
 
 }

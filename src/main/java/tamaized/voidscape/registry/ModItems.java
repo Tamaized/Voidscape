@@ -9,11 +9,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +35,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.entity.StrangePearlEntity;
 
 import java.util.List;
 
@@ -109,7 +114,26 @@ public class ModItems implements RegistryClass {
 	public static final RegistryObject<Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ICHOR = REGISTRY.register("ichor", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final RegistryObject<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+			ItemStack itemstack = pPlayer.getItemInHand(pHand);
+			pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (pLevel.getRandom().nextFloat() * 0.4F + 0.8F));
+			if (!pLevel.isClientSide) {
+				StrangePearlEntity pearl = new StrangePearlEntity(pLevel, pPlayer);
+				pearl.setItem(itemstack);
+				pearl.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 1.5F, 1.0F);
+				pLevel.addFreshEntity(pearl);
+			}
+
+			pPlayer.awardStat(Stats.ITEM_USED.get(this));
+			if (!pPlayer.getAbilities().instabuild) {
+				itemstack.shrink(1);
+			}
+
+			return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());
+		}
+	});
 	public static final RegistryObject<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final RegistryObject<Item> ASTRAL_CRYSTAL = REGISTRY.register("astral_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
