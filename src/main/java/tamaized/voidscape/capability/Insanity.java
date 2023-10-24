@@ -76,7 +76,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	private boolean canTeleport(Entity parent) {
 		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
 				parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
-				!Config.COMMON_CONFIG.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString());
+				Config.COMMON_CONFIG.bedrockTeleportationDimensionBlacklist.get().
+						contains(parent.level().dimension().location().toString()) == Config.COMMON_CONFIG.bedrockTeleportationDimensionWhitelist.get();
 	}
 
 	private boolean shouldTeleport(Entity parent) {

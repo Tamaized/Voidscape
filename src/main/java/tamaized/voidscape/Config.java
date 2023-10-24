@@ -49,6 +49,7 @@ public class Config {
 	public static class Common {
 
 		public ForgeConfigSpec.ConfigValue<List<? extends String>> bedrockTeleportationDimensionBlacklist;
+		public ForgeConfigSpec.BooleanValue bedrockTeleportationDimensionWhitelist;
 
 		public Common(ForgeConfigSpec.Builder builder) {
 			bedrockTeleportationDimensionBlacklist = builder.
@@ -58,6 +59,10 @@ public class Config {
 								Example: minecraft:overworld
 								""").
 					defineList("bedrockTeleportationDimensionBlacklist", new ArrayList<>(), s -> s instanceof String);
+			bedrockTeleportationDimensionWhitelist = builder.
+					translation(translation("bedrockTeleportationDimensionWhitelist")).
+					comment("Changes the bedrock teleportation dimension blacklist config to be a whitelist instead").
+					define("bedrockTeleportationDimensionWhitelist", false);
 		}
 
 	}
