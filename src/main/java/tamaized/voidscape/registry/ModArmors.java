@@ -1,10 +1,8 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -29,11 +27,11 @@ import javax.annotation.Nullable;
 public class ModArmors implements RegistryClass {
 
 	static class ArmorMaterial {
-		static final RegUtil.ArmorMaterial VOIDIC_CRYSTAL = new 
-				RegUtil.ArmorMaterial("voidic_crystal", 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 2F, 0.10F, () -> Ingredient.of(ModItems.VOIDIC_CRYSTAL.get()), true, false, false);
+		static final RegUtil.ArmorMaterial VOIDIC_CRYSTAL = new RegUtil.ArmorMaterial("voidic_crystal", 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 2F, 0.10F,
+				() -> Ingredient.of(ModItems.VOIDIC_CRYSTAL.get()), true, false, false);
 
-		static final RegUtil.ArmorMaterial CORRUPT = new 
-				RegUtil.ArmorMaterial("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3F, 0.15F, () -> Ingredient.of(ModItems.TENDRIL.get()), false, true, true) {
+		static final RegUtil.ArmorMaterial CORRUPT = new RegUtil.ArmorMaterial("corrupt", 41, new int[]{3, 6, 8, 3}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3F, 0.15F,
+				() -> Ingredient.of(ModItems.TENDRIL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
@@ -95,14 +93,13 @@ public class ModArmors implements RegistryClass {
 			}
 		};
 
-		static final RegUtil.ArmorMaterial TITANITE = new 
-				RegUtil.ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.20F, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
+		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.ArmorMaterial("titanite", 43, new int[]{3, 6, 8, 3}, 21, SoundEvents.ARMOR_EQUIP_NETHERITE, 4F, 0.20F,
+				() -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE));
+				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE));
 				model.head.visible = false;
 				model.headoverlay.visible = false;
 				model.body.visible = false;
@@ -140,14 +137,13 @@ public class ModArmors implements RegistryClass {
 			}
 		};
 
-		static final RegUtil.ArmorMaterial ICHOR = new 
-				RegUtil.ArmorMaterial("ichor", 45, new int[]{3, 6, 8, 3}, 23, SoundEvents.ARMOR_EQUIP_DIAMOND, 5F, 0.25F, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()), false, true, true) {
+		static final RegUtil.ArmorMaterial ICHOR = new RegUtil.ArmorMaterial("ichor", 45, new int[]{3, 6, 8, 3}, 23, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.25F,
+				() -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			@SuppressWarnings("unchecked")
 			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().
-						bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR));
+				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR));
 				model.head.visible = false;
 				model.headoverlay.visible = false;
 				model.body.visible = false;
@@ -182,6 +178,50 @@ public class ModArmors implements RegistryClass {
 			@Override
 			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, @Nullable String type) {
 				return Voidscape.MODID.concat(":textures/models/armor/ichor" + (type == null ? "" : "_overlay") + ".png");
+			}
+		};
+
+		static final RegUtil.ArmorMaterial ASTRAL = new RegUtil.ArmorMaterial("astral", 47, new int[]{3, 6, 8, 3}, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.3F,
+				() -> Ingredient.of(ModItems.ASTRAL_CRYSTAL.get()), true, false, false) {
+			@Override
+			@OnlyIn(Dist.CLIENT)
+			@SuppressWarnings("unchecked")
+			public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+				ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModEntities.ModelLayerLocations.MODEL_ARMOR_ASTRAL), true);
+				model.head.visible = false;
+				model.headoverlay.visible = false;
+				model.body.visible = false;
+				model.leftarm.visible = false;
+				model.rightarm.visible = false;
+				model.leftleg.visible = false;
+				model.rightleg.visible = false;
+				model.leftfoot.visible = false;
+				model.rightfoot.visible = false;
+				switch (armorSlot) {
+					case FEET -> {
+						model.rightfoot.visible = true;
+						model.leftfoot.visible = true;
+					}
+					case LEGS -> {
+						model.rightleg.visible = true;
+						model.leftleg.visible = true;
+					}
+					case CHEST -> {
+						model.body.visible = true;
+						model.rightarm.visible = true;
+						model.leftarm.visible = true;
+					}
+					case HEAD -> {
+						model.head.visible = true;
+						model.headoverlay.visible = true;
+					}
+				}
+				return (A) model;
+			}
+
+			@Override
+			public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, @Nullable String type) {
+				return Voidscape.MODID.concat(":textures/models/armor/astral.png");
 			}
 		};
 	}
@@ -270,6 +310,29 @@ public class ModArmors implements RegistryClass {
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 4D),
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.17D),
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
+
+	public static final RegistryObject<Item> ASTRAL_HELMET = RegUtil.ToolAndArmorHelper.
+			helmet(ArmorMaterial.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 5D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.MULTIPLY_BASE, 0.30D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_CHEST = RegUtil.ToolAndArmorHelper.
+			chest(ArmorMaterial.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 5D),
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D),
+							RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)),
+					(stack, tick) -> ModArmors.elytra(stack), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_LEGS = RegUtil.ToolAndArmorHelper.
+			legs(ArmorMaterial.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 5D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
+	public static final RegistryObject<Item> ASTRAL_BOOTS = RegUtil.ToolAndArmorHelper.
+			boots(ArmorMaterial.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 5D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.20D),
+					RegUtil.AttributeData.make(ModAttributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.25D)), tooltip -> {});
 
 	@Override
 	public void init(IEventBus bus) {

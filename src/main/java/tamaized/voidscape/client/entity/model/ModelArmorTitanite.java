@@ -28,12 +28,19 @@ public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T>
 	public ModelPart leftfoot;
 	public ModelPart rightfoot;
 
+	private final boolean fullbright;
+
 	public ModelArmorTitanite(ModelPart p_170677_) {
-		this(p_170677_, RenderType::entityCutoutNoCull);
+		this(p_170677_, false);
 	}
 
-	public ModelArmorTitanite(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_) {
+	public ModelArmorTitanite(ModelPart p_170677_, boolean fullbright) {
+		this(p_170677_, RenderType::entityCutoutNoCull, fullbright);
+	}
+
+	public ModelArmorTitanite(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_, boolean fullbright) {
 		super(parent, p_170680_);
+		this.fullbright = fullbright;
 
 		ImmutableList.Builder<ModelPart> builder = ImmutableList.builder();
 
@@ -137,7 +144,7 @@ public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T>
 		leftfoot.copyFrom(super.leftLeg);
 		rightfoot.copyFrom(super.rightLeg);
 
-		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
+		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
 	}
 
 	@Override

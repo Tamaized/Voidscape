@@ -117,6 +117,7 @@ public class ModEntities implements RegistryClass {
 		public static final ModelLayerLocation MODEL_ARMOR_CORRUPT_INNER = make("corrupt_inner");
 		public static final ModelLayerLocation MODEL_ARMOR_TITANITE = make("titanite");
 		public static final ModelLayerLocation MODEL_ARMOR_ICHOR = make("ichor");
+		public static final ModelLayerLocation MODEL_ARMOR_ASTRAL = make("astral");
 
 		private static ModelLayerLocation make(String name) {
 			return new ModelLayerLocation(new ResourceLocation(Voidscape.MODID, "main"), name);
@@ -136,6 +137,7 @@ public class ModEntities implements RegistryClass {
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_TITANITE, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
 		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_ICHOR, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(ModelLayerLocations.MODEL_ARMOR_ASTRAL, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
 
 	}
 

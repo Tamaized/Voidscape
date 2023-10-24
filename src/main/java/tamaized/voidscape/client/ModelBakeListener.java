@@ -75,6 +75,10 @@ public class ModelBakeListener {
 		impBroken(ModTools.ASTRAL_SHOVEL.get());
 		impBroken(ModTools.ASTRAL_BOW.get());
 		impBroken(ModTools.ASTRAL_XBOW.get());
+		impBroken(ModArmors.ASTRAL_HELMET.get());
+		impBroken(ModArmors.ASTRAL_CHEST.get());
+		impBroken(ModArmors.ASTRAL_LEGS.get());
+		impBroken(ModArmors.ASTRAL_BOOTS.get());
 
 		// Bows
 		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
@@ -186,7 +190,11 @@ public class ModelBakeListener {
 				ModTools.ASTRAL_PICKAXE,
 				ModTools.ASTRAL_SHOVEL,
 				ModTools.ASTRAL_BOW,
-				ModTools.ASTRAL_XBOW
+				ModTools.ASTRAL_XBOW,
+				ModArmors.ASTRAL_HELMET,
+				ModArmors.ASTRAL_CHEST,
+				ModArmors.ASTRAL_LEGS,
+				ModArmors.ASTRAL_BOOTS
 		);
 	}
 
