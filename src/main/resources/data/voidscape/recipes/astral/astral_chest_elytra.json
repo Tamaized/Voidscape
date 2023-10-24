@@ -1,0 +1,20 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:astral_chest"
+  },
+  "addition": {
+    "item": "minecraft:elytra"
+  },
+  "result": {
+    "item": "voidscape:astral_chest",
+    "nbt": {
+      "voidscape": {
+        "elytra": true
+      }
+    }
+  }
+}

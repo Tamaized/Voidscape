@@ -1,0 +1,15 @@
+{
+	"type": "voidscape:smithing",
+	"template": {
+		"item": "voidscape:voidic_template"
+	},
+	"base": {
+		"item": "voidscape:ichor_legs"
+	},
+	"addition": {
+		"item": "voidscape:astral_crystal"
+	},
+	"result": {
+		"item": "voidscape:astral_legs"
+	}
+}
