@@ -6,10 +6,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
 
 	public static Client CLIENT_CONFIG;
+	public static Common COMMON_CONFIG;
 
 	public static class Client {
 
@@ -38,6 +42,22 @@ public class Config {
 						defineInRange("color", 0x7700FF, Integer.MIN_VALUE, Integer.MAX_VALUE);
 			}
 
+		}
+
+	}
+
+	public static class Common {
+
+		public ForgeConfigSpec.ConfigValue<List<? extends String>> bedrockTeleportationDimensionBlacklist;
+
+		public Common(ForgeConfigSpec.Builder builder) {
+			bedrockTeleportationDimensionBlacklist = builder.
+					translation("config." + Voidscape.MODID + ".bedrock_teleportation_dimension_blacklist").
+					comment("""
+								Prevent standing on bedrock at low Y levels from teleporting you to the void from these dimensions
+								Example: minecraft:overworld
+								""").
+					defineList("bedrockTeleportationDimensionBlacklist", new ArrayList<>(), s -> s instanceof String);
 		}
 
 	}

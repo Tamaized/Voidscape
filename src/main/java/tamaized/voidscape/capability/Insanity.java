@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
@@ -74,7 +75,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 
 	private boolean canTeleport(Entity parent) {
 		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
-				parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK);
+				parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
+				!Config.COMMON_CONFIG.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString());
 	}
 
 	private boolean shouldTeleport(Entity parent) {

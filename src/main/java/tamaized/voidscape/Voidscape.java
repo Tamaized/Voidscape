@@ -103,9 +103,13 @@ public class Voidscape {
 		IEventBus busForge = MinecraftForge.EVENT_BUS;
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ConfigScreen::new));
 		{
-			final Pair<Config.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config.Client::new);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPair.getRight());
-			Config.CLIENT_CONFIG = specPair.getLeft();
+			final Pair<Config.Client, ForgeConfigSpec> specPairClient = new ForgeConfigSpec.Builder().configure(Config.Client::new);
+			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPairClient.getRight());
+			Config.CLIENT_CONFIG = specPairClient.getLeft();
+
+			final Pair<Config.Common, ForgeConfigSpec> specPairCommon = new ForgeConfigSpec.Builder().configure(Config.Common::new);
+			ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, specPairCommon.getRight());
+			Config.COMMON_CONFIG = specPairCommon.getLeft();
 		}
 		RegUtil.setup(MODID, busMod,
 				ModAdvancementTriggers::new,
