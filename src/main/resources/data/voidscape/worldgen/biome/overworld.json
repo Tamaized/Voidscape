@@ -34,7 +34,9 @@
 
   },
   "features": [
-	[ ],
+	[
+      "voidscape:sand"
+    ],
 	[ ],
 	[
       "voidscape:titanite",

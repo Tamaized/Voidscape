@@ -4,16 +4,16 @@
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
-		"Name": "minecraft:soul_sand"
+		"Name": "minecraft:sand"
 	  }
 	},
 	"predicate": {
 	  "type": "matching_blocks",
 	  "blocks": [
-		"crimson_nylium"
+		"grass_block"
 	  ]
 	},
-	"chance": 0.90,
+	"chance": 1,
     "max": 9
   }
 }

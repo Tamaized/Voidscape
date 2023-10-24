@@ -1,0 +1,16 @@
+{
+  "feature": "voidscape:sand",
+  "placement": [
+	{
+	  "type": "minecraft:count",
+	  "count": 2
+	},
+	{
+	  "type": "minecraft:in_square"
+	},
+	{
+	  "type": "voidscape:random_y",
+	  "y": 13
+	}
+  ]
+}
