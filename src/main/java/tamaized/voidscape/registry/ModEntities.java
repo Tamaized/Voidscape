@@ -66,7 +66,7 @@ public class ModEntities implements RegistryClass {
 	});
 
 	public static final RegistryObject<EntityType<StrangePearlEntity>> STRANGE_PEARL = REGISTRY.register("strange_pearl", () ->
-			make(new ResourceLocation(Voidscape.MODID, "strange_pearl"), StrangePearlEntity::new, MobCategory.MISC, 1F, 1F));
+			make(new ResourceLocation(Voidscape.MODID, "strange_pearl"), StrangePearlEntity::new, MobCategory.MISC, 0.25F, 0.25F));
 
 	@Override
 	public void init(IEventBus bus) {

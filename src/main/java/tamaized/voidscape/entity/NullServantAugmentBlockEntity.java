@@ -68,12 +68,9 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 			entityData.set(MIMIC, random.nextBoolean() ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.STONE.defaultBlockState());
 		} else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR) {
 			entityData.set(MIMIC, random.nextBoolean() ? Blocks.CRIMSON_NYLIUM.defaultBlockState() : Blocks.NETHERRACK.defaultBlockState());
+		} else if (parent.getAugment() == NullServantEntity.AUGMENT_ASTRAL) {
+			entityData.set(MIMIC, Blocks.END_STONE.defaultBlockState());
 		}
-		initAugmentHealth();
-	}
-
-	private void initAugmentHealth() {
-
 	}
 
 	@Nullable
@@ -130,7 +127,6 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 			if (serverLevel.getEntity(tag.getUUID("parent")) instanceof NullServantEntity p)
 				parent = p;
 		entityData.set(MIMIC, NbtUtils.readBlockState(level().holderLookup(Registries.BLOCK), tag.getCompound("mimic")));
-		initAugmentHealth();
 		super.readAdditionalSaveData(tag);
 	}
 
@@ -161,6 +157,8 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 			return super.hurt(pSource, pSource.is(ModDamageSource.VOIDIC) ? pAmount : pAmount * 0.1F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
 			return super.hurt(pSource, pSource.getEntity() == parent ? pAmount : pAmount * 0.01F);
+		else if (parent.getAugment() == NullServantEntity.AUGMENT_ASTRAL)
+			return super.hurt(pSource, pSource.getEntity() != parent && pSource.getDirectEntity() instanceof StrangePearlEntity ? pAmount : pAmount * 0.01F);
 		else
 			return super.hurt(pSource, pAmount);
 	}

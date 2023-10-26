@@ -56,8 +56,10 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
+
 	public static final int AUGMENT_TITANITE = 1;
 	public static final int AUGMENT_ICHOR = 2;
+	public static final int AUGMENT_ASTRAL = 3;
 
 	private static final UUID AUGMENT_HEALTH = UUID.fromString("f65da6bd-3e6b-468a-addc-a08335a954f2");
 	private static final UUID AUGMENT_ATTACK_DAMAGE = UUID.fromString("5ae68488-df12-40c6-9517-357917341afa");
@@ -121,6 +123,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 			} else if (pPlayer.getItemInHand(pHand).is(ModItems.ICHOR.get())) {
 				doAugment(AUGMENT_ICHOR, pPlayer, pHand);
 				return InteractionResult.SUCCESS;
+			} else if (pPlayer.getItemInHand(pHand).is(ModItems.ASTRAL_ESSENCE.get())) {
+				doAugment(AUGMENT_ASTRAL, pPlayer, pHand);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.mobInteract(pPlayer, pHand);
@@ -163,6 +168,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.titanite"), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
 		} else if (getAugment() == AUGMENT_ICHOR) {
 			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.ichor"), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+		} else if (getAugment() == AUGMENT_ASTRAL) {
+			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.astral"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS);
 		}
 	}
 
@@ -196,6 +203,17 @@ public class NullServantEntity extends Monster implements IEthereal {
 				stack = new ItemStack(ModTools.ICHOR_SWORD.get());
 			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
 				stack = new ItemStack(ModTools.ICHOR_AXE.get());
+			if (!stack.isEmpty())
+				setItemSlot(EquipmentSlot.MAINHAND, stack);
+		} else if (getAugment() == AUGMENT_ASTRAL) {
+			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 400F, AttributeModifier.Operation.ADDITION));
+			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 8F, AttributeModifier.Operation.ADDITION));
+			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 4F, AttributeModifier.Operation.ADDITION));
+			ItemStack stack = ItemStack.EMPTY;
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
+				stack = new ItemStack(ModTools.ASTRAL_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
+				stack = new ItemStack(ModTools.ASTRAL_AXE.get());
 			if (!stack.isEmpty())
 				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		}
@@ -288,6 +306,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 			this.spawnAtLocation(new ItemStack(ModItems.TITANITE_SHARD.get()));
 		} else if (getAugment() == AUGMENT_ICHOR) {
 			this.spawnAtLocation(new ItemStack(ModItems.ICHOR_CRYSTAL.get()));
+		} else if (getAugment() == AUGMENT_ASTRAL) {
+			this.spawnAtLocation(new ItemStack(ModItems.ASTRAL_CRYSTAL.get()));
 		}
 	}
 
