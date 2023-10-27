@@ -64,7 +64,99 @@
   ],
   "creature_spawn_probability": 0.0,
   "spawners": {
+    "monster": [
+      {
+        "type": "aether:aerbunny",
+        "weight": 20,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "aether:blue_swet",
+        "weight": 20,
+        "minCount": 2,
+        "maxCount": 2
+      },
+      {
+        "type": "aether:flying_cow",
+        "weight": 20,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "aether:golden_swet",
+        "weight": 20,
+        "minCount": 2,
+        "maxCount": 2
+      },
+      {
+        "type": "aether:phyg",
+        "weight": 20,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "aether:sheepuff",
+        "weight": 20,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "aether:aechor_plant",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "aether:cockatrice",
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "aether:zephyr",
+        "weight": 20,
+        "minCount": 4,
+        "maxCount": 4
+      }
+    ]
   },
   "spawn_costs": {
+    "aether:aerbunny": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:blue_swet": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:flying_cow": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:golden_swet": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:phyg": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:sheepuff": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:aechor_plant": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:cockatrice": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    },
+    "aether:zephyr": {
+      "energy_budget": 0.15,
+      "charge": 0.7
+    }
   }
 }

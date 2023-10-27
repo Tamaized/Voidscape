@@ -244,9 +244,13 @@ public class Voidscape {
 				}
 			}
 		});
+		busForge.addListener((Consumer<MobSpawnEvent.SpawnPlacementCheck>) event -> {
+			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
+				event.setResult(Event.Result.ALLOW);
+			}
+		});
 		busForge.addListener((Consumer<MobSpawnEvent.PositionCheck>) event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL &&
-					Voidscape.checkForVoidDimension(event.getLevel().getLevel())) {
+			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel())) {
 				Player player = event.getLevel().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
 				if (player != null &&
 						Voidscape.isValidPositionForMob(
