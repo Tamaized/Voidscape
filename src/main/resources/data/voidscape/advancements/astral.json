@@ -1,0 +1,38 @@
+{
+  "parent": "voidscape:cracked",
+  "criteria": {
+    "astral": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_essence"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.astral.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:astral_essence"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.astral"
+    }
+  },
+  "requirements": [
+    [
+      "astral"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

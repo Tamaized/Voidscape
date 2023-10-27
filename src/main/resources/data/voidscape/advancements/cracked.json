@@ -1,0 +1,38 @@
+{
+  "parent": "voidscape:ichor",
+  "criteria": {
+    "cracked": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_shards"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.cracked.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:astral_shards"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.cracked"
+    }
+  },
+  "requirements": [
+    [
+      "cracked"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

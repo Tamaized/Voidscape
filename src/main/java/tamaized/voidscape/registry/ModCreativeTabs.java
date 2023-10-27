@@ -28,8 +28,11 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_BLOCK_ITEM.get());
 				output.accept(ModBlocks.TITANITE_ORE_ITEM.get());
 				output.accept(ModBlocks.FLESH_ORE_ITEM.get());
+				output.accept(ModBlocks.STRANGE_ORE_ITEM.get());
 				output.accept(ModBlocks.THUNDERROCK_ITEM.get());
 				output.accept(ModBlocks.ANTIROCK_ITEM.get());
+				output.accept(ModBlocks.ASTRALROCK_ITEM.get());
+				output.accept(ModBlocks.CRACKED_ASTRALROCK_ITEM.get());
 				output.accept(ModBlocks.NULL_BLACK_ITEM.get());
 				output.accept(ModBlocks.NULL_WHITE_ITEM.get());
 				// Machine
@@ -119,6 +122,21 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModArmors.ICHOR_CHEST.get());
 				output.accept(ModArmors.ICHOR_LEGS.get());
 				output.accept(ModArmors.ICHOR_BOOTS.get());
+				// Gear - Astral
+				output.accept(ModItems.STRANGE_PEARL.get());
+				output.accept(ModItems.ASTRAL_SHARDS.get());
+				output.accept(ModItems.ASTRAL_ESSENCE.get());
+				output.accept(ModItems.ASTRAL_CRYSTAL.get());
+				output.accept(ModTools.ASTRAL_SWORD.get());
+				output.accept(ModTools.ASTRAL_AXE.get());
+				output.accept(ModTools.ASTRAL_PICKAXE.get());
+				output.accept(ModTools.ASTRAL_SHOVEL.get());
+				output.accept(ModTools.ASTRAL_BOW.get());
+				output.accept(ModTools.ASTRAL_XBOW.get());
+				output.accept(ModArmors.ASTRAL_HELMET.get());
+				output.accept(ModArmors.ASTRAL_CHEST.get());
+				output.accept(ModArmors.ASTRAL_LEGS.get());
+				output.accept(ModArmors.ASTRAL_BOOTS.get());
 			})
 			.build());
 
