@@ -25,9 +25,6 @@ public class ModelBakeListener {
 
 	private static final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
 
-	public static final ModelResourceLocation CHARRED_WARHAMMER_MODEL = new ModelResourceLocation(Voidscape.MODID, "charred/warhammer", "inventory");
-	public static final ModelResourceLocation CHARRED_WARHAMMER_IN_HAND_MODEL = new ModelResourceLocation(Voidscape.MODID, "charred/warhammer_in_hand", "inventory");
-
 	@SubscribeEvent
 	public static void modelBake(ModelEvent.ModifyBakingResult event) {
 		// Broken Variants
@@ -155,7 +152,6 @@ public class ModelBakeListener {
 				ModArmors.VOIDIC_CRYSTAL_BOOTS
 		);
 		redirectModelLocation(bakery, "charred", "charred_", ModTools.CHARRED_WARHAMMER);
-		bakery.loadTopLevel(CHARRED_WARHAMMER_IN_HAND_MODEL);
 		redirectModelLocation(bakery, "corrupt", "corrupt_",
 				ModTools.CORRUPT_AXE,
 				ModTools.CORRUPT_SWORD,
