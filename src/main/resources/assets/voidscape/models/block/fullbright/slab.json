@@ -1,9 +1,12 @@
-{   "parent": "block/block",
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
   "textures": {
     "particle": "#side"
   },
   "elements": [
-    {   "from": [ 0, 0, 0 ],
+    {
+      "from": [ 0, 0, 0 ],
       "to": [ 16, 8, 16 ],
       "faces": {
         "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "forge_data": { "block_light": 15, "sky_light": 15 }, "cullface": "down" },
