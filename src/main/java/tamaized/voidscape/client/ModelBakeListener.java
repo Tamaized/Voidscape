@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
@@ -23,6 +24,9 @@ import java.util.Map;
 public class ModelBakeListener {
 
 	private static final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
+
+	public static final ModelResourceLocation CHARRED_WARHAMMER_MODEL = new ModelResourceLocation(Voidscape.MODID, "charred/warhammer", "inventory");
+	public static final ModelResourceLocation CHARRED_WARHAMMER_IN_HAND_MODEL = new ModelResourceLocation(Voidscape.MODID, "charred/warhammer_in_hand", "inventory");
 
 	@SubscribeEvent
 	public static void modelBake(ModelEvent.ModifyBakingResult event) {
@@ -151,6 +155,7 @@ public class ModelBakeListener {
 				ModArmors.VOIDIC_CRYSTAL_BOOTS
 		);
 		redirectModelLocation(bakery, "charred", "charred_", ModTools.CHARRED_WARHAMMER);
+		bakery.loadTopLevel(CHARRED_WARHAMMER_IN_HAND_MODEL);
 		redirectModelLocation(bakery, "corrupt", "corrupt_",
 				ModTools.CORRUPT_AXE,
 				ModTools.CORRUPT_SWORD,
@@ -210,8 +215,7 @@ public class ModelBakeListener {
 			REMAPPER.put(location, rl);
 			bakery.loadTopLevel(mrl);
 			bakery.unbakedCache.put(oldMrl, bakery.unbakedCache.get(mrl));
-			Minecraft.getInstance().getItemRenderer().getItemModelShaper().
-					register(item.get(), mrl);
+			Minecraft.getInstance().getItemRenderer().getItemModelShaper().register(item.get(), mrl);
 		}
 	}
 

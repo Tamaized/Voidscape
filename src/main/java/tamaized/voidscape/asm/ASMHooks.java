@@ -8,12 +8,14 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -267,6 +269,18 @@ public class ASMHooks {
 			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 			RegUtil.renderingArmorOverlay = false;
 		}
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link ItemRenderer#getModel(ItemStack, Level, LivingEntity, int)}<br>
+	 * [AFTER FIRST INVOKEVIRTUAL {@link ItemModelShaper#getItemModel(ItemStack)}]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	public static BakedModel inHandModel(BakedModel o, ItemStack stack, ItemModelShaper itemModelShaper) {
+		if (stack.is(ModTools.CHARRED_WARHAMMER.get()))
+			return itemModelShaper.getModelManager().getModel(ModelBakeListener.CHARRED_WARHAMMER_IN_HAND_MODEL);
+		return o;
 	}
 
 }

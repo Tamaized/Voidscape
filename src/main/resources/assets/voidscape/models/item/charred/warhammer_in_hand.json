@@ -39,11 +39,11 @@
 	}
   },
   "overrides": [
-	{
-	  "predicate": {
-		"broken": 1
-	  },
-	  "model": "voidscape:item/charred/warhammer_in_hand_broken"
-	}
+    {
+      "predicate": {
+        "broken": 1
+      },
+      "model": "voidscape:item/charred/warhammer_in_hand_broken"
+    }
   ]
 }
