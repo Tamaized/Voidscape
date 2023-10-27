@@ -95,7 +95,7 @@ public class ModTools implements RegistryClass {
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
 
 	public static final RegistryObject<Item> CHARRED_WARHAMMER = hammer(ItemTier.CHARRED, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
-					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
+					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D)), tooltip -> {});
 
 	public static final RegistryObject<Item> CORRUPT_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D)), tooltip -> {});
