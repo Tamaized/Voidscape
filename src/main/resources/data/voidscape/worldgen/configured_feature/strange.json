@@ -4,16 +4,16 @@
 	"to_place": {
 	  "type": "simple_state_provider",
 	  "state": {
-		"Name": "minecraft:nether_quartz_ore"
+		"Name": "voidscape:strange_ore"
 	  }
 	},
 	"predicate": {
 	  "type": "matching_blocks",
 	  "blocks": [
-		"netherrack"
+		"end_stone"
 	  ]
 	},
-	"chance": 0.50,
-    "max": 9
+	"chance": 0.05,
+    "max": 1
   }
 }

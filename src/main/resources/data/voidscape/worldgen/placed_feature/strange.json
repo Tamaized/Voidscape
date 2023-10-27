@@ -1,9 +1,9 @@
 {
-  "feature": "voidscape:sand",
+  "feature": "voidscape:strange",
   "placement": [
 	{
 	  "type": "minecraft:count",
-	  "count": 6
+	  "count": 2
 	},
 	{
 	  "type": "minecraft:in_square"

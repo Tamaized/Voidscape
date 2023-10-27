@@ -13,7 +13,7 @@
 		"stone"
 	  ]
 	},
-	"chance": 0.25,
+	"chance": 0.125,
     "max": 4
   }
 }
