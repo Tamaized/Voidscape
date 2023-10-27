@@ -14,7 +14,7 @@ public class ModAdvancementTriggers implements RegistryClass {
 	public static final HoeBonemealTrigger HOE_BONEMEAL_TRIGGER = CriteriaTriggers.register(new HoeBonemealTrigger());
 	public static final LiquifierTrigger LIQUIFIER_TRIGGER = CriteriaTriggers.register(new LiquifierTrigger());
 	public static final DefuserTrigger DEFUSER_TRIGGER = CriteriaTriggers.register(new DefuserTrigger());
-	public static final CharredBoneWarHammerTrigger CHARRED_BONE_WAR_HAMMER_TRIGGER = CriteriaTriggers.register(new CharredBoneWarHammerTrigger());
+	public static final ThreeByThreeTrigger THREE_BY_THREE = CriteriaTriggers.register(new ThreeByThreeTrigger());
 
 	@Override
 	public void init(IEventBus bus) {

@@ -1,9 +1,9 @@
 {
-  "parent": "voidscape:root",
+  "parent": "voidscape:astral_crystal",
   "criteria": {
-    "hammer": {
+    "terraform": {
       "conditions": {
-        "item": "voidscape:charred_warhammer"
+        "item": "voidscape:astral_shovel"
       },
       "trigger": "voidscape:three_by_three"
     }
@@ -11,21 +11,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancement.voidscape.hammer.desc"
+      "translate": "advancement.voidscape.terraform.desc"
     },
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "voidscape:charred_warhammer"
+      "item": "voidscape:astral_shovel"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancement.voidscape.hammer"
+      "translate": "advancement.voidscape.terraform"
     }
   },
   "requirements": [
     [
-      "hammer"
+      "terraform"
     ]
   ],
   "sends_telemetry_event": true

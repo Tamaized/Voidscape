@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +32,6 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -413,8 +411,8 @@ public class ModTools implements RegistryClass {
 						area.add(pos.offset(x, y, 0));
 			}
 		}
-		if (item == CHARRED_WARHAMMER.get() && area.size() > 1)
-			ModAdvancementTriggers.CHARRED_BONE_WAR_HAMMER_TRIGGER.trigger(player);
+		if (area.size() > 1)
+			ModAdvancementTriggers.THREE_BY_THREE.trigger(player, stack);
 		// Using TCon's hardness division check
 		area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
 			final BlockState state = p.right();
