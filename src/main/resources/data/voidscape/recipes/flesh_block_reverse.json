@@ -1,0 +1,12 @@
+{
+  "result": {
+	"item": "voidscape:flesh_chunk",
+	"count": 9
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+	{
+	  "item": "voidscape:flesh_block"
+	}
+  ]
+}

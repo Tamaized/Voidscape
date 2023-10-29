@@ -97,6 +97,13 @@ public class ModBlocks implements RegistryClass {
 	public static final RegistryObject<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
 			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final RegistryObject<Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
+			.sound(SoundType.HONEY_BLOCK)
+			.mapColor(MapColor.COLOR_ORANGE)
+			.strength(2F, 2F)));
+	public static final RegistryObject<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
+			.register(FLESH_BLOCK.getId().getPath(), () -> new BlockItem(FLESH_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	public static final RegistryObject<Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PINK)

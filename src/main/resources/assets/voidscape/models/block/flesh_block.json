@@ -1,0 +1,7 @@
+{
+  "parent": "voidscape:block/fullbright/cube_column",
+  "textures": {
+    "end": "voidscape:block/flesh_block_top",
+    "side": "voidscape:block/flesh_block_side"
+  }
+}

@@ -277,8 +277,8 @@ public class Voidscape {
 		if (double_ > (double) (mobEntity_.getType().getCategory().getDespawnDistance() * mobEntity_.getType().getCategory().getDespawnDistance()) && mobEntity_.removeWhenFarAway(double_)) {
 			return false;
 		} else {
-			return mobEntity_.checkSpawnObstruction(serverWorld_) && (!(mobEntity_ instanceof Zoglin) || NaturalSpawner.
-					canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
+			return mobEntity_.checkSpawnObstruction(serverWorld_) &&
+					(!(mobEntity_ instanceof Zoglin) || NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
 		}
 	}
 
