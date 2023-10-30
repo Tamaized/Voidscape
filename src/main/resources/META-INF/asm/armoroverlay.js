@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer',
-                'methodName': ASM.mapMethod('m_117118_'),
+                'methodName': ASM.mapMethod('m_117118_'), // renderArmorPiece
                 'methodDesc': '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -24,9 +24,10 @@ function initializeCoreMod() {
                     var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
                     if (node.getOpcode() === Opcodes.INVOKEVIRTUAL &&
                         node.owner === 'net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer' &&
-                        node.name === ASM.mapMethod('m_289609_')) // renderModel
+                        node.name === 'renderModel') // Forge Method
                         lastInstruction = node; // Get the last INVOKEVIRTUAL
                 }
+                ASM.log('INFO', lastInstruction);
                 if (lastInstruction != null) {
                     instructions.insert(
                         lastInstruction,
