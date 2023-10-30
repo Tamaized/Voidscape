@@ -15,7 +15,7 @@
 	"grass_color": 11665355,
 	"particle": {
 	  "options": {
-		"type": "aether:portal"
+		"type": "aether:aether_portal"
 	  },
 	  "probability": 0.025
 	},
