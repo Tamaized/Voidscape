@@ -9,14 +9,13 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.unsafe.UnsafeHacks;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import tamaized.voidscape.Voidscape;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Shaders {
@@ -37,7 +36,7 @@ public class Shaders {
 	public static BindableShaderInstance VOIDSKY_WINGS;
 
 	public static void init(IEventBus bus) {
-		bus.addListener((Consumer<RegisterShadersEvent>) event -> {
+		bus.addListener(RegisterShadersEvent.class, event -> {
 			try {
 				event.registerShader(new AlphaShaderInstance(event.getResourceProvider(), new ResourceLocation(Voidscape.MODID, "alpha/pos_color"), DefaultVertexFormat.
 						POSITION_COLOR), shader -> ALPHA_POS_COLOR = (AlphaShaderInstance) shader);

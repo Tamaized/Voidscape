@@ -5,21 +5,14 @@ import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import tamaized.voidscape.Voidscape;
+
+import java.util.Optional;
 
 public class EtherealEssenceTrigger extends SimpleCriterionTrigger<EtherealEssenceTrigger.Instance> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "ethereal_essence");
-
 	@Override
-	public ResourceLocation getId() {
-		return ID;
-	}
-
-	@Override
-	public EtherealEssenceTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
+	public EtherealEssenceTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		return new EtherealEssenceTrigger.Instance(player);
 	}
 
@@ -29,8 +22,9 @@ public class EtherealEssenceTrigger extends SimpleCriterionTrigger<EtherealEssen
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
 
-		public Instance(ContextAwarePredicate player) {
-			super(ID, player);
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> player) {
+			super(player);
 		}
 
 	}

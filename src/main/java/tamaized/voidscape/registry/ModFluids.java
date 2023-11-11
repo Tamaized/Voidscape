@@ -11,14 +11,14 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -58,7 +58,7 @@ public class ModFluids implements RegistryClass {
 	private static class CircularReferenceHandler {
 		public static final RegistryObject<Item> VOIDIC_BUCKET = ModItems.REGISTRY
 				.register("voidic_bucket", () -> new BucketItem(VOIDIC_SOURCE, ModItems.ItemProps.DEFAULT.properties().get().stacksTo(1)));
-		private static final ForgeFlowingFluid.Properties VOIDIC_PROPERTIES = new ForgeFlowingFluid.Properties(VOIDIC_TYPE, VOIDIC_SOURCE, VOIDIC_FLOWING)
+		private static final BaseFlowingFluid.Properties VOIDIC_PROPERTIES = new BaseFlowingFluid.Properties(VOIDIC_TYPE, VOIDIC_SOURCE, VOIDIC_FLOWING)
 				.bucket(VOIDIC_BUCKET);
 	}
 

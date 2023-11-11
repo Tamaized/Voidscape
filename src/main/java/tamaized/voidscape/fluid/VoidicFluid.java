@@ -10,11 +10,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
-public abstract class VoidicFluid extends ForgeFlowingFluid {
+public abstract class VoidicFluid extends BaseFlowingFluid {
 
     protected VoidicFluid(Properties properties) {
         super(properties);

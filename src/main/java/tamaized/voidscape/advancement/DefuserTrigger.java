@@ -5,21 +5,14 @@ import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import tamaized.voidscape.Voidscape;
+
+import java.util.Optional;
 
 public class DefuserTrigger extends SimpleCriterionTrigger<DefuserTrigger.Instance> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "defuser");
-
 	@Override
-	public ResourceLocation getId() {
-		return ID;
-	}
-
-	@Override
-	public DefuserTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
+	public DefuserTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		return new DefuserTrigger.Instance(player);
 	}
 
@@ -29,8 +22,9 @@ public class DefuserTrigger extends SimpleCriterionTrigger<DefuserTrigger.Instan
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
 
-		public Instance(ContextAwarePredicate player) {
-			super(ID, player);
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> player) {
+			super(player);
 		}
 
 	}

@@ -1,9 +1,9 @@
 package tamaized.voidscape.asm;
 
-import net.minecraftforge.eventbus.BusBuilderImpl;
-import net.minecraftforge.eventbus.EventBus;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.neoforged.bus.BusBuilderImpl;
+import net.neoforged.bus.EventBus;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.IEventBus;
 
 public class NoOpEventBus extends EventBus {
 
@@ -14,7 +14,7 @@ public class NoOpEventBus extends EventBus {
 	}
 
 	@Override
-	public boolean post(Event event) {
-		return false;
+	public <T extends Event> T post(T event) {
+		return event;
 	}
 }

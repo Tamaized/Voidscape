@@ -3,7 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.neoforged.bus.api.IEventBus;
 import tamaized.regutil.RegistryClass;
 
 public final class ModDataSerializers implements RegistryClass {

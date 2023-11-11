@@ -1,19 +1,19 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
+var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
     return {
         'death': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraftforge.common.ForgeHooks',
+                'class': 'net.neoforged.neoforge.common.CommonHooks',
                 'methodName': 'onLivingDeath',
                 'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)Z'
             },
@@ -31,7 +31,7 @@ function initializeCoreMod() {
                             '(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)Z',
                             false
                             ),
-                        new org.objectweb.asm.tree.InsnNode(Opcodes.IRETURN)
+                        new InsnNode(Opcodes.IRETURN)
                         )
                     );
                 return methodNode;

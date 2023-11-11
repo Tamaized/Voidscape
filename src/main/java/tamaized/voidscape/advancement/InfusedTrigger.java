@@ -5,21 +5,14 @@ import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import tamaized.voidscape.Voidscape;
+
+import java.util.Optional;
 
 public class InfusedTrigger extends SimpleCriterionTrigger<InfusedTrigger.Instance> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "infused");
-
 	@Override
-	public ResourceLocation getId() {
-		return ID;
-	}
-
-	@Override
-	public InfusedTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
+	public InfusedTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		return new InfusedTrigger.Instance(player);
 	}
 
@@ -29,8 +22,9 @@ public class InfusedTrigger extends SimpleCriterionTrigger<InfusedTrigger.Instan
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
 
-		public Instance(ContextAwarePredicate player) {
-			super(ID, player);
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> player) {
+			super(player);
 		}
 
 	}

@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.block.entity.LiquifierBlockEntity;
 import tamaized.voidscape.registry.ModBlockEntities;
@@ -33,7 +33,7 @@ public class LiquifierBlock extends Block implements EntityBlock {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof LiquifierBlockEntity) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), be.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow().getStackInSlot(0));
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), be.getCapability(Capabilities.ITEM_HANDLER).resolve().orElseThrow().getStackInSlot(0));
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }

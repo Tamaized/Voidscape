@@ -14,11 +14,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.TickEvent;
 import org.joml.Matrix4f;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
@@ -32,21 +32,24 @@ import tamaized.voidscape.registry.ModParticles;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class ClientListener {
 
 	public static void init() {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
-		IEventBus busForge = MinecraftForge.EVENT_BUS;
+		IEventBus busForge = NeoForge.EVENT_BUS;
+
 		Shaders.init(busMod);
 		DonatorLayer.setup();
 		TintHandler.setup(busMod);
+
 		busMod.addListener(RenderTurmoil::render);
-		busMod.addListener((Consumer<RegisterParticleProvidersEvent>) event -> {
+
+		busMod.addListener(RegisterParticleProvidersEvent.class, event -> {
 			event.registerSpriteSet(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);
 		});
-		busForge.addListener((Consumer<TickEvent.ClientTickEvent>) event -> {
+
+		busForge.addListener(TickEvent.ClientTickEvent.class, event -> {
 			RenderTurmoil.tick(event);
 			if (event.phase == TickEvent.Phase.START) {
 				if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
@@ -56,10 +59,10 @@ public class ClientListener {
 					if (DonatorHandler.donators.contains(Minecraft.getInstance().player.getUUID()))
 						Voidscape.NETWORK.sendToServer(new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(Config.CLIENT_CONFIG.DONATOR.enabled.get(), Config.CLIENT_CONFIG.DONATOR.color.get())));
 				}
-				return;
 			}
 		});
-		busForge.addListener((Consumer<ViewportEvent.ComputeFogColor>) event -> {
+
+		busForge.addListener(ViewportEvent.ComputeFogColor.class, event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
 				event.setRed(0.04F);
 				event.setGreen(0.03F);
@@ -70,7 +73,8 @@ public class ClientListener {
 					}));
 			}
 		});
-		busForge.addListener((Consumer<ComputeFovModifierEvent>) event -> {
+
+		busForge.addListener(ComputeFovModifierEvent.class, event -> {
 			ItemStack itemstack = event.getPlayer().getUseItem();
 			if (event.getPlayer().isUsingItem()) {
 				if (RegUtil.isMyBow(itemstack, Items.BOW)) {
@@ -80,7 +84,8 @@ public class ClientListener {
 				}
 			}
 		});
-		busMod.addListener((Consumer<RegisterDimensionSpecialEffectsEvent>) event -> event
+
+		busMod.addListener(RegisterDimensionSpecialEffectsEvent.class, event -> event
 				.register(Voidscape.WORLD_KEY_VOID.location(), new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
 					@Override
 					public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
@@ -104,9 +109,10 @@ public class ClientListener {
 						return true;
 					}
 				}));
-		busMod.addListener((Consumer<EntityRenderersEvent.AddLayers>) event -> {
+
+		busMod.addListener(EntityRenderersEvent.AddLayers.class, event -> {
 			event.getSkins().forEach(renderer -> {
-				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
+				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer.name());
 				attachRenderLayers(Objects.requireNonNull(skin));
 			});
 		});

@@ -6,15 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.neoforged.bus.api.IEventBus;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-
-import java.util.function.Function;
 
 public class ModDamageSource implements RegistryClass {
 

@@ -1,10 +1,10 @@
 package tamaized.voidscape;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Config {
 
 		public Donator DONATOR;
 
-		public Client(ForgeConfigSpec.Builder builder) {
+		public Client(ModConfigSpec.Builder builder) {
 			builder.push("donator");
 			DONATOR = new Donator(builder);
 			builder.pop();
@@ -27,11 +27,11 @@ public class Config {
 
 		public static class Donator {
 
-			public ForgeConfigSpec.BooleanValue enabled;
-			public ForgeConfigSpec.IntValue color;
+			public ModConfigSpec.BooleanValue enabled;
+			public ModConfigSpec.IntValue color;
 			public boolean dirty = true;
 
-			private Donator(ForgeConfigSpec.Builder builder) {
+			private Donator(ModConfigSpec.Builder builder) {
 				enabled = builder.
 						translation(translation("enabled")).
 						comment("Enables the Donator perk wing render").
@@ -48,10 +48,10 @@ public class Config {
 
 	public static class Common {
 
-		public ForgeConfigSpec.ConfigValue<List<? extends String>> bedrockTeleportationDimensionBlacklist;
-		public ForgeConfigSpec.BooleanValue bedrockTeleportationDimensionWhitelist;
+		public ModConfigSpec.ConfigValue<List<? extends String>> bedrockTeleportationDimensionBlacklist;
+		public ModConfigSpec.BooleanValue bedrockTeleportationDimensionWhitelist;
 
-		public Common(ForgeConfigSpec.Builder builder) {
+		public Common(ModConfigSpec.Builder builder) {
 			bedrockTeleportationDimensionBlacklist = builder.
 					translation("config." + Voidscape.MODID + ".bedrock_teleportation_dimension_blacklist").
 					comment("""

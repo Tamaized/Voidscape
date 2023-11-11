@@ -43,7 +43,7 @@ public class RenderNullServantAugmentBlock<T extends NullServantAugmentBlockEnti
 				matrixStackIn.rotateAround(Axis.YP.rotationDegrees(rot + partialTicks), 0F, 1F, 0F);
 				matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
 				var model = this.dispatcher.getBlockModel(blockstate);
-				for (var renderType : model.getRenderTypes(blockstate, RandomSource.create(blockstate.getSeed(entity.blockPosition())), net.minecraftforge.client.model.data.ModelData.EMPTY))
+				for (var renderType : model.getRenderTypes(blockstate, RandomSource.create(blockstate.getSeed(entity.blockPosition())), net.neoforged.neoforge.client.model.data.ModelData.EMPTY))
 					this.dispatcher.getModelRenderer().tesselateBlock(
 							level,
 							model,
@@ -55,7 +55,7 @@ public class RenderNullServantAugmentBlock<T extends NullServantAugmentBlockEnti
 							RandomSource.create(),
 							blockstate.getSeed(entity.blockPosition()),
 							getOverlayCoords(entity, 0F),
-							net.minecraftforge.client.model.data.ModelData.EMPTY,
+							net.neoforged.neoforge.client.model.data.ModelData.EMPTY,
 							renderType
 					);
 				matrixStackIn.popPose();

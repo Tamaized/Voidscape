@@ -24,7 +24,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,15 +31,17 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -81,7 +82,7 @@ public class ModTools implements RegistryClass {
 		}
 	}
 
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final RegistryObject<Item> VOIDIC_CRYSTAL_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
 	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
@@ -158,10 +159,10 @@ public class ModTools implements RegistryClass {
 
 	@Override
 	public void init(IEventBus bus) {
-		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerInteractEvent.LeftClickBlock>) event -> {
+		NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.LeftClickBlock.class, event -> {
 			LAST_HIT_BLOCK_FACE.put(event.getEntity().getUUID(), event.getFace());
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.PlayerLoggedOutEvent>) event -> {
+		NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedOutEvent.class, event -> {
 			LAST_HIT_BLOCK_FACE.remove(event.getEntity().getUUID());
 		});
 	}
@@ -264,7 +265,7 @@ public class ModTools implements RegistryClass {
 
 		@Override
 		public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-			return (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SWEEPING_EDGE, stack) > 0 && toolAction == ToolActions.SWORD_SWEEP) || super.canPerformAction(stack, toolAction);
+			return (stack.getEnchantmentLevel(Enchantments.SWEEPING_EDGE) > 0 && toolAction == ToolActions.SWORD_SWEEP) || super.canPerformAction(stack, toolAction);
 		}
 
 		@Override
@@ -425,7 +426,7 @@ public class ModTools implements RegistryClass {
 		}).forEach(p -> {
 			final BlockPos blockPos = p.left();
 			final BlockState state = p.right();
-			int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(level, player.gameMode.getGameModeForPlayer(), player, blockPos);
+			int exp = CommonHooks.onBlockBreakEvent(level, player.gameMode.getGameModeForPlayer(), player, blockPos);
 			if (exp != -1 && !player.blockActionRestricted(level, blockPos, player.gameMode.getGameModeForPlayer())) {
 				if (player.isCreative()) {
 					removeBlock(level, player, blockPos, false);
@@ -435,7 +436,7 @@ public class ModTools implements RegistryClass {
 					boolean flag1 = state.canHarvestBlock(level, blockPos, player);
 					stack.mineBlock(level, state, blockPos, player);
 					if (stack.isEmpty() && !cloneStack.isEmpty())
-						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, cloneStack, InteractionHand.MAIN_HAND);
+						EventHooks.onPlayerDestroyItem(player, cloneStack, InteractionHand.MAIN_HAND);
 					boolean flag = removeBlock(level, player, blockPos, flag1);
 
 					if (flag && flag1) {

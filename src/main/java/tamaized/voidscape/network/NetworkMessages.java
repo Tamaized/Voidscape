@@ -2,8 +2,8 @@ package tamaized.voidscape.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
@@ -39,9 +39,9 @@ public class NetworkMessages {
 			return factory.get().fromBytes(packet);
 		}
 
-		static <M extends IMessage<M>> void onMessage(M message, Supplier<NetworkEvent.Context> context) {
-			context.get().enqueueWork(() -> message.handle(getSidedPlayer(context.get().getSender())));
-			context.get().setPacketHandled(true);
+		static <M extends IMessage<M>> void onMessage(M message, NetworkEvent.Context context) {
+			context.enqueueWork(() -> message.handle(getSidedPlayer(context.getSender())));
+			context.setPacketHandled(true);
 		}
 
 		@Nullable

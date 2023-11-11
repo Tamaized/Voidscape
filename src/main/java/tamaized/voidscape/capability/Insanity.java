@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;

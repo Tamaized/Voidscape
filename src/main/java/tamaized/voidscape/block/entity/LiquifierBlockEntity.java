@@ -4,19 +4,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
@@ -38,9 +37,9 @@ public class LiquifierBlockEntity extends BlockEntity {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
+        if (cap == Capabilities.ITEM_HANDLER)
             return items.cast();
-        if (cap == ForgeCapabilities.FLUID_HANDLER)
+        if (cap == Capabilities.FLUID_HANDLER)
             return fluids.cast();
         return super.getCapability(cap, side);
     }
@@ -92,7 +91,7 @@ public class LiquifierBlockEntity extends BlockEntity {
             for (Direction face : Direction.values()) {
                 BlockEntity other = level.getBlockEntity(blockPos.relative(face));
                 if (other != null) {
-                    other.getCapability(ForgeCapabilities.FLUID_HANDLER, face.getOpposite()).ifPresent(cap -> {
+                    other.getCapability(Capabilities.FLUID_HANDLER, face.getOpposite()).ifPresent(cap -> {
                         int amount = cap.fill(new FluidStack(fluid.getFluidInTank(0).getFluid(), Math.min(fluid.getFluidInTank(0).getAmount(), 1000)), IFluidHandler.FluidAction.EXECUTE);
                         fluid.drain(amount, IFluidHandler.FluidAction.EXECUTE);
                     });

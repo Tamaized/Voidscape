@@ -22,14 +22,17 @@ public class ThunderNyliumBlock extends Block implements BonemealableBlock {
         super(pProperties);
     }
 
-    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState, boolean pIsClient) {
+	@Override
+    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState) {
         return pLevel.getBlockState(pPos.above()).isAir();
     }
 
-    public boolean isBonemealSuccess(Level pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
+	@Override
+	public boolean isBonemealSuccess(Level pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
         return true;
     }
 
+	@Override
     public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
         BlockPos blockpos = pPos.above();
         ChunkGenerator chunkgenerator = pLevel.getChunkSource().getGenerator();

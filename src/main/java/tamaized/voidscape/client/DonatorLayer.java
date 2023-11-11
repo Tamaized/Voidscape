@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,8 +19,8 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.capability.SubCapability;
@@ -31,7 +30,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@SuppressWarnings("removal")
 public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/donator.png");
@@ -55,7 +53,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	}
 
 	public static void setup() {
-		MinecraftForge.EVENT_BUS.addListener((Consumer<RenderLevelStageEvent>) event -> {
+		NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, event -> {
 			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
 				BUFFERS.endBatch();
 		});

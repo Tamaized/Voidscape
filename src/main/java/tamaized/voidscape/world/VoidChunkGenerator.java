@@ -14,11 +14,8 @@ import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
@@ -46,9 +43,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.mutable.MutableObject;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.asm.ASMHooks;
@@ -94,11 +89,11 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		MethodHandle tmp_handle_setter_NoiseChunk_noiseSizeXZ = null;
 		try {
 			tmp_BeardifierMarker_values = ObfuscationReflectionHelper.findMethod(Class.forName("net.minecraft.world.level.levelgen.DensityFunctions$BeardifierMarker"), "values");
-			tmp_handle_BeardifierMarker_values= LOOKUP.unreflect(tmp_BeardifierMarker_values);
+			tmp_handle_BeardifierMarker_values = LOOKUP.unreflect(tmp_BeardifierMarker_values);
 			tmp_object_BeardifierMarker_values = (Object[]) tmp_handle_BeardifierMarker_values.invoke();
-			tmp_NoiseChunk_cellWidth = ObfuscationReflectionHelper.findField(NoiseChunk.class, "f_209170_");
+			tmp_NoiseChunk_cellWidth = ObfuscationReflectionHelper.findField(NoiseChunk.class, "cellWidth");
 			tmp_handle_setter_NoiseChunk_cellWidth = LOOKUP.unreflectSetter(tmp_NoiseChunk_cellWidth);
-			tmp_NoiseChunk_noiseSizeXZ = ObfuscationReflectionHelper.findField(NoiseChunk.class, "f_209169_");
+			tmp_NoiseChunk_noiseSizeXZ = ObfuscationReflectionHelper.findField(NoiseChunk.class, "noiseSizeXZ");
 			tmp_handle_setter_NoiseChunk_noiseSizeXZ = LOOKUP.unreflectSetter(tmp_NoiseChunk_noiseSizeXZ);
 		} catch (Throwable e) {
 			e.printStackTrace();

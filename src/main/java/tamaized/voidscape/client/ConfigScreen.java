@@ -1,14 +1,13 @@
 package tamaized.voidscape.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 
@@ -53,7 +52,7 @@ public class ConfigScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-		renderBackground(pGuiGraphics);
+		renderBackground(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		pGuiGraphics.drawCenteredString(font, Component.literal("Voidscape Config"), (int) (Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2F), 5, 0xFFFFFFFF);
 		int color = 0xFFFFFF;
 		try {

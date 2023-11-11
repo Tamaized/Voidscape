@@ -5,21 +5,14 @@ import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import tamaized.voidscape.Voidscape;
+
+import java.util.Optional;
 
 public class LiquifierTrigger extends SimpleCriterionTrigger<LiquifierTrigger.Instance> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "liquifier");
-
 	@Override
-	public ResourceLocation getId() {
-		return ID;
-	}
-
-	@Override
-	public LiquifierTrigger.Instance createInstance(JsonObject json, ContextAwarePredicate player, DeserializationContext condition) {
+	public LiquifierTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		return new LiquifierTrigger.Instance(player);
 	}
 
@@ -29,8 +22,9 @@ public class LiquifierTrigger extends SimpleCriterionTrigger<LiquifierTrigger.In
 
 	public static class Instance extends AbstractCriterionTriggerInstance {
 
-		public Instance(ContextAwarePredicate player) {
-			super(ID, player);
+		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+		public Instance(Optional<ContextAwarePredicate> player) {
+			super(player);
 		}
 
 	}

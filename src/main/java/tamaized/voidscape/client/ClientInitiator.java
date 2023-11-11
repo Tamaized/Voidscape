@@ -1,13 +1,11 @@
 package tamaized.voidscape.client;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import tamaized.voidscape.Voidscape;
 
-import java.util.function.Supplier;
-
 /**
- * Avoid adding to this class, this is strictly for {@link ClientListener} initiliazation from {@link Voidscape#Voidscape()} via {@link DistExecutor#safeRunWhenOn(Dist, Supplier)}
+ * Avoid adding to this class, this is strictly for {@link ClientListener} initialization from {@link Voidscape#Voidscape()} via {@link FMLEnvironment#dist} == {@link Dist#CLIENT}
  */
 public class ClientInitiator {
 

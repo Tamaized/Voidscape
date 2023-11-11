@@ -39,10 +39,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.capability.SubCapability;
@@ -127,7 +127,7 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link net.minecraftforge.common.ForgeHooks#onLivingDeath(LivingEntity, DamageSource)}<br>
+	 * {@link net.neoforged.neoforge.common.CommonHooks#onLivingDeath(LivingEntity, DamageSource)}<br>
 	 * [BEFORE FIRST GETSTATIC]
 	 */
 	public static boolean death(LivingEntity entity, DamageSource source) {
@@ -145,7 +145,7 @@ public class ASMHooks {
 				Containers.dropItemStack(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.ETHEREAL_ESSENCE.get()));
 			}
 		}
-		return MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, source));
+		return NeoForge.EVENT_BUS.post(new LivingDeathEvent(entity, source)).isCanceled();
 	}
 
 	/**

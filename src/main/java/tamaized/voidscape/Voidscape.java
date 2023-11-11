@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.BuiltInPackSource;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,40 +26,40 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
-import tamaized.voidscape.block.EtherealPlantBlock;
 import tamaized.voidscape.capability.DonatorData;
 import tamaized.voidscape.capability.Insanity;
 import tamaized.voidscape.capability.SubCapability;
@@ -71,9 +72,9 @@ import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -97,20 +98,25 @@ public class Voidscape {
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 
 	public Voidscape() {
-		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientInitiator::call);
+		if (FMLEnvironment.dist == Dist.CLIENT)
+			ClientInitiator.call();
+
 		DonatorHandler.start();
+
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
-		IEventBus busForge = MinecraftForge.EVENT_BUS;
+		IEventBus busForge = NeoForge.EVENT_BUS;
+
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ConfigScreen::new));
 		{
-			final Pair<Config.Client, ForgeConfigSpec> specPairClient = new ForgeConfigSpec.Builder().configure(Config.Client::new);
+			final Pair<Config.Client, ModConfigSpec> specPairClient = new ModConfigSpec.Builder().configure(Config.Client::new);
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPairClient.getRight());
 			Config.CLIENT_CONFIG = specPairClient.getLeft();
 
-			final Pair<Config.Common, ForgeConfigSpec> specPairCommon = new ForgeConfigSpec.Builder().configure(Config.Common::new);
+			final Pair<Config.Common, ModConfigSpec> specPairCommon = new ModConfigSpec.Builder().configure(Config.Common::new);
 			ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, specPairCommon.getRight());
 			Config.COMMON_CONFIG = specPairCommon.getLeft();
 		}
+
 		RegUtil.setup(MODID, busMod,
 				ModAdvancementTriggers::new,
 				ModArmors::new,
@@ -133,31 +139,42 @@ public class Voidscape {
 				ModStructures::new,
 				ModSurfaceRules::new,
 				ModTools::new);
-		busMod.addListener((Consumer<AddPackFindersEvent>) event -> {
+
+		busMod.addListener(AddPackFindersEvent.class, event -> {
 			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {
-				var resourcePath = ModList.get().getModFileById(MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat");
-				var pack = Pack.readMetaAndCreate("voidscape_aether_compat", Component.literal("Voidscape Aether Integration"), true,
-						name -> new PathPackResources(name, resourcePath, false), PackType.SERVER_DATA, Pack.Position.TOP, PackSource.FEATURE);
+				Path resourcePath = ModList.get().getModFileById(MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat");
+				Pack pack = Pack.readMetaAndCreate(
+						"voidscape_aether_compat",
+						Component.literal("Voidscape Aether Integration"),
+						true,
+						BuiltInPackSource.fromName(name -> new PathPackResources(name, resourcePath, false)),
+						PackType.SERVER_DATA,
+						Pack.Position.TOP,
+						PackSource.FEATURE
+				);
 				event.addRepositorySource(packConsumer -> packConsumer.accept(pack));
 			}
 		});
-		busMod.addListener((Consumer<RegisterEvent>) event -> {
+
+		busMod.addListener(RegisterEvent.class, event -> {
 			if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.RECIPE_SERIALIZERS))
 				return;
 			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeLayeredBiomeProvider.CODEC);
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 		});
+
 		SubCapability.init(busMod);
-		busMod.addListener((Consumer<FMLCommonSetupEvent>) event -> {
+
+		busMod.addListener(FMLCommonSetupEvent.class, event -> {
 			NetworkMessages.register(NETWORK);
 		});
-		busForge.addListener((Consumer<ServerStartingEvent>) event ->
 
+		busForge.addListener(ServerStartingEvent.class, event ->
 				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape").
 						then(VoidCommands.Debug.register()))
-
 		);
-		busForge.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
+
+		busForge.addListener(TickEvent.PlayerTickEvent.class, event -> {
 			if (event.player.level() != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level())) {
 				if ((!event.player.level().isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
 						map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
@@ -188,11 +205,13 @@ public class Voidscape {
 				}
 			}
 		});
-		busForge.addListener((Consumer<LivingAttackEvent>) event -> {
+
+		busForge.addListener(LivingAttackEvent.class, event -> {
 			if (event.getEntity().isAlive() && event.getSource().is(ModDamageSource.VOIDIC))
 				event.getEntity().invulnerableTime = 0;
 		});
-		busForge.addListener((Consumer<LivingHurtEvent>) event -> {
+
+		busForge.addListener(LivingHurtEvent.class, event -> {
 			Boolean arrow;
 			if (!event.getSource().is(ModDamageSource.VOIDIC) && (arrow = meleeOrArrowSource(event.getSource())) != null) {
 				if (event.getEntity().getHealth() <= event.getAmount())
@@ -232,7 +251,8 @@ public class Voidscape {
 				}
 			}
 		});
-		busForge.addListener((Consumer<EntityJoinLevelEvent>) event -> {
+
+		busForge.addListener(EntityJoinLevelEvent.class, event -> {
 			if (event.getEntity() instanceof AbstractArrow arrow) {
 				Entity entity = arrow.getOwner();
 				if (entity instanceof LivingEntity shooter) {
@@ -244,12 +264,14 @@ public class Voidscape {
 				}
 			}
 		});
-		busForge.addListener((Consumer<MobSpawnEvent.SpawnPlacementCheck>) event -> {
+
+		busForge.addListener(MobSpawnEvent.SpawnPlacementCheck.class, event -> {
 			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
 				event.setResult(Event.Result.ALLOW);
 			}
 		});
-		busForge.addListener((Consumer<MobSpawnEvent.PositionCheck>) event -> {
+
+		busForge.addListener(MobSpawnEvent.PositionCheck.class, event -> {
 			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel())) {
 				Player player = event.getLevel().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
 				if (player != null &&
@@ -263,7 +285,8 @@ public class Voidscape {
 					event.setResult(Event.Result.DENY);
 			}
 		});
-		busForge.addListener((Consumer<MobSpawnEvent.FinalizeSpawn>) event -> {
+
+		busForge.addListener(MobSpawnEvent.FinalizeSpawn.class, event -> {
 			if (event.getSpawnType() == MobSpawnType.NATURAL &&
 					!(event.getEntity() instanceof IEthereal) &&
 					Voidscape.checkForVoidDimension(event.getEntity().level())) {

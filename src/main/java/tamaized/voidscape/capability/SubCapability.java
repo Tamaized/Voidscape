@@ -9,22 +9,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.util.NonNullSupplier;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.capabilities.*;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.util.NonNullSupplier;
+import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.objectweb.asm.Type;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSubCapSync;
@@ -76,19 +70,20 @@ public class SubCapability {
 	public static final Capability<IVoidicArrow> CAPABILITY_VOIDICARROW = CapabilityManager.get(new CapabilityToken<>() {
 	});
 
+	@SuppressWarnings("removal")
 	public static void init(IEventBus modBus) {
 		Registry.register(ISubCap.class, AttachedSubCap.ID, AttachedSubCap::new, new ISubCap.Storage() {
 		});
 		Registry.register(IVoidicArrow.class, VoidicArrowCapability.ID, VoidicArrowCapability::new, new ISubCap.DummyStorage<>());
 		modBus.addListener((Consumer<RegisterCapabilitiesEvent>) event -> Registry.REGISTRY.values().stream().map(v -> v.cap).forEach(event::register));
-		MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
+		NeoForge.EVENT_BUS.addGenericListener(Entity.class, (Consumer<AttachCapabilitiesEvent<Entity>>) event -> {
 			if (event.getObject() instanceof LivingEntity) {
 				apply(event, CAPABILITY);
 			}
 			if (event.getObject() instanceof AbstractArrow)
 				apply(event, CAPABILITY_VOIDICARROW);
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<LivingEvent.LivingTickEvent>) event -> {
+		NeoForge.EVENT_BUS.addListener(LivingEvent.LivingTickEvent.class, event -> {
 			if (!event.getEntity().canUpdate())
 				return;
 			event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
@@ -101,7 +96,7 @@ public class SubCapability {
 				}
 			});
 		});
-		MinecraftForge.EVENT_BUS.addListener((Consumer<PlayerEvent.Clone>) event -> event.getEntity().getCapability(CAPABILITY).ifPresent(cap -> {
+		NeoForge.EVENT_BUS.addListener(PlayerEvent.Clone.class, event -> event.getEntity().getCapability(CAPABILITY).ifPresent(cap -> {
 			event.getOriginal().reviveCaps();
 			event.getOriginal().getCapability(CAPABILITY).ifPresent(o -> cap.clone(o, event.isWasDeath()));
 			event.getOriginal().invalidateCaps();

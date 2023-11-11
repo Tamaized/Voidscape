@@ -2,7 +2,6 @@ package tamaized.voidscape.world;
 
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -14,7 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.world.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.world.genlayer.GenLayerRandomWithOneMajorBiomes;
