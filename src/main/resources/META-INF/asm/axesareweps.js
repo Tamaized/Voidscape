@@ -1,6 +1,6 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.item.enchantment.EnchantmentCategory$6', // WEAPON
-                'methodName': ASM.mapMethod('m_7454_'), // canEnchant
+                'methodName': ASM.mapMethod('canEnchant'),
                 'methodDesc': '(Lnet/minecraft/world/item/Item;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {

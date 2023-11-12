@@ -1,6 +1,6 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.layers.CapeLayer',
-                'methodName': ASM.mapMethod('m_6494_'),
+                'methodName': ASM.mapMethod('render'),
                 'methodDesc': '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -23,7 +23,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/world/item/ItemStack',
-                        ASM.mapMethod('m_150930_'),
+                        ASM.mapMethod('is'),
                         '(Lnet/minecraft/world/item/Item;)Z'
                         ),
                     ASM.listOf(

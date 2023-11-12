@@ -1,6 +1,6 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -26,7 +26,7 @@ function transform(clazz, name, desc) {
 
                     node.owner === 'net/minecraft/world/item/ItemStack' &&
 
-                    node.name === ASM.mapMethod("m_150930_") && // is
+                    node.name === ASM.mapMethod("is") &&
 
                     node.desc === '(Lnet/minecraft/world/item/Item;)Z'
 

@@ -1,6 +1,6 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -15,7 +15,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('m_234316_'), // getBrightness
+                'methodName': ASM.mapMethod('getBrightness'),
                 'methodDesc': '(Lnet/minecraft/world/level/dimension/DimensionType;I)F'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -40,7 +40,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('m_109881_'), // updateLightTexture
+                'methodName': ASM.mapMethod('updateLightTexture'),
                 'methodDesc': '(F)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -79,7 +79,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('m_109881_'), // updateLightTexture
+                'methodName': ASM.mapMethod('updateLightTexture'),
                 'methodDesc': '(F)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -88,7 +88,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/client/Options',
-                        ASM.mapMethod('m_231927_'), // gamma
+                        ASM.mapMethod('gamma'),
                         '()Lnet/minecraft/client/OptionInstance;'
                         ).getNext().getNext().getNext(),
                     ASM.listOf(

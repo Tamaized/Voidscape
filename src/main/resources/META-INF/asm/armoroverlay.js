@@ -1,6 +1,6 @@
 // noinspection ES6ConvertVarToLetConst
 
-var ASM = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer',
-                'methodName': ASM.mapMethod('m_117118_'), // renderArmorPiece
+                'methodName': ASM.mapMethod('renderArmorPiece'),
                 'methodDesc': '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -24,7 +24,7 @@ function initializeCoreMod() {
                     var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
                     if (node.getOpcode() === Opcodes.INVOKEVIRTUAL &&
                         node.owner === 'net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer' &&
-                        node.name === 'renderModel') // Forge Method
+                        node.name === 'renderModel')
                         lastInstruction = node; // Get the last INVOKEVIRTUAL
                 }
                 ASM.log('INFO', lastInstruction);
