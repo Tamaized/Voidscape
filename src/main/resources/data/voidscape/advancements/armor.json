@@ -144,6 +144,102 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:ichor_helmet"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:ichor_chest"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:ichor_legs"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:ichor_boots"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astral_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_helmet"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astral_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_chest"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astral_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_legs"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astral_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "voidscape:astral_boots"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {
@@ -174,7 +270,15 @@
       "titanite_helmet",
       "titanite_chest",
       "titanite_legs",
-      "titanite_boots"
+      "titanite_boots",
+      "ichor_helmet",
+      "ichor_chest",
+      "ichor_legs",
+      "ichor_boots",
+      "astral_helmet",
+      "astral_chest",
+      "astral_legs",
+      "astral_boots"
     ]
   ],
   "sends_telemetry_event": true
