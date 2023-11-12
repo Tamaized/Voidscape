@@ -26,7 +26,7 @@ function transform(clazz, name, desc) {
 
                     node.owner === 'net/minecraft/world/item/ItemStack' &&
 
-                    node.name === ASM.mapMethod("is") &&
+                    node.name === 'is' &&
 
                     node.desc === '(Lnet/minecraft/world/item/Item;)Z'
 
@@ -60,28 +60,18 @@ function initializeCoreMod() {
     return {
         'evaluatewhichhandstorender': transform(
             'net.minecraft.client.renderer.ItemInHandRenderer',
-            ASM.mapMethod('m_172914_'),
+            'evaluateWhichHandsToRender',
             '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'
             ),
         'selectionusingitemwhileholdingbowlike': transform(
             'net.minecraft.client.renderer.ItemInHandRenderer',
-            ASM.mapMethod('m_172916_'),
+            'selectionUsingItemWhileHoldingBowLike',
             '(Lnet/minecraft/client/player/LocalPlayer;)Lnet/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection;'
             ),
         'ischargedcrossbow': transform(
             'net.minecraft.client.renderer.ItemInHandRenderer',
-            ASM.mapMethod('m_172912_'),
+            'isChargedCrossbow',
             '(Lnet/minecraft/world/item/ItemStack;)Z'
-            ),
-        'renderarmwithitem': transform(
-            'net.minecraft.client.renderer.ItemInHandRenderer',
-            ASM.mapMethod('m_109371_'),
-            '(Lnet/minecraft/client/player/AbstractClientPlayer;FFLnet/minecraft/world/InteractionHand;FLnet/minecraft/world/item/ItemStack;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V'
-            ),
-        'getarmpose': transform(
-            'net.minecraft.client.renderer.entity.player.PlayerRenderer',
-            ASM.mapMethod('m_117794_'),
-            '(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;'
             )
     }
 }
