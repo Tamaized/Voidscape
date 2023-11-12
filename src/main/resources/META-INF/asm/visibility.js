@@ -15,7 +15,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('getBrightness'),
+                'methodName': 'getBrightness',
                 'methodDesc': '(Lnet/minecraft/world/level/dimension/DimensionType;I)F'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -40,7 +40,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('updateLightTexture'),
+                'methodName': 'updateLightTexture',
                 'methodDesc': '(F)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -88,7 +88,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/client/Options',
-                        ASM.mapMethod('gamma'),
+                        'gamma',
                         '()Lnet/minecraft/client/OptionInstance;'
                         ).getNext().getNext().getNext(),
                     ASM.listOf(

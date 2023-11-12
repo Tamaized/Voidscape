@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.item.enchantment.EnchantmentCategory$6', // WEAPON
-                'methodName': ASM.mapMethod('canEnchant'),
+                'methodName': 'canEnchant',
                 'methodDesc': '(Lnet/minecraft/world/item/Item;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {

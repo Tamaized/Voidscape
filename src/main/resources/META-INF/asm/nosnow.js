@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.level.biome.Biome',
-                'methodName': ASM.mapMethod('shouldSnow'),
+                'methodName': 'shouldSnow',
                 'methodDesc': '(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -40,7 +40,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.level.biome.Biome',
-                'methodName': ASM.mapMethod('shouldFreeze'),
+                'methodName': 'shouldFreeze',
                 'methodDesc': '(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {

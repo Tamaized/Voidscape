@@ -13,7 +13,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.world.entity.player.Player',
-                'methodName': ASM.mapMethod('attack'),
+                'methodName': 'attack',
                 'methodDesc': '(Lnet/minecraft/world/entity/Entity;)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -22,7 +22,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/world/entity/player/Player',
-                        ASM.mapMethod('getAttackStrengthScale'),
+                        'getAttackStrengthScale',
                         '(F)F'
                         ),
                     ASM.listOf(

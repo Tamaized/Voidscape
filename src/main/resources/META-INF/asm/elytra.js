@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.layers.CapeLayer',
-                'methodName': ASM.mapMethod('render'),
+                'methodName': 'render',
                 'methodDesc': '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -23,7 +23,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/world/item/ItemStack',
-                        ASM.mapMethod('is'),
+                        'is',
                         '(Lnet/minecraft/world/item/Item;)Z'
                         ),
                     ASM.listOf(

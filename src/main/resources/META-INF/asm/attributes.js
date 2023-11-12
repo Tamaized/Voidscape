@@ -29,7 +29,7 @@ function initializeCoreMod() {
 
                         node.getOpcode() === Opcodes.PUTFIELD &&
 
-                        node.name === ASM.mapField("attributes")
+                        node.name === 'attributes'
 
                     )
                         lastInstruction = node;

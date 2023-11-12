@@ -14,7 +14,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.LivingEntityRenderer',
-                'methodName': ASM.mapMethod('render'),
+                'methodName': 'render',
                 'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -23,7 +23,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/client/model/EntityModel',
-                        ASM.mapMethod('renderToBuffer'),
+                        'renderToBuffer',
                         '(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V'
                         ),
                     ASM.listOf(
@@ -44,7 +44,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.entity.LivingEntityRenderer',
-                'methodName': ASM.mapMethod('getRenderType'),
+                'methodName': 'getRenderType',
                 'methodDesc': '(Lnet/minecraft/world/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
@@ -53,7 +53,7 @@ function initializeCoreMod() {
                     ASM.findFirstMethodCall(methodNode,
                         ASM.MethodType.VIRTUAL,
                         'net/minecraft/client/model/EntityModel',
-                        ASM.mapMethod('renderType'),
+                        'renderType',
                         '(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;'
                         ),
                     ASM.listOf(

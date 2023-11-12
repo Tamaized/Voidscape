@@ -29,7 +29,7 @@ function initializeCoreMod() {
 
                         node.getOpcode() === Opcodes.GETSTATIC &&
 
-                        node.name === ASM.mapField("ITEM")
+                        node.name === 'ITEM'
 
                     )
                         lastInstruction = node;
