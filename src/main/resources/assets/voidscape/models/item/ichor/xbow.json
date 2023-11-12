@@ -1,7 +1,7 @@
 
 {
   "parent": "item/generated",
-  "forge_data": {
+  "neoforge_data": {
     "layers": {
       "0": {
         "block_light": 15,
@@ -9,7 +9,7 @@
       }
     }
   },
-  "loader": "forge:item_layers",
+  "loader": "neoforge:item_layers",
   "textures": {
 	"layer0": "voidscape:item/ichor/xbow/crossbow_standby"
   },
