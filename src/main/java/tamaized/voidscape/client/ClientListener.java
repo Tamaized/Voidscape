@@ -112,7 +112,7 @@ public class ClientListener {
 
 		busMod.addListener(EntityRenderersEvent.AddLayers.class, event -> {
 			event.getSkins().forEach(renderer -> {
-				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer.name());
+				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);
 				attachRenderLayers(Objects.requireNonNull(skin));
 			});
 		});
