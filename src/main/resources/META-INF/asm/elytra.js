@@ -27,7 +27,7 @@ function initializeCoreMod() {
                         '(Lnet/minecraft/world/item/Item;)Z'
                         ),
                     ASM.listOf(
-                        new VarInsnNode(Opcodes.ALOAD, 11),
+                        new VarInsnNode(Opcodes.ALOAD, 12),
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
                             'tamaized/voidscape/asm/ASMHooks',
