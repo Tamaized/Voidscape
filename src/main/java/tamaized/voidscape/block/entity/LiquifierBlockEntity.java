@@ -73,7 +73,7 @@ public class LiquifierBlockEntity extends BlockEntity {
         entity.tick++;
         IFluidHandler fluid = entity.fluids.resolve().orElseThrow();
         IItemHandler item = entity.items.resolve().orElseThrow();
-        if (fluid.getFluidInTank(0).getAmount() < fluid.getTankCapacity(0) - 250 && item.getStackInSlot(0).is(ModItems.VOIDIC_CRYSTAL.get())) {
+        if (fluid.getFluidInTank(0).getAmount() <= fluid.getTankCapacity(0) - 250 && item.getStackInSlot(0).is(ModItems.VOIDIC_CRYSTAL.get())) {
             entity.processTick++;
             if (entity.processTick >= 80) {
                 entity.processTick = 0;
