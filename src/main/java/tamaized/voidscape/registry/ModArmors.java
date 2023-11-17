@@ -27,10 +27,10 @@ import javax.annotation.Nullable;
 public class ModArmors implements RegistryClass {
 
 	static class ArmorMaterial {
-		static final RegUtil.ArmorMaterial VOIDIC_CRYSTAL = new RegUtil.ArmorMaterial("voidic_crystal", 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 2F, 0.10F,
+		static final RegUtil.ArmorMaterial VOIDIC_CRYSTAL = new RegUtil.ArmorMaterial("voidic_crystal", 39, new int[]{3, 6, 8, 3}, 17, SoundEvents.ARMOR_EQUIP_DIAMOND, 4F, 0.10F,
 				() -> Ingredient.of(ModItems.VOIDIC_CRYSTAL.get()), true, false, false);
 
-		static final RegUtil.ArmorMaterial CORRUPT = new RegUtil.ArmorMaterial("corrupt", 41, new int[]{4, 7, 9, 4}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 3F, 0.15F,
+		static final RegUtil.ArmorMaterial CORRUPT = new RegUtil.ArmorMaterial("corrupt", 41, new int[]{4, 7, 9, 4}, 19, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.15F,
 				() -> Ingredient.of(ModItems.TENDRIL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
@@ -93,7 +93,7 @@ public class ModArmors implements RegistryClass {
 			}
 		};
 
-		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.ArmorMaterial("titanite", 43, new int[]{5, 7, 10, 5}, 21, SoundEvents.ARMOR_EQUIP_NETHERITE, 4F, 0.20F,
+		static final RegUtil.ArmorMaterial TITANITE = new RegUtil.ArmorMaterial("titanite", 43, new int[]{5, 8, 10, 5}, 21, SoundEvents.ARMOR_EQUIP_NETHERITE, 6F, 0.20F,
 				() -> Ingredient.of(ModItems.TITANITE_SHARD.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
@@ -137,7 +137,7 @@ public class ModArmors implements RegistryClass {
 			}
 		};
 
-		static final RegUtil.ArmorMaterial ICHOR = new RegUtil.ArmorMaterial("ichor", 45, new int[]{6, 9, 11, 6}, 23, SoundEvents.ARMOR_EQUIP_NETHERITE, 5F, 0.25F,
+		static final RegUtil.ArmorMaterial ICHOR = new RegUtil.ArmorMaterial("ichor", 45, new int[]{6, 9, 11, 6}, 23, SoundEvents.ARMOR_EQUIP_NETHERITE, 7F, 0.25F,
 				() -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()), false, true, true) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
@@ -181,7 +181,7 @@ public class ModArmors implements RegistryClass {
 			}
 		};
 
-		static final RegUtil.ArmorMaterial ASTRAL = new RegUtil.ArmorMaterial("astral", 47, new int[]{7, 10, 12, 7}, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 6F, 0.3F,
+		static final RegUtil.ArmorMaterial ASTRAL = new RegUtil.ArmorMaterial("astral", 47, new int[]{7, 10, 12, 7}, 25, SoundEvents.ARMOR_EQUIP_DIAMOND, 8F, 0.3F,
 				() -> Ingredient.of(ModItems.ASTRAL_CRYSTAL.get()), true, false, false) {
 			@Override
 			@OnlyIn(Dist.CLIENT)
