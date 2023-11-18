@@ -386,7 +386,7 @@ public class ModTools implements RegistryClass {
 	// Null return = call super
 	@Nullable
 	public static Boolean threeByThreeBreak(Item item, ItemStack stack, BlockPos pos, Player pl) {
-		if (pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || RegUtil.ToolAndArmorHelper.isBroken(stack))
+		if (pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || player.isShiftKeyDown() || RegUtil.ToolAndArmorHelper.isBroken(stack))
 			return null;
 		final ServerLevel level = player.serverLevel();
 		final BlockState oState = level.getBlockState(pos);
