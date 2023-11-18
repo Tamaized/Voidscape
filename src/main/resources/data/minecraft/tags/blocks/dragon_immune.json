@@ -1,9 +1,12 @@
 {
   "replace": false,
   "values": [
+    "voidscape:voidic_crystal_ore",
 	"voidscape:thunderrock",
 	"voidscape:antirock",
 	"voidscape:null_black",
-	"voidscape:null_white"
+	"voidscape:null_white",
+	"voidscape:astralrock",
+	"voidscape:thunder_nylium"
   ]
 }
