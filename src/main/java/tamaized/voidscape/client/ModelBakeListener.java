@@ -10,7 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
@@ -199,11 +199,9 @@ public class ModelBakeListener {
 	}
 
 	@SafeVarargs
-	private static void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, RegistryObject<Item>... items) {
-		for (RegistryObject<Item> item : items) {
+	private static void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, DeferredHolder<Item, Item>... items) {
+		for (DeferredHolder<Item, Item> item : items) {
 			ResourceLocation location = item.getId();
-			if (location == null)
-				continue;
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
 			ResourceLocation rl = new ResourceLocation(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
 			ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");

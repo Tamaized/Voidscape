@@ -6,17 +6,18 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
+import java.util.function.Supplier;
+
 public class ModCreativeTabs implements RegistryClass {
 
 	private static final DeferredRegister<CreativeModeTab> REGISTRY = RegUtil.create(Registries.CREATIVE_MODE_TAB);
 
-	public static final RegistryObject<CreativeModeTab> TAB = REGISTRY.register("tab", () -> CreativeModeTab.builder()
+	public static final Supplier<CreativeModeTab> TAB = REGISTRY.register("tab", () -> CreativeModeTab.builder()
 			.title(Component.translatable(Voidscape.MODID + ".item_group"))
 			.icon(() -> new ItemStack(ModItems.VOIDIC_CRYSTAL.get()))
 			.displayItems((parameters, output) -> {

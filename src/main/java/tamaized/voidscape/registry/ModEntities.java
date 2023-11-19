@@ -4,6 +4,7 @@ import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,8 +21,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -29,34 +28,36 @@ import tamaized.voidscape.client.entity.model.*;
 import tamaized.voidscape.client.entity.render.*;
 import tamaized.voidscape.entity.*;
 
+import java.util.function.Supplier;
+
 @Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEntities implements RegistryClass {
 
-	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(ForgeRegistries.ENTITY_TYPES);
+	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(Registries.ENTITY_TYPE);
 
-	public static final RegistryObject<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
+	public static final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
 			build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
 
-	public static final RegistryObject<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
+	public static final Supplier<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
 			make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), AntiBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
 
-	public static final RegistryObject<EntityType<IchorBoltEntity>> ICHOR_BOLT = REGISTRY.register("ichor_bolt", () ->
+	public static final Supplier<EntityType<IchorBoltEntity>> ICHOR_BOLT = REGISTRY.register("ichor_bolt", () ->
 			make(new ResourceLocation(Voidscape.MODID, "ichor_bolt"), IchorBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
 
-	public static final RegistryObject<EntityType<NullServantIchorBoltEntity>> NULL_SERVANT_ICHOR_BOLT = REGISTRY.register("null_servant_ichor_bolt", () ->
+	public static final Supplier<EntityType<NullServantIchorBoltEntity>> NULL_SERVANT_ICHOR_BOLT = REGISTRY.register("null_servant_ichor_bolt", () ->
 			make(new ResourceLocation(Voidscape.MODID, "null_servant_ichor_bolt"), NullServantIchorBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
 
-	public static final RegistryObject<EntityType<NullServantEntity>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
+	public static final Supplier<EntityType<NullServantEntity>> NULL_SERVANT = REGISTRY.register("null_servant", () -> {
 		EntityType<NullServantEntity> type = build(new ResourceLocation(Voidscape.MODID, "null_servant"), makeCastedBuilder(NullServantEntity.class, NullServantEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).setTrackingRange(256).fireImmune());
 		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
 				NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) &&
 						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
 		return type;
 	});
-	public static final RegistryObject<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = REGISTRY.register("null_servant_augment_block", () ->
+	public static final Supplier<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = REGISTRY.register("null_servant_augment_block", () ->
 			make(new ResourceLocation(Voidscape.MODID, "null_servant_augment_block"), NullServantAugmentBlockEntity::new, MobCategory.MISC, 1F, 1F));
 
-	public static final RegistryObject<EntityType<VoidsWrathEntity>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> {
+	public static final Supplier<EntityType<VoidsWrathEntity>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> {
 		EntityType<VoidsWrathEntity> type = build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(VoidsWrathEntity.class, VoidsWrathEntity::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune());
 		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
 				rand.nextInt(3) == 0 &&
@@ -65,7 +66,7 @@ public class ModEntities implements RegistryClass {
 		return type;
 	});
 
-	public static final RegistryObject<EntityType<StrangePearlEntity>> STRANGE_PEARL = REGISTRY.register("strange_pearl", () ->
+	public static final Supplier<EntityType<StrangePearlEntity>> STRANGE_PEARL = REGISTRY.register("strange_pearl", () ->
 			make(new ResourceLocation(Voidscape.MODID, "strange_pearl"), StrangePearlEntity::new, MobCategory.MISC, 0.25F, 0.25F));
 
 	@Override

@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
@@ -17,8 +18,7 @@ import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -38,10 +38,10 @@ public class ModFluids implements RegistryClass {
 
 	}
 
-	private static final DeferredRegister<FluidType> REGISTERY_FLUID_TYPE = RegUtil.create(ForgeRegistries.Keys.FLUID_TYPES);
-	private static final DeferredRegister<Fluid> REGISTERY_FLUID = RegUtil.create(ForgeRegistries.FLUIDS);
+	private static final DeferredRegister<FluidType> REGISTERY_FLUID_TYPE = RegUtil.create(NeoForgeRegistries.Keys.FLUID_TYPES);
+	private static final DeferredRegister<Fluid> REGISTERY_FLUID = RegUtil.create(Registries.FLUID);
 
-	public static final RegistryObject<FluidType> VOIDIC_TYPE = REGISTERY_FLUID_TYPE.register("voidic", makeFluidType(
+	public static final Supplier<FluidType> VOIDIC_TYPE = REGISTERY_FLUID_TYPE.register("voidic", makeFluidType(
 			FluidType.Properties.create()
 					.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
 					.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
@@ -56,14 +56,14 @@ public class ModFluids implements RegistryClass {
 	));
 
 	private static class CircularReferenceHandler {
-		public static final RegistryObject<Item> VOIDIC_BUCKET = ModItems.REGISTRY
+		public static final Supplier<Item> VOIDIC_BUCKET = ModItems.REGISTRY
 				.register("voidic_bucket", () -> new BucketItem(VOIDIC_SOURCE, ModItems.ItemProps.DEFAULT.properties().get().stacksTo(1)));
 		private static final BaseFlowingFluid.Properties VOIDIC_PROPERTIES = new BaseFlowingFluid.Properties(VOIDIC_TYPE, VOIDIC_SOURCE, VOIDIC_FLOWING)
 				.bucket(VOIDIC_BUCKET);
 	}
 
-	public static final RegistryObject<FlowingFluid> VOIDIC_SOURCE = REGISTERY_FLUID.register("voidic_source", () -> new VoidicFluid.Source(CircularReferenceHandler.VOIDIC_PROPERTIES));
-	public static final RegistryObject<FlowingFluid> VOIDIC_FLOWING = REGISTERY_FLUID.register("voidic_flowing", () -> new VoidicFluid.Flowing(CircularReferenceHandler.VOIDIC_PROPERTIES));
+	public static final Supplier<FlowingFluid> VOIDIC_SOURCE = REGISTERY_FLUID.register("voidic_source", () -> new VoidicFluid.Source(CircularReferenceHandler.VOIDIC_PROPERTIES));
+	public static final Supplier<FlowingFluid> VOIDIC_FLOWING = REGISTERY_FLUID.register("voidic_flowing", () -> new VoidicFluid.Flowing(CircularReferenceHandler.VOIDIC_PROPERTIES));
 
 	private static Supplier<FluidType> makeFluidType(FluidType.Properties props, ResourceLocation stillpath, ResourceLocation flowingpath, @Nullable ResourceLocation overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
 		return () -> new FluidType(props) {

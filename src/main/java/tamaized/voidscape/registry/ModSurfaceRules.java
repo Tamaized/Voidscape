@@ -7,15 +7,16 @@ import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
+
+import java.util.function.Supplier;
 
 public class ModSurfaceRules implements RegistryClass {
 
 	private static final DeferredRegister<Codec<? extends SurfaceRules.ConditionSource>> REGISTRY = RegUtil.create(Registries.MATERIAL_CONDITION);
 
-	private static final RegistryObject<Codec<AirAboveConditionSource>> AIR_ABOVE = REGISTRY.register("air_above", AirAboveConditionSource.CODEC::codec);
+	private static final Supplier<Codec<AirAboveConditionSource>> AIR_ABOVE = REGISTRY.register("air_above", AirAboveConditionSource.CODEC::codec);
 
 	static class AirAboveConditionSource implements SurfaceRules.ConditionSource {
 

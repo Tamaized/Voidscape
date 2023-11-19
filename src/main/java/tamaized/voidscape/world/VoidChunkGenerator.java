@@ -191,7 +191,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 					noisechunk.updateForX(x, d0);
 					noisechunk.updateForZ(z, d1);
 					BlockState blockstate = noisechunk.blockStateRule.calculate(noisechunk);
-					BlockState blockstate1 = blockstate == null ? this.generatorSettings().get().defaultBlock() : blockstate;
+					BlockState blockstate1 = blockstate == null ? this.generatorSettings().value().defaultBlock() : blockstate;
 					if (ablockstate != null) {
 						int k3 = l2 * i + i3;
 						ablockstate[k3] = blockstate1;

@@ -6,12 +6,12 @@ import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class ItemUsedOnNullServantTrigger extends SimpleCriterionTrigger<ItemUse
 	public ItemUsedOnNullServantTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		if(!json.has("item"))
 			throw new JsonSyntaxException("ItemUsedOnNullServantTrigger: Missing item field");
-		return new ItemUsedOnNullServantTrigger.Instance(player, Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "item")))));
+		return new ItemUsedOnNullServantTrigger.Instance(player, Objects.requireNonNull(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(json, "item")))));
 	}
 
 	public void trigger(ServerPlayer player, ItemStack stack) {

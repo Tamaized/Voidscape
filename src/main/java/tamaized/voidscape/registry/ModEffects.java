@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -28,13 +27,13 @@ import java.util.function.Supplier;
 
 public class ModEffects implements RegistryClass {
 
-	private static final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(ForgeRegistries.MOB_EFFECTS);
+	private static final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(Registries.MOB_EFFECT);
 
-	public static final RegistryObject<MobEffect> ICHOR = REGISTRY.register("ichor", () -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700, true)
+	public static final Supplier<MobEffect> ICHOR = REGISTRY.register("ichor", () -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700, true)
 			.texture("effect/ichor.png"));
-	public static final RegistryObject<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF, false)
+	public static final Supplier<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF, false)
 			.texture("effect/aura.png"));
-	public static final RegistryObject<MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA, false)
+	public static final Supplier<MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA, false)
 			.texture("effect/fortified.png"));
 
 	@Override

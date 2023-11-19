@@ -18,8 +18,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -33,9 +31,10 @@ import tamaized.voidscape.world.feature.config.FluidFeatureConfig;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@SuppressWarnings("ALL")
 public class ModFeatures implements RegistryClass {
 
-	private static final DeferredRegister<Feature<?>> REGISTRY_FEATURES = RegUtil.create(ForgeRegistries.FEATURES);
+	private static final DeferredRegister<Feature<?>> REGISTRY_FEATURES = RegUtil.create(Registries.FEATURE);
 	private static final DeferredRegister<PlacementModifierType<?>> REGISTRY_PLACEMENT_MOD_TYPE = RegUtil.create(Registries.PLACEMENT_MODIFIER_TYPE);
 
 	public static final ResourceKey<ConfiguredFeature<?, ?>> THUNDER_FUNGUS = ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Voidscape.MODID, "thunder_fungus"));
@@ -46,7 +45,7 @@ public class ModFeatures implements RegistryClass {
 		public static final Codec<SeekDownPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
 				BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, SeekDownPlacementMod::new));
 
-		public static RegistryObject<PlacementModifierType<SeekDownPlacementMod>> TYPE = registerPlacementModifierType("seek", () -> () -> CODEC);
+		public static Supplier<PlacementModifierType<SeekDownPlacementMod>> TYPE = registerPlacementModifierType("seek", () -> () -> CODEC);
 
 		private final boolean check_below;
 
@@ -77,7 +76,7 @@ public class ModFeatures implements RegistryClass {
 
 		public static final Codec<AirAbovePlacementMod> CODEC = Codec.unit(AirAbovePlacementMod::new);
 
-		public static RegistryObject<PlacementModifierType<AirAbovePlacementMod>> TYPE = registerPlacementModifierType("air_above", () -> () -> CODEC);
+		public static Supplier<PlacementModifierType<AirAbovePlacementMod>> TYPE = registerPlacementModifierType("air_above", () -> () -> CODEC);
 
 		public AirAbovePlacementMod() {
 		}
@@ -98,7 +97,7 @@ public class ModFeatures implements RegistryClass {
 
 		public static final Codec<NotAirBelowPlacementMod> CODEC = Codec.unit(NotAirBelowPlacementMod::new);
 
-		public static RegistryObject<PlacementModifierType<NotAirBelowPlacementMod>> TYPE = registerPlacementModifierType("not_air_below", () -> () -> CODEC);
+		public static Supplier<PlacementModifierType<NotAirBelowPlacementMod>> TYPE = registerPlacementModifierType("not_air_below", () -> () -> CODEC);
 
 		public NotAirBelowPlacementMod() {
 		}
@@ -119,7 +118,7 @@ public class ModFeatures implements RegistryClass {
 
         public static final Codec<NotInBlockPlacementMod> CODEC = Codec.unit(NotInBlockPlacementMod::new);
 
-        public static RegistryObject<PlacementModifierType<NotInBlockPlacementMod>> TYPE = registerPlacementModifierType("not_in_block", () -> () -> CODEC);
+        public static Supplier<PlacementModifierType<NotInBlockPlacementMod>> TYPE = registerPlacementModifierType("not_in_block", () -> () -> CODEC);
 
         public NotInBlockPlacementMod() {
         }
@@ -141,7 +140,7 @@ public class ModFeatures implements RegistryClass {
 		public static final Codec<RandomYPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
 				INT.fieldOf("y").orElse(0).forGetter(c -> c.y)).apply(p_242803_0_, RandomYPlacementMod::new));
 
-		public static RegistryObject<PlacementModifierType<RandomYPlacementMod>> TYPE = registerPlacementModifierType("random_y", () -> () -> CODEC);
+		public static Supplier<PlacementModifierType<RandomYPlacementMod>> TYPE = registerPlacementModifierType("random_y", () -> () -> CODEC);
 
 		private final int y;
 
@@ -167,7 +166,7 @@ public class ModFeatures implements RegistryClass {
 				BlockState.CODEC.fieldOf("state").forGetter(c -> c.state)
 		).apply(p_242803_0_, UnderBlockPlacementMod::new));
 
-		public static RegistryObject<PlacementModifierType<UnderBlockPlacementMod>> TYPE = registerPlacementModifierType("under_block", () -> () -> CODEC);
+		public static Supplier<PlacementModifierType<UnderBlockPlacementMod>> TYPE = registerPlacementModifierType("under_block", () -> () -> CODEC);
 
 		private final BlockState state;
 
@@ -194,9 +193,9 @@ public class ModFeatures implements RegistryClass {
 
 	}
 
-	public static final RegistryObject<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY_FEATURES.register("spire", () -> new SpireFeature(BooleanFeatureConfig.CODEC));
+	public static final Supplier<Feature<BooleanFeatureConfig>> SPIRE = REGISTRY_FEATURES.register("spire", () -> new SpireFeature(BooleanFeatureConfig.CODEC));
 
-	public static final RegistryObject<Feature<FluidFeatureConfig>> FLUID = REGISTRY_FEATURES.register("fluid", () -> new Feature<>(FluidFeatureConfig.CODEC) {
+	public static final Supplier<Feature<FluidFeatureConfig>> FLUID = REGISTRY_FEATURES.register("fluid", () -> new Feature<>(FluidFeatureConfig.CODEC) {
 		@Override
 		public boolean place(FeaturePlaceContext<FluidFeatureConfig> context) {
 			context.level().setBlock(context.origin(), context.config().state.createLegacyBlock(), 2);
@@ -205,11 +204,11 @@ public class ModFeatures implements RegistryClass {
 		}
 	});
 
-	public static final RegistryObject<Feature<ClusterConfig>> CLUSTER = REGISTRY_FEATURES.register("cluster", () -> new ClusterFeature(ClusterConfig.CODEC));
+	public static final Supplier<Feature<ClusterConfig>> CLUSTER = REGISTRY_FEATURES.register("cluster", () -> new ClusterFeature(ClusterConfig.CODEC));
 
-    public static final RegistryObject<Feature<NoneFeatureConfiguration>> THUNDER_VINES = REGISTRY_FEATURES.register("thunder_vines", ThunderVinesFeature::new);
+    public static final Supplier<Feature<NoneFeatureConfiguration>> THUNDER_VINES = REGISTRY_FEATURES.register("thunder_vines", ThunderVinesFeature::new);
 
-	private static <P extends PlacementModifier> RegistryObject<PlacementModifierType<P>> registerPlacementModifierType(String name, Supplier<PlacementModifierType<P>> factory) {
+	private static <P extends PlacementModifier> Supplier<PlacementModifierType<P>> registerPlacementModifierType(String name, Supplier<PlacementModifierType<P>> factory) {
 		return REGISTRY_PLACEMENT_MOD_TYPE.register(name, factory);
 	}
 

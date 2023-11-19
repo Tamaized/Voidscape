@@ -60,9 +60,18 @@ public final class VoidPortalTeleporter implements ITeleporter {
 			double maxZ = Math.min(2.9999872E7D, border.getMaxZ() - 16.0D);
 			double offset = DimensionType.getTeleportationScale(oldEntity.level().dimensionType(), destWorld.dimensionType());
 			BlockPos blockpos = BlockPos.containing(Mth.clamp(oldEntity.getX() * offset, minX, maxX), oldEntity.getY(), Mth.clamp(oldEntity.getZ() * offset, minZ, maxZ));
-			return this.getPortalLogic(destWorld, oldEntity, blockpos).map((portalresult) -> {
-				return PortalShape.createPortalInfo(destWorld, portalresult, Direction.Axis.X, new Vec3(0.0D, 0.0D, 1.0D), oldEntity, oldEntity.getDeltaMovement(), oldEntity.getYRot(), oldEntity.getXRot());
-			}).orElse(null);
+			return this.getPortalLogic(destWorld, oldEntity, blockpos)
+					.map((portalresult) -> PortalShape.createPortalInfo(
+							destWorld,
+							portalresult,
+							Direction.Axis.X,
+							new Vec3(0.0D, 0.0D, 1.0D),
+							oldEntity,
+							oldEntity.getDeltaMovement(),
+							oldEntity.getYRot(),
+							oldEntity.getXRot()
+					))
+					.orElse(null);
 		}
 	}
 
@@ -119,7 +128,9 @@ public final class VoidPortalTeleporter implements ITeleporter {
 					mut.setY(l);
 					if (level.isEmptyBlock(mut)) {
 						int i1;
-						for(i1 = l; l > 0 && level.isEmptyBlock(mut.move(Direction.DOWN)); --l) {
+						i1 = l;
+						while (l > 0 && level.isEmptyBlock(mut.move(Direction.DOWN))) {
+							--l;
 						}
 
 						if (l + 4 <= height) {

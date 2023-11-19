@@ -4,10 +4,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.network.NetworkMessages;
 
@@ -42,7 +43,7 @@ public class ClientPacketSendParticles implements NetworkMessages.IMessage<Clien
     public void toBytes(FriendlyByteBuf packet) {
         packet.writeInt(this.queuedParticles.size());
         for (QueuedParticle queuedParticle : this.queuedParticles) {
-            packet.writeResourceKey(ForgeRegistries.PARTICLE_TYPES.getResourceKey(queuedParticle.particleOptions.getType()).orElseThrow());
+            packet.writeResourceKey(BuiltInRegistries.PARTICLE_TYPE.getResourceKey(queuedParticle.particleOptions.getType()).orElseThrow());
             queuedParticle.particleOptions.writeToNetwork(packet);
             packet.writeBoolean(queuedParticle.b);
             packet.writeDouble(queuedParticle.x);
@@ -58,10 +59,10 @@ public class ClientPacketSendParticles implements NetworkMessages.IMessage<Clien
     public ClientPacketSendParticles fromBytes(FriendlyByteBuf packet) {
         int size = packet.readInt();
         for (int i = 0; i < size; i++) {
-            Optional<Holder<ParticleType<?>>> type = ForgeRegistries.PARTICLE_TYPES.getHolder(packet.readResourceKey(ForgeRegistries.PARTICLE_TYPES.getRegistryKey()));
+            Optional<Holder.Reference<ParticleType<?>>> type = BuiltInRegistries.PARTICLE_TYPE.getHolder(packet.readResourceKey(Registries.PARTICLE_TYPE));
             if (type.isEmpty())
                 break; // Fail silently and end execution entirely. Due to Type serialization we now have completely unknown data in the pipeline without any way to safely read it all
-            this.queuedParticles.add(new QueuedParticle(readParticle(type.get().get(), packet), packet.readBoolean(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
+            this.queuedParticles.add(new QueuedParticle(readParticle(type.get().value(), packet), packet.readBoolean(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
         }
         return this;
     }

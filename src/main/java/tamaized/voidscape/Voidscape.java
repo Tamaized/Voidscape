@@ -52,7 +52,6 @@ import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -121,7 +120,6 @@ public class Voidscape {
 				ModAdvancementTriggers::new,
 				ModArmors::new,
 				ModAttributes::new,
-				ModBiomes::new,
 				ModBlocks::new,
 				ModBlockEntities::new,
 				ModCreativeTabs::new,
@@ -157,7 +155,7 @@ public class Voidscape {
 		});
 
 		busMod.addListener(RegisterEvent.class, event -> {
-			if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.RECIPE_SERIALIZERS))
+			if (!Objects.equals(event.getRegistryKey(), Registries.RECIPE_SERIALIZER))
 				return;
 			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeLayeredBiomeProvider.CODEC);
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);

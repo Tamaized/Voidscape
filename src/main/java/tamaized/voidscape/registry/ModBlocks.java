@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -20,20 +21,22 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.*;
 import tamaized.voidscape.entity.AntiBoltEntity;
 import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
+import java.util.function.Supplier;
+
+@SuppressWarnings({"deprecation", "unused"})
 public class ModBlocks implements RegistryClass {
 
-	public static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
+	public static final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
 
-	public static final RegistryObject<Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(3F, 3F)
@@ -45,60 +48,60 @@ public class ModBlocks implements RegistryClass {
 			return flag;
 		}
 	});
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL_ORE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> VOIDIC_CRYSTAL_ORE_ITEM = ModItems.REGISTRY
 			.register(VOIDIC_CRYSTAL_ORE.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
 			.requiresCorrectToolForDrops()
 	));
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("fragile_voidic_crystal_block", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("fragile_voidic_crystal_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
 			.noLootTable()
 	));
-	public static final RegistryObject<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
 			.strength(4F, 6F)
 			.requiresCorrectToolForDrops()));
-	public static final RegistryObject<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
 			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
 			.strength(4F, 9F)
 			.requiresCorrectToolForDrops()));
-	public static final RegistryObject<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
 			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
 			.strength(2F, 2F)));
-	public static final RegistryObject<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FLESH_BLOCK.getId().getPath(), () -> new BlockItem(FLESH_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PINK)
 			.strength(4F, 12F)
 			.requiresCorrectToolForDrops()));
-	public static final RegistryObject<Item> STRANGE_ORE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> STRANGE_ORE_ITEM = ModItems.REGISTRY
 			.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(STRANGE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 
-	public static final RegistryObject<Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -121,10 +124,10 @@ public class ModBlocks implements RegistryClass {
 			return true;
 		}
 	});
-	public static final RegistryObject<Item> THUNDERROCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> THUNDERROCK_ITEM = ModItems.REGISTRY
 			.register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -146,10 +149,10 @@ public class ModBlocks implements RegistryClass {
 			return true;
 		}
 	});
-	public static final RegistryObject<Item> ANTIROCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ANTIROCK_ITEM = ModItems.REGISTRY
 			.register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -172,37 +175,37 @@ public class ModBlocks implements RegistryClass {
 			return true;
 		}
 	});
-	public static final RegistryObject<Item> ASTRALROCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ASTRALROCK_ITEM = ModItems.REGISTRY
 			.register(ASTRALROCK.getId().getPath(), () -> new BlockItem(ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-	public static final RegistryObject<Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
+	public static final DeferredHolder<Block, Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(4F, 12F)
 			.requiresCorrectToolForDrops()
 	));
-	public static final RegistryObject<Item> CRACKED_ASTRALROCK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> CRACKED_ASTRALROCK_ITEM = ModItems.REGISTRY
 			.register(CRACKED_ASTRALROCK.getId().getPath(), () -> new BlockItem(CRACKED_ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noLootTable()
 			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
 	));
-	public static final RegistryObject<Item> NULL_BLACK_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> NULL_BLACK_ITEM = ModItems.REGISTRY
 			.register(NULL_BLACK.getId().getPath(), () -> new BlockItem(NULL_BLACK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-	public static final RegistryObject<Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
 			.noLootTable()
 			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
 	));
-	public static final RegistryObject<Item> NULL_WHITE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> NULL_WHITE_ITEM = ModItems.REGISTRY
 			.register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<PortalBlock> PORTAL = REGISTRY.register("portal", () -> new PortalBlock(Block.Properties.of()
+	public static final Supplier<PortalBlock> PORTAL = REGISTRY.register("portal", () -> new PortalBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -213,7 +216,7 @@ public class ModBlocks implements RegistryClass {
 
 	// Crops
 
-	public static final RegistryObject<Block> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.noCollission()
@@ -221,10 +224,10 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ETHEREAL_FRUIT_VOID_ITEM = ModItems.REGISTRY
 			.register(ETHEREAL_FRUIT_VOID.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_VOID.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_BLACK)
 			.noCollission()
@@ -232,10 +235,10 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_NULL_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ETHEREAL_FRUIT_NULL_ITEM = ModItems.REGISTRY
 			.register(ETHEREAL_FRUIT_NULL.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_NULL.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_CYAN)
 			.noCollission()
@@ -243,10 +246,10 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_OVERWORLD_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ETHEREAL_FRUIT_OVERWORLD_ITEM = ModItems.REGISTRY
 			.register(ETHEREAL_FRUIT_OVERWORLD.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_OVERWORLD.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_RED)
 			.noCollission()
@@ -254,10 +257,10 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ETHEREAL_FRUIT_NETHER_ITEM = ModItems.REGISTRY
 			.register(ETHEREAL_FRUIT_NETHER.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_NETHER.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final RegistryObject<Block> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealPlantBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealPlantBlock(Block.Properties.of()
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PINK)
 			.noCollission()
@@ -265,12 +268,12 @@ public class ModBlocks implements RegistryClass {
 			.pushReaction(PushReaction.DESTROY)
 			.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_END_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> ETHEREAL_FRUIT_END_ITEM = ModItems.REGISTRY
 			.register(ETHEREAL_FRUIT_END.getId().getPath() + "_block", () -> new BlockItem(ETHEREAL_FRUIT_END.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
 	/// Machines
 
-	public static final RegistryObject<Block> MACHINE_CORE = REGISTRY.register("machine_core", () -> new Block(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> MACHINE_CORE = REGISTRY.register("machine_core", () -> new Block(Block.Properties.of()
 			.sound(SoundType.CANDLE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(1F, 1F)
@@ -282,20 +285,20 @@ public class ModBlocks implements RegistryClass {
 			return SHAPE;
 		}
 	});
-	public static final RegistryObject<Item> MACHINE_CORE_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> MACHINE_CORE_ITEM = ModItems.REGISTRY
 			.register(MACHINE_CORE.getId().getPath(), () -> new BlockItem(MACHINE_CORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new LiquifierBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new LiquifierBlock(Block.Properties.of()
 			.sound(SoundType.BONE_BLOCK)
 			.mapColor(MapColor.COLOR_RED)
 			.strength(3F, 3F)
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)
 	));
-	public static final RegistryObject<Item> MACHINE_LIQUIFIER_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> MACHINE_LIQUIFIER_ITEM = ModItems.REGISTRY
 			.register(MACHINE_LIQUIFIER.getId().getPath(), () -> new BlockItem(MACHINE_LIQUIFIER.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new DefuserBlock(Block.Properties.of()
+	public static final DeferredHolder<Block, Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new DefuserBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 3F)
@@ -303,7 +306,7 @@ public class ModBlocks implements RegistryClass {
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)
 	));
-	public static final RegistryObject<Item> MACHINE_DEFUSER_ITEM = ModItems.REGISTRY
+	public static final Supplier<Item> MACHINE_DEFUSER_ITEM = ModItems.REGISTRY
 			.register(MACHINE_DEFUSER.getId().getPath(), () -> new BlockItem(MACHINE_DEFUSER.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	@Override

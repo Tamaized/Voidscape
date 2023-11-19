@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,8 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
@@ -39,6 +38,7 @@ import tamaized.voidscape.world.ConfigurablePortalShape;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class ModItems implements RegistryClass {
 
@@ -47,10 +47,10 @@ public class ModItems implements RegistryClass {
 		public static final RegUtil.ItemProps LAVA_IMMUNE = new RegUtil.ItemProps(() -> DEFAULT.properties().get().fireResistant());
 	}
 
-	public static final DeferredRegister<Item> REGISTRY = RegUtil.create(ForgeRegistries.ITEMS);
-	public static final RegistryObject<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> VOIDIC_TEMPLATE = REGISTRY.register("voidic_template", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+	public static final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
+	public static final Supplier<Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> VOIDIC_TEMPLATE = REGISTRY.register("voidic_template", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {
 			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(Blocks.BEDROCK)) {
@@ -71,7 +71,7 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
-	public static final RegistryObject<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+	public static final Supplier<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {
 			Player player = context.getPlayer();
@@ -102,14 +102,14 @@ public class ModItems implements RegistryClass {
 			return InteractionResult.FAIL;
 		}
 	});
-	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> ICHOR = REGISTRY.register("ichor", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+	public static final Supplier<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> ICHOR = REGISTRY.register("ichor", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
 			ItemStack itemstack = pPlayer.getItemInHand(pHand);
@@ -128,7 +128,7 @@ public class ModItems implements RegistryClass {
 			return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());
 		}
 	});
-	public static final RegistryObject<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+	public static final Supplier<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {
 			if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(ModBlocks.ANTIROCK.get())) {
@@ -147,10 +147,10 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
-	public static final RegistryObject<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
-	public static final RegistryObject<Item> ASTRAL_CRYSTAL = REGISTRY.register("astral_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
+	public static final Supplier<Item> ASTRAL_CRYSTAL = REGISTRY.register("astral_crystal", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+	public static final Supplier<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
@@ -168,7 +168,7 @@ public class ModItems implements RegistryClass {
 			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+	public static final Supplier<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
@@ -186,7 +186,7 @@ public class ModItems implements RegistryClass {
 			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+	public static final Supplier<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
@@ -198,7 +198,7 @@ public class ModItems implements RegistryClass {
 			return itemstack;
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+	public static final Supplier<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
@@ -210,7 +210,7 @@ public class ModItems implements RegistryClass {
 			return itemstack;
 		}
 	});
-	public static final RegistryObject<Item> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
+	public static final Supplier<Item> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
 		@Override
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
