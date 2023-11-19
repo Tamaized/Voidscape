@@ -24,7 +24,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.ForgeRegistries;
@@ -33,10 +32,13 @@ import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.block.PortalBlock;
 import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.entity.StrangePearlEntity;
+import tamaized.voidscape.world.ConfigurablePortalShape;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ModItems implements RegistryClass {
 
@@ -77,9 +79,17 @@ public class ModItems implements RegistryClass {
 			BlockPos blockpos = context.getClickedPos();
 			BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
 
-			if (canCreatePortal(level.getBlockState(blockpos1), level, blockpos1)) {
+			Optional<ConfigurablePortalShape> configurablePortalShape = ConfigurablePortalShape.findEmptyPortalShape(
+					level,
+					blockpos1,
+					Direction.Axis.X,
+					PortalBlock.FRAME_TEST,
+					PortalBlock.PORTAL_TEST,
+					PortalBlock.IGNITER_TEST
+					);
+			if (configurablePortalShape.isPresent()) {
+				configurablePortalShape.get().createPortalBlocks(ModBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
 				level.playSound(player, blockpos1, SoundEvents.TRIDENT_THUNDER, SoundSource.BLOCKS, 1F, 0.75F + context.getLevel().getRandom().nextFloat() * 0.5F);
-				ModBlocks.PORTAL.get().tryToCreatePortal(level, blockpos1);
 				ItemStack stack = context.getItemInHand();
 
 				if (player instanceof ServerPlayer serverPlayer) {
@@ -87,24 +97,9 @@ public class ModItems implements RegistryClass {
 					if (!serverPlayer.isCreative())
 						stack.shrink(1);
 				}
-
 				return InteractionResult.SUCCESS;
-			} else {
-				return InteractionResult.FAIL;
 			}
-		}
-
-		public static boolean canCreatePortal(BlockState state, Level level, BlockPos pos) {
-			boolean flag = false;
-
-			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				BlockState s = level.getBlockState(pos.relative(direction));
-				if ((s.is(ModBlocks.VOIDIC_CRYSTAL_BLOCK.get()) || s.is(ModBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get())) && ModBlocks.PORTAL.get().isPortal(level, pos) != null) {
-					flag = true;
-				}
-			}
-
-			return state.isAir() && flag;
+			return InteractionResult.FAIL;
 		}
 	});
 	public static final RegistryObject<Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
