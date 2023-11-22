@@ -9,11 +9,11 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
-public class HoeBonemealTrigger extends SimpleCriterionTrigger<HoeBonemealTrigger.Instance> {
+public class GenericAdvancementTrigger extends SimpleCriterionTrigger<GenericAdvancementTrigger.Instance> {
 
 	@Override
-	public HoeBonemealTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
-		return new HoeBonemealTrigger.Instance(player);
+	public GenericAdvancementTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
+		return new GenericAdvancementTrigger.Instance(player);
 	}
 
 	public void trigger(ServerPlayer player) {

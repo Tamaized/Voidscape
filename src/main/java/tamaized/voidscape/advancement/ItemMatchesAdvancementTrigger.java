@@ -16,13 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ItemUsedOnNullServantTrigger extends SimpleCriterionTrigger<ItemUsedOnNullServantTrigger.Instance> {
+public class ItemMatchesAdvancementTrigger extends SimpleCriterionTrigger<ItemMatchesAdvancementTrigger.Instance> {
 
 	@Override
-	public ItemUsedOnNullServantTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
+	public ItemMatchesAdvancementTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
 		if(!json.has("item"))
 			throw new JsonSyntaxException("ItemUsedOnNullServantTrigger: Missing item field");
-		return new ItemUsedOnNullServantTrigger.Instance(player, Objects.requireNonNull(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(json, "item")))));
+		return new ItemMatchesAdvancementTrigger.Instance(player, Objects.requireNonNull(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(json, "item")))));
 	}
 
 	public void trigger(ServerPlayer player, ItemStack stack) {
