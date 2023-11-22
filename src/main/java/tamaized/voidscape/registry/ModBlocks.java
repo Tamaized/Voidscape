@@ -39,7 +39,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
-			.strength(3F, 3F)
+			.strength(3F, 3600000.0F)
 			.requiresCorrectToolForDrops()) {
 		@Override
 		public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
@@ -54,7 +54,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.requiresCorrectToolForDrops()
 	));
 	public static final Supplier<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
@@ -63,16 +63,25 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("fragile_voidic_crystal_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.noLootTable()
 	));
 	public static final Supplier<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final DeferredHolder<Block, Block> CHARRED_BRICK = REGISTRY.register("charred_brick", () -> new Block(Block.Properties.of()
+			.sound(SoundType.NETHER_BRICKS)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(3F, 1200.0F)
+			.requiresCorrectToolForDrops()
+	));
+	public static final Supplier<Item> CHARRED_BRICK_ITEM = ModItems.REGISTRY
+			.register(CHARRED_BRICK.getId().getPath(), () -> new BlockItem(CHARRED_BRICK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	public static final DeferredHolder<Block, Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
-			.strength(4F, 6F)
+			.strength(4F, 1200.0F)
 			.requiresCorrectToolForDrops()));
 	public static final Supplier<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
 			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
@@ -80,7 +89,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
-			.strength(4F, 9F)
+			.strength(4F, 1200.0F)
 			.requiresCorrectToolForDrops()));
 	public static final Supplier<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
 			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
@@ -88,14 +97,14 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
-			.strength(2F, 2F)));
+			.strength(2F, 6F)));
 	public static final Supplier<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FLESH_BLOCK.getId().getPath(), () -> new BlockItem(FLESH_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final DeferredHolder<Block, Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PINK)
-			.strength(4F, 12F)
+			.strength(4F, 1200.0F)
 			.requiresCorrectToolForDrops()));
 	public static final Supplier<Item> STRANGE_ORE_ITEM = ModItems.REGISTRY
 			.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(STRANGE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
@@ -180,7 +189,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
-			.strength(4F, 12F)
+			.strength(4F, 1200.0F)
 			.requiresCorrectToolForDrops()
 	));
 	public static final Supplier<Item> CRACKED_ASTRALROCK_ITEM = ModItems.REGISTRY
@@ -276,7 +285,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_CORE = REGISTRY.register("machine_core", () -> new Block(Block.Properties.of()
 			.sound(SoundType.CANDLE)
 			.mapColor(MapColor.COLOR_BLACK)
-			.strength(1F, 1F)
+			.strength(1F, 1200.0F)
 			.noOcclusion()
 			.isValidSpawn((t1, t2, t3, t4) -> false)) {
 		private static final VoxelShape SHAPE = Block.box(3.0D, 3.0D, 3.0D, 13.0D, 13.0D, 13.0D);
@@ -291,7 +300,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new LiquifierBlock(Block.Properties.of()
 			.sound(SoundType.BONE_BLOCK)
 			.mapColor(MapColor.COLOR_RED)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)
 	));
@@ -301,7 +310,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new DefuserBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.noOcclusion()
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)

@@ -7,6 +7,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
+import tamaized.voidscape.structure.CharredStructure;
+
+import java.util.function.Supplier;
 
 public class ModStructures implements RegistryClass {
 
@@ -15,7 +18,7 @@ public class ModStructures implements RegistryClass {
 
 	public static class StructureTypes {
 
-//		public static final RegistryObject<StructureType<NullStructure>> NULL = STRUCTURE_TYPES.register("null", () -> () -> NullStructure.CODEC);
+		public static final Supplier<StructureType<CharredStructure>> CHARRED = STRUCTURE_TYPES.register("charred", () -> () -> CharredStructure.CODEC);
 
 		private static void classload() {
 
@@ -25,7 +28,7 @@ public class ModStructures implements RegistryClass {
 
 	public static class Pieces {
 
-//		public static final RegistryObject<StructurePieceType> NULL_MAIN = STRUCTURE_PIECE_TYPES.register("nullmain", () -> NullStructure.Pieces.Piece::new);
+		public static final Supplier<StructurePieceType> CHARRED_MAIN = STRUCTURE_PIECE_TYPES.register("charred_pieces_main", () -> CharredStructure.Pieces.Piece::new);
 
 		private static void classload() {
 

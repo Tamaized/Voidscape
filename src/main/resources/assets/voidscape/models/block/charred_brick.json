@@ -1,0 +1,9 @@
+{
+  "parent": "voidscape:block/overlay/full_fullbright_overlay",
+  "render_type": "cutout_mipped",
+  "textures": {
+	"base": "voidscape:block/charred_brick",
+	"overlay": "voidscape:block/charred_brick_overlay",
+    "particle": "#base"
+  }
+}
