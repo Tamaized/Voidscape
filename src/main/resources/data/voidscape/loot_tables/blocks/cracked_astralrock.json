@@ -1,21 +1,16 @@
 {
   "type": "minecraft:block",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "voidscape:astral_essence"
-        }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "voidscape:blocks/cracked_astralrock"
-}
+  "random_sequence": "voidscape:blocks/astral_essence",
+  "pools": [{
+      	"rolls": 1.0,
+      	"bonus_rolls": 0.0,
+	"conditions": [{"condition": "minecraft:survives_explosion"}],
+     	"entries": [{
+            	"type": "minecraft:alternatives",
+             	"children": [{
+                      	"type": "minecraft:item",
+                        "conditions": [{"condition": "minecraft:match_tool", "predicate": {"enchantments": [{"enchantment": "minecraft:silk_touch", "levels": {"min": 1}}]}}],             
+               		"name": "voidscape:cracked_astralrock"
+        			},{
+			"type": "minecraft:item",
+        		"name": "voidscape:astral_essence"}]}]}]}
