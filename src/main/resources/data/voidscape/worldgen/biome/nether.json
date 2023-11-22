@@ -59,9 +59,6 @@
       "voidscape:fruit_patch_nether"
     ]
   ],
-  "starts": [
-
-  ],
   "creature_spawn_probability": 0.0,
   "spawners": {
 	"monster": [

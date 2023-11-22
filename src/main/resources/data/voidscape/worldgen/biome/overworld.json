@@ -66,9 +66,6 @@
       "voidscape:fruit_patch_overworld"
     ]
   ],
-  "starts": [
-
-  ],
   "creature_spawn_probability": 0.0,
   "spawners": {
 	"monster": [

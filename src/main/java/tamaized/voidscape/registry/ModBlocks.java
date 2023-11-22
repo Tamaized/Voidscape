@@ -69,6 +69,15 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final DeferredHolder<Block, Block> CHARRED_BRICK = REGISTRY.register("charred_brick", () -> new Block(Block.Properties.of()
+			.sound(SoundType.NETHER_BRICKS)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(3F, 3F)
+			.requiresCorrectToolForDrops()
+	));
+	public static final Supplier<Item> CHARRED_BRICK_ITEM = ModItems.REGISTRY
+			.register(CHARRED_BRICK.getId().getPath(), () -> new BlockItem(CHARRED_BRICK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	public static final DeferredHolder<Block, Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
