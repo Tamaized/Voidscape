@@ -1,21 +1,16 @@
 {
   "type": "minecraft:block",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "voidscape:strange_pearl"
-        }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "voidscape:blocks/strange_ore"
-}
+  "random_sequence": "voidscape:blocks/strange_ore",
+  "pools": [{
+      	"rolls": 1.0,
+      	"bonus_rolls": 0.0,
+	"conditions": [{"condition": "minecraft:survives_explosion"}],
+     	"entries": [{
+            	"type": "minecraft:alternatives",
+             	"children": [{
+                      	"type": "minecraft:item",
+                        "conditions": [{"condition": "minecraft:match_tool", "predicate": {"enchantments": [{"enchantment": "minecraft:silk_touch", "levels": {"min": 1}}]}}],             
+               		"name": "voidscape:strange_ore"
+        			},{
+			"type": "minecraft:item",
+        		"name": "voidscape:strange_pearl"}]}]}]}
