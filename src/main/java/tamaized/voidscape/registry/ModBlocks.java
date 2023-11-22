@@ -285,7 +285,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_CORE = REGISTRY.register("machine_core", () -> new Block(Block.Properties.of()
 			.sound(SoundType.CANDLE)
 			.mapColor(MapColor.COLOR_BLACK)
-			.strength(1F, 1F)
+			.strength(1F, 1200.0F)
 			.noOcclusion()
 			.isValidSpawn((t1, t2, t3, t4) -> false)) {
 		private static final VoxelShape SHAPE = Block.box(3.0D, 3.0D, 3.0D, 13.0D, 13.0D, 13.0D);
@@ -300,7 +300,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_LIQUIFIER = REGISTRY.register("machine_liquifier", () -> new LiquifierBlock(Block.Properties.of()
 			.sound(SoundType.BONE_BLOCK)
 			.mapColor(MapColor.COLOR_RED)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)
 	));
@@ -310,7 +310,7 @@ public class ModBlocks implements RegistryClass {
 	public static final DeferredHolder<Block, Block> MACHINE_DEFUSER = REGISTRY.register("machine_defuser", () -> new DefuserBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 3F)
+			.strength(3F, 1200.0F)
 			.noOcclusion()
 			.requiresCorrectToolForDrops()
 			.isValidSpawn((t1, t2, t3, t4) -> false)
