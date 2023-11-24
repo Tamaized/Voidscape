@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.5,
+  "ingredient": {
+    "item": "voidscape:titanite_ore"
+  },
+  "result": "voidscape:titanite_chunk"
+}

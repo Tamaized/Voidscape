@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 1.5,
+  "ingredient": {
+    "item": "voidscape:strange_ore"
+  },
+  "result": "voidscape:strange_pearl"
+}
