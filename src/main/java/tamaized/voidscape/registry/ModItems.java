@@ -161,12 +161,6 @@ public class ModItems implements RegistryClass {
 			}
 			return itemstack;
 		}
-
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-		}
 	});
 	public static final Supplier<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
 			food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3F).alwaysEat().build())) {
@@ -178,12 +172,6 @@ public class ModItems implements RegistryClass {
 						.ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
 			}
 			return itemstack;
-		}
-
-		@Override
-		public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-			super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-			pTooltipComponents.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
 		}
 	});
 	public static final Supplier<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get().
