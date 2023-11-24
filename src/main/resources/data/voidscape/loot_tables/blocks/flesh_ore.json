@@ -12,11 +12,11 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:match_tool", 
+                  "condition": "minecraft:match_tool",
                   "predicate": {
                     "enchantments": [
                       {
-                        "enchantment": "minecraft:silk_touch", 
+                        "enchantment": "minecraft:silk_touch",
                         "levels": {
                           "min": 1
                         }
@@ -24,7 +24,7 @@
                     ]
                   }
                 }
-              ],             
+              ],
               "name": "voidscape:flesh_ore"
             },
             {
