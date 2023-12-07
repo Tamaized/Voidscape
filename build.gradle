@@ -34,7 +34,7 @@ repositories {
     maven githubPackage.invoke("The-Aether-Team/The-Aether")
 }
 
-version = "${minecraft_version}-${mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
+version = "${project.minecraft_version}-${project.mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
 group = "tamaized.voidscape"
 base {
     archivesName = "Voidscape"
