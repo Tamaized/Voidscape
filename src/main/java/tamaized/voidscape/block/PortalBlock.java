@@ -17,9 +17,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.registry.ModBlocks;
+import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModSounds;
 import tamaized.voidscape.world.ConfigurablePortalShape;
 
@@ -63,9 +62,8 @@ public class PortalBlock extends HalfTransparentBlock {
     @Override
     @Deprecated
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.canChangeDimensions()) {
-            entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setInPortal(true)));
-        }
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.canChangeDimensions())
+			entity.getData(ModDataAttachments.INSANITY).setInPortal(true);
     }
 
     @Override

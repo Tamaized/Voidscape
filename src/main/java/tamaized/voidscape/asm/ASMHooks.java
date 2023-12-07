@@ -45,13 +45,9 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.entity.IEthereal;
-import tamaized.voidscape.registry.ModArmors;
-import tamaized.voidscape.registry.ModAttributes;
-import tamaized.voidscape.registry.ModItems;
-import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidTeleporter;
 
 import java.util.Map;
@@ -112,7 +108,7 @@ public class ASMHooks {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
-		return Math.min(entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> Mth.clamp(1F - data.getInfusion() / 600F, 0F, 1F)).orElse(1F)).orElse(1F), alpha);
+		return Math.min(Mth.clamp(1F - entity.getData(ModDataAttachments.INSANITY).getInfusion() / 600F, 0F, 1F), alpha);
 	}
 
 	/**
@@ -140,8 +136,10 @@ public class ASMHooks {
 				return true;
 			}
 		} else {
-			if ((source.getDirectEntity() instanceof Player || source.getEntity() instanceof Player) && Voidscape.checkForVoidDimension(entity.level()) && entity.getCapability(SubCapability.CAPABILITY).map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.
-					getInfusion() > 200).orElse(false)).orElse(false) && entity.getRandom().nextInt(3) > 0) {
+			if ((source.getDirectEntity() instanceof Player || source.getEntity() instanceof Player) &&
+					Voidscape.checkForVoidDimension(entity.level()) &&
+					entity.getData(ModDataAttachments.INSANITY).getInfusion() > 200 &&
+					entity.getRandom().nextInt(3) > 0) {
 				Containers.dropItemStack(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.ETHEREAL_ESSENCE.get()));
 			}
 		}

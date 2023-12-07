@@ -5,9 +5,10 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.NetworkEvent;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
 import tamaized.voidscape.client.ClientUtil;
+import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
-import tamaized.voidscape.network.client.ClientPacketSubCapSync;
+import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
 
 import javax.annotation.Nullable;
@@ -21,7 +22,8 @@ public class NetworkMessages {
 		registerMessage(network, ServerPacketHandlerDonatorSettings.class, () -> new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(false, 0)));
 
 		registerMessage(network, ClientPacketNoFlashOnSetHealth.class, ClientPacketNoFlashOnSetHealth::new);
-		registerMessage(network, ClientPacketSubCapSync.class, ClientPacketSubCapSync::new);
+		registerMessage(network, ClientPacketInsanitySync.class, ClientPacketInsanitySync::new);
+		registerMessage(network, ClientPacketDonatorSync.class, ClientPacketDonatorSync::new);
 		registerMessage(network, ClientPacketSendParticles.class, ClientPacketSendParticles::new);
 	}
 

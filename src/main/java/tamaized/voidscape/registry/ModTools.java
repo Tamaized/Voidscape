@@ -45,8 +45,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.Insanity;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.entity.IchorBoltEntity;
 import tamaized.voidscape.item.SpellTome;
 
@@ -59,7 +57,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ModTools implements RegistryClass {
 
@@ -129,7 +126,7 @@ public class ModTools implements RegistryClass {
 			.durability(100), ModItems.TENDRIL, 20 * 5, context -> {
 		context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
 		context.level().playSound(null, context.parent(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1F, 0.75F + context.parent().getRandom().nextFloat() * 0.5F);
-		context.parent().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(Insanity::enableLeapParticles));
+		context.parent().getData(ModDataAttachments.INSANITY).enableLeapParticles();
 		context.parent().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 10));
 	}));
 	public static final DeferredHolder<Item, Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
@@ -233,7 +230,7 @@ public class ModTools implements RegistryClass {
 							}
 						});
 						if (context.getPlayer() instanceof ServerPlayer player)
-							ModAdvancementTriggers.HOE_BONEMEAL_TRIGGER.trigger(player);
+							ModAdvancementTriggers.HOE_BONEMEAL_TRIGGER.get().trigger(player);
 					}
 					return result;
 				}
@@ -414,7 +411,7 @@ public class ModTools implements RegistryClass {
 			}
 		}
 		if (area.size() > 1)
-			ModAdvancementTriggers.THREE_BY_THREE.trigger(player, stack);
+			ModAdvancementTriggers.THREE_BY_THREE.get().trigger(player, stack);
 		// Using TCon's hardness division check
 		area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
 			final BlockState state = p.right();

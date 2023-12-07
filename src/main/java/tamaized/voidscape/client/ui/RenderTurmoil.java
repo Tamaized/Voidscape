@@ -15,11 +15,11 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.Insanity;
-import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.client.Shaders;
 import tamaized.voidscape.client.StencilBufferUtil;
+import tamaized.voidscape.registry.ModDataAttachments;
 
 public class RenderTurmoil {
 
@@ -36,62 +36,58 @@ public class RenderTurmoil {
 			return;
 		lastDeltaTick = deltaTick;
 		ClientUtil.tick++;
-		if (Minecraft.getInstance().player != null)
-			Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> {
-				cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-					if (data.getTeleportTick() >= (lastTeleportTick + 20) || (lastTeleportTick == 0 && data.getTeleportTick() > 0)) {
-						Minecraft.getInstance().player.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
-						lastTeleportTick = data.getTeleportTick();
-					}
-					if (data.getTeleportTick() < lastTeleportTick)
-						lastTeleportTick = data.getTeleportTick();
-					if (data.getTeleportTick() > deltaTick)
-						deltaTick++;
-					else if (data.getTeleportTick() < deltaTick)
-						deltaTick--;
-				});
-			});
+		if (Minecraft.getInstance().player != null) {
+			Insanity data = Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY);
+			if (data.getTeleportTick() >= (lastTeleportTick + 20) || (lastTeleportTick == 0 && data.getTeleportTick() > 0)) {
+				Minecraft.getInstance().player.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
+				lastTeleportTick = data.getTeleportTick();
+			}
+			if (data.getTeleportTick() < lastTeleportTick)
+				lastTeleportTick = data.getTeleportTick();
+			if (data.getTeleportTick() > deltaTick)
+				deltaTick++;
+			else if (data.getTeleportTick() < deltaTick)
+				deltaTick--;
+		}
 	}
 
 	public static void render(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll("turmoil", (gui, poseStack, partialTick, width, height) -> {
+		event.registerAboveAll(new ResourceLocation(Voidscape.MODID, "turmoil"), (gui, poseStack, partialTick, width, height) -> {
 			Level world = Minecraft.getInstance().level;
 			if (world != null && Minecraft.getInstance().player != null) {
-				Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-					renderInsanity(data, poseStack.pose(), partialTick);
-					float perc = Mth.clamp(Mth.lerp(partialTick, lastDeltaTick, deltaTick) / 200F, 0F, 1F);
-					if (perc > 0) {
-						RenderSystem.enableBlend();
-						{
+				renderInsanity(Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY));
+				float perc = Mth.clamp(Mth.lerp(partialTick, lastDeltaTick, deltaTick) / 200F, 0F, 1F);
+				if (perc > 0) {
+					RenderSystem.enableBlend();
+					{
 
-							Window window = Minecraft.getInstance().getWindow();
+						Window window = Minecraft.getInstance().getWindow();
 
-							float x = 0F;
-							float y = 0F;
-							float w = window.getGuiScaledWidth();
-							float h = window.getGuiScaledHeight();
-							float z = 401F; // Catch All
+						float x = 0F;
+						float y = 0F;
+						float w = window.getGuiScaledWidth();
+						float h = window.getGuiScaledHeight();
+						float z = 401F; // Catch All
 
-							ClientUtil.bindTexture(TEXTURE_MASK);
-							Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
-							StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
+						ClientUtil.bindTexture(TEXTURE_MASK);
+						Color24.INSTANCE.set(1F, 1F, 1F, 1F).apply(true, x, y, z, w, h);
+						StencilBufferUtil.setup(STENCIL_INDEX, () -> Shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenEndTesselator(perc));
 
-							Color24.INSTANCE.set(0F, 0F, 0F, 1F).apply(false, x, y, z, w, h);
-							StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
-						}
-						RenderSystem.disableBlend();
+						Color24.INSTANCE.set(0F, 0F, 0F, 1F).apply(false, x, y, z, w, h);
+						StencilBufferUtil.renderAndFlush(STENCIL_INDEX, () -> Shaders.WRAPPED_POS_COLOR.invokeThenEndTesselator());
 					}
-				}));
+					RenderSystem.disableBlend();
+				}
 			}
 		});
 	}
 
-	private static void renderInsanity(Insanity insanity, PoseStack matrixStack, float partialTicks) {
-		renderInfusion(insanity, matrixStack, partialTicks);
-		renderParanoia(insanity, matrixStack, partialTicks);
+	private static void renderInsanity(Insanity insanity) {
+		renderInfusion(insanity);
+		renderParanoia(insanity);
 	}
 
-	private static void renderParanoia(Insanity insanity, PoseStack matrixStack, float partialTicks) {
+	private static void renderParanoia(Insanity insanity) {
 		if (insanity.getParanoia() < 500F)
 			return;
 		float perc = (insanity.getParanoia() - 500F) / 90F;
@@ -115,7 +111,7 @@ public class RenderTurmoil {
 		RenderSystem.disableBlend();
 	}
 
-	private static void renderInfusion(Insanity insanity, PoseStack matrixStack, float partialTicks) {
+	private static void renderInfusion(Insanity insanity) {
 		if (insanity.getInfusion() <= 0)
 			return;
 		float perc = insanity.getInfusion() / 600F;

@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.block.AccessibleFungusBlock;
 import tamaized.voidscape.block.ThunderNyliumBlock;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModFeatures;
@@ -61,15 +62,16 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 					.pushReaction(PushReaction.DESTROY)
 	));
 
-	public static final DeferredHolder<Block, Block> THUNDER_FUNGUS = ModBlocks.REGISTRY.register("thunder_fungus", () -> new FungusBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.FUNGUS)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.noCollission()
-			.instabreak()
-			.replaceable()
-			.pushReaction(PushReaction.DESTROY),
+	public static final DeferredHolder<Block, Block> THUNDER_FUNGUS = ModBlocks.REGISTRY.register("thunder_fungus", () -> new AccessibleFungusBlock(
 			ModFeatures.THUNDER_FUNGUS,
-			THUNDER_NYLIUM.get()
+			THUNDER_NYLIUM.get(),
+			BlockBehaviour.Properties.of()
+					.sound(SoundType.FUNGUS)
+					.mapColor(MapColor.COLOR_PURPLE)
+					.noCollission()
+					.instabreak()
+					.replaceable()
+					.pushReaction(PushReaction.DESTROY)
 	));
 	public static final Supplier<Item> THUNDER_FUNGUS_ITEM = ModItems.REGISTRY
 			.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
@@ -175,6 +177,9 @@ public class ModBlocksThunderForestBiome implements RegistryClass {
 	public static final BlockSetType THUNDER_SET = new BlockSetType(
 			new ResourceLocation(Voidscape.MODID, "thunder").toString(),
 			true,
+			true,
+			true,
+			BlockSetType.PressurePlateSensitivity.EVERYTHING,
 			SoundType.NETHER_WOOD,
 			SoundEvents.NETHER_WOOD_DOOR_CLOSE,
 			SoundEvents.NETHER_WOOD_DOOR_OPEN,

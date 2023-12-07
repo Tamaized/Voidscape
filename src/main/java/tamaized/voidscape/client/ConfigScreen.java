@@ -37,7 +37,10 @@ public class ConfigScreen extends Screen {
 		int ix = font.width(TEXT_DONATOR_COLOR) + 10;
 		addRenderableWidget(input = new EditBox(font, ix, 25, Minecraft.getInstance().getWindow().getGuiScaledWidth() - ix - 15, 20, Component.literal("")));
 		input.setValue(Integer.toHexString(Config.CLIENT_CONFIG.DONATOR.color.get()));
-		addRenderableWidget(enabled = new Checkbox(ix, 50, 20, 20, Component.literal("Enabled"), Config.CLIENT_CONFIG.DONATOR.enabled.get()));
+		addRenderableWidget(enabled = Checkbox.builder(Component.literal("Enabled"), font).pos(ix, 50).selected(Config.CLIENT_CONFIG.DONATOR.enabled.get()).onValueChange((checkbox, value) -> {
+			Config.CLIENT_CONFIG.DONATOR.enabled.set(enabled.selected());
+			Config.CLIENT_CONFIG.DONATOR.enabled.save();
+		}).build());
 	}
 
 	@Override

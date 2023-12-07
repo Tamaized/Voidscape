@@ -4,6 +4,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerBossEvent;
@@ -28,15 +29,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
 import net.neoforged.neoforge.network.NetworkHooks;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.registry.*;
 
 import javax.annotation.Nullable;
 
 public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnData, IEthereal {
 
-	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
+			getDisplayName() == null ? Component.empty() : getDisplayName(),
+			BossEvent.BossBarColor.PURPLE,
+			BossEvent.BossBarOverlay.PROGRESS
+	)).setDarkenScreen(true);
 	private Entity target;
 
 	public CorruptedPawnEntity(Level level) {
@@ -89,21 +92,18 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 		if (!level().isClientSide()) {
 			if (target == null || !target.isAlive())
 				remove(RemovalReason.DISCARDED);
+			else if (!equals(target.getData(ModDataAttachments.INSANITY).getHunter()))
+				remove(RemovalReason.DISCARDED);
 			else {
-				target.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-					if (!equals(data.getHunter()))
-						remove(RemovalReason.DISCARDED);
-					else {
-						lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
-						setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
-					}
-				}));
+				lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
 			}
+
 		} else if (isAlive() && target != null) {
 			target.lookAt(EntityAnchorArgument.Anchor.EYES, getEyePosition());
 			lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
-			if (target instanceof Player target && tickCount % 5 == 0)
-				level().playSound(target, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
+			if (target instanceof Player player && tickCount % 5 == 0)
+				level().playSound(player, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
 		}
 		super.tick();
 	}
@@ -139,7 +139,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
 				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(ModItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
-				target.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.setParanoia(0)));
+				target.getData(ModDataAttachments.INSANITY).setParanoia(0);
 			}
 		}
 	}
@@ -171,6 +171,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityAdditionalSpawnDa
 
 	@Override
 	public boolean canBeCollidedWith() {
+		// Same as super... except we account for ASM/Mixins
 		return false;
 	}
 

@@ -1,48 +1,42 @@
 package tamaized.voidscape.advancement;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.Item;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class ItemMatchesAdvancementTrigger extends SimpleCriterionTrigger<ItemMatchesAdvancementTrigger.Instance> {
 
+	private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
+			ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(Instance::item)
+	).apply(instance, Instance::new));
+
 	@Override
-	public ItemMatchesAdvancementTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
-		if(!json.has("item"))
-			throw new JsonSyntaxException("ItemUsedOnNullServantTrigger: Missing item field");
-		return new ItemMatchesAdvancementTrigger.Instance(player, Objects.requireNonNull(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(json, "item")))));
+	public Codec<Instance> codec() {
+		return CODEC;
 	}
 
 	public void trigger(ServerPlayer player, ItemStack stack) {
-		this.trigger(player, instance -> instance.matches(stack));
+		this.trigger(player, instance -> instance.test(stack));
 	}
 
-	public static class Instance extends AbstractCriterionTriggerInstance {
+	public record Instance(Optional<ContextAwarePredicate> player, ItemStack item) implements SimpleInstance {
 
-		private final Item item;
-
-		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-		public Instance(Optional<ContextAwarePredicate> player, Item item) {
-			super(player);
-			this.item = item;
+		@Override
+		public Optional<ContextAwarePredicate> player() {
+			return player;
 		}
 
-		public boolean matches(ItemStack item) {
-			return item.is(this.item);
+		public boolean test(ItemStack item) {
+			return ItemStack.isSameItem(item, this.item);
 		}
-
 	}
 
 }

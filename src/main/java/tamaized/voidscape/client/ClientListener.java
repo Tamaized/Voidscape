@@ -23,11 +23,11 @@ import org.joml.Matrix4f;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.particle.ParticleSpellCloud;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
+import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModParticles;
 
 import javax.annotation.Nullable;
@@ -68,9 +68,7 @@ public class ClientListener {
 				event.setGreen(0.03F);
 				event.setBlue(0.05F);
 				if (Minecraft.getInstance().player != null)
-					Minecraft.getInstance().player.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> {
-						event.setRed(Mth.clamp(data.getParanoia() / 1200F, 0.04F, 1F));
-					}));
+					event.setRed(Mth.clamp(Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY).getParanoia() / 1200F, 0.04F, 1F));
 			}
 		});
 

@@ -135,7 +135,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 		setAugment(augment);
 		doAugmentEffectsAndTrackBossBar();
 		if (player instanceof ServerPlayer serverPlayer)
-			ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.trigger(serverPlayer, player.getItemInHand(hand));
+			ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.get().trigger(serverPlayer, player.getItemInHand(hand));
 		if (!player.isCreative())
 			player.getItemInHand(hand).shrink(1);
 	}

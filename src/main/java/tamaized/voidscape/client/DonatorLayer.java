@@ -23,8 +23,9 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ui.RenderTurmoil;
+import tamaized.voidscape.data.DonatorData;
+import tamaized.voidscape.registry.ModDataAttachments;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -61,79 +62,77 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 
 	@Override
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapDonatorData).ifPresent(data -> {
-			if (data.enabled) {
+		DonatorData data = entity.getData(ModDataAttachments.DONATOR);
+		if (data.enabled) {
+			VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
 
-				VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
+			float x1 = 0.10F;
+			float y1 = -0.75F;
+			float z1 = 0.75F;
 
-				float x1 = 0.10F;
-				float y1 = -0.75F;
-				float z1 = 0.75F;
+			float x2 = x1 + 1.0F;
+			float y2 = y1 + 1.0F;
+			float z2 = z1 - 0.75F;
 
-				float x2 = x1 + 1.0F;
-				float y2 = y1 + 1.0F;
-				float z2 = z1 - 0.75F;
+			RenderTurmoil.Color24 color = RenderTurmoil.Color24.INSTANCE;
 
-				RenderTurmoil.Color24 color = RenderTurmoil.Color24.INSTANCE;
+			Consumer<VertexConsumer> vertexColor = verticies -> verticies.color(color.bit16, color.bit8, color.bit0, color.bit24).endVertex();
 
-				Consumer<VertexConsumer> vertexColor = verticies -> verticies.color(color.bit16, color.bit8, color.bit0, color.bit24).endVertex();
+			color.set(0.25F, 0F, 0F, 0F);
 
-				color.set(0.25F, 0F, 0F, 0F);
-
-				stack.pushPose();
-				{
-					stack.mulPose(Axis.ZN.rotationDegrees(-25));
-					stack.mulPose(Axis.XN.rotationDegrees(15));
-					Matrix4f pose = stack.last().pose();
-					vertexColor.accept(buffer.vertex(pose, x2, y2, z1).uv(0, 1));
-					vertexColor.accept(buffer.vertex(pose, x2, y1, z1).uv(0, 0));
-					vertexColor.accept(buffer.vertex(pose, x1, y1, z2).uv(1, 0));
-					vertexColor.accept(buffer.vertex(pose, x1, y2, z2).uv(1, 1));
-				}
-				stack.popPose();
-				stack.pushPose();
-				{
-					Matrix4f pose = stack.last().pose();
-					stack.mulPose(Axis.ZN.rotationDegrees(25));
-					stack.mulPose(Axis.XN.rotationDegrees(15));
-					float offset = -1.2F;
-					vertexColor.accept(buffer.vertex(pose, x1 + offset, y2, z1).uv(0, 1));
-					vertexColor.accept(buffer.vertex(pose, x1 + offset, y1, z1).uv(0, 0));
-					vertexColor.accept(buffer.vertex(pose, x2 + offset, y1, z2).uv(1, 0));
-					vertexColor.accept(buffer.vertex(pose, x2 + offset, y2, z2).uv(1, 1));
-				}
-				stack.popPose();
-
-				buffer = BUFFERS.getBuffer(WINGS);
-
-				color.unpack(data.color);
-				color.bit24 = (int) (0.25F * 255);
-
-				stack.pushPose();
-				{
-					stack.mulPose(Axis.ZN.rotationDegrees(-25));
-					stack.mulPose(Axis.XN.rotationDegrees(15));
-					Matrix4f pose = stack.last().pose();
-					vertexColor.accept(buffer.vertex(pose, x2, y2, z1).uv(0, 1));
-					vertexColor.accept(buffer.vertex(pose, x2, y1, z1).uv(0, 0));
-					vertexColor.accept(buffer.vertex(pose, x1, y1, z2).uv(1, 0));
-					vertexColor.accept(buffer.vertex(pose, x1, y2, z2).uv(1, 1));
-				}
-				stack.popPose();
-				stack.pushPose();
-				{
-					Matrix4f pose = stack.last().pose();
-					stack.mulPose(Axis.ZN.rotationDegrees(25));
-					stack.mulPose(Axis.XN.rotationDegrees(15));
-					float offset = -1.2F;
-					vertexColor.accept(buffer.vertex(pose, x1 + offset, y2, z1).uv(0, 1));
-					vertexColor.accept(buffer.vertex(pose, x1 + offset, y1, z1).uv(0, 0));
-					vertexColor.accept(buffer.vertex(pose, x2 + offset, y1, z2).uv(1, 0));
-					vertexColor.accept(buffer.vertex(pose, x2 + offset, y2, z2).uv(1, 1));
-				}
-				stack.popPose();
-
+			stack.pushPose();
+			{
+				stack.mulPose(Axis.ZN.rotationDegrees(-25));
+				stack.mulPose(Axis.XN.rotationDegrees(15));
+				Matrix4f pose = stack.last().pose();
+				vertexColor.accept(buffer.vertex(pose, x2, y2, z1).uv(0, 1));
+				vertexColor.accept(buffer.vertex(pose, x2, y1, z1).uv(0, 0));
+				vertexColor.accept(buffer.vertex(pose, x1, y1, z2).uv(1, 0));
+				vertexColor.accept(buffer.vertex(pose, x1, y2, z2).uv(1, 1));
 			}
-		}));
+			stack.popPose();
+			stack.pushPose();
+			{
+				Matrix4f pose = stack.last().pose();
+				stack.mulPose(Axis.ZN.rotationDegrees(25));
+				stack.mulPose(Axis.XN.rotationDegrees(15));
+				float offset = -1.2F;
+				vertexColor.accept(buffer.vertex(pose, x1 + offset, y2, z1).uv(0, 1));
+				vertexColor.accept(buffer.vertex(pose, x1 + offset, y1, z1).uv(0, 0));
+				vertexColor.accept(buffer.vertex(pose, x2 + offset, y1, z2).uv(1, 0));
+				vertexColor.accept(buffer.vertex(pose, x2 + offset, y2, z2).uv(1, 1));
+			}
+			stack.popPose();
+
+			buffer = BUFFERS.getBuffer(WINGS);
+
+			color.unpack(data.color);
+			color.bit24 = (int) (0.25F * 255);
+
+			stack.pushPose();
+			{
+				stack.mulPose(Axis.ZN.rotationDegrees(-25));
+				stack.mulPose(Axis.XN.rotationDegrees(15));
+				Matrix4f pose = stack.last().pose();
+				vertexColor.accept(buffer.vertex(pose, x2, y2, z1).uv(0, 1));
+				vertexColor.accept(buffer.vertex(pose, x2, y1, z1).uv(0, 0));
+				vertexColor.accept(buffer.vertex(pose, x1, y1, z2).uv(1, 0));
+				vertexColor.accept(buffer.vertex(pose, x1, y2, z2).uv(1, 1));
+			}
+			stack.popPose();
+			stack.pushPose();
+			{
+				Matrix4f pose = stack.last().pose();
+				stack.mulPose(Axis.ZN.rotationDegrees(25));
+				stack.mulPose(Axis.XN.rotationDegrees(15));
+				float offset = -1.2F;
+				vertexColor.accept(buffer.vertex(pose, x1 + offset, y2, z1).uv(0, 1));
+				vertexColor.accept(buffer.vertex(pose, x1 + offset, y1, z1).uv(0, 0));
+				vertexColor.accept(buffer.vertex(pose, x2 + offset, y1, z2).uv(1, 0));
+				vertexColor.accept(buffer.vertex(pose, x2 + offset, y2, z2).uv(1, 1));
+			}
+			stack.popPose();
+
+		}
 	}
 }

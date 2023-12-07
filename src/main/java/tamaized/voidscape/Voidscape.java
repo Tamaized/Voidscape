@@ -46,7 +46,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -59,9 +58,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
-import tamaized.voidscape.capability.DonatorData;
-import tamaized.voidscape.capability.Insanity;
-import tamaized.voidscape.capability.SubCapability;
 import tamaized.voidscape.client.ClientInitiator;
 import tamaized.voidscape.client.ConfigScreen;
 import tamaized.voidscape.entity.IEthereal;
@@ -90,9 +86,6 @@ public class Voidscape {
 			serverAcceptedVersions(s -> true).
 			networkProtocolVersion(() -> "1").
 			simpleChannel();
-
-	public static final SubCapability.ISubCap.SubCapKey<Insanity> subCapInsanity = SubCapability.AttachedSubCap.register(Insanity.class, Insanity::new);
-	public static final SubCapability.ISubCap.SubCapKey<DonatorData> subCapDonatorData = SubCapability.AttachedSubCap.register(DonatorData.class, DonatorData::new);
 
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 
@@ -124,6 +117,7 @@ public class Voidscape {
 				ModBlockEntities::new,
 				ModCreativeTabs::new,
 				ModDamageSource::new,
+				ModDataAttachments::new,
 				ModDataSerializers::new,
 				ModEffects::new,
 				ModEntities::new,
@@ -161,8 +155,6 @@ public class Voidscape {
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 		});
 
-		SubCapability.init(busMod);
-
 		busMod.addListener(FMLCommonSetupEvent.class, event -> {
 			NetworkMessages.register(NETWORK);
 		});
@@ -174,8 +166,7 @@ public class Voidscape {
 
 		busForge.addListener(TickEvent.PlayerTickEvent.class, event -> {
 			if (event.player.level() != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level())) {
-				if ((!event.player.level().isClientSide() || event.player.getCapability(SubCapability.CAPABILITY).
-						map(cap -> cap.get(Voidscape.subCapInsanity).map(data -> data.getParanoia() / 600F > 0.25F).orElse(false)).orElse(false)) &&
+				if ((!event.player.level().isClientSide() || event.player.getData(ModDataAttachments.INSANITY).getParanoia() / 600F > 0.25F) &&
 
 						event.player.tickCount % 30 == 0 &&
 
@@ -222,15 +213,13 @@ public class Voidscape {
 					}
 				}
 				if (event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
-					arrowEntity.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> {
-						float voidic = data.getDamage();
-						if (voidic > 0) {
-							if (event.getEntity().getHealth() <= event.getAmount())
-								return;
-							event.getEntity().invulnerableTime = 0;
-							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
-						}
-					});
+					float voidic = arrowEntity.getData(ModDataAttachments.VOIDIC_ARROW);
+					if (voidic > 0) {
+						if (event.getEntity().getHealth() <= event.getAmount())
+							return;
+						event.getEntity().invulnerableTime = 0;
+						event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
+					}
 				}
 			} else if (event.getSource().is(ModDamageSource.VOIDIC)) {
 				if (event.getEntity().hasEffect(ModEffects.ICHOR.get())) {
@@ -253,7 +242,7 @@ public class Voidscape {
 						return;
 					float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get());
 					if (voidic > 0)
-						arrow.getCapability(SubCapability.CAPABILITY_VOIDICARROW).ifPresent(data -> data.setDamage(voidic));
+						arrow.setData(ModDataAttachments.VOIDIC_ARROW, voidic);
 				}
 			}
 		});
@@ -283,8 +272,7 @@ public class Voidscape {
 			if (event.getSpawnType() == MobSpawnType.NATURAL &&
 					!(event.getEntity() instanceof IEthereal) &&
 					Voidscape.checkForVoidDimension(event.getEntity().level())) {
-				event.getEntity().getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity).ifPresent(data -> data.
-						setInfusion(event.getEntity().getRandom().nextInt(200) + 100)));
+				event.getEntity().getData(ModDataAttachments.INSANITY).setInfusion(event.getEntity().getRandom().nextInt(200) + 100);
 			}
 		});
 	}

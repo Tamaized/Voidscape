@@ -1,5 +1,6 @@
 package tamaized.voidscape.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,10 +22,17 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class EtherealPlantBlock extends BushBlock {
 
+	public static final MapCodec<EtherealPlantBlock> CODEC = simpleCodec(EtherealPlantBlock::new);
+
 	private static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 
 	public EtherealPlantBlock(Properties prop) {
 		super(prop);
+	}
+
+	@Override
+	protected MapCodec<? extends BushBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

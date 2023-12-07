@@ -1,11 +1,9 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -21,22 +19,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.PortalBlock;
-import tamaized.voidscape.capability.SubCapability;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.StrangePearlEntity;
 import tamaized.voidscape.world.ConfigurablePortalShape;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -65,7 +60,7 @@ public class ModItems implements RegistryClass {
 								getClickedPos().getY() + context.getLevel().getRandom().nextFloat(), context.
 								getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(), 0, 0, 0, 0, 1F);
 				if (context.getPlayer() instanceof ServerPlayer serverPlayer)
-					ModAdvancementTriggers.ETHEREAL_ESSENCE_TRIGGER.trigger(serverPlayer);
+					ModAdvancementTriggers.ETHEREAL_ESSENCE_TRIGGER.get().trigger(serverPlayer);
 				return InteractionResult.SUCCESS;
 			}
 			return super.useOn(context);
@@ -86,14 +81,14 @@ public class ModItems implements RegistryClass {
 					PortalBlock.FRAME_TEST,
 					PortalBlock.PORTAL_TEST,
 					PortalBlock.IGNITER_TEST
-					);
+			);
 			if (configurablePortalShape.isPresent()) {
 				configurablePortalShape.get().createPortalBlocks(ModBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
 				level.playSound(player, blockpos1, SoundEvents.TRIDENT_THUNDER, SoundSource.BLOCKS, 1F, 0.75F + context.getLevel().getRandom().nextFloat() * 0.5F);
 				ItemStack stack = context.getItemInHand();
 
 				if (player instanceof ServerPlayer serverPlayer) {
-					ModAdvancementTriggers.ACTIVATE_PORTAL_TRIGGER.trigger(serverPlayer);
+					ModAdvancementTriggers.ACTIVATE_PORTAL_TRIGGER.get().trigger(serverPlayer);
 					if (!serverPlayer.isCreative())
 						stack.shrink(1);
 				}
@@ -156,8 +151,8 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-						.ifPresent(data -> data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))))));
+				Insanity data = entity.getData(ModDataAttachments.INSANITY);
+				data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))));
 			}
 			return itemstack;
 		}
@@ -168,8 +163,8 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-						.ifPresent(data -> data.setInfusion(data.getInfusion() - 150)));
+				Insanity data = entity.getData(ModDataAttachments.INSANITY);
+				data.setInfusion(data.getInfusion() - 150);
 			}
 			return itemstack;
 		}
@@ -180,8 +175,8 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-						.ifPresent(data -> data.setParanoia(data.getParanoia() - 150)));
+				Insanity data = entity.getData(ModDataAttachments.INSANITY);
+				data.setParanoia(data.getParanoia() - 150);
 			}
 			return itemstack;
 		}
@@ -192,8 +187,8 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				entity.getCapability(SubCapability.CAPABILITY).ifPresent(cap -> cap.get(Voidscape.subCapInsanity)
-						.ifPresent(data -> data.setParanoia(data.getParanoia() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))))));
+				Insanity data = entity.getData(ModDataAttachments.INSANITY);
+				data.setParanoia(data.getParanoia() - (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))));
 			}
 			return itemstack;
 		}

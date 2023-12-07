@@ -1,32 +1,36 @@
 package tamaized.voidscape.advancement;
 
-import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.Optional;
 
 public class GenericAdvancementTrigger extends SimpleCriterionTrigger<GenericAdvancementTrigger.Instance> {
 
-	@Override
-	public GenericAdvancementTrigger.Instance createInstance(JsonObject json, Optional<ContextAwarePredicate> player, DeserializationContext condition) {
-		return new GenericAdvancementTrigger.Instance(player);
-	}
+	private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player)
+	).apply(instance, Instance::new));
 
 	public void trigger(ServerPlayer player) {
 		this.trigger(player, instance -> true);
 	}
 
-	public static class Instance extends AbstractCriterionTriggerInstance {
+	@Override
+	public Codec<Instance> codec() {
+		return CODEC;
+	}
 
-		@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-		public Instance(Optional<ContextAwarePredicate> player) {
-			super(player);
+	public record Instance(Optional<ContextAwarePredicate> player) implements SimpleInstance {
+
+		@Override
+		public Optional<ContextAwarePredicate> player() {
+			return player;
 		}
-
 	}
 
 }

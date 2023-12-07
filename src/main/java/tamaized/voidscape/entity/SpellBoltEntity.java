@@ -35,7 +35,7 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAd
 	protected double maxRange = 0D;
 
 	public SpellBoltEntity(EntityType<? extends SpellBoltEntity> type, Level level, int color) {
-		super(type, level);
+		super(type, level, ItemStack.EMPTY);
 		startingPoint = position();
 		pickup = Pickup.DISALLOWED;
 		noCulling = true;

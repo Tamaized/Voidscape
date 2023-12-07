@@ -1,4 +1,4 @@
-package tamaized.voidscape.capability;
+package tamaized.voidscape.data;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,11 +23,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
+import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidPortalTeleporter;
@@ -36,9 +38,8 @@ import tamaized.voidscape.world.VoidTeleporter;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
+public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {
 
-	private static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "insanity");
 	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
 	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
 	private static final UUID INFUSION_RESISTANCE = UUID.fromString("4fe870c1-c74f-4856-b30d-7a4311d72639");
@@ -86,7 +87,6 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				canTeleport(parent);
 	}
 
-	@Override
 	public void tick(Entity parent) {
 		if (!parent.level().isClientSide()) {
 			if (leapParticles > 0)
@@ -239,7 +239,7 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 				}
 				if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level())) {
 					if (parent instanceof ServerPlayer player)
-						ModAdvancementTriggers.INFUSED_TRIGGER.trigger(player);
+						ModAdvancementTriggers.INFUSED_TRIGGER.get().trigger(player);
 					parent.hurt(parent.damageSources().fellOutOfWorld(), 1024F);
 				}
 			}
@@ -351,7 +351,8 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public CompoundTag write(CompoundTag nbt, @Nullable Direction side) {
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = new CompoundTag();
 		nbt.putFloat("paranoia", paranoia);
 		nbt.putFloat("infusion", infusion);
 		nbt.putBoolean("inPortal", inPortal);
@@ -361,17 +362,12 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 	}
 
 	@Override
-	public void read(CompoundTag nbt, @Nullable Direction side) {
+	public void deserializeNBT(CompoundTag nbt) {
 		paranoia = nbt.getFloat("paranoia");
 		infusion = nbt.getFloat("infusion");
 		inPortal = nbt.getBoolean("inPortal");
 		pleaseLeavePortal = nbt.getBoolean("pleaseLeavePortal");
 		teleportTick = nbt.getInt("teleportTick");
-	}
-
-	@Override
-	public ResourceLocation id() {
-		return ID;
 	}
 
 	@Override
@@ -392,17 +388,12 @@ public class Insanity implements SubCapability.ISubCap.ISubCapData.All {
 		leapParticles = buffer.readInt();
 	}
 
-	@Override
-	public void clone(SubCapability.ISubCap.ISubCapData old, boolean death) {
-		if (old instanceof Insanity o) {
-			if (!death) {
-				infusion = o.infusion;
-				paranoia = o.paranoia;
-				inPortal = o.inPortal;
-				pleaseLeavePortal = o.pleaseLeavePortal;
-				teleportTick = o.teleportTick;
-			}
-		}
+	private void sendToClient(ServerPlayer parent) {
+		Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> parent), new ClientPacketInsanitySync(this));
+	}
+
+	private void sendToClients(Entity parent) {
+		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> parent), new ClientPacketInsanitySync(this, parent));
 	}
 
 }
