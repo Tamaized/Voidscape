@@ -56,6 +56,7 @@
   "entity.voidscape.null_servant.ichor": "Іхоровий слуга",
   "entity.voidscape.null_servant.astral": "Астарльний слуга",
   "entity.voidscape.null_servant_augment_block": "Блок",
+  "entity.voidscape.strange_pearl": "Дивна перлина",
   "entity.voidscape.voids_wrath": "Гнів порожнечі",
   "entity.voidscape.corrupted_pawn": "Зіпсований пішак",
   "entity.voidscape.corrupted_pawn_tentacle": "Мацак зіпсованого пішака",
@@ -65,6 +66,7 @@
 
   "block.voidscape.voidic_crystal_ore": "Порожнява кристалічна руда",
   "block.voidscape.voidic_crystal_block": "Блок порожнявого кристала",
+  "block.voidscape.charred_brick": "Обвуглена кістка цеглини",
   "block.voidscape.titanite_ore": "Титанітова руда",
   "block.voidscape.flesh_ore": "Руда плоті",
   "block.voidscape.flesh_block": "Потойбічна плоть",
