@@ -151,6 +151,10 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 
 	@Override
 	public boolean hurt(DamageSource pSource, float pAmount) {
+		if (parent == null) {
+			discard();
+			return true;
+		}
 		if (pSource.is(DamageTypes.IN_WALL))
 			return false;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
