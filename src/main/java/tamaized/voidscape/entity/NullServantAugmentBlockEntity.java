@@ -74,7 +74,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	@Nullable
-	public static Vec3 randomPos(Level level, RandomSource random, Vec3 from, @Nullable Entity clipSource) {
+	public static Vec3 randomPos(Level level, RandomSource random, Vec3 from, Entity clipSource) {
 		for (int i = 0; i < 10; i++) {
 			Vec3 vec = new Vec3(5, 0.125, 0).yRot(Mth.DEG_TO_RAD * (random.nextFloat() * 360F)).add(from);
 			BlockHitResult result = level.clip(new ClipContext(vec, from, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, clipSource));
