@@ -25,7 +25,7 @@ public class LiquifierBlockEntity extends BlockEntity {
 	public final ItemStackHandler items = new ItemStackHandler(1);
 	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get());
 
-	private BlockPosDirectionCapabilityCacher<IFluidHandler> capabilityCache;
+	private final BlockPosDirectionCapabilityCacher<IFluidHandler> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
 	private int tick;
 	private int processTick;

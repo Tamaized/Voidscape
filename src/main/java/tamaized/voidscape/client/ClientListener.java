@@ -15,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
@@ -35,8 +34,7 @@ import java.util.Objects;
 
 public class ClientListener {
 
-	public static void init() {
-		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
+	public static void init(IEventBus busMod) {
 		IEventBus busForge = NeoForge.EVENT_BUS;
 
 		Shaders.init(busMod);

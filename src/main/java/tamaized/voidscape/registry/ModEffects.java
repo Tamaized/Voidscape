@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.common.EffectCure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
@@ -22,6 +23,7 @@ import tamaized.voidscape.client.ClientUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -52,8 +54,9 @@ public class ModEffects implements RegistryClass {
 		}
 
 		@Override
-		public List<ItemStack> getCurativeItems() {
-			return allowCure ? super.getCurativeItems() : new ArrayList<>(); // Disable Milk
+		public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+			if (allowCure)
+				super.fillEffectCures(cures, effectInstance);
 		}
 
 		<T extends StandardEffect> T texture(String loc) {

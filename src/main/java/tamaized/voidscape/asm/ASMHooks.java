@@ -41,6 +41,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
@@ -130,7 +131,7 @@ public class ASMHooks {
 		if (entity instanceof ServerPlayer player) {
 			if (Voidscape.checkForVoidDimension(player.level())) {
 				player.setHealth(entity.getMaxHealth() * 0.1F);
-				player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+				player.removeEffectsCuredBy(EffectCures.MILK);
 				if (!player.level().isClientSide())
 					Voidscape.getPlayersSpawnLevel(player).ifPresent(level -> player.changeDimension(level, VoidTeleporter.INSTANCE));
 				return true;

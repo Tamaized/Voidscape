@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class BlockPosDirectionCapabilityCacher<R> {
 
-	private Map<BlockPosAndDirection, BlockCapabilityCache<R, Direction>> data = new HashMap<>();
+	private final Map<BlockPosAndDirection, BlockCapabilityCache<R, Direction>> data = new HashMap<>();
 
 	public R get(BlockCapability<R, Direction> capability, ServerLevel level, BlockPos pos, Direction direction) {
 		BlockCapabilityCache<R, Direction> cache = data.get(new BlockPosAndDirection(pos, direction));

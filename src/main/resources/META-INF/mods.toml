@@ -14,7 +14,7 @@ description='''
 
 [[dependencies.voidscape]]
     modId="neoforge"
-    mandatory=true
+    type="required"
     versionRange="[20,)"
     ordering="NONE"
     side="BOTH"
