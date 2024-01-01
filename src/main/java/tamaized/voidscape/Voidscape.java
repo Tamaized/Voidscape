@@ -155,9 +155,19 @@ public class Voidscape {
 
 		busMod.addListener(FMLCommonSetupEvent.class, event -> {
 			NetworkMessages.register(NETWORK);
+			
+			event.enqueueWork(() -> {
+				ComposterBlock.add(0.85F, ModBlocksThunderForestBiome.THUNDER_WART.get());
+				ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_ROOTS.get());
+				ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_FUNGUS.get());
+				ComposterBlock.add(0.5F, ModBlocksThunderForestBiome.THUNDER_VINES.get());
+				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_END.get());
+				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NETHER.get());
+				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_OVERWORLD.get());
+				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_VOID.get());
+				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NULL.get());
+			});
 		});
-		
-		busMod.addListener(this::init);
 
 		busForge.addListener(ServerStartingEvent.class, event ->
 				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape").
@@ -361,20 +371,5 @@ public class Voidscape {
 		}
 
 		return entity == null ? null : new EntityHitResult(entity, vector3d);
-	}
-
-	public void init(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> {
-			ComposterBlock.add(0.85F, ModBlocksThunderForestBiome.THUNDER_WART.get());
-			ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_ROOTS.get());
-			ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_FUNGUS.get());
-			ComposterBlock.add(0.5F, ModBlocksThunderForestBiome.THUNDER_VINES.get());
-
-			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_END.get());
-			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NETHER.get());
-			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_OVERWORLD.get());
-			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_VOID.get());
-			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NULL.get());
-		});
 	}
 }
