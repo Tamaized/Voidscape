@@ -298,7 +298,7 @@ public class Voidscape {
 		}
 	}
 
-@Nullable
+	@Nullable
 	private static Boolean meleeOrArrowSource(DamageSource source) {
 		if (source.is(DamageTypes.PLAYER_ATTACK) || source.is(DamageTypes.MOB_ATTACK))
 			return false;
