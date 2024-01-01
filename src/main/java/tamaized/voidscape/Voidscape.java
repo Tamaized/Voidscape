@@ -372,4 +372,5 @@ public class Voidscape {
 
 		return entity == null ? null : new EntityHitResult(entity, vector3d);
 	}
+	
 }
