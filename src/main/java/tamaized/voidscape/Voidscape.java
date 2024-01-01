@@ -363,20 +363,13 @@ public class Voidscape {
 		return entity == null ? null : new EntityHitResult(entity, vector3d);
 	}
 
-	//pain in my arse
-	public void init(FMLCommonSetupEvent evt) {
-		evt.enqueueWork(() -> {
-			//Thunder Forest Plant Values are based on respective Vanilla Values
+	public void init(FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
 			ComposterBlock.add(0.85F, ModBlocksThunderForestBiome.THUNDER_WART.get());
 			ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_ROOTS.get());
 			ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_FUNGUS.get());
 			ComposterBlock.add(0.5F, ModBlocksThunderForestBiome.THUNDER_VINES.get());
 
-			/*
-			* Ethereal Fruits are based on Sweet Berry Values
-			* Ethereal Plants wont be added since it makes no sense for them to be obtainable c:
-			* ...and bc tama said no
-			*/
 			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_END.get());
 			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NETHER.get());
 			ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_OVERWORLD.get());
