@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 public record ClientPacketDonatorSync(@Nullable DonatorData handler, int entity, @Nullable FriendlyByteBuf data) implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "donatorsync");
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "s2c_donator_sync");
 
 	public ClientPacketDonatorSync(DonatorData handler, Entity entity) {
 		this(handler, entity.getId(), null);

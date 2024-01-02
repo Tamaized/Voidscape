@@ -9,7 +9,7 @@ import tamaized.voidscape.network.DonatorHandler;
 
 public record ServerPacketHandlerDonatorSettings(DonatorHandler.DonatorSettings settings) implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "donatorsettings");
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "c2s_donator_settings");
 
 	public ServerPacketHandlerDonatorSettings(FriendlyByteBuf packet) {
 		this(new DonatorHandler.DonatorSettings(packet.readBoolean(), packet.readInt()));

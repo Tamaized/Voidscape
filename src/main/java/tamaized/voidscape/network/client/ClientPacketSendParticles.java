@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "sendparticles");
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "s2c_send_particles");
     
     public ClientPacketSendParticles() {
 		this(new ArrayList<>());

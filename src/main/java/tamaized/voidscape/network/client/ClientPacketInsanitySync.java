@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 public record ClientPacketInsanitySync(@Nullable Insanity handler, int entity, @Nullable FriendlyByteBuf data) implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "insanitysync");
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "s2c_insanity_sync");
 
 	public ClientPacketInsanitySync(Insanity handler, Entity entity) {
 		this(handler, entity.getId(), null);

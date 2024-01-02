@@ -9,7 +9,7 @@ import tamaized.voidscape.Voidscape;
 
 public record ClientPacketNoFlashOnSetHealth() implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "noflashsethealth");
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "s2c_no_flash_set_health");
 
 	public ClientPacketNoFlashOnSetHealth(FriendlyByteBuf packet) {
 		this();
