@@ -26,6 +26,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -63,6 +64,7 @@ import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 
@@ -155,6 +157,18 @@ public class Voidscape {
 
 		busMod.addListener(FMLCommonSetupEvent.class, event -> {
 			NetworkMessages.register(NETWORK);
+			
+			event.enqueueWork(() -> {
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_WART.get().asItem(), 0.85F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_ROOTS.get().asItem(), 0.65F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_FUNGUS.get().asItem(), 0.65F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_VINES.get().asItem(), 0.5F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_END.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NETHER.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_OVERWORLD.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_VOID.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NULL.get().asItem(), 0.3F);
+			});
 		});
 
 		busForge.addListener(ServerStartingEvent.class, event ->
