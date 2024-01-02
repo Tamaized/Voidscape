@@ -183,7 +183,7 @@ public class SpecialAugmentGoal extends Goal {
 		parent.playSound(SoundEvents.GENERIC_EXPLODE, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
 		ClientPacketSendParticles particles = new ClientPacketSendParticles();
 		particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, false, pos, Vec3.ZERO);
-		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> parent), particles);
+		PacketDistributor.TRACKING_ENTITY.with(parent).send(particles);
 	}
 
 	private void ichor(Vec3 pos) {
@@ -203,7 +203,7 @@ public class SpecialAugmentGoal extends Goal {
 					.xRot((float) Math.toRadians(parent.getRandom().nextInt(360)));
 			particles.queueParticle(new ModParticles.ParticleSpellCloudData(0xFF7700), false, pos, dir.add(0, 0.25D, 0));
 		}
-		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> parent), particles);
+		PacketDistributor.TRACKING_ENTITY.with(parent).send(particles);
 	}
 
 	private void shoot(Vec3 pos) {

@@ -29,7 +29,7 @@ public class NullServantIchorBoltEntity extends SpellBoltEntity {
 		if (!level().isClientSide()) {
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			particles.queueParticle(ParticleTypes.EXPLOSION, false, position().x(), position().y(), position().z(), 0, 0, 0);
-			Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), particles);
+			PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
 		}
 		level().playSound(null, blockPosition(), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 4F, 1F);
 		entity.hurt(ModDamageSource.getIndirectEntityDamageSource(level(), ModDamageSource.VOIDIC, this, shootingEntity), 8F);

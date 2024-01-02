@@ -2,32 +2,33 @@ package tamaized.voidscape.network.client;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.network.NetworkMessages;
 
-import javax.annotation.Nullable;
+public record ClientPacketNoFlashOnSetHealth() implements CustomPacketPayload {
 
-public class ClientPacketNoFlashOnSetHealth implements NetworkMessages.IMessage<ClientPacketNoFlashOnSetHealth> {
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "noflashsethealth");
 
-	public ClientPacketNoFlashOnSetHealth() {
+	public ClientPacketNoFlashOnSetHealth(FriendlyByteBuf packet) {
+		this();
+	}
+
+	@Override
+	public void write(FriendlyByteBuf pBuffer) {
 
 	}
 
 	@Override
-	public void handle(@Nullable Player player) {
-		if (player instanceof LocalPlayer local)
-			local.flashOnSetHealth = false;
+	public ResourceLocation id() {
+		return ID;
 	}
 
-	@Override
-	public void toBytes(FriendlyByteBuf packet) {
-
+	public static void handle(ClientPacketNoFlashOnSetHealth payload, PlayPayloadContext context) {
+		context.player().ifPresent(player -> {
+			if (player instanceof LocalPlayer local)
+				local.flashOnSetHealth = false;
+		});
 	}
-
-	@Override
-	public ClientPacketNoFlashOnSetHealth fromBytes(FriendlyByteBuf packet) {
-		return this;
-	}
-
 }

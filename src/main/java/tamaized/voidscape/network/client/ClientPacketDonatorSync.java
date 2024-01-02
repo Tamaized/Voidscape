@@ -1,58 +1,59 @@
 package tamaized.voidscape.network.client;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.DonatorData;
-import tamaized.voidscape.data.Insanity;
-import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.ModDataAttachments;
 
 import javax.annotation.Nullable;
 
-public class ClientPacketDonatorSync implements NetworkMessages.IMessage<ClientPacketDonatorSync> {
+public record ClientPacketDonatorSync(@Nullable DonatorData handler, int entity, @Nullable FriendlyByteBuf data) implements CustomPacketPayload {
 
-	private DonatorData handler;
-	private int entity;
-	private FriendlyByteBuf data;
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "donatorsync");
 
 	public ClientPacketDonatorSync(DonatorData handler, Entity entity) {
-		this(handler);
-		this.entity = entity.getId();
+		this(handler, entity.getId(), null);
 	}
 
 	public ClientPacketDonatorSync(DonatorData handler) {
-		this.handler = handler;
+		this(handler, -1, null);
 	}
 
-	public ClientPacketDonatorSync() {
-
-	}
-
-	@Override
-	public void handle(@Nullable Player player) {
-		if (player == null || !player.level().isClientSide()) {
-			Voidscape.LOGGER.fatal("Warning, client attempted to send malicious packet! ({})", player == null ? "NULL PLAYER" : player.getDisplayName());
-			return;
-		}
-		Entity entity = this.entity > 0 ? player.level().getEntity(this.entity) : player;
-		if (entity == null)
-			return;
-		entity.getData(ModDataAttachments.DONATOR).read(data);
+	public ClientPacketDonatorSync(FriendlyByteBuf packet) {
+		this(null, packet.readInt(), packet);
 	}
 
 	@Override
-	public void toBytes(FriendlyByteBuf packet) {
+	public void write(FriendlyByteBuf packet) {
+		if (handler == null)
+			throw new IllegalStateException("ClientPacketDonatorSync: Null Handler for entity id " + entity);
 		packet.writeInt(entity);
 		handler.write(packet);
 	}
 
 	@Override
-	public ClientPacketDonatorSync fromBytes(FriendlyByteBuf packet) {
-		entity = packet.readInt();
-		data = packet;
-		return this;
+	public ResourceLocation id() {
+		return ID;
+	}
+
+	public static void handle(ClientPacketDonatorSync payload, PlayPayloadContext context) {
+		context.player().ifPresent(player -> {
+			Entity entity = payload.entity > 0 ? player.level().getEntity(payload.entity) : player;
+			if (entity == null)
+				return;
+			FriendlyByteBuf data = payload.data;
+			if (data == null && payload.handler != null) { // Assume Singleplayer
+				data = new FriendlyByteBuf(Unpooled.buffer());
+				payload.handler.write(data);
+			}
+			if (data != null)
+				entity.getData(ModDataAttachments.DONATOR).read(data);
+		});
 	}
 
 }

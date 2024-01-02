@@ -18,6 +18,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
@@ -55,7 +56,7 @@ public class ClientListener {
 				else if (Config.CLIENT_CONFIG.DONATOR.dirty) {
 					Config.CLIENT_CONFIG.DONATOR.dirty = false;
 					if (DonatorHandler.donators.contains(Minecraft.getInstance().player.getUUID()))
-						Voidscape.NETWORK.sendToServer(new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(Config.CLIENT_CONFIG.DONATOR.enabled.get(), Config.CLIENT_CONFIG.DONATOR.color.get())));
+						PacketDistributor.SERVER.noArg().send(new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(Config.CLIENT_CONFIG.DONATOR.enabled.get(), Config.CLIENT_CONFIG.DONATOR.color.get())));
 				}
 			}
 		});

@@ -7,22 +7,34 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-import tamaized.voidscape.network.NetworkMessages;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import tamaized.voidscape.Voidscape;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ClientPacketSendParticles implements NetworkMessages.IMessage<ClientPacketSendParticles> {
+public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) implements CustomPacketPayload {
+
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "sendparticles");
     
-    private final List<QueuedParticle> queuedParticles = new ArrayList<>();
-
     public ClientPacketSendParticles() {
-
+		this(new ArrayList<>());
     }
+
+	public ClientPacketSendParticles(FriendlyByteBuf packet) {
+		this();
+		int size = packet.readInt();
+		for (int i = 0; i < size; i++) {
+			Optional<Holder.Reference<ParticleType<?>>> type = BuiltInRegistries.PARTICLE_TYPE.getHolder(packet.readResourceKey(Registries.PARTICLE_TYPE));
+			if (type.isEmpty())
+				break; // Fail silently and end execution entirely. Due to Type serialization we now have completely unknown data in the pipeline without any way to safely read it all
+			this.queuedParticles.add(new QueuedParticle(readParticle(type.get().value(), packet), packet.readBoolean(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
+		}
+	}
 
     public void queueParticle(ParticleOptions particleOptions, boolean b, double x, double y, double z, double x2, double y2, double z2) {
         this.queuedParticles.add(new QueuedParticle(particleOptions, b, x, y, z, x2, y2, z2));
@@ -33,14 +45,7 @@ public class ClientPacketSendParticles implements NetworkMessages.IMessage<Clien
     }
 
     @Override
-    public void handle(@Nullable Player player) {
-        if (player == null || !(player.level() instanceof ClientLevel level))
-            return;
-        queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.b, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2));
-    }
-
-    @Override
-    public void toBytes(FriendlyByteBuf packet) {
+    public void write(FriendlyByteBuf packet) {
         packet.writeInt(this.queuedParticles.size());
         for (QueuedParticle queuedParticle : this.queuedParticles) {
             packet.writeResourceKey(BuiltInRegistries.PARTICLE_TYPE.getResourceKey(queuedParticle.particleOptions.getType()).orElseThrow());
@@ -55,21 +60,22 @@ public class ClientPacketSendParticles implements NetworkMessages.IMessage<Clien
         }
     }
 
-    @Override
-    public ClientPacketSendParticles fromBytes(FriendlyByteBuf packet) {
-        int size = packet.readInt();
-        for (int i = 0; i < size; i++) {
-            Optional<Holder.Reference<ParticleType<?>>> type = BuiltInRegistries.PARTICLE_TYPE.getHolder(packet.readResourceKey(Registries.PARTICLE_TYPE));
-            if (type.isEmpty())
-                break; // Fail silently and end execution entirely. Due to Type serialization we now have completely unknown data in the pipeline without any way to safely read it all
-            this.queuedParticles.add(new QueuedParticle(readParticle(type.get().value(), packet), packet.readBoolean(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
-        }
-        return this;
-    }
-
     private <T extends ParticleOptions> T readParticle(ParticleType<T> particleType, FriendlyByteBuf buf) {
         return particleType.getDeserializer().fromNetwork(particleType, buf);
     }
+
+	@Override
+	public ResourceLocation id() {
+		return ID;
+	}
+
+	public static void handle(ClientPacketSendParticles payload, PlayPayloadContext context) {
+		context.player().ifPresent(player -> {
+			if (!(player.level() instanceof ClientLevel level))
+				return;
+			payload.queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.b, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2));
+		});
+	}
 
     private record QueuedParticle(ParticleOptions particleOptions, boolean b, double x, double y, double z, double x2,
                                   double y2, double z2) {

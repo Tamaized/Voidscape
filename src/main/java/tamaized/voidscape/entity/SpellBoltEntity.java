@@ -18,11 +18,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import tamaized.voidscape.registry.ModParticles;
 
-public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAdditionalSpawnData {
+public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWithComplexSpawn {
 
 	protected LivingEntity shootingEntity;
 	private int particleColor;
@@ -221,11 +220,6 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityAd
 	@Override
 	protected ItemStack getPickupItem() {
 		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

@@ -42,11 +42,11 @@ public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTa
 	}
 
 	private void sendToClient(ServerPlayer parent) {
-		Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> parent), new ClientPacketDonatorSync(this));
+		PacketDistributor.PLAYER.with(parent).send(new ClientPacketDonatorSync(this));
 	}
 
 	private void sendToClients(Entity parent) {
-		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> parent), new ClientPacketDonatorSync(this, parent));
+		PacketDistributor.TRACKING_ENTITY_AND_SELF.with(parent).send(new ClientPacketDonatorSync(this, parent));
 	}
 
 	@Override

@@ -49,8 +49,6 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.network.NetworkRegistry;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -80,13 +78,6 @@ public class Voidscape {
 	public static final String MODID = "voidscape";
 
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
-
-	public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.
-			named(new ResourceLocation(MODID, MODID)).
-			clientAcceptedVersions(s -> true).
-			serverAcceptedVersions(s -> true).
-			networkProtocolVersion(() -> "1").
-			simpleChannel();
 
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
 
@@ -132,6 +123,8 @@ public class Voidscape {
 				ModSurfaceRules::new,
 				ModTools::new);
 
+		NetworkMessages.register(busMod);
+
 		busMod.addListener(AddPackFindersEvent.class, event -> {
 			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {
 				Path resourcePath = ModList.get().getModFileById(MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat");
@@ -156,8 +149,6 @@ public class Voidscape {
 		});
 
 		busMod.addListener(FMLCommonSetupEvent.class, event -> {
-			NetworkMessages.register(NETWORK);
-			
 			event.enqueueWork(() -> {
 				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_WART.get().asItem(), 0.85F);
 				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_ROOTS.get().asItem(), 0.65F);

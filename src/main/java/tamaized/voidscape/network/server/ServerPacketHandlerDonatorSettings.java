@@ -1,33 +1,35 @@
 package tamaized.voidscape.network.server;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.DonatorHandler;
-import tamaized.voidscape.network.NetworkMessages;
 
-public class ServerPacketHandlerDonatorSettings implements NetworkMessages.IMessage<ServerPacketHandlerDonatorSettings> {
+public record ServerPacketHandlerDonatorSettings(DonatorHandler.DonatorSettings settings) implements CustomPacketPayload {
 
-	private DonatorHandler.DonatorSettings settings;
+	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "donatorsettings");
 
-	public ServerPacketHandlerDonatorSettings(DonatorHandler.DonatorSettings settings) {
-		this.settings = settings;
+	public ServerPacketHandlerDonatorSettings(FriendlyByteBuf packet) {
+		this(new DonatorHandler.DonatorSettings(packet.readBoolean(), packet.readInt()));
 	}
 
 	@Override
-	public void handle(Player player) {
-		if (DonatorHandler.donators.contains(player.getUUID()))
-			DonatorHandler.settings.put(player.getUUID(), settings);
-	}
-
-	@Override
-	public void toBytes(FriendlyByteBuf packet) {
+	public void write(FriendlyByteBuf packet) {
 		packet.writeBoolean(settings.enabled);
 		packet.writeInt(settings.color);
 	}
 
 	@Override
-	public ServerPacketHandlerDonatorSettings fromBytes(FriendlyByteBuf packet) {
-		settings = new DonatorHandler.DonatorSettings(packet.readBoolean(), packet.readInt());
-		return this;
+	public ResourceLocation id() {
+		return ID;
+	}
+
+	public static void handle(ServerPacketHandlerDonatorSettings payload, PlayPayloadContext context) {
+		context.player().ifPresent(player -> {
+			if (DonatorHandler.donators.contains(player.getUUID()))
+				DonatorHandler.settings.put(player.getUUID(), payload.settings);
+		});
 	}
 }

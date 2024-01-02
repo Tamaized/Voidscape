@@ -75,7 +75,7 @@ public class DefuserBlockEntity extends BlockEntity {
 			if (process.get()) {
 				entity.processTick--;
 				if (particle.get())
-					Voidscape.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(blockPos)), packet);
+					PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(blockPos)).send(packet);
 			}
 		}
 	}

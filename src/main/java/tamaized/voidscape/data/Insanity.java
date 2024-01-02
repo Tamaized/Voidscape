@@ -233,7 +233,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 					attributeVoidicResistance.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
 					if (parent.getHealth() > parent.getMaxHealth()) {
 						if (parent instanceof ServerPlayer player)
-							Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ClientPacketNoFlashOnSetHealth());
+							PacketDistributor.PLAYER.with(player).send(new ClientPacketNoFlashOnSetHealth());
 						parent.setHealth(parent.getMaxHealth());
 					}
 				}
@@ -389,11 +389,11 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	private void sendToClient(ServerPlayer parent) {
-		Voidscape.NETWORK.send(PacketDistributor.PLAYER.with(() -> parent), new ClientPacketInsanitySync(this));
+		PacketDistributor.PLAYER.with(parent).send(new ClientPacketInsanitySync(this));
 	}
 
 	private void sendToClients(Entity parent) {
-		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> parent), new ClientPacketInsanitySync(this, parent));
+		PacketDistributor.TRACKING_ENTITY_AND_SELF.with(parent).send(new ClientPacketInsanitySync(this, parent));
 	}
 
 }

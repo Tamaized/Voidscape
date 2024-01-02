@@ -27,8 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
-import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
@@ -39,7 +38,7 @@ import tamaized.voidscape.registry.ModEntities;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityAdditionalSpawnData, IEthereal {
+public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityWithComplexSpawn, IEthereal {
 
 	private static final EntityDataAccessor<BlockState> MIMIC = SynchedEntityData.defineId(NullServantAugmentBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
 
@@ -105,7 +104,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 						0D
 				);
 			}
-			Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), particles);
+			PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
 		} else {
 			discard();
 		}
@@ -240,8 +239,4 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 		}
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 }

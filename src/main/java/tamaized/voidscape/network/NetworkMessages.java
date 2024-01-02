@@ -1,61 +1,30 @@
 package tamaized.voidscape.network;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.NetworkEvent;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
-import tamaized.voidscape.client.ClientUtil;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
-
 public class NetworkMessages {
 
-	private static int index = 0;
+	public static void register(IEventBus busMod) {
+		busMod.addListener(RegisterPayloadHandlerEvent.class, event -> {
+			IPayloadRegistrar network = event.registrar(Voidscape.MODID)
+					.versioned("1")
+					.optional();
 
-	public static void register(SimpleChannel network) {
-		registerMessage(network, ServerPacketHandlerDonatorSettings.class, () -> new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(false, 0)));
+			network.play(ServerPacketHandlerDonatorSettings.ID, ServerPacketHandlerDonatorSettings::new, side -> side.server(ServerPacketHandlerDonatorSettings::handle));
 
-		registerMessage(network, ClientPacketNoFlashOnSetHealth.class, ClientPacketNoFlashOnSetHealth::new);
-		registerMessage(network, ClientPacketInsanitySync.class, ClientPacketInsanitySync::new);
-		registerMessage(network, ClientPacketDonatorSync.class, ClientPacketDonatorSync::new);
-		registerMessage(network, ClientPacketSendParticles.class, ClientPacketSendParticles::new);
+			network.play(ClientPacketNoFlashOnSetHealth.ID, ClientPacketNoFlashOnSetHealth::new, side -> side.client(ClientPacketNoFlashOnSetHealth::handle));
+			network.play(ClientPacketInsanitySync.ID, ClientPacketInsanitySync::new, side -> side.client(ClientPacketInsanitySync::handle));
+			network.play(ClientPacketDonatorSync.ID, ClientPacketDonatorSync::new, side -> side.client(ClientPacketDonatorSync::handle));
+			network.play(ClientPacketSendParticles.ID, ClientPacketSendParticles::new, side -> side.client(ClientPacketSendParticles::handle));
+		});
 	}
 
-	private static <M extends IMessage<M>> void registerMessage(SimpleChannel network, Class<M> type, Supplier<M> factory) {
-		network.registerMessage(index++, type, IMessage::encode, p -> IMessage.decode(p, factory), IMessage::onMessage);
-	}
-
-	public interface IMessage<SELF extends IMessage<SELF>> {
-
-		static <M extends IMessage<M>> void encode(M message, FriendlyByteBuf packet) {
-			message.toBytes(packet);
-		}
-
-		static <M extends IMessage<M>> M decode(FriendlyByteBuf packet, Supplier<M> factory) {
-			return factory.get().fromBytes(packet);
-		}
-
-		static <M extends IMessage<M>> void onMessage(M message, NetworkEvent.Context context) {
-			context.enqueueWork(() -> message.handle(getSidedPlayer(context.getSender())));
-			context.setPacketHandled(true);
-		}
-
-		@Nullable
-		static Player getSidedPlayer(@Nullable Player test) {
-			return test == null ? ClientUtil.getClientPlayerSafely() : test;
-		}
-
-		void handle(@Nullable Player player);
-
-		void toBytes(FriendlyByteBuf packet);
-
-		SELF fromBytes(FriendlyByteBuf packet);
-
-	}
 }

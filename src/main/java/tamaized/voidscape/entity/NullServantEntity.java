@@ -39,7 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -154,7 +153,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 					0D
 			);
 		}
-		Voidscape.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), particles);
+		PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
 		playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 4F, 0.5F + getRandom().nextFloat() * 0.5F);
 		if (getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache serverChunkCache) {
 			for(ServerPlayerConnection serverplayerconnection : serverChunkCache.chunkMap.entityMap.get(getId()).seenBy) {
@@ -411,11 +410,6 @@ public class NullServantEntity extends Monster implements IEthereal {
 			Vec3 dir = new Vec3(aoe.x(), aoe.y(), aoe.z()).subtract(pos).normalize().scale(0.35D);
 			level().addParticle(ParticleTypes.END_ROD, false, pos.x(), pos.y(), pos.z(), dir.x(), dir.y(), dir.z());
 		}
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
