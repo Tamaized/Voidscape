@@ -159,15 +159,15 @@ public class Voidscape {
 			NetworkMessages.register(NETWORK);
 			
 			event.enqueueWork(() -> {
-				ComposterBlock.add(0.85F, ModBlocksThunderForestBiome.THUNDER_WART.get());
-				ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_ROOTS.get());
-				ComposterBlock.add(0.65F, ModBlocksThunderForestBiome.THUNDER_FUNGUS.get());
-				ComposterBlock.add(0.5F, ModBlocksThunderForestBiome.THUNDER_VINES.get());
-				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_END.get());
-				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NETHER.get());
-				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_OVERWORLD.get());
-				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_VOID.get());
-				ComposterBlock.add(0.3F, ModItems.ETHEREAL_FRUIT_NULL.get());
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_WART.get().asItem(), 0.85F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_ROOTS.get().asItem(), 0.65F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_FUNGUS.get().asItem(), 0.65F);
+				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_VINES.get().asItem(), 0.5F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_END.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NETHER.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_OVERWORLD.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_VOID.get().asItem(), 0.3F);
+				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NULL.get().asItem(), 0.3F);
 			});
 		});
 
