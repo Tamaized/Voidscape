@@ -96,6 +96,13 @@ runs {
     }
 }
 
+subsystems {
+    parchment {
+        minecraftVersion = "1.20.3" //parchment doesnt support 1.20.4 yet
+        mappingsVersion = project.parchment_version
+    }
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 processResources {
