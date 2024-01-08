@@ -318,6 +318,17 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> MACHINE_DEFUSER_ITEM = ModItems.REGISTRY
 			.register(MACHINE_DEFUSER.getId().getPath(), () -> new BlockItem(MACHINE_DEFUSER.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final DeferredHolder<Block, Block> MACHINE_GERMINATOR = REGISTRY.register("machine_germinator", () -> new GerminatorBlock(Block.Properties.of()
+			.sound(SoundType.AMETHYST)
+			.mapColor(MapColor.COLOR_LIGHT_GREEN)
+			.strength(3F, 1200.0F)
+			.noOcclusion()
+			.requiresCorrectToolForDrops()
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
+	public static final Supplier<Item> MACHINE_GERMINATOR_ITEM = ModItems.REGISTRY
+			.register(MACHINE_GERMINATOR.getId().getPath(), () -> new BlockItem(MACHINE_GERMINATOR.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	@Override
 	public void init(IEventBus bus) {
 		new ModBlocksThunderForestBiome().init(bus);

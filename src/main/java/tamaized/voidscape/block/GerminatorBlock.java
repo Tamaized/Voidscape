@@ -10,12 +10,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.block.entity.DefuserBlockEntity;
+import tamaized.voidscape.block.entity.GerminatorBlockEntity;
 import tamaized.voidscape.registry.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
-public class DefuserBlock extends Block implements EntityBlock {
+public class GerminatorBlock extends Block implements EntityBlock {
 
-    public DefuserBlock(Properties pProperties) {
+    public GerminatorBlock(Properties pProperties) {
         super(pProperties);
     }
 
@@ -29,13 +30,13 @@ public class DefuserBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DefuserBlockEntity(pos, state);
+        return new GerminatorBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.DEFUSER.get() == entity && !level.isClientSide() ? DefuserBlockEntity::tick : null;
+        return ModBlockEntities.GERMINATOR.get() == entity && !level.isClientSide() ? GerminatorBlockEntity::tick : null;
     }
 
 }

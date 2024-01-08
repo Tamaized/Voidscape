@@ -1,5 +1,6 @@
 package tamaized.voidscape;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -69,6 +70,7 @@ import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -80,6 +82,8 @@ public class Voidscape {
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
+
+	public static final GameProfile FAKE_PLAYER = new GameProfile(UUID.fromString("4B63F35E-2AA1-4BC2-8D13-A3F32C9D8380"), "[Voidscape]");
 
 	public Voidscape(IEventBus busMod) {
 		if (FMLEnvironment.dist == Dist.CLIENT)
