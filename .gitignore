@@ -11,6 +11,8 @@
 !/src/**
 !/libs/
 !/libs/**
+!/bbmodels/
+!/bbmodels/**
 !build.gradle
 !settings.gradle
 !gradle.properties
