@@ -23,6 +23,7 @@ import tamaized.voidscape.registry.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GerminatorBlockEntity extends BlockEntity {
@@ -100,6 +101,9 @@ public class GerminatorBlockEntity extends BlockEntity {
 							}
 						}
 					}
+				}
+				if (growths.get() <= 0) {
+					entity.processTick = 120;
 				}
 			}
 		}
