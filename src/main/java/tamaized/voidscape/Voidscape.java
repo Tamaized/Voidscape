@@ -20,6 +20,7 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -237,6 +238,12 @@ public class Voidscape {
 					if (event.getEntity().getRandom().nextInt(4) == 0) {
 						event.getEntity().removeEffect(ModEffects.FORTIFIED.get());
 					}
+				}
+				AttributeInstance attributeInstance = event.getEntity().getAttribute(ModAttributes.VOIDIC_RES.get());
+				if (attributeInstance != null) {
+					float res = (float) attributeInstance.getValue();
+					if (res != 0)
+						event.setAmount(event.getAmount() - res);
 				}
 			}
 		});
