@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:defused",
+  "criteria": {
+    "germinated": {
+      "conditions": {},
+      "trigger": "voidscape:germinator"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.germinated.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:machine_germinator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.germinated"
+    }
+  },
+  "requirements": [
+    [
+      "germinated"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

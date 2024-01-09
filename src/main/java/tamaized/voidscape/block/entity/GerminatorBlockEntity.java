@@ -5,8 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -23,7 +26,6 @@ import tamaized.voidscape.registry.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GerminatorBlockEntity extends BlockEntity {
@@ -104,6 +106,9 @@ public class GerminatorBlockEntity extends BlockEntity {
 				}
 				if (growths.get() <= 0) {
 					entity.processTick = 120;
+				} else {
+					level.getEntities(EntityTypeTest.forClass(ServerPlayer.class), aabb, EntitySelector.NO_SPECTATORS)
+							.forEach(ModAdvancementTriggers.GERMINATOR_TRIGGER.get()::trigger);
 				}
 			}
 		}
