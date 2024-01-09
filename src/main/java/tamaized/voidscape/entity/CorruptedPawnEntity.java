@@ -93,9 +93,14 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 				remove(RemovalReason.DISCARDED);
 			else if (!equals(target.getData(ModDataAttachments.INSANITY).getHunter()))
 				remove(RemovalReason.DISCARDED);
-			else {
+			else if (isAlive()) {
 				lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
+				if (target.distanceTo(this) <= 0.25F) {
+					teleport();
+					target.hurt(ModDamageSource.getEntityDamageSource(level(), ModDamageSource.VOIDIC, this), 10);
+					heal(5F);
+				}
 			}
 
 		} else if (isAlive() && target != null) {
@@ -105,6 +110,14 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 				level().playSound(player, blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.MASTER, 4F, 0.5F);
 		}
 		super.tick();
+	}
+
+	private void teleport() {
+		if (isAlive()) {
+			playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+			Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
+			moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
+		}
 	}
 
 	@Override
@@ -121,10 +134,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	public boolean hurt(DamageSource source, float amount) {
 		float dmg = source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F;
 		if (super.hurt(source, dmg)) {
-			if (isAlive()) {
-				Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
-				moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
-			}
+			teleport();
 			return true;
 		}
 		return false;
