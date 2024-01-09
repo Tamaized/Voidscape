@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
 	"voidscape:machine_liquifier",
-	"voidscape:machine_defuser"
+	"voidscape:machine_defuser",
+	"voidscape:machine_germinator"
   ]
 }
