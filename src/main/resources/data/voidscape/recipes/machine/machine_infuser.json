@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "voidscape:machine_infuser"
+  },
+  "pattern": [
+    "IBI",
+    "BCB",
+    "IBI"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "voidscape:ichor_crystal"
+    },
+    "B": {
+      "item": "voidscape:charred_bone"
+    },
+    "C": {
+      "item": "voidscape:machine_core"
+    }
+  }
+}

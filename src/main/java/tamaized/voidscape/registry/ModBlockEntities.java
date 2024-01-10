@@ -14,6 +14,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.entity.DefuserBlockEntity;
 import tamaized.voidscape.block.entity.GerminatorBlockEntity;
+import tamaized.voidscape.block.entity.InfuserBlockEntity;
 import tamaized.voidscape.block.entity.LiquifierBlockEntity;
 
 import java.util.function.Supplier;
@@ -32,6 +33,9 @@ public class ModBlockEntities implements RegistryClass {
 	public static final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = REGISTERY
 			.register("germinator", () -> BlockEntityType.Builder.of(GerminatorBlockEntity::new, ModBlocks.MACHINE_GERMINATOR.get()).build(null));
 
+	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTERY
+			.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.MACHINE_INFUSER.get()).build(null));
+
 	@Override
 	public void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
@@ -41,6 +45,8 @@ public class ModBlockEntities implements RegistryClass {
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DEFUSER.get(), (object, context) -> object.fluids);
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, GERMINATOR.get(), (object, context) -> object.fluids);
+
+			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
 		});
 	}
 

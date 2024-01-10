@@ -1,29 +1,29 @@
 {
   "parent": "voidscape:liquid",
   "criteria": {
-    "germinated": {
+    "infuser": {
       "conditions": {},
-      "trigger": "voidscape:germinator"
+      "trigger": "voidscape:infuser"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancement.voidscape.germinated.desc"
+      "translate": "advancement.voidscape.infuser.desc"
     },
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "voidscape:machine_germinator"
+      "item": "voidscape:machine_infuser"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancement.voidscape.germinated"
+      "translate": "advancement.voidscape.infuser"
     }
   },
   "requirements": [
     [
-      "germinated"
+      "infuser"
     ]
   ],
   "sends_telemetry_event": true
