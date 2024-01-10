@@ -51,7 +51,7 @@ public class LiquifierBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-		if (!(be instanceof LiquifierBlockEntity entity))
+		if (!(be instanceof LiquifierBlockEntity entity) || level.hasNeighborSignal(blockPos))
 			return;
 		entity.tick++;
 		if (entity.fluids.getFluidInTank(0).getAmount() <= entity.fluids.getTankCapacity(0) - 250 && entity.items.getStackInSlot(0).is(ModItems.VOIDIC_CRYSTAL.get())) {

@@ -58,7 +58,7 @@ public class GerminatorBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-		if (!(be instanceof GerminatorBlockEntity entity))
+		if (!(be instanceof GerminatorBlockEntity entity) || level.hasNeighborSignal(blockPos))
 			return;
 		IFluidHandler fluid = entity.fluids;
 		if (entity.processTick <= 0 && fluid.getFluidInTank(0).getAmount() > 0) {
