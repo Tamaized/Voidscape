@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:liquid",
+  "criteria": {
+    "collector": {
+      "conditions": {},
+      "trigger": "voidscape:collector"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.collector.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:machine_collector"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.collector"
+    }
+  },
+  "requirements": [
+    [
+      "collector"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

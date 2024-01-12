@@ -1,21 +1,14 @@
 package tamaized.voidscape.registry;
 
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.jetbrains.annotations.Nullable;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.block.entity.DefuserBlockEntity;
-import tamaized.voidscape.block.entity.GerminatorBlockEntity;
-import tamaized.voidscape.block.entity.InfuserBlockEntity;
-import tamaized.voidscape.block.entity.LiquifierBlockEntity;
+import tamaized.voidscape.block.entity.*;
 
 import java.util.function.Supplier;
 
@@ -36,6 +29,9 @@ public class ModBlockEntities implements RegistryClass {
 	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTERY
 			.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.MACHINE_INFUSER.get()).build(null));
 
+	public static final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = REGISTERY
+			.register("collector", () -> BlockEntityType.Builder.of(CollectorBlockEntity::new, ModBlocks.MACHINE_COLLECTOR.get()).build(null));
+
 	@Override
 	public void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
@@ -47,6 +43,8 @@ public class ModBlockEntities implements RegistryClass {
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, GERMINATOR.get(), (object, context) -> object.fluids);
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
+
+			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COLLECTOR.get(), (object, context) -> object.fluids);
 		});
 	}
 

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "voidscape:machine_collector"
+  },
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "voidscape:astral_crystal"
+    },
+    "B": {
+      "item": "voidscape:charred_bone"
+    },
+    "C": {
+      "item": "voidscape:machine_core"
+    }
+  }
+}
