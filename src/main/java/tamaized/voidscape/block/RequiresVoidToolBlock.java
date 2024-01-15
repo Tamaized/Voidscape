@@ -32,7 +32,7 @@ public class RequiresVoidToolBlock extends Block {
 		if (f == -1.0F) {
 			return 0.0F;
 		} else {
-			int i = canHarvestBlock(pState, pLevel, pPos, pPlayer) ? 30 : 100;
+			int i = canHarvestBlock(pState, pLevel, pPos, pPlayer) ? 30 : 1000;
 			return pPlayer.getDigSpeed(pState, pPos) / f / (float)i;
 		}
 	}
