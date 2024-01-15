@@ -2,6 +2,8 @@
   "voidscape.item_group": "Voidscape",
   "itemGroup.voidscape.item_group": "Voidscape",
 
+  "dimension.voidscape.void": "The Void",
+
   "biome.voidscape.void": "Void",
   "biome.voidscape.null": "Null",
   "biome.voidscape.antispires": "Anti-Spires",
