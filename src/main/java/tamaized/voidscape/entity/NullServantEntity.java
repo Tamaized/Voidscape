@@ -4,8 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -42,8 +40,9 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.entity.ai.nullservant.SpecialAugmentGoal;
+import tamaized.voidscape.entity.ai.nullservant.AstralAugmentGoal;
+import tamaized.voidscape.entity.ai.nullservant.IchorAugmentGoal;
+import tamaized.voidscape.entity.ai.nullservant.TitaniteAugmentGoal;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.*;
 
@@ -52,7 +51,7 @@ import java.util.UUID;
 public class NullServantEntity extends Monster implements IEthereal {
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 
@@ -64,7 +63,11 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private static final UUID AUGMENT_ATTACK_DAMAGE = UUID.fromString("5ae68488-df12-40c6-9517-357917341afa");
 	private static final UUID AUGMENT_RESISTANCE = UUID.fromString("dcf3c0df-c827-43f7-8d07-9d77b6ce0c83");
 
+	@Nullable
 	private ServerBossEvent bossInfo;
+
+	@Nullable
+	private IchorAugmentGoal ichorAugmentGoal;
 
 	public NullServantEntity(Level level) {
 		this(ModEntities.NULL_SERVANT.get(), level);
@@ -90,7 +93,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(1, new SpecialAugmentGoal(this));
+		this.goalSelector.addGoal(1, new TitaniteAugmentGoal(this));
+		this.goalSelector.addGoal(1, ichorAugmentGoal = new IchorAugmentGoal(this));
+		this.goalSelector.addGoal(1, new AstralAugmentGoal(this));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
 		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
 
@@ -155,14 +160,14 @@ public class NullServantEntity extends Monster implements IEthereal {
 		}
 		PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
 		playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 4F, 0.5F + getRandom().nextFloat() * 0.5F);
-		if (getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache serverChunkCache) {
+		if (bossInfo != null && getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache serverChunkCache) {
 			for(ServerPlayerConnection serverplayerconnection : serverChunkCache.chunkMap.entityMap.get(getId()).seenBy) {
 				bossInfo.addPlayer(serverplayerconnection.getPlayer());
 			}
 		}
 	}
 
-	private void initBossBar() {
+	protected void initBossBar() {
 		if (getAugment() == AUGMENT_TITANITE) {
 			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.titanite"), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
 		} else if (getAugment() == AUGMENT_ICHOR) {
@@ -223,8 +228,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 	@Override
 	public void setCustomName(@Nullable Component name) {
 		super.setCustomName(name);
-		if (bossInfo != null)
-			bossInfo.setName(this.getDisplayName());
+		Component displayName = this.getDisplayName();
+		if (bossInfo != null && displayName != null)
+			bossInfo.setName(displayName);
 	}
 
 	@Override
@@ -294,8 +300,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 		setAugment(compound.getInt("augment")); // This first before health is read from nbt
 		super.readAdditionalSaveData(compound);
 
-		if (hasCustomName() && bossInfo != null) {
-			bossInfo.setName(getDisplayName());
+		Component displayName = this.getDisplayName();
+		if (hasCustomName() && bossInfo != null && displayName != null) {
+			bossInfo.setName(displayName);
 		}
 	}
 
@@ -336,6 +343,20 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	@Override
 	public boolean hurt(DamageSource pSource, float pAmount) {
+		if (this instanceof PhantomNullServantEntity && pSource.getDirectEntity() instanceof StrangePearlEntity && !(pSource.getEntity() instanceof NullServantEntity))
+			return super.hurt(pSource, pAmount);
+		if (getAugmentAttack() && pSource.getEntity() instanceof PhantomNullServantEntity) {
+			switch (getAugment()) {
+				case AUGMENT_ICHOR -> {
+					if (ichorAugmentGoal != null)
+						ichorAugmentGoal.applyHit();
+					super.hurt(pSource, pAmount);
+				}
+				case AUGMENT_ASTRAL -> {
+
+				}
+			}
+		}
 		return !getAugmentAttack() && super.hurt(pSource, pAmount);
 	}
 
@@ -386,21 +407,25 @@ public class NullServantEntity extends Monster implements IEthereal {
 				level().addParticle(ParticleTypes.END_ROD, vec.x, vec.y, vec.z, 0, 0, 0);
 			}
 			if (getAugmentAttack()) {
-				level().addParticle(
-						ParticleTypes.END_ROD,
-						false,
-						position().x() - 1D + getRandom().nextFloat() * 2D,
-						position().y() + 0.5D + getRandom().nextFloat() * 2D,
-						position().z() - 1D + getRandom().nextFloat() * 2D,
-						0D,
-						0D,
-						0D);
+				augmentClientTick();
 			}
 			for (int i = 0; i < 3; i++) {
 				doAoeParticles(entityData.get(AUGMENT_ATTACK_AOE1));
 				doAoeParticles(entityData.get(AUGMENT_ATTACK_AOE2));
 			}
 		}
+	}
+
+	protected void augmentClientTick() {
+		level().addParticle(
+				ParticleTypes.END_ROD,
+				false,
+				position().x() - 1D + getRandom().nextFloat() * 2D,
+				position().y() + 0.5D + getRandom().nextFloat() * 2D,
+				position().z() - 1D + getRandom().nextFloat() * 2D,
+				0D,
+				0D,
+				0D);
 	}
 
 	private void doAoeParticles(Vector3f aoe) {

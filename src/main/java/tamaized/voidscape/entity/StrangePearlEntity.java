@@ -103,6 +103,11 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	}
 
 	@Override
+	protected boolean canHitEntity(Entity entity) {
+		return (!(getOwner() instanceof NullServantEntity) && entity instanceof NullServantEntity) || super.canHitEntity(entity);
+	}
+
+	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
 		super.onHitEntity(pResult);
 		pResult.getEntity().hurt(ModDamageSource.getIndirectEntityDamageSource(level(), ModDamageSource.VOIDIC, this, getOwner()), damage);

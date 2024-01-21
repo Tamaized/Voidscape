@@ -56,6 +56,8 @@ public class ModEntities implements RegistryClass {
 	});
 	public static final Supplier<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = REGISTRY.register("null_servant_augment_block", () ->
 			make(new ResourceLocation(Voidscape.MODID, "null_servant_augment_block"), NullServantAugmentBlockEntity::new, MobCategory.MISC, 1F, 1F));
+	public static final Supplier<EntityType<PhantomNullServantEntity>> NULL_SERVANT_PHANTOM = REGISTRY.register("null_servant_phantom", () ->
+			build(new ResourceLocation(Voidscape.MODID, "null_servant_phantom"), makeCastedBuilder(PhantomNullServantEntity.class, PhantomNullServantEntity::new, MobCategory.MISC).sized(0.6F, 1.95F).fireImmune()));
 
 	public static final Supplier<EntityType<VoidsWrathEntity>> VOIDS_WRATH = REGISTRY.register("voids_wrath", () -> {
 		EntityType<VoidsWrathEntity> type = build(new ResourceLocation(Voidscape.MODID, "voids_wrath"), makeCastedBuilder(VoidsWrathEntity.class, VoidsWrathEntity::new, MobCategory.MONSTER).sized(0.9F, 2.0F).setTrackingRange(256).fireImmune());
@@ -103,6 +105,7 @@ public class ModEntities implements RegistryClass {
 		event.put(CORRUPTED_PAWN.get(), CorruptedPawnEntity.createAttributes().build());
 		event.put(VOIDS_WRATH.get(), VoidsWrathEntity.createAttributes().build());
 		event.put(NULL_SERVANT.get(), NullServantEntity.createAttributes().build());
+		event.put(NULL_SERVANT_PHANTOM.get(), NullServantEntity.createAttributes().build());
 		event.put(NULL_SERVANT_AUGMENT_BLOCK.get(), NullServantAugmentBlockEntity.createAttributes().build());
 	}
 
@@ -149,6 +152,7 @@ public class ModEntities implements RegistryClass {
 		event.registerEntityRenderer(VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(NULL_SERVANT_AUGMENT_BLOCK.get(), RenderNullServantAugmentBlock::new);
+		event.registerEntityRenderer(NULL_SERVANT_PHANTOM.get(), RenderNullServant::new);
 		event.registerEntityRenderer(ANTI_BOLT.get(), RenderAntiBolt::new);
 		event.registerEntityRenderer(ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF7700));
 		event.registerEntityRenderer(NULL_SERVANT_ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF0000));
