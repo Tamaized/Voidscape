@@ -1,0 +1,15 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:machine_germinator"
+  },
+  "addition": {
+    "item": "minecraft:water_bucket"
+  },
+  "result": {
+    "item": "voidscape:machine_well"
+  }
+}

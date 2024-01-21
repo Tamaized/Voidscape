@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:germinated",
+  "criteria": {
+    "well": {
+      "conditions": {},
+      "trigger": "voidscape:well"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.well.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:machine_well"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.well"
+    }
+  },
+  "requirements": [
+    [
+      "well"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

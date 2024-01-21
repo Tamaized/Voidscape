@@ -26,6 +26,9 @@ public class ModBlockEntities implements RegistryClass {
 	public static final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = REGISTERY
 			.register("germinator", () -> BlockEntityType.Builder.of(GerminatorBlockEntity::new, ModBlocks.MACHINE_GERMINATOR.get()).build(null));
 
+	public static final Supplier<BlockEntityType<WellBlockEntity>> WELL = REGISTERY
+			.register("well", () -> BlockEntityType.Builder.of(WellBlockEntity::new, ModBlocks.MACHINE_WELL.get()).build(null));
+
 	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTERY
 			.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.MACHINE_INFUSER.get()).build(null));
 
@@ -41,6 +44,8 @@ public class ModBlockEntities implements RegistryClass {
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DEFUSER.get(), (object, context) -> object.fluids);
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, GERMINATOR.get(), (object, context) -> object.fluids);
+
+			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WELL.get(), (object, context) -> object.fluids);
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
 

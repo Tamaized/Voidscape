@@ -5,7 +5,7 @@
 	"textures": {
 		"0": "voidscape:block/machine/germinator/frame",
 		"1": "voidscape:block/machine/core",
-		"2": "voidscape:block/machine/germinator/inner",
+		"2": "voidscape:block/machine/inner",
 		"particle": "#0"
 	},
 	"elements": [

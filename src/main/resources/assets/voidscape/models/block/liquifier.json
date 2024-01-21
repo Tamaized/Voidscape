@@ -310,8 +310,8 @@
 			}
 		},
 		{
-			"from": [1, 1, -0.001],
-			"to": [15, 15, -0.001],
+			"from": [1, 1, -0.008],
+			"to": [15, 15, -0.008],
 			"faces": {
 				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
@@ -322,8 +322,8 @@
 			}
 		},
 		{
-			"from": [1, 1, 16.001],
-			"to": [15, 15, 16.001],
+			"from": [1, 1, 16.008],
+			"to": [15, 15, 16.008],
 			"faces": {
 				"north": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [0, 0, 0, 14], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
@@ -334,8 +334,8 @@
 			}
 		},
 		{
-			"from": [16.001, 1, 1],
-			"to": [16.001, 15, 15],
+			"from": [16.008, 1, 1],
+			"to": [16.008, 15, 15],
 			"faces": {
 				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
@@ -346,8 +346,8 @@
 			}
 		},
 		{
-			"from": [-0.001, 1, 1],
-			"to": [-0.001, 15, 15],
+			"from": [-0.008, 1, 1],
+			"to": [-0.008, 15, 15],
 			"faces": {
 				"north": {"uv": [0, 0, 2, 14], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [1, 1, 15, 15], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
@@ -358,8 +358,8 @@
 			}
 		},
 		{
-			"from": [1, 16.001, 1],
-			"to": [15, 16.001, 15],
+			"from": [1, 16.008, 1],
+			"to": [15, 16.008, 15],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
@@ -370,8 +370,8 @@
 			}
 		},
 		{
-			"from": [1, -0.001, 1],
-			"to": [15, -0.001, 15],
+			"from": [1, -0.008, 1],
+			"to": [15, -0.008, 15],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },
 				"east": {"uv": [0, 0, 14, 0], "texture": "#face_overlay", "neoforge_data": { "block_light": 15, "sky_light": 15 } },

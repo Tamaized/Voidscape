@@ -329,6 +329,17 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> MACHINE_GERMINATOR_ITEM = ModItems.REGISTRY
 			.register(MACHINE_GERMINATOR.getId().getPath(), () -> new BlockItem(MACHINE_GERMINATOR.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
+	public static final DeferredHolder<Block, Block> MACHINE_WELL = REGISTRY.register("machine_well", () -> new WellBlock(Block.Properties.of()
+			.sound(SoundType.AMETHYST)
+			.mapColor(MapColor.COLOR_BLUE)
+			.strength(3F, 1200.0F)
+			.noOcclusion()
+			.requiresCorrectToolForDrops()
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
+	public static final Supplier<Item> MACHINE_WELL_ITEM = ModItems.REGISTRY
+			.register(MACHINE_WELL.getId().getPath(), () -> new BlockItem(MACHINE_WELL.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
 	public static final DeferredHolder<Block, Block> MACHINE_INFUSER = REGISTRY.register("machine_infuser", () -> new InfuserBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_ORANGE)

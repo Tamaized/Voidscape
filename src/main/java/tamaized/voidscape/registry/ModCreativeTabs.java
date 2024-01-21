@@ -40,6 +40,7 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.MACHINE_LIQUIFIER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_DEFUSER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_GERMINATOR_ITEM.get());
+				output.accept(ModBlocks.MACHINE_WELL_ITEM.get());
 				output.accept(ModBlocks.MACHINE_INFUSER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_COLLECTOR_ITEM.get());
 				// Biome - Thunder Forest
