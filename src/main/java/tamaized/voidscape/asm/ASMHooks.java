@@ -160,7 +160,7 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link Biome#shouldSnow(LevelReader, BlockPos)} and {@link Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
-	 * [AFTER ICONST_1]
+	 * [AFTER ALL ICONST_1]
 	 */
 	public static boolean shouldSnow(boolean o, Biome biome, LevelReader level) {
 		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :

@@ -7,7 +7,6 @@ var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
     return {
         'attackstrength': {
             'target': {

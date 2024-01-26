@@ -8,7 +8,7 @@ var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
+    ASM.loadFile('META-INF/asm/util/util.js');
     return {
         'overlay': {
             'target': {
@@ -19,38 +19,27 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                var lastInstruction = null;
-                for (var index = 0; index < instructions.size(); index++) {
-                    var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
-                    if (node.getOpcode() === Opcodes.INVOKEVIRTUAL &&
-                        node.owner === 'net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer' &&
-                        node.name === 'renderModel')
-                        lastInstruction = node; // Get the last INVOKEVIRTUAL
-                }
-                ASM.log('INFO', lastInstruction);
-                if (lastInstruction != null) {
-                    instructions.insert(
-                        lastInstruction,
-                        ASM.listOf(
-                            new VarInsnNode(Opcodes.ALOAD, 0),
-                            new VarInsnNode(Opcodes.ALOAD, 1),
-                            new VarInsnNode(Opcodes.ALOAD, 2),
-                            new VarInsnNode(Opcodes.ILOAD, 5),
-                            new VarInsnNode(Opcodes.ILOAD, 11),
-                            new VarInsnNode(Opcodes.ALOAD, 10),
-                            new VarInsnNode(Opcodes.ALOAD, 3),
-                            new VarInsnNode(Opcodes.ALOAD, 7),
-                            new VarInsnNode(Opcodes.ALOAD, 4),
-                            new MethodInsnNode(
-                                Opcodes.INVOKESTATIC,
-                                'tamaized/voidscape/asm/ASMHooks',
-                                'armorOverlay',
-                                '(Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IZLnet/minecraft/client/model/Model;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)V',
-                                false
-                                )
-                            )
-                        );
-                }
+                instructions.insert(
+                    findLastMethodInstruction(methodNode, Opcodes.INVOKEVIRTUAL, 'net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer', 'renderModel', '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/Model;ZFFFLnet/minecraft/resources/ResourceLocation;)V'),
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new VarInsnNode(Opcodes.ALOAD, 1),
+                        new VarInsnNode(Opcodes.ALOAD, 2),
+                        new VarInsnNode(Opcodes.ILOAD, 5),
+                        new VarInsnNode(Opcodes.ILOAD, 11),
+                        new VarInsnNode(Opcodes.ALOAD, 10),
+                        new VarInsnNode(Opcodes.ALOAD, 3),
+                        new VarInsnNode(Opcodes.ALOAD, 7),
+                        new VarInsnNode(Opcodes.ALOAD, 4),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'armorOverlay',
+                            '(Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IZLnet/minecraft/client/model/Model;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)V',
+                            false
+                        )
+                    )
+                );
                 return methodNode;
             }
         }

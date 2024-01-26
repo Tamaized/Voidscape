@@ -9,7 +9,7 @@ var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
+    ASM.loadFile('META-INF/asm/util/util.js');
     return {
         'visibility': {
             'target': {
@@ -45,22 +45,8 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                var lastInstruction = null;
-                for (var index = 0; index < instructions.size(); index++) {
-                    var /*org.objectweb.asm.tree.VarInsnNode*/ node = instructions.get(index);
-                    if (lastInstruction == null &&
-
-                        node instanceof VarInsnNode &&
-
-                        node.getOpcode() === Opcodes.FLOAD &&
-
-                        node.var === 9
-
-                    )
-                        lastInstruction = node;
-                }
                 instructions.insert(
-                    lastInstruction,
+                    findLastVarInstruction(methodNode, Opcodes.FLOAD, 9),
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, 2),
                         new MethodInsnNode(
@@ -79,7 +65,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.LightTexture',
-                'methodName': ASM.mapMethod('updateLightTexture'),
+                'methodName': 'updateLightTexture',
                 'methodDesc': '(F)V'
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {

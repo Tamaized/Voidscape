@@ -17,27 +17,11 @@ function transform(clazz, name, desc) {
         },
         'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
             var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-            var inst = [];
-            for (var index = 0; index < instructions.size(); index++) {
-                var /*org.objectweb.asm.tree.MethodInsnNode*/ node = instructions.get(index);
-                if (node instanceof MethodInsnNode &&
-
-                    node.getOpcode() === Opcodes.INVOKEVIRTUAL &&
-
-                    node.owner === 'net/minecraft/world/item/ItemStack' &&
-
-                    node.name === 'is' &&
-
-                    node.desc === '(Lnet/minecraft/world/item/Item;)Z'
-
-                )
-                    inst.push(node);
-            }
-            inst.forEach(function (/*org.objectweb.asm.tree.AbstractInsnNode*/ value, index, array) {
-                var /*org.objectweb.asm.tree.FieldInsnNode*/ prev = value.getPrevious();
+            findAllMethodInstructions(methodNode, Opcodes.INVOKEVIRTUAL, 'net/minecraft/world/item/ItemStack', 'is', '(Lnet/minecraft/world/item/Item;)Z').forEach((/*org.objectweb.asm.tree.MethodInsnNode*/ node) => {
+                var /*org.objectweb.asm.tree.FieldInsnNode*/ prev = node.getPrevious();
                 var /*org.objectweb.asm.tree.VarInsnNode*/ prevPrev = prev.getPrevious();
                 instructions.insert(
-                    value,
+                    node,
                     ASM.listOf(
                         new VarInsnNode(Opcodes.ALOAD, prevPrev.var),
                         new FieldInsnNode(Opcodes.GETSTATIC, prev.owner, prev.name, prev.desc),
@@ -46,9 +30,9 @@ function transform(clazz, name, desc) {
                             'tamaized/voidscape/asm/ASMHooks',
                             'isMyBow',
                             '(ZLnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item;)Z'
-                            )
                         )
                     )
+                )
             });
             return methodNode;
         }
@@ -57,6 +41,7 @@ function transform(clazz, name, desc) {
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
+    ASM.loadFile('META-INF/asm/util/util.js');
     return {
         'evaluatewhichhandstorender': transform(
             'net.minecraft.client.renderer.ItemInHandRenderer',

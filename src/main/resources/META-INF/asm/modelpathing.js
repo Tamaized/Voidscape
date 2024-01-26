@@ -4,12 +4,11 @@ var ASM = Java.type('net.neoforged.coremod.api.ASMAPI');
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
 var MethodInsnNode = Java.type('org.objectweb.asm.tree.MethodInsnNode');
-var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
+    ASM.loadFile('META-INF/asm/util/util.js');
     return {
         'modelpathing': {
             'target': {
@@ -20,62 +19,32 @@ function initializeCoreMod() {
             },
             'transformer': function (/*org.objectweb.asm.tree.MethodNode*/ methodNode) {
                 var /*org.objectweb.asm.tree.InsnList*/ instructions = methodNode.instructions;
-                var lastInstruction = null;
-                for (var index = 0; index < instructions.size(); index++) {
-                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
-                    if (lastInstruction == null &&
-
-                        node instanceof FieldInsnNode &&
-
-                        node.getOpcode() === Opcodes.GETSTATIC &&
-
-                        node.name === 'ITEM'
-
+                instructions.insertBefore(
+                    findLastFieldInstruction(methodNode, Opcodes.GETSTATIC, 'net/minecraft/core/registries/BuiltInRegistries', 'ITEM'),
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'redirectModels',
+                            '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
+                            false
+                        )
                     )
-                        lastInstruction = node;
-                }
-                if (lastInstruction != null)
-                    instructions.insertBefore(
-                        lastInstruction,
-                        ASM.listOf(
-                            new VarInsnNode(Opcodes.ALOAD, 0),
-                            new MethodInsnNode(
-                                Opcodes.INVOKESTATIC,
-                                'tamaized/voidscape/asm/ASMHooks',
-                                'redirectModels',
-                                '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
-                                false
-                                )
-                            )
-                        );
-                lastInstruction = null;
-                for (var index = instructions.size() - 1; index > 0; index--) {
-                    var /*org.objectweb.asm.tree.FieldInsnNode*/ node = instructions.get(index);
-                    if (lastInstruction == null &&
-
-                        node instanceof MethodInsnNode &&
-
-                        node.getOpcode() === Opcodes.INVOKESTATIC &&
-
-                        node.name === "newHashSet"
-
+                );
+                instructions.insertBefore(
+                    findLastMethodInstruction(methodNode, Opcodes.INVOKESTATIC, 'com/google/common/collect/Sets', 'newHashSet', '()Ljava/util/HashSet;'),
+                    ASM.listOf(
+                        new VarInsnNode(Opcodes.ALOAD, 0),
+                        new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            'tamaized/voidscape/asm/ASMHooks',
+                            'cleanModels',
+                            '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
+                            false
+                        )
                     )
-                        lastInstruction = node;
-                }
-                if (lastInstruction != null)
-                    instructions.insertBefore(
-                        lastInstruction,
-                        ASM.listOf(
-                            new VarInsnNode(Opcodes.ALOAD, 0),
-                            new MethodInsnNode(
-                                Opcodes.INVOKESTATIC,
-                                'tamaized/voidscape/asm/ASMHooks',
-                                'cleanModels',
-                                '(Lnet/minecraft/client/resources/model/ModelBakery;)V',
-                                false
-                                )
-                            )
-                        );
+                );
                 return methodNode;
             }
         }

@@ -8,7 +8,6 @@ var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 // noinspection JSUnusedGlobalSymbols
 function initializeCoreMod() {
-
     return {
         'axesareweps': {
             'target': {
