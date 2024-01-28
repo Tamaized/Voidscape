@@ -23,6 +23,7 @@ public class ModAdvancementTriggers implements RegistryClass {
 	public static final Supplier<GenericAdvancementTrigger> DEFUSER_TRIGGER = REGISTRY.register("defuser", GenericAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> GERMINATOR_TRIGGER = REGISTRY.register("germinator", GenericAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> WELL_TRIGGER = REGISTRY.register("well", GenericAdvancementTrigger::new);
+	public static final Supplier<GenericAdvancementTrigger> COOP_TRIGGER = REGISTRY.register("coop", GenericAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> INFUSER_TRIGGER = REGISTRY.register("infuser", GenericAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> COLLECTOR_TRIGGER = REGISTRY.register("collector", GenericAdvancementTrigger::new);
 	public static final Supplier<ItemMatchesAdvancementTrigger> THREE_BY_THREE = REGISTRY.register("three_by_three", ItemMatchesAdvancementTrigger::new);

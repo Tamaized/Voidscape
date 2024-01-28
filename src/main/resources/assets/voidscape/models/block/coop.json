@@ -1,0 +1,10 @@
+{
+    "parent": "voidscape:block/germinator",
+    "render_type": "cutout_mipped",
+	"textures": {
+		"0": "voidscape:block/machine/coop/frame",
+		"1": "voidscape:block/machine/core",
+		"2": "voidscape:block/machine/inner",
+		"particle": "#0"
+	}
+}

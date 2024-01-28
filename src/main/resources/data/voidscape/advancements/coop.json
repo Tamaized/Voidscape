@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:germinated",
+  "criteria": {
+    "coop": {
+      "conditions": {},
+      "trigger": "voidscape:coop"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.coop.desc"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:machine_coop"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.coop"
+    }
+  },
+  "requirements": [
+    [
+      "coop"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
