@@ -341,7 +341,7 @@ public class ModBlocks implements RegistryClass {
 			.register(MACHINE_WELL.getId().getPath(), () -> new BlockItem(MACHINE_WELL.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	public static final DeferredHolder<Block, Block> MACHINE_COOP = REGISTRY.register("machine_coop", () -> new CoopBlock(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
+			.sound(SoundType.BONE_BLOCK)
 			.mapColor(MapColor.TERRACOTTA_WHITE)
 			.strength(3F, 1200.0F)
 			.noOcclusion()
