@@ -28,7 +28,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -40,7 +39,6 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.ConfigScreenHandler;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -64,7 +62,6 @@ import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.*;
-import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 import tamaized.voidscape.world.VoidChunkGenerator;
 import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
 
@@ -151,20 +148,6 @@ public class Voidscape {
 				return;
 			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeLayeredBiomeProvider.CODEC);
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
-		});
-
-		busMod.addListener(FMLCommonSetupEvent.class, event -> {
-			event.enqueueWork(() -> {
-				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_WART.get().asItem(), 0.85F);
-				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_ROOTS.get().asItem(), 0.65F);
-				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_FUNGUS.get().asItem(), 0.65F);
-				ComposterBlock.COMPOSTABLES.put(ModBlocksThunderForestBiome.THUNDER_VINES.get().asItem(), 0.5F);
-				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_END.get().asItem(), 0.3F);
-				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NETHER.get().asItem(), 0.3F);
-				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_OVERWORLD.get().asItem(), 0.3F);
-				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_VOID.get().asItem(), 0.3F);
-				ComposterBlock.COMPOSTABLES.put(ModItems.ETHEREAL_FRUIT_NULL.get().asItem(), 0.3F);
-			});
 		});
 
 		busForge.addListener(ServerStartingEvent.class, event ->

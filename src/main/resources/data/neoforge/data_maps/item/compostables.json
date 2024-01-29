@@ -1,0 +1,31 @@
+{
+  "values": {
+    "voidscape:thunder_wart": {
+      "chance": 0.85
+    },
+    "voidscape:thunder_roots": {
+      "chance": 0.65
+    },
+    "voidscape:thunder_fungus": {
+      "chance": 0.65
+    },
+    "voidscape:thunder_vines": {
+      "chance": 0.50
+    },
+    "voidscape:ethereal_fruit_void": {
+      "chance": 0.30
+    },
+    "voidscape:ethereal_fruit_null": {
+      "chance": 0.30
+    },
+    "voidscape:ethereal_fruit_overworld": {
+      "chance": 0.30
+    },
+    "voidscape:ethereal_fruit_nether": {
+      "chance": 0.30
+    },
+    "voidscape:ethereal_fruit_end": {
+      "chance": 0.30
+    }
+  }
+}
