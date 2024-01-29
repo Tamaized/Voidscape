@@ -49,10 +49,4 @@ public class EtherealPlantBlock extends BushBlock {
 				state.is(Blocks.END_STONE) ||
 				state.is(ModBlocks.NULL_BLACK.get());
 	}
-
-	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-		super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
-		pTooltip.add(Component.translatable("voidscape.tooltip.textures").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GREEN));
-	}
 }
