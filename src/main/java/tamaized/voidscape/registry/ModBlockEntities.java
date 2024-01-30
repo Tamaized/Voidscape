@@ -32,6 +32,9 @@ public class ModBlockEntities implements RegistryClass {
 	public static final Supplier<BlockEntityType<CoopBlockEntity>> COOP = REGISTERY
 			.register("coop", () -> BlockEntityType.Builder.of(CoopBlockEntity::new, ModBlocks.MACHINE_COOP.get()).build(null));
 
+	public static final Supplier<BlockEntityType<HatcheryBlockEntity>> HATCHERY = REGISTERY
+			.register("hatchery", () -> BlockEntityType.Builder.of(HatcheryBlockEntity::new, ModBlocks.MACHINE_HATCHERY.get()).build(null));
+
 	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTERY
 			.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.MACHINE_INFUSER.get()).build(null));
 
@@ -52,6 +55,8 @@ public class ModBlockEntities implements RegistryClass {
 
 			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COOP.get(), (object, context) -> object.items);
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COOP.get(), (object, context) -> object.fluids);
+
+			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, HATCHERY.get(), (object, context) -> object.fluids);
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
 

@@ -1,29 +1,29 @@
 {
-  "parent": "voidscape:germinated",
+  "parent": "voidscape:coop",
   "criteria": {
-    "coop": {
+    "hatchery": {
       "conditions": {},
-      "trigger": "voidscape:coop"
+      "trigger": "voidscape:hatchery"
     }
   },
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancement.voidscape.coop.desc"
+      "translate": "advancement.voidscape.hatchery.desc"
     },
-    "frame": "task",
+    "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "voidscape:machine_coop"
+      "item": "minecraft:dragon_egg"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancement.voidscape.coop"
+      "translate": "advancement.voidscape.hatchery"
     }
   },
   "requirements": [
     [
-      "coop"
+      "hatchery"
     ]
   ],
   "sends_telemetry_event": true

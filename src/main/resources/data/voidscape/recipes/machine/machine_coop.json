@@ -1,13 +1,13 @@
 {
   "type": "voidscape:smithing",
   "template": {
-    "item": "voidscape:voidic_template"
+    "item": "minecraft:egg"
   },
   "base": {
     "item": "voidscape:machine_germinator"
   },
   "addition": {
-    "item": "minecraft:egg"
+    "item": "voidscape:ichor_crystal"
   },
   "result": {
     "item": "voidscape:machine_coop"
