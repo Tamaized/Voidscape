@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -165,15 +166,15 @@ public class ModTools implements RegistryClass {
 		});
 	}
 
-	private static DeferredHolder<Item, Item> hammer(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+	private static DeferredHolder<Item, Item> hammer(RegUtil.ItemTier tier, Item.Properties properties, BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_warhammer"), () -> new LootingWarhammer(factory, tier, 7, -3.5F, properties, tooltipConsumer));
 	}
 
-	private static DeferredHolder<Item, Item> threeByThreeShovel(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+	private static DeferredHolder<Item, Item> threeByThreeShovel(RegUtil.ItemTier tier, Item.Properties properties, BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shovel"), () -> new ThreeByThreeShovel(factory, tier, 1.5F, -3.0F, properties, tooltipConsumer));
 	}
 
-	private static DeferredHolder<Item, Item> bonemealHoe(RegUtil.ItemTier tier, Item.Properties properties, Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+	private static DeferredHolder<Item, Item> bonemealHoe(RegUtil.ItemTier tier, Item.Properties properties, BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_hoe"), () -> new HoeItem(tier, -3, 0.0F, properties) {
 
 			@Override
@@ -243,7 +244,7 @@ public class ModTools implements RegistryClass {
 				if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
 					map.putAll(super.getDefaultAttributeModifiers(slot));
 					if (slot == EquipmentSlot.MAINHAND)
-						map.putAll(factory.apply(null));
+						map.putAll(factory.apply(null, stack));
 				}
 				return map.build();
 			}
@@ -252,10 +253,10 @@ public class ModTools implements RegistryClass {
 
 	public static class LootingWarhammer extends PickaxeItem {
 
-		private final Function<Integer, Multimap<Attribute, AttributeModifier>> factory;
+		private final BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory;
 		private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer;
 
-		public LootingWarhammer(Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Tier tier, int attackDamage, float speed, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+		public LootingWarhammer(BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Tier tier, int attackDamage, float speed, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 			super(tier, attackDamage, speed, properties);
 			this.factory = factory;
 			this.tooltipConsumer = tooltipConsumer;
@@ -310,7 +311,7 @@ public class ModTools implements RegistryClass {
 			if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
 				map.putAll(super.getDefaultAttributeModifiers(slot));
 				if (slot == EquipmentSlot.MAINHAND) {
-					map.putAll(factory.apply(null));
+					map.putAll(factory.apply(null, stack));
 				}
 			}
 
@@ -320,10 +321,10 @@ public class ModTools implements RegistryClass {
 
 	public static class ThreeByThreeShovel extends ShovelItem {
 
-		private final Function<Integer, Multimap<Attribute, AttributeModifier>> factory;
+		private final BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory;
 		private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer;
 
-		public ThreeByThreeShovel(Function<Integer, Multimap<Attribute, AttributeModifier>> factory, Tier tier, float attackDamage, float speed, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+		public ThreeByThreeShovel(BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Tier tier, float attackDamage, float speed, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 			super(tier, attackDamage, speed, properties);
 			this.factory = factory;
 			this.tooltipConsumer = tooltipConsumer;
@@ -373,7 +374,7 @@ public class ModTools implements RegistryClass {
 			if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
 				map.putAll(super.getDefaultAttributeModifiers(slot));
 				if (slot == EquipmentSlot.MAINHAND) {
-					map.putAll(factory.apply(null));
+					map.putAll(factory.apply(null, stack));
 				}
 			}
 

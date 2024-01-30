@@ -28,11 +28,13 @@ public class ModAttributes implements RegistryClass {
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_DMG = make("voidic_dmg", 0F, "Voidic Damage", UUID.fromString("eeacdd6d-bc33-4d30-b2f0-807e7ed333d6"));
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_ARROW_DMG = make("voidic_arrow_dmg", 0F, "Voidic Arrow Damage", UUID.fromString("43812ed1-d129-44b9-8b51-673c91d498c6"));
 
-	private static Supplier<RegUtil.ModAttribute> make(String name, float defaultVal, String type, UUID id) {
+	public static final CustomVanillaAttribute DRACONIC_HEALTH = new CustomVanillaAttribute("Draconic Health", UUID.fromString("BCCA14E2-2754-4ED9-86A6-6C42CADC25CF"));
+
+	private static Supplier<RegUtil.ModAttribute> make(String name, double defaultVal, String type, UUID id) {
 		return make(name, defaultVal, type, id, false);
 	}
 
-	private static Supplier<RegUtil.ModAttribute> make(String name, float defaultVal, String type, UUID id, boolean sync) {
+	private static Supplier<RegUtil.ModAttribute> make(String name, double defaultVal, String type, UUID id, boolean sync) {
 		return ATTRIBUTE_REGISTERY.register(name, () -> {
 			RegUtil.ModAttribute attribute = new RegUtil.ModAttribute(Voidscape.MODID.concat(".attribute.").concat(name), defaultVal, id, type);
 			if (sync)
@@ -48,6 +50,10 @@ public class ModAttributes implements RegistryClass {
 		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
 		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
 		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
+	}
+
+	public record CustomVanillaAttribute(String type, UUID id) {
+
 	}
 
 }

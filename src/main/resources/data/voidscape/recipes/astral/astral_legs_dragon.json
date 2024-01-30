@@ -1,0 +1,20 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:astral_legs"
+  },
+  "addition": {
+    "item": "minecraft:dragon_egg"
+  },
+  "result": {
+    "item": "voidscape:astral_legs",
+    "nbt": {
+      "voidscape": {
+        "draconic": true
+      }
+    }
+  }
+}

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -25,6 +26,7 @@ import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.data.DonatorData;
+import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModDataAttachments;
 
 import java.util.function.Consumer;
@@ -63,7 +65,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	@Override
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		DonatorData data = entity.getData(ModDataAttachments.DONATOR);
-		if (data.enabled) {
+		if (data.enabled || (ModArmors.draconic(entity.getItemBySlot(EquipmentSlot.CHEST)))) {
 			VertexConsumer buffer = BUFFERS.getBuffer(WRAPPED_POS_TEX_COLOR);
 
 			float x1 = 0.10F;
@@ -106,7 +108,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 
 			buffer = BUFFERS.getBuffer(WINGS);
 
-			color.unpack(data.color);
+			color.unpack(data.enabled ? data.color : 0xFFA4EA);
 			color.bit24 = (int) (0.25F * 255);
 
 			stack.pushPose();
