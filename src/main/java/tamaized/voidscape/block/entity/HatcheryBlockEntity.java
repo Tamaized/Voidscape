@@ -3,16 +3,19 @@ package tamaized.voidscape.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
+import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 
@@ -46,6 +49,10 @@ public class HatcheryBlockEntity extends BlockEntity {
 			particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, false, Vec3.atCenterOf(blockPos), Vec3.ZERO);
 			PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(blockPos)).send(particles);
 			level.setBlockAndUpdate(blockPos, Blocks.DRAGON_EGG.defaultBlockState());
+			level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
+					.filter(e -> e instanceof ServerPlayer)
+					.map(ServerPlayer.class::cast)
+					.forEach(ModAdvancementTriggers.HATCHERY_TRIGGER.get()::trigger);
 		} else if (fluid >= 5000 && level.getGameTime() % 10 == 0) {
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			for (int i = 0; i < (fluid / 5000); i++) {
