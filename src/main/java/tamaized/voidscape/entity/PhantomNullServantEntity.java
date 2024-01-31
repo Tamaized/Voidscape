@@ -119,9 +119,9 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
-	public boolean hurt(DamageSource pSource, float pAmount) {
-		if (pSource.getDirectEntity() instanceof StrangePearlEntity && !(pSource.getEntity() instanceof NullServantEntity))
-			return super.hurt(pSource, 300F);
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.getDirectEntity() instanceof StrangePearlEntity && !(source.getEntity() instanceof NullServantEntity))
+			return super.hurt(source, 300F);
 		return false;
 	}
 

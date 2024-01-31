@@ -149,21 +149,23 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	@Override
-	public boolean hurt(DamageSource pSource, float pAmount) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.is(DamageTypes.GENERIC_KILL))
+			return super.hurt(source, amount);
 		if (parent == null) {
 			discard();
 			return true;
 		}
-		if (pSource.is(DamageTypes.IN_WALL))
+		if (source.is(DamageTypes.IN_WALL))
 			return false;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
-			return super.hurt(pSource, pSource.is(ModDamageSource.VOIDIC) ? pAmount : pAmount * 0.1F);
+			return super.hurt(source, source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
-			return super.hurt(pSource, pSource.getEntity() == parent ? pAmount : pAmount * 0.01F);
+			return super.hurt(source, source.getEntity() == parent ? amount : amount * 0.01F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ASTRAL)
-			return super.hurt(pSource, pSource.getEntity() != parent && pSource.getDirectEntity() instanceof StrangePearlEntity ? pAmount : pAmount * 0.01F);
+			return super.hurt(source, source.getEntity() != parent && source.getDirectEntity() instanceof StrangePearlEntity ? amount : amount * 0.01F);
 		else
-			return super.hurt(pSource, pAmount);
+			return super.hurt(source, amount);
 	}
 
 	@Override

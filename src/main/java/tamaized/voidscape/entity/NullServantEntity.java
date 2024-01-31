@@ -19,6 +19,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -342,22 +344,24 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	public boolean hurt(DamageSource pSource, float pAmount) {
-		if (this instanceof PhantomNullServantEntity && pSource.getDirectEntity() instanceof StrangePearlEntity && !(pSource.getEntity() instanceof NullServantEntity))
-			return super.hurt(pSource, pAmount);
-		if (getAugmentAttack() && pSource.getEntity() instanceof PhantomNullServantEntity) {
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.is(DamageTypes.GENERIC_KILL))
+			return super.hurt(source, amount);
+		if (this instanceof PhantomNullServantEntity && source.getDirectEntity() instanceof StrangePearlEntity && !(source.getEntity() instanceof NullServantEntity))
+			return super.hurt(source, amount);
+		if (getAugmentAttack() && source.getEntity() instanceof PhantomNullServantEntity) {
 			switch (getAugment()) {
 				case AUGMENT_ICHOR -> {
 					if (ichorAugmentGoal != null)
 						ichorAugmentGoal.applyHit();
-					super.hurt(pSource, pAmount);
+					super.hurt(source, amount);
 				}
 				case AUGMENT_ASTRAL -> {
 
 				}
 			}
 		}
-		return !getAugmentAttack() && super.hurt(pSource, pAmount);
+		return !getAugmentAttack() && super.hurt(source, amount);
 	}
 
 	@Override
