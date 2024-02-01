@@ -35,28 +35,28 @@ public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fall
 
 	private static final VoxelShape TIP_SHAPE_DOWN = Block.box(5.0, 5.0, 5.0, 11.0, 16.0, 11.0);
 
-    public VeryDrippyDripstoneBlock(Properties pProperties) {
-        super(pProperties);
-    }
+	public VeryDrippyDripstoneBlock(Properties pProperties) {
+		super(pProperties);
+	}
 
-    @Override
-    @Deprecated
-    public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
-        BlockEntity be = pLevel.getBlockEntity(pPos);
-        return super.triggerEvent(pState, pLevel, pPos, pId, pParam) || (be != null && be.triggerEvent(pId, pParam));
-    }
+	@Override
+	@Deprecated
+	public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
+		BlockEntity be = pLevel.getBlockEntity(pPos);
+		return super.triggerEvent(pState, pLevel, pPos, pId, pParam) || (be != null && be.triggerEvent(pId, pParam));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new VeryDrippyDripstoneBlockEntity(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new VeryDrippyDripstoneBlockEntity(pos, state);
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.VERY_DRIPPY_DRIPSTONE.get() == entity && !level.isClientSide() ? VeryDrippyDripstoneBlockEntity::tick : null;
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
+		return ModBlockEntities.VERY_DRIPPY_DRIPSTONE.get() == entity && !level.isClientSide() ? VeryDrippyDripstoneBlockEntity::tick : null;
+	}
 
 	@Override
 	public void onBrokenAfterFall(Level pLevel, BlockPos pPos, FallingBlockEntity pFallingBlock) {
