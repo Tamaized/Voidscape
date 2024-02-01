@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -383,6 +384,23 @@ public class ModBlocks implements RegistryClass {
 	));
 	public static final Supplier<Item> MACHINE_COLLECTOR_ITEM = ModItems.REGISTRY
 			.register(MACHINE_COLLECTOR.getId().getPath(), () -> new BlockItem(MACHINE_COLLECTOR.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+
+	public static final DeferredHolder<Block, Block> VERY_DRIPPY_DRIPSTONE = REGISTRY.register("very_drippy_dripstone", () -> new VeryDrippyDripstoneBlock(Block.Properties.of()
+			.mapColor(MapColor.TERRACOTTA_PURPLE)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASEDRUM)
+			.noOcclusion()
+			.sound(SoundType.POINTED_DRIPSTONE)
+			.randomTicks()
+			.strength(1.5F, 3.0F)
+			.dynamicShape()
+			.offsetType(BlockBehaviour.OffsetType.XZ)
+			.pushReaction(PushReaction.DESTROY)
+			.isRedstoneConductor((state, level, pos) -> false)
+			.isValidSpawn((t1, t2, t3, t4) -> false)
+	));
+	public static final Supplier<Item> VERY_DRIPPY_DRIPSTONE_ITEM = ModItems.REGISTRY
+			.register(VERY_DRIPPY_DRIPSTONE.getId().getPath(), () -> new BlockItem(VERY_DRIPPY_DRIPSTONE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
 	@Override
 	public void init(IEventBus bus) {

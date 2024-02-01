@@ -1,0 +1,27 @@
+{
+  "parent": "item/generated",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "loader": "neoforge:item_layers",
+  "textures": {
+	"layer0": "voidscape:item/very_drippy_dripstone"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 0, 100, 0 ],
+      "translation": [ -1, -1, 0],
+      "scale": [ 0.9, 0.9, 0.9 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, 100, 0 ],
+      "translation": [ 0, -2, 0],
+      "scale": [ 0.9, 0.9, 0.9 ]
+    }
+  }
+}

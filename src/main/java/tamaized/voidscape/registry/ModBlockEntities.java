@@ -41,6 +41,9 @@ public class ModBlockEntities implements RegistryClass {
 	public static final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = REGISTERY
 			.register("collector", () -> BlockEntityType.Builder.of(CollectorBlockEntity::new, ModBlocks.MACHINE_COLLECTOR.get()).build(null));
 
+	public static final Supplier<BlockEntityType<VeryDrippyDripstoneBlockEntity>> VERY_DRIPPY_DRIPSTONE = REGISTERY
+			.register("very_drippy_dripstone", () -> BlockEntityType.Builder.of(VeryDrippyDripstoneBlockEntity::new, ModBlocks.VERY_DRIPPY_DRIPSTONE.get()).build(null));
+
 	@Override
 	public void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {

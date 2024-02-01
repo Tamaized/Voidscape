@@ -24,6 +24,7 @@ public class ModCreativeTabs implements RegistryClass {
 				//// Blocks
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_ORE_ITEM.get());
 				output.accept(ModBlocks.VOIDIC_CRYSTAL_BLOCK_ITEM.get());
+				output.accept(ModBlocks.VERY_DRIPPY_DRIPSTONE_ITEM.get());
 				output.accept(ModBlocks.CHARRED_BRICK_ITEM.get());
 				output.accept(ModBlocks.TITANITE_ORE_ITEM.get());
 				output.accept(ModBlocks.FLESH_ORE_ITEM.get());

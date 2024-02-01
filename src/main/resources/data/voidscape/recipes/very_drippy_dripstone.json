@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "voidscape:very_drippy_dripstone",
+    "count": 1
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:pointed_dripstone"
+    },
+    {
+      "item": "voidscape:voidic_bucket"
+    }
+  ]
+}

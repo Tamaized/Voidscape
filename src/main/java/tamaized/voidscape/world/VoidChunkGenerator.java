@@ -96,7 +96,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 			tmp_NoiseChunk_noiseSizeXZ = ObfuscationReflectionHelper.findField(NoiseChunk.class, "noiseSizeXZ");
 			tmp_handle_setter_NoiseChunk_noiseSizeXZ = LOOKUP.unreflectSetter(tmp_NoiseChunk_noiseSizeXZ);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			Voidscape.LOGGER.error("Exception", e);
 		}
 		object_BeardifierMarker_INSTANCE = Objects.requireNonNull(tmp_object_BeardifierMarker_values)[0];
 		handle_setter_NoiseChunk_cellWidth = tmp_handle_setter_NoiseChunk_cellWidth;

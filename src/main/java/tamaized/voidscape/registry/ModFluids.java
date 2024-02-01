@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -55,9 +56,9 @@ public class ModFluids implements RegistryClass {
 			null
 	));
 
-	private static class CircularReferenceHandler {
+	public static class CircularReferenceHandler {
 		public static final Supplier<Item> VOIDIC_BUCKET = ModItems.REGISTRY
-				.register("voidic_bucket", () -> new BucketItem(VOIDIC_SOURCE, ModItems.ItemProps.DEFAULT.properties().get().stacksTo(1)));
+				.register("voidic_bucket", () -> new BucketItem(VOIDIC_SOURCE, ModItems.ItemProps.DEFAULT.properties().get().stacksTo(1).craftRemainder(Items.BUCKET)));
 		private static final BaseFlowingFluid.Properties VOIDIC_PROPERTIES = new BaseFlowingFluid.Properties(VOIDIC_TYPE, VOIDIC_SOURCE, VOIDIC_FLOWING)
 				.bucket(VOIDIC_BUCKET);
 	}
