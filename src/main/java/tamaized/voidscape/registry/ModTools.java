@@ -69,7 +69,7 @@ public class ModTools implements RegistryClass {
 		public static final RegUtil.ItemTier CORRUPT = new RegUtil.ItemTier("corrupt", 6, 3041, 10.0F, 6F, 19, () -> Ingredient.of(ModItems.TENDRIL.get()));
 		public static final RegUtil.ItemTier TITANITE = new RegUtil.ItemTier("titanite", 7, 3544, 10.5F, 7F, 21, () -> Ingredient.of(ModItems.TITANITE_SHARD.get()));
 		public static final RegUtil.ItemTier ICHOR = new RegUtil.ItemTier("ichor", 8, 4047, 11.0F, 8F, 23, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()));
-		public static final RegUtil.ItemTier ASTRAL = new RegUtil.ItemTier("astral", 9, 4550, 11.5F, 9F, 25, () -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()));
+		public static final RegUtil.ItemTier ASTRAL = new RegUtil.ItemTier("astral", 9, 4550, 11.5F, 9F, 25, () -> Ingredient.of(ModItems.ASTRAL_CRYSTAL.get()));
 
 		public static boolean check(Tier tier) {
 			return tier == VOIDIC_CRYSTAL ||
