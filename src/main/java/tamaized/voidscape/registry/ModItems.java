@@ -151,8 +151,7 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				Insanity data = entity.getData(ModDataAttachments.INSANITY);
-				data.setInfusion(data.getInfusion() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))));
+				entity.getData(ModDataAttachments.INSANITY).addInfusion(150, entity);
 			}
 			return itemstack;
 		}
@@ -163,8 +162,7 @@ public class ModItems implements RegistryClass {
 		public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
-				Insanity data = entity.getData(ModDataAttachments.INSANITY);
-				data.setInfusion(data.getInfusion() - 150);
+				entity.getData(ModDataAttachments.INSANITY).removeInfusion(150);
 			}
 			return itemstack;
 		}

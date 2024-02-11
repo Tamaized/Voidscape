@@ -330,6 +330,14 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		decrementInfusion = amount;
 	}
 
+	public void addInfusion(float amount, LivingEntity parent) {
+		setInfusion(infusion + (amount * (2F - (float) parent.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()))));
+	}
+
+	public void removeInfusion(float amount) {
+		setInfusion(infusion - amount);
+	}
+
 	public void setInfusion(float amount) {
 		float prev = infusion;
 		infusion = Mth.clamp(amount, 0, 600);

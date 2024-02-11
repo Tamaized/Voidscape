@@ -63,7 +63,7 @@ public class InfuserBlockEntity extends BlockEntity {
 				level.getEntities(EntityTypeTest.forClass(LivingEntity.class), new AABB(blockPos).inflate(6D), e -> true).forEach(e -> {
 					Insanity data = e.getData(ModDataAttachments.INSANITY);
 					if (data.getInfusion() < 200) {
-						data.setInfusion(250);
+						data.addInfusion(250, e);
 					}
 					if (level instanceof ServerLevel serverLevel) {
 						FakePlayer fakePlayer = FakePlayerFactory.get(serverLevel, Voidscape.FAKE_PLAYER);

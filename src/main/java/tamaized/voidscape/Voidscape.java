@@ -269,7 +269,7 @@ public class Voidscape {
 			if (event.getSpawnType() == MobSpawnType.NATURAL &&
 					!(event.getEntity() instanceof IEthereal) &&
 					Voidscape.checkForVoidDimension(event.getEntity().level())) {
-				event.getEntity().getData(ModDataAttachments.INSANITY).setInfusion(event.getEntity().getRandom().nextInt(200) + 100);
+				event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(event.getEntity().getRandom().nextInt(200) + 100, event.getEntity());
 			}
 		});
 	}

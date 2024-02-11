@@ -3,6 +3,7 @@ package tamaized.voidscape.registry;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +35,9 @@ import java.util.function.Supplier;
 public class ModEntities implements RegistryClass {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(Registries.ENTITY_TYPE);
+
+	public static final Supplier<EntityType<VoidlingEntity>> VOIDLING = REGISTRY.register("voidling", () ->
+			build(new ResourceLocation(Voidscape.MODID, "voidling"), makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER).sized(0.7F, 0.5F).setTrackingRange(256).fireImmune()));
 
 	public static final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
 			build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
@@ -102,6 +106,7 @@ public class ModEntities implements RegistryClass {
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
+		event.put(VOIDLING.get(), VoidlingEntity.createAttributes().build());
 		event.put(CORRUPTED_PAWN.get(), CorruptedPawnEntity.createAttributes().build());
 		event.put(VOIDS_WRATH.get(), VoidsWrathEntity.createAttributes().build());
 		event.put(NULL_SERVANT.get(), NullServantEntity.createAttributes().build());
@@ -112,6 +117,7 @@ public class ModEntities implements RegistryClass {
 	@OnlyIn(Dist.CLIENT)
 	public static class ModelLayerLocations {
 
+		public static final ModelLayerLocation VOIDLING = make("voidling");
 		public static final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
 		public static final ModelLayerLocation VOIDS_WRATH = make("voidswrath");
 		public static final ModelLayerLocation VOIDS_WRATH_CHARGED = make("voidswrathcharged");
@@ -132,6 +138,7 @@ public class ModEntities implements RegistryClass {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(ModelLayerLocations.VOIDLING, ModelVoidling::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.CORRUPTED_PAWN, ModelCorruptedPawn::createMesh);
 		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH, () -> ModelVoidsWrath.createMesh(CubeDeformation.NONE));
 		event.registerLayerDefinition(ModelLayerLocations.VOIDS_WRATH_CHARGED, () -> ModelVoidsWrath.createMesh(new CubeDeformation(1.0F)));
@@ -148,6 +155,7 @@ public class ModEntities implements RegistryClass {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public static void registerEntityRenderer(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(VOIDLING.get(), RenderVoidling::factory);
 		event.registerEntityRenderer(CORRUPTED_PAWN.get(), RenderCorruptedPawn::factory);
 		event.registerEntityRenderer(VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(NULL_SERVANT.get(), RenderNullServant::new);
