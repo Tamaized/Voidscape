@@ -19,6 +19,7 @@ public class VoidlingEntity extends Spider implements IEthereal {
 	public static AttributeSupplier.Builder createAttributes() {
 		return Spider.createAttributes()
 				.add(Attributes.MOVEMENT_SPEED, 0.4F)
+				.add(Attributes.ARMOR, 8.0D)
 				.add(ModAttributes.VOIDIC_DMG.get(), 3.0D)
 				.add(ModAttributes.VOIDIC_RES.get(), 2.0D);
 	}
