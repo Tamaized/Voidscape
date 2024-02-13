@@ -15,6 +15,7 @@ public class ModAdvancementTriggers implements RegistryClass {
 	private static final DeferredRegister<CriterionTrigger<?>> REGISTRY = RegUtil.create(Registries.TRIGGER_TYPE);
 
 	public static final Supplier<GenericAdvancementTrigger> ETHEREAL_ESSENCE_TRIGGER = REGISTRY.register("ethereal_essence", GenericAdvancementTrigger::new);
+	public static final Supplier<GenericAdvancementTrigger> ETHEREAL_SPIDER_EGGS_TRIGGER = REGISTRY.register("ethereal_spider_eggs", GenericAdvancementTrigger::new);
 	public static final Supplier<ItemMatchesAdvancementTrigger> ITEM_USED_ON_NULL_SERVANT_TRIGGER = REGISTRY.register("item_used_on_null_servant", ItemMatchesAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> ACTIVATE_PORTAL_TRIGGER = REGISTRY.register("activate_portal", GenericAdvancementTrigger::new);
 	public static final Supplier<GenericAdvancementTrigger> INFUSED_TRIGGER = REGISTRY.register("infused", GenericAdvancementTrigger::new);

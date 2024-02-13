@@ -279,7 +279,7 @@ public class Voidscape {
 			return false;
 		} else {
 			return mobEntity_.checkSpawnObstruction(serverWorld_) &&
-					(!(mobEntity_ instanceof Zoglin) || NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
+					(!(mobEntity_ instanceof Zoglin || mobEntity_ instanceof IEthereal) || NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
 		}
 	}
 

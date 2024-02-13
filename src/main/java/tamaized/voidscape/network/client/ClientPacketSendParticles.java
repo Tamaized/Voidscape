@@ -73,7 +73,7 @@ public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) im
 		context.player().ifPresent(player -> {
 			if (!(player.level() instanceof ClientLevel level))
 				return;
-			payload.queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.b, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2));
+			context.workHandler().execute(() -> payload.queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.b, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2)));
 		});
 	}
 

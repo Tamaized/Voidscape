@@ -1,0 +1,30 @@
+{
+  "parent": "voidscape:root",
+  "criteria": {
+    "spidereggs": {
+      "conditions": {},
+      "trigger": "voidscape:ethereal_spider_eggs"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.voidscape.spidereggs.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "voidscape:ethereal_spider_eggs"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.voidscape.spidereggs"
+    }
+  },
+  "requirements": [
+    [
+      "spidereggs"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

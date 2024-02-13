@@ -22,7 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
@@ -30,6 +32,8 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.PortalBlock;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.StrangePearlEntity;
+import tamaized.voidscape.network.client.ClientPacketSendParticles;
+import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 import tamaized.voidscape.world.ConfigurablePortalShape;
 
 import java.util.Optional;
@@ -62,6 +66,34 @@ public class ModItems implements RegistryClass {
 				if (context.getPlayer() instanceof ServerPlayer serverPlayer)
 					ModAdvancementTriggers.ETHEREAL_ESSENCE_TRIGGER.get().trigger(serverPlayer);
 				return InteractionResult.SUCCESS;
+			}
+			return super.useOn(context);
+		}
+	});
+	public static final Supplier<Item> ETHEREAL_SPIDER_EGGS = REGISTRY.register("ethereal_spider_eggs", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
+		@Override
+		public InteractionResult useOn(UseOnContext context) {
+			if (Voidscape.checkForVoidDimension(context.getLevel())) {
+				BlockState state = context.getLevel().getBlockState(context.getClickedPos());
+				if (state.is(Blocks.BEDROCK) || state.is(ModBlocksThunderForestBiome.THUNDER_NYLIUM.get())) {
+					context.getLevel().removeBlock(context.getClickedPos(), false);
+					if (context.getPlayer() == null || !context.getPlayer().isCreative())
+						context.getItemInHand().shrink(1);
+					context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.CONDUIT_ATTACK_TARGET, SoundSource.BLOCKS, 1F, 0.5F + context.getLevel().getRandom().nextFloat() * 0.5F);
+					if (context.getLevel() instanceof ServerLevel) {
+						ClientPacketSendParticles particles = new ClientPacketSendParticles();
+						for (int i = 0; i < 200; i++)
+							particles.queueParticle(ParticleTypes.ASH, false,
+									context.getClickedPos().getX() + context.getLevel().getRandom().nextFloat(),
+									context.getClickedPos().getY() + context.getLevel().getRandom().nextFloat(),
+									context.getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(),
+									0, 0, 0);
+						PacketDistributor.TRACKING_CHUNK.with(context.getLevel().getChunkAt(context.getClickedPos())).send(particles);
+					}
+					if (context.getPlayer() instanceof ServerPlayer serverPlayer)
+						ModAdvancementTriggers.ETHEREAL_SPIDER_EGGS_TRIGGER.get().trigger(serverPlayer);
+					return InteractionResult.SUCCESS;
+				}
 			}
 			return super.useOn(context);
 		}

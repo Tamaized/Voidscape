@@ -36,8 +36,13 @@ public class ModEntities implements RegistryClass {
 
 	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(Registries.ENTITY_TYPE);
 
-	public static final Supplier<EntityType<VoidlingEntity>> VOIDLING = REGISTRY.register("voidling", () ->
-			build(new ResourceLocation(Voidscape.MODID, "voidling"), makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER).sized(0.7F, 0.5F).setTrackingRange(256).fireImmune()));
+	public static final Supplier<EntityType<VoidlingEntity>> VOIDLING = REGISTRY.register("voidling", () -> {
+		EntityType<VoidlingEntity> type = build(new ResourceLocation(Voidscape.MODID, "voidling"), makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER).sized(0.7F, 0.5F).setTrackingRange(256).fireImmune());
+		SpawnPlacements.register(type, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (type1, level, spawn, pos, rand) ->
+				NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, level, pos, type1) &&
+						level.getEntities(null, new AABB(pos).inflate(20F, 3F, 20F)).isEmpty());
+		return type;
+	});
 
 	public static final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
 			build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
