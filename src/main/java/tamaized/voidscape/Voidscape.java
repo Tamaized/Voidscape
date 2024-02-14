@@ -58,6 +58,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.client.ClientInitiator;
 import tamaized.voidscape.client.ConfigScreen;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
@@ -201,6 +202,11 @@ public class Voidscape {
 							event.getEntity().invulnerableTime = 0;
 							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(event.getEntity().level(), ModDamageSource.VOIDIC, attacker), dmg);
 						}
+						final float infusion = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_INFUSION.get()) ?
+								attacker.getAttributeValue(ModAttributes.VOIDIC_INFUSION.get()) - 1F : 0) *
+								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * Insanity.MAX_INFUSION;
+						if (infusion > 0)
+							event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(infusion, event.getEntity());
 					}
 				}
 				if (event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
@@ -210,6 +216,10 @@ public class Voidscape {
 							return;
 						event.getEntity().invulnerableTime = 0;
 						event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
+					}
+					float infusion = arrowEntity.getData(ModDataAttachments.INFUSION_ARROW);
+					if (infusion > 0) {
+						event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(infusion, event.getEntity());
 					}
 				}
 			} else if (event.getSource().is(ModDamageSource.VOIDIC)) {
@@ -235,11 +245,18 @@ public class Voidscape {
 			if (event.getEntity() instanceof AbstractArrow arrow) {
 				Entity entity = arrow.getOwner();
 				if (entity instanceof LivingEntity shooter) {
-					if (shooter.getMainHandItem().isEmpty() || !shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get()))
+					if (shooter.getMainHandItem().isEmpty())
 						return;
-					float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get());
-					if (voidic > 0)
-						arrow.setData(ModDataAttachments.VOIDIC_ARROW, voidic);
+					if (shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get())) {
+						float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get());
+						if (voidic > 0)
+							arrow.setData(ModDataAttachments.VOIDIC_ARROW, voidic);
+					}
+					if (shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_INFUSION.get())) {
+						final float infusion = ((float) shooter.getAttributeValue(ModAttributes.VOIDIC_INFUSION.get()) - 1F) * Insanity.MAX_INFUSION;
+						if (infusion > 0)
+							event.getEntity().setData(ModDataAttachments.INFUSION_ARROW, infusion);
+					}
 				}
 			}
 		});

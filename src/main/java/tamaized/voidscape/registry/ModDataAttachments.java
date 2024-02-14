@@ -21,6 +21,7 @@ public class ModDataAttachments implements RegistryClass {
 	public static final Supplier<AttachmentType<Insanity>> INSANITY = REGISTRY.register("insanity", () -> AttachmentType.serializable(Insanity::new).build());
 	public static final Supplier<AttachmentType<DonatorData>> DONATOR = REGISTRY.register("donator", () -> AttachmentType.serializable(DonatorData::new).copyOnDeath().build());
 	public static final Supplier<AttachmentType<Float>> VOIDIC_ARROW = REGISTRY.register("voidicarrow", () -> AttachmentType.builder(() -> 0F).serialize(Codec.FLOAT).build());
+	public static final Supplier<AttachmentType<Float>> INFUSION_ARROW = REGISTRY.register("infusionarrow", () -> AttachmentType.builder(() -> 0F).serialize(Codec.FLOAT).build());
 
 	@Override
 	public void init(IEventBus bus) {

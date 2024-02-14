@@ -5,6 +5,7 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
+          "weight": 75,
           "type": "minecraft:item",
           "functions": [
             {
@@ -26,6 +27,22 @@
             }
           ],
           "name": "voidscape:ethereal_spider_eggs"
+        },
+        {
+          "weight": 10,
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "voidscape:ethereal_spider_fang"
         }
       ],
       "rolls": 1.0

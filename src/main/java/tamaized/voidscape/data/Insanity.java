@@ -44,6 +44,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
 	private static final UUID INFUSION_RESISTANCE = UUID.fromString("4fe870c1-c74f-4856-b30d-7a4311d72639");
 
+	public static final float MAX_INFUSION = 600;
+	public static final float MAX_PARANOIA = 600;
+
 	private static final SoundEvent[] PARANOIA_SOUNDS = new SoundEvent[]{
 
 			SoundEvents.CREEPER_PRIMED, SoundEvents.ENDERMAN_AMBIENT, SoundEvents.ENDERMAN_SCREAM, SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT,
@@ -167,8 +170,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			infusion--;
 		}
 		decrementInfusion = 0;
-		paranoia = Mth.clamp(paranoia, 0, 600);
-		infusion = Mth.clamp(infusion, 0, 600);
+		paranoia = Mth.clamp(paranoia, 0, MAX_INFUSION);
+		infusion = Mth.clamp(infusion, 0, MAX_PARANOIA);
 		boolean infusionImmune = parent instanceof ArmorStand || (parent instanceof IEthereal ethereal && ethereal.insanityImmunity());
 		if (infusionImmune) {
 			paranoia = 0;
@@ -217,7 +220,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	private void calculateEffects(LivingEntity parent) {
-		float perc = infusion / 600F;
+		float perc = infusion / MAX_INFUSION;
 		if (parent.tickCount % 20 == 0) {
 			AttributeInstance attributeMaxHealth = parent.getAttribute(Attributes.MAX_HEALTH);
 			AttributeInstance attributeVoidicAttackDamage = parent.getAttribute(ModAttributes.VOIDIC_DMG.get());
@@ -245,7 +248,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			}
 		}
 		if (parent instanceof Player) {
-			float sanity = paranoia / 600F;
+			float sanity = paranoia / MAX_PARANOIA;
 			if (parent.level().isClientSide() && sanity > 0.25F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.level().playSound((Player) parent,
 
@@ -273,7 +276,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 						1F);
 			if (!parent.level().isClientSide()) {
-				if (hunt == null && paranoia >= 600) {
+				if (hunt == null && paranoia >= MAX_PARANOIA) {
 					hunt = new CorruptedPawnEntity(parent.level()).target((Player) parent);
 					Vec3 vec = new Vec3(0, 100, 0).xRot(parent.getRandom().nextFloat() * 2F - 1F).yRot(parent.getRandom().nextFloat());
 					hunt.setPos(parent.getX() + vec.x(), parent.getY() + vec.y(), parent.getZ() + vec.z());
@@ -340,7 +343,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	public void setInfusion(float amount) {
 		float prev = infusion;
-		infusion = Mth.clamp(amount, 0, 600);
+		infusion = Mth.clamp(amount, 0, MAX_INFUSION);
 		dirty = prev != infusion;
 	}
 
@@ -350,7 +353,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	public void setParanoia(float amount) {
 		float prev = paranoia;
-		paranoia = Mth.clamp(amount, 0, 600);
+		paranoia = Mth.clamp(amount, 0, MAX_PARANOIA);
 		dirty = prev != paranoia;
 	}
 

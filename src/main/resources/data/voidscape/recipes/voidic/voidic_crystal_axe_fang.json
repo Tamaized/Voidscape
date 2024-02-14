@@ -1,0 +1,20 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:voidic_crystal_axe"
+  },
+  "addition": {
+    "item": "voidscape:ethereal_spider_fang"
+  },
+  "result": {
+    "item": "voidscape:voidic_crystal_axe",
+    "nbt": {
+      "voidscape": {
+        "fang": true
+      }
+    }
+  }
+}

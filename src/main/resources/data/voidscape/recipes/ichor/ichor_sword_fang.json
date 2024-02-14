@@ -1,0 +1,20 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:ichor_sword"
+  },
+  "addition": {
+    "item": "voidscape:ethereal_spider_fang"
+  },
+  "result": {
+    "item": "voidscape:ichor_sword",
+    "nbt": {
+      "voidscape": {
+        "fang": true
+      }
+    }
+  }
+}

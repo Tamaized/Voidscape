@@ -98,6 +98,7 @@ public class ModItems implements RegistryClass {
 			return super.useOn(context);
 		}
 	});
+	public static final Supplier<Item> ETHEREAL_SPIDER_FANG = REGISTRY.register("ethereal_spider_fang", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()));
 	public static final Supplier<Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new Item(ItemProps.LAVA_IMMUNE.properties().get()) {
 		@Override
 		public InteractionResult useOn(UseOnContext context) {

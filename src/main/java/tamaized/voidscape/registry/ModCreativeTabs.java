@@ -71,6 +71,8 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModItems.ETHEREAL_FRUIT_NETHER.get());
 				output.accept(ModItems.ETHEREAL_FRUIT_END.get());
 				//// Items
+				output.accept(ModItems.ETHEREAL_SPIDER_EGGS.get());
+				output.accept(ModItems.ETHEREAL_SPIDER_FANG.get());
 				output.accept(ModItems.ETHEREAL_ESSENCE.get());
 				output.accept(ModItems.VOIDIC_CRYSTAL.get());
 				output.accept(ModItems.VOIDIC_TEMPLATE.get());

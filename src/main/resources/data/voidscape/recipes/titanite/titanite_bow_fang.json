@@ -1,0 +1,20 @@
+{
+  "type": "voidscape:smithing",
+  "template": {
+    "item": "voidscape:voidic_template"
+  },
+  "base": {
+    "item": "voidscape:titanite_bow"
+  },
+  "addition": {
+    "item": "voidscape:ethereal_spider_fang"
+  },
+  "result": {
+    "item": "voidscape:titanite_bow",
+    "nbt": {
+      "voidscape": {
+        "fang": true
+      }
+    }
+  }
+}

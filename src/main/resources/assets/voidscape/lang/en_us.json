@@ -132,6 +132,7 @@
   "item.voidscape.voidic_template": "Voidic Smithing Template",
   "item.voidscape.ethereal_essence": "Ethereal Essence",
   "item.voidscape.ethereal_spider_eggs": "Ethereal Spider Eggs",
+  "item.voidscape.ethereal_spider_fang": "Ethereal Spider Fang",
   "item.voidscape.tendril": "Tendril",
   "item.voidscape.charred_bone": "Charred Bone",
   "item.voidscape.charred_warhammer_head": "Charred War Hammer Head Piece",
@@ -214,6 +215,7 @@
   "voidscape.attribute.voidic_dmg": "Voidic Damage",
   "voidscape.attribute.voidic_arrow_dmg": "Voidic Arrow Damage",
   "voidscape.attribute.voidic_visibility": "Voidic Visibility",
+  "voidscape.attribute.voidic_infusion": "Voidic Infusion",
 
   "effect.voidscape.aura": "Voidic Aura",
   "effect.voidscape.fortified": "Voidic Fortification",

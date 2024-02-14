@@ -22,6 +22,7 @@ public class ModAttributes implements RegistryClass {
 	private static final DeferredRegister<Attribute> ATTRIBUTE_REGISTERY = RegUtil.create(Registries.ATTRIBUTE);
 
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_VISIBILITY = make("voidic_visibility", 1F, "Voidic Visibility", UUID.fromString("177f92ef-452c-49e0-acd3-235bc58c9297"), true);
+	public static final Supplier<RegUtil.ModAttribute> VOIDIC_INFUSION = make("voidic_infusion", 1F, "Voidic Infusion", UUID.fromString("4691a2df-c072-4ef1-9c8b-7ab3cc7df322"));
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_INFUSION_RES = make("voidic_infusion_res", 1F, "Voidic Infusion Resistance", UUID.fromString("15d20c76-90c0-4d15-affd-c974e36ac35d"), true);
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_PARANOIA_RES = make("voidic_paranoia_res", 1F, "Voidic Paranoia Resistance", UUID.fromString("c265b4c7-78b8-4a1b-b99b-c2a6c2af4f57"), true);
 	public static final Supplier<RegUtil.ModAttribute> VOIDIC_RES = make("voidic_res", 0F, "Voidic Damage Resistance", UUID.fromString("a1fa645b-70ca-459b-becc-bcf7bdf090c0"));
@@ -45,6 +46,7 @@ public class ModAttributes implements RegistryClass {
 
 	public static void assignAttributes(AttributeSupplier.Builder n) {
 		n.add(ModAttributes.VOIDIC_VISIBILITY.get(), 1F);
+		n.add(ModAttributes.VOIDIC_INFUSION.get(), 1F);
 		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
 		n.add(ModAttributes.VOIDIC_PARANOIA_RES.get(), 1F);
 		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
