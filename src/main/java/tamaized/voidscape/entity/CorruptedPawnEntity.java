@@ -87,6 +87,10 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 
 	@Override
 	public void tick() {
+		if (isNoAi()) {
+			super.tick();
+			return;
+		}
 		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 		if (!level().isClientSide()) {
 			if (target == null || !target.isAlive())
