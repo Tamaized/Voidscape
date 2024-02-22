@@ -219,7 +219,7 @@ public class ModItems implements RegistryClass {
 			ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 			if (!level.isClientSide) {
 				Insanity data = entity.getData(ModDataAttachments.INSANITY);
-				data.setParanoia(data.getParanoia() - (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))));
+				data.setParanoia(data.getParanoia() + (150 * (2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()))));
 			}
 			return itemstack;
 		}
