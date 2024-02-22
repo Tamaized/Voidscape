@@ -273,7 +273,7 @@ public class ASMHooks {
 	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.GameRenderer#renderLevel(float, long, PoseStack)}<br>
-	 * [AFTER FIRST ASTORE 7]
+	 * [BEFORE FIRST ASTORE 7]
 	 */
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
