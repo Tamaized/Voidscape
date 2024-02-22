@@ -10,5 +10,6 @@
   "visibility": "META-INF/asm/visibility.js",
   "mybow": "META-INF/asm/mybow.js",
   "armoroverlay": "META-INF/asm/armoroverlay.js",
-  "seed": "META-INF/asm/seed.js"
+  "seed": "META-INF/asm/seed.js",
+  "lockcamera": "META-INF/asm/lockcamera.js"
 }

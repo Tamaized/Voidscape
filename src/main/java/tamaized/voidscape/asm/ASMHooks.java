@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -35,7 +36,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
@@ -47,10 +47,12 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModelBakeListener;
+import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.world.VoidTeleporter;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -266,6 +268,25 @@ public class ASMHooks {
 			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 			RegUtil.renderingArmorOverlay = false;
 		}
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.client.renderer.GameRenderer#renderLevel(float, long, PoseStack)}<br>
+	 * [AFTER FIRST ASTORE 7]
+	 */
+	@OnlyIn(Dist.CLIENT)
+	@Nullable
+	public static Entity lockCamera(@Nullable Entity entity) {
+		if (entity == null)
+			return null;
+		CorruptedPawnEntity hunt = entity.getData(ModDataAttachments.INSANITY).getHunter();
+		if (hunt != null) {
+			entity.lookAt(EntityAnchorArgument.Anchor.EYES, hunt.getEyePosition());
+			entity.yRotO = entity.getYRot();
+			entity.xRotO = entity.getXRot();
+		}
+		return entity;
 	}
 
 }

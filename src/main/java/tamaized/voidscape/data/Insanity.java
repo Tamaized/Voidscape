@@ -1,5 +1,6 @@
 package tamaized.voidscape.data;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -384,6 +385,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		buffer.writeInt(teleportTick);
 		buffer.writeBoolean(aura);
 		buffer.writeInt(leapParticles);
+		buffer.writeInt(hunt == null ? -1 : hunt.getId());
 	}
 
 	@Override
@@ -393,6 +395,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		teleportTick = buffer.readInt();
 		aura = buffer.readBoolean();
 		leapParticles = buffer.readInt();
+		int huntId = buffer.readInt();
+		if (huntId >= 0 && Minecraft.getInstance().level != null && Minecraft.getInstance().level.getEntity(huntId) instanceof CorruptedPawnEntity pawn)
+			hunt = pawn;
 	}
 
 	private void sendToClient(ServerPlayer parent) {
