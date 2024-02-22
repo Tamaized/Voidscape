@@ -263,12 +263,12 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 						parent.getRandom().nextFloat() * 0.5F + 0.5F);
 			if (!parent.level().isClientSide() && sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.hurt(parent.damageSources().generic(), 1F);
-			if (parent.level().isClientSide() && sanity > 0.75F && parent.tickCount % (82) == 0)
+			if (parent.level().isClientSide() && sanity > 0.75F && parent.tickCount % (sanity == 1F ? 8 : sanity > 0.95F ? 10 : sanity > 0.80F ? 20 : 30) == 0)
 				parent.level().playSound((Player) parent,
 
 						parent.blockPosition(),
 
-						SoundEvents.CONDUIT_AMBIENT,
+						SoundEvents.WARDEN_HEARTBEAT,
 
 						SoundSource.MASTER,
 
