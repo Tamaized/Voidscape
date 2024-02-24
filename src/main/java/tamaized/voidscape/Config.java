@@ -35,7 +35,7 @@ public class Config {
 				enabled = builder.
 						translation(translation("enabled")).
 						comment("Enables the Donator perk wing render").
-						define("enabled", false);
+						define("enabled", true);
 				color = builder.
 						translation(translation("color")).
 						comment("Changes the Donator Wing Render Color, Format: RRGGBB Hex").
