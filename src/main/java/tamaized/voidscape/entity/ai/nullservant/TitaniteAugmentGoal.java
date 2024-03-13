@@ -92,7 +92,7 @@ public class TitaniteAugmentGoal extends Goal {
 				parent.setAugmentAttackAoes(aoe1 == null ? new Vector3f() : aoe1.toVector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 			} else if (aoe1 != null) {
 				boom(aoe1);
-				parent.setAugmentAttackAoes(new Vector3f(), aoe2.toVector3f());
+				parent.setAugmentAttackAoes(new Vector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 				aoe1 = null;
 			} else {
 				boom(aoe2);
