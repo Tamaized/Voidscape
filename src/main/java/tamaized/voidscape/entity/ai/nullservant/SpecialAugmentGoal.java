@@ -106,7 +106,7 @@ public class SpecialAugmentGoal extends Goal {
 						parent.setAugmentAttackAoes(aoe1 == null ? new Vector3f() : aoe1.toVector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 					} else if (aoe1 != null) {
 						boom(aoe1);
-						parent.setAugmentAttackAoes(new Vector3f(), aoe2.toVector3f());
+						parent.setAugmentAttackAoes(new Vector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 						aoe1 = null;
 					} else {
 						boom(aoe2);
@@ -129,7 +129,7 @@ public class SpecialAugmentGoal extends Goal {
 						parent.setAugmentAttackAoes(aoe1 == null ? new Vector3f() : aoe1.toVector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 					} else if (aoe1 != null) {
 						ichor(aoe1);
-						parent.setAugmentAttackAoes(new Vector3f(), aoe2.toVector3f());
+						parent.setAugmentAttackAoes(new Vector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 						aoe1 = null;
 					} else {
 						ichor(aoe2);
@@ -151,7 +151,7 @@ public class SpecialAugmentGoal extends Goal {
 						parent.setAugmentAttackAoes(aoe1 == null ? new Vector3f() : aoe1.toVector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 					} else if (aoe1 != null) {
 						shoot(aoe1);
-						parent.setAugmentAttackAoes(new Vector3f(), aoe2.toVector3f());
+						parent.setAugmentAttackAoes(new Vector3f(), aoe2 == null ? new Vector3f() : aoe2.toVector3f());
 						aoe1 = null;
 					} else {
 						shoot(aoe2);
