@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.97'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'io.github.0ffz.github-packages' version '1.+'
 }

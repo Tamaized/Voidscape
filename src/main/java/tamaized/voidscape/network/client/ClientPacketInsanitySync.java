@@ -8,11 +8,12 @@ import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.network.DetatchedFriendlyByteBuf;
 import tamaized.voidscape.registry.ModDataAttachments;
 
 import javax.annotation.Nullable;
 
-public record ClientPacketInsanitySync(@Nullable Insanity handler, int entity, @Nullable FriendlyByteBuf data) implements CustomPacketPayload {
+public record ClientPacketInsanitySync(@Nullable Insanity handler, int entity, @Nullable DetatchedFriendlyByteBuf data) implements CustomPacketPayload {
 
 	public static final ResourceLocation ID = new ResourceLocation(Voidscape.MODID, "s2c_insanity_sync");
 
@@ -25,7 +26,7 @@ public record ClientPacketInsanitySync(@Nullable Insanity handler, int entity, @
 	}
 
 	public ClientPacketInsanitySync(FriendlyByteBuf packet) {
-		this(null, packet.readInt(), packet);
+		this(null, packet.readInt(), new DetatchedFriendlyByteBuf(packet));
 	}
 
 	@Override
