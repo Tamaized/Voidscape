@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
@@ -17,7 +16,7 @@ import net.neoforged.neoforge.event.TickEvent;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.client.ClientUtil;
-import tamaized.voidscape.client.Shaders;
+import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.registry.ModDataAttachments;
 

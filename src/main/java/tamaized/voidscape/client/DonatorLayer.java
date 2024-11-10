@@ -24,6 +24,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.data.DonatorData;
 import tamaized.voidscape.registry.ModArmors;

@@ -23,7 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import tamaized.voidscape.client.RenderStateAccessor;
-import tamaized.voidscape.client.Shaders;
+import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.entity.NullServantEntity;
 
 import java.util.function.Function;

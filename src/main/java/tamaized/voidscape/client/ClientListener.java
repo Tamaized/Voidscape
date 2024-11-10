@@ -24,6 +24,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.particle.ParticleSpellCloud;
+import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.client.ui.RenderTurmoil;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
@@ -38,7 +39,6 @@ public class ClientListener {
 	public static void init(IEventBus busMod) {
 		IEventBus busForge = NeoForge.EVENT_BUS;
 
-		Shaders.init(busMod);
 		DonatorLayer.setup();
 		TintHandler.setup(busMod);
 

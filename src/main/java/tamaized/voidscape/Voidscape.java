@@ -54,6 +54,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.BeanContext;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.client.ClientInitiator;
@@ -80,14 +81,15 @@ public class Voidscape {
 
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(MODID, "void"));
+	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(MODID, "void"));
 
 	public static final GameProfile FAKE_PLAYER = new GameProfile(UUID.fromString("4B63F35E-2AA1-4BC2-8D13-A3F32C9D8380"), "[Voidscape]");
 
-	public Voidscape(IEventBus busMod) {
-		if (FMLEnvironment.dist == Dist.CLIENT)
-			ClientInitiator.call(busMod);
+	static {
+		BeanContext.init();
+	}
 
+	public Voidscape(IEventBus busMod) {
 		DonatorHandler.start();
 
 		IEventBus busForge = NeoForge.EVENT_BUS;
