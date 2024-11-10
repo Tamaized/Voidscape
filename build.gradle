@@ -1,10 +1,14 @@
+import org.jetbrains.gradle.ext.JUnit
+
 plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.97'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    // Version List: https://projects.neoforged.net/neoforged/ModDevGradle
+    id 'net.neoforged.moddev' version "${mdg_version}"
+    id "com.dorongold.task-tree" version "4.0.0"
+    id 'com.gradleup.shadow' version '8.3.3'
     id 'io.github.0ffz.github-packages' version '1.+'
 }
 
@@ -15,34 +19,9 @@ configurations {
 shadowJar {
     archiveClassifier.set('')
     configurations = [project.configurations.shade]
-    relocate 'tamaized.regutil', 'tamaized.voidscape.regutil'
+    relocate 'tamaized.beanification', "tamaized.${project.mod_id}.beanification"
+    relocate 'tamaized.regutil', "tamaized.${project.mod_id}.regutil"
 }
-
-repositories {
-    maven {
-        name 'JEI'
-        url 'https://maven.blamejared.com/'
-    }
-    maven {
-        name 'RegUtil'
-        url 'https://maven.tamaized.com/releases/'
-    }
-    maven {
-        name 'EnderIO'
-        url "https://api.modrinth.com/maven"
-    }
-    maven githubPackage.invoke("The-Aether-Team/The-Aether")
-}
-
-version = "${project.minecraft_version}-${project.mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
-group = "tamaized.voidscape"
-base {
-    archivesName = "Voidscape"
-}
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation" << "-Werror"
 
 def secrets = new Properties()
 def secretsFile = file('secrets.properties')
@@ -61,81 +40,198 @@ if (secretsFile.exists()) {
     }
 }
 
-def mod_id = 'voidscape'
-runs {
-    configureEach {
-        workingDirectory project.file('run')
-        systemProperty 'forge.logging.console.level', 'debug'
-        systemProperty 'fml.earlyprogresswindow', 'false'
-        systemProperty 'mixin.env.disableRefMap', 'true'
-
-        modSource project.sourceSets.main
-    }
-
-    client {
-//        taskName "Minecraft_Client_${project.minecraft_version}"
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-        programArguments.addAll '--username', secrets.getProperty("username")?: 'Dev', secrets.getProperty("uuid") ? '--uuid' : '', secrets.getProperty("uuid")?: ''
-    }
-
-    server {
-//        taskName "Minecraft_Server_${project.minecraft_version}"
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-        programArgument '--nogui'
-    }
-
-    gameTestServer {
-//        taskName "Minecraft_GameTestServer_${project.minecraft_version}"
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-    }
-
-    data {
-//        taskName "Minecraft_Data_${project.minecraft_version}"
-        workingDirectory project.file('run-data')
-        programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
     }
 }
 
-subsystems {
-    parchment {
-        minecraftVersion = "1.20.3" //parchment doesnt support 1.20.4 yet
-        mappingsVersion = project.parchment_version
+version = "${project.minecraft_version}-${project.mod_major_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
+group = "tamaized.${project.mod_id}"
+
+base {
+    archivesName = "Voidscape"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+
+sourceSets {
+    data {
+        compileClasspath += main.compileClasspath + main.output
+
+        java {
+            srcDirs = ['src/main/java', 'src/data/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    dataForPublishing {
+        compileClasspath += data.compileClasspath
+
+        java {
+            srcDirs = ['src/data/java']
+        }
+    }
+}
+
+configurations {
+    dataImplementation.extendsFrom implementation
+}
+
+neoForge {
+    version = project.neoforge_version
+
+    validateAccessTransformers = true
+
+    addModdingDependenciesTo sourceSets.data
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet this.sourceSets.main
+        }
+
+        "${project.mod_id}-data" {
+            sourceSet this.sourceSets.main
+            sourceSet this.sourceSets.data
+        }
+    }
+
+    unitTest {
+        enable()
+        testedMod = mods."${project.mod_id}"
+        project.afterEvaluate {
+            idea {
+                project {
+                    settings {
+                        runConfigurations {
+                            defaults(JUnit) {
+                                vmParameters += " -Dforge.logging.console.level=debug"
+                                vmParameters += " -Dforge.logging.marker.scan=ACCEPT"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    def mainMod = mods."${project.mod_id}"
+    def dataMod = mods."${project.mod_id}-data"
+
+    runs {
+        configureEach {
+            gameDirectory = project.file('run')
+            systemProperty 'forge.logging.console.level', 'debug'
+            logLevel = org.slf4j.event.Level.DEBUG
+            mods = [mainMod]
+        }
+
+        client {
+            client()
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            programArguments.addAll '--username', secrets.getProperty("username") ?: 'Dev', secrets.getProperty("uuid") ? '--uuid' : '', secrets.getProperty("uuid") ?: ''
+        }
+
+        server {
+            server()
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            programArgument '--nogui'
+        }
+
+        data {
+            data()
+            gameDirectory = project.file('run-data')
+            programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            sourceSet = this.sourceSets.data
+            mods = [dataMod]
+        }
+    }
+}
+
+repositories {
+    maven {
+        name 'Jared\'s Maven' // JEI
+        url 'https://maven.blamejared.com/'
+    }
+    maven {
+        name 'Tama\'s Maven' // Beanification, RegUtil
+        url 'https://maven.tamaized.com/releases/'
+    }
+    maven {
+        name 'Modrinth\'s Maven' // EnderIO
+        url "https://api.modrinth.com/maven"
+    }
+    maven githubPackage.invoke("The-Aether-Team/The-Aether")
+}
+
+dependencies {
+    compileOnly "net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:${project.mdg_version}"
+
+    runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
+//    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
+//    runtimeOnly fg.deobf("com.aetherteam.aether:aether:1.20.1-1.0.0-beta.1.2-neoforge")
+
+    def beanification = "tamaized:beanification:${project.minecraft_version}-${project.beanification_version}"
+    implementation beanification
+    shade beanification
+    testImplementation "${beanification}:tests"
+    testCompileOnly "${beanification}:test-sources"
+
+    def reg = "tamaized:regutil:${project.minecraft_version}-${project.regutil_version}"
+    implementation reg
+    shade reg
+
+    testImplementation group: 'net.neoforged', name: 'testframework', version: project.neoforge_version
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.3'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "failed"
+
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+
+        showStandardStreams = false
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 processResources {
-    filesMatching("META-INF/mods.toml") {
+    def version = project.version
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand([
-                'file': ['jarVersion': "${project.version}"]
+                'file': ['jarVersion': "${version}"]
         ])
     }
 }
 
-tasks.named('jar', Jar).configure {
-    //noinspection GroovyAssignabilityCheck
+jar {
     manifest {
-        attributes(["Specification-Title"     : "Voidscape",
-                    "Specification-Vendor"    : "Tamaized",
-                    "Specification-Version"   : "${version}",
-                    "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${version}",
-                    "Implementation-Vendor"   : "Tamaized",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+        attributes([
+                "Specification-Title"     : "Voidscape",
+                "Specification-Vendor"    : "Tamaized",
+                "Specification-Version"   : "${version}",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "Tamaized",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
-}
-
-dependencies {
-    implementation "net.neoforged:neoforge:${project.neoforge_version}"
-
-    runtimeOnly "mezz.jei:${project.jei_version}"
-//    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
-//    runtimeOnly fg.deobf("com.aetherteam.aether:aether:1.20.1-1.0.0-beta.1.2-neoforge")
-
-    def reg = "tamaized:regutil:" + project.regutil_version
-    implementation reg
-    shade reg
 }
 
 def mavenUser = hasProperty("CIMUser") ? CIMUser : secrets.getProperty("maven_username")
@@ -143,13 +239,15 @@ def mavenToken = hasProperty("CIMToken") ? CIMToken : secrets.getProperty("maven
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        create('mavenJava', MavenPublication) {
             afterEvaluate {
-                artifact project.shadowJar
-                artifact project.sourceJar
+                artifact this.project.jar
+                artifact this.project.sourceJar
+                artifact this.project.dataJar
+                artifact this.project.dataSourceJar
             }
-            setGroupId 'tamaized'
-            setArtifactId 'voidscape'
+            groupId 'tamaized'
+            artifactId this.project.mod_id
         }
     }
     repositories {
@@ -169,18 +267,20 @@ tasks.register('sourceJar', Jar) {
     archiveClassifier = 'sources'
 }
 
-jar.enabled = false
+tasks.register('dataJar', Jar) {
+    dependsOn 'classes'
+    from sourceSets.dataForPublishing.output
+    archiveClassifier = 'data'
+}
+
+tasks.register('dataSourceJar', Jar) {
+    dependsOn 'classes'
+    from sourceSets.dataForPublishing.allSource
+    archiveClassifier = 'data-sources'
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-task incrBuildNum doLast {
-    ant.propertyfile(file: "gradle.properties") {
-        entry(key: "mod_version", value: Integer.parseInt(project.mod_version) + 1)
-    }
-}
-
 build.dependsOn shadowJar
-
-build.finalizedBy(incrBuildNum)

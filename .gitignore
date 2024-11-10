@@ -1,4 +1,6 @@
 *
+!.editorconfig
+!.gitattributes
 !.gitignore
 !donator.properties
 !gradlew
