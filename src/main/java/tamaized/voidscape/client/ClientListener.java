@@ -16,10 +16,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
+import tamaized.beanification.Component;
+import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
@@ -34,12 +34,11 @@ import tamaized.voidscape.registry.ModParticles;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+@Component
 public class ClientListener {
 
-	public static void init(IEventBus busMod) {
-		IEventBus busForge = NeoForge.EVENT_BUS;
-
-		DonatorLayer.setup();
+	@PostConstruct
+	private void init(IEventBus busMod, IEventBus busForge) {
 		TintHandler.setup(busMod);
 
 		busMod.addListener(RenderTurmoil::render);
