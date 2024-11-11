@@ -2,6 +2,8 @@ package tamaized.voidscape.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
@@ -58,12 +60,12 @@ public final class StencilBufferUtil {
 		render(index, run, true);
 	}
 
-	public static void renderTesselator(int index) {
-		render(index, () -> Tesselator.getInstance().end());
+	public static void renderThenUpload(int index, BufferBuilder buffer) {
+		render(index, () -> BufferUploader.draw(buffer.buildOrThrow()));
 	}
 
-	public static void renderTesselatorAndFlush(int index) {
-		renderAndFlush(index, () -> Tesselator.getInstance().end());
+	public static void renderThenUploadAndFlush(int index, BufferBuilder buffer) {
+		renderAndFlush(index, () -> BufferUploader.draw(buffer.buildOrThrow()));
 	}
 
 	public static void endRender(int index) {

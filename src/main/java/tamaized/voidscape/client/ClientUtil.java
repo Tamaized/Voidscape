@@ -21,6 +21,10 @@ public class ClientUtil {
 		return TextureManager.INTENTIONAL_MISSING_TEXTURE;
 	}
 
+	/**
+	 * Call {@link RenderSystem#setShaderTexture(int, ResourceLocation)} directly
+	 */
+	@Deprecated(forRemoval = true)
 	public static void bindTexture(ResourceLocation texture) {
 		RenderSystem.setShaderTexture(0, texture);
 	}

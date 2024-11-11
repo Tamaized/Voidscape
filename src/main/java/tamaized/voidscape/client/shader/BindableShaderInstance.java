@@ -1,7 +1,8 @@
 package tamaized.voidscape.client.shader;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
@@ -46,12 +47,12 @@ public class BindableShaderInstance extends ShaderInstance {
 		invokeThenClear(null, execPost);
 	}
 
-	public final void invokeThenEndTesselator(@Nullable Runnable execBind) {
-		invokeThenClear(execBind, () -> Tesselator.getInstance().end());
+	public final void invokeThenUpload(@Nullable Runnable execBind, BufferBuilder buffer) {
+		invokeThenClear(execBind, () -> BufferUploader.drawWithShader(buffer.buildOrThrow()));
 	}
 
-	public final void invokeThenEndTesselator() {
-		invokeThenClear(() -> Tesselator.getInstance().end());
+	public final void invokeThenUpload(BufferBuilder buffer) {
+		invokeThenClear(() -> BufferUploader.drawWithShader(buffer.buildOrThrow()));
 	}
 
 }

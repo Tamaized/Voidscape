@@ -1,7 +1,8 @@
 package tamaized.voidscape.client.shader;
 
 import com.mojang.blaze3d.shaders.Uniform;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -43,8 +44,8 @@ public class OptimalAlphaShaderInstance extends BindableShaderInstance {
 		resetClear();
 	}
 
-	public final void invokeThenEndTesselator(float val) {
-		invokeThenClear(val, () -> Tesselator.getInstance().end());
+	public final void invokeThenUpload(float val, BufferBuilder buffer) {
+		invokeThenClear(val, () -> BufferUploader.drawWithShader(buffer.buildOrThrow()));
 	}
 
 }
