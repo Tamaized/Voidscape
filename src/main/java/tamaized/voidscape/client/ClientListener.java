@@ -39,8 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		TintHandler.setup(busMod);
-
 		busMod.addListener(RenderTurmoil::render);
 
 		busMod.addListener(RegisterParticleProvidersEvent.class, event -> {
