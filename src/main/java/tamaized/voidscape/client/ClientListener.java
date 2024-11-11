@@ -39,8 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		busMod.addListener(RenderTurmoil::render);
-
 		busMod.addListener(RegisterParticleProvidersEvent.class, event -> {
 			event.registerSpriteSet(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);
 		});
