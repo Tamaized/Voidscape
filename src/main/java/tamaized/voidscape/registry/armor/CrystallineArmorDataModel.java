@@ -24,19 +24,21 @@ public class CrystallineArmorDataModel extends ArmorDataModel {
 	private final ResourceLocation TEXTURE;
 	private final ResourceLocation TEXTURE_OVERLAY;
 
+	private final boolean overlay;
 	private final ModelLayerLocation modelLayerLocation;
 
 	public CrystallineArmorDataModel(String textureName, ModelLayerLocation modelLayerLocation, boolean overlay) {
 		super(!overlay, overlay, overlay);
 		TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+".png");
 		TEXTURE_OVERLAY = overlay ? ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+"_overlay.png") : TEXTURE;
+		this.overlay = overlay;
 		this.modelLayerLocation = modelLayerLocation;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-		ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().bakeLayer(modelLayerLocation));
+		ModelArmorTitanite<LivingEntity> model = new ModelArmorTitanite<>(Minecraft.getInstance().getEntityModels().bakeLayer(modelLayerLocation), !overlay);
 		model.head.visible = false;
 		model.headoverlay.visible = false;
 		model.body.visible = false;
