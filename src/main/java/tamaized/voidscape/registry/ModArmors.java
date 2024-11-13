@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,9 +20,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import tamaized.regutil.ArmorData;
-import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
+import tamaized.beanification.Autowired;
+import tamaized.regutil.*;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.entity.model.ModelArmorTitanite;
@@ -30,23 +30,6 @@ import javax.annotation.Nullable;
 
 @tamaized.beanification.Component
 public class ModArmors {
-
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_HELMET = RegUtil.ToolAndArmorHelper
-		.helmet(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D),
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_CHEST = RegUtil.ToolAndArmorHelper.
-			chest(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D),
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), (stack, tick) -> ModArmors.elytra(stack), tooltip -> {});
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_LEGS = RegUtil.ToolAndArmorHelper.
-			legs(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D),
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOOTS = RegUtil.ToolAndArmorHelper.
-			boots(ArmorMaterial.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D),
-					RegUtil.AttributeData.make(ModAttributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.MULTIPLY_BASE, 0.05D)), tooltip -> {});
 
 	public final DeferredHolder<Item, Item> CORRUPT_HELMET = RegUtil.ToolAndArmorHelper.
 			helmet(ArmorMaterial.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), RegUtil.makeAttributeFactory(
@@ -154,28 +137,5 @@ public class ModArmors {
 				if (draconic(tooltip.stack()))
 					tooltip.tooltip().add(Component.translatable(Voidscape.MODID + ".tooltip.draconic").withStyle(ChatFormatting.LIGHT_PURPLE));
 			});
-
-	@Override
-	public void init(IEventBus bus) {
-
-	}
-
-	public static boolean elytra(ItemStack stack) {
-		if (stack.isEmpty())
-			return false;
-		if (!stack.is(VOIDIC_CRYSTAL_CHEST.get()) && !stack.is(TITANITE_CHEST.get()) && !stack.is(ICHOR_CHEST.get()) && !stack.is(ASTRAL_CHEST.get()))
-			return false; // Quick fail for performance, no nbt polling needed
-		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
-		return nbt != null && nbt.getBoolean("elytra");
-	}
-
-	public static boolean draconic(ItemStack stack) {
-		if (stack.isEmpty())
-			return false;
-		if (!stack.is(ASTRAL_HELMET.get()) && !stack.is(ASTRAL_CHEST.get()) && !stack.is(ASTRAL_LEGS.get()) && !stack.is(ASTRAL_BOOTS.get()))
-			return false; // Quick fail for performance, no nbt polling needed
-		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
-		return nbt != null && nbt.getBoolean("draconic");
-	}
 
 }
