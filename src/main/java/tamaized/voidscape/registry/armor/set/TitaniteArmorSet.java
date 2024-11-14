@@ -18,59 +18,63 @@ import tamaized.voidscape.util.ArmorUtil;
 public class TitaniteArmorSet {
 
 	@Autowired
-	private static ModAttributes attributes;
+	private ModAttributes attributes;
 
 	@Autowired
-	private static ModArmorMaterials armorMaterials;
+	private ModArmorMaterials armorMaterials;
 
 	@Autowired
-	private static ModItemProperties itemProperties;
+	private ModItemProperties itemProperties;
 
 	@Autowired
 	private ArmorUtil armorUtil;
 
 	public final DeferredHolder<Item, Item> TITANITE_HELMET = RegUtil.ToolAndArmorHelper.helmet(
-		armorMaterials.TITANITE,
-		itemProperties.LAVA_IMMUNE.get(),
+		"titanite",
+		() -> armorMaterials.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
 	public final DeferredHolder<Item, Item> TITANITE_CHEST = RegUtil.ToolAndArmorHelper.chest(
-		armorMaterials.TITANITE,
-		itemProperties.LAVA_IMMUNE.get(),
+		"titanite",
+		() -> armorMaterials.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.CHEST),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.CHEST),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
 		),
 		(stack, tick) -> armorUtil.elytra(stack),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
 	public final DeferredHolder<Item, Item> TITANITE_LEGS = RegUtil.ToolAndArmorHelper.legs(
-		armorMaterials.TITANITE,
-		itemProperties.LAVA_IMMUNE.get(),
+		"titanite",
+		() -> armorMaterials.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.LEGS),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.LEGS),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
 	public final DeferredHolder<Item, Item> TITANITE_BOOTS = RegUtil.ToolAndArmorHelper.boots(
-		armorMaterials.TITANITE,
-		itemProperties.LAVA_IMMUNE.get(),
+		"titanite",
+		() -> armorMaterials.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.FEET),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.FEET),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);

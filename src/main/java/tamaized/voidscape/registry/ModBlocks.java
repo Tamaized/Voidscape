@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.*;
@@ -32,25 +33,10 @@ import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings({"deprecation", "unused"})
+@Component
 public class ModBlocks implements RegistryClass {
 
-	public static final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
-
-	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_ORE = REGISTRY.register("voidic_crystal_ore", () -> new Block(Block.Properties.of()
-			.sound(SoundType.STONE)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(3F, 3600000.0F)
-			.requiresCorrectToolForDrops()) {
-		@Override
-		public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-			boolean flag = super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
-			world.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), world.isClientSide() ? 11 : 3);
-			return flag;
-		}
-	});
-	public static final Supplier<Item> VOIDIC_CRYSTAL_ORE_ITEM = ModItems.REGISTRY
-			.register(VOIDIC_CRYSTAL_ORE.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
+	public final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
 
 	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.AMETHYST)
@@ -137,7 +123,7 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> THUNDERROCK_ITEM = ModItems.REGISTRY
 			.register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of()
+	public final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -162,7 +148,7 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> ANTIROCK_ITEM = ModItems.REGISTRY
 			.register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
-	public static final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
+	public final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)

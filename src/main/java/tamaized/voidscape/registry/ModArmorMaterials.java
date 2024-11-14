@@ -8,6 +8,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.ArmorData;
 import tamaized.regutil.ArmorDataModel;
@@ -15,6 +16,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.armor.CorruptArmorDataModel;
 import tamaized.voidscape.registry.armor.CrystallineArmorDataModel;
+import tamaized.voidscape.registry.item.MaterialItems;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -22,7 +24,10 @@ import java.util.List;
 @Component
 public class ModArmorMaterials {
 
-	private DeferredRegister<ArmorMaterial> REGISTRY = RegUtil.create(Registries.ARMOR_MATERIAL);
+	@Autowired
+	private MaterialItems materialItems;
+
+	private final DeferredRegister<ArmorMaterial> REGISTRY = RegUtil.create(Registries.ARMOR_MATERIAL);
 
 	public final ArmorData VOIDIC_CRYSTAL = new ArmorData(REGISTRY.register("voidic_crystal", () -> new ArmorMaterial(
 		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -34,7 +39,7 @@ public class ModArmorMaterials {
 		}),
 		17,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
-		() -> Ingredient.of(ModItems.VOIDIC_CRYSTAL.get()),
+		() -> Ingredient.of(materialItems.VOIDIC_CRYSTAL.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"))),
 		4F,
 		0.10F
@@ -50,7 +55,7 @@ public class ModArmorMaterials {
 		}),
 		19,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(ModItems.TENDRIL.get()),
+		() -> Ingredient.of(materialItems.TENDRIL.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "corrupt"))),
 		5F,
 		0.15F
@@ -66,7 +71,7 @@ public class ModArmorMaterials {
 		}),
 		17,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(ModItems.TITANITE_SHARD.get()),
+		() -> Ingredient.of(materialItems.TITANITE_SHARD.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
 		6F,
 		0.20F
@@ -82,7 +87,7 @@ public class ModArmorMaterials {
 		}),
 		23,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()),
+		() -> Ingredient.of(materialItems.ICHOR_CRYSTAL.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
 		7F,
 		0.25F
@@ -98,7 +103,7 @@ public class ModArmorMaterials {
 		}),
 		25,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
-		() -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()),
+		() -> Ingredient.of(materialItems.ASTRAL_CRYSTAL.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,
 		0.30F

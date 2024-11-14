@@ -23,16 +23,16 @@ import java.util.function.Consumer;
 public class AstralArmorSet {
 
 	@Autowired
-	private static ModAttributes attributes;
+	private ModAttributes attributes;
 
 	@Autowired
-	private static ModArmorMaterials armorMaterials;
+	private ModArmorMaterials armorMaterials;
 
 	@Autowired
-	private static ModItemProperties itemProperties;
+	private ModItemProperties itemProperties;
 
 	@Autowired
-	private static ArmorUtil armorUtil;
+	private ArmorUtil armorUtil;
 
 	private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> TOOLTIP = tooltipContext -> {
 		if (armorUtil.draconic(tooltipContext.stack()))
@@ -40,48 +40,52 @@ public class AstralArmorSet {
 	};
 
 	public final DeferredHolder<Item, Item> ASTRAL_HELMET = RegUtil.ToolAndArmorHelper.helmet(
-		armorMaterials.ASTRAL,
-		itemProperties.LAVA_IMMUNE.get(),
+		"astral",
+		() -> armorMaterials.ASTRAL,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.30D, EquipmentSlotGroup.HEAD),
-			AttributeData.make(armorUtil::draconic, Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.30D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(armorUtil::draconic, Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
 		),
 		TOOLTIP
 	);
 
 	public final DeferredHolder<Item, Item> ASTRAL_CHEST = RegUtil.ToolAndArmorHelper.chest(
-		armorMaterials.ASTRAL,
-		itemProperties.LAVA_IMMUNE.get(),
+		"astral",
+		() -> armorMaterials.ASTRAL,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.CHEST),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
 		),
 		(stack, tick) -> armorUtil.elytra(stack),
 		TOOLTIP
 	);
 
 	public final DeferredHolder<Item, Item> ASTRAL_LEGS = RegUtil.ToolAndArmorHelper.legs(
-		armorMaterials.ASTRAL,
-		itemProperties.LAVA_IMMUNE.get(),
+		"astral",
+		() -> armorMaterials.ASTRAL,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.LEGS),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
 		),
 		TOOLTIP
 	);
 
 	public final DeferredHolder<Item, Item> ASTRAL_BOOTS = RegUtil.ToolAndArmorHelper.boots(
-		armorMaterials.ASTRAL,
-		itemProperties.LAVA_IMMUNE.get(),
+		"astral",
+		() -> armorMaterials.ASTRAL,
+		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.FEET),
-			AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.FEET),
-			AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
+			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
 		),
 		TOOLTIP
 	);
