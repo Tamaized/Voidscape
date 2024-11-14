@@ -97,7 +97,7 @@ public class ModArmorMaterials {
 			map.put(ArmorItem.Type.BODY, 15);
 		}),
 		25,
-		SoundEvents.ARMOR_EQUIP_NETHERITE,
+		SoundEvents.ARMOR_EQUIP_DIAMOND,
 		() -> Ingredient.of(ModItems.ICHOR_CRYSTAL.get()),
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,

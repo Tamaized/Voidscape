@@ -48,7 +48,7 @@ public class VoidicCrystalArmorSet {
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_LEGS = RegUtil.ToolAndArmorHelper.chest(
+	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_LEGS = RegUtil.ToolAndArmorHelper.legs(
 		armorMaterials.VOIDIC_CRYSTAL,
 		itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -58,7 +58,7 @@ public class VoidicCrystalArmorSet {
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOOTS = RegUtil.ToolAndArmorHelper.chest(
+	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOOTS = RegUtil.ToolAndArmorHelper.boots(
 		armorMaterials.VOIDIC_CRYSTAL,
 		itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(

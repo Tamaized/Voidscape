@@ -5,18 +5,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.util.NamespaceUtils;
-
-import java.util.UUID;
-import java.util.function.Supplier;
 
 @Component
 public class ModAttributes {
@@ -38,13 +31,13 @@ public class ModAttributes {
 	public final String DRACONIC_HEALTH_ID = "draconic_health";
 
 	public void assignAttributes(AttributeSupplier.Builder n) {
-		n.add(ModAttributes.VOIDIC_VISIBILITY.get(), 1F);
-		n.add(ModAttributes.VOIDIC_INFUSION.get(), 1F);
-		n.add(ModAttributes.VOIDIC_INFUSION_RES.get(), 1F);
-		n.add(ModAttributes.VOIDIC_PARANOIA_RES.get(), 1F);
-		n.add(ModAttributes.VOIDIC_RES.get(), 0F);
-		n.add(ModAttributes.VOIDIC_DMG.get(), 0F);
-		n.add(ModAttributes.VOIDIC_ARROW_DMG.get(), 0F);
+		n.add(VOIDIC_VISIBILITY, 1F);
+		n.add(VOIDIC_INFUSION, 1F);
+		n.add(VOIDIC_INFUSION_RES, 1F);
+		n.add(VOIDIC_PARANOIA_RES, 1F);
+		n.add(VOIDIC_RES, 0F);
+		n.add(VOIDIC_DMG, 0F);
+		n.add(VOIDIC_ARROW_DMG, 0F);
 	}
 
 }
