@@ -15,13 +15,13 @@ import net.minecraft.world.level.Level;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class SpellTome extends Item {
+public class SpellTomeItem extends Item {
 
 	private final Supplier<Item> repairMaterial;
 	private final int cooldown;
 	private final Consumer<ActionContext> action;
 
-	public SpellTome(Properties properties, Supplier<Item> repairMaterial, int cooldown, Consumer<ActionContext> action) {
+	public SpellTomeItem(Properties properties, Supplier<Item> repairMaterial, int cooldown, Consumer<ActionContext> action) {
 		super(properties);
 		this.repairMaterial = repairMaterial;
 		this.cooldown = cooldown;

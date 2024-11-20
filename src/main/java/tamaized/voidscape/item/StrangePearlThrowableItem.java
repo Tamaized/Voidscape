@@ -11,9 +11,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import tamaized.voidscape.entity.StrangePearlEntity;
 
-public class StrangePearlThrowable extends Item {
+public class StrangePearlThrowableItem extends Item {
 
-	public StrangePearlThrowable(Properties properties) {
+	public StrangePearlThrowableItem(Properties properties) {
 		super(properties);
 	}
 

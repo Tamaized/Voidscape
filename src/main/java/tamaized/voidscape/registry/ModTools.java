@@ -47,7 +47,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IchorBoltEntity;
-import tamaized.voidscape.item.SpellTome;
+import tamaized.voidscape.item.SpellTomeItem;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ModTools implements RegistryClass {
 
@@ -87,90 +86,90 @@ public class ModTools implements RegistryClass {
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 1D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 1D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_SHIELD = RegUtil.ToolAndArmorHelper.shield(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_SHIELD = RegUtil.ToolAndArmorHelper.shield(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_RES, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
 	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.VOIDIC_CRYSTAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
 
-	public static final DeferredHolder<Item, Item> CHARRED_WARHAMMER = hammer(ItemTier.CHARRED, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> CHARRED_WARHAMMER = hammer(ItemTier.CHARRED, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
 
-	public static final DeferredHolder<Item, Item> CORRUPT_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> CORRUPT_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> CORRUPT_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> CORRUPT_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 2D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> CORRUPT_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> CORRUPT_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 2D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> CORRUPT_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> CORRUPT_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.CORRUPT, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
 
-	public static final DeferredHolder<Item, Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(
 							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D),
 							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
 					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(), 
+	public static final DeferredHolder<Item, Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D)), tooltip -> {});
 	public static final DeferredHolder<Item, Item> TITANITE_HOE = bonemealHoe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
 
-	public static final DeferredHolder<Item, Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
+	public static final DeferredHolder<Item, Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
 			.durability(100), ModItems.ICHOR_CRYSTAL, 20 * 10, context -> context.level().addFreshEntity(new IchorBoltEntity(context.parent()))));
-	public static final DeferredHolder<Item, Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
+	public static final DeferredHolder<Item, Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
 			.durability(100), ModItems.VOIDIC_CRYSTAL, 20 * 45, context -> context.parent().addEffect(new MobEffectInstance(ModEffects.AURA.get(), 20 * 30))));
-	public static final DeferredHolder<Item, Item> CORRUPT_TOME = ModItems.REGISTRY.register("corrupt_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
+	public static final DeferredHolder<Item, Item> CORRUPT_TOME = ModItems.REGISTRY.register("corrupt_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
 			.durability(100), ModItems.TENDRIL, 20 * 5, context -> {
 		context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
 		context.level().playSound(null, context.parent(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1F, 0.75F + context.parent().getRandom().nextFloat() * 0.5F);
 		context.parent().getData(ModDataAttachments.INSANITY).enableLeapParticles();
 		context.parent().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 10));
 	}));
-	public static final DeferredHolder<Item, Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTome(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
+	public static final DeferredHolder<Item, Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
 			.durability(100), ModItems.TITANITE_SHARD, 20 * 45, context -> context.parent().addEffect(new MobEffectInstance(ModEffects.FORTIFIED.get(), 20 * 30))));
 	public static final DeferredHolder<Item, Item> ICHOR_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.ICHOR, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 			RegUtil.makeAttributeFactory(

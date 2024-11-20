@@ -21,12 +21,12 @@ import tamaized.voidscape.world.ConfigurablePortalShape;
 import java.util.Optional;
 
 @Configurable
-public class VoidPortalActivator extends Item {
+public class VoidPortalActivatorItem extends Item {
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
-	public VoidPortalActivator(Properties properties) {
+	public VoidPortalActivatorItem(Properties properties) {
 		super(properties);
 	}
 

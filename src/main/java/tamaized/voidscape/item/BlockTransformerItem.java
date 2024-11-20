@@ -22,7 +22,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockTransformer extends Item {
+public class BlockTransformerItem extends Item {
 
 	private final Predicate<BlockState> from;
 	private final Supplier<BlockState> to;
@@ -31,7 +31,7 @@ public class BlockTransformer extends Item {
 	private final Supplier<ParticleOptions> particle;
 	private final SoundEffect soundEffect;
 
-	private BlockTransformer(
+	private BlockTransformerItem(
 		Predicate<BlockState> from,
 		Supplier<BlockState> to,
 		@Nullable Supplier<GenericAdvancementTrigger> advancement,
@@ -131,8 +131,8 @@ public class BlockTransformer extends Item {
 			return this;
 		}
 
-		public BlockTransformer build(Properties properties) {
-			return new BlockTransformer(from, to, advancement, particleCount, particle, soundEffect, properties);
+		public BlockTransformerItem build(Properties properties) {
+			return new BlockTransformerItem(from, to, advancement, particleCount, particle, soundEffect, properties);
 		}
 
 	}

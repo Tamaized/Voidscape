@@ -17,6 +17,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.block.TransformOnBreakBlock;
 import tamaized.voidscape.registry.ModItemProperties;
 
 import java.util.function.Supplier;
@@ -30,20 +31,14 @@ public class OreBlocks {
 	private final DeferredRegister<Block> REGISTRY_BLOCK = RegUtil.create(Registries.BLOCK);
 	private final DeferredRegister<Item> REGISTRY_ITEM = RegUtil.create(Registries.ITEM);
 
-	public final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_ORE = REGISTRY_BLOCK.register("voidic_crystal_ore", () -> new Block(
+	public final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_ORE = REGISTRY_BLOCK.register("voidic_crystal_ore", () -> new TransformOnBreakBlock(
+		Blocks.BEDROCK::defaultBlockState,
 		Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(3F, 3600000.0F)
 			.requiresCorrectToolForDrops()
-	) {
-		@Override
-		public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-			boolean flag = super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
-			world.setBlock(pos, Blocks.BEDROCK.defaultBlockState(), world.isClientSide() ? 11 : 3);
-			return flag;
-		}
-	});
+	));
 	public final Supplier<Item> VOIDIC_CRYSTAL_ORE_ITEM = REGISTRY_ITEM.register(VOIDIC_CRYSTAL_ORE.getId().getPath(), () -> new BlockItem(
 		VOIDIC_CRYSTAL_ORE.get(),
 		itemProperties.LAVA_IMMUNE.get()

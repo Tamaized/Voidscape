@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.item.BlockTransformer;
+import tamaized.voidscape.item.BlockTransformerItem;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.block.OreBlocks;
@@ -34,13 +34,13 @@ public class MiscItems {
 
 	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
 
-	public final Supplier<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new BlockTransformer.Builder(
+	public final Supplier<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new BlockTransformerItem.Builder(
 		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
 		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
 		.build(itemProperties.LAVA_IMMUNE.get())
 	);
 
-	public final Supplier<Item> ETHEREAL_SPIDER_EGGS = REGISTRY.register("ethereal_spider_eggs", () -> new BlockTransformer.Builder(
+	public final Supplier<Item> ETHEREAL_SPIDER_EGGS = REGISTRY.register("ethereal_spider_eggs", () -> new BlockTransformerItem.Builder(
 		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
 		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
 		.advancement(advancementTriggers.ETHEREAL_SPIDER_EGGS_TRIGGER)
