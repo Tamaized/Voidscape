@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -18,15 +17,13 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.*;
+import tamaized.voidscape.block.LightningAttractorBlock;
 import tamaized.voidscape.entity.AntiBoltEntity;
-import tamaized.voidscape.registry.block.ThunderForestBiomeBlocks;
 
 import java.util.function.Supplier;
 
@@ -34,110 +31,6 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
 	public final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
-
-	public static final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
-			.sound(SoundType.STONE)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.lightLevel(state -> 15)
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
-		@Override
-		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
-				return;
-			LightningBolt lit = EntityType.LIGHTNING_BOLT.create(level);
-			if (lit != null) {
-				lit.moveTo(Vec3.atBottomCenterOf(pos));
-				level.addFreshEntity(lit);
-			}
-		}
-
-		@Override
-		public boolean isRandomlyTicking(BlockState state) {
-			return true;
-		}
-	});
-	public static final Supplier<Item> THUNDERROCK_ITEM = ModItems.REGISTRY
-			.register(THUNDERROCK.getId().getPath(), () -> new BlockItem(THUNDERROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-
-	public final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new Block(Block.Properties.of()
-			.sound(SoundType.STONE)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
-		@Override
-		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
-				return;
-			AntiBoltEntity lit = ModEntities.ANTI_BOLT.get().create(level);
-			if (lit != null) {
-				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
-				level.addFreshEntity(lit);
-			}
-		}
-
-		@Override
-		public boolean isRandomlyTicking(BlockState state) {
-			return true;
-		}
-	});
-	public static final Supplier<Item> ANTIROCK_ITEM = ModItems.REGISTRY
-			.register(ANTIROCK.getId().getPath(), () -> new BlockItem(ANTIROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-
-	public final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new Block(Block.Properties.of()
-			.sound(SoundType.STONE)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)) {
-		@Override
-		public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-			if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
-				return;
-			AntiBoltEntity lit = ModEntities.ANTI_BOLT.get().create(level);
-			if (lit != null) {
-				lit.moveTo(Vec3.atBottomCenterOf(pos).subtract(0, 0.01F, 0));
-				level.addFreshEntity(lit);
-				level.setBlockAndUpdate(pos, CRACKED_ASTRALROCK.get().defaultBlockState());
-			}
-		}
-
-		@Override
-		public boolean isRandomlyTicking(BlockState state) {
-			return true;
-		}
-	});
-	public static final Supplier<Item> ASTRALROCK_ITEM = ModItems.REGISTRY
-			.register(ASTRALROCK.getId().getPath(), () -> new BlockItem(ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-	public static final DeferredHolder<Block, Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(4F, 1200.0F)
-			.requiresCorrectToolForDrops()
-	));
-	public static final Supplier<Item> CRACKED_ASTRALROCK_ITEM = ModItems.REGISTRY
-			.register(CRACKED_ASTRALROCK.getId().getPath(), () -> new BlockItem(CRACKED_ASTRALROCK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-
-	public static final DeferredHolder<Block, Block> NULL_BLACK = REGISTRY.register("null_black", () -> new Block(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
-	));
-	public static final Supplier<Item> NULL_BLACK_ITEM = ModItems.REGISTRY
-			.register(NULL_BLACK.getId().getPath(), () -> new BlockItem(NULL_BLACK.get(), ModItems.ItemProps.DEFAULT.properties().get()));
-	public static final DeferredHolder<Block, Block> NULL_WHITE = REGISTRY.register("null_white", () -> new Block(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
-			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> true)
-	));
-	public static final Supplier<Item> NULL_WHITE_ITEM = ModItems.REGISTRY
-			.register(NULL_WHITE.getId().getPath(), () -> new BlockItem(NULL_WHITE.get(), ModItems.ItemProps.DEFAULT.properties().get()));
 
 	public static final Supplier<PortalBlock> PORTAL = REGISTRY.register("portal", () -> new PortalBlock(Block.Properties.of()
 			.sound(SoundType.AMETHYST)

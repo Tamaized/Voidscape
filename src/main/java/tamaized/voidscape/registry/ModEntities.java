@@ -22,6 +22,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
@@ -31,10 +32,10 @@ import tamaized.voidscape.entity.*;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Voidscape.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModEntities implements RegistryClass {
+@Component
+public class ModEntities {
 
-	private static final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(Registries.ENTITY_TYPE);
+	private final DeferredRegister<EntityType<?>> REGISTRY = RegUtil.create(Registries.ENTITY_TYPE);
 
 	public static final Supplier<EntityType<VoidlingEntity>> VOIDLING = REGISTRY.register("voidling", () -> {
 		EntityType<VoidlingEntity> type = build(new ResourceLocation(Voidscape.MODID, "voidling"), makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER).sized(0.7F, 0.5F).setTrackingRange(256).fireImmune());
@@ -47,7 +48,7 @@ public class ModEntities implements RegistryClass {
 	public static final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = REGISTRY.register("corrupted_pawn", () ->
 			build(new ResourceLocation(Voidscape.MODID, "corrupted_pawn"), makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER).sized(2.5F, 2.5F).setTrackingRange(256).fireImmune()));
 
-	public static final Supplier<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
+	public final Supplier<EntityType<AntiBoltEntity>> ANTI_BOLT = REGISTRY.register("anti_bolt", () ->
 			make(new ResourceLocation(Voidscape.MODID, "anti_bolt"), AntiBoltEntity::new, MobCategory.MISC, 0.5F, 0.5F));
 
 	public static final Supplier<EntityType<IchorBoltEntity>> ICHOR_BOLT = REGISTRY.register("ichor_bolt", () ->

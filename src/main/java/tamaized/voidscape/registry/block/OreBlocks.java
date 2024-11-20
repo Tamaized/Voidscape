@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -68,6 +69,17 @@ public class OreBlocks {
 	public final Supplier<Item> STRANGE_ORE_ITEM = REGISTRY_ITEM.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(
 		STRANGE_ORE.get(),
 		itemProperties.LAVA_IMMUNE.get()
+	));
+
+	public final DeferredHolder<Block, Block> CRACKED_ASTRALROCK = REGISTRY.register("cracked_astralrock", () -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
+		.sound(SoundType.AMETHYST)
+		.mapColor(MapColor.COLOR_BLACK)
+		.strength(4F, 1200.0F)
+		.requiresCorrectToolForDrops()
+	));
+	public final Supplier<Item> CRACKED_ASTRALROCK_ITEM = REGISTRY_ITEM.register(CRACKED_ASTRALROCK.getId().getPath(), () -> new BlockItem(
+		CRACKED_ASTRALROCK.get(),
+		itemProperties.DEFAULT.get()
 	));
 
 }
