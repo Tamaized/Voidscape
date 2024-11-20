@@ -65,10 +65,9 @@ public class OreBlocks {
 		.mapColor(MapColor.COLOR_PINK)
 		.strength(4F, 1200.0F)
 		.requiresCorrectToolForDrops()));
-	public final Supplier<Item> STRANGE_ORE_ITEM = REGISTRY_ITEM
-		.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(
-			STRANGE_ORE.get(),
-			itemProperties.LAVA_IMMUNE.get()
-		));
+	public final Supplier<Item> STRANGE_ORE_ITEM = REGISTRY_ITEM.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(
+		STRANGE_ORE.get(),
+		itemProperties.LAVA_IMMUNE.get()
+	));
 
 }
