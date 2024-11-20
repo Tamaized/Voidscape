@@ -44,7 +44,10 @@ public class MaterialItems {
 
 	public final Supplier<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new StrangePearlThrowable(itemProperties.LAVA_IMMUNE.get()));
 
-	public final Supplier<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new BlockTransformer(blocks.ANTIROCK, blocks.ASTRALROCK, itemProperties.LAVA_IMMUNE.get()));
+	public final Supplier<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new BlockTransformer.Builder(
+		state -> state.is(blocks.ANTIROCK),
+		() -> blocks.ASTRALROCK.get().defaultBlockState()
+	).build(itemProperties.LAVA_IMMUNE.get()));
 
 	public final Supplier<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 

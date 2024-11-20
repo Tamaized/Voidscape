@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.block.ModBlocksThunderForestBiome;
+import tamaized.voidscape.registry.block.ThunderForestBiomeBlocks;
 
 import java.util.function.Supplier;
 
@@ -47,18 +47,18 @@ public class ModCreativeTabs implements RegistryClass {
 				output.accept(ModBlocks.MACHINE_INFUSER_ITEM.get());
 				output.accept(ModBlocks.MACHINE_COLLECTOR_ITEM.get());
 				// Biome - Thunder Forest
-				output.accept(ModBlocksThunderForestBiome.THUNDER_NYLIUM_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_ROOTS_ITEM.get());
-                output.accept(ModBlocksThunderForestBiome.THUNDER_WART_ITEM.get());
-                output.accept(ModBlocksThunderForestBiome.THUNDER_VINES_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_FUNGUS_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_STEM_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_HYPHAE_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_STEM_STRIPPED_ITEM.get());
-				output.accept(ModBlocksThunderForestBiome.THUNDER_HYPHAE_STRIPPED_ITEM.get());
-                output.accept(ModBlocksThunderForestBiome.THUNDER_PLANKS_ITEM.get());
-                output.accept(ModBlocksThunderForestBiome.THUNDER_STAIRS_ITEM.get());
-                output.accept(ModBlocksThunderForestBiome.THUNDER_SLAB_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_NYLIUM_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_ROOTS_ITEM.get());
+                output.accept(ThunderForestBiomeBlocks.THUNDER_WART_ITEM.get());
+                output.accept(ThunderForestBiomeBlocks.THUNDER_VINES_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_FUNGUS_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_STEM_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_HYPHAE_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_STEM_STRIPPED_ITEM.get());
+				output.accept(ThunderForestBiomeBlocks.THUNDER_HYPHAE_STRIPPED_ITEM.get());
+                output.accept(ThunderForestBiomeBlocks.THUNDER_PLANKS_ITEM.get());
+                output.accept(ThunderForestBiomeBlocks.THUNDER_STAIRS_ITEM.get());
+                output.accept(ThunderForestBiomeBlocks.THUNDER_SLAB_ITEM.get());
 				// Crops
 				output.accept(ModBlocks.ETHEREAL_FRUIT_VOID.get());
 				output.accept(ModBlocks.ETHEREAL_FRUIT_NULL.get());

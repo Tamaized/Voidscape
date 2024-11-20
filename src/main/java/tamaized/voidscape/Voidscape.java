@@ -106,9 +106,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(MODID, busMod,
-				ModAdvancementTriggers::new,
-				ModArmors::new,
-				ModAttributes::new,
 				ModBlocks::new,
 				ModBlockEntities::new,
 				ModCreativeTabs::new,

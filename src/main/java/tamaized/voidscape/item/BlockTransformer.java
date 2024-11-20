@@ -1,56 +1,160 @@
 package tamaized.voidscape.item;
 
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.advancement.GenericAdvancementTrigger;
+import tamaized.voidscape.network.client.ClientPacketSendParticles;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class BlockTransformer extends Item {
 
-	private final Supplier<Block> from;
-	private final Supplier<Block> to;
+	private final Predicate<BlockState> from;
+	private final Supplier<BlockState> to;
 	private final @Nullable Supplier<GenericAdvancementTrigger> advancement;
+	private final int particleCount;
+	private final Supplier<ParticleOptions> particle;
+	private final SoundEffect soundEffect;
 
-	public BlockTransformer(Supplier<Block> from, Supplier<Block> to, Properties properties) {
-		this(from, to, null, properties);
-	}
-
-	public BlockTransformer(Supplier<Block> from, Supplier<Block> to, @Nullable Supplier<GenericAdvancementTrigger> advancement, Properties properties) {
+	private BlockTransformer(
+		Predicate<BlockState> from,
+		Supplier<BlockState> to,
+		@Nullable Supplier<GenericAdvancementTrigger> advancement,
+		int particleCount,
+		Supplier<ParticleOptions> particle,
+		SoundEffect soundEffect,
+		Properties properties
+	) {
 		super(properties);
 		this.from = from;
 		this.to = to;
 		this.advancement = advancement;
+		this.particleCount = particleCount;
+		this.particle = particle;
+		this.soundEffect = soundEffect;
 	}
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		if (Voidscape.checkForVoidDimension(context.getLevel()) && context.getLevel().getBlockState(context.getClickedPos()).is(from.get())) {
-			context.getLevel().setBlockAndUpdate(context.getClickedPos(), to.get().defaultBlockState());
+		if (Voidscape.checkForVoidDimension(context.getLevel()) && from.test(context.getLevel().getBlockState(context.getClickedPos()))) {
+			context.getLevel().setBlockAndUpdate(context.getClickedPos(), to.get());
 			if (context.getPlayer() == null || !context.getPlayer().isCreative())
 				context.getItemInHand().shrink(1);
-			context.getLevel().playSound(null, context.getClickedPos(), SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1F, 0.5F + context.getLevel().getRandom().nextFloat() * 0.5F);
-			if (context.getLevel() instanceof ServerLevel)
-				for (int i = 0; i < 50; i++)
-					((ServerLevel) context.getLevel()).sendParticles(ParticleTypes.WITCH, context.
-						getClickedPos().getX() + context.getLevel().getRandom().nextFloat(), context.
-						getClickedPos().getY() + context.getLevel().getRandom().nextFloat(), context.
-						getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(), 0, 0, 0, 0, 1F);
+			context.getLevel().playSound(
+				null,
+				context.getClickedPos(),
+				soundEffect.sound().get(),
+				soundEffect.source(),
+				soundEffect.volume(),
+				soundEffect.pitch().apply(context.getLevel().getRandom().nextFloat())
+			);
+			if (context.getLevel() instanceof ServerLevel level) {
+				ClientPacketSendParticles particles = new ClientPacketSendParticles();
+				for (int i = 0; i < particleCount; i++)
+					particles.queueParticle(
+						particle.get(),
+						false,
+						context.getClickedPos().getX() + context.getLevel().getRandom().nextFloat(),
+						context.getClickedPos().getY() + context.getLevel().getRandom().nextFloat(),
+						context.getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(),
+						0, 0, 0);
+				PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(context.getClickedPos()), particles);
+			}
 			if (advancement != null && context.getPlayer() instanceof ServerPlayer serverPlayer)
 				advancement.get().trigger(serverPlayer);
 			return InteractionResult.SUCCESS;
 		}
 		return super.useOn(context);
+	}
+
+	public static class Builder {
+
+		private final Predicate<BlockState> from;
+		private final Supplier<BlockState> to;
+		private @Nullable Supplier<GenericAdvancementTrigger> advancement;
+		private int particleCount = 50;
+		private Supplier<ParticleOptions> particle = () -> ParticleTypes.WITCH;
+		private SoundEffect soundEffect = new SoundEffect(() -> SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1F, rand -> 0.5F + rand * 0.5F);
+
+		public Builder(Predicate<BlockState> from, Supplier<BlockState> to) {
+			this.from = from;
+			this.to = to;
+		}
+
+		public Builder advancement(Supplier<GenericAdvancementTrigger> advancement) {
+			this.advancement = advancement;
+			return this;
+		}
+
+		public Builder particleCount(int count) {
+			this.particleCount = count;
+			return this;
+		}
+
+		public Builder particle(Supplier<ParticleOptions> particle) {
+			this.particle = particle;
+			return this;
+		}
+
+		public Builder sound(Supplier<SoundEvent> sound) {
+			this.soundEffect = this.soundEffect.with(sound);
+			return this;
+		}
+
+		public Builder soundSource(SoundSource source) {
+			this.soundEffect = this.soundEffect.with(source);
+			return this;
+		}
+
+		public Builder soundVolume(float volume) {
+			this.soundEffect = this.soundEffect.with(volume);
+			return this;
+		}
+
+		public Builder soundPitch(Function<Float, Float> pitch) {
+			this.soundEffect = this.soundEffect.with(pitch);
+			return this;
+		}
+
+		public BlockTransformer build(Properties properties) {
+			return new BlockTransformer(from, to, advancement, particleCount, particle, soundEffect, properties);
+		}
+
+	}
+
+	public record SoundEffect(Supplier<SoundEvent> sound, SoundSource source, float volume, Function<Float, Float> pitch) {
+
+		public SoundEffect with(Supplier<SoundEvent> sound) {
+			return new SoundEffect(sound, source, volume, pitch);
+		}
+
+		public SoundEffect with(SoundSource source) {
+			return new SoundEffect(sound, source, volume, pitch);
+		}
+
+		public SoundEffect with(float volume) {
+			return new SoundEffect(sound, source, volume, pitch);
+		}
+
+		public SoundEffect with(Function<Float, Float> pitch) {
+			return new SoundEffect(sound, source, volume, pitch);
+		}
+
 	}
 
 }

@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry;
 
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import tamaized.beanification.Component;
 
@@ -11,5 +12,11 @@ public class ModItemProperties {
 	public final Supplier<Item.Properties> DEFAULT = Item.Properties::new;
 
 	public final Supplier<Item.Properties> LAVA_IMMUNE = () -> DEFAULT.get().fireResistant();
+
+	public final Supplier<Item.Properties> ETHEREAL_FRUIT = () -> LAVA_IMMUNE.get().food(new FoodProperties.Builder()
+		.nutrition(4)
+		.saturationModifier(0.3F)
+		.alwaysEdible()
+		.build());
 
 }

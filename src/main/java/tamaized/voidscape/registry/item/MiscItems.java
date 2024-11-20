@@ -1,0 +1,53 @@
+package tamaized.voidscape.registry.item;
+
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
+import tamaized.regutil.RegUtil;
+import tamaized.voidscape.item.BlockTransformer;
+import tamaized.voidscape.registry.ModAdvancementTriggers;
+import tamaized.voidscape.registry.ModItemProperties;
+import tamaized.voidscape.registry.block.OreBlocks;
+import tamaized.voidscape.registry.block.ThunderForestBiomeBlocks;
+
+import java.util.function.Supplier;
+
+@Component
+public class MiscItems {
+
+	@Autowired
+	private ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private OreBlocks oreBlocks;
+
+	@Autowired
+	private ThunderForestBiomeBlocks thunderForestBiomeBlocks;
+
+	@Autowired
+	private ModItemProperties itemProperties;
+
+	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
+
+	public final Supplier<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new BlockTransformer.Builder(
+		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
+		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
+		.build(itemProperties.LAVA_IMMUNE.get())
+	);
+
+	public final Supplier<Item> ETHEREAL_SPIDER_EGGS = REGISTRY.register("ethereal_spider_eggs", () -> new BlockTransformer.Builder(
+		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
+		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
+		.advancement(advancementTriggers.ETHEREAL_SPIDER_EGGS_TRIGGER)
+		.particleCount(200)
+		.particle(() -> ParticleTypes.ASH)
+		.sound(() -> SoundEvents.CONDUIT_ATTACK_TARGET)
+		.build(itemProperties.LAVA_IMMUNE.get())
+	);
+
+}
