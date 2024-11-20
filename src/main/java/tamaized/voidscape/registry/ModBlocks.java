@@ -31,7 +31,7 @@ import tamaized.voidscape.registry.block.ThunderForestBiomeBlocks;
 import java.util.function.Supplier;
 
 @Component
-public class ModBlocks implements RegistryClass {
+public class ModBlocks {
 
 	public final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
 
@@ -62,37 +62,12 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> CHARRED_BRICK_ITEM = ModItems.REGISTRY
 			.register(CHARRED_BRICK.getId().getPath(), () -> new BlockItem(CHARRED_BRICK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	public static final DeferredHolder<Block, Block> TITANITE_ORE = REGISTRY.register("titanite_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
-			.sound(SoundType.NETHER_GOLD_ORE)
-			.mapColor(MapColor.COLOR_LIGHT_GREEN)
-			.strength(4F, 1200.0F)
-			.requiresCorrectToolForDrops()));
-	public static final Supplier<Item> TITANITE_ORE_ITEM = ModItems.REGISTRY
-			.register(TITANITE_ORE.getId().getPath(), () -> new BlockItem(TITANITE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
-	public static final DeferredHolder<Block, Block> FLESH_ORE = REGISTRY.register("flesh_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
-			.sound(SoundType.HONEY_BLOCK)
-			.mapColor(MapColor.COLOR_ORANGE)
-			.strength(4F, 1200.0F)
-			.requiresCorrectToolForDrops()));
-	public static final Supplier<Item> FLESH_ORE_ITEM = ModItems.REGISTRY
-			.register(FLESH_ORE.getId().getPath(), () -> new BlockItem(FLESH_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
 	public static final DeferredHolder<Block, Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
 			.strength(2F, 6F)));
 	public static final Supplier<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
 			.register(FLESH_BLOCK.getId().getPath(), () -> new BlockItem(FLESH_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
-	public static final DeferredHolder<Block, Block> STRANGE_ORE = REGISTRY.register("strange_ore", () -> new RequiresVoidToolBlock(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_PINK)
-			.strength(4F, 1200.0F)
-			.requiresCorrectToolForDrops()));
-	public static final Supplier<Item> STRANGE_ORE_ITEM = ModItems.REGISTRY
-			.register(STRANGE_ORE.getId().getPath(), () -> new BlockItem(STRANGE_ORE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
 
 	public static final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
@@ -385,8 +360,4 @@ public class ModBlocks implements RegistryClass {
 	public static final Supplier<Item> VERY_DRIPPY_DRIPSTONE_ITEM = ModItems.REGISTRY
 			.register(VERY_DRIPPY_DRIPSTONE.getId().getPath(), () -> new BlockItem(VERY_DRIPPY_DRIPSTONE.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
 
-	@Override
-	public void init(IEventBus bus) {
-		new ThunderForestBiomeBlocks().init(bus);
-	}
 }
