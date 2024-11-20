@@ -35,40 +35,6 @@ public class ModBlocks {
 
 	public final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
 
-	public static final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("voidic_crystal_block", () -> new Block(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 1200.0F)
-			.requiresCorrectToolForDrops()
-	));
-	public static final Supplier<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
-			.register(VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
-	public static final DeferredHolder<Block, Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = REGISTRY.register("fragile_voidic_crystal_block", () -> new Block(Block.Properties.of()
-			.sound(SoundType.AMETHYST)
-			.mapColor(MapColor.COLOR_PURPLE)
-			.strength(3F, 1200.0F)
-			.noLootTable()
-	));
-	public static final Supplier<Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = ModItems.REGISTRY
-			.register(FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(), () -> new BlockItem(FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
-	public static final DeferredHolder<Block, Block> CHARRED_BRICK = REGISTRY.register("charred_brick", () -> new Block(Block.Properties.of()
-			.sound(SoundType.NETHER_BRICKS)
-			.mapColor(MapColor.COLOR_BLACK)
-			.strength(3F, 1200.0F)
-			.requiresCorrectToolForDrops()
-	));
-	public static final Supplier<Item> CHARRED_BRICK_ITEM = ModItems.REGISTRY
-			.register(CHARRED_BRICK.getId().getPath(), () -> new BlockItem(CHARRED_BRICK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
-	public static final DeferredHolder<Block, Block> FLESH_BLOCK = REGISTRY.register("flesh_block", () -> new Block(Block.Properties.of()
-			.sound(SoundType.HONEY_BLOCK)
-			.mapColor(MapColor.COLOR_ORANGE)
-			.strength(2F, 6F)));
-	public static final Supplier<Item> FLESH_BLOCK_ITEM = ModItems.REGISTRY
-			.register(FLESH_BLOCK.getId().getPath(), () -> new BlockItem(FLESH_BLOCK.get(), ModItems.ItemProps.LAVA_IMMUNE.properties().get()));
-
 	public static final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new Block(Block.Properties.of()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
