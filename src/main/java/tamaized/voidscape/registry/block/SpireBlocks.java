@@ -33,37 +33,38 @@ public class SpireBlocks {
 	@Autowired
 	private ModItemProperties itemProperties;
 
-	public final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new LightningAttractorBlock.Builder<>(
-		() -> EntityType.LIGHTNING_BOLT
-	).build(Block.Properties.of()
-		.sound(SoundType.STONE)
-		.mapColor(MapColor.COLOR_BLACK)
-		.strength(-1.0F, 3600000.0F)
-		.noLootTable()
-		.lightLevel(state -> 15)
-		.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
-	));
+	public final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new LightningAttractorBlock
+		.Builder<>(() -> EntityType.LIGHTNING_BOLT)
+		.build(Block.Properties.of()
+			.sound(SoundType.STONE)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.lightLevel(state -> 15)
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
+		));
 	public final Supplier<Item> THUNDERROCK_ITEM = REGISTRY_ITEM.register(THUNDERROCK.getId().getPath(), () -> new BlockItem(
 		THUNDERROCK.get(),
 		itemProperties.DEFAULT.get()
 	));
 
-	public final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new LightningAttractorBlock.Builder<>(entities.ANTI_BOLT)
+	public final DeferredHolder<Block, Block> ANTIROCK = REGISTRY.register("antirock", () -> new LightningAttractorBlock
+		.Builder<>(entities.ANTI_BOLT)
 		.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
-		.build(
-			Block.Properties.of()
-				.sound(SoundType.STONE)
-				.mapColor(MapColor.COLOR_BLACK)
-				.strength(-1.0F, 3600000.0F)
-				.noLootTable()
-				.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
+		.build(Block.Properties.of()
+			.sound(SoundType.STONE)
+			.mapColor(MapColor.COLOR_BLACK)
+			.strength(-1.0F, 3600000.0F)
+			.noLootTable()
+			.isValidSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false)
 		));
 	public final Supplier<Item> ANTIROCK_ITEM = REGISTRY_ITEM.register(ANTIROCK.getId().getPath(), () -> new BlockItem(
 		ANTIROCK.get(),
 		itemProperties.DEFAULT.get()
 	));
 
-	public final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new LightningAttractorBlock.Builder<>(entities.ANTI_BOLT)
+	public final DeferredHolder<Block, Block> ASTRALROCK = REGISTRY.register("astralrock", () -> new LightningAttractorBlock
+		.Builder<>(entities.ANTI_BOLT)
 		.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
 		.to(() -> oreBlocks.CRACKED_ASTRALROCK.get().defaultBlockState())
 		.build(Block.Properties.of()
