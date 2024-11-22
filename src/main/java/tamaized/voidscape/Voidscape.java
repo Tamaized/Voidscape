@@ -106,17 +106,14 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(MODID, busMod,
-				ModBlocks::new,
 				ModBlockEntities::new,
 				ModCreativeTabs::new,
 				ModDamageSource::new,
 				ModDataAttachments::new,
 				ModDataSerializers::new,
 				ModEffects::new,
-				ModEntities::new,
 				ModFeatures::new,
 				ModFluids::new,
-				ModItems::new,
 				ModNoiseGeneratorSettings::new,
 				ModParticles::new,
 				ModPOIs::new,

@@ -11,7 +11,6 @@ import tamaized.voidscape.item.StrangePearlThrowableItem;
 import tamaized.voidscape.item.VoidPortalActivatorItem;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.registry.ModItems;
 
 import java.util.function.Supplier;
 
