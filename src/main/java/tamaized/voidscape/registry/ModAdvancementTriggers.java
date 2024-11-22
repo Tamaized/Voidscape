@@ -2,11 +2,9 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.advancement.*;
 
 import java.util.function.Supplier;

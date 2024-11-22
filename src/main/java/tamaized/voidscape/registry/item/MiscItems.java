@@ -35,8 +35,9 @@ public class MiscItems {
 	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
 
 	public final Supplier<Item> ETHEREAL_ESSENCE = REGISTRY.register("ethereal_essence", () -> new BlockTransformerItem.Builder(
-		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
+		state -> state.is(Blocks.BEDROCK),
 		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
+		.advancement(advancementTriggers.ETHEREAL_ESSENCE_TRIGGER)
 		.build(itemProperties.LAVA_IMMUNE.get())
 	);
 
