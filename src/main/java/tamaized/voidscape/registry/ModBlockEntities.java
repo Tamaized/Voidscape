@@ -6,46 +6,78 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
+import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.block.entity.*;
+import tamaized.voidscape.registry.block.FunctionalBlocks;
+import tamaized.voidscape.registry.block.MachineBlocks;
+import tamaized.voidscape.registry.util.BlockEntityTypeFactory;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("ConstantConditions")
-public class ModBlockEntities implements RegistryClass {
+@Component
+public class ModBlockEntities {
 
-	private static final DeferredRegister<BlockEntityType<?>> REGISTERY = RegUtil.create(Registries.BLOCK_ENTITY_TYPE);
+	@Autowired
+	private BlockEntityTypeFactory factory;
 
-	public static final Supplier<BlockEntityType<LiquifierBlockEntity>> LIQUIFIER = REGISTERY
-			.register("liquifier", () -> BlockEntityType.Builder.of(LiquifierBlockEntity::new, ModBlocks.MACHINE_LIQUIFIER.get()).build(null));
+	@Autowired
+	private FunctionalBlocks functionalBlocks;
 
-	public static final Supplier<BlockEntityType<DefuserBlockEntity>> DEFUSER = REGISTERY
-			.register("defuser", () -> BlockEntityType.Builder.of(DefuserBlockEntity::new, ModBlocks.MACHINE_DEFUSER.get()).build(null));
+	@Autowired
+	private MachineBlocks machineBlocks;
 
-	public static final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = REGISTERY
-			.register("germinator", () -> BlockEntityType.Builder.of(GerminatorBlockEntity::new, ModBlocks.MACHINE_GERMINATOR.get()).build(null));
+	private final DeferredRegister<BlockEntityType<?>> REGISTRY = RegUtil.create(Registries.BLOCK_ENTITY_TYPE);
 
-	public static final Supplier<BlockEntityType<WellBlockEntity>> WELL = REGISTERY
-			.register("well", () -> BlockEntityType.Builder.of(WellBlockEntity::new, ModBlocks.MACHINE_WELL.get()).build(null));
+	public final Supplier<BlockEntityType<LiquifierBlockEntity>> LIQUIFIER = REGISTRY.register("liquifier", () -> factory.create(
+		LiquifierBlockEntity::new,
+		machineBlocks.MACHINE_LIQUIFIER.get()
+	));
 
-	public static final Supplier<BlockEntityType<CoopBlockEntity>> COOP = REGISTERY
-			.register("coop", () -> BlockEntityType.Builder.of(CoopBlockEntity::new, ModBlocks.MACHINE_COOP.get()).build(null));
+	public final Supplier<BlockEntityType<DefuserBlockEntity>> DEFUSER = REGISTRY.register("defuser", () -> factory.create(
+		DefuserBlockEntity::new,
+		machineBlocks.MACHINE_DEFUSER.get()
+	));
 
-	public static final Supplier<BlockEntityType<HatcheryBlockEntity>> HATCHERY = REGISTERY
-			.register("hatchery", () -> BlockEntityType.Builder.of(HatcheryBlockEntity::new, ModBlocks.MACHINE_HATCHERY.get()).build(null));
+	public final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = REGISTRY.register("germinator", () -> factory.create(
+		GerminatorBlockEntity::new,
+		machineBlocks.MACHINE_GERMINATOR.get()
+	));
 
-	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTERY
-			.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.MACHINE_INFUSER.get()).build(null));
+	public final Supplier<BlockEntityType<WellBlockEntity>> WELL = REGISTRY.register("well", () -> factory.create(
+		WellBlockEntity::new,
+		machineBlocks.MACHINE_WELL.get()
+	));
 
-	public static final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = REGISTERY
-			.register("collector", () -> BlockEntityType.Builder.of(CollectorBlockEntity::new, ModBlocks.MACHINE_COLLECTOR.get()).build(null));
+	public final Supplier<BlockEntityType<CoopBlockEntity>> COOP = REGISTRY.register("coop", () -> factory.create(
+		CoopBlockEntity::new,
+		machineBlocks.MACHINE_COOP.get()
+	));
 
-	public static final Supplier<BlockEntityType<VeryDrippyDripstoneBlockEntity>> VERY_DRIPPY_DRIPSTONE = REGISTERY
-			.register("very_drippy_dripstone", () -> BlockEntityType.Builder.of(VeryDrippyDripstoneBlockEntity::new, ModBlocks.VERY_DRIPPY_DRIPSTONE.get()).build(null));
+	public final Supplier<BlockEntityType<HatcheryBlockEntity>> HATCHERY = REGISTRY.register("hatchery", () -> factory.create(
+		HatcheryBlockEntity::new,
+		machineBlocks.MACHINE_HATCHERY.get()
+	));
 
-	@Override
-	public void init(IEventBus bus) {
+	public final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = REGISTRY.register("infuser", () -> factory.create(
+		InfuserBlockEntity::new,
+		machineBlocks.MACHINE_INFUSER.get()
+	));
+
+	public final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = REGISTRY.register("collector", () -> factory.create(
+		CollectorBlockEntity::new,
+		machineBlocks.MACHINE_COLLECTOR.get()
+	));
+
+	public final Supplier<BlockEntityType<VeryDrippyDripstoneBlockEntity>> VERY_DRIPPY_DRIPSTONE = REGISTRY.register("very_drippy_dripstone", () -> factory.create(
+		VeryDrippyDripstoneBlockEntity::new,
+		functionalBlocks.VERY_DRIPPY_DRIPSTONE.get()
+	));
+
+	@PostConstruct // TODO: add to each block entity class to let them register themselves
+	private void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
 			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LIQUIFIER.get(), (object, context) -> object.items);
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, LIQUIFIER.get(), (object, context) -> object.fluids);

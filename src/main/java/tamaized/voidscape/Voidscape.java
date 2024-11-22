@@ -105,8 +105,7 @@ public class Voidscape {
 			Config.COMMON_CONFIG = specPairCommon.getLeft();
 		}
 
-		RegUtil.setup(MODID, busMod,
-				ModBlockEntities::new,
+		RegUtil.setup(
 				ModCreativeTabs::new,
 				ModDamageSource::new,
 				ModDataAttachments::new,
