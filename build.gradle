@@ -60,7 +60,10 @@ java {
     }
 }
 
-compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+	options.encoding = 'UTF-8'
+}
 
 sourceSets {
     data {
@@ -277,10 +280,6 @@ tasks.register('dataSourceJar', Jar) {
     dependsOn 'classes'
     from sourceSets.dataForPublishing.allSource
     archiveClassifier = 'data-sources'
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
 }
 
 build.dependsOn shadowJar

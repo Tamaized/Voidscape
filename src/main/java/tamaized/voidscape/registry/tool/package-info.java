@@ -1,0 +1,6 @@
+@MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
+package tamaized.voidscape.registry.tool;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

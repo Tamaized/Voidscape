@@ -2,16 +2,11 @@ package tamaized.voidscape.util;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.armor.set.VoidicCrystalArmorSet;
 
 @Component
-public class ArmorUtil {
-
-	@Autowired
-	private VoidicCrystalArmorSet voidicCrystalArmorSet;
+public class ItemAugmentUtil { // TODO: use components
 
 	public boolean elytra(ItemStack stack) {
 		if (stack.isEmpty())
@@ -29,6 +24,13 @@ public class ArmorUtil {
 			return false; // Quick fail for performance, no nbt polling needed
 		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
 		return nbt != null && nbt.getBoolean("draconic");
+	}
+
+	public boolean fang(ItemStack stack) {
+		if (stack.isEmpty())
+			return false;
+		CompoundTag nbt = stack.getTagElement(Voidscape.MODID);
+		return nbt != null && nbt.getBoolean("fang");
 	}
 
 }

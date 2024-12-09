@@ -1,4 +1,4 @@
-package tamaized.voidscape.registry;
+package tamaized.voidscape.registry.armor;
 
 import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
@@ -14,8 +14,7 @@ import tamaized.regutil.ArmorData;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.armor.CorruptArmorDataModel;
-import tamaized.voidscape.registry.armor.CrystallineArmorDataModel;
+import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 import java.util.EnumMap;

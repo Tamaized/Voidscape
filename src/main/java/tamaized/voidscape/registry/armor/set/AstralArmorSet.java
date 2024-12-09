@@ -12,10 +12,10 @@ import tamaized.regutil.AttributeData;
 import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModArmorMaterials;
+import tamaized.voidscape.registry.armor.ModArmorMaterials;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.util.ArmorUtil;
+import tamaized.voidscape.util.ItemAugmentUtil;
 
 import java.util.function.Consumer;
 
@@ -32,10 +32,10 @@ public class AstralArmorSet {
 	private ModItemProperties itemProperties;
 
 	@Autowired
-	private ArmorUtil armorUtil;
+	private ItemAugmentUtil itemAugmentUtil;
 
 	private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> TOOLTIP = tooltipContext -> {
-		if (armorUtil.draconic(tooltipContext.stack()))
+		if (itemAugmentUtil.draconic(tooltipContext.stack()))
 			tooltipContext.tooltip().add(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.draconic").withStyle(ChatFormatting.LIGHT_PURPLE));
 	};
 
@@ -48,7 +48,7 @@ public class AstralArmorSet {
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD),
 			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
 			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.30D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(armorUtil::draconic, Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(itemAugmentUtil::draconic, Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
 		),
 		TOOLTIP
 	);
@@ -62,7 +62,7 @@ public class AstralArmorSet {
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.CHEST),
 			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
 		),
-		(stack, tick) -> armorUtil.elytra(stack),
+		(stack, tick) -> itemAugmentUtil.elytra(stack),
 		TOOLTIP
 	);
 

@@ -9,7 +9,7 @@ import tamaized.beanification.Component;
 import tamaized.regutil.AttributeData;
 import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.registry.ModArmorMaterials;
+import tamaized.voidscape.registry.armor.ModArmorMaterials;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
 

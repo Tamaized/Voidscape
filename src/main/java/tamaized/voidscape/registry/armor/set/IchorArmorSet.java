@@ -9,10 +9,10 @@ import tamaized.beanification.Component;
 import tamaized.regutil.AttributeData;
 import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.registry.ModArmorMaterials;
+import tamaized.voidscape.registry.armor.ModArmorMaterials;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.util.ArmorUtil;
+import tamaized.voidscape.util.ItemAugmentUtil;
 
 @Component
 public class IchorArmorSet {
@@ -27,7 +27,7 @@ public class IchorArmorSet {
 	private ModItemProperties itemProperties;
 
 	@Autowired
-	private ArmorUtil armorUtil;
+	private ItemAugmentUtil itemAugmentUtil;
 
 	public final DeferredHolder<Item, Item> ICHOR_HELMET = RegUtil.ToolAndArmorHelper.helmet(
 		"ichor",
@@ -51,7 +51,7 @@ public class IchorArmorSet {
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.17D, EquipmentSlotGroup.CHEST),
 			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
 		),
-		(stack, tick) -> armorUtil.elytra(stack),
+		(stack, tick) -> itemAugmentUtil.elytra(stack),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
