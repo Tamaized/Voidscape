@@ -11,14 +11,13 @@ import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.registry.tool.ExtraToolTypes;
 import tamaized.voidscape.registry.tool.ModToolTiers;
 import tamaized.voidscape.util.ItemAugmentUtil;
 
 @Component
-public class TitaniteToolSet {
+public class IchorToolSet {
 
-	private final String MATERIAL_NAME = "titanite";
+	private final String MATERIAL_NAME = "ichor";
 
 	@Autowired
 	private ModToolTiers toolTiers;
@@ -32,42 +31,9 @@ public class TitaniteToolSet {
 	@Autowired
 	private ItemAugmentUtil itemAugmentUtil;
 
-	public final DeferredHolder<Item, Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.sword(
+	public final DeferredHolder<Item, Item> ICHOR_SWORD = RegUtil.ToolAndArmorHelper.sword(
 		MATERIAL_NAME,
-		() -> toolTiers.TITANITE,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.bow(
-		MATERIAL_NAME,
-		() -> toolTiers.TITANITE,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.xbow(
-		MATERIAL_NAME,
-		() -> toolTiers.TITANITE,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.axe(
-		MATERIAL_NAME,
-		() -> toolTiers.TITANITE,
+		() -> toolTiers.ICHOR,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
@@ -76,28 +42,47 @@ public class TitaniteToolSet {
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
-	public final DeferredHolder<Item, Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(
+	public final DeferredHolder<Item, Item> ICHOR_BOW = RegUtil.ToolAndArmorHelper.bow(
 		MATERIAL_NAME,
-		() -> toolTiers.TITANITE,
+		() -> toolTiers.ICHOR,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.MAINHAND)
+			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
-	public final DeferredHolder<Item, Item> TITANITE_HOE;
+	public final DeferredHolder<Item, Item> ICHOR_XBOW = RegUtil.ToolAndArmorHelper.xbow(
+		MATERIAL_NAME,
+		() -> toolTiers.ICHOR,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
 
-	public TitaniteToolSet(@Autowired ExtraToolTypes extraToolTypes) {
-		TITANITE_HOE = extraToolTypes.hoeWithBonemeal(
-			MATERIAL_NAME,
-			() -> toolTiers.TITANITE,
-			() -> itemProperties.LAVA_IMMUNE.get(),
-			AttributeFactory.make(
-				() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.MAINHAND)
-			),
-			RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-		);
-	}
+	public final DeferredHolder<Item, Item> ICHOR_AXE = RegUtil.ToolAndArmorHelper.axe(
+		MATERIAL_NAME,
+		() -> toolTiers.ICHOR,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
+
+	public final DeferredHolder<Item, Item> ICHOR_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(
+		MATERIAL_NAME,
+		() -> toolTiers.ICHOR,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
 
 }
