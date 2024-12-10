@@ -61,20 +61,6 @@ import java.util.function.Consumer;
 
 public class ModTools implements RegistryClass {
 
-	public static final DeferredHolder<Item, Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
-			.durability(100), ModItems.ICHOR_CRYSTAL, 20 * 10, context -> context.level().addFreshEntity(new IchorBoltEntity(context.parent()))));
-	public static final DeferredHolder<Item, Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
-			.durability(100), ModItems.VOIDIC_CRYSTAL, 20 * 45, context -> context.parent().addEffect(new MobEffectInstance(ModEffects.AURA.get(), 20 * 30))));
-	public static final DeferredHolder<Item, Item> CORRUPT_TOME = ModItems.REGISTRY.register("corrupt_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
-			.durability(100), ModItems.TENDRIL, 20 * 5, context -> {
-		context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
-		context.level().playSound(null, context.parent(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1F, 0.75F + context.parent().getRandom().nextFloat() * 0.5F);
-		context.parent().getData(ModDataAttachments.INSANITY).enableLeapParticles();
-		context.parent().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 10));
-	}));
-	public static final DeferredHolder<Item, Item> TITANITE_TOME = ModItems.REGISTRY.register("titanite_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
-			.durability(100), ModItems.TITANITE_SHARD, 20 * 45, context -> context.parent().addEffect(new MobEffectInstance(ModEffects.FORTIFIED.get(), 20 * 30))));
-
 
 	public static final DeferredHolder<Item, Item> ASTRAL_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.ASTRAL, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
 			RegUtil.makeAttributeFactory(

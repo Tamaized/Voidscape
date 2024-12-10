@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -29,13 +30,13 @@ import java.util.function.Supplier;
 
 public class ModEffects implements RegistryClass {
 
-	private static final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(Registries.MOB_EFFECT);
+	private final DeferredRegister<MobEffect> REGISTRY = RegUtil.create(Registries.MOB_EFFECT);
 
-	public static final Supplier<MobEffect> ICHOR = REGISTRY.register("ichor", () -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700, true)
+	public final Holder<MobEffect> ICHOR = REGISTRY.register("ichor", () -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700, true)
 			.texture("effect/ichor.png"));
-	public static final Supplier<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF, false)
+	public final Holder<MobEffect> AURA = REGISTRY.register("aura", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF, false)
 			.texture("effect/aura.png"));
-	public static final Supplier<MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA, false)
+	public final Holder<MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA, false)
 			.texture("effect/fortified.png"));
 
 	@Override
