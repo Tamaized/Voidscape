@@ -11,14 +11,14 @@ import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.tool.ExtraToolTypes;
 import tamaized.voidscape.registry.tool.ModToolTiers;
 import tamaized.voidscape.util.ItemAugmentUtil;
 
 @Component
-public class CorruptToolSet {
+public class TitaniteToolSet {
 
-	private final String MATERIAL_NAME = "corrupt";
+	private final String MATERIAL_NAME = "titanite";
 
 	@Autowired
 	private ModToolTiers toolTiers;
@@ -32,42 +32,9 @@ public class CorruptToolSet {
 	@Autowired
 	private ItemAugmentUtil itemAugmentUtil;
 
-	public final DeferredHolder<Item, Item> CORRUPT_SWORD = RegUtil.ToolAndArmorHelper.sword(
+	public final DeferredHolder<Item, Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.sword(
 		MATERIAL_NAME,
-		() -> toolTiers.CORRUPT,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> CORRUPT_BOW = RegUtil.ToolAndArmorHelper.bow(
-		MATERIAL_NAME,
-		() -> toolTiers.CORRUPT,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> CORRUPT_XBOW = RegUtil.ToolAndArmorHelper.xbow(
-		MATERIAL_NAME,
-		() -> toolTiers.CORRUPT,
-		() -> itemProperties.LAVA_IMMUNE.get(),
-		AttributeFactory.make(
-			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
-		),
-		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
-	);
-
-	public final DeferredHolder<Item, Item> CORRUPT_AXE = RegUtil.ToolAndArmorHelper.axe(
-		MATERIAL_NAME,
-		() -> toolTiers.CORRUPT,
+		() -> toolTiers.TITANITE,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
@@ -75,5 +42,62 @@ public class CorruptToolSet {
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
+
+	public final DeferredHolder<Item, Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.bow(
+		MATERIAL_NAME,
+		() -> toolTiers.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
+
+	public final DeferredHolder<Item, Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.xbow(
+		MATERIAL_NAME,
+		() -> toolTiers.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
+
+	public final DeferredHolder<Item, Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.axe(
+		MATERIAL_NAME,
+		() -> toolTiers.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
+			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
+
+	public final DeferredHolder<Item, Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(
+		MATERIAL_NAME,
+		() -> toolTiers.TITANITE,
+		() -> itemProperties.LAVA_IMMUNE.get(),
+		AttributeFactory.make(
+			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.MAINHAND)
+		),
+		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+	);
+
+	public final DeferredHolder<Item, Item> TITANITE_HOE;
+
+	public TitaniteToolSet(@Autowired ExtraToolTypes extraToolTypes) {
+		TITANITE_HOE = extraToolTypes.hoeWithBonemeal(
+			MATERIAL_NAME,
+			() -> toolTiers.TITANITE,
+			() -> itemProperties.LAVA_IMMUNE.get(),
+			AttributeFactory.make(
+				() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.MAINHAND)
+			),
+			RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+		);;
+	}
 
 }

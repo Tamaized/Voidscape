@@ -1,4 +1,4 @@
-package tamaized.voidscape.registry;
+package tamaized.voidscape.registry.blockentity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -13,7 +13,6 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.block.entity.*;
 import tamaized.voidscape.registry.block.FunctionalBlocks;
 import tamaized.voidscape.registry.block.MachineBlocks;
-import tamaized.voidscape.registry.util.BlockEntityTypeFactory;
 
 import java.util.function.Supplier;
 
@@ -76,7 +75,7 @@ public class ModBlockEntities {
 		functionalBlocks.VERY_DRIPPY_DRIPSTONE.get()
 	));
 
-	@PostConstruct // TODO: add to each block entity class to let them register themselves
+	@PostConstruct // TODO: can we make each block entity class register themselves?
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
 			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LIQUIFIER.get(), (object, context) -> object.items);

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.block.entity.WellBlockEntity;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 import java.util.Optional;
 

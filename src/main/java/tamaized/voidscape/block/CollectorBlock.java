@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.block.entity.CollectorBlockEntity;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
 public class CollectorBlock extends Block implements EntityBlock {

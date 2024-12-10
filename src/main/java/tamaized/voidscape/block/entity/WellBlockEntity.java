@@ -15,7 +15,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 public class WellBlockEntity extends BlockEntity {
 

@@ -1,4 +1,4 @@
-package tamaized.voidscape.registry.util;
+package tamaized.voidscape.registry.blockentity;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;

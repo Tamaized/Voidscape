@@ -16,7 +16,7 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 
 public class HatcheryBlockEntity extends BlockEntity {

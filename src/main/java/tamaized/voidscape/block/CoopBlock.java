@@ -13,7 +13,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.block.entity.CoopBlockEntity;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
 public class CoopBlock extends Block implements EntityBlock {

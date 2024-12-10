@@ -21,7 +21,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.ModFluids;
 
 public class CoopBlockEntity extends BlockEntity {

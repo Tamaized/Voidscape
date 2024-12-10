@@ -61,31 +61,6 @@ import java.util.function.Consumer;
 
 public class ModTools implements RegistryClass {
 
-	public static final DeferredHolder<Item, Item> TITANITE_SWORD = RegUtil.ToolAndArmorHelper.sword(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 3D),
-							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
-					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_BOW = RegUtil.ToolAndArmorHelper.bow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D),
-							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
-					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_XBOW = RegUtil.ToolAndArmorHelper.xbow(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADDITION, 3D),
-							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
-					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_AXE = RegUtil.ToolAndArmorHelper.axe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(
-							RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 4D),
-							RegUtil.AttributeData.make(ModTools::fang, ModAttributes.VOIDIC_INFUSION, AttributeModifier.Operation.MULTIPLY_BASE, 0.15D)
-					), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 2D)), tooltip -> {});
-	public static final DeferredHolder<Item, Item> TITANITE_HOE = bonemealHoe(ItemTier.TITANITE, ModItems.ItemProps.LAVA_IMMUNE.properties().get(),
-					RegUtil.makeAttributeFactory(RegUtil.AttributeData.make(ModAttributes.VOIDIC_DMG, AttributeModifier.Operation.ADDITION, 1D)), tooltip -> {});
-
 	public static final DeferredHolder<Item, Item> ICHOR_TOME = ModItems.REGISTRY.register("ichor_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
 			.durability(100), ModItems.ICHOR_CRYSTAL, 20 * 10, context -> context.level().addFreshEntity(new IchorBoltEntity(context.parent()))));
 	public static final DeferredHolder<Item, Item> VOIDIC_TOME = ModItems.REGISTRY.register("voidic_tome", () -> new SpellTomeItem(ModItems.ItemProps.LAVA_IMMUNE.properties().get()
@@ -150,83 +125,6 @@ public class ModTools implements RegistryClass {
 
 	private static DeferredHolder<Item, Item> threeByThreeShovel(RegUtil.ItemTier tier, Item.Properties properties, BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
 		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_shovel"), () -> new ThreeByThreeShovel(factory, tier, 1.5F, -3.0F, properties, tooltipConsumer));
-	}
-
-	private static DeferredHolder<Item, Item> bonemealHoe(RegUtil.ItemTier tier, Item.Properties properties, BiFunction<Integer, ItemStack, Multimap<Attribute, AttributeModifier>> factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
-		return ModItems.REGISTRY.register(tier.name().toLowerCase(Locale.US).concat("_hoe"), () -> new HoeItem(tier, -3, 0.0F, properties) {
-
-			@Override
-			@OnlyIn(Dist.CLIENT)
-			public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-				if (RegUtil.ToolAndArmorHelper.isBroken(stack))
-					tooltip.add(Component.translatable(Voidscape.MODID + ".tooltip.broken").withStyle(ChatFormatting.DARK_RED));
-				tooltipConsumer.accept(new RegUtil.ToolAndArmorHelper.TooltipContext(stack, worldIn, tooltip, flagIn));
-				super.appendHoverText(stack, worldIn, tooltip, flagIn);
-			}
-
-			@Override
-			public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-				int remaining = (stack.getMaxDamage() - 1) - stack.getDamageValue();
-				if (amount >= remaining)
-					onBroken.accept(entity);
-				return Math.min(remaining, amount);
-			}
-
-			@Override
-			public float getDestroySpeed(ItemStack stack, BlockState state) {
-				return RegUtil.ToolAndArmorHelper.isBroken(stack) ? 0 : super.getDestroySpeed(stack, state);
-			}
-
-			@Override
-			public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-				return !RegUtil.ToolAndArmorHelper.isBroken(stack) && super.hurtEnemy(stack, target, attacker);
-			}
-
-			@Override
-			public InteractionResult useOn(UseOnContext context) {
-				if (RegUtil.ToolAndArmorHelper.isBroken(context.getItemInHand()))
-				return InteractionResult.FAIL;
-				InteractionResult result = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? InteractionResult.PASS : super.useOn(context);
-				if (result == InteractionResult.PASS) {
-					result = Items.BONE_MEAL.useOn(new UseOnContext(
-							context.getLevel(),
-							context.getPlayer(),
-							context.getHand(),
-							new ItemStack(Items.BONE_MEAL),
-							new BlockHitResult(
-									context.getClickLocation(),
-									context.getHorizontalDirection(),
-									context.getClickedPos(),
-									context.isInside()
-							)));
-					if ((result == InteractionResult.SUCCESS || result == InteractionResult.CONSUME) && context.getPlayer() != null) {
-						// This must remain an anon class to spoof the reobfuscator from mapping to the wrong SRG name
-						//noinspection Convert2Lambda
-						context.getItemInHand().hurtAndBreak(20, context.getPlayer(), new Consumer<LivingEntity>() {
-							@Override
-							public void accept(LivingEntity entityIn1) {
-								entityIn1.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-							}
-						});
-						if (context.getPlayer() instanceof ServerPlayer player)
-							ModAdvancementTriggers.HOE_BONEMEAL_TRIGGER.get().trigger(player);
-					}
-					return result;
-				}
-				return result;
-			}
-
-			@Override
-			public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-				ImmutableMultimap.Builder<Attribute, AttributeModifier> map = ImmutableMultimap.builder();
-				if (!RegUtil.ToolAndArmorHelper.isBroken(stack)) {
-					map.putAll(super.getDefaultAttributeModifiers(slot));
-					if (slot == EquipmentSlot.MAINHAND)
-						map.putAll(factory.apply(null, stack));
-				}
-				return map.build();
-			}
-		});
 	}
 
 	public static class ThreeByThreeShovel extends ShovelItem {

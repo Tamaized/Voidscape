@@ -1,7 +1,6 @@
 package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +20,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

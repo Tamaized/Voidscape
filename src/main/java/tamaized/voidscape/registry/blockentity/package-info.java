@@ -1,5 +1,5 @@
 @MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
-package tamaized.voidscape.registry.util;
+package tamaized.voidscape.registry.blockentity;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

@@ -18,6 +18,8 @@ import tamaized.voidscape.util.ItemAugmentUtil;
 @Component
 public class CharredToolSet {
 
+	private final String MATERIAL_NAME = "charred";
+
 	@Autowired
 	private ModToolTiers toolTiers;
 
@@ -34,7 +36,7 @@ public class CharredToolSet {
 
 	public CharredToolSet(@Autowired ExtraToolTypes extraToolTypes) {
 		CHARRED_WARHAMMER = extraToolTypes.hammer(
-			"charred",
+			MATERIAL_NAME,
 			() -> toolTiers.CHARRED,
 			() -> itemProperties.LAVA_IMMUNE.get(),
 			AttributeFactory.make(

@@ -23,6 +23,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 import java.util.ArrayList;
 import java.util.List;

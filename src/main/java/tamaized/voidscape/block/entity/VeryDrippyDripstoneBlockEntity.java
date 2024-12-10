@@ -19,7 +19,7 @@ import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
-import tamaized.voidscape.registry.ModBlockEntities;
+import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

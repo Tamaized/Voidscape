@@ -17,6 +17,8 @@ import tamaized.voidscape.util.ItemAugmentUtil;
 @Component
 public class VoidicCrystalToolSet {
 
+	private final String MATERIAL_NAME = "voidic_crystal";
+
 	@Autowired
 	private ModToolTiers toolTiers;
 
@@ -30,7 +32,7 @@ public class VoidicCrystalToolSet {
 	private ItemAugmentUtil itemAugmentUtil;
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_SWORD = RegUtil.ToolAndArmorHelper.sword(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -41,7 +43,7 @@ public class VoidicCrystalToolSet {
 	);
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_BOW = RegUtil.ToolAndArmorHelper.bow(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -52,7 +54,7 @@ public class VoidicCrystalToolSet {
 	);
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_XBOW = RegUtil.ToolAndArmorHelper.xbow(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -63,7 +65,7 @@ public class VoidicCrystalToolSet {
 	);
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_SHIELD = RegUtil.ToolAndArmorHelper.shield(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -73,7 +75,7 @@ public class VoidicCrystalToolSet {
 	);
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_AXE = RegUtil.ToolAndArmorHelper.axe(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
@@ -84,7 +86,7 @@ public class VoidicCrystalToolSet {
 	);
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_PICKAXE = RegUtil.ToolAndArmorHelper.pickaxe(
-		"voidic_crystal",
+		MATERIAL_NAME,
 		() -> toolTiers.VOIDIC_CRYSTAL,
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
