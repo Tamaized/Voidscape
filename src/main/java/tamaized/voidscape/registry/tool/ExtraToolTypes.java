@@ -23,4 +23,8 @@ public class ExtraToolTypes {
 		return RegUtil.ToolAndArmorHelper.gear("hoe", baseName, factory, () -> new BonemealHoe(tier.get(), properties.get(), tooltipConsumer));
 	}
 
+	public DeferredHolder<Item, Item> shovelThreeByThree(String baseName, Supplier<ToolTier> tier, Supplier<Item.Properties> properties, AttributeFactory factory, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+		return RegUtil.ToolAndArmorHelper.gear("shovel", baseName, factory, () -> new BonemealHoe(tier.get(), properties.get(), tooltipConsumer));
+	}
+
 }

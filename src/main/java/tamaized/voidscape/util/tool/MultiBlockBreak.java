@@ -36,7 +36,11 @@ public class MultiBlockBreak {
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
+	public final int THREE_BY_THREE_RADIUS = 1;
+	public final int FIVE_BY_FIVE_RADIUS = 2;
+
 	private final Map<UUID, Direction> LAST_HIT_BLOCK_FACE = new HashMap<>();
+	private static boolean running = false;
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void postConstruct(IEventBus bus) {
@@ -48,8 +52,8 @@ public class MultiBlockBreak {
 		return doBreak(radius, stack, pos, pl, s -> false, delegate);
 	}
 
-	public boolean doBreak(int radius, ItemStack stack, BlockPos pos, Player pl, Predicate<ItemStack> shouldDelegate, BooleanSupplier delegate) {
-		if (pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || player.isShiftKeyDown() || shouldDelegate.test(stack))
+	public synchronized boolean doBreak(int radius, ItemStack stack, BlockPos pos, Player pl, Predicate<ItemStack> shouldDelegate, BooleanSupplier delegate) {
+		if (running || pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || player.isShiftKeyDown() || shouldDelegate.test(stack))
 			return delegate.getAsBoolean();
 		final Item item = stack.getItem();
 		final ServerLevel level = player.serverLevel();
@@ -79,6 +83,7 @@ public class MultiBlockBreak {
 		if (area.size() > 1) // TODO: This should not be here
 			advancementTriggers.THREE_BY_THREE.get().trigger(player, stack);
 		// Using TCon's hardness division check
+		running = true;
 		area.stream().map(p -> Pair.of(p, level.getBlockState(p))).filter(p -> {
 			final BlockState state = p.right();
 			if (state.isAir())
@@ -113,6 +118,7 @@ public class MultiBlockBreak {
 				}
 			}
 		});
+		running = false;
 		return true;
 	}
 
