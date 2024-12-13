@@ -106,7 +106,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModDamageSource::new,
 				ModDataAttachments::new,
 				ModDataSerializers::new,
 				ModEffects::new,
@@ -117,8 +116,8 @@ public class Voidscape {
 				ModPOIs::new,
 				ModSounds::new,
 				ModStructures::new,
-				ModSurfaceRules::new,
-				ModTools::new);
+				ModSurfaceRules::new
+				);
 
 		NetworkMessages.register(busMod);
 

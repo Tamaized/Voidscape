@@ -7,34 +7,29 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.IEventBus;
 import org.jetbrains.annotations.Nullable;
-import tamaized.regutil.RegistryClass;
+import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 
-public class ModDamageSource implements RegistryClass {
+@Component
+public class ModDamageSource {
 
-	public static final ResourceKey<DamageType> VOIDIC = create("voidic");
+	public final ResourceKey<DamageType> VOIDIC = create("voidic");
 
-	public static ResourceKey<DamageType> create(String name) {
-		return ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Voidscape.MODID, name));
+	private ResourceKey<DamageType> create(String name) {
+		return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, name));
 	}
 
-	public static DamageSource getDamageSource(Level level, ResourceKey<DamageType> type) {
+	public DamageSource getDamageSource(Level level, ResourceKey<DamageType> type) {
 		return getEntityDamageSource(level, type, null);
 	}
 
-	public static DamageSource getEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker) {
+	public DamageSource getEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker) {
 		return getIndirectEntityDamageSource(level, type, attacker, attacker);
 	}
 
-	public static DamageSource getIndirectEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker, @Nullable Entity indirectAttacker) {
+	public DamageSource getIndirectEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker, @Nullable Entity indirectAttacker) {
 		return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type), attacker, indirectAttacker);
-	}
-
-	@Override
-	public void init(IEventBus bus) {
-
 	}
 
 }
