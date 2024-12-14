@@ -106,7 +106,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModEffects::new,
 				ModFeatures::new,
 				ModFluids::new,
 				ModNoiseGeneratorSettings::new,
