@@ -106,8 +106,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModDataAttachments::new,
-				ModDataSerializers::new,
 				ModEffects::new,
 				ModFeatures::new,
 				ModFluids::new,
