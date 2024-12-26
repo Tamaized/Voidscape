@@ -11,11 +11,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.block.ThunderForestBiomeBlocks;
+import tamaized.voidscape.util.DirectionUtil;
 
+@Configurable
 public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
 
-    private static final Direction[] DIRECTIONS = Direction.values();
+	@Autowired
+	private DirectionUtil directionUtil;
+
+	@Autowired
+	private ThunderForestBiomeBlocks thunderForestBiomeBlocks;
 
     public ThunderVinesFeature() {
         super(NoneFeatureConfiguration.CODEC);
@@ -30,7 +38,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
             return false;
         } else {
             BlockState blockstate = worldgenlevel.getBlockState(blockpos.above());
-            if (!blockstate.is(ThunderForestBiomeBlocks.THUNDER_WART.get())) {
+            if (!blockstate.is(thunderForestBiomeBlocks.THUNDER_WART.get())) {
                 return false;
             } else {
                 this.placeRoofWart(worldgenlevel, randomsource, blockpos);
@@ -41,7 +49,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void placeRoofWart(LevelAccessor pLevel, RandomSource pRandom, BlockPos pPos) {
-        pLevel.setBlock(pPos, ThunderForestBiomeBlocks.THUNDER_WART.get().defaultBlockState(), 2);
+        pLevel.setBlock(pPos, thunderForestBiomeBlocks.THUNDER_WART.get().defaultBlockState(), 2);
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         BlockPos.MutableBlockPos blockpos$mutableblockpos1 = new BlockPos.MutableBlockPos();
 
@@ -50,9 +58,9 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
             if (pLevel.isEmptyBlock(blockpos$mutableblockpos)) {
                 int j = 0;
 
-                for(Direction direction : DIRECTIONS) {
+                for(Direction direction : directionUtil.getAllDirections()) {
                     BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos1.setWithOffset(blockpos$mutableblockpos, direction));
-                    if (blockstate.is(ThunderForestBiomeBlocks.THUNDER_WART.get())) {
+                    if (blockstate.is(thunderForestBiomeBlocks.THUNDER_WART.get())) {
                         ++j;
                     }
 
@@ -62,7 +70,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
                 }
 
                 if (j == 1) {
-                    pLevel.setBlock(blockpos$mutableblockpos, ThunderForestBiomeBlocks.THUNDER_WART.get().defaultBlockState(), 2);
+                    pLevel.setBlock(blockpos$mutableblockpos, thunderForestBiomeBlocks.THUNDER_WART.get().defaultBlockState(), 2);
                 }
             }
         }
@@ -76,7 +84,7 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
             blockpos$mutableblockpos.setWithOffset(pPos, pRandom.nextInt(8) - pRandom.nextInt(8), pRandom.nextInt(2) - pRandom.nextInt(7), pRandom.nextInt(8) - pRandom.nextInt(8));
             if (pLevel.isEmptyBlock(blockpos$mutableblockpos)) {
                 BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos.above());
-                if (blockstate.is(ThunderForestBiomeBlocks.THUNDER_WART.get())) {
+                if (blockstate.is(thunderForestBiomeBlocks.THUNDER_WART.get())) {
                     int j = Mth.nextInt(pRandom, 1, 8);
                     if (pRandom.nextInt(6) == 0) {
                         j *= 2;
@@ -95,15 +103,15 @@ public class ThunderVinesFeature extends Feature<NoneFeatureConfiguration> {
 
     }
 
-    public static void placeWeepingVinesColumn(LevelAccessor pLevel, RandomSource pRandom, BlockPos.MutableBlockPos pPos, int pHeight, int pMinAge, int pMaxAge) {
+    private void placeWeepingVinesColumn(LevelAccessor pLevel, RandomSource pRandom, BlockPos.MutableBlockPos pPos, int pHeight, int pMinAge, int pMaxAge) {
         for(int i = 0; i <= pHeight; ++i) {
             if (pLevel.isEmptyBlock(pPos)) {
                 if (i == pHeight || !pLevel.isEmptyBlock(pPos.below())) {
-                    pLevel.setBlock(pPos, ThunderForestBiomeBlocks.THUNDER_VINES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(pRandom, pMinAge, pMaxAge)), 2);
+                    pLevel.setBlock(pPos, thunderForestBiomeBlocks.THUNDER_VINES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(pRandom, pMinAge, pMaxAge)), 2);
                     break;
                 }
 
-                pLevel.setBlock(pPos, ThunderForestBiomeBlocks.THUNDER_VINES_PLANT.get().defaultBlockState(), 2);
+                pLevel.setBlock(pPos, thunderForestBiomeBlocks.THUNDER_VINES_PLANT.get().defaultBlockState(), 2);
             }
 
             pPos.move(Direction.DOWN);

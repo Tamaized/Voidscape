@@ -7,10 +7,17 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
 import tamaized.voidscape.features.config.BooleanFeatureConfig;
+import tamaized.voidscape.registry.block.SpireBlocks;
 
+@Configurable
 public class SpireFeature extends Feature<BooleanFeatureConfig> {
+
+	@Autowired
+	private SpireBlocks spireBlocks;
 
 	public SpireFeature() {
 		super(BooleanFeatureConfig.CODEC);
@@ -30,7 +37,7 @@ public class SpireFeature extends Feature<BooleanFeatureConfig> {
 			base++;
 		if (canGen) {
 			genSpire(context.level(), pos.set(pos.getX(), base + length * (context.config().get() ? 0 : 1), pos.getZ()), length, context.random(), 5, context.config().get());
-			context.level().setBlock(pos, (context.config().get() ? ModBlocks.ANTIROCK : ModBlocks.THUNDERROCK).get().defaultBlockState(), 16 | 2);
+			context.level().setBlock(pos, (context.config().get() ? spireBlocks.ANTIROCK : spireBlocks.THUNDERROCK).get().defaultBlockState(), 16 | 2);
 			return true;
 		}
 		return false;

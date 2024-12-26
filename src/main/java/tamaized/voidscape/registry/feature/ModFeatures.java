@@ -1,15 +1,11 @@
 package tamaized.voidscape.registry.feature;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.features.ClusterFeature;
 import tamaized.voidscape.features.FluidFeature;
 import tamaized.voidscape.features.SpireFeature;
