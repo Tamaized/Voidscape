@@ -26,7 +26,7 @@ import tamaized.voidscape.Voidscape;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class ModNoiseGeneratorSettings implements RegistryClass {
+public class ModNoiseGeneratorSettings {
 
 //	private static final DeferredRegister<NoiseGeneratorSettings> REGISTRY = RegUtil.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
 
@@ -109,9 +109,6 @@ public class ModNoiseGeneratorSettings implements RegistryClass {
 					true
 			)));*/
 
-	@Override
-	public void init(IEventBus bus) {
-	}
 
 	/*private static DensityFunctions.HolderHolder getDensityFunction(String key) {
 		return new DensityFunctions.HolderHolder(BuiltinRegistries.DENSITY_FUNCTION.getHolderOrThrow(ResourceKey.create(Registry.DENSITY_FUNCTION_REGISTRY, new ResourceLocation(key))));
