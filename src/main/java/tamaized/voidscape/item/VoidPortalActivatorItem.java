@@ -16,7 +16,7 @@ import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.PortalBlock;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlocks;
-import tamaized.voidscape.world.ConfigurablePortalShape;
+import tamaized.voidscape.dimension.ConfigurablePortalShape;
 
 import java.util.Optional;
 

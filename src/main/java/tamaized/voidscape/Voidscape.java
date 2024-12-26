@@ -32,14 +32,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.ConfigScreenHandler;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForge;
@@ -64,8 +62,8 @@ import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.*;
-import tamaized.voidscape.world.VoidChunkGenerator;
-import tamaized.voidscape.world.VoidscapeLayeredBiomeProvider;
+import tamaized.voidscape.dimension.VoidChunkGenerator;
+import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -106,7 +104,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModFeatures::new,
 				ModFluids::new,
 				ModNoiseGeneratorSettings::new,
 				ModParticles::new,

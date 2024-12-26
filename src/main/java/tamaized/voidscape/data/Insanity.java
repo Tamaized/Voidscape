@@ -1,11 +1,9 @@
 package tamaized.voidscape.data;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -33,10 +31,9 @@ import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.*;
-import tamaized.voidscape.world.VoidPortalTeleporter;
-import tamaized.voidscape.world.VoidTeleporter;
+import tamaized.voidscape.dimension.VoidPortalTeleporter;
+import tamaized.voidscape.dimension.VoidTeleporter;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {

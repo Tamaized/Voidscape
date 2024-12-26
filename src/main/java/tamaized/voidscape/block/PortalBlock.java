@@ -20,7 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModSounds;
-import tamaized.voidscape.world.ConfigurablePortalShape;
+import tamaized.voidscape.dimension.ConfigurablePortalShape;
 
 @SuppressWarnings("deprecation")
 public class PortalBlock extends HalfTransparentBlock {

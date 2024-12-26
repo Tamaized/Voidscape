@@ -28,7 +28,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.AccessibleFungusBlock;
 import tamaized.voidscape.block.ThunderNyliumBlock;
-import tamaized.voidscape.registry.ModFeatures;
+import tamaized.voidscape.registry.feature.ModFeatures;
 import tamaized.voidscape.registry.ModItemProperties;
 
 import java.util.function.Supplier;

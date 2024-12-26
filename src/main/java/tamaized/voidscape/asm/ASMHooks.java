@@ -50,7 +50,7 @@ import tamaized.voidscape.client.ModelBakeListener;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.*;
-import tamaized.voidscape.world.VoidTeleporter;
+import tamaized.voidscape.dimension.VoidTeleporter;
 
 import javax.annotation.Nullable;
 import java.util.Map;

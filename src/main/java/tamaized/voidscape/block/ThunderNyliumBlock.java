@@ -3,7 +3,6 @@ package tamaized.voidscape.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.features.NetherFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import tamaized.voidscape.registry.ModFeatures;
+import tamaized.voidscape.registry.feature.ModFeatures;
 
 public class ThunderNyliumBlock extends Block implements BonemealableBlock {
 
