@@ -79,8 +79,6 @@ public class Voidscape {
 
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(MODID, "void"));
-
 	static {
 		BeanContext.init();
 	}
