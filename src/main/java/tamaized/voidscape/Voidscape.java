@@ -92,17 +92,6 @@ public class Voidscape {
 
 		IEventBus busForge = NeoForge.EVENT_BUS;
 
-		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(ConfigScreen::new));
-		{
-			final Pair<Config.Client, ModConfigSpec> specPairClient = new ModConfigSpec.Builder().configure(Config.Client::new);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, specPairClient.getRight());
-			Config.CLIENT_CONFIG = specPairClient.getLeft();
-
-			final Pair<Config.Common, ModConfigSpec> specPairCommon = new ModConfigSpec.Builder().configure(Config.Common::new);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, specPairCommon.getRight());
-			Config.COMMON_CONFIG = specPairCommon.getLeft();
-		}
-
 		RegUtil.setup();
 
 		NetworkMessages.register(busMod);
