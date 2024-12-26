@@ -104,7 +104,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModStructures::new,
 				ModSurfaceRules::new
 				);
 

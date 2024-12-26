@@ -1,6 +1,6 @@
 package tamaized.voidscape.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,14 +18,22 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModStructures;
+import tamaized.voidscape.registry.structure.ModStructurePieces;
+import tamaized.voidscape.registry.structure.ModStructures;
 
 import java.util.Optional;
 
 public class CharredStructure extends Structure {
 
-	public static final Codec<CharredStructure> CODEC = simpleCodec(CharredStructure::new);
+	public static final MapCodec<CharredStructure> CODEC = simpleCodec(CharredStructure::new);
+
+	@Autowired
+	private static ModStructures structures;
+
+	@Autowired
+	private static ModStructurePieces structurePieces;
 
 	public CharredStructure(Structure.StructureSettings p_227526_) {
 		super(p_227526_);
@@ -48,11 +56,11 @@ public class CharredStructure extends Structure {
 
 	@Override
 	public StructureType<?> type() {
-		return ModStructures.StructureTypes.CHARRED.get();
+		return structures.CHARRED.get();
 	}
 
 	public static class Pieces {
-		private static final ResourceLocation TEMPLATE = new ResourceLocation(Voidscape.MODID, "charred");
+		private static final ResourceLocation TEMPLATE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "charred");
 
 		public static void addPieces(StructureTemplateManager manager, BlockPos pos, Rotation rotation, ResourceLocation location, StructurePieceAccessor accessor) {
 			accessor.addPiece(new Piece(manager, location, pos, rotation));
@@ -65,11 +73,11 @@ public class CharredStructure extends Structure {
 			}
 
 			public Piece(StructureTemplateManager manager, ResourceLocation location, BlockPos pos, Rotation rotation) {
-				super(ModStructures.Pieces.CHARRED_MAIN.get(), 0, manager, location, location.toString(), makeSettings(rotation), pos);
+				super(structurePieces.CHARRED_MAIN.get(), 0, manager, location, location.toString(), makeSettings(rotation), pos);
 			}
 
 			public Piece(StructureTemplateManager manager, CompoundTag tag) {
-				super(ModStructures.Pieces.CHARRED_MAIN.get(), tag, manager, (location) -> makeSettings(Rotation.valueOf(tag.getString("Rot"))));
+				super(structurePieces.CHARRED_MAIN.get(), tag, manager, (location) -> makeSettings(Rotation.valueOf(tag.getString("Rot"))));
 			}
 
 			private static StructurePlaceSettings makeSettings(Rotation rotation) {
