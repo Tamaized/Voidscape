@@ -1,22 +1,28 @@
 package tamaized.voidscape.features.placements;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import tamaized.beanification.Autowired;
+import tamaized.voidscape.registry.feature.ModFeaturePlacements;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class RandomYPlacementMod extends PlacementModifier {
 
-	public static final Codec<RandomYPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
-		INT.fieldOf("y").orElse(0).forGetter(c -> c.y)).apply(p_242803_0_, RandomYPlacementMod::new));
+	public static final MapCodec<RandomYPlacementMod> CODEC = RecordCodecBuilder.mapCodec(
+		schema -> schema.group(
+			Codec.INT.fieldOf("y").orElse(0).forGetter(c -> c.y)
+		).apply(schema, RandomYPlacementMod::new)
+	);
 
-	public static Supplier<PlacementModifierType<RandomYPlacementMod>> TYPE = registerPlacementModifierType("random_y", () -> () -> CODEC);
+	@Autowired
+	private static ModFeaturePlacements featurePlacements;
 
 	private final int y;
 
@@ -31,7 +37,7 @@ public class RandomYPlacementMod extends PlacementModifier {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return TYPE.get();
+		return featurePlacements.RANDOM_Y.get();
 	}
 
 }

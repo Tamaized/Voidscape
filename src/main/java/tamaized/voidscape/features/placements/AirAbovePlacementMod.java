@@ -7,18 +7,16 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.feature.ModFeaturePlacements;
 
 import java.util.stream.Stream;
 
-@Configurable
 public class AirAbovePlacementMod extends PlacementModifier {
 
 	public static final MapCodec<AirAbovePlacementMod> CODEC = MapCodec.unit(AirAbovePlacementMod::new);
 
 	@Autowired
-	private ModFeaturePlacements featurePlacements;
+	private static ModFeaturePlacements featurePlacements;
 
 	public AirAbovePlacementMod() {
 	}

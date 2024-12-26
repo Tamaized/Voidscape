@@ -1,6 +1,6 @@
 package tamaized.voidscape.features.placements;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -8,17 +8,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import tamaized.beanification.Autowired;
+import tamaized.voidscape.registry.feature.ModFeaturePlacements;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class UnderBlockPlacementMod extends PlacementModifier {
 
-	public static final Codec<UnderBlockPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(
-		BlockState.CODEC.fieldOf("state").forGetter(c -> c.state)
-	).apply(p_242803_0_, UnderBlockPlacementMod::new));
+	public static final MapCodec<UnderBlockPlacementMod> CODEC = RecordCodecBuilder.mapCodec(
+		schema -> schema.group(
+			BlockState.CODEC.fieldOf("state").forGetter(c -> c.state)
+		).apply(schema, UnderBlockPlacementMod::new)
+	);
 
-	public static Supplier<PlacementModifierType<UnderBlockPlacementMod>> TYPE = registerPlacementModifierType("under_block", () -> () -> CODEC);
+	@Autowired
+	private static ModFeaturePlacements featurePlacements;
 
 	private final BlockState state;
 
@@ -40,7 +44,7 @@ public class UnderBlockPlacementMod extends PlacementModifier {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return TYPE.get();
+		return featurePlacements.UNDER_BLOCK.get();
 	}
 
 }

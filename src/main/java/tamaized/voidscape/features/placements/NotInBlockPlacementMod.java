@@ -1,20 +1,22 @@
 package tamaized.voidscape.features.placements;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import tamaized.beanification.Autowired;
+import tamaized.voidscape.registry.feature.ModFeaturePlacements;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class NotInBlockPlacementMod extends PlacementModifier {
 
-	public static final Codec<NotInBlockPlacementMod> CODEC = Codec.unit(NotInBlockPlacementMod::new);
+	public static final MapCodec<NotInBlockPlacementMod> CODEC = MapCodec.unit(NotInBlockPlacementMod::new);
 
-	public static Supplier<PlacementModifierType<NotInBlockPlacementMod>> TYPE = registerPlacementModifierType("not_in_block", () -> () -> CODEC);
+	@Autowired
+	private static ModFeaturePlacements featurePlacements;
 
 	public NotInBlockPlacementMod() {
 	}
@@ -26,7 +28,7 @@ public class NotInBlockPlacementMod extends PlacementModifier {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return TYPE.get();
+		return featurePlacements.NOT_IN_BLOCK.get();
 	}
 
 }

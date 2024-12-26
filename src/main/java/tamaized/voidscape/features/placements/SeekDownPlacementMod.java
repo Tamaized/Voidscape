@@ -1,6 +1,6 @@
 package tamaized.voidscape.features.placements;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,16 +8,23 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import tamaized.beanification.Autowired;
+import tamaized.voidscape.registry.feature.ModFeaturePlacements;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static com.mojang.serialization.Codec.BOOL;
 
 public class SeekDownPlacementMod extends PlacementModifier {
 
-	public static final Codec<SeekDownPlacementMod> CODEC = RecordCodecBuilder.create((p_242803_0_) -> p_242803_0_.group(Codec.
-		BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)).apply(p_242803_0_, SeekDownPlacementMod::new));
+	public static final MapCodec<SeekDownPlacementMod> CODEC = RecordCodecBuilder.mapCodec(
+		schema -> schema.group(
+			BOOL.fieldOf("check_below").orElse(false).forGetter(c -> c.check_below)
+		).apply(schema, SeekDownPlacementMod::new)
+	);
 
-	public static Supplier<PlacementModifierType<SeekDownPlacementMod>> TYPE = registerPlacementModifierType("seek", () -> () -> CODEC);
+	@Autowired
+	private static ModFeaturePlacements featurePlacements;
 
 	private final boolean check_below;
 
@@ -39,7 +46,7 @@ public class SeekDownPlacementMod extends PlacementModifier {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return TYPE.get();
+		return featurePlacements.SEEK_DOWN.get();
 	}
 
 }

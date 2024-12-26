@@ -5,7 +5,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.features.placements.AirAbovePlacementMod;
+import tamaized.voidscape.features.placements.*;
 
 import java.util.function.Supplier;
 
@@ -16,6 +16,14 @@ public class ModFeaturePlacements {
 
 	public final Supplier<PlacementModifierType<AirAbovePlacementMod>> AIR_ABOVE = REGISTRY.register("air_above", () -> () -> AirAbovePlacementMod.CODEC);
 
-	public final Supplier<PlacementModifierType<AirAbovePlacementMod>> NOT_AIR_BELOW = REGISTRY.register("not_air_below", () -> () -> NotAirBelowPlacementMod.CODEC);
+	public final Supplier<PlacementModifierType<NotAirBelowPlacementMod>> NOT_AIR_BELOW = REGISTRY.register("not_air_below", () -> () -> NotAirBelowPlacementMod.CODEC);
+
+	public final Supplier<PlacementModifierType<NotInBlockPlacementMod>> NOT_IN_BLOCK = REGISTRY.register("not_in_block", () -> () -> NotInBlockPlacementMod.CODEC);
+
+	public final Supplier<PlacementModifierType<RandomYPlacementMod>> RANDOM_Y = REGISTRY.register("random_y", () -> () -> RandomYPlacementMod.CODEC);
+
+	public final Supplier<PlacementModifierType<SeekDownPlacementMod>> SEEK_DOWN = REGISTRY.register("seek", () -> () -> SeekDownPlacementMod.CODEC);
+
+	public final Supplier<PlacementModifierType<UnderBlockPlacementMod>> UNDER_BLOCK = REGISTRY.register("under_block", () -> () -> UnderBlockPlacementMod.CODEC);
 
 }
