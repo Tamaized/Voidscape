@@ -103,9 +103,7 @@ public class Voidscape {
 			Config.COMMON_CONFIG = specPairCommon.getLeft();
 		}
 
-		RegUtil.setup(
-				ModSurfaceRules::new
-				);
+		RegUtil.setup();
 
 		NetworkMessages.register(busMod);
 
