@@ -104,7 +104,6 @@ public class Voidscape {
 		}
 
 		RegUtil.setup(
-				ModPOIs::new,
 				ModSounds::new,
 				ModStructures::new,
 				ModSurfaceRules::new

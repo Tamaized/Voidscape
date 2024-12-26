@@ -6,18 +6,20 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.RegistryClass;
+import tamaized.voidscape.registry.block.FunctionalBlocks;
 
-public class ModPOIs implements RegistryClass {
+@Component
+public class ModPOIs {
 
-	@Override
-	public void init(IEventBus bus) {
+	@Autowired
+	private FunctionalBlocks functionalBlocks;
 
-	}
+	private final DeferredRegister<PoiType> REGISTERY = RegUtil.create(Registries.POINT_OF_INTEREST_TYPE);
 
-	private static final DeferredRegister<PoiType> REGISTERY = RegUtil.create(Registries.POINT_OF_INTEREST_TYPE);
-
-	public static final DeferredHolder<PoiType, PoiType> PORTAL = REGISTERY.register("portal", () -> new PoiType(ImmutableSet.copyOf(ModBlocks.PORTAL.get().getStateDefinition().getPossibleStates()), 0, 1));
+	public final DeferredHolder<PoiType, PoiType> PORTAL = REGISTERY.register("portal", () -> new PoiType(ImmutableSet.copyOf(functionalBlocks.PORTAL.get().getStateDefinition().getPossibleStates()), 0, 1));
 
 }
