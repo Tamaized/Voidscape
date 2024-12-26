@@ -3,13 +3,11 @@ package tamaized.voidscape.registry;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.registry.block.FunctionalBlocks;
 
 @Component
