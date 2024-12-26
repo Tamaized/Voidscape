@@ -81,8 +81,6 @@ public class Voidscape {
 
 	public static final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(MODID, "void"));
 
-	public static final GameProfile FAKE_PLAYER = new GameProfile(UUID.fromString("4B63F35E-2AA1-4BC2-8D13-A3F32C9D8380"), "[Voidscape]");
-
 	static {
 		BeanContext.init();
 	}
