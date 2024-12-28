@@ -63,12 +63,6 @@ public class Voidscape {
 
 	public Voidscape(IEventBus busMod) {
 
-		busMod.addListener(RegisterEvent.class, event -> {
-			if (!Objects.equals(event.getRegistryKey(), Registries.RECIPE_SERIALIZER))
-				return;
-			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
-		});
-
 		busForge.addListener(ServerStartingEvent.class, event ->
 				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape").
 						then(VoidCommands.Debug.register()))

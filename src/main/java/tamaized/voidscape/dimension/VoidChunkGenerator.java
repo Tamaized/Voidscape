@@ -1,7 +1,7 @@
 package tamaized.voidscape.dimension;
 
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 
 public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
-	public static final Codec<VoidChunkGenerator> codec = RecordCodecBuilder.create((p_236091_0_) -> p_236091_0_.
+	public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder.mapCodec((p_236091_0_) -> p_236091_0_.
 			group(BiomeSource.CODEC
 							.fieldOf("biome_source")
 							.forGetter(ChunkGenerator::getBiomeSource),
@@ -109,8 +109,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	}
 
 	@Override
-	protected Codec<? extends ChunkGenerator> codec() {
-		return codec;
+	protected MapCodec<? extends ChunkGenerator> codec() {
+		return CODEC;
 	}
 
 	private void setupNoiseChunk(NoiseChunk noisechunk, int i, int cellWidth, ChunkPos chunkpos, Blender blender) {
@@ -293,7 +293,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 																worldGenRegion_.registryAccess().asGetterLookup(),
 																generatorSettings().unwrapKey().orElse(ResourceKey.create(
 																		Registries.NOISE_SETTINGS,
-																		new ResourceLocation(Voidscape.MODID, "void"))),
+																		ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void"))),
 																seed).sampler());
 								if (biome.value().getGenerationSettings().hasFeature(placedfeature)) {
 									BlockPos pos = new BlockPos(x, y, z);
