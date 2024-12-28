@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
+import tamaized.voidscape.biome.LayeredBiomeProvider;
 import tamaized.voidscape.biome.genlayer.legacy.AreaTransformer0;
 import tamaized.voidscape.biome.genlayer.legacy.Context;
 
@@ -14,26 +14,26 @@ import java.util.List;
 
 public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 	public static final Codec<GenLayerRandomWithOneMajorBiomes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.list(VoidscapeLayeredBiomeProvider.conditionalModLoadedBiome()).fieldOf("biomes").stable().forGetter(obj -> obj.biomes),
+			Codec.list(LayeredBiomeProvider.conditionalModLoadedBiome()).fieldOf("biomes").stable().forGetter(obj -> obj.biomes),
 			ResourceKey.codec(Registries.BIOME).fieldOf("majorBiome").stable().forGetter(obj -> obj.majorBiome),
 			Codec.INT.fieldOf("chance").stable().forGetter(obj -> obj.chance)
 	).apply(instance, instance.stable(GenLayerRandomWithOneMajorBiomes::new)));
 
-	private final List<Either<ResourceKey<Biome>, VoidscapeLayeredBiomeProvider.ConditionalBiomeHolder>> biomes;
+	private final List<Either<ResourceKey<Biome>, LayeredBiomeProvider.ConditionalBiomeHolder>> biomes;
 	private final List<ResourceKey<Biome>> loadedBiomes;
 	private final ResourceKey<Biome> majorBiome;
 	private final int chance;
 
-	private VoidscapeLayeredBiomeProvider provider;
+	private LayeredBiomeProvider provider;
 
-	GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, VoidscapeLayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
+	GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, LayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
 		this.biomes = biomes;
-		this.loadedBiomes = VoidscapeLayeredBiomeProvider.getConditionalBiomes(biomes);
+		this.loadedBiomes = LayeredBiomeProvider.getConditionalBiomes(biomes);
 		this.majorBiome = majorBiome;
 		this.chance = chance;
 	}
 
-	public GenLayerRandomWithOneMajorBiomes setup(VoidscapeLayeredBiomeProvider provider) {
+	public GenLayerRandomWithOneMajorBiomes setup(LayeredBiomeProvider provider) {
 		this.provider = provider;
 		return this;
 	}

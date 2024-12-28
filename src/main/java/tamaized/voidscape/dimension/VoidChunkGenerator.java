@@ -47,7 +47,7 @@ import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.mutable.MutableObject;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.asm.ASMHooks;
-import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
+import tamaized.voidscape.biome.LayeredBiomeProvider;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
@@ -284,7 +284,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 						try {
 							worldGenRegion_.setCurrentlyGenerating(supplier1);
 							for (int y = worldGenRegion_.getMinBuildHeight(); y < worldGenRegion_.getMaxBuildHeight() - 15; y += 15) {
-								Holder<Biome> biome = biomeSource instanceof VoidscapeLayeredBiomeProvider voidscapeLayeredBiomeProvider ? voidscapeLayeredBiomeProvider.
+								Holder<Biome> biome = biomeSource instanceof LayeredBiomeProvider voidscapeLayeredBiomeProvider ? voidscapeLayeredBiomeProvider.
 										getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) : this.biomeSource.
 										getNoiseBiome((centerX << 2) + 2, (y >> 2), (centerZ << 2) + 2,
 												worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?

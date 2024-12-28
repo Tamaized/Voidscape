@@ -3,6 +3,7 @@ package tamaized.voidscape.biome;
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -25,9 +26,9 @@ import java.util.function.LongFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class VoidscapeLayeredBiomeProvider extends BiomeSource {
+public class LayeredBiomeProvider extends BiomeSource {
 
-	public static final Codec<VoidscapeLayeredBiomeProvider> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
+	public static final MapCodec<LayeredBiomeProvider> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
 			RegistryOps.retrieveGetter(Registries.BIOME),
 			Codec.list(conditionalModLoadedBiome()).fieldOf("possibleBiomes").stable().forGetter(obj -> obj.possibleBiomes),
 			Codec.INT.fieldOf("layerBottomDownwardsStart").stable().forGetter(obj -> obj.layerBottomDownwardsStart),
@@ -35,7 +36,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerTopUpwards").stable().forGetter(obj -> obj.layerTopUpwards),
 			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerThreeSlicesBetween").stable().forGetter(obj -> obj.layerThreeSlicesBetween),
 			GenLayerRandomWithOneMajorBiomes.CODEC.fieldOf("layerBottomDownwards").stable().forGetter(obj -> obj.layerBottomDownwards)
-	).apply(instance, instance.stable(VoidscapeLayeredBiomeProvider::new)));
+	).apply(instance, instance.stable(LayeredBiomeProvider::new)));
 
 	public static Codec<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> conditionalModLoadedBiome() {
 		return Codec.either(
@@ -83,7 +84,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 	private final Supplier<Layer> genBottomDownwards;
 	private final Random layerMergeRandom = new Random();
 
-	public VoidscapeLayeredBiomeProvider(
+	public LayeredBiomeProvider(
 			HolderGetter<Biome> registryIn,
 			List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> possibleBiomes,
 			int layerBottomDownwardsStart,
@@ -172,7 +173,7 @@ public class VoidscapeLayeredBiomeProvider extends BiomeSource {
 	}
 
 	@Override
-	protected Codec<? extends BiomeSource> codec() {
+	protected MapCodec<? extends BiomeSource> codec() {
 		return CODEC;
 	}
 

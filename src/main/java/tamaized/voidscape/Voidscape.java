@@ -42,7 +42,7 @@ import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidChunkGenerator;
-import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
+import tamaized.voidscape.biome.LayeredBiomeProvider;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -58,15 +58,14 @@ public class Voidscape {
 
 	static {
 		BeanContext.init();
+		RegUtil.setup();
 	}
 
 	public Voidscape(IEventBus busMod) {
-		RegUtil.setup();
 
 		busMod.addListener(RegisterEvent.class, event -> {
 			if (!Objects.equals(event.getRegistryKey(), Registries.RECIPE_SERIALIZER))
 				return;
-			Registry.register(BuiltInRegistries.BIOME_SOURCE, new ResourceLocation(MODID, "biomeprovider"), VoidscapeLayeredBiomeProvider.CODEC);
 			Registry.register(BuiltInRegistries.CHUNK_GENERATOR, new ResourceLocation(MODID, "void"), VoidChunkGenerator.codec);
 		});
 
