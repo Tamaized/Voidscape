@@ -61,18 +61,6 @@ public class Voidscape {
 		RegUtil.setup();
 	}
 
-	public Voidscape() {
-
-
-		busForge.addListener(MobSpawnEvent.FinalizeSpawn.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL &&
-					!(event.getEntity() instanceof IEthereal) &&
-					Voidscape.checkForVoidDimension(event.getEntity().level())) {
-				event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(event.getEntity().getRandom().nextInt(200) + 100, event.getEntity());
-			}
-		});
-	}
-
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
 		return getHitResultFromEyes(entity, predicate, range, 0, 0);
 	}
