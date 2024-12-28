@@ -10,6 +10,6 @@ import tamaized.voidscape.Voidscape;
 @Component
 public class ModDimensions {
 
-	public final ResourceKey<Level> WORLD_KEY_VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void"));
+	public final ResourceKey<Level> VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void"));
 
 }

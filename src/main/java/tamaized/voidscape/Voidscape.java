@@ -61,39 +61,7 @@ public class Voidscape {
 		RegUtil.setup();
 	}
 
-	public Voidscape(IEventBus busMod) {
-
-		busForge.addListener(TickEvent.PlayerTickEvent.class, event -> {
-			if (event.player.level() != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level())) {
-				if ((!event.player.level().isClientSide() || event.player.getData(ModDataAttachments.INSANITY).getParanoia() / 600F > 0.25F) &&
-
-						event.player.tickCount % 30 == 0 &&
-
-						event.player.getRandom().nextFloat() <= 0.20F) {
-					final int dist = 64;
-					final int rad = dist / 2;
-					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
-					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-					if (event.player.level().getBlockState(dest).equals(Blocks.BEDROCK.defaultBlockState()))
-						event.player.level().setBlockAndUpdate(dest, ModBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState());
-				}
-				if (!event.player.level().isClientSide() && event.player.tickCount % 15 == 0 && event.player.getRandom().nextFloat() <= 0.15F) {
-					final int dist = 64;
-					final int rad = dist / 2;
-					final Supplier<Integer> exec = () -> event.player.getRandom().nextInt(dist) - rad;
-					BlockPos dest = event.player.blockPosition().offset(exec.get(), exec.get(), exec.get());
-					if (event.player.level().getBlockState(dest).isAir() && ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(event.player.level(), dest))
-						event.player.level().setBlockAndUpdate(dest, switch (event.player.level().getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")).getPath()) {
-							default -> ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState();
-							case "null" -> ModBlocks.ETHEREAL_FRUIT_NULL.get().defaultBlockState();
-							case "overworld" -> ModBlocks.ETHEREAL_FRUIT_OVERWORLD.get().defaultBlockState();
-							case "nether" -> ModBlocks.ETHEREAL_FRUIT_NETHER.get().defaultBlockState();
-							case "end" -> ModBlocks.ETHEREAL_FRUIT_END.get().defaultBlockState();
-					});
-				}
-			}
-		});
-
+	public Voidscape() {
 		busForge.addListener(LivingHurtEvent.class, event -> {
 			Boolean arrow;
 			if (!event.getSource().is(ModDamageSource.VOIDIC) && (arrow = meleeOrArrowSource(event.getSource())) != null) {
@@ -214,20 +182,6 @@ public class Voidscape {
 		if (source.is(DamageTypes.ARROW))
 			return true;
 		return null;
-	}
-
-	public static boolean checkForVoidDimension(@Nullable Level level) {
-		if (level == null)
-			return false;
-		return level.dimension().location().equals(WORLD_KEY_VOID.location());
-	}
-
-	public static Optional<ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
-		return Optional.ofNullable(Objects.requireNonNull(level.getServer()).getLevel(dest));
-	}
-
-	public static Optional<ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
-		return getLevel(player.level(), player.getRespawnDimension());
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
