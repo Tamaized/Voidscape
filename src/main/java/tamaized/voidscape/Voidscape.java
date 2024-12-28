@@ -84,8 +84,6 @@ public class Voidscape {
 	}
 
 	public Voidscape(IEventBus busMod) {
-		DonatorHandler.start();
-
 		IEventBus busForge = NeoForge.EVENT_BUS;
 
 		RegUtil.setup();

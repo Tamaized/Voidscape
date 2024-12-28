@@ -1,6 +1,5 @@
 package tamaized.voidscape.network;
 
-import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 
@@ -10,7 +9,9 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-@Component
+/**
+ * {@link NetworkMessages#donatorHandler()}
+ */
 public class DonatorHandler {
 
 	private final Object lock_settings = new Object();
