@@ -62,26 +62,7 @@ public class Voidscape {
 	}
 
 	public Voidscape() {
-		busForge.addListener(MobSpawnEvent.SpawnPlacementCheck.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
-				event.setResult(Event.Result.ALLOW);
-			}
-		});
 
-		busForge.addListener(MobSpawnEvent.PositionCheck.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel())) {
-				Player player = event.getLevel().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
-				if (player != null &&
-						Voidscape.isValidPositionForMob(
-								event.getLevel().getLevel(),
-								event.getEntity(),
-								player.distanceToSqr(event.getX(), event.getY(), event.getZ()),
-								BlockPos.containing(event.getX(), event.getY(), event.getZ())))
-					event.setResult(Event.Result.ALLOW);
-				else
-					event.setResult(Event.Result.DENY);
-			}
-		});
 
 		busForge.addListener(MobSpawnEvent.FinalizeSpawn.class, event -> {
 			if (event.getSpawnType() == MobSpawnType.NATURAL &&
@@ -90,15 +71,6 @@ public class Voidscape {
 				event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(event.getEntity().getRandom().nextInt(200) + 100, event.getEntity());
 			}
 		});
-	}
-
-	private static boolean isValidPositionForMob(ServerLevel serverWorld_, Mob mobEntity_, double double_, BlockPos pos) {
-		if (double_ > (double) (mobEntity_.getType().getCategory().getDespawnDistance() * mobEntity_.getType().getCategory().getDespawnDistance()) && mobEntity_.removeWhenFarAway(double_)) {
-			return false;
-		} else {
-			return mobEntity_.checkSpawnObstruction(serverWorld_) &&
-					(!(mobEntity_ instanceof Zoglin || mobEntity_ instanceof IEthereal) || NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
-		}
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
