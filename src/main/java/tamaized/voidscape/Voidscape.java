@@ -62,60 +62,6 @@ public class Voidscape {
 	}
 
 	public Voidscape() {
-		busForge.addListener(LivingHurtEvent.class, event -> {
-			Boolean arrow;
-			if (!event.getSource().is(ModDamageSource.VOIDIC) && (arrow = meleeOrArrowSource(event.getSource())) != null) {
-				if (event.getEntity().getHealth() <= event.getAmount())
-					return;
-				Entity e = event.getSource().isIndirect() ? event.getSource().getEntity() : event.getSource().getDirectEntity();
-				if (e instanceof LivingEntity attacker) {
-					if (!arrow) {
-						final float dmg = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_DMG.get()) ?
-								attacker.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) : 0) *
-								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F);
-						if (dmg > 0) {
-							event.getEntity().invulnerableTime = 0;
-							event.getEntity().hurt(ModDamageSource.getEntityDamageSource(event.getEntity().level(), ModDamageSource.VOIDIC, attacker), dmg);
-						}
-						final float infusion = (float) (attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_INFUSION.get()) ?
-								attacker.getAttributeValue(ModAttributes.VOIDIC_INFUSION.get()) - 1F : 0) *
-								(attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F) * Insanity.MAX_INFUSION;
-						if (infusion > 0)
-							event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(infusion, event.getEntity());
-					}
-				}
-				if (event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
-					float voidic = arrowEntity.getData(ModDataAttachments.VOIDIC_ARROW);
-					if (voidic > 0) {
-						if (event.getEntity().getHealth() <= event.getAmount())
-							return;
-						event.getEntity().invulnerableTime = 0;
-						event.getEntity().hurt(ModDamageSource.getEntityDamageSource(arrowEntity.level(), ModDamageSource.VOIDIC, arrowEntity.getOwner()), voidic);
-					}
-					float infusion = arrowEntity.getData(ModDataAttachments.INFUSION_ARROW);
-					if (infusion > 0) {
-						event.getEntity().getData(ModDataAttachments.INSANITY).addInfusion(infusion, event.getEntity());
-					}
-				}
-			} else if (event.getSource().is(ModDamageSource.VOIDIC)) {
-				if (event.getEntity().hasEffect(ModEffects.ICHOR.get())) {
-					event.setAmount(event.getAmount() * 2F);
-				}
-				if (event.getEntity().hasEffect(ModEffects.FORTIFIED.get())) {
-					event.setAmount(event.getAmount() * 0.25F);
-					if (event.getEntity().getRandom().nextInt(4) == 0) {
-						event.getEntity().removeEffect(ModEffects.FORTIFIED.get());
-					}
-				}
-				AttributeInstance attributeInstance = event.getEntity().getAttribute(ModAttributes.VOIDIC_RES.get());
-				if (attributeInstance != null) {
-					float res = (float) attributeInstance.getValue();
-					if (res != 0)
-						event.setAmount(event.getAmount() - res);
-				}
-			}
-		});
-
 		busForge.addListener(EntityJoinLevelEvent.class, event -> {
 			if (event.getEntity() instanceof AbstractArrow arrow) {
 				Entity entity = arrow.getOwner();
@@ -173,15 +119,6 @@ public class Voidscape {
 			return mobEntity_.checkSpawnObstruction(serverWorld_) &&
 					(!(mobEntity_ instanceof Zoglin || mobEntity_ instanceof IEthereal) || NaturalSpawner.canSpawnAtBody(SpawnPlacements.Type.ON_GROUND, serverWorld_, pos, mobEntity_.getType()));
 		}
-	}
-
-	@Nullable
-	private static Boolean meleeOrArrowSource(DamageSource source) {
-		if (source.is(DamageTypes.PLAYER_ATTACK) || source.is(DamageTypes.MOB_ATTACK))
-			return false;
-		if (source.is(DamageTypes.ARROW))
-			return true;
-		return null;
 	}
 
 	public static HitResult getHitResultFromEyes(LivingEntity entity, Predicate<Entity> predicate, double range) {
