@@ -1,22 +1,15 @@
 package tamaized.voidscape;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.PathPackResources;
-import net.minecraft.server.packs.repository.BuiltInPackSource;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -34,41 +27,25 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.client.ConfigScreenHandler;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddPackFindersEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.BeanContext;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.asm.ASMHooks;
-import tamaized.voidscape.client.ClientInitiator;
-import tamaized.voidscape.client.ConfigScreen;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.IEthereal;
-import tamaized.voidscape.network.DonatorHandler;
-import tamaized.voidscape.network.NetworkMessages;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidChunkGenerator;
 import tamaized.voidscape.biome.VoidscapeLayeredBiomeProvider;
 
-import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -85,22 +62,6 @@ public class Voidscape {
 
 	public Voidscape(IEventBus busMod) {
 		RegUtil.setup();
-
-		busMod.addListener(AddPackFindersEvent.class, event -> {
-			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {
-				Path resourcePath = ModList.get().getModFileById(MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat");
-				Pack pack = Pack.readMetaAndCreate(
-						"voidscape_aether_compat",
-						Component.literal("Voidscape Aether Integration"),
-						true,
-						BuiltInPackSource.fromName(name -> new PathPackResources(name, resourcePath, false)),
-						PackType.SERVER_DATA,
-						Pack.Position.TOP,
-						PackSource.FEATURE
-				);
-				event.addRepositorySource(packConsumer -> packConsumer.accept(pack));
-			}
-		});
 
 		busMod.addListener(RegisterEvent.class, event -> {
 			if (!Objects.equals(event.getRegistryKey(), Registries.RECIPE_SERIALIZER))
