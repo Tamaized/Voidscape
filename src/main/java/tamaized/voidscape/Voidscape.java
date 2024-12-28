@@ -63,11 +63,6 @@ public class Voidscape {
 
 	public Voidscape(IEventBus busMod) {
 
-		busForge.addListener(ServerStartingEvent.class, event ->
-				event.getServer().getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape").
-						then(VoidCommands.Debug.register()))
-		);
-
 		busForge.addListener(TickEvent.PlayerTickEvent.class, event -> {
 			if (event.player.level() != null && !event.player.isSpectator() && checkForVoidDimension(event.player.level())) {
 				if ((!event.player.level().isClientSide() || event.player.getData(ModDataAttachments.INSANITY).getParanoia() / 600F > 0.25F) &&
