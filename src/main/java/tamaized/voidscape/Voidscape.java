@@ -62,26 +62,6 @@ public class Voidscape {
 	}
 
 	public Voidscape() {
-		busForge.addListener(EntityJoinLevelEvent.class, event -> {
-			if (event.getEntity() instanceof AbstractArrow arrow) {
-				Entity entity = arrow.getOwner();
-				if (entity instanceof LivingEntity shooter) {
-					if (shooter.getMainHandItem().isEmpty())
-						return;
-					if (shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_ARROW_DMG.get())) {
-						float voidic = (float) shooter.getAttributeValue(ModAttributes.VOIDIC_ARROW_DMG.get());
-						if (voidic > 0)
-							arrow.setData(ModDataAttachments.VOIDIC_ARROW, voidic);
-					}
-					if (shooter.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ModAttributes.VOIDIC_INFUSION.get())) {
-						final float infusion = ((float) shooter.getAttributeValue(ModAttributes.VOIDIC_INFUSION.get()) - 1F) * Insanity.MAX_INFUSION;
-						if (infusion > 0)
-							event.getEntity().setData(ModDataAttachments.INFUSION_ARROW, infusion);
-					}
-				}
-			}
-		});
-
 		busForge.addListener(MobSpawnEvent.SpawnPlacementCheck.class, event -> {
 			if (event.getSpawnType() == MobSpawnType.NATURAL && Voidscape.checkForVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
 				event.setResult(Event.Result.ALLOW);
