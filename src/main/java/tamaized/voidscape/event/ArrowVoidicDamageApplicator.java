@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class ArrowVoidicDamageApplier {
+public class ArrowVoidicDamageApplicator {
 
 	@Autowired
 	private ModAttributes attributes;

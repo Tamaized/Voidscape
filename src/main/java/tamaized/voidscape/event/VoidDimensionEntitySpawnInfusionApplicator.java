@@ -11,7 +11,7 @@ import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.util.LevelUtil;
 
 @Component
-public class VoidDimensionEntitySpawnInfusionApplier {
+public class VoidDimensionEntitySpawnInfusionApplicator {
 
 	@Autowired
 	private LevelUtil levelUtil;
