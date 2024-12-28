@@ -84,11 +84,7 @@ public class Voidscape {
 	}
 
 	public Voidscape(IEventBus busMod) {
-		IEventBus busForge = NeoForge.EVENT_BUS;
-
 		RegUtil.setup();
-
-		NetworkMessages.register(busMod);
 
 		busMod.addListener(AddPackFindersEvent.class, event -> {
 			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {

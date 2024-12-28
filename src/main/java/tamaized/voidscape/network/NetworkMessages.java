@@ -2,34 +2,36 @@ package tamaized.voidscape.network;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import tamaized.beanification.Bean;
 import tamaized.beanification.Component;
+import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
-import tamaized.voidscape.network.server.ServerPacketHandlerDonatorSettings;
+import tamaized.voidscape.network.server.ServerPacketDonatorSettings;
 
 import java.util.UUID;
 
 @Component
 public class NetworkMessages {
 
-	public static void register(IEventBus busMod) {
-		busMod.addListener(RegisterPayloadHandlerEvent.class, event -> {
-			IPayloadRegistrar network = event.registrar(Voidscape.MODID)
-					.versioned("1")
-					.optional();
+	@PostConstruct
+	private void init(IEventBus bus) {
+		bus.addListener(RegisterPayloadHandlersEvent.class, event -> {
+			PayloadRegistrar network = event.registrar(Voidscape.MODID)
+				.versioned("1")
+				.optional();
 
-			network.play(ServerPacketHandlerDonatorSettings.ID, ServerPacketHandlerDonatorSettings::new, side -> side.server(ServerPacketHandlerDonatorSettings::handle));
+			network.playToServer(ServerPacketDonatorSettings.ID, ServerPacketDonatorSettings.CODEC, ServerPacketDonatorSettings::handle);
 
-			network.play(ClientPacketNoFlashOnSetHealth.ID, ClientPacketNoFlashOnSetHealth::new, side -> side.client(ClientPacketNoFlashOnSetHealth::handle));
-			network.play(ClientPacketInsanitySync.ID, ClientPacketInsanitySync::new, side -> side.client(ClientPacketInsanitySync::handle));
-			network.play(ClientPacketDonatorSync.ID, ClientPacketDonatorSync::new, side -> side.client(ClientPacketDonatorSync::handle));
-			network.play(ClientPacketSendParticles.ID, ClientPacketSendParticles::new, side -> side.client(ClientPacketSendParticles::handle));
+			network.playToClient(ClientPacketNoFlashOnSetHealth.ID, ClientPacketNoFlashOnSetHealth.CODEC, ClientPacketNoFlashOnSetHealth::handle);
+			network.playToClient(ClientPacketInsanitySync.ID, ClientPacketInsanitySync.CODEC, ClientPacketInsanitySync::handle);
+			network.playToClient(ClientPacketDonatorSync.ID, ClientPacketDonatorSync.CODEC, ClientPacketDonatorSync::handle);
+			network.playToClient(ClientPacketSendParticles.ID, ClientPacketSendParticles.CODEC, ClientPacketSendParticles::handle);
 		});
 	}
 
