@@ -94,7 +94,7 @@ public class ModBlockEntities {
 
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COLLECTOR.get(), (object, context) -> object.fluids);
+			CollectorBlockEntity.registerCaps(event);
 		});
 	}
 

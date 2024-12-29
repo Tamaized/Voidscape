@@ -9,33 +9,38 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.CollectorBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class CollectorBlock extends Block implements EntityBlock {
 
-    public CollectorBlock(Properties pProperties) {
-        super(pProperties);
-    }
+	@Autowired
+	private ModBlockEntities blockEntities;
 
-    @Override
-    @Deprecated
-    public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
-        BlockEntity be = pLevel.getBlockEntity(pPos);
-        return super.triggerEvent(pState, pLevel, pPos, pId, pParam) || (be != null && be.triggerEvent(pId, pParam));
-    }
+	public CollectorBlock(Properties pProperties) {
+		super(pProperties);
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CollectorBlockEntity(pos, state);
-    }
+	@Override
+	public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
+		BlockEntity be = pLevel.getBlockEntity(pPos);
+		return super.triggerEvent(pState, pLevel, pPos, pId, pParam) || (be != null && be.triggerEvent(pId, pParam));
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.COLLECTOR.get() == entity && !level.isClientSide() ? CollectorBlockEntity::tick : null;
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new CollectorBlockEntity(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
+		return blockEntities.COLLECTOR.get() == entity && !level.isClientSide() ? CollectorBlockEntity::tick : null;
+	}
 
 }
