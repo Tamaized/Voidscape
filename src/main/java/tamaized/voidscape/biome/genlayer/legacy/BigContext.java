@@ -1,30 +1,30 @@
 package tamaized.voidscape.biome.genlayer.legacy;
 
 public interface BigContext<R extends Area> extends Context {
-	void initRandom(long p_76508_, long p_76509_);
+	void initRandom(long u, long v);
 
-	R createResult(PixelTransformer p_76510_);
+	R createResult(PixelTransformer transformer);
 
-	default R createResult(PixelTransformer p_76511_, R p_76512_) {
-		return this.createResult(p_76511_);
+	default R createResult(PixelTransformer transformer, R result) {
+		return this.createResult(transformer);
 	}
 
-	default R createResult(PixelTransformer p_76513_, R p_76514_, R p_76515_) {
-		return this.createResult(p_76513_);
+	default R createResult(PixelTransformer transformer, R resultA, R resultB) {
+		return this.createResult(transformer);
 	}
 
-	default int random(int p_76501_, int p_76502_) {
-		return this.nextRandom(2) == 0 ? p_76501_ : p_76502_;
+	default int random(int a, int b) {
+		return this.nextRandom(2) == 0 ? a : b;
 	}
 
-	default int random(int p_76504_, int p_76505_, int p_76506_, int p_76507_) {
+	default int random(int a, int b, int c, int d) {
 		int i = this.nextRandom(4);
 		if (i == 0) {
-			return p_76504_;
+			return a;
 		} else if (i == 1) {
-			return p_76505_;
+			return b;
 		} else {
-			return i == 2 ? p_76506_ : p_76507_;
+			return i == 2 ? c : d;
 		}
 	}
 }

@@ -6,7 +6,6 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
@@ -14,8 +13,8 @@ import java.util.Optional;
 public class ItemMatchesAdvancementTrigger extends SimpleCriterionTrigger<ItemMatchesAdvancementTrigger.Instance> {
 
 	private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-			ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(Instance::item)
+		EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+		ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(Instance::item)
 	).apply(instance, Instance::new));
 
 	@Override
