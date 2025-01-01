@@ -26,10 +26,8 @@ import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.block.AccessibleFungusBlock;
 import tamaized.voidscape.block.ThunderNyliumBlock;
 import tamaized.voidscape.registry.feature.ModConfiguredFeatures;
-import tamaized.voidscape.registry.feature.ModFeatures;
 import tamaized.voidscape.registry.ModItemProperties;
 
 import java.util.function.Supplier;
@@ -76,7 +74,7 @@ public class ThunderForestBiomeBlocks {
 			.pushReaction(PushReaction.DESTROY)
 	));
 
-	public final DeferredHolder<Block, Block> THUNDER_FUNGUS = REGISTRY.register("thunder_fungus", () -> new AccessibleFungusBlock(
+	public final DeferredHolder<Block, Block> THUNDER_FUNGUS = REGISTRY.register("thunder_fungus", () -> new FungusBlock(
 		configuredFeatures.THUNDER_FUNGUS,
 		THUNDER_NYLIUM.get(),
 		BlockBehaviour.Properties.of()
