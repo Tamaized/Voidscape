@@ -119,11 +119,11 @@ public class ModCreativeTabs {
 			output.accept(thunderForestBiomeBlocks.THUNDER_STAIRS_ITEM.get());
 			output.accept(thunderForestBiomeBlocks.THUNDER_SLAB_ITEM.get());
 			// Crops
-			output.accept(etherealFruitBlocks.ETHEREAL_FRUIT_VOID.get());
-			output.accept(etherealFruitBlocks.ETHEREAL_FRUIT_NULL.get());
-			output.accept(etherealFruitBlocks.ETHEREAL_FRUIT_OVERWORLD.get());
-			output.accept(etherealFruitBlocks.ETHEREAL_FRUIT_NETHER.get());
-			output.accept(etherealFruitBlocks.ETHEREAL_FRUIT_END.get());
+			output.accept(etherealFruitBlocks.VOID.get());
+			output.accept(etherealFruitBlocks.NULL.get());
+			output.accept(etherealFruitBlocks.OVERWORLD.get());
+			output.accept(etherealFruitBlocks.NETHER.get());
+			output.accept(etherealFruitBlocks.END.get());
 			output.accept(etherealFruitItems.ETHEREAL_FRUIT_VOID.get());
 			output.accept(etherealFruitItems.ETHEREAL_FRUIT_NULL.get());
 			output.accept(etherealFruitItems.ETHEREAL_FRUIT_OVERWORLD.get());

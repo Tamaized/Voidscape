@@ -1,48 +1,70 @@
 package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.ModDataAttachments;
-import tamaized.voidscape.registry.ModFluids;
+import tamaized.voidscape.registry.fluid.ModFluids;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DefuserBlockEntity extends BlockEntity {
 
-	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get());
+	@Autowired
+	private static ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private static ModBlockEntities blockEntities;
+
+	@Autowired
+	private static ModDataAttachments dataAttachments;
+
+	@Autowired
+	private static ModFluids modFluids;
+
+	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.DEFUSER.get(), (object, context) -> object.fluids);
+	}
+
+	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == modFluids.VOIDIC_SOURCE.get());
 
 	private int processTick;
 
 	public DefuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.DEFUSER.get(), pPos, pBlockState);
+		super(blockEntities.DEFUSER.get(), pPos, pBlockState);
 	}
 
 	@Override
-	public void load(CompoundTag pTag) {
-		super.load(pTag);
-		processTick = pTag.getInt("processTick");
-		fluids.readFromNBT(pTag.getCompound("tank"));
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		processTick = tag.getInt("processTick");
+		fluids.readFromNBT(registries, tag.getCompound("tank"));
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
-		super.saveAdditional(pTag);
-		pTag.putInt("processTick", processTick);
-		pTag.put("tank", fluids.writeToNBT(new CompoundTag()));
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putInt("processTick", processTick);
+		tag.put("tank", fluids.writeToNBT(registries, new CompoundTag()));
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -57,11 +79,11 @@ public class DefuserBlockEntity extends BlockEntity {
 			AtomicBoolean process = new AtomicBoolean(false);
 			AtomicBoolean particle = new AtomicBoolean(false);
 			level.getEntities(null, new AABB(blockPos).inflate(32D)).forEach(e -> {
-				Insanity data = e.getData(ModDataAttachments.INSANITY);
+				Insanity data = e.getData(dataAttachments.INSANITY);
 				if (data.getInfusion() > 0) {
 					data.decrementInfusion(1);
 					if (e instanceof ServerPlayer player)
-						ModAdvancementTriggers.DEFUSER_TRIGGER.get().trigger(player);
+						advancementTriggers.DEFUSER_TRIGGER.get().trigger(player);
 					process.set(true);
 					Vec3 dir = new Vec3(blockPos.getX() + 0.5D, blockPos.getY() - 0.5D, blockPos.getZ() + 0.5D).subtract(e.position()).normalize().scale(0.15D);
 					if (level.getRandom().nextInt(100) == 0) {
@@ -72,8 +94,8 @@ public class DefuserBlockEntity extends BlockEntity {
 			});
 			if (process.get()) {
 				entity.processTick--;
-				if (particle.get())
-					PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(blockPos)).send(packet);
+				if (particle.get() && level instanceof ServerLevel serverLevel)
+					PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(blockPos), packet);
 			}
 		}
 	}

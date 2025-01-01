@@ -2,6 +2,7 @@ package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,18 +14,34 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
-import tamaized.voidscape.registry.ModFluids;
+import tamaized.voidscape.registry.fluid.ModFluids;
 
 public class CoopBlockEntity extends BlockEntity {
+
+	@Autowired
+	private static ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private static ModBlockEntities blockEntities;
+
+	@Autowired
+	private static ModFluids modFluids;
+
+	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, blockEntities.COOP.get(), (object, context) -> object.items);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.COOP.get(), (object, context) -> object.fluids);
+	}
 
 	public final ItemStackHandler items = new ItemStackHandler(1) {
 		@Override
@@ -32,30 +49,30 @@ public class CoopBlockEntity extends BlockEntity {
 			return stack.is(Items.EGG);
 		}
 	};
-	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get());
+	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == modFluids.VOIDIC_SOURCE.get());
 
 	private final BlockPosDirectionCapabilityCacher<IItemHandler> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
 	private int processTick;
 
 	public CoopBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.COOP.get(), pPos, pBlockState);
+		super(blockEntities.COOP.get(), pPos, pBlockState);
 	}
 
 	@Override
-	public void load(CompoundTag pTag) {
-		super.load(pTag);
-		processTick = pTag.getInt("processTick");
-		items.deserializeNBT(pTag.getCompound("inventory"));
-		fluids.readFromNBT(pTag.getCompound("tank"));
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		processTick = tag.getInt("processTick");
+		items.deserializeNBT(registries, tag.getCompound("inventory"));
+		fluids.readFromNBT(registries, tag.getCompound("tank"));
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
-		super.saveAdditional(pTag);
-		pTag.putInt("processTick", processTick);
-		pTag.put("inventory", items.serializeNBT());
-		pTag.put("tank", fluids.writeToNBT(new CompoundTag()));
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putInt("processTick", processTick);
+		tag.put("inventory", items.serializeNBT(registries));
+		tag.put("tank", fluids.writeToNBT(registries, new CompoundTag()));
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -72,8 +89,8 @@ public class CoopBlockEntity extends BlockEntity {
 					entity.processTick = 200;
 				else {
 					level.getEntities((Entity) null, new AABB(blockPos).inflate(6D), e -> e instanceof ServerPlayer player && !player.isSpectator()).stream()
-							.map(ServerPlayer.class::cast)
-							.forEach(ModAdvancementTriggers.COOP_TRIGGER.get()::trigger);
+						.map(ServerPlayer.class::cast)
+						.forEach(advancementTriggers.COOP_TRIGGER.get()::trigger);
 				}
 			}
 		}

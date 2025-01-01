@@ -10,14 +10,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 public class WellBlockEntity extends BlockEntity {
+
+	@Autowired
+	private static ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private static ModBlockEntities blockEntities;
+
+	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.WELL.get(), (object, context) -> object.fluids);
+	}
 
 	public final FluidTank fluids = new FluidTank(Integer.MAX_VALUE, fluidStack -> fluidStack.getFluid() == Fluids.WATER);
 
@@ -26,7 +38,7 @@ public class WellBlockEntity extends BlockEntity {
 	private int tick;
 
 	public WellBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.WELL.get(), pPos, pBlockState);
+		super(blockEntities.WELL.get(), pPos, pBlockState);
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -48,7 +60,7 @@ public class WellBlockEntity extends BlockEntity {
 				level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
 						.filter(e -> e instanceof ServerPlayer)
 						.map(ServerPlayer.class::cast)
-						.forEach(ModAdvancementTriggers.WELL_TRIGGER.get()::trigger);
+						.forEach(advancementTriggers.WELL_TRIGGER.get()::trigger);
 			}
 		}
 	}

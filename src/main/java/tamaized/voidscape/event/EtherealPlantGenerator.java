@@ -36,14 +36,14 @@ public class EtherealPlantGenerator {
 					final int dist = 64;
 					final int rad = dist / 2;
 					BlockPos dest = player.blockPosition().offset(randomOffset(player, dist, rad), randomOffset(player, dist, rad), randomOffset(player, dist, rad));
-					if (level.getBlockState(dest).isAir() && etherealFruitBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(level, dest))
+					if (level.getBlockState(dest).isAir() && etherealFruitBlocks.VOID.get().defaultBlockState().canSurvive(level, dest))
 						level.setBlockAndUpdate(dest, switch (level.getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(ResourceLocation.withDefaultNamespace("")).getPath()) {
 							// TODO: Make this datapack friendly (maybe something like data/voidscape/ethereal_fruit_growths/ethereal_fruit_id.json {"replace": true/false, biomes: ["id"]})
-							default -> etherealFruitBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState();
-							case "null" -> etherealFruitBlocks.ETHEREAL_FRUIT_NULL.get().defaultBlockState();
-							case "overworld" -> etherealFruitBlocks.ETHEREAL_FRUIT_OVERWORLD.get().defaultBlockState();
-							case "nether" -> etherealFruitBlocks.ETHEREAL_FRUIT_NETHER.get().defaultBlockState();
-							case "end" -> etherealFruitBlocks.ETHEREAL_FRUIT_END.get().defaultBlockState();
+							default -> etherealFruitBlocks.VOID.get().defaultBlockState();
+							case "null" -> etherealFruitBlocks.NULL.get().defaultBlockState();
+							case "overworld" -> etherealFruitBlocks.OVERWORLD.get().defaultBlockState();
+							case "nether" -> etherealFruitBlocks.NETHER.get().defaultBlockState();
+							case "end" -> etherealFruitBlocks.END.get().defaultBlockState();
 						});
 				}
 			}

@@ -1,6 +1,7 @@
 package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -18,12 +19,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import tamaized.voidscape.Voidscape;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.block.EtherealFruitBlocks;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.registry.fluid.ModFluids;
+import tamaized.voidscape.util.LevelUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +37,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GerminatorBlockEntity extends BlockEntity {
 
-	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == ModFluids.VOIDIC_SOURCE.get());
+	@Autowired
+	private static ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private static ModBlockEntities blockEntities;
+
+	@Autowired
+	private static EtherealFruitBlocks etherealFruitBlocks;
+
+	@Autowired
+	private static FakePlayers fakePlayers;
+
+	@Autowired
+	private static ModFluids modFluids;
+
+	@Autowired
+	private static LevelUtil levelUtil;
+
+	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.GERMINATOR.get(), (object, context) -> object.fluids);
+	}
+
+	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == modFluids.VOIDIC_SOURCE.get());
 
 	private int processTick;
 
 	public GerminatorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.GERMINATOR.get(), pPos, pBlockState);
+		super(blockEntities.GERMINATOR.get(), pPos, pBlockState);
 	}
 
 	@Override
@@ -45,17 +73,17 @@ public class GerminatorBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public void load(CompoundTag pTag) {
-		super.load(pTag);
-		processTick = pTag.getInt("processTick");
-		fluids.readFromNBT(pTag.getCompound("tank"));
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		processTick = tag.getInt("processTick");
+		fluids.readFromNBT(registries, tag.getCompound("tank"));
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
-		super.saveAdditional(pTag);
-		pTag.putInt("processTick", processTick);
-		pTag.put("tank", fluids.writeToNBT(new CompoundTag()));
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putInt("processTick", processTick);
+		tag.put("tank", fluids.writeToNBT(registries, new CompoundTag()));
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -69,7 +97,7 @@ public class GerminatorBlockEntity extends BlockEntity {
 			entity.processTick--;
 			if (entity.processTick <= 0) {
 				AtomicInteger growths = new AtomicInteger(0);
-				boolean isVoid = Voidscape.checkForVoidDimension(level);
+				boolean isVoid = levelUtil.isInVoidDimension(level);
 				AABB aabb = new AABB(blockPos).inflate(4D);
 				List<BlockPos> list = new ArrayList<>();
 				int minX = Mth.floor(aabb.minX);
@@ -85,20 +113,20 @@ public class GerminatorBlockEntity extends BlockEntity {
 					BlockPos pos = getRandomBlockPos(list, level.getRandom(), minX, minY, minZ, maxX, maxY, maxZ);
 					list.remove(pos);
 					if (level.getBlockState(pos.above()).isAir()) {
-						if (isVoid && ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState().canSurvive(level, pos.above())) {
-							level.setBlockAndUpdate(pos.above(), switch (level.getBiome(pos.above()).unwrapKey().map(ResourceKey::location).orElse(new ResourceLocation("")).getPath()) {
-								default -> ModBlocks.ETHEREAL_FRUIT_VOID.get().defaultBlockState();
-								case "null" -> ModBlocks.ETHEREAL_FRUIT_NULL.get().defaultBlockState();
-								case "overworld" -> ModBlocks.ETHEREAL_FRUIT_OVERWORLD.get().defaultBlockState();
-								case "nether" -> ModBlocks.ETHEREAL_FRUIT_NETHER.get().defaultBlockState();
-								case "end" -> ModBlocks.ETHEREAL_FRUIT_END.get().defaultBlockState();
+						if (isVoid && etherealFruitBlocks.VOID.get().defaultBlockState().canSurvive(level, pos.above())) {
+							level.setBlockAndUpdate(pos.above(), switch (level.getBiome(pos.above()).unwrapKey().map(ResourceKey::location).orElse(ResourceLocation.withDefaultNamespace("")).getPath()) {
+								default -> etherealFruitBlocks.VOID.get().defaultBlockState();
+								case "null" -> etherealFruitBlocks.NULL.get().defaultBlockState();
+								case "overworld" -> etherealFruitBlocks.OVERWORLD.get().defaultBlockState();
+								case "nether" -> etherealFruitBlocks.NETHER.get().defaultBlockState();
+								case "end" -> etherealFruitBlocks.END.get().defaultBlockState();
 							});
 							level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
 							growths.incrementAndGet();
 							continue;
 						}
 						if (level instanceof ServerLevel serverLevel) {
-							if (BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), level, pos, FakePlayerFactory.get(serverLevel, Voidscape.FAKE_PLAYER))) {
+							if (BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), level, pos, FakePlayerFactory.get(serverLevel, fakePlayers.GERMINATOR))) {
 								serverLevel.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
 								growths.incrementAndGet();
 							}
@@ -109,7 +137,7 @@ public class GerminatorBlockEntity extends BlockEntity {
 					entity.processTick = 120;
 				} else {
 					level.getEntities(EntityTypeTest.forClass(ServerPlayer.class), aabb, EntitySelector.NO_SPECTATORS)
-							.forEach(ModAdvancementTriggers.GERMINATOR_TRIGGER.get()::trigger);
+							.forEach(advancementTriggers.GERMINATOR_TRIGGER.get()::trigger);
 				}
 			}
 		}

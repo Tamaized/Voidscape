@@ -27,7 +27,7 @@ public class EtherealFruitBlocks {
 	private final DeferredRegister<Block> REGISTRY = RegUtil.create(Registries.BLOCK);
 	private final DeferredRegister<Item> REGISTRY_ITEM = RegUtil.create(Registries.ITEM);
 
-	public final DeferredHolder<Block, Block> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealPlantBlock(Block.Properties.of()
+	public final DeferredHolder<Block, Block> VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealPlantBlock(Block.Properties.of()
 		.sound(SoundType.CROP)
 		.mapColor(MapColor.COLOR_PURPLE)
 		.noCollission()
@@ -35,12 +35,12 @@ public class EtherealFruitBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> ETHEREAL_FRUIT_VOID_ITEM = REGISTRY_ITEM.register(ETHEREAL_FRUIT_VOID.getId().getPath() + "_block", () -> new BlockItem(
-		ETHEREAL_FRUIT_VOID.get(),
+	public final Supplier<Item> VOID_ITEM = REGISTRY_ITEM.register(VOID.getId().getPath() + "_block", () -> new BlockItem(
+		VOID.get(),
 		itemProperties.DEFAULT.get()
 	));
 
-	public final DeferredHolder<Block, Block> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealPlantBlock(Block.Properties.of()
+	public final DeferredHolder<Block, Block> NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealPlantBlock(Block.Properties.of()
 		.sound(SoundType.CROP)
 		.mapColor(MapColor.COLOR_LIGHT_GRAY)
 		.noCollission()
@@ -48,12 +48,12 @@ public class EtherealFruitBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> ETHEREAL_FRUIT_NULL_ITEM = REGISTRY_ITEM.register(ETHEREAL_FRUIT_NULL.getId().getPath() + "_block", () -> new BlockItem(
-		ETHEREAL_FRUIT_NULL.get(),
+	public final Supplier<Item> NULL_ITEM = REGISTRY_ITEM.register(NULL.getId().getPath() + "_block", () -> new BlockItem(
+		NULL.get(),
 		itemProperties.DEFAULT.get()
 	));
 
-	public final DeferredHolder<Block, Block> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealPlantBlock(Block.Properties.of()
+	public final DeferredHolder<Block, Block> OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealPlantBlock(Block.Properties.of()
 		.sound(SoundType.CROP)
 		.mapColor(MapColor.COLOR_CYAN)
 		.noCollission()
@@ -61,13 +61,13 @@ public class EtherealFruitBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> ETHEREAL_FRUIT_OVERWORLD_ITEM = REGISTRY_ITEM
-		.register(ETHEREAL_FRUIT_OVERWORLD.getId().getPath() + "_block", () -> new BlockItem(
-			ETHEREAL_FRUIT_OVERWORLD.get(),
+	public final Supplier<Item> OVERWORLD_ITEM = REGISTRY_ITEM
+		.register(OVERWORLD.getId().getPath() + "_block", () -> new BlockItem(
+			OVERWORLD.get(),
 			itemProperties.DEFAULT.get()
 		));
 
-	public final DeferredHolder<Block, Block> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealPlantBlock(Block.Properties.of()
+	public final DeferredHolder<Block, Block> NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealPlantBlock(Block.Properties.of()
 		.sound(SoundType.CROP)
 		.mapColor(MapColor.COLOR_RED)
 		.noCollission()
@@ -75,13 +75,13 @@ public class EtherealFruitBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> ETHEREAL_FRUIT_NETHER_ITEM = REGISTRY_ITEM
-		.register(ETHEREAL_FRUIT_NETHER.getId().getPath() + "_block", () -> new BlockItem(
-			ETHEREAL_FRUIT_NETHER.get(),
+	public final Supplier<Item> NETHER_ITEM = REGISTRY_ITEM
+		.register(NETHER.getId().getPath() + "_block", () -> new BlockItem(
+			NETHER.get(),
 			itemProperties.DEFAULT.get()
 		));
 
-	public final DeferredHolder<Block, Block> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealPlantBlock(Block.Properties.of()
+	public final DeferredHolder<Block, Block> END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealPlantBlock(Block.Properties.of()
 		.sound(SoundType.CROP)
 		.mapColor(MapColor.COLOR_PINK)
 		.noCollission()
@@ -89,9 +89,9 @@ public class EtherealFruitBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> ETHEREAL_FRUIT_END_ITEM = REGISTRY_ITEM
-		.register(ETHEREAL_FRUIT_END.getId().getPath() + "_block", () -> new BlockItem(
-			ETHEREAL_FRUIT_END.get(),
+	public final Supplier<Item> END_ITEM = REGISTRY_ITEM
+		.register(END.getId().getPath() + "_block", () -> new BlockItem(
+			END.get(),
 			itemProperties.DEFAULT.get()
 		));
 

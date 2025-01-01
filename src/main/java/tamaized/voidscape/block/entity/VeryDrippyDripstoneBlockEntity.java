@@ -1,9 +1,12 @@
 package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
@@ -42,22 +46,25 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 		handle_method_AbstractCauldronBlock_receiveStalactiteDrip = tmp_handle_method_AbstractCauldronBlock_receiveStalactiteDrip;
 	}
 
+	@Autowired
+	private static ModBlockEntities blockEntities;
+
 	private int tick;
 
 	public VeryDrippyDripstoneBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.VERY_DRIPPY_DRIPSTONE.get(), pPos, pBlockState);
+		super(blockEntities.VERY_DRIPPY_DRIPSTONE.get(), pPos, pBlockState);
 	}
 
 	@Override
-	public void load(CompoundTag pTag) {
-		super.load(pTag);
-		tick = pTag.getInt("tick");
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		tick = tag.getInt("tick");
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
-		super.saveAdditional(pTag);
-		pTag.putInt("tick", tick);
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putInt("tick", tick);
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -69,7 +76,8 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 			if (!level.isOutsideBuildHeight(fluidPos) && !level.getBlockState(blockPos.above()).isAir()) {
 				BlockState fluidBlockState = level.getBlockState(fluidPos);
 				if (fluidBlockState.is(Blocks.MUD) && !level.dimensionType().ultraWarm()) {
-					spawnDripParticles(level, blockPos, blockState, Fluids.WATER);
+					if (level instanceof ServerLevel serverLevel)
+						spawnDripParticles(serverLevel, blockPos, blockState, Fluids.WATER);
 					if (level.random.nextInt(4) == 0) {
 						BlockState clay = Blocks.CLAY.defaultBlockState();
 						level.setBlockAndUpdate(fluidPos, clay);
@@ -80,7 +88,8 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 					FluidState fluidState = level.getFluidState(fluidPos);
 					if (!fluidState.isEmpty()) {
 						Fluid fluid = fluidState.getType();
-						spawnDripParticles(level, blockPos, blockState, fluid);
+						if (level instanceof ServerLevel serverLevel)
+							spawnDripParticles(serverLevel, blockPos, blockState, fluid);
 						if (handle_method_AbstractCauldronBlock_receiveStalactiteDrip != null && level.random.nextInt(4) == 0) {
 							for (int i = 1; i <= 11; i++) {
 								BlockPos cauldronPos = blockPos.below(i);
@@ -107,7 +116,7 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 		}
 	}
 
-	private static void spawnDripParticles(Level level, BlockPos pos, BlockState state, Fluid fluid) {
+	private static void spawnDripParticles(ServerLevel level, BlockPos pos, BlockState state, Fluid fluid) {
 		Vec3 vec3 = state.getOffset(level, pos);
 		ClientPacketSendParticles packet = new ClientPacketSendParticles();
 		double d1 = (double) pos.getX() + 0.5 + vec3.x;
@@ -116,7 +125,7 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 		ParticleOptions particleoptions = fluid.getFluidType().getDripInfo() != null ? fluid.getFluidType().getDripInfo().dripParticle() : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
 		if (particleoptions != null)
 			packet.queueParticle(particleoptions, false, d1, d2, d3, 0, 0, 0);
-		PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(pos)).send(packet);
+		PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(pos), packet);
 	}
 
 }

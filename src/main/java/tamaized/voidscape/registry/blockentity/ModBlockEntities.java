@@ -75,24 +75,22 @@ public class ModBlockEntities {
 		functionalBlocks.VERY_DRIPPY_DRIPSTONE.get()
 	));
 
-	@PostConstruct // TODO: can we make each block entity class register themselves?
+	@PostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
-			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LIQUIFIER.get(), (object, context) -> object.items);
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, LIQUIFIER.get(), (object, context) -> object.fluids);
+			LiquifierBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DEFUSER.get(), (object, context) -> object.fluids);
+			DefuserBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, GERMINATOR.get(), (object, context) -> object.fluids);
+			GerminatorBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WELL.get(), (object, context) -> object.fluids);
+			WellBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COOP.get(), (object, context) -> object.items);
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COOP.get(), (object, context) -> object.fluids);
+			CoopBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, HATCHERY.get(), (object, context) -> object.fluids);
+			HatcheryBlockEntity.registerCaps(event);
 
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, INFUSER.get(), (object, context) -> object.fluids);
+			InfuserBlockEntity.registerCaps(event);
 
 			CollectorBlockEntity.registerCaps(event);
 		});

@@ -34,18 +34,17 @@ import tamaized.voidscape.registry.fluid.ModFluids;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
 public class CollectorBlockEntity extends BlockEntity {
 
 	@Autowired
-	private static ModFluids modFluids;
+	private static ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
 	private static ModBlockEntities blockEntities;
 
 	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+	private static ModFluids modFluids;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.COLLECTOR.get(), (object, context) -> object.fluids);

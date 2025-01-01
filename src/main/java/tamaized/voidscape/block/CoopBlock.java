@@ -12,11 +12,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.CoopBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class CoopBlock extends Block implements EntityBlock {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
 	public CoopBlock(Properties pProperties) {
 		super(pProperties);
@@ -52,7 +58,7 @@ public class CoopBlock extends Block implements EntityBlock {
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return ModBlockEntities.COOP.get() == entity && !level.isClientSide() ? CoopBlockEntity::tick : null;
+		return blockEntities.COOP.get() == entity && !level.isClientSide() ? CoopBlockEntity::tick : null;
 	}
 
 }
