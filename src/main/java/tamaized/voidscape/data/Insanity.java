@@ -24,6 +24,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
@@ -33,10 +34,15 @@ import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidPortalTeleporter;
 import tamaized.voidscape.dimension.VoidTeleporter;
+import tamaized.voidscape.util.LevelUtil;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {
+
+	@Autowired
+	private static LevelUtil levelUtil;
 
 	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
 	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
@@ -100,11 +106,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 				}
 				teleportTick = Mth.clamp(teleportTick, 0, 200);
 				if (!pleaseLeavePortal && teleportTick >= 200) {
-					if (Voidscape.checkForVoidDimension(parent.level())) {
-						Voidscape.getLevel(parent.level(), Level.OVERWORLD).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
-					} else {
-						Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidPortalTeleporter.INSTANCE));
-					}
+					levelUtil.getDimensionForTeleport(parent.level()).ifPresent(destLevel -> parent.changeDimension(destLevel, VoidPortalTeleporter.INSTANCE));
 				}
 			} else {
 				pleaseLeavePortal = false;

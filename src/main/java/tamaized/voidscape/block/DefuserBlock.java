@@ -9,11 +9,17 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.DefuserBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class DefuserBlock extends Block implements EntityBlock {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
     public DefuserBlock(Properties pProperties) {
         super(pProperties);
@@ -35,7 +41,7 @@ public class DefuserBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.DEFUSER.get() == entity && !level.isClientSide() ? DefuserBlockEntity::tick : null;
+        return blockEntities.DEFUSER.get() == entity && !level.isClientSide() ? DefuserBlockEntity::tick : null;
     }
 
 }

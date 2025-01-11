@@ -13,9 +13,16 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
+import tamaized.voidscape.registry.feature.ModConfiguredFeatures;
 import tamaized.voidscape.registry.feature.ModFeatures;
 
+@Configurable
 public class ThunderNyliumBlock extends Block implements BonemealableBlock {
+
+	@Autowired
+	private ModConfiguredFeatures configuredFeatures;
 
     public ThunderNyliumBlock(Properties pProperties) {
         super(pProperties);
@@ -36,7 +43,7 @@ public class ThunderNyliumBlock extends Block implements BonemealableBlock {
         BlockPos blockpos = pPos.above();
         ChunkGenerator chunkgenerator = pLevel.getChunkSource().getGenerator();
         Registry<ConfiguredFeature<?, ?>> registry = pLevel.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-        this.place(registry, ModFeatures.THUNDER_FOREST_VEGETATION_BONEMEAL, pLevel, chunkgenerator, pRandom, blockpos); // TODO
+        this.place(registry, configuredFeatures.THUNDER_FOREST_VEGETATION_BONEMEAL, pLevel, chunkgenerator, pRandom, blockpos); // TODO
 
     }
 

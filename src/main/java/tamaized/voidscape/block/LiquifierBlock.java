@@ -18,14 +18,27 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.LiquifierBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
-import tamaized.voidscape.registry.ModFluids;
+import tamaized.voidscape.registry.fluid.ModFluidBuckets;
+import tamaized.voidscape.registry.fluid.ModFluids;
 
 import java.util.Optional;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private ModFluids fluids;
+
+	@Autowired
+	private ModFluidBuckets buckets;
 
 	public LiquifierBlock(Properties pProperties) {
 		super(pProperties);
@@ -61,7 +74,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return ModBlockEntities.LIQUIFIER.get() == entity && !level.isClientSide() ? LiquifierBlockEntity::tick : null;
+		return blockEntities.LIQUIFIER.get() == entity && !level.isClientSide() ? LiquifierBlockEntity::tick : null;
 	}
 
 	@Override
@@ -69,14 +82,14 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 		BlockEntity be = level.getBlockEntity(pos);
 		if (be instanceof LiquifierBlockEntity entity && entity.fluids.getFluidAmount() >= 1000) {
 			entity.fluids.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-			return new ItemStack(ModFluids.CircularReferenceHandler.VOIDIC_BUCKET.get());
+			return new ItemStack(buckets.VOIDIC.get());
 		}
 		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public Optional<SoundEvent> getPickupSound() {
-		return ModFluids.VOIDIC_SOURCE.get().getPickupSound();
+		return fluids.VOIDIC_SOURCE.get().getPickupSound();
 	}
 
 }

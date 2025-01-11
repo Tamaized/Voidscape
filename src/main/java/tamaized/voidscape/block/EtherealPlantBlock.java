@@ -1,12 +1,8 @@
 package tamaized.voidscape.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -14,17 +10,19 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-import tamaized.voidscape.registry.ModBlocks;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
+import tamaized.voidscape.registry.block.NullBiomeBlocks;
 
-import java.util.List;
-
-@SuppressWarnings("deprecation")
+@Configurable
 public class EtherealPlantBlock extends BushBlock {
 
 	public static final MapCodec<EtherealPlantBlock> CODEC = simpleCodec(EtherealPlantBlock::new);
 
 	private static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
+
+	@Autowired
+	private NullBiomeBlocks nullBiomeBlocks;
 
 	public EtherealPlantBlock(Properties prop) {
 		super(prop);
@@ -47,6 +45,6 @@ public class EtherealPlantBlock extends BushBlock {
 				state.is(BlockTags.BASE_STONE_NETHER) ||
 				state.is(BlockTags.NYLIUM) ||
 				state.is(Blocks.END_STONE) ||
-				state.is(ModBlocks.NULL_BLACK.get());
+				state.is(nullBiomeBlocks.NULL_BLACK.get());
 	}
 }

@@ -25,13 +25,19 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.VeryDrippyDripstoneBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fallable {
 
 	private static final VoxelShape TIP_SHAPE_DOWN = Block.box(5.0, 5.0, 5.0, 11.0, 16.0, 11.0);
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
 	public VeryDrippyDripstoneBlock(Properties pProperties) {
 		super(pProperties);
@@ -53,7 +59,7 @@ public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fall
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return ModBlockEntities.VERY_DRIPPY_DRIPSTONE.get() == entity && !level.isClientSide() ? VeryDrippyDripstoneBlockEntity::tick : null;
+		return blockEntities.VERY_DRIPPY_DRIPSTONE.get() == entity && !level.isClientSide() ? VeryDrippyDripstoneBlockEntity::tick : null;
 	}
 
 	@Override
@@ -111,7 +117,7 @@ public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fall
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
+	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
 		return false;
 	}
 

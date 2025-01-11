@@ -9,11 +9,17 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.HatcheryBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class HatcheryBlock extends Block implements EntityBlock {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
 	public HatcheryBlock(Properties pProperties) {
 		super(pProperties);
@@ -35,7 +41,7 @@ public class HatcheryBlock extends Block implements EntityBlock {
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return ModBlockEntities.HATCHERY.get() == entity && !level.isClientSide() ? HatcheryBlockEntity::tick : null;
+		return blockEntities.HATCHERY.get() == entity && !level.isClientSide() ? HatcheryBlockEntity::tick : null;
 	}
 
 }

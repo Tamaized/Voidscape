@@ -16,13 +16,19 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.WellBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 import java.util.Optional;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class WellBlock extends Block implements EntityBlock, BucketPickup {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
     public WellBlock(Properties pProperties) {
         super(pProperties);
@@ -44,7 +50,7 @@ public class WellBlock extends Block implements EntityBlock, BucketPickup {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.WELL.get() == entity && !level.isClientSide() ? WellBlockEntity::tick : null;
+        return blockEntities.WELL.get() == entity && !level.isClientSide() ? WellBlockEntity::tick : null;
     }
 
 	@Override

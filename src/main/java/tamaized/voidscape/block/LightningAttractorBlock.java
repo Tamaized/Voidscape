@@ -19,7 +19,7 @@ public class LightningAttractorBlock<T extends LightningBolt> extends Block {
 	private final Supplier<EntityType<T>> entityType;
 	private final Function<Vec3, Vec3> positionModifier;
 	@Nullable
-	private Supplier<BlockState> to;
+	private final Supplier<BlockState> to;
 
 	private LightningAttractorBlock(Supplier<EntityType<T>> entityType, Function<Vec3, Vec3> positionModifier, @Nullable Supplier<BlockState> to, Properties properties) {
 		super(properties);

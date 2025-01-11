@@ -9,11 +9,17 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.GerminatorBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
 @SuppressWarnings("deprecation")
+@Configurable
 public class GerminatorBlock extends Block implements EntityBlock {
+
+	@Autowired
+	private ModBlockEntities blockEntities;
 
     public GerminatorBlock(Properties pProperties) {
         super(pProperties);
@@ -35,7 +41,7 @@ public class GerminatorBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return ModBlockEntities.GERMINATOR.get() == entity && !level.isClientSide() ? GerminatorBlockEntity::tick : null;
+        return blockEntities.GERMINATOR.get() == entity && !level.isClientSide() ? GerminatorBlockEntity::tick : null;
     }
 
 }
