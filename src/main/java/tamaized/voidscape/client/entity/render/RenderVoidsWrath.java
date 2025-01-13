@@ -19,7 +19,7 @@ import tamaized.voidscape.registry.ModEntities;
 
 public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/voidswrath.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");
 
 	public RenderVoidsWrath(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.VOIDS_WRATH)), 0F);
@@ -45,7 +45,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 
 	private class OverlayLayer extends EyesLayer<T, ModelVoidsWrath<T>> {
 
-		private static final RenderType OVERLAY = RenderType.eyes(new ResourceLocation(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
+		private static final RenderType OVERLAY = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
 
 		public OverlayLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_117346_) {
 			super(p_117346_);
@@ -58,7 +58,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 	}
 
 	private class PowerLayer extends EnergySwirlLayer<T, ModelVoidsWrath<T>> {
-		private static final ResourceLocation POWER_LOCATION = new ResourceLocation(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
+		private static final ResourceLocation POWER_LOCATION = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
 		private final ModelVoidsWrath<T> model;
 
 		public PowerLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_174471_, EntityModelSet p_174472_) {

@@ -19,7 +19,7 @@ import tamaized.voidscape.registry.ModEntities;
 
 public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>> extends LivingEntityRenderer<T, M> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/voidling.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");
 
 	public RenderVoidling(EntityRendererProvider.Context rendererManager, M model) {
 		super(rendererManager, model, 0F);

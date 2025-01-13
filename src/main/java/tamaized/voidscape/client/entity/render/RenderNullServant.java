@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
 import tamaized.voidscape.entity.NullServantEntity;
@@ -20,14 +21,10 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 
 	private static class ColorHack {
 		private boolean eyes = false;
-		private float red = 1F;
-		private float green = 1F;
-		private float blue = 1F;
+		private int color = 0xFFFFFF;
 
 		void reset() {
-			red = 1F;
-			green = 1F;
-			blue = 1F;
+			color = 0xFFFFFF;
 		}
 	}
 
@@ -36,8 +33,8 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 	public RenderNullServant(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelNullServant<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.NULL_SERVANT)) {
 			@Override
-			public void renderToBuffer(PoseStack stack, VertexConsumer buffer, int p_103113_, int p_103114_, float r, float g, float b, float a) {
-				super.renderToBuffer(stack, buffer, p_103113_, p_103114_, COLOR_STATE.eyes ? r : COLOR_STATE.red, COLOR_STATE.eyes ? g : COLOR_STATE.green, COLOR_STATE.eyes ? b : COLOR_STATE.blue, a);
+			public void renderToBuffer(PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+				super.renderToBuffer(stack, buffer, packedLight, packedOverlay, COLOR_STATE.eyes ? FastColor.ARGB32.color(FastColor.ARGB32.alpha(color), COLOR_STATE.color) : color);
 			}
 		}, 0F);
 		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));
@@ -53,17 +50,11 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 	public void render(T entity, float yaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 		COLOR_STATE.eyes = false;
 		if (entity.getAugment() == NullServantEntity.AUGMENT_TITANITE) {
-			COLOR_STATE.red = 0F;
-			COLOR_STATE.green = 1F;
-			COLOR_STATE.blue = 0F;
+			COLOR_STATE.color = 0x00FF00;
 		} else if (entity.getAugment() == NullServantEntity.AUGMENT_ICHOR) {
-			COLOR_STATE.red = 1F;
-			COLOR_STATE.green = 0.5F;
-			COLOR_STATE.blue = 0F;
+			COLOR_STATE.color = 0xFF7F00;
 		} else if (entity.getAugment() == NullServantEntity.AUGMENT_ASTRAL) {
-			COLOR_STATE.red = 1F;
-			COLOR_STATE.green = 0.7F;
-			COLOR_STATE.blue = 0.8F;
+			COLOR_STATE.color = 0xFFB2CC;
 		} else {
 			COLOR_STATE.reset();
 		}
@@ -77,7 +68,7 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 
 	private class EyeLayer extends EyesLayer<T, ModelNullServant<T>> {
 
-		private static final RenderType EYES = RenderType.eyes(new ResourceLocation(Voidscape.MODID, "textures/entity/nullservant.png"));
+		private static final RenderType EYES = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/nullservant.png"));
 
 		public EyeLayer(RenderLayerParent<T, ModelNullServant<T>> p_117346_) {
 			super(p_117346_);

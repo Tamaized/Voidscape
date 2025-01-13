@@ -15,8 +15,8 @@ import tamaized.voidscape.registry.ModEntities;
 
 public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelCorruptedPawn<T>> extends LivingEntityRenderer<T, M> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Voidscape.MODID, "textures/entity/corruptedpawn.png");
-	private static final RenderType OVERLAY = RenderType.eyes(new ResourceLocation(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");
+	private static final RenderType OVERLAY = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
 
 	public RenderCorruptedPawn(EntityRendererProvider.Context rendererManager, M model) {
 		super(rendererManager, model, 0F);

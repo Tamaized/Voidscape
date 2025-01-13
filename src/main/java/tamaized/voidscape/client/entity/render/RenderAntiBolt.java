@@ -11,8 +11,8 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import org.joml.Matrix4f;
 import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.entity.AntiBoltEntity;
@@ -115,14 +115,14 @@ public class RenderAntiBolt extends EntityRenderer<AntiBoltEntity> {
 	}
 
 	private static void quad(Matrix4f p_229116_0_, VertexConsumer p_229116_1_, float p_229116_2_, float p_229116_3_, int p_229116_4_, float p_229116_5_, float p_229116_6_, float p_229116_7_, float p_229116_8_, float p_229116_9_, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
-		p_229116_1_.vertex(p_229116_0_, p_229116_2_ + (p_229116_12_ ? p_229116_11_ : -p_229116_11_), (float) (p_229116_4_ * -16), p_229116_3_ + (p_229116_13_ ? p_229116_11_ : -p_229116_11_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
-		p_229116_1_.vertex(p_229116_0_, p_229116_5_ + (p_229116_12_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_13_ ? p_229116_10_ : -p_229116_10_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
-		p_229116_1_.vertex(p_229116_0_, p_229116_5_ + (p_229116_14_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_15_ ? p_229116_10_ : -p_229116_10_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
-		p_229116_1_.vertex(p_229116_0_, p_229116_2_ + (p_229116_14_ ? p_229116_11_ : -p_229116_11_), (float) (p_229116_4_ * -16), p_229116_3_ + (p_229116_15_ ? p_229116_11_ : -p_229116_11_)).color(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F).endVertex();
+		p_229116_1_.addVertex(p_229116_0_, p_229116_2_ + (p_229116_12_ ? p_229116_11_ : -p_229116_11_), (float) (p_229116_4_ * -16), p_229116_3_ + (p_229116_13_ ? p_229116_11_ : -p_229116_11_)).setColor(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F);
+		p_229116_1_.addVertex(p_229116_0_, p_229116_5_ + (p_229116_12_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_13_ ? p_229116_10_ : -p_229116_10_)).setColor(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F);
+		p_229116_1_.addVertex(p_229116_0_, p_229116_5_ + (p_229116_14_ ? p_229116_10_ : -p_229116_10_), (float) ((p_229116_4_ + 1) * -16), p_229116_6_ + (p_229116_15_ ? p_229116_10_ : -p_229116_10_)).setColor(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F);
+		p_229116_1_.addVertex(p_229116_0_, p_229116_2_ + (p_229116_14_ ? p_229116_11_ : -p_229116_11_), (float) (p_229116_4_ * -16), p_229116_3_ + (p_229116_15_ ? p_229116_11_ : -p_229116_11_)).setColor(p_229116_7_, p_229116_8_, p_229116_9_, 0.3F);
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(AntiBoltEntity p_110775_1_) {
-		return TextureAtlas.LOCATION_BLOCKS;
+		return InventoryMenu.BLOCK_ATLAS;
 	}
 }
