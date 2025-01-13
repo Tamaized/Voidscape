@@ -50,7 +50,7 @@ public class ModDimensions {
 
 				@Override
 				public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
-					voidSkyRenderer.render(ticks, partialTick, modelViewMatrix, level, Minecraft.getInstance());
+					voidSkyRenderer.render();
 					return true;
 				}
 			});

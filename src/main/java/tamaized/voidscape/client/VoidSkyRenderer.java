@@ -3,65 +3,63 @@ package tamaized.voidscape.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
-import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.client.shader.Shaders;
 
 @Component
 public class VoidSkyRenderer {
 
-	public void render(int ticks, float partialTicks, Matrix4f matrix, ClientLevel world, Minecraft mc) {
+	@Autowired
+	private Shaders shaders;
 
-		BufferBuilder vertexbuffer = Tesselator.getInstance().getBuilder();
-		vertexbuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+	public void render() {
 
-		double diameter = 200.0D;
-		double radius = diameter / 2D;
+		BufferBuilder vertexbuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
-		double x = -radius;
-		double y = -radius;
-		double z = -radius;
+		float diameter = 200.0F;
+		float radius = diameter / 2F;
 
-		vertexbuffer.vertex(x, y, z).endVertex();
-		vertexbuffer.vertex(x + diameter, y, z).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z).endVertex();
-		vertexbuffer.vertex(x, y + diameter, z).endVertex();
+		float x = -radius;
+		float y = -radius;
+		float z = -radius;
 
-		vertexbuffer.vertex(x, y + diameter, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y, z + diameter).endVertex();
-		vertexbuffer.vertex(x, y, z + diameter).endVertex();
+		vertexbuffer.addVertex(x, y, z);
+		vertexbuffer.addVertex(x + diameter, y, z);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z);
+		vertexbuffer.addVertex(x, y + diameter, z);
 
-		vertexbuffer.vertex(x, y + diameter, z).endVertex();
-		vertexbuffer.vertex(x, y + diameter, z + diameter).endVertex();
-		vertexbuffer.vertex(x, y, z + diameter).endVertex();
-		vertexbuffer.vertex(x, y, z).endVertex();
+		vertexbuffer.addVertex(x, y + diameter, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y, z + diameter);
+		vertexbuffer.addVertex(x, y, z + diameter);
 
-		vertexbuffer.vertex(x + diameter, y, z).endVertex();
-		vertexbuffer.vertex(x + diameter, y, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z).endVertex();
+		vertexbuffer.addVertex(x, y + diameter, z);
+		vertexbuffer.addVertex(x, y + diameter, z + diameter);
+		vertexbuffer.addVertex(x, y, z + diameter);
+		vertexbuffer.addVertex(x, y, z);
 
-		vertexbuffer.vertex(x, y + diameter, z).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z).endVertex();
-		vertexbuffer.vertex(x + diameter, y + diameter, z + diameter).endVertex();
-		vertexbuffer.vertex(x, y + diameter, z + diameter).endVertex();
+		vertexbuffer.addVertex(x + diameter, y, z);
+		vertexbuffer.addVertex(x + diameter, y, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z);
 
-		vertexbuffer.vertex(x, y, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y, z + diameter).endVertex();
-		vertexbuffer.vertex(x + diameter, y, z).endVertex();
-		vertexbuffer.vertex(x, y, z).endVertex();
+		vertexbuffer.addVertex(x, y + diameter, z);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z);
+		vertexbuffer.addVertex(x + diameter, y + diameter, z + diameter);
+		vertexbuffer.addVertex(x, y + diameter, z + diameter);
+
+		vertexbuffer.addVertex(x, y, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y, z + diameter);
+		vertexbuffer.addVertex(x + diameter, y, z);
+		vertexbuffer.addVertex(x, y, z);
 
 		RenderSystem.setShaderTexture(0, TheEndPortalRenderer.END_SKY_LOCATION);
 		RenderSystem.setShaderTexture(1, TheEndPortalRenderer.END_PORTAL_LOCATION);
-		Shaders.VOIDSKY.invokeThenEndTesselator();
+		shaders.VOIDSKY.invokeThenUpload(vertexbuffer);
 	}
 
 }
