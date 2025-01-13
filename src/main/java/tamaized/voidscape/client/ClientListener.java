@@ -39,16 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		busForge.addListener(ViewportEvent.ComputeFogColor.class, event -> {
-			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
-				event.setRed(0.04F);
-				event.setGreen(0.03F);
-				event.setBlue(0.05F);
-				if (Minecraft.getInstance().player != null)
-					event.setRed(Mth.clamp(Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY).getParanoia() / 1200F, 0.04F, 1F));
-			}
-		});
-
 		busForge.addListener(ComputeFovModifierEvent.class, event -> {
 			ItemStack itemstack = event.getPlayer().getUseItem();
 			if (event.getPlayer().isUsingItem()) {
