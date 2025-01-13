@@ -1,14 +1,19 @@
 package tamaized.voidscape.config.client;
 
+import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.config.ConfigUtil;
+import tamaized.voidscape.network.DonatorHandler;
+import tamaized.voidscape.network.server.ServerPacketDonatorSettings;
 
 @Component
 public class DonatorSettings {
@@ -16,29 +21,41 @@ public class DonatorSettings {
 	@Autowired("donatorSettings")
 	private ConfigUtil configUtil;
 
+	@Autowired
+	private DonatorHandler donatorHandler;
+
 	public ModConfigSpec.BooleanValue enable;
 	public ModConfigSpec.IntValue color;
 
 	private boolean dirty;
 
 	@PostConstruct
-	private void postConstruct(IEventBus modBus) {
+	private void postConstruct(IEventBus modBus, IEventBus forgeBus) {
 		modBus.addListener(ModConfigEvent.Reloading.class, event -> {
 			if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getModId().equals(Voidscape.MODID)) {
 				markDirty();
 			}
 		});
+		forgeBus.addListener(ClientTickEvent.Pre.class, event -> {
+			if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
+				markDirty();
+			else if (isDirty()) {
+				unmarkDirty();
+				if (donatorHandler.isDonator(Minecraft.getInstance().player.getUUID()))
+					PacketDistributor.sendToServer(new ServerPacketDonatorSettings(new DonatorHandler.Settings(enable.get(), color.get())));
+			}
+		});
 	}
 
-	public boolean isDirty() {
+	private boolean isDirty() {
 		return dirty;
 	}
 
-	public void markDirty() {
+	private void markDirty() {
 		dirty = true;
 	}
 
-	public void unmarkDirty() {
+	private void unmarkDirty() {
 		dirty = false;
 	}
 

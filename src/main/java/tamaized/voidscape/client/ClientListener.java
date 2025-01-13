@@ -39,19 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		busForge.addListener(TickEvent.ClientTickEvent.class, event -> {
-			RenderTurmoil.tick(event);
-			if (event.phase == TickEvent.Phase.START) {
-				if (Minecraft.getInstance().level == null || Minecraft.getInstance().player == null)
-					Config.CLIENT_CONFIG.DONATOR.dirty = true;
-				else if (Config.CLIENT_CONFIG.DONATOR.dirty) {
-					Config.CLIENT_CONFIG.DONATOR.dirty = false;
-					if (DonatorHandler.donators.contains(Minecraft.getInstance().player.getUUID()))
-						PacketDistributor.SERVER.noArg().send(new ServerPacketHandlerDonatorSettings(new DonatorHandler.DonatorSettings(Config.CLIENT_CONFIG.DONATOR.enabled.get(), Config.CLIENT_CONFIG.DONATOR.color.get())));
-				}
-			}
-		});
-
 		busForge.addListener(ViewportEvent.ComputeFogColor.class, event -> {
 			if (Minecraft.getInstance().level != null && Voidscape.checkForVoidDimension(Minecraft.getInstance().level)) {
 				event.setRed(0.04F);
