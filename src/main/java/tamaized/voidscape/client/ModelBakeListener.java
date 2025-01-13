@@ -4,220 +4,267 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
+import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
+import tamaized.regutil.item.BreakableHelper;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmors;
 import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.armor.set.*;
+import tamaized.voidscape.registry.tool.set.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Voidscape.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Component
 public class ModelBakeListener {
 
-	private static final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
+	@Autowired
+	private VoidicCrystalToolSet voidicCrystalToolSet;
 
-	@SubscribeEvent
-	public static void modelBake(ModelEvent.ModifyBakingResult event) {
+	@Autowired
+	private VoidicCrystalArmorSet voidicCrystalArmorSet;
+
+	@Autowired
+	private CharredToolSet charredToolSet;
+
+	@Autowired
+	private CorruptToolSet corruptToolSet;
+
+	@Autowired
+	private CorruptArmorSet corruptArmorSet;
+
+	@Autowired
+	private TitaniteToolSet titaniteToolSet;
+
+	@Autowired
+	private TitaniteArmorSet titaniteArmorSet;
+
+	@Autowired
+	private IchorToolSet ichorToolSet;
+
+	@Autowired
+	private IchorArmorSet ichorArmorSet;
+
+	@Autowired
+	private AstralToolSet astralToolSet;
+
+	@Autowired
+	private AstralArmorSet astralArmorSet;
+
+	private final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
+
+	@PostConstruct
+	private void setup(IEventBus bus) {
+		bus.addListener(this::modelBake);
+	}
+
+	private void modelBake(ModelEvent.ModifyBakingResult event) {
 		// Broken Variants
-		impBroken(ModTools.VOIDIC_CRYSTAL_SWORD.get());
-		impBroken(ModTools.VOIDIC_CRYSTAL_AXE.get());
-		impBroken(ModTools.VOIDIC_CRYSTAL_BOW.get());
-		impBroken(ModTools.VOIDIC_CRYSTAL_XBOW.get());
-		impBroken(ModTools.VOIDIC_CRYSTAL_PICKAXE.get());
-		impBroken(ModArmors.VOIDIC_CRYSTAL_HELMET.get());
-		impBroken(ModArmors.VOIDIC_CRYSTAL_CHEST.get());
-		impBroken(ModArmors.VOIDIC_CRYSTAL_LEGS.get());
-		impBroken(ModArmors.VOIDIC_CRYSTAL_BOOTS.get());
+		impBroken(voidicCrystalToolSet.VOIDIC_CRYSTAL_SWORD.get());
+		impBroken(voidicCrystalToolSet.VOIDIC_CRYSTAL_AXE.get());
+		impBroken(voidicCrystalToolSet.VOIDIC_CRYSTAL_BOW.get());
+		impBroken(voidicCrystalToolSet.VOIDIC_CRYSTAL_XBOW.get());
+		impBroken(voidicCrystalToolSet.VOIDIC_CRYSTAL_PICKAXE.get());
+		impBroken(voidicCrystalArmorSet.VOIDIC_CRYSTAL_HELMET.get());
+		impBroken(voidicCrystalArmorSet.VOIDIC_CRYSTAL_CHEST.get());
+		impBroken(voidicCrystalArmorSet.VOIDIC_CRYSTAL_LEGS.get());
+		impBroken(voidicCrystalArmorSet.VOIDIC_CRYSTAL_BOOTS.get());
 
-		impBroken(ModTools.CHARRED_WARHAMMER.get());
+		impBroken(charredToolSet.CHARRED_WARHAMMER.get());
 
-		impBroken(ModTools.CORRUPT_SWORD.get());
-		impBroken(ModTools.CORRUPT_AXE.get());
-		impBroken(ModTools.CORRUPT_BOW.get());
-		impBroken(ModTools.CORRUPT_XBOW.get());
-		impBroken(ModArmors.CORRUPT_HELMET.get());
-		impBroken(ModArmors.CORRUPT_CHEST.get());
-		impBroken(ModArmors.CORRUPT_LEGS.get());
-		impBroken(ModArmors.CORRUPT_BOOTS.get());
+		impBroken(corruptToolSet.CORRUPT_SWORD.get());
+		impBroken(corruptToolSet.CORRUPT_AXE.get());
+		impBroken(corruptToolSet.CORRUPT_BOW.get());
+		impBroken(corruptToolSet.CORRUPT_XBOW.get());
+		impBroken(corruptArmorSet.CORRUPT_HELMET.get());
+		impBroken(corruptArmorSet.CORRUPT_CHEST.get());
+		impBroken(corruptArmorSet.CORRUPT_LEGS.get());
+		impBroken(corruptArmorSet.CORRUPT_BOOTS.get());
 
-		impBroken(ModTools.TITANITE_SWORD.get());
-		impBroken(ModTools.TITANITE_AXE.get());
-		impBroken(ModTools.TITANITE_PICKAXE.get());
-		impBroken(ModTools.TITANITE_HOE.get());
-		impBroken(ModTools.TITANITE_BOW.get());
-		impBroken(ModTools.TITANITE_XBOW.get());
-		impBroken(ModArmors.TITANITE_HELMET.get());
-		impBroken(ModArmors.TITANITE_CHEST.get());
-		impBroken(ModArmors.TITANITE_LEGS.get());
-		impBroken(ModArmors.TITANITE_BOOTS.get());
+		impBroken(titaniteToolSet.TITANITE_SWORD.get());
+		impBroken(titaniteToolSet.TITANITE_AXE.get());
+		impBroken(titaniteToolSet.TITANITE_PICKAXE.get());
+		impBroken(titaniteToolSet.TITANITE_HOE.get());
+		impBroken(titaniteToolSet.TITANITE_BOW.get());
+		impBroken(titaniteToolSet.TITANITE_XBOW.get());
+		impBroken(titaniteArmorSet.TITANITE_HELMET.get());
+		impBroken(titaniteArmorSet.TITANITE_CHEST.get());
+		impBroken(titaniteArmorSet.TITANITE_LEGS.get());
+		impBroken(titaniteArmorSet.TITANITE_BOOTS.get());
 
-		impBroken(ModTools.ICHOR_SWORD.get());
-		impBroken(ModTools.ICHOR_AXE.get());
-		impBroken(ModTools.ICHOR_PICKAXE.get());
-		impBroken(ModTools.ICHOR_BOW.get());
-		impBroken(ModTools.ICHOR_XBOW.get());
-		impBroken(ModArmors.ICHOR_HELMET.get());
-		impBroken(ModArmors.ICHOR_CHEST.get());
-		impBroken(ModArmors.ICHOR_LEGS.get());
-		impBroken(ModArmors.ICHOR_BOOTS.get());
+		impBroken(ichorToolSet.ICHOR_SWORD.get());
+		impBroken(ichorToolSet.ICHOR_AXE.get());
+		impBroken(ichorToolSet.ICHOR_PICKAXE.get());
+		impBroken(ichorToolSet.ICHOR_BOW.get());
+		impBroken(ichorToolSet.ICHOR_XBOW.get());
+		impBroken(ichorArmorSet.ICHOR_HELMET.get());
+		impBroken(ichorArmorSet.ICHOR_CHEST.get());
+		impBroken(ichorArmorSet.ICHOR_LEGS.get());
+		impBroken(ichorArmorSet.ICHOR_BOOTS.get());
 
-		impBroken(ModTools.ASTRAL_SWORD.get());
-		impBroken(ModTools.ASTRAL_AXE.get());
-		impBroken(ModTools.ASTRAL_PICKAXE.get());
-		impBroken(ModTools.ASTRAL_SHOVEL.get());
-		impBroken(ModTools.ASTRAL_BOW.get());
-		impBroken(ModTools.ASTRAL_XBOW.get());
-		impBroken(ModArmors.ASTRAL_HELMET.get());
-		impBroken(ModArmors.ASTRAL_CHEST.get());
-		impBroken(ModArmors.ASTRAL_LEGS.get());
-		impBroken(ModArmors.ASTRAL_BOOTS.get());
+		impBroken(astralToolSet.ASTRAL_SWORD.get());
+		impBroken(astralToolSet.ASTRAL_AXE.get());
+		impBroken(astralToolSet.ASTRAL_PICKAXE.get());
+		impBroken(astralToolSet.ASTRAL_SHOVEL.get());
+		impBroken(astralToolSet.ASTRAL_BOW.get());
+		impBroken(astralToolSet.ASTRAL_XBOW.get());
+		impBroken(astralArmorSet.ASTRAL_HELMET.get());
+		impBroken(astralArmorSet.ASTRAL_CHEST.get());
+		impBroken(astralArmorSet.ASTRAL_LEGS.get());
+		impBroken(astralArmorSet.ASTRAL_BOOTS.get());
 
 		// Bows
-		impBow(ModTools.VOIDIC_CRYSTAL_BOW.get());
-		impBow(ModTools.CORRUPT_BOW.get());
-		impBow(ModTools.TITANITE_BOW.get());
-		impBow(ModTools.ICHOR_BOW.get());
-		impBow(ModTools.ASTRAL_BOW.get());
+		impBow(voidicCrystalToolSet.VOIDIC_CRYSTAL_BOW.get());
+		impBow(corruptToolSet.CORRUPT_BOW.get());
+		impBow(titaniteToolSet.TITANITE_BOW.get());
+		impBow(ichorToolSet.ICHOR_BOW.get());
+		impBow(astralToolSet.ASTRAL_BOW.get());
 
 		// XBows
-		impXBow(ModTools.VOIDIC_CRYSTAL_XBOW.get());
-		impXBow(ModTools.CORRUPT_XBOW.get());
-		impXBow(ModTools.TITANITE_XBOW.get());
-		impXBow(ModTools.ICHOR_XBOW.get());
-		impXBow(ModTools.ASTRAL_XBOW.get());
+		impXBow(voidicCrystalToolSet.VOIDIC_CRYSTAL_XBOW.get());
+		impXBow(corruptToolSet.CORRUPT_XBOW.get());
+		impXBow(titaniteToolSet.TITANITE_XBOW.get());
+		impXBow(ichorToolSet.ICHOR_XBOW.get());
+		impXBow(astralToolSet.ASTRAL_XBOW.get());
 
 		// Shields
-		impShield(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
+		impShield(voidicCrystalToolSet.VOIDIC_CRYSTAL_SHIELD.get());
 
 	}
 
-	private static void impBroken(Item item) {
-		ItemProperties.register(item, new ResourceLocation("broken"), (stack, level, entity, prop) -> RegUtil.ToolAndArmorHelper.isBroken(stack) ? 1F : 0F);
+	private void impBroken(Item item) {
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "broken"), (stack, level, entity, prop) -> BreakableHelper.isBroken(stack) ? 1F : 0F);
 	}
 
-	private static void impBow(Item item) {
-		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, prop) ->
+	private void impBow(Item item) {
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pull"), (stack, level, entity, prop) ->
 
-				entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
+			entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
 
-		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity, prop) ->
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pulling"), (stack, level, entity, prop) ->
 
-				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+			entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
-	private static void impXBow(Item item) {
-		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, prop) ->
+	private void impXBow(Item item) {
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pull"), (stack, level, entity, prop) ->
 
-				entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack));
+			entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack));
 
-		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity, prop) ->
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pulling"), (stack, level, entity, prop) ->
 
-				entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
+			entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
 
-		ItemProperties.register(item, new ResourceLocation("charged"), (stack, level, entity, prop) ->
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "charged"), (stack, level, entity, prop) ->
 
-				entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
+			entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F);
 
-		ItemProperties.register(item, new ResourceLocation("firework"), (stack, level, entity, prop) ->
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "firework"), (stack, level, entity, prop) ->
 
-				entity != null && CrossbowItem.isCharged(stack) && CrossbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0F : 0.0F);
+			entity != null && CrossbowItem.isCharged(stack) && stack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY).contains(Items.FIREWORK_ROCKET) ? 1.0F : 0.0F);
 	}
 
-	private static void impShield(Item item) {
-		ItemProperties.register(item, new ResourceLocation("blocking"), (stack, level, entity, prop) ->
+	private void impShield(Item item) {
+		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "blocking"), (stack, level, entity, prop) ->
 
-				entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+			entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
-	public static void redirectModels(ModelBakery bakery) {
+	public void redirectModels(ModelBakery bakery) {
 		redirectModelLocation(bakery, "voidic", "voidic_crystal_",
-				ModTools.VOIDIC_CRYSTAL_AXE,
-				ModTools.VOIDIC_CRYSTAL_PICKAXE,
-				ModTools.VOIDIC_CRYSTAL_SWORD,
-				ModTools.VOIDIC_CRYSTAL_SHIELD,
-				ModTools.VOIDIC_CRYSTAL_BOW,
-				ModTools.VOIDIC_CRYSTAL_XBOW,
-				ModArmors.VOIDIC_CRYSTAL_HELMET,
-				ModArmors.VOIDIC_CRYSTAL_CHEST,
-				ModArmors.VOIDIC_CRYSTAL_LEGS,
-				ModArmors.VOIDIC_CRYSTAL_BOOTS
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_AXE,
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_PICKAXE,
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_SWORD,
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_SHIELD,
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_BOW,
+			voidicCrystalToolSet.VOIDIC_CRYSTAL_XBOW,
+			voidicCrystalArmorSet.VOIDIC_CRYSTAL_HELMET,
+			voidicCrystalArmorSet.VOIDIC_CRYSTAL_CHEST,
+			voidicCrystalArmorSet.VOIDIC_CRYSTAL_LEGS,
+			voidicCrystalArmorSet.VOIDIC_CRYSTAL_BOOTS
 		);
-		redirectModelLocation(bakery, "charred", "charred_", ModTools.CHARRED_WARHAMMER);
+		redirectModelLocation(bakery, "charred", "charred_", charredToolSet.CHARRED_WARHAMMER);
 		redirectModelLocation(bakery, "corrupt", "corrupt_",
-				ModTools.CORRUPT_AXE,
-				ModTools.CORRUPT_SWORD,
-				ModTools.CORRUPT_BOW,
-				ModTools.CORRUPT_XBOW,
-				ModArmors.CORRUPT_HELMET,
-				ModArmors.CORRUPT_CHEST,
-				ModArmors.CORRUPT_LEGS,
-				ModArmors.CORRUPT_BOOTS
+			corruptToolSet.CORRUPT_AXE,
+			corruptToolSet.CORRUPT_SWORD,
+			corruptToolSet.CORRUPT_BOW,
+			corruptToolSet.CORRUPT_XBOW,
+			corruptArmorSet.CORRUPT_HELMET,
+			corruptArmorSet.CORRUPT_CHEST,
+			corruptArmorSet.CORRUPT_LEGS,
+			corruptArmorSet.CORRUPT_BOOTS
 		);
 		redirectModelLocation(bakery, "titanite", "titanite_",
-				ModTools.TITANITE_AXE,
-				ModTools.TITANITE_PICKAXE,
-				ModTools.TITANITE_HOE,
-				ModTools.TITANITE_SWORD,
-				ModTools.TITANITE_BOW,
-				ModTools.TITANITE_XBOW,
-				ModArmors.TITANITE_HELMET,
-				ModArmors.TITANITE_CHEST,
-				ModArmors.TITANITE_LEGS,
-				ModArmors.TITANITE_BOOTS
+			titaniteToolSet.TITANITE_AXE,
+			titaniteToolSet.TITANITE_PICKAXE,
+			titaniteToolSet.TITANITE_HOE,
+			titaniteToolSet.TITANITE_SWORD,
+			titaniteToolSet.TITANITE_BOW,
+			titaniteToolSet.TITANITE_XBOW,
+			titaniteArmorSet.TITANITE_HELMET,
+			titaniteArmorSet.TITANITE_CHEST,
+			titaniteArmorSet.TITANITE_LEGS,
+			titaniteArmorSet.TITANITE_BOOTS
 		);
 		redirectModelLocation(bakery, "ichor", "ichor_",
-				ModTools.ICHOR_SWORD,
-				ModTools.ICHOR_AXE,
-				ModTools.ICHOR_PICKAXE,
-				ModTools.ICHOR_BOW,
-				ModTools.ICHOR_XBOW,
-				ModArmors.ICHOR_HELMET,
-				ModArmors.ICHOR_CHEST,
-				ModArmors.ICHOR_LEGS,
-				ModArmors.ICHOR_BOOTS
+			ichorToolSet.ICHOR_SWORD,
+			ichorToolSet.ICHOR_AXE,
+			ichorToolSet.ICHOR_PICKAXE,
+			ichorToolSet.ICHOR_BOW,
+			ichorToolSet.ICHOR_XBOW,
+			ichorArmorSet.ICHOR_HELMET,
+			ichorArmorSet.ICHOR_CHEST,
+			ichorArmorSet.ICHOR_LEGS,
+			ichorArmorSet.ICHOR_BOOTS
 		);
 		redirectModelLocation(bakery, "astral", "astral_",
-				ModTools.ASTRAL_SWORD,
-				ModTools.ASTRAL_AXE,
-				ModTools.ASTRAL_PICKAXE,
-				ModTools.ASTRAL_SHOVEL,
-				ModTools.ASTRAL_BOW,
-				ModTools.ASTRAL_XBOW,
-				ModArmors.ASTRAL_HELMET,
-				ModArmors.ASTRAL_CHEST,
-				ModArmors.ASTRAL_LEGS,
-				ModArmors.ASTRAL_BOOTS
+			astralToolSet.ASTRAL_SWORD,
+			astralToolSet.ASTRAL_AXE,
+			astralToolSet.ASTRAL_PICKAXE,
+			astralToolSet.ASTRAL_SHOVEL,
+			astralToolSet.ASTRAL_BOW,
+			astralToolSet.ASTRAL_XBOW,
+			astralArmorSet.ASTRAL_HELMET,
+			astralArmorSet.ASTRAL_CHEST,
+			astralArmorSet.ASTRAL_LEGS,
+			astralArmorSet.ASTRAL_BOOTS
 		);
 	}
 
 	@SafeVarargs
-	private static void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, DeferredHolder<Item, Item>... items) {
-		for (DeferredHolder<Item, Item> item : items) {
+	private void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, DeferredHolder<Item, Item>... items) {
+		// TODO: do we even need this anymore?
+		/*for (DeferredHolder<Item, Item> item : items) {
 			ResourceLocation location = item.getId();
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			ResourceLocation rl = new ResourceLocation(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
+			ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
 			ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");
 			REMAPPER.put(location, rl);
-			bakery.loadTopLevel(mrl);
+			bakery.getBakedTopLevelModels().loadTopLevel(mrl);
 			bakery.unbakedCache.put(oldMrl, bakery.unbakedCache.get(mrl));
 			Minecraft.getInstance().getItemRenderer().getItemModelShaper().register(item.get(), mrl);
-		}
+		}*/
 	}
 
-	public static void clearOldModels(ModelBakery bakery) {
-		REMAPPER.keySet().forEach(location -> {
+	public void clearOldModels(ModelBakery bakery) {
+		/*REMAPPER.keySet().forEach(location -> {
 			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
 			bakery.unbakedCache.remove(oldMrl);
 			bakery.topLevelModels.remove(oldMrl);
-		});
+		});*/
 	}
 
 }
