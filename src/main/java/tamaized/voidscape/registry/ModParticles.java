@@ -5,7 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.particle.ParticleSpellCloud;
+import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 
 import java.util.function.Supplier;
 
@@ -14,6 +14,6 @@ public class ModParticles {
 
 	private final DeferredRegister<ParticleType<?>> REGISTRY = RegUtil.create(Registries.PARTICLE_TYPE);
 
-	public final Supplier<ParticleType<ParticleSpellCloud.Options>> SPELL_CLOUD = REGISTRY.register("spell_cloud", ParticleSpellCloud::new);
+	public final Supplier<ParticleType<ParticleTypeSpellCloud.Options>> SPELL_CLOUD = REGISTRY.register("spell_cloud", ParticleTypeSpellCloud::new);
 
 }

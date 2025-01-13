@@ -12,9 +12,9 @@ import tamaized.voidscape.registry.ModParticles;
 
 import javax.annotation.Nonnull;
 
-public class ParticleSpellCloud extends ParticleType<ParticleSpellCloud.Options> {
+public class ParticleTypeSpellCloud extends ParticleType<ParticleTypeSpellCloud.Options> {
 
-	public ParticleSpellCloud() {
+	public ParticleTypeSpellCloud() {
 		super(false);
 	}
 

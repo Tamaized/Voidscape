@@ -11,11 +11,10 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import tamaized.voidscape.registry.ModParticles;
+import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 
 import javax.annotation.Nonnull;
 
@@ -110,28 +109,29 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 		float lvt_14_1_ = this.getV0();
 		float lvt_15_1_ = this.getV1();
 		int lvt_16_1_ = this.getLightColor(partialTicks);
-		buffer.vertex((double) lvt_10_1_[0].x(), (double) lvt_10_1_[0].y(), (double) lvt_10_1_[0].z()).uv(lvt_13_2_, lvt_15_1_).color(rCol, gCol, bCol, alpha).uv2(lvt_16_1_).endVertex();
-		buffer.vertex((double) lvt_10_1_[1].x(), (double) lvt_10_1_[1].y(), (double) lvt_10_1_[1].z()).uv(lvt_13_2_, lvt_14_1_).color(rCol, gCol, bCol, alpha).uv2(lvt_16_1_).endVertex();
-		buffer.vertex((double) lvt_10_1_[2].x(), (double) lvt_10_1_[2].y(), (double) lvt_10_1_[2].z()).uv(lvt_12_2_, lvt_14_1_).color(rCol, gCol, bCol, alpha).uv2(lvt_16_1_).endVertex();
-		buffer.vertex((double) lvt_10_1_[3].x(), (double) lvt_10_1_[3].y(), (double) lvt_10_1_[3].z()).uv(lvt_12_2_, lvt_15_1_).color(rCol, gCol, bCol, alpha).uv2(lvt_16_1_).endVertex();
+		buffer.addVertex(lvt_10_1_[0].x(), lvt_10_1_[0].y(), lvt_10_1_[0].z()).setUv(lvt_13_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[1].x(), lvt_10_1_[1].y(), lvt_10_1_[1].z()).setUv(lvt_13_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[2].x(), lvt_10_1_[2].y(), lvt_10_1_[2].z()).setUv(lvt_12_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[3].x(), lvt_10_1_[3].y(), lvt_10_1_[3].z()).setUv(lvt_12_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
 	}
 
 
 	@Override
 	public int getLightColor(float partialTicks) {
-		return 240 | 240 << 16;
+		return 0xF000F0; // 0xF0 | 0xF0 << 16;
 	}
 
-	public static class Factory implements ParticleProvider<ModParticles.ParticleSpellCloudData> {
+	public static class Factory implements ParticleProvider<ParticleTypeSpellCloud.Options> {
 		private final SpriteSet spriteSet;
 
 		public Factory(SpriteSet sprite) {
 			this.spriteSet = sprite;
 		}
 
+		@Nullable
 		@Override
-		public Particle createParticle(ModParticles.ParticleSpellCloudData data, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			ParticleSpellCloud particle = new ParticleSpellCloud(world, x, y, z, xSpeed, ySpeed, zSpeed);
+		public Particle createParticle(ParticleTypeSpellCloud.Options data, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+			ParticleSpellCloud particle = new ParticleSpellCloud(level, x, y, z, xSpeed, ySpeed, zSpeed);
 			particle.setColor(((data.color() >> 16) & 0xFF) / 255F, ((data.color() >> 8) & 0xFF) / 255F, (data.color() & 0xFF) / 255F);
 			particle.pickSprite(this.spriteSet);
 			return particle;

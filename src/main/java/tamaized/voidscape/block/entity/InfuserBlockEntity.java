@@ -23,7 +23,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
-import tamaized.voidscape.particle.ParticleSpellCloud;
+import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.fluid.ModFluids;
@@ -106,7 +106,7 @@ public class InfuserBlockEntity extends BlockEntity {
 							.yRot((float) Math.toRadians(level.getRandom().nextInt(360)))
 							.scale(0.2F + level.getRandom().nextFloat() * 0.8F)
 							.add(e.position().add(0, e.getBbHeight() / 2F, 0));
-						packet.queueParticle(new ParticleSpellCloud.Options(0x7700FF), false, pos.x(), pos.y(), pos.z(), 0, 0, 0);
+						packet.queueParticle(new ParticleTypeSpellCloud.Options(0x7700FF), false, pos.x(), pos.y(), pos.z(), 0, 0, 0);
 					}
 				});
 				if (process.get()) {
