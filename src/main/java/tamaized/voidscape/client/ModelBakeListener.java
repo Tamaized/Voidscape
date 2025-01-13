@@ -1,27 +1,19 @@
 package tamaized.voidscape.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ChargedProjectiles;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableHelper;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModArmors;
-import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.registry.armor.set.*;
 import tamaized.voidscape.registry.tool.set.*;
 
@@ -152,7 +144,7 @@ public class ModelBakeListener {
 	private void impBow(Item item) {
 		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pull"), (stack, level, entity, prop) ->
 
-			entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F);
+			entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F);
 
 		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pulling"), (stack, level, entity, prop) ->
 
@@ -162,7 +154,7 @@ public class ModelBakeListener {
 	private void impXBow(Item item) {
 		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pull"), (stack, level, entity, prop) ->
 
-			entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack));
+			entity == null ? 0.0F : CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack, entity));
 
 		ItemProperties.register(item, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "pulling"), (stack, level, entity, prop) ->
 
