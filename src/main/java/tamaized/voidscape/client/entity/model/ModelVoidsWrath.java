@@ -227,10 +227,10 @@ public class ModelVoidsWrath<T extends VoidsWrathEntity> extends EntityModel<T> 
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer buffer, int p_103113_, int p_103114_, float r, float g, float b, float a) {
-		head.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		body.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		leftArm.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		rightArm.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+		head.render(poseStack, buffer, packedLight, packedOverlay, color);
+		body.render(poseStack, buffer, packedLight, packedOverlay, color);
+		leftArm.render(poseStack, buffer, packedLight, packedOverlay, color);
+		rightArm.render(poseStack, buffer, packedLight, packedOverlay, color);
 	}
 }

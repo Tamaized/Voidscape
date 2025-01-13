@@ -5,6 +5,10 @@ import tamaized.beanification.Component;
 @Component
 public class ColorHelper {
 
+	public int colorWithAlphaMul(int color, float alphaPerc) {
+		return color & (((int) (((color >> 24) & 0xFF) * alphaPerc)) << 24);
+	}
+
 	public HSV rgbToHsv(int color) {
 		float r = ((color >> 16) & 0xFF) / 255F;
 		float g = ((color >> 8) & 0xFF) / 255F;

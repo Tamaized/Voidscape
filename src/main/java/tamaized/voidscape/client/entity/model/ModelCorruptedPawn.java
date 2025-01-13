@@ -13,11 +13,16 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
+import tamaized.voidscape.util.ColorHelper;
 
 import java.util.function.Function;
 
 public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityModel<T> {
+
+	@Autowired
+	private static ColorHelper colorHelper;
 
 	private static final int[] CAST_MOVEMENT = {225, 315, 135, 270, 45, 180, 0, 90};
 
@@ -140,9 +145,9 @@ public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityMod
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack p_103013_, VertexConsumer p_103014_, int p_103015_, int p_103016_, float p_103017_, float p_103018_, float p_103019_, float p_103020_) {
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
 		this.parts.forEach((part) -> {
-			part.part.render(p_103013_, p_103014_, p_103015_, p_103016_, p_103017_, p_103018_, p_103019_, p_103020_ * part.alpha);
+			part.part.render(poseStack, buffer, packedLight, packedOverlay, colorHelper.colorWithAlphaMul(color, part.alpha));
 			part.alpha = 1F;
 		});
 	}

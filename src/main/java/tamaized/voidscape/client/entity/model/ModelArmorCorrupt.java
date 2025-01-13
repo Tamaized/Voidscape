@@ -166,7 +166,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
 		head.copyFrom(super.head);
 		headoverlay.copyFrom(super.hat);
 		body.copyFrom(super.body);
@@ -177,7 +177,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		leftleg.copyFrom(super.leftLeg);
 		rightfoot.copyFrom(super.rightLeg);
 		leftfoot.copyFrom(super.leftLeg);
-		parts.forEach((modelRenderer_) -> modelRenderer_.render(matrixStackIn, bufferIn, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
+		parts.forEach((modelRenderer_) -> modelRenderer_.render(poseStack, buffer, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLight, packedOverlay, color));
 	}
 
 	@Override

@@ -19,7 +19,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
-import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModSounds;
 import tamaized.voidscape.dimension.ConfigurablePortalShape;

@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.entity.NullServantEntity;
@@ -30,9 +31,12 @@ import java.util.function.Function;
 
 public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T> implements ArmedModel {
 
+	@Autowired
+	private static Shaders shaders;
+
 	private static final Function<ResourceLocation, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {
 		RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().
-				setShaderState(new RenderStateShard.ShaderStateShard(() -> Shaders.VOIDSKY_ENTITY)).
+				setShaderState(new RenderStateShard.ShaderStateShard(() -> shaders.VOIDSKY_ENTITY)).
 				setTextureState(RenderStateShard.MultiTextureStateShard.builder().add(p_173204_, false, false).add(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false).build()).
 				setTransparencyState(RenderStateAccessor.NO_TRANSPARENCY()).
 				setLightmapState(RenderStateAccessor.NO_LIGHTMAP()).
@@ -244,10 +248,10 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer buffer, int p_103113_, int p_103114_, float r, float g, float b, float a) {
-		head.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		body.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		leftArm.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
-		rightArm.render(stack, buffer, p_103113_, p_103114_, r, g, b, a);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+		head.render(poseStack, buffer, packedLight, packedOverlay, color);
+		body.render(poseStack, buffer, packedLight, packedOverlay, color);
+		leftArm.render(poseStack, buffer, packedLight, packedOverlay, color);
+		rightArm.render(poseStack, buffer, packedLight, packedOverlay, color);
 	}
 }

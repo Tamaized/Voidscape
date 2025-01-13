@@ -136,7 +136,7 @@ public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T>
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
 		head.copyFrom(super.head);
 		headoverlay.copyFrom(super.hat);
 		body.copyFrom(super.body);
@@ -147,7 +147,7 @@ public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T>
 		leftfoot.copyFrom(super.leftLeg);
 		rightfoot.copyFrom(super.rightLeg);
 
-		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, red, green, blue, alpha));
+		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, color));
 	}
 
 	@Override
