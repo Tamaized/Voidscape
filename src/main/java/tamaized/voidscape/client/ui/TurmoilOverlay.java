@@ -30,6 +30,9 @@ public class TurmoilOverlay {
 	@Autowired
 	private Shaders shaders;
 
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
 	private final int STENCIL_INDEX = 10;
 	private final ResourceLocation TEXTURE_MASK = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/mask.png");
 	private final ResourceLocation TEXTURE_VOIDICINFUSION = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
@@ -51,7 +54,7 @@ public class TurmoilOverlay {
 		lastDeltaTick = deltaTick;
 		ClientUtil.tick++;
 		if (Minecraft.getInstance().player != null) {
-			Insanity data = Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY);
+			Insanity data = Minecraft.getInstance().player.getData(dataAttachments.INSANITY);
 			if (data.getTeleportTick() >= (lastTeleportTick + 20) || (lastTeleportTick == 0 && data.getTeleportTick() > 0)) {
 				Minecraft.getInstance().player.playSound(SoundEvents.CONDUIT_AMBIENT_SHORT, 4F, 1F);
 				lastTeleportTick = data.getTeleportTick();
@@ -69,7 +72,7 @@ public class TurmoilOverlay {
 		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "turmoil"), (graphics, delta) -> {
 			Level world = Minecraft.getInstance().level;
 			if (world != null && Minecraft.getInstance().player != null) {
-				Insanity data = Minecraft.getInstance().player.getData(ModDataAttachments.INSANITY);
+				Insanity data = Minecraft.getInstance().player.getData(dataAttachments.INSANITY);
 				renderParanoia(data);
 				renderInfusion(data);
 				float perc = Mth.clamp(Mth.lerp(delta.getGameTimeDeltaPartialTick(false), lastDeltaTick, deltaTick) / 200F, 0F, 1F);
