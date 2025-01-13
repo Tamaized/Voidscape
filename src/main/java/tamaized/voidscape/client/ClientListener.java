@@ -39,31 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		busMod.addListener(RegisterDimensionSpecialEffectsEvent.class, event -> event
-				.register(Voidscape.WORLD_KEY_VOID.location(), new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
-					@Override
-					public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
-						return Vec3.ZERO;
-					}
-
-					@Override
-					public boolean isFoggyAt(int p_230493_1_, int p_230493_2_) {
-						return true;
-					}
-
-					@Override
-					@Nullable
-					public float[] getSunriseColor(float p_230492_1_, float p_230492_2_) {
-						return null;
-					}
-
-					@Override
-					public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
-						VoidSkyRenderer.render(ticks, partialTick, poseStack, level, Minecraft.getInstance());
-						return true;
-					}
-				}));
-
 		busMod.addListener(EntityRenderersEvent.AddLayers.class, event -> {
 			event.getSkins().forEach(renderer -> {
 				LivingEntityRenderer<Player, EntityModel<Player>> skin = event.getSkin(renderer);

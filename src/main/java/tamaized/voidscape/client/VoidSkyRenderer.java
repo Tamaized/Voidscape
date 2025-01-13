@@ -10,11 +10,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
+import tamaized.beanification.Component;
 import tamaized.voidscape.client.shader.Shaders;
 
+@Component
 public class VoidSkyRenderer {
 
-	public static void render(int ticks, float partialTicks, PoseStack matrixStack, ClientLevel world, Minecraft mc) {
+	public void render(int ticks, float partialTicks, Matrix4f matrix, ClientLevel world, Minecraft mc) {
 
 		BufferBuilder vertexbuffer = Tesselator.getInstance().getBuilder();
 		vertexbuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
