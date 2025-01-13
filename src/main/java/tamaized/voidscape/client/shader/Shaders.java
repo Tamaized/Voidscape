@@ -50,7 +50,7 @@ public class Shaders {
 				event.registerShader(new BindableShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "lines/lines"), DefaultVertexFormat.
 						POSITION_COLOR_NORMAL), shader -> LINES = (BindableShaderInstance) shader);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Voidscape.LOGGER.error(e);
 			}
 		});
 		WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
