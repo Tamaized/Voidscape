@@ -39,10 +39,6 @@ public class ClientListener {
 
 	@PostConstruct
 	private void init(IEventBus busMod, IEventBus busForge) {
-		busMod.addListener(RegisterParticleProvidersEvent.class, event -> {
-			event.registerSpriteSet(ModParticles.SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);
-		});
-
 		busForge.addListener(TickEvent.ClientTickEvent.class, event -> {
 			RenderTurmoil.tick(event);
 			if (event.phase == TickEvent.Phase.START) {
