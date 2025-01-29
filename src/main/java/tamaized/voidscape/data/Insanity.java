@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.BeanContext;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.config.common.CommonConfig;
 import tamaized.voidscape.dimension.DirectTeleporter;
@@ -40,16 +41,16 @@ import java.util.UUID;
 public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {
 
 	@Autowired
-	private static LevelUtil levelUtil;
+	private LevelUtil levelUtil;
 
 	@Autowired
-	private static CommonConfig commonConfig;
+	private CommonConfig commonConfig;
 
 	@Autowired
-	private static VoidPortalTeleporter voidPortalTeleporter;
+	private VoidPortalTeleporter voidPortalTeleporter;
 
 	@Autowired
-	private static DirectTeleporter directTeleporter;
+	private DirectTeleporter directTeleporter;
 
 	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
 	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
@@ -78,6 +79,10 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	private CorruptedPawnEntity hunt;
 
 	private boolean dirty;
+
+	public Insanity() {
+		BeanContext.injectInto(this);
+	}
 
 	public void setInPortal(boolean flag) {
 		inPortal = flag;

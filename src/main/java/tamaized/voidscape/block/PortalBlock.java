@@ -25,7 +25,6 @@ import tamaized.voidscape.dimension.ConfigurablePortalShape;
 import tamaized.voidscape.util.LevelUtil;
 import tamaized.voidscape.util.PortalFramePredicates;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class PortalBlock extends HalfTransparentBlock {
 
