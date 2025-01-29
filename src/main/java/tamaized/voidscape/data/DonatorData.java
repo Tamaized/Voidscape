@@ -1,18 +1,23 @@
 package tamaized.voidscape.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
-import tamaized.voidscape.Voidscape;
+import org.jetbrains.annotations.UnknownNullability;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.client.ClientPacketDonatorSync;
-import tamaized.voidscape.network.client.ClientPacketInsanitySync;
+
+import java.util.Optional;
 
 public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTag> {
+
+	@Autowired
+	private static DonatorHandler donatorHandler;
 
 	public boolean enabled;
 	public int color;
@@ -31,10 +36,10 @@ public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTa
 
 	public void tick(Entity parent) {
 		if (parent instanceof ServerPlayer && parent.tickCount % 20 == 0) {
-			DonatorHandler.DonatorSettings settings = DonatorHandler.settings.get(parent.getUUID());
-			if (settings != null) {
-				enabled = settings.enabled;
-				color = settings.color;
+			Optional<DonatorHandler.Settings> settings = donatorHandler.getSettings(parent.getUUID());
+			if (settings.isPresent()) {
+				enabled = settings.get().enabled();
+				color = settings.get().color();
 			} else
 				enabled = false;
 			sendToClients(parent);
@@ -42,15 +47,15 @@ public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTa
 	}
 
 	private void sendToClient(ServerPlayer parent) {
-		PacketDistributor.PLAYER.with(parent).send(new ClientPacketDonatorSync(this));
+		PacketDistributor.sendToPlayer(parent, new ClientPacketDonatorSync(this));
 	}
 
 	private void sendToClients(Entity parent) {
-		PacketDistributor.TRACKING_ENTITY_AND_SELF.with(parent).send(new ClientPacketDonatorSync(this, parent));
+		PacketDistributor.sendToPlayersTrackingEntityAndSelf(parent, new ClientPacketDonatorSync(this, parent));
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
+	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
 		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("enabled", enabled);
 		nbt.putInt("color", color);
@@ -58,7 +63,7 @@ public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTa
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt) {
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
 		enabled = nbt.getBoolean("enabled");
 		color = nbt.getInt("color");
 	}

@@ -32,8 +32,12 @@ public class LevelUtil {
 		return getLevel(player.level(), player.getRespawnDimension());
 	}
 
+	public Optional<ServerLevel> getVoidDimension(Level currentLevel) {
+		return getLevel(currentLevel, dimensions.VOID);
+	}
+
 	public Optional<ServerLevel> getDimensionForTeleport(Level currentLevel) {
-		return isInVoidDimension(currentLevel) ? getLevel(currentLevel, Level.OVERWORLD) : getLevel(currentLevel, dimensions.VOID);
+		return isInVoidDimension(currentLevel) ? getLevel(currentLevel, Level.OVERWORLD) : getVoidDimension(currentLevel);
 	}
 
 }

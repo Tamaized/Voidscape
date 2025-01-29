@@ -134,7 +134,7 @@ neoForge {
             gameDirectory = project.file('run')
             systemProperty 'forge.logging.console.level', 'debug'
             logLevel = org.slf4j.event.Level.DEBUG
-            mods = [mainMod]
+            loadedMods = [mainMod]
         }
 
         client {
@@ -154,7 +154,7 @@ neoForge {
             gameDirectory = project.file('run-data')
             programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
             sourceSet = this.sourceSets.data
-            mods = [dataMod]
+			loadedMods = [dataMod]
         }
     }
 }

@@ -13,79 +13,63 @@ import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.PortalInfo;
-import net.minecraft.world.level.portal.PortalShape;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.ITeleporter;
-import org.jetbrains.annotations.Nullable;
-import tamaized.voidscape.Voidscape;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
 import tamaized.voidscape.block.PortalBlock;
-import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModPOIs;
+import tamaized.voidscape.registry.block.FunctionalBlocks;
+import tamaized.voidscape.registry.block.ImposterBlocks;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
-public final class VoidPortalTeleporter implements ITeleporter {
+@Component
+public final class VoidPortalTeleporter {
 
-	public static final VoidPortalTeleporter INSTANCE = new VoidPortalTeleporter();
+	@Autowired
+	private ModPOIs pois;
 
-	private VoidPortalTeleporter() {
+	@Autowired
+	private ImposterBlocks imposterBlocks;
 
-	}
+	@Autowired
+	private FunctionalBlocks functionalBlocks;
 
-	@Override
-	public Entity placeEntity(Entity oldEntity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-		oldEntity.fallDistance = 0;
-		return repositionEntity.apply(false);
-	}
+	public Optional<DimensionTransition> make(Entity entity, ServerLevel destination) {
+		WorldBorder border = destination.getWorldBorder();
+		double minX = Math.max(-2.9999872E7D, border.getMinX() + 16.0D);
+		double minZ = Math.max(-2.9999872E7D, border.getMinZ() + 16.0D);
+		double maxX = Math.min(2.9999872E7D, border.getMaxX() - 16.0D);
+		double maxZ = Math.min(2.9999872E7D, border.getMaxZ() - 16.0D);
+		double offset = DimensionType.getTeleportationScale(entity.level().dimensionType(), destination.dimensionType());
+		BlockPos blockpos = BlockPos.containing(Mth.clamp(entity.getX() * offset, minX, maxX), entity.getY(), Mth.clamp(entity.getZ() * offset, minZ, maxZ));
 
-	@Nullable
-	@Override
-	public PortalInfo getPortalInfo(Entity oldEntity, ServerLevel destWorld, Function<ServerLevel, PortalInfo> defaultPortalInfo) {
-		if (!Voidscape.checkForVoidDimension(oldEntity.level()) && !Voidscape.checkForVoidDimension(destWorld)) {
-			return null;
-		} else {
-			WorldBorder border = destWorld.getWorldBorder();
-			double minX = Math.max(-2.9999872E7D, border.getMinX() + 16.0D);
-			double minZ = Math.max(-2.9999872E7D, border.getMinZ() + 16.0D);
-			double maxX = Math.min(2.9999872E7D, border.getMaxX() - 16.0D);
-			double maxZ = Math.min(2.9999872E7D, border.getMaxZ() - 16.0D);
-			double offset = DimensionType.getTeleportationScale(oldEntity.level().dimensionType(), destWorld.dimensionType());
-			BlockPos blockpos = BlockPos.containing(Mth.clamp(oldEntity.getX() * offset, minX, maxX), oldEntity.getY(), Mth.clamp(oldEntity.getZ() * offset, minZ, maxZ));
-			return this.getPortalLogic(destWorld, oldEntity, blockpos)
-					.map((portalresult) -> PortalShape.createPortalInfo(
-							destWorld,
-							portalresult,
-							Direction.Axis.X,
-							new Vec3(0.0D, 0.0D, 1.0D),
-							oldEntity,
-							oldEntity.getDeltaMovement(),
-							oldEntity.getYRot(),
-							oldEntity.getXRot()
-					))
-					.orElse(null);
+		Optional<BlockUtil.FoundRectangle> destPortal = this.getExistingPortal(destination, blockpos);
+		if (destPortal.isEmpty() && entity instanceof ServerPlayer) {
+			destPortal = this.makePortal(destination, blockpos, entity.level().getBlockState(entity.blockPosition()).getOptionalValue(PortalBlock.AXIS).orElse(Direction.Axis.X));
 		}
-	}
 
-	private Optional<BlockUtil.FoundRectangle> getPortalLogic(ServerLevel level, Entity entity, BlockPos pos) {
-		Optional<BlockUtil.FoundRectangle> existing = this.getExistingPortal(level, pos);
-		if (entity instanceof ServerPlayer) {
-			if (existing.isPresent()) {
-				return existing;
-			} else {
-				return this.makePortal(level, pos, entity.level().getBlockState(entity.blockPosition()).getOptionalValue(PortalBlock.AXIS).orElse(Direction.Axis.X));
-			}
-		} else {
-			return existing;
-		}
+		return destPortal.map(portal -> NetherPortalBlock.createDimensionTransition(
+			destination,
+			portal,
+			Direction.Axis.X,
+			new Vec3(0.0D, 0.0D, 1.0D),
+			entity,
+			entity.getDeltaMovement(),
+			entity.getYRot(),
+			entity.getXRot(),
+			DimensionTransition.PLAY_PORTAL_SOUND.then(transition -> transition.placePortalTicket(portal.minCorner))
+		));
 	}
 
 	public Optional<BlockUtil.FoundRectangle> getExistingPortal(ServerLevel level, BlockPos pos) {
@@ -93,7 +77,7 @@ public final class VoidPortalTeleporter implements ITeleporter {
 		int i = 64;
 		poimanager.ensureLoadedAndValid(level, pos, i);
 		Optional<PoiRecord> optional = poimanager.getInSquare(type ->
-						type.is(ModPOIs.PORTAL.getKey()), pos, i, PoiManager.Occupancy.ANY)
+						type.is(Objects.requireNonNull(pois.PORTAL.getKey())), pos, i, PoiManager.Occupancy.ANY)
 				.sorted(Comparator.comparingDouble((ToDoubleFunction<PoiRecord>) poi ->
 								poi.getPos().distSqr(pos))
 						.thenComparingInt(poi ->
@@ -161,7 +145,6 @@ public final class VoidPortalTeleporter implements ITeleporter {
 			d0 = d1;
 		}
 
-		//Place the frame blocks
 		if (d0 == -1.0D) {
 			blockpos = (new BlockPos(pos.getX(), Mth.clamp(pos.getY(), 70, level.getHeight() - 10), pos.getZ())).immutable();
 			Direction drotated = direction.getClockWise();
@@ -174,7 +157,7 @@ public final class VoidPortalTeleporter implements ITeleporter {
 					for (int fHeight = -1; fHeight < 3; ++fHeight) {
 						boolean flag = fHeight < 0;
 						mutable.setWithOffset(blockpos, fWidth * direction.getStepX() + fOffset * drotated.getStepX(), fHeight, fWidth * direction.getStepZ() + fOffset * direction.getStepZ());
-						level.setBlockAndUpdate(mutable, flag ? ModBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get().defaultBlockState() : Blocks.AIR.defaultBlockState());
+						level.setBlockAndUpdate(mutable, flag ? imposterBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get().defaultBlockState() : Blocks.AIR.defaultBlockState());
 					}
 				}
 			}
@@ -184,13 +167,12 @@ public final class VoidPortalTeleporter implements ITeleporter {
 			for (int fHeight = -1; fHeight < 4; ++fHeight) {
 				if (fWidth == -1 || fWidth == 2 || fHeight == -1 || fHeight == 3) {
 					mutable.setWithOffset(blockpos, fWidth * direction.getStepX(), fHeight, fWidth * direction.getStepZ());
-					level.setBlockAndUpdate(mutable, ModBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get().defaultBlockState());
+					level.setBlockAndUpdate(mutable, imposterBlocks.FRAGILE_VOIDIC_CRYSTAL_BLOCK.get().defaultBlockState());
 				}
 			}
 		}
 
-		//Place the portal blocks
-		BlockState portal = ModBlocks.PORTAL.get().defaultBlockState().setValue(PortalBlock.AXIS, axis);
+		BlockState portal = functionalBlocks.PORTAL.get().defaultBlockState().setValue(PortalBlock.AXIS, axis);
 		for (int pWidth = 0; pWidth < 2; ++pWidth) {
 			for (int pHeight = 0; pHeight < 3; ++pHeight) {
 				mutable.setWithOffset(blockpos, pWidth * direction.getStepX(), pHeight, pWidth * direction.getStepZ());

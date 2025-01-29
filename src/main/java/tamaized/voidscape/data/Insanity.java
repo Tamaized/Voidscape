@@ -18,31 +18,38 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Autowired;
-import tamaized.voidscape.Config;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.config.common.CommonConfig;
+import tamaized.voidscape.dimension.DirectTeleporter;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidPortalTeleporter;
-import tamaized.voidscape.dimension.VoidTeleporter;
 import tamaized.voidscape.util.LevelUtil;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {
 
 	@Autowired
 	private static LevelUtil levelUtil;
+
+	@Autowired
+	private static CommonConfig commonConfig;
+
+	@Autowired
+	private static VoidPortalTeleporter voidPortalTeleporter;
+
+	@Autowired
+	private static DirectTeleporter directTeleporter;
 
 	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
 	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
@@ -83,9 +90,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	private boolean canTeleport(Entity parent) {
 		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
-				parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
-				Config.COMMON_CONFIG.bedrockTeleportationDimensionBlacklist.get().
-						contains(parent.level().dimension().location().toString()) == Config.COMMON_CONFIG.bedrockTeleportationDimensionWhitelist.get();
+			   parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
+			   commonConfig.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString()) == commonConfig.bedrockTeleportationDimensionWhitelist.get();
 	}
 
 	private boolean shouldTeleport(Entity parent) {
@@ -106,12 +112,12 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 				}
 				teleportTick = Mth.clamp(teleportTick, 0, 200);
 				if (!pleaseLeavePortal && teleportTick >= 200) {
-					levelUtil.getDimensionForTeleport(parent.level()).ifPresent(destLevel -> parent.changeDimension(destLevel, VoidPortalTeleporter.INSTANCE));
+					levelUtil.getDimensionForTeleport(parent.level()).flatMap(destLevel -> voidPortalTeleporter.make(parent, destLevel)).ifPresent(parent::changeDimension);
 				}
 			} else {
 				pleaseLeavePortal = false;
 				boolean inVoid;
-				if (inVoid = Voidscape.checkForVoidDimension(parent.level())) {
+				if (inVoid = levelUtil.isInVoidDimension(parent.level())) {
 					int prev = teleportTick;
 					teleportTick--;
 					if ((teleportTick > 0 && teleportTick % 20 == 0) || teleportTick <= 0 && prev > 0)
@@ -144,7 +150,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 				}
 				teleportTick = Mth.clamp(teleportTick, 0, 200);
 				if (!inVoid && teleportTick >= 200) {
-					Voidscape.getLevel(parent.level(), Voidscape.WORLD_KEY_VOID).ifPresent(level -> parent.changeDimension(level, VoidTeleporter.INSTANCE));
+					levelUtil.getVoidDimension(parent.level()).map(destLevel -> directTeleporter.make(parent, destLevel)).ifPresent(parent::changeDimension);
 					return;
 				}
 			}
