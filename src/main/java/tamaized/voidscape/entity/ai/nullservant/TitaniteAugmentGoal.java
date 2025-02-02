@@ -1,32 +1,27 @@
 package tamaized.voidscape.entity.ai.nullservant;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Vector3f;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.entity.NullServantAugmentBlockEntity;
 import tamaized.voidscape.entity.NullServantEntity;
-import tamaized.voidscape.entity.NullServantIchorBoltEntity;
-import tamaized.voidscape.entity.StrangePearlEntity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
-import tamaized.voidscape.registry.ModEffects;
-import tamaized.voidscape.registry.ModParticles;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
+@Configurable
 public class TitaniteAugmentGoal extends Goal {
+
+	@Autowired
+	private ModDamageSource damageSource;
 
 	private final NullServantEntity parent;
 	private int cooldown;
@@ -107,11 +102,11 @@ public class TitaniteAugmentGoal extends Goal {
 				(Entity) null,
 				new AABB(pos.x(), pos.y(), pos.z(), pos.x() + 1, pos.y() + 1, pos.z() + 1).inflate(4D),
 				e -> !(e instanceof NullServantAugmentBlockEntity) && e != parent && e.distanceToSqr(pos) <= 9D
-		).forEach(e -> e.hurt(ModDamageSource.getEntityDamageSource(e.level(), ModDamageSource.VOIDIC, parent), 6F));
-		parent.playSound(SoundEvents.GENERIC_EXPLODE, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
+		).forEach(e -> e.hurt(damageSource.getEntityDamageSource(e.level(), damageSource.VOIDIC, parent), 6F));
+		parent.playSound(SoundEvents.GENERIC_EXPLODE.value(), 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
 		ClientPacketSendParticles particles = new ClientPacketSendParticles();
 		particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, false, pos, Vec3.ZERO);
-		PacketDistributor.TRACKING_ENTITY.with(parent).send(particles);
+		PacketDistributor.sendToPlayersTrackingEntity(parent, particles);
 	}
 
 }
