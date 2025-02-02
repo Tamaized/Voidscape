@@ -3,10 +3,8 @@ package tamaized.voidscape.entity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -28,17 +26,31 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.item.MaterialItems;
 
 import javax.annotation.Nullable;
 
+@Configurable
 public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn, IEthereal {
+
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
+	@Autowired
+	private ModDamageSource damageSource;
+
+	@Autowired
+	private MaterialItems materialItems;
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
 			getDisplayName() == null ? Component.empty() : getDisplayName(),
 			BossEvent.BossBarColor.PURPLE,
 			BossEvent.BossBarOverlay.PROGRESS
 	)).setDarkenScreen(true);
+
 	private Entity target;
 
 	public CorruptedPawnEntity(Level level) {
@@ -95,14 +107,14 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		if (!level().isClientSide()) {
 			if (target == null || !target.isAlive())
 				remove(RemovalReason.DISCARDED);
-			else if (!equals(target.getData(ModDataAttachments.INSANITY).getHunter()))
+			else if (!equals(target.getData(dataAttachments.INSANITY).getHunter()))
 				remove(RemovalReason.DISCARDED);
 			else if (isAlive()) {
 				lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
 				if (target.distanceTo(this) <= 0.25F) {
 					teleport();
-					target.hurt(ModDamageSource.getEntityDamageSource(level(), ModDamageSource.VOIDIC, this), 10);
+					target.hurt(damageSource.getEntityDamageSource(level(), damageSource.VOIDIC, this), 10);
 					heal(5F);
 				}
 			}
@@ -125,18 +137,18 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	}
 
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer) {
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
 		buffer.writeVarInt(target == null ? -1 : target.getId());
 	}
 
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData) {
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
 		target = level().getEntity(additionalData.readVarInt());
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		float dmg = source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F;
+		float dmg = source.is(damageSource.VOIDIC) ? amount : amount * 0.1F;
 		if (super.hurt(source, dmg)) {
 			teleport();
 			return true;
@@ -151,8 +163,8 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 			if (deathTime == 1)
 				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
 			if (deathTime == 20) {
-				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(ModItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
-				target.getData(ModDataAttachments.INSANITY).setParanoia(0);
+				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(materialItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
+				target.getData(dataAttachments.INSANITY).setParanoia(0);
 			}
 		}
 	}
