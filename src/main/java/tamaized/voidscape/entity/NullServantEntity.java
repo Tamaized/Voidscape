@@ -7,8 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
@@ -40,17 +42,30 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.nullservant.AstralAugmentGoal;
 import tamaized.voidscape.entity.ai.nullservant.IchorAugmentGoal;
 import tamaized.voidscape.entity.ai.nullservant.TitaniteAugmentGoal;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.*;
+import tamaized.voidscape.registry.item.MaterialItems;
+import tamaized.voidscape.registry.tool.set.AstralToolSet;
+import tamaized.voidscape.registry.tool.set.CorruptToolSet;
+import tamaized.voidscape.registry.tool.set.IchorToolSet;
+import tamaized.voidscape.registry.tool.set.TitaniteToolSet;
 
 import java.util.UUID;
 
+@Configurable
 public class NullServantEntity extends Monster implements IEthereal {
+
+	@Autowired
+	private static ModAttributes attributes;
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
@@ -61,9 +76,27 @@ public class NullServantEntity extends Monster implements IEthereal {
 	public static final int AUGMENT_ICHOR = 2;
 	public static final int AUGMENT_ASTRAL = 3;
 
-	private static final UUID AUGMENT_HEALTH = UUID.fromString("f65da6bd-3e6b-468a-addc-a08335a954f2");
-	private static final UUID AUGMENT_ATTACK_DAMAGE = UUID.fromString("5ae68488-df12-40c6-9517-357917341afa");
-	private static final UUID AUGMENT_RESISTANCE = UUID.fromString("dcf3c0df-c827-43f7-8d07-9d77b6ce0c83");
+	private static final ResourceLocation AUGMENT_HEALTH = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_HEALTH");
+	private static final ResourceLocation AUGMENT_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_ATTACK_DAMAGE");
+	private static final ResourceLocation AUGMENT_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_RESISTANCE");
+
+	@Autowired
+	private CorruptToolSet corruptToolSet;
+
+	@Autowired
+	private TitaniteToolSet titaniteToolSet;
+
+	@Autowired
+	private IchorToolSet ichorToolSet;
+
+	@Autowired
+	private AstralToolSet astralToolSet;
+
+	@Autowired
+	private MaterialItems materialItems;
+
+	@Autowired
+	private ModAdvancementTriggers advancementTriggers;
 
 	@Nullable
 	private ServerBossEvent bossInfo;
@@ -87,8 +120,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 				.add(Attributes.MOVEMENT_SPEED, 0.23F)
 				.add(Attributes.ATTACK_DAMAGE, 3.0D)
 				.add(Attributes.ARMOR, 10.0D)
-				.add(ModAttributes.VOIDIC_DMG.get(), 2.0D)
-				.add(ModAttributes.VOIDIC_RES.get(), 3.0D);
+				.add(attributes.VOIDIC_DMG, 2.0D)
+				.add(attributes.VOIDIC_RES, 3.0D);
 	}
 
 	@Override
@@ -105,31 +138,31 @@ public class NullServantEntity extends Monster implements IEthereal {
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
-	@Override
-	@Nullable
 	@Deprecated
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
-		this.populateDefaultEquipmentSlots(getRandom(), p_33283_);
-		this.populateDefaultEquipmentEnchantments(getRandom(), p_33283_);
-		return super.finalizeSpawn(p_33282_, p_33283_, p_33284_, p_33285_, p_33286_);
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+		this.populateDefaultEquipmentSlots(getRandom(), difficulty);
+		this.populateDefaultEquipmentEnchantments(level, getRandom(), difficulty);
+		return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
 	}
 
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_32136_) {
 		super.populateDefaultEquipmentSlots(random, p_32136_);
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextBoolean() ? ModTools.CORRUPT_AXE.get() : ModTools.CORRUPT_SWORD.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextBoolean() ? corruptToolSet.CORRUPT_AXE.get() : corruptToolSet.CORRUPT_SWORD.get()));
 	}
 
 	@Override
 	protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		if (!level().isClientSide() && getAugment() <= 0) {
-			if (pPlayer.getItemInHand(pHand).is(ModItems.TITANITE_CHUNK.get())) {
+			if (pPlayer.getItemInHand(pHand).is(materialItems.TITANITE_CHUNK.get())) {
 				doAugment(AUGMENT_TITANITE, pPlayer, pHand);
 				return InteractionResult.SUCCESS;
-			} else if (pPlayer.getItemInHand(pHand).is(ModItems.ICHOR.get())) {
+			} else if (pPlayer.getItemInHand(pHand).is(materialItems.ICHOR.get())) {
 				doAugment(AUGMENT_ICHOR, pPlayer, pHand);
 				return InteractionResult.SUCCESS;
-			} else if (pPlayer.getItemInHand(pHand).is(ModItems.ASTRAL_ESSENCE.get())) {
+			} else if (pPlayer.getItemInHand(pHand).is(materialItems.ASTRAL_ESSENCE.get())) {
 				doAugment(AUGMENT_ASTRAL, pPlayer, pHand);
 				return InteractionResult.SUCCESS;
 			}
@@ -141,7 +174,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 		setAugment(augment);
 		doAugmentEffectsAndTrackBossBar();
 		if (player instanceof ServerPlayer serverPlayer)
-			ModAdvancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.get().trigger(serverPlayer, player.getItemInHand(hand));
+			advancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.get().trigger(serverPlayer, player.getItemInHand(hand));
 		if (!player.isCreative())
 			player.getItemInHand(hand).shrink(1);
 	}
@@ -160,7 +193,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 					0D
 			);
 		}
-		PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
+		PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 4F, 0.5F + getRandom().nextFloat() * 0.5F);
 		if (bossInfo != null && getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache serverChunkCache) {
 			for(ServerPlayerConnection serverplayerconnection : serverChunkCache.chunkMap.entityMap.get(getId()).seenBy) {
@@ -181,8 +214,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	private void setupAugmentStats() {
 		AttributeInstance attributeMaxHealth = getAttribute(Attributes.MAX_HEALTH);
-		AttributeInstance attributeVoidicDamage = getAttribute(ModAttributes.VOIDIC_DMG.get());
-		AttributeInstance attributeVoidicRes = getAttribute(ModAttributes.VOIDIC_RES.get());
+		AttributeInstance attributeVoidicDamage = getAttribute(attributes.VOIDIC_DMG);
+		AttributeInstance attributeVoidicRes = getAttribute(attributes.VOIDIC_RES);
 		if (attributeMaxHealth == null || attributeVoidicDamage == null || attributeVoidicRes == null)
 			return;
 		attributeMaxHealth.removeModifier(AUGMENT_HEALTH);
@@ -190,36 +223,36 @@ public class NullServantEntity extends Monster implements IEthereal {
 		attributeVoidicRes.removeModifier(AUGMENT_RESISTANCE);
 
 		if (getAugment() == AUGMENT_TITANITE) {
-			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 50F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 1F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 1F, AttributeModifier.Operation.ADDITION));
+			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, 50F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, 1F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, 1F, AttributeModifier.Operation.ADD_VALUE));
 			ItemStack stack = ItemStack.EMPTY;
-			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
-				stack = new ItemStack(ModTools.TITANITE_SWORD.get());
-			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
-				stack = new ItemStack(ModTools.TITANITE_AXE.get());
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_SWORD.get()))
+				stack = new ItemStack(titaniteToolSet.TITANITE_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_AXE.get()))
+				stack = new ItemStack(titaniteToolSet.TITANITE_AXE.get());
 			if (!stack.isEmpty())
 				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		} else if (getAugment() == AUGMENT_ICHOR) {
-			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 150F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 4F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 2F, AttributeModifier.Operation.ADDITION));
+			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, 150F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, 4F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, 2F, AttributeModifier.Operation.ADD_VALUE));
 			ItemStack stack = ItemStack.EMPTY;
-			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
-				stack = new ItemStack(ModTools.ICHOR_SWORD.get());
-			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
-				stack = new ItemStack(ModTools.ICHOR_AXE.get());
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_SWORD.get()))
+				stack = new ItemStack(ichorToolSet.ICHOR_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_AXE.get()))
+				stack = new ItemStack(ichorToolSet.ICHOR_AXE.get());
 			if (!stack.isEmpty())
 				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		} else if (getAugment() == AUGMENT_ASTRAL) {
-			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, "Augmented Health", 400F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, "Augmented Damage", 8F, AttributeModifier.Operation.ADDITION));
-			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, "Augmented Resistance", 4F, AttributeModifier.Operation.ADDITION));
+			attributeMaxHealth.addTransientModifier(new AttributeModifier(AUGMENT_HEALTH, 400F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicDamage.addTransientModifier(new AttributeModifier(AUGMENT_ATTACK_DAMAGE, 8F, AttributeModifier.Operation.ADD_VALUE));
+			attributeVoidicRes.addTransientModifier(new AttributeModifier(AUGMENT_RESISTANCE, 4F, AttributeModifier.Operation.ADD_VALUE));
 			ItemStack stack = ItemStack.EMPTY;
-			if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_SWORD.get()))
-				stack = new ItemStack(ModTools.ASTRAL_SWORD.get());
-			else if (getItemInHand(InteractionHand.MAIN_HAND).is(ModTools.CORRUPT_AXE.get()))
-				stack = new ItemStack(ModTools.ASTRAL_AXE.get());
+			if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_SWORD.get()))
+				stack = new ItemStack(astralToolSet.ASTRAL_SWORD.get());
+			else if (getItemInHand(InteractionHand.MAIN_HAND).is(corruptToolSet.CORRUPT_AXE.get()))
+				stack = new ItemStack(astralToolSet.ASTRAL_AXE.get());
 			if (!stack.isEmpty())
 				setItemSlot(EquipmentSlot.MAINHAND, stack);
 		}
@@ -258,12 +291,12 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		entityData.define(AUGMENT, 0);
-		entityData.define(AUGMENT_ATTACK, false);
-		entityData.define(AUGMENT_ATTACK_AOE1, new Vector3f());
-		entityData.define(AUGMENT_ATTACK_AOE2, new Vector3f());
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(AUGMENT, 0);
+		builder.define(AUGMENT_ATTACK, false);
+		builder.define(AUGMENT_ATTACK_AOE1, new Vector3f());
+		builder.define(AUGMENT_ATTACK_AOE2, new Vector3f());
 	}
 
 	public Integer getAugment() {
@@ -309,13 +342,13 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 		if (getAugment() == AUGMENT_TITANITE) {
-			this.spawnAtLocation(new ItemStack(ModItems.TITANITE_SHARD.get()));
+			this.spawnAtLocation(new ItemStack(materialItems.TITANITE_SHARD.get()));
 		} else if (getAugment() == AUGMENT_ICHOR) {
-			this.spawnAtLocation(new ItemStack(ModItems.ICHOR_CRYSTAL.get()));
+			this.spawnAtLocation(new ItemStack(materialItems.ICHOR_CRYSTAL.get()));
 		} else if (getAugment() == AUGMENT_ASTRAL) {
-			this.spawnAtLocation(new ItemStack(ModItems.ASTRAL_CRYSTAL.get()));
+			this.spawnAtLocation(new ItemStack(materialItems.ASTRAL_CRYSTAL.get()));
 		}
 	}
 

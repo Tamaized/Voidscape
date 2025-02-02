@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -30,6 +31,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
@@ -38,9 +41,13 @@ import tamaized.voidscape.registry.ModEntities;
 import java.util.ArrayList;
 import java.util.Random;
 
+@Configurable
 public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityWithComplexSpawn, IEthereal {
 
 	private static final EntityDataAccessor<BlockState> MIMIC = SynchedEntityData.defineId(NullServantAugmentBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
+
+	@Autowired
+	private ModDamageSource damageSource;
 
 	private NullServantEntity parent;
 
@@ -104,16 +111,16 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 						0D
 				);
 			}
-			PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
+			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		} else {
 			discard();
 		}
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		entityData.define(MIMIC, Blocks.BEDROCK.defaultBlockState());
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(MIMIC, Blocks.BEDROCK.defaultBlockState());
 	}
 
 	public BlockState getMimic() {
@@ -138,12 +145,12 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer) {
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
 		buffer.writeInt(parent == null ? -1 : parent.getId());
 	}
 
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData) {
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
 		if(level().getEntity(additionalData.readInt()) instanceof NullServantEntity p)
 			parent = p;
 	}
@@ -159,7 +166,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 		if (source.is(DamageTypes.IN_WALL))
 			return false;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
-			return super.hurt(source, source.is(ModDamageSource.VOIDIC) ? amount : amount * 0.1F);
+			return super.hurt(source, source.is(damageSource.VOIDIC) ? amount : amount * 0.1F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
 			return super.hurt(source, source.getEntity() == parent ? amount : amount * 0.01F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ASTRAL)

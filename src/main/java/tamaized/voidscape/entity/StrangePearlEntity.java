@@ -4,27 +4,33 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.ModItems;
+import tamaized.voidscape.registry.item.MaterialItems;
 
+@Configurable
 public class StrangePearlEntity extends AbstractHurtingProjectile implements ItemSupplier {
+
+	@Autowired
+	private MaterialItems materialItems;
+
+	@Autowired
+	private ModDamageSource damageSource;
 
 	private float damage = 0F;
 	private ItemStack stack = new ItemStack(getDefaultItem());
@@ -38,7 +44,7 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	}
 
 	public StrangePearlEntity(Level pLevel, LivingEntity pShooter, Vec3 dir) {
-		super(ModEntities.STRANGE_PEARL.get(), pShooter, dir.x(), dir.y(), dir.z(), pLevel);
+		super(ModEntities.STRANGE_PEARL.get(), pShooter, dir, pLevel);
 		setPos(pShooter.getEyePosition());
 	}
 
@@ -58,7 +64,7 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	}
 
 	protected Item getDefaultItem() {
-		return ModItems.STRANGE_PEARL.get();
+		return materialItems.STRANGE_PEARL.get();
 	}
 
 	@Override
@@ -86,7 +92,8 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 
 	}
 
-	protected float getGravity() {
+	@Override
+	protected double getDefaultGravity() {
 		return 0.03F;
 	}
 
@@ -110,9 +117,9 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
 		super.onHitEntity(pResult);
-		pResult.getEntity().hurt(ModDamageSource.getIndirectEntityDamageSource(level(), ModDamageSource.VOIDIC, this, getOwner()), damage);
-		if (pResult.getEntity() instanceof EndCrystal && getItem().is(ModItems.STRANGE_PEARL.get())) {
-			this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.ASTRAL_SHARDS.get())));
+		pResult.getEntity().hurt(damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, getOwner()), damage);
+		if (pResult.getEntity() instanceof EndCrystal && getItem().is(materialItems.STRANGE_PEARL.get())) {
+			this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(materialItems.ASTRAL_SHARDS.get())));
 		}
 	}
 

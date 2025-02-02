@@ -77,7 +77,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 						0D
 				);
 			}
-			PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
+			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		} else {
 			discard();
 		}
@@ -89,8 +89,8 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
-	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
-		return p_33285_;
+	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+		return spawnGroupData;
 	}
 
 	@Override
@@ -109,12 +109,12 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
-	protected void dropAllDeathLoot(DamageSource pDamageSource) {
+	protected void dropAllDeathLoot(ServerLevel p_level, DamageSource damageSource) {
 
 	}
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 
 	}
 
@@ -146,7 +146,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 					Vec3 dir = new Vec3(parent.getX(), parent.getY() + parent.getEyeHeight() / 2F, parent.getZ()).subtract(position()).normalize().scale(0.5D);
 					ClientPacketSendParticles packet = new ClientPacketSendParticles();
 					packet.queueParticle(ParticleTypes.END_ROD, false, getX(), getY() + getBbHeight() / 2F, getZ(), dir.x(), dir.y(), dir.z());
-					PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+					PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 				}
 			}
 		}

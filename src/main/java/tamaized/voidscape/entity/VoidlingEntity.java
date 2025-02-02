@@ -7,10 +7,19 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.level.Level;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
 
+@Configurable
 public class VoidlingEntity extends Spider implements IEthereal {
+
+	@Autowired
+	private static ModAttributes attributes;
+
+	@Autowired
+	private ModDataAttachments dataAttachments;
 
 	public VoidlingEntity(EntityType<? extends VoidlingEntity> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
@@ -20,15 +29,15 @@ public class VoidlingEntity extends Spider implements IEthereal {
 		return Spider.createAttributes()
 				.add(Attributes.MOVEMENT_SPEED, 0.4F)
 				.add(Attributes.ARMOR, 8.0D)
-				.add(ModAttributes.VOIDIC_DMG.get(), 3.0D)
-				.add(ModAttributes.VOIDIC_RES.get(), 2.0D);
+				.add(attributes.VOIDIC_DMG, 3.0D)
+				.add(attributes.VOIDIC_RES, 2.0D);
 	}
 
 	@Override
 	public boolean doHurtTarget(Entity entity) {
 		if (super.doHurtTarget(entity)) {
 			if (entity instanceof LivingEntity living)
-				entity.getData(ModDataAttachments.INSANITY.get()).addInfusion(25, living);
+				entity.getData(dataAttachments.INSANITY.get()).addInfusion(25, living);
 			return true;
 		}
 		return false;

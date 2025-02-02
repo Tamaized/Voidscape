@@ -4,10 +4,16 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModEntities;
 
+@Configurable
 public class IchorBoltEntity extends SpellBoltEntity {
+
+	@Autowired
+	private ModEffects effects;
 
 	public IchorBoltEntity(EntityType<IchorBoltEntity> type, Level level) {
 		super(type, level, 0xFF7700);
@@ -19,7 +25,7 @@ public class IchorBoltEntity extends SpellBoltEntity {
 
 	@Override
 	protected void doPostHurtEffects(LivingEntity entity) {
-		entity.addEffect(new MobEffectInstance(ModEffects.ICHOR.get(), 20 * 30));
+		entity.addEffect(new MobEffectInstance(effects.ICHOR, 20 * 30));
 	}
 
 }

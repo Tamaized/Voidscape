@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
@@ -19,6 +20,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 import tamaized.voidscape.registry.ModParticles;
 
 public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWithComplexSpawn {
@@ -34,7 +36,7 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWi
 	protected double maxRange = 0D;
 
 	public SpellBoltEntity(EntityType<? extends SpellBoltEntity> type, Level level, int color) {
-		super(type, level, ItemStack.EMPTY);
+		super(type, level);
 		startingPoint = position();
 		pickup = Pickup.DISALLOWED;
 		noCulling = true;
@@ -70,7 +72,7 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWi
 	}
 
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer) {
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
 		buffer.writeDouble(getX());
 		buffer.writeDouble(getY());
 		buffer.writeDouble(getZ());
@@ -81,12 +83,17 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWi
 	}
 
 	@Override
-	public void readSpawnData(FriendlyByteBuf buffer) {
+	public void readSpawnData(RegistryFriendlyByteBuf buffer) {
 		moveTo(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		range = buffer.readFloat();
 		speed = buffer.readDouble();
 		maxRange = buffer.readDouble();
 		particleColor = buffer.readInt();
+	}
+
+	@Override
+	protected ItemStack getDefaultPickupItem() {
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -185,7 +192,7 @@ public abstract class SpellBoltEntity extends AbstractArrow implements IEntityWi
 		moveTo(getX(), getY(), getZ());
 		checkInsideBlocks();
 		if (level().isClientSide())
-			level().addParticle(new ModParticles.ParticleSpellCloudData(particleColor), getX() - 0.3F + random.nextFloat() * 0.6F, getY() - 0.3F + random.nextFloat() * 0.6F, getZ() - 0.3F + random.nextFloat() * 0.6F, 0, 0, 0);
+			level().addParticle(new ParticleTypeSpellCloud.Options(particleColor), getX() - 0.3F + random.nextFloat() * 0.6F, getY() - 0.3F + random.nextFloat() * 0.6F, getZ() - 0.3F + random.nextFloat() * 0.6F, 0, 0, 0);
 	}
 
 	@Override

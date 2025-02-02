@@ -8,12 +8,18 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 
+@Configurable
 public class NullServantIchorBoltEntity extends SpellBoltEntity {
+
+	@Autowired
+	private ModDamageSource damageSource;
 
 	public NullServantIchorBoltEntity(EntityType<NullServantIchorBoltEntity> type, Level level) {
 		super(type, level, 0xFF0000);
@@ -35,10 +41,10 @@ public class NullServantIchorBoltEntity extends SpellBoltEntity {
 		if (!level().isClientSide()) {
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			particles.queueParticle(ParticleTypes.EXPLOSION, false, position().x(), position().y(), position().z(), 0, 0, 0);
-			PacketDistributor.TRACKING_ENTITY.with(this).send(particles);
+			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		}
 		level().playSound(null, blockPosition(), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 4F, 1F);
-		entity.hurt(ModDamageSource.getIndirectEntityDamageSource(level(), ModDamageSource.VOIDIC, this, shootingEntity), 16F);
+		entity.hurt(damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, shootingEntity), 16F);
 	}
 
 }

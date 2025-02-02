@@ -2,11 +2,10 @@ package tamaized.voidscape.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -33,16 +32,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.entity.ai.wrath.ChargedExplosionGoal;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.ModTools;
+import tamaized.voidscape.registry.tool.set.CharredToolSet;
 
 import javax.annotation.Nullable;
 
+@Configurable
 public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal {
 
+	@Autowired
+	private static ModAttributes attributes;
+
 	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(VoidsWrathEntity.class, EntityDataSerializers.BOOLEAN);
+
+	@Autowired
+	private CharredToolSet charredToolSet;
 
 	public VoidsWrathEntity(Level level) {
 		this(ModEntities.VOIDS_WRATH.get(), level);
@@ -59,7 +67,7 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 				.add(Attributes.MOVEMENT_SPEED, 0.23F)
 				.add(Attributes.ATTACK_DAMAGE, 3.0D)
 				.add(Attributes.ARMOR, 20.0D)
-				.add(ModAttributes.VOIDIC_DMG.get(), 3D);
+				.add(attributes.VOIDIC_DMG, 3D);
 	}
 
 	@Override
@@ -74,22 +82,23 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
+
+	@org.jetbrains.annotations.Nullable
 	@Override
-	@Nullable
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_33282_, DifficultyInstance p_33283_, MobSpawnType p_33284_, @Nullable SpawnGroupData p_33285_, @Nullable CompoundTag p_33286_) {
-		this.populateDefaultEquipmentSlots(getRandom(), p_33283_);
-		this.populateDefaultEquipmentEnchantments(getRandom(), p_33283_);
-		return super.finalizeSpawn(p_33282_, p_33283_, p_33284_, p_33285_, p_33286_);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
+		this.populateDefaultEquipmentSlots(getRandom(), difficulty);
+		this.populateDefaultEquipmentEnchantments(level, getRandom(), difficulty);
+		return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
 	}
 
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_32136_) {
 		super.populateDefaultEquipmentSlots(random, p_32136_);
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModTools.CHARRED_WARHAMMER.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(charredToolSet.CHARRED_WARHAMMER.get()));
 	}
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource p_21385_, int p_21386_, boolean p_21387_) {
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 		// NO-OP
 	}
 
@@ -100,9 +109,9 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		entityData.define(GLOWING, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(GLOWING, false);
 	}
 
 	@Override
