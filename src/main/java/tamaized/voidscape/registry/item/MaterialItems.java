@@ -9,8 +9,8 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.item.BlockTransformerItem;
 import tamaized.voidscape.item.StrangePearlThrowableItem;
 import tamaized.voidscape.item.VoidPortalActivatorItem;
-import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.registry.ModItemProperties;
+import tamaized.voidscape.registry.block.SpireBlocks;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class MaterialItems {
 
 	@Autowired
-	private ModBlocks blocks;
+	private SpireBlocks spireBlocks;
 
 	@Autowired
 	private ModItemProperties itemProperties;
@@ -44,8 +44,8 @@ public class MaterialItems {
 	public final Supplier<Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new StrangePearlThrowableItem(itemProperties.LAVA_IMMUNE.get()));
 
 	public final Supplier<Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new BlockTransformerItem.Builder(
-		state -> state.is(blocks.ANTIROCK),
-		() -> blocks.ASTRALROCK.get().defaultBlockState()
+		state -> state.is(spireBlocks.ANTIROCK),
+		() -> spireBlocks.ASTRALROCK.get().defaultBlockState()
 	).build(itemProperties.LAVA_IMMUNE.get()));
 
 	public final Supplier<Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(itemProperties.LAVA_IMMUNE.get()));

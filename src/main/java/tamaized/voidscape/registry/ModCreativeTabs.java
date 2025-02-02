@@ -11,200 +11,156 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.armor.set.*;
 import tamaized.voidscape.registry.block.*;
 import tamaized.voidscape.registry.item.*;
+import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 import java.util.function.Supplier;
 
 @tamaized.beanification.Component
 public class ModCreativeTabs {
 
-	// Blocks
 	@Autowired
-	private EtherealFruitBlocks etherealFruitBlocks;
+	private ModBlockComponentDirectory blockComponentDirectory;
 
 	@Autowired
-	private FunctionalBlocks functionalBlocks;
+	private ModItemComponentDirectory itemComponentDirectory;
 
 	@Autowired
-	private MachineBlocks machineBlocks;
+	private ModArmorSetComponentDirectory armorSetComponentDirectory;
 
 	@Autowired
-	private MaterialBlocks materialBlocks;
-
-	@Autowired
-	private NullBiomeBlocks nullBiomeBlocks;
-
-	@Autowired
-	private OreBlocks oreBlocks;
-
-	@Autowired
-	private SpireBlocks spireBlocks;
-
-	@Autowired
-	private ThunderForestBiomeBlocks thunderForestBiomeBlocks;
-
-	// Items
-	@Autowired
-	private AugmentItems augmentItems;
-
-	@Autowired
-	private EtherealFruitItems etherealFruitItems;
-
-	@Autowired
-	private MaterialItems materialItems;
-
-	@Autowired
-	private MiscItems miscItems;
-
-	@Autowired
-	private PartItems partItems;
-
-	// Armor Sets
-	@Autowired
-	private VoidicCrystalArmorSet voidicCrystalArmorSet;
-
-	@Autowired
-	private CorruptArmorSet corruptArmorSet;
-
-	@Autowired
-	private TitaniteArmorSet titaniteArmorSet;
-
-	@Autowired
-	private IchorArmorSet ichorArmorSet;
-
-	@Autowired
-	private AstralArmorSet astralArmorSet;
+	private ModToolSetComponentDirectory toolSetComponentDirectory;
 
 	private final DeferredRegister<CreativeModeTab> REGISTRY = RegUtil.create(Registries.CREATIVE_MODE_TAB);
 
 	public final Supplier<CreativeModeTab> TAB = REGISTRY.register("tab", () -> CreativeModeTab.builder()
 		.title(Component.translatable(Voidscape.MODID + ".item_group"))
-		.icon(() -> new ItemStack(materialItems.VOIDIC_CRYSTAL.get()))
+		.icon(() -> new ItemStack(itemComponentDirectory.materialItems().VOIDIC_CRYSTAL.get()))
 		.displayItems((parameters, output) -> {
 			//// Blocks
-			output.accept(oreBlocks.VOIDIC_CRYSTAL_ORE_ITEM.get());
-			output.accept(materialBlocks.VOIDIC_CRYSTAL_BLOCK_ITEM.get());
-			output.accept(functionalBlocks.VERY_DRIPPY_DRIPSTONE_ITEM.get());
-			output.accept(materialBlocks.CHARRED_BRICK_ITEM.get());
-			output.accept(oreBlocks.TITANITE_ORE_ITEM.get());
-			output.accept(oreBlocks.FLESH_ORE_ITEM.get());
-			output.accept(materialBlocks.FLESH_BLOCK_ITEM.get());
-			output.accept(oreBlocks.STRANGE_ORE_ITEM.get());
-			output.accept(spireBlocks.THUNDERROCK_ITEM.get());
-			output.accept(spireBlocks.ANTIROCK_ITEM.get());
-			output.accept(spireBlocks.ASTRALROCK_ITEM.get());
-			output.accept(oreBlocks.CRACKED_ASTRALROCK_ITEM.get());
-			output.accept(nullBiomeBlocks.NULL_BLACK_ITEM.get());
-			output.accept(nullBiomeBlocks.NULL_WHITE_ITEM.get());
+			output.accept(blockComponentDirectory.oreBlocks().VOIDIC_CRYSTAL_ORE_ITEM.get());
+			output.accept(blockComponentDirectory.materialBlocks().VOIDIC_CRYSTAL_BLOCK_ITEM.get());
+			output.accept(blockComponentDirectory.functionalBlocks().VERY_DRIPPY_DRIPSTONE_ITEM.get());
+			output.accept(blockComponentDirectory.materialBlocks().CHARRED_BRICK_ITEM.get());
+			output.accept(blockComponentDirectory.oreBlocks().TITANITE_ORE_ITEM.get());
+			output.accept(blockComponentDirectory.oreBlocks().FLESH_ORE_ITEM.get());
+			output.accept(blockComponentDirectory.materialBlocks().FLESH_BLOCK_ITEM.get());
+			output.accept(blockComponentDirectory.oreBlocks().STRANGE_ORE_ITEM.get());
+			output.accept(blockComponentDirectory.spireBlocks().THUNDERROCK_ITEM.get());
+			output.accept(blockComponentDirectory.spireBlocks().ANTIROCK_ITEM.get());
+			output.accept(blockComponentDirectory.spireBlocks().ASTRALROCK_ITEM.get());
+			output.accept(blockComponentDirectory.oreBlocks().CRACKED_ASTRALROCK_ITEM.get());
+			output.accept(blockComponentDirectory.nullBiomeBlocks().NULL_BLACK_ITEM.get());
+			output.accept(blockComponentDirectory.nullBiomeBlocks().NULL_WHITE_ITEM.get());
 			// Machine
-			output.accept(machineBlocks.MACHINE_CORE_ITEM.get());
-			output.accept(machineBlocks.MACHINE_LIQUIFIER_ITEM.get());
-			output.accept(machineBlocks.MACHINE_DEFUSER_ITEM.get());
-			output.accept(machineBlocks.MACHINE_GERMINATOR_ITEM.get());
-			output.accept(machineBlocks.MACHINE_WELL_ITEM.get());
-			output.accept(machineBlocks.MACHINE_COOP_ITEM.get());
-			output.accept(machineBlocks.MACHINE_HATCHERY_ITEM.get());
-			output.accept(machineBlocks.MACHINE_INFUSER_ITEM.get());
-			output.accept(machineBlocks.MACHINE_COLLECTOR_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_CORE_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_LIQUIFIER_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_DEFUSER_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_GERMINATOR_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_WELL_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_COOP_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_HATCHERY_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_INFUSER_ITEM.get());
+			output.accept(blockComponentDirectory.machineBlocks().MACHINE_COLLECTOR_ITEM.get());
 			// Biome - Thunder Forest
-			output.accept(thunderForestBiomeBlocks.THUNDER_NYLIUM_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_ROOTS_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_WART_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_VINES_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_FUNGUS_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_STEM_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_HYPHAE_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_STEM_STRIPPED_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_HYPHAE_STRIPPED_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_PLANKS_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_STAIRS_ITEM.get());
-			output.accept(thunderForestBiomeBlocks.THUNDER_SLAB_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_NYLIUM_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_ROOTS_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_WART_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_VINES_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_FUNGUS_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_STEM_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_HYPHAE_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_PLANKS_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_STAIRS_ITEM.get());
+			output.accept(blockComponentDirectory.thunderForestBiomeBlocks().THUNDER_SLAB_ITEM.get());
 			// Crops
-			output.accept(etherealFruitBlocks.VOID.get());
-			output.accept(etherealFruitBlocks.NULL.get());
-			output.accept(etherealFruitBlocks.OVERWORLD.get());
-			output.accept(etherealFruitBlocks.NETHER.get());
-			output.accept(etherealFruitBlocks.END.get());
-			output.accept(etherealFruitItems.ETHEREAL_FRUIT_VOID.get());
-			output.accept(etherealFruitItems.ETHEREAL_FRUIT_NULL.get());
-			output.accept(etherealFruitItems.ETHEREAL_FRUIT_OVERWORLD.get());
-			output.accept(etherealFruitItems.ETHEREAL_FRUIT_NETHER.get());
-			output.accept(etherealFruitItems.ETHEREAL_FRUIT_END.get());
+			output.accept(blockComponentDirectory.etherealFruitBlocks().VOID.get());
+			output.accept(blockComponentDirectory.etherealFruitBlocks().NULL.get());
+			output.accept(blockComponentDirectory.etherealFruitBlocks().OVERWORLD.get());
+			output.accept(blockComponentDirectory.etherealFruitBlocks().NETHER.get());
+			output.accept(blockComponentDirectory.etherealFruitBlocks().END.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_VOID.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NULL.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_OVERWORLD.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NETHER.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_END.get());
 			//// Items
-			output.accept(miscItems.ETHEREAL_SPIDER_EGGS.get());
-			output.accept(augmentItems.ETHEREAL_SPIDER_FANG.get());
-			output.accept(miscItems.ETHEREAL_ESSENCE.get());
-			output.accept(materialItems.VOIDIC_CRYSTAL.get());
-			output.accept(augmentItems.VOIDIC_TEMPLATE.get());
+			output.accept(itemComponentDirectory.miscItems().ETHEREAL_SPIDER_EGGS.get());
+			output.accept(itemComponentDirectory.augmentItems().ETHEREAL_SPIDER_FANG.get());
+			output.accept(itemComponentDirectory.miscItems().ETHEREAL_ESSENCE.get());
+			output.accept(itemComponentDirectory.materialItems().VOIDIC_CRYSTAL.get());
+			output.accept(itemComponentDirectory.augmentItems().VOIDIC_TEMPLATE.get());
 			// Gear - Voidic
-			output.accept(ModTools.VOIDIC_CRYSTAL_SWORD.get());
-			output.accept(ModTools.VOIDIC_CRYSTAL_AXE.get());
-			output.accept(ModTools.VOIDIC_CRYSTAL_PICKAXE.get());
-			output.accept(ModTools.VOIDIC_CRYSTAL_SHIELD.get());
-			output.accept(ModTools.VOIDIC_CRYSTAL_BOW.get());
-			output.accept(ModTools.VOIDIC_CRYSTAL_XBOW.get());
-			output.accept(voidicCrystalArmorSet.VOIDIC_CRYSTAL_HELMET.get());
-			output.accept(voidicCrystalArmorSet.VOIDIC_CRYSTAL_CHEST.get());
-			output.accept(voidicCrystalArmorSet.VOIDIC_CRYSTAL_LEGS.get());
-			output.accept(voidicCrystalArmorSet.VOIDIC_CRYSTAL_BOOTS.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_SWORD.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_AXE.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_PICKAXE.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_SHIELD.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_BOW.get());
+			output.accept(toolSetComponentDirectory.voidicCrystalToolSet().VOIDIC_CRYSTAL_XBOW.get());
+			output.accept(armorSetComponentDirectory.voidicCrystalArmorSet().VOIDIC_CRYSTAL_HELMET.get());
+			output.accept(armorSetComponentDirectory.voidicCrystalArmorSet().VOIDIC_CRYSTAL_CHEST.get());
+			output.accept(armorSetComponentDirectory.voidicCrystalArmorSet().VOIDIC_CRYSTAL_LEGS.get());
+			output.accept(armorSetComponentDirectory.voidicCrystalArmorSet().VOIDIC_CRYSTAL_BOOTS.get());
 			// Gear - Charred
-			output.accept(materialItems.CHARRED_BONE.get());
-			output.accept(partItems.CHARRED_WARHAMMER_HEAD.get());
-			output.accept(ModTools.CHARRED_WARHAMMER.get());
+			output.accept(itemComponentDirectory.materialItems().CHARRED_BONE.get());
+			output.accept(itemComponentDirectory.partItems().CHARRED_WARHAMMER_HEAD.get());
+			output.accept(toolSetComponentDirectory.charredToolSet().CHARRED_WARHAMMER.get());
 			// Gear - Corrupt
-			output.accept(materialItems.TENDRIL.get());
-			output.accept(ModTools.CORRUPT_SWORD.get());
-			output.accept(ModTools.CORRUPT_AXE.get());
-			output.accept(ModTools.CORRUPT_BOW.get());
-			output.accept(ModTools.CORRUPT_XBOW.get());
-			output.accept(corruptArmorSet.CORRUPT_HELMET.get());
-			output.accept(corruptArmorSet.CORRUPT_CHEST.get());
-			output.accept(corruptArmorSet.CORRUPT_LEGS.get());
-			output.accept(corruptArmorSet.CORRUPT_BOOTS.get());
+			output.accept(itemComponentDirectory.materialItems().TENDRIL.get());
+			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_SWORD.get());
+			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_AXE.get());
+			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_BOW.get());
+			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_XBOW.get());
+			output.accept(armorSetComponentDirectory.corruptArmorSet().CORRUPT_HELMET.get());
+			output.accept(armorSetComponentDirectory.corruptArmorSet().CORRUPT_CHEST.get());
+			output.accept(armorSetComponentDirectory.corruptArmorSet().CORRUPT_LEGS.get());
+			output.accept(armorSetComponentDirectory.corruptArmorSet().CORRUPT_BOOTS.get());
 			// Gear - Titanite
-			output.accept(materialItems.TITANITE_CHUNK.get());
-			output.accept(materialItems.TITANITE_SHARD.get());
-			output.accept(ModTools.TITANITE_SWORD.get());
-			output.accept(ModTools.TITANITE_AXE.get());
-			output.accept(ModTools.TITANITE_PICKAXE.get());
-			output.accept(ModTools.TITANITE_HOE.get());
-			output.accept(ModTools.TITANITE_BOW.get());
-			output.accept(ModTools.TITANITE_XBOW.get());
-			output.accept(titaniteArmorSet.TITANITE_HELMET.get());
-			output.accept(titaniteArmorSet.TITANITE_CHEST.get());
-			output.accept(titaniteArmorSet.TITANITE_LEGS.get());
-			output.accept(titaniteArmorSet.TITANITE_BOOTS.get());
+			output.accept(itemComponentDirectory.materialItems().TITANITE_CHUNK.get());
+			output.accept(itemComponentDirectory.materialItems().TITANITE_SHARD.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_SWORD.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_AXE.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_PICKAXE.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_HOE.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_BOW.get());
+			output.accept(toolSetComponentDirectory.titaniteToolSet().TITANITE_XBOW.get());
+			output.accept(armorSetComponentDirectory.titaniteArmorSet().TITANITE_HELMET.get());
+			output.accept(armorSetComponentDirectory.titaniteArmorSet().TITANITE_CHEST.get());
+			output.accept(armorSetComponentDirectory.titaniteArmorSet().TITANITE_LEGS.get());
+			output.accept(armorSetComponentDirectory.titaniteArmorSet().TITANITE_BOOTS.get());
 			// Gear - Ichor
-			output.accept(materialItems.FLESH_CHUNK.get());
-			output.accept(materialItems.ICHOR.get());
-			output.accept(materialItems.ICHOR_CRYSTAL.get());
-			output.accept(ModTools.ICHOR_TOME.get());
-			output.accept(ModTools.VOIDIC_TOME.get());
-			output.accept(ModTools.CORRUPT_TOME.get());
-			output.accept(ModTools.TITANITE_TOME.get());
-			output.accept(ModTools.ICHOR_SWORD.get());
-			output.accept(ModTools.ICHOR_AXE.get());
-			output.accept(ModTools.ICHOR_PICKAXE.get());
-			output.accept(ModTools.ICHOR_BOW.get());
-			output.accept(ModTools.ICHOR_XBOW.get());
-			output.accept(ichorArmorSet.ICHOR_HELMET.get());
-			output.accept(ichorArmorSet.ICHOR_CHEST.get());
-			output.accept(ichorArmorSet.ICHOR_LEGS.get());
-			output.accept(ichorArmorSet.ICHOR_BOOTS.get());
+			output.accept(itemComponentDirectory.materialItems().FLESH_CHUNK.get());
+			output.accept(itemComponentDirectory.materialItems().ICHOR.get());
+			output.accept(itemComponentDirectory.materialItems().ICHOR_CRYSTAL.get());
+			output.accept(toolSetComponentDirectory.spellTomeSet().ICHOR_TOME.get());
+			output.accept(toolSetComponentDirectory.spellTomeSet().VOIDIC_TOME.get());
+			output.accept(toolSetComponentDirectory.spellTomeSet().CORRUPT_TOME.get());
+			output.accept(toolSetComponentDirectory.spellTomeSet().TITANITE_TOME.get());
+			output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_SWORD.get());
+			output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_AXE.get());
+			output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_PICKAXE.get());
+			output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_BOW.get());
+			output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_XBOW.get());
+			output.accept(armorSetComponentDirectory.ichorArmorSet().ICHOR_HELMET.get());
+			output.accept(armorSetComponentDirectory.ichorArmorSet().ICHOR_CHEST.get());
+			output.accept(armorSetComponentDirectory.ichorArmorSet().ICHOR_LEGS.get());
+			output.accept(armorSetComponentDirectory.ichorArmorSet().ICHOR_BOOTS.get());
 			// Gear - Astral
-			output.accept(materialItems.STRANGE_PEARL.get());
-			output.accept(materialItems.ASTRAL_SHARDS.get());
-			output.accept(materialItems.ASTRAL_ESSENCE.get());
-			output.accept(materialItems.ASTRAL_CRYSTAL.get());
-			output.accept(ModTools.ASTRAL_SWORD.get());
-			output.accept(ModTools.ASTRAL_AXE.get());
-			output.accept(ModTools.ASTRAL_PICKAXE.get());
-			output.accept(ModTools.ASTRAL_SHOVEL.get());
-			output.accept(ModTools.ASTRAL_BOW.get());
-			output.accept(ModTools.ASTRAL_XBOW.get());
-			output.accept(astralArmorSet.ASTRAL_HELMET.get());
-			output.accept(astralArmorSet.ASTRAL_CHEST.get());
-			output.accept(astralArmorSet.ASTRAL_LEGS.get());
-			output.accept(astralArmorSet.ASTRAL_BOOTS.get());
+			output.accept(itemComponentDirectory.materialItems().STRANGE_PEARL.get());
+			output.accept(itemComponentDirectory.materialItems().ASTRAL_SHARDS.get());
+			output.accept(itemComponentDirectory.materialItems().ASTRAL_ESSENCE.get());
+			output.accept(itemComponentDirectory.materialItems().ASTRAL_CRYSTAL.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_SWORD.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_AXE.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_PICKAXE.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_SHOVEL.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_BOW.get());
+			output.accept(toolSetComponentDirectory.astralToolSet().ASTRAL_XBOW.get());
+			output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_HELMET.get());
+			output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_CHEST.get());
+			output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_LEGS.get());
+			output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_BOOTS.get());
 		})
 		.build());
 

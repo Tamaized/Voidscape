@@ -29,25 +29,28 @@ public class EtherealFruitItems {
 	@Autowired
 	private ModItemProperties itemProperties;
 
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
 	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
 
 	public final Supplier<Item> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealFruitItem(
-		entity -> entity.getData(ModDataAttachments.INSANITY).addInfusion(150, entity),
+		entity -> entity.getData(dataAttachments.INSANITY).addInfusion(150, entity),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
 	public final Supplier<Item> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealFruitItem(
-		entity -> entity.getData(ModDataAttachments.INSANITY).removeInfusion(150),
+		entity -> entity.getData(dataAttachments.INSANITY).removeInfusion(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
 	public final Supplier<Item> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealFruitItem(
-		entity -> entity.getData(ModDataAttachments.INSANITY).removeParanoia(150),
+		entity -> entity.getData(dataAttachments.INSANITY).removeParanoia(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
 	public final Supplier<Item> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealFruitItem(
-		entity -> entity.getData(ModDataAttachments.INSANITY).addParanoia(150),
+		entity -> entity.getData(dataAttachments.INSANITY).addParanoia(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
