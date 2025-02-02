@@ -1,30 +1,31 @@
 package tamaized.voidscape.data;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.UnknownNullability;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.config.common.CommonConfig;
 import tamaized.voidscape.dimension.DirectTeleporter;
@@ -32,13 +33,13 @@ import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
+import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidPortalTeleporter;
 import tamaized.voidscape.util.LevelUtil;
 
-import java.util.UUID;
-
-public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> {
+@Configurable
+public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> { // TODO: split up this class into multiple components
 
 	@Autowired
 	private LevelUtil levelUtil;
@@ -52,9 +53,21 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	@Autowired
 	private DirectTeleporter directTeleporter;
 
-	private static final UUID INFUSION_HEALTH_DECAY = UUID.fromString("56ace1bf-6e7f-4724-b4d6-4012519a5b5d");
-	private static final UUID INFUSION_ATTACK_DAMAGE = UUID.fromString("08eecf1b-9bbb-46eb-be7e-76308d1241e7");
-	private static final UUID INFUSION_RESISTANCE = UUID.fromString("4fe870c1-c74f-4856-b30d-7a4311d72639");
+	@Autowired
+	private ModEffects effects;
+
+	@Autowired
+	private ModDamageSource damageSource;
+
+	@Autowired
+	private ModAttributes attributes;
+
+	@Autowired
+	private ModAdvancementTriggers advancementTriggers;
+
+	private static final ResourceLocation INFUSION_HEALTH_DECAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_HEALTH_DECAY");
+	private static final ResourceLocation INFUSION_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_ATTACK_DAMAGE");
+	private static final ResourceLocation INFUSION_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_RESISTANCE");
 
 	public static final float MAX_INFUSION = 600;
 	public static final float MAX_PARANOIA = 600;
@@ -79,10 +92,6 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	private CorruptedPawnEntity hunt;
 
 	private boolean dirty;
-
-	public Insanity() {
-		BeanContext.injectInto(this);
-	}
 
 	public void setInPortal(boolean flag) {
 		inPortal = flag;
@@ -170,7 +179,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			}
 			leapParticles--;
 		}
-		if (Voidscape.checkForVoidDimension(parent.level()) && !parent.isSpectator()) {
+		if (levelUtil.isInVoidDimension(parent.level()) && !parent.isSpectator()) {
 			paranoia += calcParanoiaRate(parent) / 20F;
 			if (decrementInfusion <= 0)
 				infusion += calcInfusionRate(parent) / 20F;
@@ -198,10 +207,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			if (!infusionImmune)
 				calculateEffects(living);
 			if (!living.level().isClientSide()) {
-				if (living.hasEffect(ModEffects.AURA.get()))
-					aura = true;
-				else
-					aura = false;
+				aura = living.hasEffect(effects.AURA);
 			}
 			if (aura)
 				handleAura(living);
@@ -215,13 +221,13 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 						.yRot((float) Math.toRadians(entity.getRandom().nextInt(360)))
 						.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
 						.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
-				entity.level().addParticle(new ModParticles.ParticleSpellCloudData(0x7700FF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
+				entity.level().addParticle(new ParticleTypeSpellCloud.Options(0x7700FF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
 			}
 		} else if (entity.tickCount % 20 == 0) {
 			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D), e -> e instanceof LivingEntity)
 					.forEach(e -> e.hurt(
-							ModDamageSource.getEntityDamageSource(entity.level(), ModDamageSource.VOIDIC, entity),
-							(float) (2D + entity.getAttributeValue(ModAttributes.VOIDIC_DMG.get()) / 2D)
+							damageSource.getEntityDamageSource(entity.level(), damageSource.VOIDIC, entity),
+							(float) (2D + entity.getAttributeValue(attributes.VOIDIC_DMG) / 2D)
 					));
 		}
 	}
@@ -234,26 +240,26 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		float perc = infusion / MAX_INFUSION;
 		if (parent.tickCount % 20 == 0) {
 			AttributeInstance attributeMaxHealth = parent.getAttribute(Attributes.MAX_HEALTH);
-			AttributeInstance attributeVoidicAttackDamage = parent.getAttribute(ModAttributes.VOIDIC_DMG.get());
-			AttributeInstance attributeVoidicResistance = parent.getAttribute(ModAttributes.VOIDIC_RES.get());
+			AttributeInstance attributeVoidicAttackDamage = parent.getAttribute(attributes.VOIDIC_DMG);
+			AttributeInstance attributeVoidicResistance = parent.getAttribute(attributes.VOIDIC_RES);
 			if (attributeMaxHealth != null && attributeVoidicAttackDamage != null && attributeVoidicResistance != null) {
 				attributeMaxHealth.removeModifier(INFUSION_HEALTH_DECAY);
 				attributeVoidicAttackDamage.removeModifier(INFUSION_ATTACK_DAMAGE);
 				attributeVoidicResistance.removeModifier(INFUSION_RESISTANCE);
 				if (perc > 0F) {
 					final float bound = 1F / parent.getMaxHealth();
-					attributeMaxHealth.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, "Voidic Infusion Health Decay", Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.MULTIPLY_TOTAL));
-					attributeVoidicAttackDamage.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, "Voidic Infusion Voidic Attack Damage", 10F * perc, AttributeModifier.Operation.ADDITION));
-					attributeVoidicResistance.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, "Voidic Infusion Voidic Resistance", 10F * perc, AttributeModifier.Operation.ADDITION));
+					attributeMaxHealth.addTransientModifier(new AttributeModifier(INFUSION_HEALTH_DECAY, Math.max((1F - perc) - 1F, bound - 1F), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+					attributeVoidicAttackDamage.addTransientModifier(new AttributeModifier(INFUSION_ATTACK_DAMAGE, 10F * perc, AttributeModifier.Operation.ADD_VALUE));
+					attributeVoidicResistance.addTransientModifier(new AttributeModifier(INFUSION_RESISTANCE, 10F * perc, AttributeModifier.Operation.ADD_VALUE));
 					if (parent.getHealth() > parent.getMaxHealth()) {
 						if (parent instanceof ServerPlayer player)
-							PacketDistributor.PLAYER.with(player).send(new ClientPacketNoFlashOnSetHealth());
+							PacketDistributor.sendToPlayer(player, new ClientPacketNoFlashOnSetHealth());
 						parent.setHealth(parent.getMaxHealth());
 					}
 				}
-				if (perc >= 1F && Voidscape.checkForVoidDimension(parent.level())) {
+				if (perc >= 1F && levelUtil.isInVoidDimension(parent.level())) {
 					if (parent instanceof ServerPlayer player)
-						ModAdvancementTriggers.INFUSED_TRIGGER.get().trigger(player);
+						advancementTriggers.INFUSED_TRIGGER.get().trigger(player);
 					parent.hurt(parent.damageSources().fellOutOfWorld(), 1024F);
 				}
 			}
@@ -298,7 +304,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 						hunt = null;
 					} else if (!hunt.isAlive()) {
 						paranoia = 0;
-					} else if (!Voidscape.checkForVoidDimension(parent.level()) || paranoia < 600) {
+					} else if (!levelUtil.isInVoidDimension(parent.level()) || paranoia < 600) {
 						hunt.remove(Entity.RemovalReason.DISCARDED);
 						hunt = null;
 					}
@@ -313,25 +319,26 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	public float calcInfusionRate(Entity parent) {
 		if (parent instanceof LivingEntity entity) {
-			return Mth.clamp(2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get()), 0F, 1F);
+			return Mth.clamp(2F - (float) entity.getAttributeValue(attributes.VOIDIC_INFUSION_RES), 0F, 1F);
 		}
 		return 1F;
 	}
 
 	private void refreshEquipmentAttributes(LivingEntity entity) {
-		for (EquipmentSlot equipmentSlotType : EquipmentSlot.values()) {
+		// TODO: investigate, is this even needed?
+		/*for (EquipmentSlot equipmentSlotType : EquipmentSlot.values()) {
 			ItemStack itemstack = entity.getItemBySlot(equipmentSlotType);
 			if (!itemstack.isEmpty()) {
 				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
 				entity.getAttributes().addTransientAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
 			}
 
-		}
+		}*/
 	}
 
 	public float calcParanoiaRate(Entity parent) {
 		if (parent instanceof LivingEntity entity) {
-			return Mth.clamp(2F - (float) entity.getAttributeValue(ModAttributes.VOIDIC_PARANOIA_RES.get()), 0F, 1F) * 0.9F;
+			return Mth.clamp(2F - (float) entity.getAttributeValue(attributes.VOIDIC_PARANOIA_RES), 0F, 1F) * 0.9F;
 		}
 		return 1F;
 	}
@@ -349,7 +356,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	public void addInfusion(float amount, LivingEntity parent) {
-		addInfusion(amount * (2F - (float) parent.getAttributeValue(ModAttributes.VOIDIC_INFUSION_RES.get())));
+		addInfusion(amount * (2F - (float) parent.getAttributeValue(attributes.VOIDIC_INFUSION_RES)));
 	}
 
 	public void removeInfusion(float amount) {
@@ -381,7 +388,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
+	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
 		CompoundTag nbt = new CompoundTag();
 		nbt.putFloat("paranoia", paranoia);
 		nbt.putFloat("infusion", infusion);
@@ -392,7 +399,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt) {
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
 		paranoia = nbt.getFloat("paranoia");
 		infusion = nbt.getFloat("infusion");
 		inPortal = nbt.getBoolean("inPortal");
@@ -423,11 +430,11 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	private void sendToClient(ServerPlayer parent) {
-		PacketDistributor.PLAYER.with(parent).send(new ClientPacketInsanitySync(this));
+		PacketDistributor.sendToPlayer(parent, new ClientPacketInsanitySync(this));
 	}
 
 	private void sendToClients(Entity parent) {
-		PacketDistributor.TRACKING_ENTITY_AND_SELF.with(parent).send(new ClientPacketInsanitySync(this, parent));
+		PacketDistributor.sendToPlayersTrackingEntityAndSelf(parent, new ClientPacketInsanitySync(this, parent));
 	}
 
 }
