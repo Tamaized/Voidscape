@@ -1,12 +1,12 @@
 {
   "parent": "voidscape:block/fullbright/cube",
   "textures": {
-    "particle": "#side",
     "down": "#end",
-    "up": "#end",
-    "north": "#side",
     "east": "#side",
+    "north": "#side",
+    "particle": "#side",
     "south": "#side",
+    "up": "#end",
     "west": "#side"
   }
 }

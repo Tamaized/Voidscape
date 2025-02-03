@@ -1,18 +1,18 @@
 {
   "parent": "voidscape:block/fullbright/cube_overlay",
   "textures": {
-    "particle": "#side",
     "down": "#end",
-    "up": "#end",
-    "north": "#side",
-    "east": "#side",
-    "south": "#side",
-    "west": "#side",
     "down-overlay": "#end-overlay",
-    "up-overlay": "#end-overlay",
-    "north-overlay": "#side-overlay",
+    "east": "#side",
     "east-overlay": "#side-overlay",
+    "north": "#side",
+    "north-overlay": "#side-overlay",
+    "particle": "#side",
+    "south": "#side",
     "south-overlay": "#side-overlay",
+    "up": "#end",
+    "up-overlay": "#end-overlay",
+    "west": "#side",
     "west-overlay": "#side-overlay"
   }
 }

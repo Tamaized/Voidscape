@@ -5,13 +5,13 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CrossFullbrightBlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.FullbrightBlockModelProviderFactory;
 
 @Component
 public class BlockModelProviderFactory {
 
 	@Autowired
-	private CrossFullbrightBlockModelHolder crossFullbrightBlockModelHolder;
+	private FullbrightBlockModelProviderFactory fullbrightBlockModelProviderFactory;
 
 	public BlockModelProvider make(GatherDataEvent event) {
 		return new BlockModelProvider(
@@ -21,7 +21,7 @@ public class BlockModelProviderFactory {
 		) {
 			@Override
 			protected void registerModels() {
-				crossFullbrightBlockModelHolder.build(this);
+				fullbrightBlockModelProviderFactory.make(this);
 			}
 		};
 	}
