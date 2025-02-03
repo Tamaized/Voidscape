@@ -15,7 +15,7 @@ import tamaized.voidscape.util.NamespaceUtils;
 public class ModAttributes {
 
 	@Autowired
-	private static NamespaceUtils namespaceUtils;
+	private NamespaceUtils namespaceUtils;
 
 	private final DeferredRegister<Attribute> REGISTERY = RegUtil.create(Registries.ATTRIBUTE);
 
