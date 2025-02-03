@@ -11,20 +11,17 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
-import tamaized.voidscape.registry.ModEntities;
 
 import java.util.Optional;
 
-@Configurable
 public class CorruptArmorDataModel extends ArmorDataModel {
 
 	@Autowired(dist = Dist.CLIENT)
-	private ModModelLayerLocations modelLayerLocations;
+	private static ModModelLayerLocations modelLayerLocations;
 
 	private final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt.png");
 	private final ResourceLocation TEXTURE_OVERLAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt_overlay.png");
