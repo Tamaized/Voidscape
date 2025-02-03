@@ -32,9 +32,6 @@ public class AstralToolSet {
 	@Autowired
 	private ItemAugmentUtil itemAugmentUtil;
 
-	@Autowired
-	private ExtraToolTypes extraToolTypes;
-
 	public final DeferredHolder<Item, Item> ASTRAL_SWORD = RegUtil.ToolAndArmorHelper.sword(
 		MATERIAL_NAME,
 		() -> toolTiers.ASTRAL,
@@ -91,7 +88,7 @@ public class AstralToolSet {
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 
-	public AstralToolSet() {
+	public AstralToolSet(@Autowired ExtraToolTypes extraToolTypes) {
 		ASTRAL_SHOVEL = extraToolTypes.shovelThreeByThree(
 			MATERIAL_NAME,
 			() -> toolTiers.ASTRAL,
