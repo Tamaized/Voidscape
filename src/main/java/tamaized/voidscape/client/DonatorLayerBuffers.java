@@ -42,7 +42,7 @@ public class DonatorLayerBuffers {
 		map.put(WINGS, new ByteBufferBuilder(WINGS.bufferSize()));
 	}), new ByteBufferBuilder(256));
 
-	@PostConstruct
+	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(RenderLevelStageEvent.class, event -> {
 			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
