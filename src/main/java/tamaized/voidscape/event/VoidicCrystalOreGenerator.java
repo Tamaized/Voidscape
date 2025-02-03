@@ -27,7 +27,7 @@ public class VoidicCrystalOreGenerator {
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
-		bus.addListener(PlayerTickEvent.class, event -> {
+		bus.addListener(PlayerTickEvent.Post.class, event -> {
 			Player player = event.getEntity();
 			Level level = player.level();
 			if (!player.isSpectator() && levelUtil.isInVoidDimension(level)) {
