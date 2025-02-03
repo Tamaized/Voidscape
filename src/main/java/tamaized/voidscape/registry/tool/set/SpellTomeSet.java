@@ -30,6 +30,9 @@ public class SpellTomeSet {
 	@Autowired
 	private ModEffects modEffects;
 
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
 	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
 
 	public final DeferredHolder<Item, Item> ICHOR_TOME = REGISTRY.register("ichor_tome", () -> new SpellTomeItem(
@@ -53,7 +56,7 @@ public class SpellTomeSet {
 		context -> {
 			context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
 			context.level().playSound(null, context.parent(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1F, 0.75F + context.parent().getRandom().nextFloat() * 0.5F);
-			context.parent().getData(ModDataAttachments.INSANITY).enableLeapParticles();
+			context.parent().getData(dataAttachments.INSANITY).enableLeapParticles();
 			context.parent().addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 10));
 		}
 	));

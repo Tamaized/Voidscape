@@ -54,14 +54,7 @@ public class SpellTomeItem extends Item {
 			level.playSound(null, entity.position().x(), entity.position().y(), entity.position().z(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1F, 0.5F + entity.getRandom().nextFloat() * 0.25F);
 			if (entity instanceof Player player)
 				player.getCooldowns().addCooldown(this, cooldown);
-			// This must remain an anon class to spoof the reobfuscator from mapping to the wrong SRG name
-			//noinspection Convert2Lambda
-			stack.hurtAndBreak(1, entity, new Consumer<>() {
-				@Override
-				public void accept(LivingEntity e) {
-					e.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-				}
-			});
+			stack.hurtAndBreak(1, entity, EquipmentSlot.MAINHAND);
 		}
 	}
 

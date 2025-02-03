@@ -14,15 +14,21 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import tamaized.voidscape.Voidscape;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.advancement.GenericAdvancementTrigger;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
+import tamaized.voidscape.util.LevelUtil;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+@Configurable
 public class BlockTransformerItem extends Item {
+
+	@Autowired
+	private LevelUtil levelUtil;
 
 	private final Predicate<BlockState> from;
 	private final Supplier<BlockState> to;
@@ -51,7 +57,7 @@ public class BlockTransformerItem extends Item {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		if (Voidscape.checkForVoidDimension(context.getLevel()) && from.test(context.getLevel().getBlockState(context.getClickedPos()))) {
+		if (levelUtil.isInVoidDimension(context.getLevel()) && from.test(context.getLevel().getBlockState(context.getClickedPos()))) {
 			context.getLevel().setBlockAndUpdate(context.getClickedPos(), to.get());
 			if (context.getPlayer() == null || !context.getPlayer().isCreative())
 				context.getItemInHand().shrink(1);
