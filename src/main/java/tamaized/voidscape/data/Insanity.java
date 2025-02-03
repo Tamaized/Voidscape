@@ -65,9 +65,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
-	private static final ResourceLocation INFUSION_HEALTH_DECAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_HEALTH_DECAY");
-	private static final ResourceLocation INFUSION_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_ATTACK_DAMAGE");
-	private static final ResourceLocation INFUSION_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "INFUSION_RESISTANCE");
+	private static final ResourceLocation INFUSION_HEALTH_DECAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_health_decay");
+	private static final ResourceLocation INFUSION_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_attack_damage");
+	private static final ResourceLocation INFUSION_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_resistance");
 
 	public static final float MAX_INFUSION = 600;
 	public static final float MAX_PARANOIA = 600;

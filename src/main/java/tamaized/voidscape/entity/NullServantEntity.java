@@ -79,9 +79,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 	public static final int AUGMENT_ICHOR = 2;
 	public static final int AUGMENT_ASTRAL = 3;
 
-	private static final ResourceLocation AUGMENT_HEALTH = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_HEALTH");
-	private static final ResourceLocation AUGMENT_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_ATTACK_DAMAGE");
-	private static final ResourceLocation AUGMENT_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "AUGMENT_RESISTANCE");
+	private static final ResourceLocation AUGMENT_HEALTH = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_health");
+	private static final ResourceLocation AUGMENT_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_attack_damage");
+	private static final ResourceLocation AUGMENT_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_resistance");
 
 	@Autowired
 	private CorruptToolSet corruptToolSet;
