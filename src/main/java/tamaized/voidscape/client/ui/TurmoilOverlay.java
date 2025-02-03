@@ -42,10 +42,10 @@ public class TurmoilOverlay {
 	private float lastDeltaTick;
 	private float lastTeleportTick;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
-	private void setup(IEventBus bus) {
+	@PostConstruct
+	private void setup(IEventBus modBus, IEventBus bus) {
 		bus.addListener(this::tick);
-		bus.addListener(this::renderOverlay);
+		modBus.addListener(this::renderOverlay);
 	}
 
 	private void tick(ClientTickEvent.Post event) {
