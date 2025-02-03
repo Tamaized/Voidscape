@@ -53,9 +53,9 @@ public class ModModelLayerLocations {
 
 		event.registerLayerDefinition(MODEL_ARMOR_CORRUPT_OUTER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F));
 		event.registerLayerDefinition(MODEL_ARMOR_CORRUPT_INNER, () -> ModelArmorCorrupt.makeMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0F));
-		event.registerLayerDefinition(MODEL_ARMOR_TITANITE, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
-		event.registerLayerDefinition(MODEL_ARMOR_ICHOR, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
-		event.registerLayerDefinition(MODEL_ARMOR_ASTRAL, () -> ModelArmorTitanite.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(MODEL_ARMOR_TITANITE, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(MODEL_ARMOR_ICHOR, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(MODEL_ARMOR_ASTRAL, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 
 	}
 

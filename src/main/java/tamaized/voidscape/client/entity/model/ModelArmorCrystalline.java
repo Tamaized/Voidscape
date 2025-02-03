@@ -14,7 +14,7 @@ import tamaized.regutil.RegUtil;
 
 import java.util.function.Function;
 
-public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T> {
+public class ModelArmorCrystalline<T extends LivingEntity> extends HumanoidModel<T> {
 
 	private final ImmutableList<ModelPart> parts;
 
@@ -30,18 +30,15 @@ public class ModelArmorTitanite<T extends LivingEntity> extends HumanoidModel<T>
 
 	private final boolean fullbright;
 
-	@Deprecated // TODO: rename to ModelArmorCrystalline
-	public ModelArmorTitanite(ModelPart p_170677_) {
+	public ModelArmorCrystalline(ModelPart p_170677_) {
 		this(p_170677_, false);
 	}
 
-	@Deprecated
-	public ModelArmorTitanite(ModelPart p_170677_, boolean fullbright) {
+	public ModelArmorCrystalline(ModelPart p_170677_, boolean fullbright) {
 		this(p_170677_, RenderType::entityCutoutNoCull, fullbright);
 	}
 
-	@Deprecated
-	public ModelArmorTitanite(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_, boolean fullbright) {
+	public ModelArmorCrystalline(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_, boolean fullbright) {
 		super(parent, p_170680_);
 		this.fullbright = fullbright;
 

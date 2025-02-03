@@ -78,7 +78,7 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
 		6F,
 		0.20F
-	)), 43, new CrystallineArmorDataModel("titanite", modelLayerLocations.MODEL_ARMOR_TITANITE, true));
+	)), 43, new CrystallineArmorDataModel("titanite", () -> modelLayerLocations.MODEL_ARMOR_TITANITE, true));
 
 	public final ArmorData ICHOR = new ArmorData(REGISTRY.register("ichor", () -> new ArmorMaterial(
 		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -94,7 +94,7 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
 		7F,
 		0.25F
-	)), 45, new CrystallineArmorDataModel("ichor", modelLayerLocations.MODEL_ARMOR_ICHOR, true));
+	)), 45, new CrystallineArmorDataModel("ichor", () -> modelLayerLocations.MODEL_ARMOR_ICHOR, true));
 
 	public final ArmorData ASTRAL = new ArmorData(REGISTRY.register("astral", () -> new ArmorMaterial(
 		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -110,6 +110,6 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,
 		0.30F
-	)), 47, new CrystallineArmorDataModel("astral", modelLayerLocations.MODEL_ARMOR_ICHOR, false));
+	)), 47, new CrystallineArmorDataModel("astral", () -> modelLayerLocations.MODEL_ARMOR_ICHOR, false));
 
 }
