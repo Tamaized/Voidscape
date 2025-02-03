@@ -15,8 +15,9 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.PortalBlock;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlocks;
 import tamaized.voidscape.dimension.ConfigurablePortalShape;
+import tamaized.voidscape.registry.block.FunctionalBlocks;
+import tamaized.voidscape.util.PortalFramePredicates;
 
 import java.util.Optional;
 
@@ -25,6 +26,12 @@ public class VoidPortalActivatorItem extends Item {
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private PortalFramePredicates portalFramePredicates;
+
+	@Autowired
+	private FunctionalBlocks functionalBlocks;
 
 	public VoidPortalActivatorItem(Properties properties) {
 		super(properties);
@@ -41,12 +48,12 @@ public class VoidPortalActivatorItem extends Item {
 			level,
 			blockpos1,
 			Direction.Axis.X,
-			PortalBlock.FRAME_TEST,
-			PortalBlock.PORTAL_TEST,
-			PortalBlock.IGNITER_TEST
+			portalFramePredicates.FRAME_TEST,
+			portalFramePredicates.PORTAL_TEST,
+			portalFramePredicates.IGNITER_TEST
 		);
 		if (configurablePortalShape.isPresent()) {
-			configurablePortalShape.get().createPortalBlocks(ModBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
+			configurablePortalShape.get().createPortalBlocks(functionalBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
 			level.playSound(player, blockpos1, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.BLOCKS, 1F, 0.75F + context.getLevel().getRandom().nextFloat() * 0.5F);
 			ItemStack stack = context.getItemInHand();
 

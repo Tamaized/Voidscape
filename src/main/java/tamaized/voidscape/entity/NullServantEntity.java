@@ -65,6 +65,9 @@ import java.util.UUID;
 public class NullServantEntity extends Monster implements IEthereal {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private static ModAttributes attributes;
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
@@ -105,7 +108,7 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private IchorAugmentGoal ichorAugmentGoal;
 
 	public NullServantEntity(Level level) {
-		this(ModEntities.NULL_SERVANT.get(), level);
+		this(entities.NULL_SERVANT.get(), level);
 	}
 
 	public NullServantEntity(EntityType<? extends NullServantEntity> type, Level level) {

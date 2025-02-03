@@ -8,12 +8,16 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
-import tamaized.voidscape.registry.ModEntities;
 
 public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelCorruptedPawn<T>> extends LivingEntityRenderer<T, M> {
+
+	@Autowired
+	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");
 	private static final RenderType OVERLAY = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
@@ -29,7 +33,7 @@ public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelC
 	}
 
 	public static <T extends CorruptedPawnEntity> RenderCorruptedPawn<T, ModelCorruptedPawn<T>> factory(EntityRendererProvider.Context manager) {
-		return new RenderCorruptedPawn<>(manager, new ModelCorruptedPawn<>(manager.bakeLayer(ModEntities.ModelLayerLocations.CORRUPTED_PAWN)));
+		return new RenderCorruptedPawn<>(manager, new ModelCorruptedPawn<>(manager.bakeLayer(modelLayerLocations.CORRUPTED_PAWN)));
 	}
 
 	@Override

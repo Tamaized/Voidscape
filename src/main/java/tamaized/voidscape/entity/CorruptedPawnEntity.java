@@ -37,6 +37,9 @@ import javax.annotation.Nullable;
 public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn, IEthereal {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private ModDataAttachments dataAttachments;
 
 	@Autowired
@@ -54,7 +57,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	private Entity target;
 
 	public CorruptedPawnEntity(Level level) {
-		this(ModEntities.CORRUPTED_PAWN.get(), level);
+		this(entities.CORRUPTED_PAWN.get(), level);
 	}
 
 	public CorruptedPawnEntity(EntityType<? extends CorruptedPawnEntity> p_i48577_1_, Level p_i48577_2_) {

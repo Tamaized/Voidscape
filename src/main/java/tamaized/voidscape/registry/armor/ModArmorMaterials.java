@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -14,7 +15,7 @@ import tamaized.regutil.ArmorData;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.ModEntities;
+import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 import java.util.EnumMap;
@@ -25,6 +26,9 @@ public class ModArmorMaterials {
 
 	@Autowired
 	private MaterialItems materialItems;
+
+	@Autowired(dist = Dist.CLIENT)
+	private ModModelLayerLocations modelLayerLocations;
 
 	private final DeferredRegister<ArmorMaterial> REGISTRY = RegUtil.create(Registries.ARMOR_MATERIAL);
 
@@ -74,7 +78,7 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
 		6F,
 		0.20F
-	)), 43, new CrystallineArmorDataModel("titanite", ModEntities.ModelLayerLocations.MODEL_ARMOR_TITANITE, true));
+	)), 43, new CrystallineArmorDataModel("titanite", modelLayerLocations.MODEL_ARMOR_TITANITE, true));
 
 	public final ArmorData ICHOR = new ArmorData(REGISTRY.register("ichor", () -> new ArmorMaterial(
 		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -90,7 +94,7 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
 		7F,
 		0.25F
-	)), 45, new CrystallineArmorDataModel("ichor", ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR, true));
+	)), 45, new CrystallineArmorDataModel("ichor", modelLayerLocations.MODEL_ARMOR_ICHOR, true));
 
 	public final ArmorData ASTRAL = new ArmorData(REGISTRY.register("astral", () -> new ArmorMaterial(
 		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -106,6 +110,6 @@ public class ModArmorMaterials {
 		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,
 		0.30F
-	)), 47, new CrystallineArmorDataModel("astral", ModEntities.ModelLayerLocations.MODEL_ARMOR_ICHOR, false));
+	)), 47, new CrystallineArmorDataModel("astral", modelLayerLocations.MODEL_ARMOR_ICHOR, false));
 
 }

@@ -18,7 +18,6 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.ClientUtil;
 import tamaized.voidscape.client.StencilBufferUtil;
 import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.data.Insanity;
@@ -38,6 +37,7 @@ public class TurmoilOverlay {
 	private final ResourceLocation TEXTURE_VOIDICINFUSION = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	private final ResourceLocation TEXTURE_WATCHINGYOU = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watchingyou.png");
 
+	private int tick;
 	private float deltaTick;
 	private float lastDeltaTick;
 	private float lastTeleportTick;
@@ -52,7 +52,7 @@ public class TurmoilOverlay {
 		if (Minecraft.getInstance().isPaused() || Minecraft.getInstance().level == null)
 			return;
 		lastDeltaTick = deltaTick;
-		ClientUtil.tick++;
+		tick++;
 		if (Minecraft.getInstance().player != null) {
 			Insanity data = Minecraft.getInstance().player.getData(dataAttachments.INSANITY);
 			if (data.getTeleportTick() >= (lastTeleportTick + 20) || (lastTeleportTick == 0 && data.getTeleportTick() > 0)) {

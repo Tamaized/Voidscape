@@ -10,14 +10,21 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 import tamaized.voidscape.registry.ModEntities;
 
 import java.util.Optional;
 
+@Configurable
 public class CorruptArmorDataModel extends ArmorDataModel {
+
+	@Autowired(dist = Dist.CLIENT)
+	private ModModelLayerLocations modelLayerLocations;
 
 	private final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt.png");
 	private final ResourceLocation TEXTURE_OVERLAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt_overlay.png");
@@ -32,8 +39,8 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
 		ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(
 			armorSlot == EquipmentSlot.LEGS ?
-				ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_INNER :
-				ModEntities.ModelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER
+				modelLayerLocations.MODEL_ARMOR_CORRUPT_INNER :
+				modelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER
 		));
 		model.rightfoot.visible = false;
 		model.leftfoot.visible = false;

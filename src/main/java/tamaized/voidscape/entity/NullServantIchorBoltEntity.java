@@ -19,6 +19,9 @@ import tamaized.voidscape.registry.ModEntities;
 public class NullServantIchorBoltEntity extends SpellBoltEntity {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private ModDamageSource damageSource;
 
 	public NullServantIchorBoltEntity(EntityType<NullServantIchorBoltEntity> type, Level level) {
@@ -27,7 +30,7 @@ public class NullServantIchorBoltEntity extends SpellBoltEntity {
 	}
 
 	public NullServantIchorBoltEntity(LivingEntity shooter) {
-		super(ModEntities.NULL_SERVANT_ICHOR_BOLT.get(), shooter, 0xFF0000);
+		super(entities.NULL_SERVANT_ICHOR_BOLT.get(), shooter, 0xFF0000);
 		speed = 0.125D;
 	}
 

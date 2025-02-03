@@ -11,7 +11,6 @@ import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.registry.ModTools;
 import tamaized.voidscape.registry.tool.ModToolTiers;
 import tamaized.voidscape.util.ItemAugmentUtil;
 

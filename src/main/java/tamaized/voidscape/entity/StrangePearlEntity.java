@@ -27,6 +27,9 @@ import tamaized.voidscape.registry.item.MaterialItems;
 public class StrangePearlEntity extends AbstractHurtingProjectile implements ItemSupplier {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private MaterialItems materialItems;
 
 	@Autowired
@@ -44,7 +47,7 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	}
 
 	public StrangePearlEntity(Level pLevel, LivingEntity pShooter, Vec3 dir) {
-		super(ModEntities.STRANGE_PEARL.get(), pShooter, dir, pLevel);
+		super(entities.STRANGE_PEARL.get(), pShooter, dir, pLevel);
 		setPos(pShooter.getEyePosition());
 	}
 

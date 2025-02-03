@@ -1,23 +1,23 @@
 package tamaized.voidscape.client.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
+import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidling;
-import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.VoidlingEntity;
-import tamaized.voidscape.registry.ModEntities;
 
 public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>> extends LivingEntityRenderer<T, M> {
+
+	@Autowired
+	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");
 
@@ -26,7 +26,7 @@ public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>
 	}
 
 	public static <T extends VoidlingEntity> RenderVoidling<T, ModelVoidling<T>> factory(EntityRendererProvider.Context manager) {
-		return new RenderVoidling<>(manager, new ModelVoidling<>(manager.bakeLayer(ModEntities.ModelLayerLocations.VOIDLING)));
+		return new RenderVoidling<>(manager, new ModelVoidling<>(manager.bakeLayer(modelLayerLocations.VOIDLING)));
 	}
 
 	@Override

@@ -26,15 +26,19 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModEntities;
 
 public class PhantomNullServantEntity extends NullServantEntity {
 
+	@Autowired
+	private static ModEntities entities;
+
 	private NullServantEntity parent;
 
 	public PhantomNullServantEntity(NullServantEntity parent) {
-		this(ModEntities.NULL_SERVANT_PHANTOM.get(), parent.level());
+		this(entities.NULL_SERVANT_PHANTOM.get(), parent.level());
 		this.parent = parent;
 	}
 

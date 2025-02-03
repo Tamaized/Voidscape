@@ -12,17 +12,21 @@ import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
 import tamaized.voidscape.entity.VoidsWrathEntity;
-import tamaized.voidscape.registry.ModEntities;
 
 public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
+
+	@Autowired
+	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");
 
 	public RenderVoidsWrath(EntityRendererProvider.Context rendererManager) {
-		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(ModEntities.ModelLayerLocations.VOIDS_WRATH)), 0F);
+		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(modelLayerLocations.VOIDS_WRATH)), 0F);
 		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));
 		this.addLayer(new OverlayLayer(this));
 		this.addLayer(new PowerLayer(this, rendererManager.getModelSet()));
@@ -63,7 +67,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 
 		public PowerLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_174471_, EntityModelSet p_174472_) {
 			super(p_174471_);
-			this.model = new ModelVoidsWrath<>(p_174472_.bakeLayer(ModEntities.ModelLayerLocations.VOIDS_WRATH_CHARGED));
+			this.model = new ModelVoidsWrath<>(p_174472_.bakeLayer(modelLayerLocations.VOIDS_WRATH_CHARGED));
 		}
 
 		@Override

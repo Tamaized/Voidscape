@@ -44,6 +44,9 @@ import java.util.Random;
 @Configurable
 public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityWithComplexSpawn, IEthereal {
 
+	@Autowired
+	private static ModEntities entities;
+
 	private static final EntityDataAccessor<BlockState> MIMIC = SynchedEntityData.defineId(NullServantAugmentBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
 
 	@Autowired
@@ -57,7 +60,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	public NullServantAugmentBlockEntity(NullServantEntity parent) {
-		this(ModEntities.NULL_SERVANT_AUGMENT_BLOCK.get(), parent.level());
+		this(entities.NULL_SERVANT_AUGMENT_BLOCK.get(), parent.level());
 		this.parent = parent;
 		initAugment();
 	}

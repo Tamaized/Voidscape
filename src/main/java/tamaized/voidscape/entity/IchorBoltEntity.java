@@ -13,6 +13,9 @@ import tamaized.voidscape.registry.ModEntities;
 public class IchorBoltEntity extends SpellBoltEntity {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private ModEffects effects;
 
 	public IchorBoltEntity(EntityType<IchorBoltEntity> type, Level level) {
@@ -20,7 +23,7 @@ public class IchorBoltEntity extends SpellBoltEntity {
 	}
 
 	public IchorBoltEntity(LivingEntity shooter) {
-		super(ModEntities.ICHOR_BOLT.get(), shooter, 0xFF7700);
+		super(entities.ICHOR_BOLT.get(), shooter, 0xFF7700);
 	}
 
 	@Override

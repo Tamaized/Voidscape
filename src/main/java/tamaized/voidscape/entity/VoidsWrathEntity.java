@@ -45,6 +45,9 @@ import javax.annotation.Nullable;
 public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal {
 
 	@Autowired
+	private static ModEntities entities;
+
+	@Autowired
 	private static ModAttributes attributes;
 
 	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(VoidsWrathEntity.class, EntityDataSerializers.BOOLEAN);
@@ -53,7 +56,7 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	private CharredToolSet charredToolSet;
 
 	public VoidsWrathEntity(Level level) {
-		this(ModEntities.VOIDS_WRATH.get(), level);
+		this(entities.VOIDS_WRATH.get(), level);
 	}
 
 	public VoidsWrathEntity(EntityType<? extends VoidsWrathEntity> p_i48577_1_, Level p_i48577_2_) {
