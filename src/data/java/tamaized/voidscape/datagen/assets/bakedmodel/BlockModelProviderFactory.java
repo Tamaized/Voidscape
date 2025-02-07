@@ -6,12 +6,16 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.FullbrightBlockModelProviderFactory;
+import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.OverlayBlockModelProviderFactory;
 
 @Component
 public class BlockModelProviderFactory {
 
 	@Autowired
 	private FullbrightBlockModelProviderFactory fullbrightBlockModelProviderFactory;
+
+	@Autowired
+	private OverlayBlockModelProviderFactory overlayBlockModelProviderFactory;
 
 	public BlockModelProvider make(GatherDataEvent event) {
 		return new BlockModelProvider(
@@ -22,6 +26,7 @@ public class BlockModelProviderFactory {
 			@Override
 			protected void registerModels() {
 				fullbrightBlockModelProviderFactory.make(this);
+				overlayBlockModelProviderFactory.make(this);
 			}
 		};
 	}
