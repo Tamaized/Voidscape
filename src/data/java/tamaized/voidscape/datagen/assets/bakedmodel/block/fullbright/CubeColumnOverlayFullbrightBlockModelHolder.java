@@ -14,7 +14,7 @@ public class CubeColumnOverlayFullbrightBlockModelHolder extends BlockModelHolde
 	public void build(BlockModelProvider provider) {
 		set(
 			// @formatter:off
-			provider.withExistingParent("block/fullbright/cube_column_overlay", cubeOverlayFullbrightBlockModelHolder.get().orElseThrow().getLocation())
+			provider.withExistingParent("block/fullbright/cube_column_overlay", cubeOverlayFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
 				.texture("particle", "#side")
 				.texture("down", "#end")
 				.texture("up", "#end")

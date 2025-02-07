@@ -14,7 +14,7 @@ public class CubeAllFullbrightBlockModelHolder extends BlockModelHolder {
 	public void build(BlockModelProvider provider) {
 		set(
 			// @formatter:off
-			provider.withExistingParent("block/fullbright/cube_all", cubeFullbrightBlockModelHolder.get().orElseThrow().getLocation())
+			provider.withExistingParent("block/fullbright/cube_all", cubeFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
 				.texture("particle", "#all")
 				.texture("down", "#all")
 				.texture("up", "#all")
