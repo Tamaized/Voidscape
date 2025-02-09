@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-07T11:04:00.13243323	Block Models: voidscape
+// 1.21.1	2025-02-08T18:59:44.600626123	Block Models: voidscape
 e5a019ad009114c5ca26379eaa41d043a492b798 assets/voidscape/models/block/fullbright/cross.json
 fabbb3f2a76bae791516e17e57c60beaff277b57 assets/voidscape/models/block/fullbright/cube.json
 2e314e5be811f7c28df0e08f20cbd38091c2c3a6 assets/voidscape/models/block/fullbright/cube_all.json
@@ -12,4 +12,10 @@ cbd060fb5ec8923766df3bc3cd58e5ea2a57cbf1 assets/voidscape/models/block/fullbrigh
 a3659ed56afc04d6a3ffcd6593f4ba2de31779b8 assets/voidscape/models/block/fullbright/slab_top.json
 e9be01233e3b7317611e4bdead8941b894a3790f assets/voidscape/models/block/fullbright/stairs.json
 dcd3895a0158dfc2bd240aea28ba6bf4c94d0ce2 assets/voidscape/models/block/fullbright/tinted_cross.json
-b685c8692d910105017d9d3b936444c7164e2db5 assets/voidscape/models/block/overlay/base.json
+fe62042bb84310a1ffdd7b9682948ca5183f547c assets/voidscape/models/block/overlay/base.json
+41003d8eda7233a34b179b14155b803f37cbdf5e assets/voidscape/models/block/overlay/base_fullbright_overlay.json
+63500a67bf1ed85876d0abe39a73e329187306dd assets/voidscape/models/block/overlay/full.json
+adc3d90971c6172bc1790afbc433e9ec1c4457a0 assets/voidscape/models/block/overlay/full_fullbright_overlay.json
+848df712b534098021e8630e435231d8c111f8b4 assets/voidscape/models/block/overlay/side.json
+0afe179bb654f02f5ce37171d5c245128f3f5192 assets/voidscape/models/block/overlay/side_top.json
+e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/side_top_fullbright_overlay.json

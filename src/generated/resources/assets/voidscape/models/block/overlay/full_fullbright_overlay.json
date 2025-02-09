@@ -1,0 +1,18 @@
+{
+  "parent": "voidscape:block/overlay/base_fullbright_overlay",
+  "textures": {
+    "down": "#base",
+    "east": "#base",
+    "north": "#base",
+    "overlay-down": "#overlay",
+    "overlay-east": "#overlay",
+    "overlay-north": "#overlay",
+    "overlay-south": "#overlay",
+    "overlay-up": "#overlay",
+    "overlay-west": "#overlay",
+    "particle": "#base",
+    "south": "#base",
+    "up": "#base",
+    "west": "#base"
+  }
+}
