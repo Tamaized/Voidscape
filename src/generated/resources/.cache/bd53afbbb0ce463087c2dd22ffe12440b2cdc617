@@ -1,5 +1,8 @@
-// 1.21.1	2025-02-08T19:10:59.511046903	Block Models: voidscape
+// 1.21.1	2025-02-08T19:33:58.384971454	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
+911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
+dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
+cc3b4e276cdfd2856c65e0b1a3b87238087b2165 assets/voidscape/models/block/coop.json
 e5a019ad009114c5ca26379eaa41d043a492b798 assets/voidscape/models/block/fullbright/cross.json
 fabbb3f2a76bae791516e17e57c60beaff277b57 assets/voidscape/models/block/fullbright/cube.json
 2e314e5be811f7c28df0e08f20cbd38091c2c3a6 assets/voidscape/models/block/fullbright/cube_all.json

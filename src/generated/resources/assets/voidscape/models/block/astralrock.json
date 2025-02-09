@@ -1,0 +1,6 @@
+{
+  "parent": "voidscape:block/fullbright/tinted_cube_all",
+  "textures": {
+    "all": "minecraft:block/bedrock"
+  }
+}
