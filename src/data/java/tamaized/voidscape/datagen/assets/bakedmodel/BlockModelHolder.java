@@ -7,16 +7,20 @@ public abstract class BlockModelHolder extends ModelHolder {
 
 	public ModelFile getOrBuild(BlockModelProvider provider) {
 		return get().orElseGet(() -> {
-			build(provider);
+			buildAndSet(provider);
 			return get().orElseThrow();
 		});
 	}
 
 	public void buildIfEmpty(BlockModelProvider provider) {
 		if (get().isEmpty())
-			build(provider);
+			buildAndSet(provider);
 	}
 
-	public abstract void build(BlockModelProvider provider);
+	public void buildAndSet(BlockModelProvider provider) {
+		set(build(provider));
+	}
+
+	public abstract ModelFile build(BlockModelProvider provider);
 
 }

@@ -7,16 +7,20 @@ public abstract class ItemModelHolder extends ModelHolder {
 
 	public ModelFile getOrBuild(ItemModelProvider provider) {
 		return get().orElseGet(() -> {
-			build(provider);
+			buildAndSet(provider);
 			return get().orElseThrow();
 		});
 	}
 
 	public void buildIfEmpty(ItemModelProvider provider) {
 		if (get().isEmpty())
-			build(provider);
+			buildAndSet(provider);
 	}
 
-	public abstract void build(ItemModelProvider provider);
+	public void buildAndSet(ItemModelProvider provider) {
+		set(build(provider));
+	}
+
+	public abstract ModelFile build(ItemModelProvider provider);
 
 }
