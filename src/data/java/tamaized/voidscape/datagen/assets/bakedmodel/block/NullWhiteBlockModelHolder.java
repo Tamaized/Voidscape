@@ -18,7 +18,10 @@ public class NullWhiteBlockModelHolder extends BlockModelHolder {
 	private CubeAllFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.nullBiomeBlocks().NULL_WHITE.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.nullBiomeBlocks().NULL_WHITE),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.ao(false)
 			.texture("all", "block/white")
 			.texture("particle", "#all");

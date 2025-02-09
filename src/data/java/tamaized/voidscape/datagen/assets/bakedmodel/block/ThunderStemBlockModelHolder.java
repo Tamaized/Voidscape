@@ -21,7 +21,7 @@ public class ThunderStemBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_STEM.getId().getPath(),
+				name(blocks.thunderForestBiomeBlocks().THUNDER_STEM),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)

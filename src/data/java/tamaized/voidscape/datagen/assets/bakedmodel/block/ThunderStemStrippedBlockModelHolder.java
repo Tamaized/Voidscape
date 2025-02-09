@@ -21,7 +21,7 @@ public class ThunderStemStrippedBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED.getId().getPath(),
+				name(blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("end", "block/thunder_stem_stripped_top")

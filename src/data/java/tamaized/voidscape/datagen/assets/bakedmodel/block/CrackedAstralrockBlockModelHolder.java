@@ -4,15 +4,23 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
 public class CrackedAstralrockBlockModelHolder extends BlockModelHolder {
 
+	@Autowired
+	private ModBlockComponentDirectory blocks;
+
 	public ModelFile build(BlockModelProvider provider) {
 		// @formatter:off
-		return provider.withExistingParent("block/cracked_astralrock", "block/cube")
+		return provider.withExistingParent(
+				name(blocks.oreBlocks().CRACKED_ASTRALROCK),
+				"block/cube"
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("base", provider.mcLoc("block/bedrock"))
 			.texture("overlay", "block/cracked_astralrock")

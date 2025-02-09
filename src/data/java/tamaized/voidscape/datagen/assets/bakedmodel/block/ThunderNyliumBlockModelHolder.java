@@ -20,7 +20,10 @@ public class ThunderNyliumBlockModelHolder extends BlockModelHolder {
 	private SideTopFullbrightOverlayOverlayBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("top", provider.mcLoc("block/bedrock"))
 			.texture("bottom", provider.mcLoc("block/bedrock"))

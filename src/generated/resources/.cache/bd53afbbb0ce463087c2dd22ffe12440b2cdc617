@@ -1,8 +1,7 @@
-// 1.21.1	2025-02-09T11:38:35.959843126	Block Models: voidscape
+// 1.21.1	2025-02-09T12:36:10.060096727	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
-cc3b4e276cdfd2856c65e0b1a3b87238087b2165 assets/voidscape/models/block/coop.json
 13654e3e1b7516480e81f62c2f58933f9464a803 assets/voidscape/models/block/cracked_astralrock.json
 dfdd1ee49a1b5ea03a00dbcf38d8e8d3859ed31a assets/voidscape/models/block/ethereal_fruit_end.json
 51e49b6e64ebf275701f05d98ab08766ffe9f09f assets/voidscape/models/block/ethereal_fruit_nether.json
@@ -26,7 +25,9 @@ e9be01233e3b7317611e4bdead8941b894a3790f assets/voidscape/models/block/fullbrigh
 dcd3895a0158dfc2bd240aea28ba6bf4c94d0ce2 assets/voidscape/models/block/fullbright/tinted_cross.json
 2ed8ee85d8280b1967fad8e6ede40a7eef00b205 assets/voidscape/models/block/fullbright/tinted_cube.json
 422c8f00bd927452fbeb335112b6f373f624ca0d assets/voidscape/models/block/fullbright/tinted_cube_all.json
-dc924ca318ec40b000a325ca5c63a0630960fc7e assets/voidscape/models/block/hatchery.json
+cc3b4e276cdfd2856c65e0b1a3b87238087b2165 assets/voidscape/models/block/machine_coop.json
+dc924ca318ec40b000a325ca5c63a0630960fc7e assets/voidscape/models/block/machine_hatchery.json
+6d2faaac66b57b7e8e6c38dace67013ad354bfdb assets/voidscape/models/block/machine_well.json
 157ad3ca0911c1da7e0c8786748a1c9b92d063dd assets/voidscape/models/block/null_black.json
 6caeda07137650b289c81435a973fd802594b5cb assets/voidscape/models/block/null_white.json
 fe62042bb84310a1ffdd7b9682948ca5183f547c assets/voidscape/models/block/overlay/base.json
@@ -57,3 +58,8 @@ a3d9a1ea9e0599cb5c972f99d6e5fe697ec3291b assets/voidscape/models/block/thunder_p
 7077e62b83d8d328c2674e399428ea5adb66e58a assets/voidscape/models/block/thunder_vines.json
 e2e8d922c06df29b8f9d3fcb8026743affb09e3c assets/voidscape/models/block/thunder_vines_plant.json
 d5e356b9a18ce232eb112f7a1d6b04d890f04194 assets/voidscape/models/block/thunder_wart.json
+4a697ac11281e27343dba50d32718632e52e08a6 assets/voidscape/models/block/thunderrock.json
+373d583f737ef1cb0a19ac0302459c140677257d assets/voidscape/models/block/titanite_ore.json
+79288b6e88d12d628c3a45d18107343fccec684e assets/voidscape/models/block/very_drippy_dripstone.json
+1aaa810778fc847f7333755204374748c10eddaa assets/voidscape/models/block/voidic_crystal_block.json
+e15788b25b844dda353d8da16673bfc0c1242d38 assets/voidscape/models/block/voidic_crystal_ore.json

@@ -1,0 +1,9 @@
+{
+  "parent": "voidscape:block/overlay/full_fullbright_overlay",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "base": "minecraft:block/bedrock",
+    "overlay": "voidscape:block/voidic_crystal_ore",
+    "particle": "#base"
+  }
+}

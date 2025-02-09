@@ -18,7 +18,10 @@ public class ThunderSlabBlockModelHolder extends BlockModelHolder {
 	private SlabFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.thunderForestBiomeBlocks().THUNDER_SLAB.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.thunderForestBiomeBlocks().THUNDER_SLAB),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.texture("bottom", "block/thunder_planks")
 			.texture("side", "block/thunder_planks")
 			.texture("top", "block/thunder_planks");

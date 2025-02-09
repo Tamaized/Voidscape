@@ -7,12 +7,19 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
+import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
 public class CoopBlockModelHolder extends BlockModelHolder {
 
+	@Autowired
+	private ModBlockComponentDirectory blocks;
+
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/coop", provider.modLoc("block/germinator"))
+		return provider.withExistingParent(
+				name(blocks.machineBlocks().MACHINE_COOP),
+				provider.modLoc("block/germinator")
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("0", "block/machine/coop/frame")
 			.texture("1", "block/machine/core")

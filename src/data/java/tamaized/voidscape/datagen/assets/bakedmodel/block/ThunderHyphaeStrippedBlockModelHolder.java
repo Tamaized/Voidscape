@@ -18,7 +18,10 @@ public class ThunderHyphaeStrippedBlockModelHolder extends BlockModelHolder {
 	private CubeAllFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.texture("all", "block/thunder_stem_stripped")
 			.texture("particle", "#all");
 	}

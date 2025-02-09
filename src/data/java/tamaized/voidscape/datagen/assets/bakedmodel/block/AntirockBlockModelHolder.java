@@ -6,15 +6,22 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.TintedCubeAllFullbrightBlockModelHolder;
+import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
 public class AntirockBlockModelHolder extends BlockModelHolder {
 
 	@Autowired
+	private ModBlockComponentDirectory blocks;
+
+	@Autowired
 	private TintedCubeAllFullbrightBlockModelHolder tintedCubeAllFullbrightBlockModelHolder;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/antirock", tintedCubeAllFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.spireBlocks().ANTIROCK),
+				tintedCubeAllFullbrightBlockModelHolder.getOrBuild(provider).getLocation()
+			)
 			.texture("all", provider.mcLoc("block/bedrock"));
 	}
 

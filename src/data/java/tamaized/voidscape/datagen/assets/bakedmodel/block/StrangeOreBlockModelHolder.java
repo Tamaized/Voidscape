@@ -19,7 +19,10 @@ public class StrangeOreBlockModelHolder extends BlockModelHolder {
 	private FullFullbrightOverlayOverlayBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.oreBlocks().STRANGE_ORE.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.oreBlocks().STRANGE_ORE),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("base", provider.mcLoc("block/end_stone"))
 			.texture("overlay", "block/strange_ore")

@@ -20,7 +20,7 @@ public class ThunderStairsOuterBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_STAIRS.getId().getPath() + "_outer",
+				name(blocks.thunderForestBiomeBlocks().THUNDER_STAIRS) + "_outer",
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("bottom", "block/thunder_planks")

@@ -6,26 +6,26 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CrossFullbrightBlockModelHolder;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.FlowerPotCrossFullbrightBlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeAllFullbrightBlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class ThunderFungusPotBlockModelHolder extends BlockModelHolder {
+public class VoidicCrystalBlockBlockModelHolder extends BlockModelHolder {
 
 	@Autowired
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private FlowerPotCrossFullbrightBlockModelHolder parent;
+	private CubeAllFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				name(blocks.thunderForestBiomeBlocks().THUNDER_FUNGUS_POT),
+				name(blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK),
 				parent.getOrBuild(provider).getLocation()
 			)
-			.renderType(RenderType.cutoutMipped().name)
-			.texture("plant", "block/thunder_fungus_pot_plant");
+			.texture("all", "block/voidic_crystal_block")
+			.texture("particle", "#all");
 	}
 
 }

@@ -19,7 +19,7 @@ public class ThunderSlabTopBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_SLAB.getId().getPath() + "_top",
+				name(blocks.thunderForestBiomeBlocks().THUNDER_SLAB) + "_top",
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("bottom", "block/thunder_planks")

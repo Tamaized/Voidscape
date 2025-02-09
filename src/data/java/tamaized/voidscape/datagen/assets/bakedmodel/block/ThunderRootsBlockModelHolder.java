@@ -20,7 +20,10 @@ public class ThunderRootsBlockModelHolder extends BlockModelHolder {
 	private CrossFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.thunderForestBiomeBlocks().THUNDER_ROOTS.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.thunderForestBiomeBlocks().THUNDER_ROOTS),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("cross", "block/thunder_roots")
 			.texture("particle", "#cross");

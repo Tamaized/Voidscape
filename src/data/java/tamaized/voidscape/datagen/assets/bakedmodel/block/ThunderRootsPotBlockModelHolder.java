@@ -20,7 +20,10 @@ public class ThunderRootsPotBlockModelHolder extends BlockModelHolder {
 	private FlowerPotCrossFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent("block/" + blocks.thunderForestBiomeBlocks().THUNDER_ROOTS_POT.getId().getPath(), parent.getOrBuild(provider).getLocation())
+		return provider.withExistingParent(
+				name(blocks.thunderForestBiomeBlocks().THUNDER_ROOTS_POT),
+				parent.getOrBuild(provider).getLocation()
+			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("plant", "block/thunder_roots_pot_plant");
 	}

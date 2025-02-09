@@ -21,7 +21,7 @@ public class ThunderVinesBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_VINES.getId().getPath(),
+				name(blocks.thunderForestBiomeBlocks().THUNDER_VINES),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)

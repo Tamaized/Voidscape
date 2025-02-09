@@ -19,7 +19,7 @@ public class ThunderWartBlockModelHolder extends BlockModelHolder {
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				"block/" + blocks.thunderForestBiomeBlocks().THUNDER_WART.getId().getPath(),
+				name(blocks.thunderForestBiomeBlocks().THUNDER_WART),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("all", "block/thunder_wart")
