@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.assets.bakedmodel.block.overlay;
+package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import tamaized.beanification.Component;
@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import java.util.List;
 
 @Component
-public class OverlayBlockModelProviderFactory {
+public class RootBlockModelProviderFactory {
 
 	@Directory(BlockModelHolder.class)
 	private List<BlockModelHolder> blockModelHolders;

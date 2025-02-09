@@ -3,7 +3,7 @@ package tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 
 import java.util.List;
 

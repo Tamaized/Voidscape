@@ -1,8 +1,7 @@
-package tamaized.voidscape.datagen.assets.bakedmodel.item;
+package tamaized.voidscape.datagen.assets.bakedmodel;
 
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-import tamaized.voidscape.datagen.assets.bakedmodel.ModelHolder;
 
 public abstract class ItemModelHolder extends ModelHolder {
 

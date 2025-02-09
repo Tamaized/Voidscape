@@ -4,7 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 
 @Component
 public class StairsFullbrightBlockModelHolder extends BlockModelHolder {

@@ -6,15 +6,15 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 
 @Component
-public class CubeAllFullbrightBlockModelHolder extends BlockModelHolder {
+public class TintedCubeAllFullbrightBlockModelHolder extends BlockModelHolder {
 
 	@Autowired
-	private CubeFullbrightBlockModelHolder cubeFullbrightBlockModelHolder;
+	private TintedCubeFullbrightBlockModelHolder tintedCubeFullbrightBlockModelHolder;
 
 	public void build(BlockModelProvider provider) {
 		set(
 			// @formatter:off
-			provider.withExistingParent("block/fullbright/cube_all", cubeFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
+			provider.withExistingParent("block/fullbright/tinted_cube_all", tintedCubeFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
 				.texture("particle", "#all")
 				.texture("down", "#all")
 				.texture("up", "#all")

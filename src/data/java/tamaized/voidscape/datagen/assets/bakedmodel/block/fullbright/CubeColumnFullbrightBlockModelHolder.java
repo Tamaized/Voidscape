@@ -3,7 +3,7 @@ package tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 
 @Component
 public class CubeColumnFullbrightBlockModelHolder extends BlockModelHolder {
