@@ -10,11 +10,11 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 public class CubeAllFullbrightBlockModelHolder extends BlockModelHolder {
 
 	@Autowired
-	private CubeFullbrightBlockModelHolder cubeFullbrightBlockModelHolder;
+	private CubeFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		// @formatter:off
-		return provider.withExistingParent("block/fullbright/cube_all", cubeFullbrightBlockModelHolder.getOrBuild(provider).getLocation())
+		return provider.withExistingParent("block/fullbright/cube_all", parent.getOrBuild(provider).getLocation())
 			.texture("particle", "#all")
 			.texture("down", "#all")
 			.texture("up", "#all")

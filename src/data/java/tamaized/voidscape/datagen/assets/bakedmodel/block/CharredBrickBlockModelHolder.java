@@ -16,12 +16,12 @@ public class CharredBrickBlockModelHolder extends BlockModelHolder {
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private FullFullbrightOverlayOverlayBlockModelHolder fullFullbrightOverlayOverlayBlockModelHolder;
+	private FullFullbrightOverlayOverlayBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
 				name(blocks.materialBlocks().CHARRED_BRICK),
-				fullFullbrightOverlayOverlayBlockModelHolder.getOrBuild(provider).getLocation()
+				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("base", "block/charred_brick")

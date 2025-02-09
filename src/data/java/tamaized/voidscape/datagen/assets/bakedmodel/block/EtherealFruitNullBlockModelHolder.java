@@ -16,12 +16,12 @@ public class EtherealFruitNullBlockModelHolder extends BlockModelHolder {
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private TintedCrossFullbrightBlockModelHolder tintedCrossFullbrightBlockModelHolder;
+	private TintedCrossFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
 				name(blocks.etherealFruitBlocks().NULL),
-				tintedCrossFullbrightBlockModelHolder.getOrBuild(provider).getLocation()
+				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("cross", "block/ethereal_fruit_null")

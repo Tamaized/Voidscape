@@ -10,11 +10,11 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 public class SideTopFullbrightOverlayOverlayBlockModelHolder extends BlockModelHolder {
 
 	@Autowired
-	private BaseFullbrightOverlayOverlayBlockModelHolder baseFullbrightOverlayOverlayBlockModelHolder;
+	private BaseFullbrightOverlayOverlayBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		// @formatter:off
-		return provider.withExistingParent("block/overlay/side_top_fullbright_overlay", baseFullbrightOverlayOverlayBlockModelHolder.getOrBuild(provider).getLocation())
+		return provider.withExistingParent("block/overlay/side_top_fullbright_overlay", parent.getOrBuild(provider).getLocation())
 			.texture("particle", "#top")
 			.texture("down", "#bottom")
 			.texture("up", "#top")

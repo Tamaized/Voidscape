@@ -15,12 +15,12 @@ public class AstralrockBlockModelHolder extends BlockModelHolder {
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private TintedCubeAllFullbrightBlockModelHolder tintedCubeAllFullbrightBlockModelHolder;
+	private TintedCubeAllFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
 				name(blocks.spireBlocks().ASTRALROCK),
-				tintedCubeAllFullbrightBlockModelHolder.getOrBuild(provider).getLocation()
+				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("all", provider.mcLoc("block/bedrock"));
 	}

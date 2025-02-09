@@ -13,7 +13,6 @@ public class FullbrightBlockModelProviderFactory {
 	@Directory(BlockModelHolder.class)
 	private List<BlockModelHolder> blockModelHolders;
 
-
 	public void make(BlockModelProvider provider) {
 		blockModelHolders.forEach(holder -> holder.buildIfEmpty(provider));
 	}

@@ -16,12 +16,12 @@ public class FleshOreBlockModelHolder extends BlockModelHolder {
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private FullFullbrightOverlayOverlayBlockModelHolder fullFullbrightOverlayOverlayBlockModelHolder;
+	private FullFullbrightOverlayOverlayBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
 				name(blocks.oreBlocks().FLESH_ORE),
-				fullFullbrightOverlayOverlayBlockModelHolder.getOrBuild(provider).getLocation()
+				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("base", provider.mcLoc("block/netherrack"))

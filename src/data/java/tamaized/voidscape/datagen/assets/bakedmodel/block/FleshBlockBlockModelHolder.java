@@ -15,12 +15,12 @@ public class FleshBlockBlockModelHolder extends BlockModelHolder {
 	private ModBlockComponentDirectory blocks;
 
 	@Autowired
-	private CubeColumnFullbrightBlockModelHolder cubeColumnFullbrightBlockModelHolder;
+	private CubeColumnFullbrightBlockModelHolder parent;
 
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
 				name(blocks.materialBlocks().FLESH_BLOCK),
-				cubeColumnFullbrightBlockModelHolder.getOrBuild(provider).getLocation()
+				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("end", "block/flesh_block_top")
 			.texture("side", "block/flesh_block_side");
