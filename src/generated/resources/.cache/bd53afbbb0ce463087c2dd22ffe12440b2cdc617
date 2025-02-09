@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-09T11:02:47.839734884	Block Models: voidscape
+// 1.21.1	2025-02-09T11:38:35.959843126	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
@@ -41,3 +41,19 @@ e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/s
 4f25a4be652a6f5d0bba6584497836e15d0bbcfb assets/voidscape/models/block/strange_ore.json
 d1a7b806ec9de239869a5c3f83a1941ccc567f3f assets/voidscape/models/block/thunder_fungus.json
 45b88a05bb5ea1f0d982a106cd18d831a4b370aa assets/voidscape/models/block/thunder_fungus_pot.json
+c1d6a5f8c1098a85bc75340712df7e0f17665487 assets/voidscape/models/block/thunder_hyphae.json
+023c42ec35ccdc19819e0f01620791337de1cb77 assets/voidscape/models/block/thunder_hyphae_stripped.json
+6480b4a629929a0e93b9ac3391b653fe9975ad72 assets/voidscape/models/block/thunder_nylium.json
+a3d9a1ea9e0599cb5c972f99d6e5fe697ec3291b assets/voidscape/models/block/thunder_planks.json
+1ab848fb50240b3ba5aea2db3d5bf8953abf9913 assets/voidscape/models/block/thunder_roots.json
+5e3197f78cba444a0952b6af972f10a90326d085 assets/voidscape/models/block/thunder_roots_pot.json
+657117c43cf4a72c928b5188b02eb1b870c1ee49 assets/voidscape/models/block/thunder_slab.json
+8f3c211671ac9db5003fca672914972efb672d8d assets/voidscape/models/block/thunder_slab_top.json
+8a2a295b69911d907d70337527fae6c767cc650e assets/voidscape/models/block/thunder_stairs.json
+1a45a37a04cb4e3ba1a1161b804de3eee3176e55 assets/voidscape/models/block/thunder_stairs_inner.json
+41a305b808e36b41762a92445054304b07f9881c assets/voidscape/models/block/thunder_stairs_outer.json
+3dee72f55a8bebd657331fed38014639eed570a9 assets/voidscape/models/block/thunder_stem.json
+046044f3bf0bdc83500c4be04a744364f17e1e34 assets/voidscape/models/block/thunder_stem_stripped.json
+7077e62b83d8d328c2674e399428ea5adb66e58a assets/voidscape/models/block/thunder_vines.json
+e2e8d922c06df29b8f9d3fcb8026743affb09e3c assets/voidscape/models/block/thunder_vines_plant.json
+d5e356b9a18ce232eb112f7a1d6b04d890f04194 assets/voidscape/models/block/thunder_wart.json

@@ -1,0 +1,13 @@
+{
+  "parent": "voidscape:block/overlay/side_top_fullbright_overlay",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "bottom": "minecraft:block/bedrock",
+    "overlay-bottom": "voidscape:block/blank",
+    "overlay-side": "voidscape:block/thunder_nylium_side",
+    "overlay-top": "voidscape:block/thunder_nylium_top",
+    "particle": "#overlay-top",
+    "side": "minecraft:block/bedrock",
+    "top": "minecraft:block/bedrock"
+  }
+}

@@ -66,7 +66,7 @@ public class ThunderForestBiomeBlocks {
 	));
 	public final Supplier<Item> THUNDER_ROOTS_ITEM = REGISTRY_ITEM
 		.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), itemProperties.LAVA_IMMUNE.get()));
-	public final Supplier<Block> THUNDER_ROOTS_POT = REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
+	public final DeferredHolder<Block, Block> THUNDER_ROOTS_POT = REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
 		() -> (FlowerPotBlock) Blocks.FLOWER_POT,
 		THUNDER_ROOTS,
 		BlockBehaviour.Properties.of()
@@ -119,7 +119,7 @@ public class ThunderForestBiomeBlocks {
 			return THUNDER_VINES_PLANT.get();
 		}
 	});
-	public final Supplier<Block> THUNDER_VINES_PLANT = REGISTRY.register("thunder_vines_plant", () -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
+	public final DeferredHolder<Block, Block> THUNDER_VINES_PLANT = REGISTRY.register("thunder_vines_plant", () -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
 		.sound(SoundType.WEEPING_VINES)
 		.mapColor(MapColor.COLOR_PURPLE)
 		.randomTicks()

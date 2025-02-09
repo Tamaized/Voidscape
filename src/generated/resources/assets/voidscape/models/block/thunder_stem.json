@@ -1,6 +1,6 @@
 {
   "parent": "voidscape:block/fullbright/cube_column_overlay",
-  "render_type": "cutout_mipped",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "end": "voidscape:block/thunder_stem_top",
     "end-overlay": "voidscape:block/thunder_stem_top_overlay",
