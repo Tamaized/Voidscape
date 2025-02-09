@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry.block;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -88,7 +89,7 @@ public class ThunderForestBiomeBlocks {
 	public final Supplier<Item> THUNDER_FUNGUS_ITEM = REGISTRY_ITEM
 		.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), itemProperties.LAVA_IMMUNE.get()));
 
-	public final Supplier<Block> THUNDER_FUNGUS_POT = REGISTRY.register("thunder_fungus_pot", () -> new FlowerPotBlock(
+	public final DeferredHolder<Block, Block> THUNDER_FUNGUS_POT = REGISTRY.register("thunder_fungus_pot", () -> new FlowerPotBlock(
 		() -> (FlowerPotBlock) Blocks.FLOWER_POT,
 		THUNDER_FUNGUS,
 		BlockBehaviour.Properties.of()

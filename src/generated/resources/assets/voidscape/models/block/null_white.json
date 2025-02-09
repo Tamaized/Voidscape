@@ -2,7 +2,7 @@
   "parent": "voidscape:block/fullbright/cube_all",
   "ambientocclusion": false,
   "textures": {
-	"all": "voidscape:block/white",
-	"particle": "#all"
+    "all": "voidscape:block/white",
+    "particle": "#all"
   }
 }

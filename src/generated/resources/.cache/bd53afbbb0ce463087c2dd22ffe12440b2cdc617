@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-08T19:54:31.548052999	Block Models: voidscape
+// 1.21.1	2025-02-09T11:02:47.839734884	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
@@ -9,6 +9,8 @@ dfdd1ee49a1b5ea03a00dbcf38d8e8d3859ed31a assets/voidscape/models/block/ethereal_
 034ee51e0947fd7dbc358d3fddc9ceb1773de152 assets/voidscape/models/block/ethereal_fruit_null.json
 f9f0806db4d1f9e9df50b7cda1bd631fa5cd9548 assets/voidscape/models/block/ethereal_fruit_overworld.json
 2072342552f72433a483213173b74438221e2b23 assets/voidscape/models/block/ethereal_fruit_void.json
+39bd7711e3dda4a5889f50a7c43228035b88cc9c assets/voidscape/models/block/flesh_block.json
+39536e201361d33e2c4a02e0d9a33c3f3315f442 assets/voidscape/models/block/flesh_ore.json
 e5a019ad009114c5ca26379eaa41d043a492b798 assets/voidscape/models/block/fullbright/cross.json
 fabbb3f2a76bae791516e17e57c60beaff277b57 assets/voidscape/models/block/fullbright/cube.json
 2e314e5be811f7c28df0e08f20cbd38091c2c3a6 assets/voidscape/models/block/fullbright/cube_all.json
@@ -24,6 +26,9 @@ e9be01233e3b7317611e4bdead8941b894a3790f assets/voidscape/models/block/fullbrigh
 dcd3895a0158dfc2bd240aea28ba6bf4c94d0ce2 assets/voidscape/models/block/fullbright/tinted_cross.json
 2ed8ee85d8280b1967fad8e6ede40a7eef00b205 assets/voidscape/models/block/fullbright/tinted_cube.json
 422c8f00bd927452fbeb335112b6f373f624ca0d assets/voidscape/models/block/fullbright/tinted_cube_all.json
+dc924ca318ec40b000a325ca5c63a0630960fc7e assets/voidscape/models/block/hatchery.json
+157ad3ca0911c1da7e0c8786748a1c9b92d063dd assets/voidscape/models/block/null_black.json
+6caeda07137650b289c81435a973fd802594b5cb assets/voidscape/models/block/null_white.json
 fe62042bb84310a1ffdd7b9682948ca5183f547c assets/voidscape/models/block/overlay/base.json
 41003d8eda7233a34b179b14155b803f37cbdf5e assets/voidscape/models/block/overlay/base_fullbright_overlay.json
 63500a67bf1ed85876d0abe39a73e329187306dd assets/voidscape/models/block/overlay/full.json
@@ -31,3 +36,8 @@ adc3d90971c6172bc1790afbc433e9ec1c4457a0 assets/voidscape/models/block/overlay/f
 848df712b534098021e8630e435231d8c111f8b4 assets/voidscape/models/block/overlay/side.json
 0afe179bb654f02f5ce37171d5c245128f3f5192 assets/voidscape/models/block/overlay/side_top.json
 e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/side_top_fullbright_overlay.json
+05da98b9de8b6d5370fa79c15dcd5abd975d7d60 assets/voidscape/models/block/portal_ew.json
+1c84ff4a7d1913f1aafbea8d5ed5f6450cab06d3 assets/voidscape/models/block/portal_ns.json
+4f25a4be652a6f5d0bba6584497836e15d0bbcfb assets/voidscape/models/block/strange_ore.json
+d1a7b806ec9de239869a5c3f83a1941ccc567f3f assets/voidscape/models/block/thunder_fungus.json
+45b88a05bb5ea1f0d982a106cd18d831a4b370aa assets/voidscape/models/block/thunder_fungus_pot.json
