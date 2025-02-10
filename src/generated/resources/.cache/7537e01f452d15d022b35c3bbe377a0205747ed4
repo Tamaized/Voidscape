@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-09T23:54:01.601765159	Item Models: voidscape
+// 1.21.1	2025-02-10T00:00:51.070286677	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -55,3 +55,28 @@ ce0f8548e3454f8f8c6331a974f5ad536ad160d3 assets/voidscape/models/item/corrupt/xb
 08b9858c348dac311642c0d9b73e4ab89e06bda9 assets/voidscape/models/item/corrupt/xbow_pulling_0.json
 d318f7b23a9322023482ece85ce37cf15cf4c089 assets/voidscape/models/item/corrupt/xbow_pulling_1.json
 acf91dc7399fc5d34c8cae91e0154892fb07d10f assets/voidscape/models/item/corrupt/xbow_pulling_2.json
+575851356e70cf53ddf1877a739d9aaae99078ca assets/voidscape/models/item/ichor/axe.json
+1bd822db8b5a3f87070c967dbee458c48492d9ef assets/voidscape/models/item/ichor/axe_broken.json
+dea00050b90d5f4950bfbafe5835f1e0690c7076 assets/voidscape/models/item/ichor/boots.json
+0c05bde57587500cc91ae25e4890e02d2a0c903a assets/voidscape/models/item/ichor/boots_broken.json
+70bdaba12463bc243fd05041e65f601858745dc5 assets/voidscape/models/item/ichor/bow.json
+724bacb72fdd495713e0dea2e6ed9135c5a77e9f assets/voidscape/models/item/ichor/bow_broken.json
+d61d8adc1cc8d94a84bcf2ed2ade0eb75db48277 assets/voidscape/models/item/ichor/bow_pulling_0.json
+c2dda82f77b03bed974510420ec89d4c7e7bfe50 assets/voidscape/models/item/ichor/bow_pulling_1.json
+5bdfa8434edebd67d3d0564932062501311cb180 assets/voidscape/models/item/ichor/bow_pulling_2.json
+772f56d4ba993a0581fd13380d0cb21f4033a5ba assets/voidscape/models/item/ichor/chest.json
+3cd10c54e2cf098eaf1208e35ad3fe47541528fa assets/voidscape/models/item/ichor/helmet.json
+55ad844779d6870a7b1bf4eff4c8933e6b7b83ef assets/voidscape/models/item/ichor/helmet_broken.json
+52ae465d7d6232fa0e852cd1e6b4f4b49d088936 assets/voidscape/models/item/ichor/legs.json
+c3c83c661806eddbdbcfe6c64169797e6285db33 assets/voidscape/models/item/ichor/legs_broken.json
+3d2850635cd2b1445a84af1973a566975e09070e assets/voidscape/models/item/ichor/pickaxe.json
+8f4ac3fef19f26e3c68c034f294e91649b8eecfd assets/voidscape/models/item/ichor/pickaxe_broken.json
+69bd5d8c565bd5d0fd611fdc5b22eee293c26ffe assets/voidscape/models/item/ichor/sword.json
+9732055872387745ccfb856004e840718e52dc1a assets/voidscape/models/item/ichor/sword_broken.json
+c7f59051891754957310235abbb46a2f8c75ae43 assets/voidscape/models/item/ichor/xbow.json
+9d9e8dc17aef26e5bb6e60edfc7a79ae723de912 assets/voidscape/models/item/ichor/xbow_arrow.json
+a58374ab1c9e8f524d0802e17c2b38e044ae68c6 assets/voidscape/models/item/ichor/xbow_broken.json
+041b5fc1ee1db416d34d66ea1cf6fad12a1a8309 assets/voidscape/models/item/ichor/xbow_firework.json
+2765800db4068e13f5acfe9d99e7229476b14553 assets/voidscape/models/item/ichor/xbow_pulling_0.json
+a4b26fbf08885fa2ac562c9a7a7dda7b705ecc11 assets/voidscape/models/item/ichor/xbow_pulling_1.json
+3ba116fa9f226de39a3743f15428c6de6469938b assets/voidscape/models/item/ichor/xbow_pulling_2.json
