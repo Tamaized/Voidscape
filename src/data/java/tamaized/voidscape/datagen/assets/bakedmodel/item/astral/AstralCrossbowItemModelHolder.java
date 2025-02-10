@@ -1,9 +1,11 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.item.astral;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -38,10 +40,15 @@ public class AstralCrossbowItemModelHolder extends ItemModelHolder {
 	@Nullable
 	private ModelFile fireworkModel;
 
+	@Override
+	protected DeferredHolder<Item, ? extends Item> itemForName() {
+		return tools.astralToolSet().ASTRAL_XBOW;
+	}
+
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(tools.astralToolSet().ASTRAL_XBOW),
+				splitName(),
 				"item/generated"
 			)
 			.texture("layer0", "item/astral/xbow/crossbow_standby")
@@ -142,7 +149,7 @@ public class AstralCrossbowItemModelHolder extends ItemModelHolder {
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(tools.astralToolSet().ASTRAL_XBOW) + "_" + name,
+				splitName(name),
 				"item/crossbow"
 			)
 			.texture("layer0", "item/astral/xbow/crossbow_" + name)

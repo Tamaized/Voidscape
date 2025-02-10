@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-09T20:27:01.800048636	Item Models: voidscape
+// 1.21.1	2025-02-09T23:45:12.245270271	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -27,3 +27,8 @@ d28b27c07236291508ec48f3729e9f028bcf04d3 assets/voidscape/models/item/astral/xbo
 8cd6bfcdbd5b45ac5978047c31b23004e1e67da0 assets/voidscape/models/item/astral/xbow_pulling_0.json
 9597e5ef444455c11c5bd401a941dc835bc5bc03 assets/voidscape/models/item/astral/xbow_pulling_1.json
 e1d59f520692ff7b0b30cc385fc19cdf682b0bbd assets/voidscape/models/item/astral/xbow_pulling_2.json
+ab68a910e95aaca3c81a19cedade339a974d8f36 assets/voidscape/models/item/charred/warhammer.json
+0f728ef02f4652d319607d322ace2c86d1ae5fdb assets/voidscape/models/item/charred/warhammer_in_hand.json
+c92410b5afdbb146928850edabd4e1e5ebd4ea99 assets/voidscape/models/item/charred/warhammer_in_hand_broken.json
+8f42f3b045a43c3db6c34d775fd52f436a402210 assets/voidscape/models/item/charred/warhammer_small.json
+00bb97411f7407ca85358c22a71bc47f31c18e43 assets/voidscape/models/item/charred/warhammer_small_broken.json
