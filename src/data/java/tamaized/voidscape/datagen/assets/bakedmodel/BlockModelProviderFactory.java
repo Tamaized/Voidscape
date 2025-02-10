@@ -2,24 +2,17 @@ package tamaized.voidscape.datagen.assets.bakedmodel;
 
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.Directory;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.RootBlockModelProviderFactory;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.FullbrightBlockModelProviderFactory;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.OverlayBlockModelProviderFactory;
+
+import java.util.List;
 
 @Component
 public class BlockModelProviderFactory {
 
-	@Autowired
-	private FullbrightBlockModelProviderFactory fullbrightBlockModelProviderFactory;
-
-	@Autowired
-	private OverlayBlockModelProviderFactory overlayBlockModelProviderFactory;
-
-	@Autowired
-	private RootBlockModelProviderFactory rootBlockModelProviderFactory;
+	@Directory(BlockModelHolder.class)
+	private List<BlockModelHolder> blockModelHolders;
 
 	public BlockModelProvider make(GatherDataEvent event) {
 		return new BlockModelProvider(
@@ -29,9 +22,7 @@ public class BlockModelProviderFactory {
 		) {
 			@Override
 			protected void registerModels() {
-				fullbrightBlockModelProviderFactory.make(this);
-				overlayBlockModelProviderFactory.make(this);
-				rootBlockModelProviderFactory.make(this);
+				blockModelHolders.forEach(holder -> holder.buildIfEmpty(this));
 			}
 		};
 	}

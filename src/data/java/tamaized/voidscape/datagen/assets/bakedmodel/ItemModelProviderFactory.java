@@ -2,16 +2,17 @@ package tamaized.voidscape.datagen.assets.bakedmodel;
 
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.Directory;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.assets.bakedmodel.item.RootItemModelProviderFactory;
+
+import java.util.List;
 
 @Component
 public class ItemModelProviderFactory {
 
-	@Autowired
-	private RootItemModelProviderFactory rootItemModelProviderFactory;
+	@Directory(ItemModelHolder.class)
+	private List<ItemModelHolder> itemModelHolders;
 
 	public ItemModelProvider make(GatherDataEvent event) {
 		return new ItemModelProvider(
@@ -21,7 +22,7 @@ public class ItemModelProviderFactory {
 		) {
 			@Override
 			protected void registerModels() {
-				rootItemModelProviderFactory.make(this);
+				itemModelHolders.forEach(holder -> holder.buildIfEmpty(this));
 			}
 		};
 	}
