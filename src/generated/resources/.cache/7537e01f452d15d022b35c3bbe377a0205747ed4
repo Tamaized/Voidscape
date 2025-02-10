@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-10T00:07:59.234718025	Item Models: voidscape
+// 1.21.1	2025-02-10T10:45:23.204637093	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -110,3 +110,31 @@ f35d0d857e0b37db018fd37df8de6d2ca36b325d assets/voidscape/models/item/titanite/x
 ce711e1d4c46095a731619f603a6dd28368b4bc1 assets/voidscape/models/item/titanite/xbow_pulling_0.json
 2dfefc0c32cbf10d02f321e41e5a6a6e3e9efe68 assets/voidscape/models/item/titanite/xbow_pulling_1.json
 1e5ef3fefb593bc9ccd56c2bd4a39fa1a0e1e729 assets/voidscape/models/item/titanite/xbow_pulling_2.json
+387acb2f212293fbbe39cc69e831ba182f73f525 assets/voidscape/models/item/voidic/axe.json
+927153863d0df6ab57af317e34ece0106fe3c23a assets/voidscape/models/item/voidic/axe_broken.json
+0b078025de78f5120745b1a5edc9b210db072dd2 assets/voidscape/models/item/voidic/boots.json
+1274084ebe830a8c713c9058d243b925465bda96 assets/voidscape/models/item/voidic/boots_broken.json
+3c6f3e3495a1efa8671bcb6999c08bbb9221c1f4 assets/voidscape/models/item/voidic/bow.json
+029eef5114e36b53e0edec129290e97d53de741d assets/voidscape/models/item/voidic/bow_broken.json
+2e36bf46615f1af7f60e36e53eea7ff8cf0bbafd assets/voidscape/models/item/voidic/bow_pulling_0.json
+9877821e8e305e8eb871f11cae5cc6b884754d95 assets/voidscape/models/item/voidic/bow_pulling_1.json
+e1184aaebe8c9141d30b0923f835735c1a030d6f assets/voidscape/models/item/voidic/bow_pulling_2.json
+0a7355f0260d8892eefa865d77098efe9f3ae2c3 assets/voidscape/models/item/voidic/chest.json
+cf7477aff0ae9edad4491405dd3063daf8b67519 assets/voidscape/models/item/voidic/chest_broken.json
+6c2478f334d6a6e0294653381c60be5653fe1da7 assets/voidscape/models/item/voidic/helmet.json
+2b2f26cf864372995a0d813268498403660fe80c assets/voidscape/models/item/voidic/helmet_broken.json
+b36c7eb581a9532c96d29e3b194ce964743f58b7 assets/voidscape/models/item/voidic/legs.json
+721702038ce87f822a7b710e3816db8659f0a211 assets/voidscape/models/item/voidic/legs_broken.json
+5e08643a5c245b4ca001d7764dab5bfd352279fa assets/voidscape/models/item/voidic/pickaxe.json
+87999a5bcd9e6eec0a407966ff99db8e72a9cec3 assets/voidscape/models/item/voidic/pickaxe_broken.json
+3910566dd94ef5befdc7a0668d3d4dd406e0d5e7 assets/voidscape/models/item/voidic/shield.json
+9945b0ab452b0b23c87bd0496949348e27c2af4c assets/voidscape/models/item/voidic/shield_blocking.json
+c39b8fa538457899c51409225b1098d96b9b0be4 assets/voidscape/models/item/voidic/sword.json
+ce150b4dca8deb5fed3cff2f873c31129847007a assets/voidscape/models/item/voidic/sword_broken.json
+2843b392c02ed4443f61ddc005bbfa85ec74c02c assets/voidscape/models/item/voidic/xbow.json
+83e10402df90025b031c3324451f2bd2248c43c0 assets/voidscape/models/item/voidic/xbow_arrow.json
+32c4bb2af9f5acd25adc0df245a63ed4762b0e7d assets/voidscape/models/item/voidic/xbow_broken.json
+62d5f1841fcc2d7195221d290d7705c106766104 assets/voidscape/models/item/voidic/xbow_firework.json
+7a98622bf0c8e6b4d0c82850133c7a410a62ba79 assets/voidscape/models/item/voidic/xbow_pulling_0.json
+70f463504c678d68c62c6d756cfa076b4b623b48 assets/voidscape/models/item/voidic/xbow_pulling_1.json
+52b1295d0a8d32db10cdc8979612e2612c65c421 assets/voidscape/models/item/voidic/xbow_pulling_2.json

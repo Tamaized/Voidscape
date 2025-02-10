@@ -27,29 +27,25 @@ public abstract class ItemModelHolder extends ModelHolder {
 	public abstract ModelFile build(ItemModelProvider provider);
 
 	protected String name() {
-		return name((String) null);
+		return name(null);
 	}
 
 	protected String name(@Nullable String suffix) {
-		return name(itemForName()) + (suffix == null ? "" : ("_" + suffix));
-	}
-
-	protected String name(DeferredHolder<Item, ? extends Item> holder) {
-		return "item/" + holder.getId().getPath();
+		return "item/" + nameToUse() + (suffix == null ? "" : ("_" + suffix));
 	}
 
 	protected String splitName() {
-		return splitName((String) null);
+		return splitName(null);
 	}
 
 	protected String splitName(@Nullable String suffix) {
-		return splitName(itemForName()) + (suffix == null ? "" : ("_" + suffix));
-	}
-
-	protected String splitName(DeferredHolder<Item, ? extends Item> holder) {
-		return "item/" + String.join("/", holder.getId().getPath().split("_", 2));
+		return "item/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
 	}
 
 	protected abstract DeferredHolder<Item, ? extends Item> itemForName();
+
+	protected String nameToUse() {
+		return itemForName().getId().getPath();
+	}
 
 }
