@@ -8,13 +8,14 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
+import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
 @Component
-public class AstralAxeItemModelHolder extends ItemModelHolder {
+public class AstralBootsItemModelHolder extends ItemModelHolder {
 
 	@Autowired
-	private ModToolSetComponentDirectory tools;
+	private ModArmorSetComponentDirectory armor;
 
 	@Autowired
 	private ItemModelOverridePredicates itemModelOverridePredicates;
@@ -25,10 +26,10 @@ public class AstralAxeItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(tools.astralToolSet().ASTRAL_AXE),
-				"item/handheld"
+				splitName(armor.astralArmorSet().ASTRAL_BOOTS),
+				"item/generated"
 			)
-			.texture("layer0", "item/astral/axe")
+			.texture("layer0", "item/astral/boots")
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
 			.override()
 				.predicate(itemModelOverridePredicates.BROKEN, 1)
@@ -37,13 +38,13 @@ public class AstralAxeItemModelHolder extends ItemModelHolder {
 		// @formatter:on
 	}
 
-	private ModelFile getBrokenModel(ItemModelProvider provider) {
+	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName(tools.astralToolSet().ASTRAL_AXE) + "_broken",
-					"item/handheld"
+					splitName(armor.astralArmorSet().ASTRAL_BOOTS) + "_broken",
+					"item/generated"
 				)
-				.texture("layer0", "item/astral/axe_broken")
+				.texture("layer0", "item/astral/boots_broken")
 				.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
 		}
 		return brokenModel;

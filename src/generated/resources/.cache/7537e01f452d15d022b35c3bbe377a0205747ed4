@@ -1,3 +1,10 @@
-// 1.21.1	2025-02-09T17:52:21.016275645	Item Models: voidscape
+// 1.21.1	2025-02-09T19:28:19.148605292	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
+686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
+10c8f2137f0826a6641a4c2b1f05f2ddd20236d1 assets/voidscape/models/item/astral/boots_broken.json
+5945c50e85e3ca18656fe6810be46e9305294142 assets/voidscape/models/item/astral/bow.json
+f95f8522e4cfe31d8a60998ff6ec693ba8466a23 assets/voidscape/models/item/astral/bow_broken.json
+dc2eae5b0e201f30a12384006622cf85cd9284c9 assets/voidscape/models/item/astral/bow_pulling_0.json
+e78dd1d766a11a81797656aa93927a92b02bf158 assets/voidscape/models/item/astral/bow_pulling_1.json
+d922d2fc066678919aaeaaca832c5be22ddde899 assets/voidscape/models/item/astral/bow_pulling_2.json
