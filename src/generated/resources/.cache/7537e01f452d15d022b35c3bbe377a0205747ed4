@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-09T23:45:12.245270271	Item Models: voidscape
+// 1.21.1	2025-02-09T23:54:01.601765159	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -9,7 +9,7 @@ dc2eae5b0e201f30a12384006622cf85cd9284c9 assets/voidscape/models/item/astral/bow
 e78dd1d766a11a81797656aa93927a92b02bf158 assets/voidscape/models/item/astral/bow_pulling_1.json
 d922d2fc066678919aaeaaca832c5be22ddde899 assets/voidscape/models/item/astral/bow_pulling_2.json
 55c0d2f98bb08ed45eec6ad61c4cbc7669aa984e assets/voidscape/models/item/astral/chest.json
-dd71f2552809b0553f5f99073c29e7dc8d5d9020 assets/voidscape/models/item/astral/chest_broken.json
+fe60dff655ce092ed3066345b79bfc87d7242796 assets/voidscape/models/item/astral/chest_broken.json
 8ea81d12765656b78759480fe5e69b2982feea13 assets/voidscape/models/item/astral/helmet.json
 59ab89d02cb35d90db4f5539dc3dcd9602cea6b1 assets/voidscape/models/item/astral/helmet_broken.json
 3a15395f686524ed1781c5fbd458c8afa9f2f98f assets/voidscape/models/item/astral/legs.json
@@ -32,3 +32,26 @@ ab68a910e95aaca3c81a19cedade339a974d8f36 assets/voidscape/models/item/charred/wa
 c92410b5afdbb146928850edabd4e1e5ebd4ea99 assets/voidscape/models/item/charred/warhammer_in_hand_broken.json
 8f42f3b045a43c3db6c34d775fd52f436a402210 assets/voidscape/models/item/charred/warhammer_small.json
 00bb97411f7407ca85358c22a71bc47f31c18e43 assets/voidscape/models/item/charred/warhammer_small_broken.json
+cc3a829e618c7caa3b66f7ca1677ee0871076cd9 assets/voidscape/models/item/corrupt/axe.json
+0287a4e97b6a6857e690c0729c5ba22bbea109ab assets/voidscape/models/item/corrupt/axe_broken.json
+e6715e803fcb2b96d605fe3bbcf378768f35ccb7 assets/voidscape/models/item/corrupt/boots.json
+968716843f2a5279719f8a86c1da6bb4484d6ae3 assets/voidscape/models/item/corrupt/boots_broken.json
+10f90efee47cf57945f6faad662cfb2df82175d4 assets/voidscape/models/item/corrupt/bow.json
+9826296e9e9b30aae324f88deabf22221296e37f assets/voidscape/models/item/corrupt/bow_broken.json
+95fb77e7f8406ee167a3f10c2bb56c54ec7928f7 assets/voidscape/models/item/corrupt/bow_pulling_0.json
+e981160ba080e148e4c824d5be1fea2d9fdd6b5c assets/voidscape/models/item/corrupt/bow_pulling_1.json
+b927f514af3325051c3ec811c4a85a5d84e8e369 assets/voidscape/models/item/corrupt/bow_pulling_2.json
+58955d05428081d17ee4bb21512898f0fbfcbb48 assets/voidscape/models/item/corrupt/chest.json
+88bfa7793fed01c3479381d83c11e96f0a335f67 assets/voidscape/models/item/corrupt/helmet.json
+67f2fbdb4b5dfca23aa86308d378ddb50f02f65f assets/voidscape/models/item/corrupt/helmet_broken.json
+6cc733bafcabb72b652b893370eb59501d936a09 assets/voidscape/models/item/corrupt/legs.json
+efb718f3a912e9cf15056c38bd35752b39919062 assets/voidscape/models/item/corrupt/legs_broken.json
+ddb75c9488c526de2e77ff1e873e5092e7bf02da assets/voidscape/models/item/corrupt/sword.json
+cf88af94fb11bf7c36627f55f69ef6efaaaa5d59 assets/voidscape/models/item/corrupt/sword_broken.json
+0d19b53749ca25e75bb84fc97bc157e6bb86f3b1 assets/voidscape/models/item/corrupt/xbow.json
+ce0f8548e3454f8f8c6331a974f5ad536ad160d3 assets/voidscape/models/item/corrupt/xbow_arrow.json
+4c14a5ee09048a3daa597b1853f3b2ac8e0b4a30 assets/voidscape/models/item/corrupt/xbow_broken.json
+3be2da6d022f05939b7dbccf5233b628e7ddf9a9 assets/voidscape/models/item/corrupt/xbow_firework.json
+08b9858c348dac311642c0d9b73e4ab89e06bda9 assets/voidscape/models/item/corrupt/xbow_pulling_0.json
+d318f7b23a9322023482ece85ce37cf15cf4c089 assets/voidscape/models/item/corrupt/xbow_pulling_1.json
+acf91dc7399fc5d34c8cae91e0154892fb07d10f assets/voidscape/models/item/corrupt/xbow_pulling_2.json

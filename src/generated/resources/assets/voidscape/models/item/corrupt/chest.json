@@ -9,8 +9,16 @@
       }
     }
   },
+  "overrides": [
+    {
+      "model": "voidscape:item/astral/chest_broken",
+      "predicate": {
+        "voidscape:broken": 1.0
+      }
+    }
+  ],
   "render_types": {},
   "textures": {
-    "layer0": "voidscape:item/corrupt/chest_broken"
+    "layer0": "voidscape:item/corrupt/chest"
   }
 }
