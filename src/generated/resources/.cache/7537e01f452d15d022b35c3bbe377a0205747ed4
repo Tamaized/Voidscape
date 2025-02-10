@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-10T00:00:51.070286677	Item Models: voidscape
+// 1.21.1	2025-02-10T00:07:59.234718025	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -9,7 +9,7 @@ dc2eae5b0e201f30a12384006622cf85cd9284c9 assets/voidscape/models/item/astral/bow
 e78dd1d766a11a81797656aa93927a92b02bf158 assets/voidscape/models/item/astral/bow_pulling_1.json
 d922d2fc066678919aaeaaca832c5be22ddde899 assets/voidscape/models/item/astral/bow_pulling_2.json
 55c0d2f98bb08ed45eec6ad61c4cbc7669aa984e assets/voidscape/models/item/astral/chest.json
-fe60dff655ce092ed3066345b79bfc87d7242796 assets/voidscape/models/item/astral/chest_broken.json
+dd71f2552809b0553f5f99073c29e7dc8d5d9020 assets/voidscape/models/item/astral/chest_broken.json
 8ea81d12765656b78759480fe5e69b2982feea13 assets/voidscape/models/item/astral/helmet.json
 59ab89d02cb35d90db4f5539dc3dcd9602cea6b1 assets/voidscape/models/item/astral/helmet_broken.json
 3a15395f686524ed1781c5fbd458c8afa9f2f98f assets/voidscape/models/item/astral/legs.json
@@ -41,7 +41,8 @@ e6715e803fcb2b96d605fe3bbcf378768f35ccb7 assets/voidscape/models/item/corrupt/bo
 95fb77e7f8406ee167a3f10c2bb56c54ec7928f7 assets/voidscape/models/item/corrupt/bow_pulling_0.json
 e981160ba080e148e4c824d5be1fea2d9fdd6b5c assets/voidscape/models/item/corrupt/bow_pulling_1.json
 b927f514af3325051c3ec811c4a85a5d84e8e369 assets/voidscape/models/item/corrupt/bow_pulling_2.json
-58955d05428081d17ee4bb21512898f0fbfcbb48 assets/voidscape/models/item/corrupt/chest.json
+8ef6dce91a81e443697b08c2183753cffb731ad6 assets/voidscape/models/item/corrupt/chest.json
+fe60dff655ce092ed3066345b79bfc87d7242796 assets/voidscape/models/item/corrupt/chest_broken.json
 88bfa7793fed01c3479381d83c11e96f0a335f67 assets/voidscape/models/item/corrupt/helmet.json
 67f2fbdb4b5dfca23aa86308d378ddb50f02f65f assets/voidscape/models/item/corrupt/helmet_broken.json
 6cc733bafcabb72b652b893370eb59501d936a09 assets/voidscape/models/item/corrupt/legs.json
@@ -64,7 +65,8 @@ dea00050b90d5f4950bfbafe5835f1e0690c7076 assets/voidscape/models/item/ichor/boot
 d61d8adc1cc8d94a84bcf2ed2ade0eb75db48277 assets/voidscape/models/item/ichor/bow_pulling_0.json
 c2dda82f77b03bed974510420ec89d4c7e7bfe50 assets/voidscape/models/item/ichor/bow_pulling_1.json
 5bdfa8434edebd67d3d0564932062501311cb180 assets/voidscape/models/item/ichor/bow_pulling_2.json
-772f56d4ba993a0581fd13380d0cb21f4033a5ba assets/voidscape/models/item/ichor/chest.json
+34e2f91272ed84d6a1453d99d2fb39418fef09e3 assets/voidscape/models/item/ichor/chest.json
+d3eded0d2d29107256508f79b7358e5aa80bb315 assets/voidscape/models/item/ichor/chest_broken.json
 3cd10c54e2cf098eaf1208e35ad3fe47541528fa assets/voidscape/models/item/ichor/helmet.json
 55ad844779d6870a7b1bf4eff4c8933e6b7b83ef assets/voidscape/models/item/ichor/helmet_broken.json
 52ae465d7d6232fa0e852cd1e6b4f4b49d088936 assets/voidscape/models/item/ichor/legs.json
@@ -80,3 +82,31 @@ a58374ab1c9e8f524d0802e17c2b38e044ae68c6 assets/voidscape/models/item/ichor/xbow
 2765800db4068e13f5acfe9d99e7229476b14553 assets/voidscape/models/item/ichor/xbow_pulling_0.json
 a4b26fbf08885fa2ac562c9a7a7dda7b705ecc11 assets/voidscape/models/item/ichor/xbow_pulling_1.json
 3ba116fa9f226de39a3743f15428c6de6469938b assets/voidscape/models/item/ichor/xbow_pulling_2.json
+a55d7aac57f38bb1b86f24ae40af8d141a7e9a74 assets/voidscape/models/item/titanite/axe.json
+7081add1d66b388c9f0e08be5b03f47e2565c6d6 assets/voidscape/models/item/titanite/axe_broken.json
+a19aa7fdac0528929e5fefda5155d333f5d88e56 assets/voidscape/models/item/titanite/boots.json
+0b79a3ea67e04f4ad7926b24b9e3fcd8bccd7738 assets/voidscape/models/item/titanite/boots_broken.json
+578dd95dce64553447d552273b19c1a9b7e83754 assets/voidscape/models/item/titanite/bow.json
+8247a64a8ddf18abd35314c843b8a37648b26d44 assets/voidscape/models/item/titanite/bow_broken.json
+618a6343ff64d7d0b9490f8a999099887369dcd9 assets/voidscape/models/item/titanite/bow_pulling_0.json
+e674a5e866e9f9bd2faea50a21d353f012c14aaf assets/voidscape/models/item/titanite/bow_pulling_1.json
+9f6531e55dd33c5efc9294cc496e6910849807d9 assets/voidscape/models/item/titanite/bow_pulling_2.json
+ad77ba85e84f838dda8cbd769f2bac1951d45054 assets/voidscape/models/item/titanite/chest.json
+b9ff1d21c0b11e162e115adeaa67d25b107075ae assets/voidscape/models/item/titanite/chest_broken.json
+f2556b08c1757da569abb2a343586fc467c23724 assets/voidscape/models/item/titanite/helmet.json
+ab01b9ca946dd796cd2e7f67508462014baccf92 assets/voidscape/models/item/titanite/helmet_broken.json
+22cf2939d786d92a5b37e03c394f25bfa8b23b07 assets/voidscape/models/item/titanite/hoe.json
+26a4f6fa0691b755791cbabd2a5434449b06946d assets/voidscape/models/item/titanite/hoe_broken.json
+70d11e6e36f31527db317e8980b904e5e9e84b48 assets/voidscape/models/item/titanite/legs.json
+fdc5b5548626ea83adab2e96d03d2e4a4e3d1f6e assets/voidscape/models/item/titanite/legs_broken.json
+e9bfc606155d92e8eb99168b6a64837af29873af assets/voidscape/models/item/titanite/pickaxe.json
+22a1a3c6b3c02f1ae7f8d14476cb8e26bb762866 assets/voidscape/models/item/titanite/pickaxe_broken.json
+c731125c8c902a33d5470b493c49f955770cddb2 assets/voidscape/models/item/titanite/sword.json
+546a35694be544d50153fb5a27f968bbc7d1ca99 assets/voidscape/models/item/titanite/sword_broken.json
+926a3948f54931afcdfbf5487c1ad0d88a589bd0 assets/voidscape/models/item/titanite/xbow.json
+23a9d511e5ea25359ee9d02b6e5b1feca2c5ba47 assets/voidscape/models/item/titanite/xbow_arrow.json
+f35d0d857e0b37db018fd37df8de6d2ca36b325d assets/voidscape/models/item/titanite/xbow_broken.json
+7e9e49630901c64a0cced6e30595d7e5d6f51fc2 assets/voidscape/models/item/titanite/xbow_firework.json
+ce711e1d4c46095a731619f603a6dd28368b4bc1 assets/voidscape/models/item/titanite/xbow_pulling_0.json
+2dfefc0c32cbf10d02f321e41e5a6a6e3e9efe68 assets/voidscape/models/item/titanite/xbow_pulling_1.json
+1e5ef3fefb593bc9ccd56c2bd4a39fa1a0e1e729 assets/voidscape/models/item/titanite/xbow_pulling_2.json

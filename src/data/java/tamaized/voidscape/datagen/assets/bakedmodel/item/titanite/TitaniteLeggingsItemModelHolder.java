@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.assets.bakedmodel.item.corrupt;
+package tamaized.voidscape.datagen.assets.bakedmodel.item.titanite;
 
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -13,7 +13,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 
 @Component
-public class CorruptChestplateItemModelHolder extends ItemModelHolder {
+public class TitaniteLeggingsItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModArmorSetComponentDirectory armor;
@@ -26,7 +26,7 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
-		return armor.corruptArmorSet().CORRUPT_CHEST;
+		return armor.titaniteArmorSet().TITANITE_LEGS;
 	}
 
 	public ModelFile build(ItemModelProvider provider) {
@@ -35,7 +35,7 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 				splitName(),
 				"item/generated"
 			)
-			.texture("layer0", "item/corrupt/chest")
+			.texture("layer0", "item/titanite/legs")
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
 			.override()
 				.predicate(itemModelOverridePredicates.BROKEN, 1)
@@ -50,7 +50,7 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 					splitName("broken"),
 					"item/generated"
 				)
-				.texture("layer0", "item/corrupt/chest_broken")
+				.texture("layer0", "item/titanite/legs_broken")
 				.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
 		}
 		return brokenModel;

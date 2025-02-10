@@ -47,7 +47,7 @@ public class AstralChestplateItemModelHolder extends ItemModelHolder {
 	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName(armor.astralArmorSet().ASTRAL_CHEST) + "_broken",
+					splitName("broken"),
 					"item/generated"
 				)
 				.texture("layer0", "item/astral/chest_broken")

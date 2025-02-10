@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "loader": "neoforge:item_layers",
   "neoforge_data": {
     "layers": {
@@ -11,7 +11,7 @@
   },
   "overrides": [
     {
-      "model": "voidscape:item/ichor/chest_broken",
+      "model": "voidscape:item/titanite/hoe_broken",
       "predicate": {
         "voidscape:broken": 1.0
       }
@@ -19,6 +19,6 @@
   ],
   "render_types": {},
   "textures": {
-    "layer0": "voidscape:item/ichor/chest"
+    "layer0": "voidscape:item/titanite/hoe"
   }
 }

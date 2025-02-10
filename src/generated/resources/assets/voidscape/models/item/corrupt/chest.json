@@ -11,7 +11,7 @@
   },
   "overrides": [
     {
-      "model": "voidscape:item/astral/chest_broken",
+      "model": "voidscape:item/corrupt/chest_broken",
       "predicate": {
         "voidscape:broken": 1.0
       }

@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.assets.bakedmodel.item.corrupt;
+package tamaized.voidscape.datagen.assets.bakedmodel.item.titanite;
 
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -10,13 +10,13 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
-import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
+import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
 @Component
-public class CorruptChestplateItemModelHolder extends ItemModelHolder {
+public class TitaniteHoeItemModelHolder extends ItemModelHolder {
 
 	@Autowired
-	private ModArmorSetComponentDirectory armor;
+	private ModToolSetComponentDirectory tools;
 
 	@Autowired
 	private ItemModelOverridePredicates itemModelOverridePredicates;
@@ -26,16 +26,16 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
-		return armor.corruptArmorSet().CORRUPT_CHEST;
+		return tools.titaniteToolSet().TITANITE_HOE;
 	}
 
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
 				splitName(),
-				"item/generated"
+				"item/handheld"
 			)
-			.texture("layer0", "item/corrupt/chest")
+			.texture("layer0", "item/titanite/hoe")
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
 			.override()
 				.predicate(itemModelOverridePredicates.BROKEN, 1)
@@ -44,13 +44,13 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 		// @formatter:on
 	}
 
-	public ModelFile getBrokenModel(ItemModelProvider provider) {
+	private ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
 					splitName("broken"),
-					"item/generated"
+					"item/handheld"
 				)
-				.texture("layer0", "item/corrupt/chest_broken")
+				.texture("layer0", "item/titanite/hoe_broken")
 				.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
 		}
 		return brokenModel;
