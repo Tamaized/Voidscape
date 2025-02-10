@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-09T19:28:19.148605292	Item Models: voidscape
+// 1.21.1	2025-02-09T20:27:01.800048636	Item Models: voidscape
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -8,3 +8,22 @@ f95f8522e4cfe31d8a60998ff6ec693ba8466a23 assets/voidscape/models/item/astral/bow
 dc2eae5b0e201f30a12384006622cf85cd9284c9 assets/voidscape/models/item/astral/bow_pulling_0.json
 e78dd1d766a11a81797656aa93927a92b02bf158 assets/voidscape/models/item/astral/bow_pulling_1.json
 d922d2fc066678919aaeaaca832c5be22ddde899 assets/voidscape/models/item/astral/bow_pulling_2.json
+55c0d2f98bb08ed45eec6ad61c4cbc7669aa984e assets/voidscape/models/item/astral/chest.json
+dd71f2552809b0553f5f99073c29e7dc8d5d9020 assets/voidscape/models/item/astral/chest_broken.json
+8ea81d12765656b78759480fe5e69b2982feea13 assets/voidscape/models/item/astral/helmet.json
+59ab89d02cb35d90db4f5539dc3dcd9602cea6b1 assets/voidscape/models/item/astral/helmet_broken.json
+3a15395f686524ed1781c5fbd458c8afa9f2f98f assets/voidscape/models/item/astral/legs.json
+66308a96f23a9a7f55f47e18d2dd28338fd4458e assets/voidscape/models/item/astral/legs_broken.json
+be443b4e69ef2fd8ba67fcf7d783a0e3329e65b5 assets/voidscape/models/item/astral/pickaxe.json
+99fd0d75bf7240de47ed82ce7be94ce0348b66af assets/voidscape/models/item/astral/pickaxe_broken.json
+e5d5dd5d16c79b7e64f7b2a95366c998a0ea48dd assets/voidscape/models/item/astral/shovel.json
+ad161a9a65cd9a764cb40b84e1eedc16e28b89d6 assets/voidscape/models/item/astral/shovel_broken.json
+b085e9c0e96b64f0e86de6e50cd7792d0cf3ae16 assets/voidscape/models/item/astral/sword.json
+8c30c27585279f9a1120a02ca3c55d151519cc72 assets/voidscape/models/item/astral/sword_broken.json
+28c1d50088feb22ddf948c3c59ebd635bcc26c7d assets/voidscape/models/item/astral/xbow.json
+d28b27c07236291508ec48f3729e9f028bcf04d3 assets/voidscape/models/item/astral/xbow_arrow.json
+61dc75bc9be6184e40f69f731797ab7a634b3cb2 assets/voidscape/models/item/astral/xbow_broken.json
+5a2c6a4b22a232e4b85c7f8cab5e730e4bc98a5a assets/voidscape/models/item/astral/xbow_firework.json
+8cd6bfcdbd5b45ac5978047c31b23004e1e67da0 assets/voidscape/models/item/astral/xbow_pulling_0.json
+9597e5ef444455c11c5bd401a941dc835bc5bc03 assets/voidscape/models/item/astral/xbow_pulling_1.json
+e1d59f520692ff7b0b30cc385fc19cdf682b0bbd assets/voidscape/models/item/astral/xbow_pulling_2.json
