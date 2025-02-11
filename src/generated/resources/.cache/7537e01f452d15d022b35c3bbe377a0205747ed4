@@ -1,4 +1,5 @@
-// 1.21.1	2025-02-10T10:45:23.204637093	Item Models: voidscape
+// 1.21.1	2025-02-11T11:12:56.689965753	Item Models: voidscape
+cd8847016a11fc3d2738342ea5bd29f343123e3a assets/voidscape/models/item/antirock.json
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -27,11 +28,13 @@ d28b27c07236291508ec48f3729e9f028bcf04d3 assets/voidscape/models/item/astral/xbo
 8cd6bfcdbd5b45ac5978047c31b23004e1e67da0 assets/voidscape/models/item/astral/xbow_pulling_0.json
 9597e5ef444455c11c5bd401a941dc835bc5bc03 assets/voidscape/models/item/astral/xbow_pulling_1.json
 e1d59f520692ff7b0b30cc385fc19cdf682b0bbd assets/voidscape/models/item/astral/xbow_pulling_2.json
+166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 ab68a910e95aaca3c81a19cedade339a974d8f36 assets/voidscape/models/item/charred/warhammer.json
 0f728ef02f4652d319607d322ace2c86d1ae5fdb assets/voidscape/models/item/charred/warhammer_in_hand.json
 c92410b5afdbb146928850edabd4e1e5ebd4ea99 assets/voidscape/models/item/charred/warhammer_in_hand_broken.json
 8f42f3b045a43c3db6c34d775fd52f436a402210 assets/voidscape/models/item/charred/warhammer_small.json
 00bb97411f7407ca85358c22a71bc47f31c18e43 assets/voidscape/models/item/charred/warhammer_small_broken.json
+e55f564e4f986512aee28378506d646300cea4f6 assets/voidscape/models/item/charred_brick.json
 cc3a829e618c7caa3b66f7ca1677ee0871076cd9 assets/voidscape/models/item/corrupt/axe.json
 0287a4e97b6a6857e690c0729c5ba22bbea109ab assets/voidscape/models/item/corrupt/axe_broken.json
 e6715e803fcb2b96d605fe3bbcf378768f35ccb7 assets/voidscape/models/item/corrupt/boots.json
@@ -56,6 +59,14 @@ ce0f8548e3454f8f8c6331a974f5ad536ad160d3 assets/voidscape/models/item/corrupt/xb
 08b9858c348dac311642c0d9b73e4ab89e06bda9 assets/voidscape/models/item/corrupt/xbow_pulling_0.json
 d318f7b23a9322023482ece85ce37cf15cf4c089 assets/voidscape/models/item/corrupt/xbow_pulling_1.json
 acf91dc7399fc5d34c8cae91e0154892fb07d10f assets/voidscape/models/item/corrupt/xbow_pulling_2.json
+84d664e14eb65e4ce3578c63ae68a283487ab141 assets/voidscape/models/item/cracked_astralrock.json
+8d36e8b8d4c905f93e0b2ed452bd043e4cb89635 assets/voidscape/models/item/ethereal_fruit_end_block.json
+a14673a70214695200612fe8349d239434f28448 assets/voidscape/models/item/ethereal_fruit_nether_block.json
+caa2c2f05fb8cb0828f1b7a8eef979f72b9b4d2f assets/voidscape/models/item/ethereal_fruit_null_block.json
+07bf9c8c5663d9b3b70fb774b610d26713fd94de assets/voidscape/models/item/ethereal_fruit_overworld_block.json
+d5c8f2f326aea4cc1d496a4321bc14e5336a6fa9 assets/voidscape/models/item/ethereal_fruit_void_block.json
+c4217758645d0704498567168e4af480b1d6859e assets/voidscape/models/item/flesh_block.json
+cbb164ab538b0e10eab17d201f2f892e5376c8e8 assets/voidscape/models/item/flesh_ore.json
 575851356e70cf53ddf1877a739d9aaae99078ca assets/voidscape/models/item/ichor/axe.json
 1bd822db8b5a3f87070c967dbee458c48492d9ef assets/voidscape/models/item/ichor/axe_broken.json
 dea00050b90d5f4950bfbafe5835f1e0690c7076 assets/voidscape/models/item/ichor/boots.json
@@ -82,6 +93,25 @@ a58374ab1c9e8f524d0802e17c2b38e044ae68c6 assets/voidscape/models/item/ichor/xbow
 2765800db4068e13f5acfe9d99e7229476b14553 assets/voidscape/models/item/ichor/xbow_pulling_0.json
 a4b26fbf08885fa2ac562c9a7a7dda7b705ecc11 assets/voidscape/models/item/ichor/xbow_pulling_1.json
 3ba116fa9f226de39a3743f15428c6de6469938b assets/voidscape/models/item/ichor/xbow_pulling_2.json
+8b3b28fcb372e00ebfd23b020bacd7f8e3bc85df assets/voidscape/models/item/machine_coop.json
+d9fd7b43235a66809e6b247ebe5e7108e5f7baf3 assets/voidscape/models/item/machine_hatchery.json
+c6d6f4e11b6fec17b15e592aa2fdb07dc6d9ec3c assets/voidscape/models/item/machine_well.json
+551d9683a535f2ad963ee1abc06347d8c17765c4 assets/voidscape/models/item/null_black.json
+6f3f134860affc46925209cf7d112135d24556fe assets/voidscape/models/item/null_white.json
+cad1ab43a548b3ac7d2e3c6175aaf2be2eeb3ccd assets/voidscape/models/item/strange_ore.json
+f2e38ee050e74b504ae571349768cb20fddd2453 assets/voidscape/models/item/thunder_fungus.json
+3ca1977782d0f1785a939a4520b057bf41bf9842 assets/voidscape/models/item/thunder_hyphae.json
+3d49b458e4f6d6c7c7a15d7481f5201e9154cd39 assets/voidscape/models/item/thunder_hyphae_stripped.json
+3cba1d108a0cd105d61976c5ef7429883416672b assets/voidscape/models/item/thunder_nylium.json
+dba8902b66c709ef9399cbe4282fb3f47e428992 assets/voidscape/models/item/thunder_planks.json
+50a50b46fa4d1a38f82cfe6a637a7b6ef1724692 assets/voidscape/models/item/thunder_roots.json
+f4a8ed213ca9bcea857b9bc91e6198d739d4965a assets/voidscape/models/item/thunder_slab.json
+9d2406dc4b76a4d0c1f749f633cb1a5fa9e50e09 assets/voidscape/models/item/thunder_stairs.json
+4c38df23c7da30e22cb33226c19c75a8337c88d8 assets/voidscape/models/item/thunder_stem.json
+5bf5246877bd1d894a0f6000a66cfa24258a7e33 assets/voidscape/models/item/thunder_stem_stripped.json
+3359e374486ec041fa5f9d22d6c9f4a5d12fc90a assets/voidscape/models/item/thunder_vines.json
+d13c4afc7e16d35980836d843f17fbdab2faef95 assets/voidscape/models/item/thunder_wart.json
+abdd49be2778a7c45c21e4c4ad6884b611a9be7b assets/voidscape/models/item/thunderrock.json
 a55d7aac57f38bb1b86f24ae40af8d141a7e9a74 assets/voidscape/models/item/titanite/axe.json
 7081add1d66b388c9f0e08be5b03f47e2565c6d6 assets/voidscape/models/item/titanite/axe_broken.json
 a19aa7fdac0528929e5fefda5155d333f5d88e56 assets/voidscape/models/item/titanite/boots.json
@@ -110,6 +140,7 @@ f35d0d857e0b37db018fd37df8de6d2ca36b325d assets/voidscape/models/item/titanite/x
 ce711e1d4c46095a731619f603a6dd28368b4bc1 assets/voidscape/models/item/titanite/xbow_pulling_0.json
 2dfefc0c32cbf10d02f321e41e5a6a6e3e9efe68 assets/voidscape/models/item/titanite/xbow_pulling_1.json
 1e5ef3fefb593bc9ccd56c2bd4a39fa1a0e1e729 assets/voidscape/models/item/titanite/xbow_pulling_2.json
+0c3bbfaf32f6942eb7310bb5ce4f021df803858a assets/voidscape/models/item/titanite_ore.json
 387acb2f212293fbbe39cc69e831ba182f73f525 assets/voidscape/models/item/voidic/axe.json
 927153863d0df6ab57af317e34ece0106fe3c23a assets/voidscape/models/item/voidic/axe_broken.json
 0b078025de78f5120745b1a5edc9b210db072dd2 assets/voidscape/models/item/voidic/boots.json
@@ -138,3 +169,5 @@ ce150b4dca8deb5fed3cff2f873c31129847007a assets/voidscape/models/item/voidic/swo
 7a98622bf0c8e6b4d0c82850133c7a410a62ba79 assets/voidscape/models/item/voidic/xbow_pulling_0.json
 70f463504c678d68c62c6d756cfa076b4b623b48 assets/voidscape/models/item/voidic/xbow_pulling_1.json
 52b1295d0a8d32db10cdc8979612e2612c65c421 assets/voidscape/models/item/voidic/xbow_pulling_2.json
+e74eb25e9e53bdf36372bdc27bd0cdeaad86dc36 assets/voidscape/models/item/voidic_crystal_block.json
+c82819b90c686b63313ed5a16b55635f41127e7e assets/voidscape/models/item/voidic_crystal_ore.json

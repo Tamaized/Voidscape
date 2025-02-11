@@ -1,7 +1,10 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
@@ -17,9 +20,20 @@ public class FleshBlockBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private CubeColumnFullbrightBlockModelHolder parent;
 
+	@Nullable
+	@Override
+	protected DeferredHolder<Block, ? extends Block> blockForName() {
+		return blocks.materialBlocks().FLESH_BLOCK;
+	}
+
+	@Override
+	public boolean hasStandardBlockItem() {
+		return true;
+	}
+
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				name(blocks.materialBlocks().FLESH_BLOCK),
+				name(),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("end", "block/flesh_block_top")

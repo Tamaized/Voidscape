@@ -1,7 +1,10 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
@@ -17,9 +20,20 @@ public class ThunderHyphaeBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private CubeAllFullbrightBlockModelHolder parent;
 
+	@Nullable
+	@Override
+	protected DeferredHolder<Block, ? extends Block> blockForName() {
+		return blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE;
+	}
+
+	@Override
+	public boolean hasStandardBlockItem() {
+		return true;
+	}
+
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				name(blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE),
+				name(),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.texture("all", "block/thunder_stem")

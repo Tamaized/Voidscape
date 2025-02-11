@@ -2,8 +2,11 @@ package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
@@ -16,10 +19,16 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private ModBlockComponentDirectory blocks;
 
+	@Nullable
+	@Override
+	protected DeferredHolder<Block, ? extends Block> blockForName() {
+		return blocks.functionalBlocks().VERY_DRIPPY_DRIPSTONE;
+	}
+
 	public ModelFile build(BlockModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				name(blocks.functionalBlocks().VERY_DRIPPY_DRIPSTONE),
+				name(),
 				"block/pointed_dripstone"
 			)
 			.renderType(RenderType.cutoutMipped().name)

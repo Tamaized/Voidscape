@@ -1,8 +1,12 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
@@ -18,9 +22,15 @@ public class ThunderVinesPlantBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private CrossFullbrightBlockModelHolder parent;
 
+	@Nullable
+	@Override
+	protected DeferredHolder<Block, ? extends Block> blockForName() {
+		return blocks.thunderForestBiomeBlocks().THUNDER_VINES_PLANT;
+	}
+
 	public ModelFile build(BlockModelProvider provider) {
 		return provider.withExistingParent(
-				name(blocks.thunderForestBiomeBlocks().THUNDER_VINES_PLANT),
+				name(),
 				parent.getOrBuild(provider).getLocation()
 			)
 			.renderType(RenderType.cutoutMipped().name)
