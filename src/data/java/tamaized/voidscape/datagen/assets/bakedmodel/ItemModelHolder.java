@@ -6,6 +6,8 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public abstract class ItemModelHolder extends ModelHolder {
 
 	public ModelFile getOrBuild(ItemModelProvider provider) {
@@ -42,10 +44,13 @@ public abstract class ItemModelHolder extends ModelHolder {
 		return "item/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
 	}
 
-	protected abstract DeferredHolder<Item, ? extends Item> itemForName();
+	@Nullable
+	protected DeferredHolder<Item, ? extends Item> itemForName() {
+		return null;
+	}
 
 	protected String nameToUse() {
-		return itemForName().getId().getPath();
+		return Objects.requireNonNull(itemForName()).getId().getPath();
 	}
 
 }

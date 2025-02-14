@@ -1,6 +1,5 @@
 package tamaized.voidscape.datagen.assets.bakedmodel;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -77,6 +76,13 @@ public abstract class BlockModelHolder extends ModelHolder {
 
 	public boolean hasStandardBlockItem() {
 		return false;
+	}
+
+	public ModelFile getOrBuildItemBlockModel(ItemModelProvider provider) {
+		return getItemBlockModel().orElseGet(() -> {
+			buildAndSetItemBlockModel(provider);
+			return getItemBlockModel().orElseThrow();
+		});
 	}
 
 	public final Optional<ModelFile> getItemBlockModel() {
