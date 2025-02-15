@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.assets.bakedmodel;
 
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Component;
@@ -30,6 +31,10 @@ public class BlockModelProviderFactory {
 
 	public void makeBlockItems(ItemModelProvider provider) {
 		blockModelHolders.stream().filter(BlockModelHolder::hasStandardBlockItem).forEach(holder -> holder.buildItemBlockModelIfEmpty(provider));
+	}
+
+	public void makeBlockstates(BlockStateProvider provider) {
+		blockModelHolders.stream().filter(BlockModelHolder::hasBlockState).forEach(holder -> holder.buildBlockState(provider));
 	}
 
 }
