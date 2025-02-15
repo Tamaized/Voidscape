@@ -39,4 +39,9 @@ public class AstralrockBlockModelHolder extends BlockModelHolder {
 			.texture("all", provider.mcLoc("block/bedrock"));
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

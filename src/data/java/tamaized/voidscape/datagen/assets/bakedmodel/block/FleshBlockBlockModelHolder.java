@@ -40,4 +40,9 @@ public class FleshBlockBlockModelHolder extends BlockModelHolder {
 			.texture("side", "block/flesh_block_side");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

@@ -60,4 +60,9 @@ public class CrackedAstralrockBlockModelHolder extends BlockModelHolder {
 		// @formatter:on
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

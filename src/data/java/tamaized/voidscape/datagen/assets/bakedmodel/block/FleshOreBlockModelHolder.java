@@ -43,4 +43,9 @@ public class FleshOreBlockModelHolder extends BlockModelHolder {
 			.texture("particle", "#base");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

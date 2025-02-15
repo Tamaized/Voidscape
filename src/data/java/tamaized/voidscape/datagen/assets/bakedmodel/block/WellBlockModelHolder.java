@@ -41,4 +41,9 @@ public class WellBlockModelHolder extends BlockModelHolder {
 			.texture("particle", "#0");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

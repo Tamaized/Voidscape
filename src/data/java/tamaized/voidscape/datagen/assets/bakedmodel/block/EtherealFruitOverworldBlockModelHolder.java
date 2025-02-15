@@ -47,4 +47,9 @@ public class EtherealFruitOverworldBlockModelHolder extends BlockModelHolder {
 			.texture("particle", "#cross");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

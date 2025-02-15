@@ -41,4 +41,9 @@ public class NullWhiteBlockModelHolder extends BlockModelHolder {
 			.texture("particle", "#all");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }
