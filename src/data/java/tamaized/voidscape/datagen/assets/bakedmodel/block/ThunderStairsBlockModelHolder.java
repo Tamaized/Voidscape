@@ -1,16 +1,19 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StairBlock;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.SlabTopFullbrightBlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.StairsFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
+
+import java.util.Objects;
 
 @Component
 public class ThunderStairsBlockModelHolder extends BlockModelHolder {
@@ -21,9 +24,15 @@ public class ThunderStairsBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private StairsFullbrightBlockModelHolder parent;
 
+	@Autowired
+	private ThunderStairsInnerBlockModelHolder innerStairs;
+
+	@Autowired
+	private ThunderStairsOuterBlockModelHolder outerStairs;
+
 	@Nullable
 	@Override
-	protected DeferredHolder<Block, ? extends Block> blockForName() {
+	protected DeferredHolder<Block, ? extends StairBlock> blockForName() {
 		return blocks.thunderForestBiomeBlocks().THUNDER_STAIRS;
 	}
 
@@ -42,4 +51,13 @@ public class ThunderStairsBlockModelHolder extends BlockModelHolder {
 			.texture("top", "block/thunder_planks");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
+	@Override
+	public void buildBlockState(BlockStateProvider provider) {
+		provider.stairsBlock(Objects.requireNonNull(blockForName()).value(), get().orElseThrow(), innerStairs.get().orElseThrow(), outerStairs.get().orElseThrow());
+	}
 }

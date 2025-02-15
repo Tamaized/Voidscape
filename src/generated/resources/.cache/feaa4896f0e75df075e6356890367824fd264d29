@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-15T12:17:03.265764688	Block States: voidscape
+// 1.21.1	2025-02-15T12:23:27.606364502	Block States: voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -27,3 +27,4 @@ d646f17a0bdf06d7507c6e4ad40f6ad5d4c26ef8 assets/voidscape/blockstates/thunder_hy
 6728161c1071484a54aebece8b46c8fe63728d17 assets/voidscape/blockstates/thunder_roots.json
 21bbb551a7f392183e1c6ce97eb6b56548178b56 assets/voidscape/blockstates/thunder_roots_pot.json
 115e355f02d58db73898614cc7da0165273a5b6a assets/voidscape/blockstates/thunder_slab.json
+47e5dc536b6fe193369b544e1b827ade359cda02 assets/voidscape/blockstates/thunder_stairs.json

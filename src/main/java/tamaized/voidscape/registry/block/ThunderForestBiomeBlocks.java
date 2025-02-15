@@ -214,7 +214,7 @@ public class ThunderForestBiomeBlocks {
 	public final Supplier<Item> THUNDER_PLANKS_ITEM = REGISTRY_ITEM
 		.register(THUNDER_PLANKS.getId().getPath(), () -> new BlockItem(THUNDER_PLANKS.get(), itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Block, Block> THUNDER_STAIRS = REGISTRY.register("thunder_stairs", () -> new StairBlock(THUNDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+	public final DeferredHolder<Block, StairBlock> THUNDER_STAIRS = REGISTRY.register("thunder_stairs", () -> new StairBlock(THUNDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
 		.sound(SoundType.NETHER_WOOD)
 		.mapColor(MapColor.COLOR_CYAN)
 		.instrument(NoteBlockInstrument.BASS)
