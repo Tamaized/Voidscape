@@ -48,4 +48,9 @@ public class ThunderVinesBlockModelHolder extends BlockModelHolder {
 		return provider.withExistingParent(nameForItemBlock(), "item/generated")
 			.texture("layer0", "block/thunder_vines_plant");
 	}
+
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
 }

@@ -78,4 +78,9 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 			// @formatter:on
 			.end();
 	}
+
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
 }

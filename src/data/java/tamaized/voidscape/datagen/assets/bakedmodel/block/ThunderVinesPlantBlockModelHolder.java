@@ -37,4 +37,9 @@ public class ThunderVinesPlantBlockModelHolder extends BlockModelHolder {
 			.texture("cross", "block/thunder_vines_plant");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }
