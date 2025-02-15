@@ -49,4 +49,9 @@ public class ThunderFungusBlockModelHolder extends BlockModelHolder {
 		return provider.withExistingParent(nameForItemBlock(), "item/generated")
 			.texture("layer0", "block/thunder_fungus");
 	}
+
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
 }

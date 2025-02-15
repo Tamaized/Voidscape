@@ -49,4 +49,9 @@ public class ThunderRootsBlockModelHolder extends BlockModelHolder {
 		return provider.withExistingParent(nameForItemBlock(), "item/generated")
 			.texture("layer0", "block/thunder_roots");
 	}
+
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
 }

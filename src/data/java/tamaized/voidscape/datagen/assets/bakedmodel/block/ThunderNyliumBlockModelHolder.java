@@ -48,4 +48,9 @@ public class ThunderNyliumBlockModelHolder extends BlockModelHolder {
 			.texture("particle", "#overlay-top");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }

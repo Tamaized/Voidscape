@@ -37,4 +37,9 @@ public class ThunderFungusPotBlockModelHolder extends BlockModelHolder {
 			.texture("plant", "block/thunder_fungus_pot_plant");
 	}
 
+	@Override
+	public boolean hasBlockState() {
+		return true;
+	}
+
 }
