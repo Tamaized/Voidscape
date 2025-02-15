@@ -2,15 +2,17 @@ package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
-import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
@@ -23,6 +25,11 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 	@Override
 	protected DeferredHolder<Block, ? extends Block> blockForName() {
 		return blocks.functionalBlocks().VERY_DRIPPY_DRIPSTONE;
+	}
+
+	@Override
+	public boolean hasStandardBlockItem() {
+		return true;
 	}
 
 	public ModelFile build(BlockModelProvider provider) {
@@ -51,4 +58,24 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 		// @formatter:on
 	}
 
+	@Override
+	public ModelFile buildItemBlockModel(ItemModelProvider provider) {
+		return provider.withExistingParent(name(), "item/generated")
+			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
+			.texture("layer0", name())
+			.transforms()
+			// @formatter:off
+				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+					.translation(-1, -1, 0)
+					.rotation(0, 100, 0)
+					.scale(0.9F)
+				.end()
+				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+					.translation(0, -2, 0)
+					.rotation(0, 100, 0)
+					.scale(0.9F)
+				.end()
+			// @formatter:on
+			.end();
+	}
 }
