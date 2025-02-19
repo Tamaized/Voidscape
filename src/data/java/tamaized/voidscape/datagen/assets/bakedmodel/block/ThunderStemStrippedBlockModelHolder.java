@@ -16,6 +16,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeColumnF
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ThunderStemStrippedBlockModelHolder extends BlockModelHolder {
@@ -68,6 +69,11 @@ public class ThunderStemStrippedBlockModelHolder extends BlockModelHolder {
 					.rotationX(90)
 					.build()
 			);
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Stripped Thunder Stem");
 	}
 
 }

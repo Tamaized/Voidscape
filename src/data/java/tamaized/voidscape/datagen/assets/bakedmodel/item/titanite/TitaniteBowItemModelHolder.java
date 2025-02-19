@@ -13,6 +13,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class TitaniteBowItemModelHolder extends ItemModelHolder {
 
@@ -37,6 +39,11 @@ public class TitaniteBowItemModelHolder extends ItemModelHolder {
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return tools.titaniteToolSet().TITANITE_BOW;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Titanite Bow");
 	}
 
 	public ModelFile build(ItemModelProvider provider) {

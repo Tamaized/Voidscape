@@ -14,6 +14,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.StairsFullb
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ThunderStairsBlockModelHolder extends BlockModelHolder {
@@ -59,5 +60,10 @@ public class ThunderStairsBlockModelHolder extends BlockModelHolder {
 	@Override
 	public void buildBlockState(BlockStateProvider provider) {
 		provider.stairsBlock(Objects.requireNonNull(blockForName()).value(), get().orElseThrow(), innerStairs.get().orElseThrow(), outerStairs.get().orElseThrow());
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Stairs");
 	}
 }

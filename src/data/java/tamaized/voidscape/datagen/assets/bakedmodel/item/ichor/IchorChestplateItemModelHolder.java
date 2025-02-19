@@ -12,6 +12,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class IchorChestplateItemModelHolder extends ItemModelHolder {
 
@@ -27,6 +29,11 @@ public class IchorChestplateItemModelHolder extends ItemModelHolder {
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return armor.ichorArmorSet().ICHOR_CHEST;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Ichor Chestplate");
 	}
 
 	public ModelFile build(ItemModelProvider provider) {

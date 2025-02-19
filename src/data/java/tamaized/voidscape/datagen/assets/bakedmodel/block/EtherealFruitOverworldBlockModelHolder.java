@@ -13,6 +13,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.TintedCrossFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class EtherealFruitOverworldBlockModelHolder extends BlockModelHolder {
 
@@ -50,6 +52,11 @@ public class EtherealFruitOverworldBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Ethereal Fruit Plant");
 	}
 
 }

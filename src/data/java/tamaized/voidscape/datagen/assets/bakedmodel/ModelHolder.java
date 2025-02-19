@@ -18,4 +18,8 @@ public abstract class ModelHolder {
 		this.model = model;
 	}
 
+	public Optional<String> lang() {
+		return Optional.empty();
+	}
+
 }

@@ -13,6 +13,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class CorruptBowItemModelHolder extends ItemModelHolder {
 
@@ -125,6 +127,11 @@ public class CorruptBowItemModelHolder extends ItemModelHolder {
 			)
 			.texture("layer0", "item/corrupt/bow/bow_" + name)
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Corrupt Bow");
 	}
 
 }

@@ -21,7 +21,7 @@ import java.util.Optional;
 @Component
 public class ModDatapacks {
 
-	private final Lazy<Pack> AETHER_INTEGRATION = Lazy.of(() -> Pack.readMetaAndCreate(
+	public final Lazy<Pack> AETHER_INTEGRATION = Lazy.of(() -> Pack.readMetaAndCreate(
 		new PackLocationInfo(
 			"voidscape_aether_compat",
 			net.minecraft.network.chat.Component.literal("Voidscape Aether Integration"),

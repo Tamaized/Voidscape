@@ -11,6 +11,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.TintedCubeAllFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class AntirockBlockModelHolder extends BlockModelHolder {
 
@@ -42,5 +44,10 @@ public class AntirockBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Anti-Rock");
 	}
 }

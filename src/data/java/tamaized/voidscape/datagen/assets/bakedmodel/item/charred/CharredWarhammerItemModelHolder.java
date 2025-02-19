@@ -15,6 +15,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 
@@ -171,6 +173,11 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 				.end();
 		}
 		return brokenBigModel;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Charred War Hammer");
 	}
 
 }

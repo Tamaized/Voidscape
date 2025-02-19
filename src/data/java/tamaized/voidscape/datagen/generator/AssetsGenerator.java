@@ -6,6 +6,7 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelProviderFactory;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelProviderFactory;
 import tamaized.voidscape.datagen.assets.blockstate.BlockStateProviderFactory;
+import tamaized.voidscape.datagen.assets.lang.LangProviderFactory;
 
 @Component
 public class AssetsGenerator {
@@ -19,10 +20,14 @@ public class AssetsGenerator {
 	@Autowired
 	private BlockStateProviderFactory blockStateProviderFactory;
 
+	@Autowired
+	private LangProviderFactory langProviderFactory;
+
 	public void generate(GatherDataEvent event) {
 		event.getGenerator().addProvider(event.includeClient(), blockModelProviderFactory.make(event));
 		event.getGenerator().addProvider(event.includeClient(), itemModelProviderFactory.make(event));
 		event.getGenerator().addProvider(event.includeClient(), blockStateProviderFactory.make(event));
+		event.getGenerator().addProvider(event.includeClient(), langProviderFactory.make(event));
 	}
 
 }

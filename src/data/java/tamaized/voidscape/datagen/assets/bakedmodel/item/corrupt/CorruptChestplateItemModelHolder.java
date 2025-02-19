@@ -12,6 +12,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 
@@ -27,6 +29,11 @@ public class CorruptChestplateItemModelHolder extends ItemModelHolder {
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return armor.corruptArmorSet().CORRUPT_CHEST;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Corrupt Chestplate");
 	}
 
 	public ModelFile build(ItemModelProvider provider) {

@@ -14,6 +14,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CrossFullbr
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeAllFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class ThunderRootsBlockModelHolder extends BlockModelHolder {
 
@@ -53,5 +55,10 @@ public class ThunderRootsBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Roots");
 	}
 }

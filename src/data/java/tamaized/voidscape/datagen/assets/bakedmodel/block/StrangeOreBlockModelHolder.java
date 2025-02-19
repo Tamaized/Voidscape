@@ -12,6 +12,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class StrangeOreBlockModelHolder extends BlockModelHolder {
 
@@ -46,6 +48,11 @@ public class StrangeOreBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Strange Ore");
 	}
 
 }

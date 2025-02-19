@@ -12,6 +12,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class CorruptSwordItemModelHolder extends ItemModelHolder {
 
@@ -54,6 +56,11 @@ public class CorruptSwordItemModelHolder extends ItemModelHolder {
 				.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
 		}
 		return brokenModel;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Corrupt Sword");
 	}
 
 }

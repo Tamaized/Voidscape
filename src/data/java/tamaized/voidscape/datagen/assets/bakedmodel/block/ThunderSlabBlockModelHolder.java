@@ -16,6 +16,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.SlabFullbri
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ThunderSlabBlockModelHolder extends BlockModelHolder {
@@ -64,5 +65,10 @@ public class ThunderSlabBlockModelHolder extends BlockModelHolder {
 			.partialState().with(SlabBlock.TYPE, SlabType.BOTTOM).addModels(ConfiguredModel.builder().modelFile(get().orElseThrow()).build())
 			.partialState().with(SlabBlock.TYPE, SlabType.DOUBLE).addModels(ConfiguredModel.builder().modelFile(planks.get().orElseThrow()).build())
 			.partialState().with(SlabBlock.TYPE, SlabType.TOP).addModels(ConfiguredModel.builder().modelFile(slabTop.get().orElseThrow()).build());
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Slab");
 	}
 }

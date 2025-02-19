@@ -13,6 +13,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeAllFull
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.SideTopFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class ThunderNyliumBlockModelHolder extends BlockModelHolder {
 
@@ -51,6 +53,11 @@ public class ThunderNyliumBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Nylium");
 	}
 
 }

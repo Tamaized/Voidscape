@@ -13,6 +13,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class AstralBootsItemModelHolder extends ItemModelHolder {
 
@@ -28,6 +30,11 @@ public class AstralBootsItemModelHolder extends ItemModelHolder {
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return armor.astralArmorSet().ASTRAL_BOOTS;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Astral Boots");
 	}
 
 	public ModelFile build(ItemModelProvider provider) {

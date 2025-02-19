@@ -14,6 +14,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CrossFullbr
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class ThunderFungusBlockModelHolder extends BlockModelHolder {
 
@@ -53,5 +55,10 @@ public class ThunderFungusBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Fungus");
 	}
 }

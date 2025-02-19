@@ -11,6 +11,8 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class CharredBoneItemModelHolder extends ItemModelHolder {
 
@@ -28,5 +30,10 @@ public class CharredBoneItemModelHolder extends ItemModelHolder {
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
 			.texture("layer0", "item/charred_bone")
 			.texture("layer1", "item/charred_bone_overlay");
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Charred Bone");
 	}
 }

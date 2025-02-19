@@ -18,6 +18,7 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.OuterStairs
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ThunderStemBlockModelHolder extends BlockModelHolder {
@@ -73,5 +74,10 @@ public class ThunderStemBlockModelHolder extends BlockModelHolder {
 					.rotationX(90)
 					.build()
 			);
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Thunder Stem");
 	}
 }

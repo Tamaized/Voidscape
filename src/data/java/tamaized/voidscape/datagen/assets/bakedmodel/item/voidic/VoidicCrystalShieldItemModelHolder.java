@@ -15,6 +15,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class VoidicCrystalShieldItemModelHolder extends VoidicCrystalItemModelHolder {
 
@@ -91,6 +93,11 @@ public class VoidicCrystalShieldItemModelHolder extends VoidicCrystalItemModelHo
 				.end();
 		}
 		return blockingModel;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Voidic Crystal Shield");
 	}
 
 }

@@ -11,6 +11,8 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class AstralCrystalItemModelHolder extends ItemModelHolder {
 
@@ -27,5 +29,10 @@ public class AstralCrystalItemModelHolder extends ItemModelHolder {
 		return provider.withExistingParent(name(), "item/generated")
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
 			.texture("layer0", "item/astral_crystal");
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Astral Crystal");
 	}
 }

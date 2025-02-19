@@ -13,6 +13,8 @@ import tamaized.voidscape.client.ItemModelOverridePredicates;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class VoidicCrystalCrossbowItemModelHolder extends VoidicCrystalItemModelHolder {
 
@@ -154,6 +156,11 @@ public class VoidicCrystalCrossbowItemModelHolder extends VoidicCrystalItemModel
 			)
 			.texture("layer0", "item/voidic/xbow/crossbow_" + name)
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Voidic Crystal Crossbow");
 	}
 
 }

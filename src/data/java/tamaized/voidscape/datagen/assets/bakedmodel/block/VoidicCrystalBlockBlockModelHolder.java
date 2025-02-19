@@ -13,6 +13,8 @@ import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeAllFull
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class VoidicCrystalBlockBlockModelHolder extends BlockModelHolder {
 
@@ -45,6 +47,11 @@ public class VoidicCrystalBlockBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasBlockState() {
 		return true;
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Voidic Crystal");
 	}
 
 }

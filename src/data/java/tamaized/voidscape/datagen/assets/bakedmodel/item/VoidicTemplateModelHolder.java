@@ -11,6 +11,8 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
+import java.util.Optional;
+
 @Component
 public class VoidicTemplateModelHolder extends ItemModelHolder {
 
@@ -26,5 +28,10 @@ public class VoidicTemplateModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		return provider.withExistingParent(name(), "item/generated")
 			.texture("layer0", name());
+	}
+
+	@Override
+	public Optional<String> lang() {
+		return Optional.of("Voidic Smithing Template");
 	}
 }

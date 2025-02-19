@@ -3,12 +3,14 @@ package tamaized.voidscape.datagen.assets.bakedmodel;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
 import tamaized.voidscape.Voidscape;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BlockModelProviderFactory {
@@ -35,6 +37,12 @@ public class BlockModelProviderFactory {
 
 	public void makeBlockstates(BlockStateProvider provider) {
 		blockModelHolders.stream().filter(BlockModelHolder::hasBlockState).forEach(holder -> holder.buildBlockState(provider));
+	}
+
+	public void addLangEntries(LanguageProvider provider) {
+		blockModelHolders.forEach(holder -> holder.lang().ifPresent(
+			lang -> provider.addBlock(Objects.requireNonNull(holder.blockForName()), lang)
+		));
 	}
 
 }
