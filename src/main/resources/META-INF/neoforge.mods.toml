@@ -6,7 +6,6 @@ license="All Rights Reserved"
 modId="voidscape"
 version="${file.jarVersion}"
 displayName="Voidscape"
-updateJSONURL = "https://gh.tamaized.com/Tamaized/Voidscape/update.json?m=${m}&l=${l}&v=${v}"
 credits=""
 authors="Tamaized"
 description='''

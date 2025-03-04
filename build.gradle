@@ -212,17 +212,12 @@ test {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 processResources {
-	def mc = minecraft_version
-	def neo = neoforge_version
 	def ver = project.version
 	filesMatching("META-INF/neoforge.mods.toml") {
 		expand([
 			'file'           : [
 				'jarVersion': ver
-			],
-			'm'      : mc,
-			'l'      : "NeoForge",
-			'v': neo,
+			]
 		])
 	}
 }
