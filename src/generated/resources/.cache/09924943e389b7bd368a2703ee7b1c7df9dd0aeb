@@ -1,2 +1,7 @@
-// 1.21.1	2025-03-09T14:01:47.477106707	Tags for minecraft:item mod id voidscape
+// 1.21.1	2025-03-09T14:43:42.576232373	Tags for minecraft:item mod id voidscape
 dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/item/logs.json
+926b9496d731adec0e05bd6aa529a847359e0882 data/minecraft/tags/item/non_flammable_wood.json
+0603e38093539eb8aae23fadb83a82018e4908b8 data/minecraft/tags/item/planks.json
+586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/item/slabs.json
+58988441c89f527d6dc0a209d3376a775360f13f data/minecraft/tags/item/stairs.json
+586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/item/wooden_slabs.json
