@@ -2,6 +2,7 @@ package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -13,13 +14,13 @@ import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.RegistryProvider;
-import tamaized.voidscape.datagen.data.tag.ITagProviderFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class BlockTagProviderFactory implements ITagProviderFactory<Block> {
+public class BlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -27,9 +28,11 @@ public class BlockTagProviderFactory implements ITagProviderFactory<Block> {
 	@Directory(IBlockTagProviderFactory.class)
 	List<IBlockTagProviderFactory> factories;
 
-	@Override
+	@Nullable
+	private BlockTagsProvider provider;
+
 	public BlockTagsProvider make(GatherDataEvent event) {
-		return new BlockTagsProviderAccessor(
+		return provider = new BlockTagsProviderAccessor(
 			event.getGenerator().getPackOutput(),
 			registryProvider.retrieve(event),
 			Voidscape.MODID,
@@ -40,6 +43,10 @@ public class BlockTagProviderFactory implements ITagProviderFactory<Block> {
 				factories.forEach(f -> f.make(this, provider));
 			}
 		};
+	}
+
+	public Optional<CompletableFuture<TagsProvider.TagLookup<Block>>> lookup() {
+		return Optional.ofNullable(provider).map(BlockTagsProvider::contentsGetter);
 	}
 
 	public static abstract class BlockTagsProviderAccessor extends BlockTagsProvider {

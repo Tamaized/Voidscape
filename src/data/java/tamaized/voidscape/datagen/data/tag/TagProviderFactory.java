@@ -1,19 +1,23 @@
 package tamaized.voidscape.datagen.data.tag;
 
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.Directory;
-
-import java.util.List;
+import tamaized.voidscape.datagen.data.tag.block.BlockTagProviderFactory;
+import tamaized.voidscape.datagen.data.tag.item.ItemTagProviderFactory;
 
 @Component
 public class TagProviderFactory {
 
-	@Directory(ITagProviderFactory.class)
-	private List<ITagProviderFactory<?>> providers;
+	@Autowired
+	private BlockTagProviderFactory blockTagProviderFactory;
+
+	@Autowired
+	private ItemTagProviderFactory itemTagProviderFactory;
 
 	public void generate(GatherDataEvent event) {
-		providers.forEach(provider -> event.getGenerator().addProvider(event.includeServer(), provider.make(event)));
+		event.getGenerator().addProvider(event.includeServer(), blockTagProviderFactory.make(event));
+		event.getGenerator().addProvider(event.includeServer(), itemTagProviderFactory.make(event));
 	}
 
 }
