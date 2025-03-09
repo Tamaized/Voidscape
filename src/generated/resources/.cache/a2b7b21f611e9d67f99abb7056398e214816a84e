@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-08T23:46:49.110195935	Tags for minecraft:block mod id voidscape
+// 1.21.1	2025-03-09T00:11:52.781420837	Tags for minecraft:block mod id voidscape
 cfab2ab481bf476a645d326b87627918009b9e50 data/c/tags/block/ore_bearing_ground/bedrock.json
 9994f212884e8264af96eaba34aa7e89696d8994 data/c/tags/block/ore_bearing_ground/end_stone.json
 3f611ce11efe1a29ec5758cb2a3bf606a991c473 data/c/tags/block/ores_in_ground/bedrock.json
@@ -6,6 +6,7 @@ a92ff84fbf3ac283cd6003dfa52ae5ab187f0db5 data/c/tags/block/ores_in_ground/end_st
 51e1cba6f20d43210e9c1250f82295de4a664b47 data/c/tags/block/ores_in_ground/netherrack.json
 e119c4cb97f44b563ac4cd811ad387aa6a13e846 data/c/tags/block/ores_in_ground/stone.json
 92e6852a31d2dbe93ff9872f4d12c33adedae400 data/minecraft/tags/block/dragon_immune.json
+dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/block/logs.json
 926b9496d731adec0e05bd6aa529a847359e0882 data/minecraft/tags/block/mineable/axe.json
 7a75828d53d8aea5d3f9ae59b3f0825bc66da872 data/minecraft/tags/block/mineable/hoe.json
 6aac6a2824a84dfc4b07a02575bd5094e3090a11 data/minecraft/tags/block/mineable/pickaxe.json
