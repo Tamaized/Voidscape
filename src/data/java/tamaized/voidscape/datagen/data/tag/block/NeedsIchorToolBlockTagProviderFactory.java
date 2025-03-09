@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class NeedsTitaniteToolTagProviderFactory implements IBlockTagProviderFactory {
+public class NeedsIchorToolBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,8 +18,9 @@ public class NeedsTitaniteToolTagProviderFactory implements IBlockTagProviderFac
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(RequiresVoidToolBlock.NEEDS_TITANITE_TOOL).add(
-			blocks.oreBlocks().FLESH_ORE.get()
+		accessor.tag(RequiresVoidToolBlock.NEEDS_ICHOR_TOOL).add(
+			blocks.oreBlocks().STRANGE_ORE.get(),
+			blocks.oreBlocks().CRACKED_ASTRALROCK.get()
 		);
 	}
 

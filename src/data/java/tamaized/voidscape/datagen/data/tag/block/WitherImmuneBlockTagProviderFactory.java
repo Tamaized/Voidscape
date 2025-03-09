@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class WoodenSlabsEfficientTagProviderFactory implements IBlockTagProviderFactory {
+public class WitherImmuneBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,8 +18,15 @@ public class WoodenSlabsEfficientTagProviderFactory implements IBlockTagProvider
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.WOODEN_SLABS).add(
-			blocks.thunderForestBiomeBlocks().THUNDER_SLAB.get()
+		accessor.tag(BlockTags.WITHER_IMMUNE).add(
+			blocks.oreBlocks().VOIDIC_CRYSTAL_ORE.get(),
+			blocks.spireBlocks().THUNDERROCK.get(),
+			blocks.spireBlocks().ANTIROCK.get(),
+			blocks.nullBiomeBlocks().NULL_BLACK.get(),
+			blocks.nullBiomeBlocks().NULL_WHITE.get(),
+			blocks.spireBlocks().ASTRALROCK.get(),
+			blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM.get(),
+			blocks.oreBlocks().CRACKED_ASTRALROCK.get()
 		);
 	}
 

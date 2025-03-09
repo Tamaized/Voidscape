@@ -1,14 +1,14 @@
 package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.block.RequiresVoidToolBlock;
 import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class NeedsVoidicToolTagProviderFactory implements IBlockTagProviderFactory {
+public class LogsBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,8 +18,11 @@ public class NeedsVoidicToolTagProviderFactory implements IBlockTagProviderFacto
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(RequiresVoidToolBlock.NEEDS_VOIDIC_TOOL).add(
-			blocks.oreBlocks().TITANITE_ORE.get()
+		accessor.tag(BlockTags.LOGS).add(
+			blocks.thunderForestBiomeBlocks().THUNDER_STEM.get(),
+			blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED.get(),
+			blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE.get(),
+			blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED.get()
 		);
 	}
 

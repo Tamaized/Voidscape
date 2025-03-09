@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class StairsTagProviderFactory implements IBlockTagProviderFactory {
+public class NeedsDiamondToolBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,8 +18,9 @@ public class StairsTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.STAIRS).add(
-			blocks.thunderForestBiomeBlocks().THUNDER_STAIRS.get()
+		accessor.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(
+			blocks.oreBlocks().VOIDIC_CRYSTAL_ORE.get(),
+			blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK.get()
 		);
 	}
 

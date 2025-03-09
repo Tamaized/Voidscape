@@ -4,37 +4,31 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.RegistryProvider;
-import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class DebugOreTagProviderFactory implements IBlockTagProviderFactory {
+public class OreBearingGroundBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
 
-	@Autowired
-	private ModBlockComponentDirectory blocks;
-
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "debug_ore"))).add(
-			Blocks.IRON_ORE,
-			Blocks.GOLD_ORE,
-			Blocks.COPPER_ORE,
-			Blocks.DIAMOND_ORE,
-			Blocks.EMERALD_ORE,
-			Blocks.REDSTONE_ORE,
-			Blocks.LAPIS_ORE,
-			Blocks.COAL_ORE,
-			Blocks.NETHER_GOLD_ORE,
-			Blocks.STONE,
-			Blocks.NETHERRACK
-		);
+		tag(accessor, provider, Blocks.BEDROCK);
+		tag(accessor, provider, Blocks.END_STONE);
 	}
 
+	private void tag(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider, Block block) {
+		accessor.tag(TagKey.create(
+			Registries.BLOCK,
+			ResourceLocation.fromNamespaceAndPath(
+				"c",
+				"ore_bearing_ground/" + registryProvider.findKeyFrom(provider, Registries.BLOCK, block).orElseThrow().location().getPath()
+			)
+		)).add(block);
+	}
 }

@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class NeedsIronToolTagProviderFactory implements IBlockTagProviderFactory {
+public class PlanksBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,14 +18,8 @@ public class NeedsIronToolTagProviderFactory implements IBlockTagProviderFactory
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.NEEDS_IRON_TOOL).add(
-			blocks.machineBlocks().MACHINE_LIQUIFIER.get(),
-			blocks.machineBlocks().MACHINE_DEFUSER.get(),
-			blocks.machineBlocks().MACHINE_GERMINATOR.get(),
-			blocks.machineBlocks().MACHINE_WELL.get(),
-			blocks.machineBlocks().MACHINE_COOP.get(),
-			blocks.machineBlocks().MACHINE_INFUSER.get(),
-			blocks.machineBlocks().MACHINE_COLLECTOR.get()
+		accessor.tag(BlockTags.PLANKS).add(
+			blocks.thunderForestBiomeBlocks().THUNDER_PLANKS.get()
 		);
 	}
 

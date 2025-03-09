@@ -1,14 +1,14 @@
 package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.block.RequiresVoidToolBlock;
 import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class NeedsIchorToolTagProviderFactory implements IBlockTagProviderFactory {
+public class SwordEfficientBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,9 +18,8 @@ public class NeedsIchorToolTagProviderFactory implements IBlockTagProviderFactor
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(RequiresVoidToolBlock.NEEDS_ICHOR_TOOL).add(
-			blocks.oreBlocks().STRANGE_ORE.get(),
-			blocks.oreBlocks().CRACKED_ASTRALROCK.get()
+		accessor.tag(BlockTags.SWORD_EFFICIENT).add(
+			blocks.materialBlocks().FLESH_BLOCK.get()
 		);
 	}
 

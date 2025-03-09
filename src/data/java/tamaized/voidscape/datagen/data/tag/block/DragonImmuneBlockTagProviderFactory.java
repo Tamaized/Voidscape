@@ -8,7 +8,7 @@ import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
-public class LogsTagProviderFactory implements IBlockTagProviderFactory {
+public class DragonImmuneBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
 	private RegistryProvider registryProvider;
@@ -18,11 +18,15 @@ public class LogsTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.LOGS).add(
-			blocks.thunderForestBiomeBlocks().THUNDER_STEM.get(),
-			blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED.get(),
-			blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE.get(),
-			blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED.get()
+		accessor.tag(BlockTags.DRAGON_IMMUNE).add(
+			blocks.oreBlocks().VOIDIC_CRYSTAL_ORE.get(),
+			blocks.spireBlocks().THUNDERROCK.get(),
+			blocks.spireBlocks().ANTIROCK.get(),
+			blocks.nullBiomeBlocks().NULL_BLACK.get(),
+			blocks.nullBiomeBlocks().NULL_WHITE.get(),
+			blocks.spireBlocks().ASTRALROCK.get(),
+			blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM.get(),
+			blocks.oreBlocks().CRACKED_ASTRALROCK.get()
 		);
 	}
 
