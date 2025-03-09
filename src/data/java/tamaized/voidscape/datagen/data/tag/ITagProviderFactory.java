@@ -5,6 +5,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public interface ITagProviderFactory<T> {
 
-	public TagsProvider<T> make(GatherDataEvent event);
+	TagsProvider<T> make(GatherDataEvent event);
 
 }
