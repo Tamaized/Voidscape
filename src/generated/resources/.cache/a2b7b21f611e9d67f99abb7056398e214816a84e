@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-09T00:25:14.835029181	Tags for minecraft:block mod id voidscape
+// 1.21.1	2025-03-09T00:32:52.794262946	Tags for minecraft:block mod id voidscape
 cfab2ab481bf476a645d326b87627918009b9e50 data/c/tags/block/ore_bearing_ground/bedrock.json
 9994f212884e8264af96eaba34aa7e89696d8994 data/c/tags/block/ore_bearing_ground/end_stone.json
 3f611ce11efe1a29ec5758cb2a3bf606a991c473 data/c/tags/block/ores_in_ground/bedrock.json
@@ -12,3 +12,10 @@ dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/block/logs.json
 6aac6a2824a84dfc4b07a02575bd5094e3090a11 data/minecraft/tags/block/mineable/pickaxe.json
 18eb7bd28abd90a4064895cafaaeda50b7840643 data/minecraft/tags/block/needs_diamond_tool.json
 6332159db4f0eb30e192709f96237abd7d094abe data/minecraft/tags/block/needs_iron_tool.json
+3834b85e9c127e5cc60951c23116db26f8d512cb data/minecraft/tags/block/nylium.json
+0603e38093539eb8aae23fadb83a82018e4908b8 data/minecraft/tags/block/planks.json
+586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/block/slabs.json
+58988441c89f527d6dc0a209d3376a775360f13f data/minecraft/tags/block/stairs.json
+d9a6b95c5c4455d3d7222352acfe6da770db1b94 data/minecraft/tags/block/sword_efficient.json
+92e6852a31d2dbe93ff9872f4d12c33adedae400 data/minecraft/tags/block/wither_immune.json
+586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/block/wooden_slabs.json
