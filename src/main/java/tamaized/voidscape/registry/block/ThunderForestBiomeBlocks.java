@@ -64,7 +64,7 @@ public class ThunderForestBiomeBlocks {
 		.pushReaction(PushReaction.DESTROY)
 		.offsetType(BlockBehaviour.OffsetType.XYZ)
 	));
-	public final Supplier<Item> THUNDER_ROOTS_ITEM = REGISTRY_ITEM
+	public final DeferredHolder<Item, BlockItem> THUNDER_ROOTS_ITEM = REGISTRY_ITEM
 		.register(THUNDER_ROOTS.getId().getPath(), () -> new BlockItem(THUNDER_ROOTS.get(), itemProperties.LAVA_IMMUNE.get()));
 	public final DeferredHolder<Block, Block> THUNDER_ROOTS_POT = REGISTRY.register("thunder_roots_pot", () -> new FlowerPotBlock(
 		() -> (FlowerPotBlock) Blocks.FLOWER_POT,
@@ -86,7 +86,7 @@ public class ThunderForestBiomeBlocks {
 			.replaceable()
 			.pushReaction(PushReaction.DESTROY)
 	));
-	public final Supplier<Item> THUNDER_FUNGUS_ITEM = REGISTRY_ITEM
+	public final DeferredHolder<Item, BlockItem> THUNDER_FUNGUS_ITEM = REGISTRY_ITEM
 		.register(THUNDER_FUNGUS.getId().getPath(), () -> new BlockItem(THUNDER_FUNGUS.get(), itemProperties.LAVA_IMMUNE.get()));
 
 	public final DeferredHolder<Block, Block> THUNDER_FUNGUS_POT = REGISTRY.register("thunder_fungus_pot", () -> new FlowerPotBlock(
@@ -103,7 +103,7 @@ public class ThunderForestBiomeBlocks {
 		.mapColor(MapColor.COLOR_PURPLE)
 		.strength(1.0F)
 	));
-	public final Supplier<Item> THUNDER_WART_ITEM = REGISTRY_ITEM
+	public final DeferredHolder<Item, BlockItem> THUNDER_WART_ITEM = REGISTRY_ITEM
 		.register(THUNDER_WART.getId().getPath(), () -> new BlockItem(THUNDER_WART.get(), itemProperties.LAVA_IMMUNE.get()));
 
 	public final DeferredHolder<Block, GrowingPlantHeadBlock> THUNDER_VINES = REGISTRY.register("thunder_vines", () -> new WeepingVinesBlock(BlockBehaviour.Properties.of()
@@ -132,7 +132,7 @@ public class ThunderForestBiomeBlocks {
 			return THUNDER_VINES.get();
 		}
 	});
-	public final Supplier<Item> THUNDER_VINES_ITEM = REGISTRY_ITEM
+	public final DeferredHolder<Item, BlockItem> THUNDER_VINES_ITEM = REGISTRY_ITEM
 		.register(THUNDER_VINES.getId().getPath(), () -> new BlockItem(THUNDER_VINES.get(), itemProperties.LAVA_IMMUNE.get()));
 
 	public final DeferredHolder<Block, Block> THUNDER_STEM = REGISTRY.register("thunder_stem", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
