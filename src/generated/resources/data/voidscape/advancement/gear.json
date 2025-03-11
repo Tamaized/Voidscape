@@ -1,205 +1,11 @@
 {
   "parent": "voidscape:root",
   "criteria": {
-    "voidic_helmet": {
+    "astral_boots": {
       "conditions": {
         "items": [
           {
-            "items": [
-              "voidscape:voidic_crystal_helmet"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "voidic_chest": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:voidic_crystal_chest"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "voidic_legs": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:voidic_crystal_legs"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "voidic_boots": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:voidic_crystal_boots"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "corrupt_helmet": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:corrupt_helmet"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "corrupt_chest": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:corrupt_chest"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "corrupt_legs": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:corrupt_legs"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "corrupt_boots": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:corrupt_boots"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "titanite_helmet": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:titanite_helmet"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "titanite_chest": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:titanite_chest"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "titanite_legs": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:titanite_legs"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "titanite_boots": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:titanite_boots"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "ichor_helmet": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:ichor_helmet"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "ichor_chest": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:ichor_chest"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "ichor_legs": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:ichor_legs"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "ichor_boots": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:ichor_boots"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "astral_helmet": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "voidscape:astral_helmet"
-            ]
+            "items": "voidscape:astral_boots"
           }
         ]
       },
@@ -209,9 +15,17 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "voidscape:astral_chest"
-            ]
+            "items": "voidscape:astral_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astral_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:astral_helmet"
           }
         ]
       },
@@ -221,21 +35,167 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "voidscape:astral_legs"
-            ]
+            "items": "voidscape:astral_legs"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "astral_boots": {
+    "corrupt_boots": {
       "conditions": {
         "items": [
           {
-            "items": [
-              "voidscape:astral_boots"
-            ]
+            "items": "voidscape:corrupt_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "corrupt_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:corrupt_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "corrupt_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:corrupt_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "corrupt_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:corrupt_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:ichor_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:ichor_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:ichor_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "ichor_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:ichor_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "titanite_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:titanite_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "titanite_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:titanite_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "titanite_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:titanite_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "titanite_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:titanite_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "voidic_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:voidic_crystal_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "voidic_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:voidic_crystal_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "voidic_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:voidic_crystal_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "voidic_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:voidic_crystal_legs"
           }
         ]
       },
@@ -243,16 +203,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.gear.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:voidic_crystal_chest"
+      "count": 1,
+      "id": "voidscape:voidic_crystal_chest"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.gear"
     }

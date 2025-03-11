@@ -40,11 +40,11 @@ public abstract class AbstractAdvancementSubProvider implements AdvancementProvi
 	protected abstract String name();
 
 	protected final Component title() {
-		return Component.translatable("advancement.voidscape." + name());
+		return Component.translatable("advancement." + Voidscape.MODID + "." + name());
 	}
 
 	protected final Component description() {
-		return Component.translatable("advancement.voidscape." + name() + ".desc");
+		return Component.translatable("advancement." + Voidscape.MODID + "." + name() + ".desc");
 	}
 
 	protected final String location() {
