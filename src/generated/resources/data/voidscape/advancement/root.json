@@ -18,17 +18,14 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "background": "minecraft:textures/block/bedrock.png",
     "description": {
       "translate": "advancement.voidscape.root.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:voidic_crystal"
+      "count": 1,
+      "id": "voidscape:voidic_crystal"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.root"
     }

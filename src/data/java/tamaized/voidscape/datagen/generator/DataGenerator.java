@@ -3,6 +3,7 @@ package tamaized.voidscape.datagen.generator;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.voidscape.datagen.data.advancement.AdvancementProviderFactory;
 import tamaized.voidscape.datagen.data.datamap.DatamapProviderFactory;
 import tamaized.voidscape.datagen.data.tag.TagProviderFactory;
 
@@ -15,9 +16,13 @@ public class DataGenerator {
 	@Autowired
 	private DatamapProviderFactory datamapProviderFactory;
 
+	@Autowired
+	private AdvancementProviderFactory advancementProviderFactory;
+
 	public void generate(GatherDataEvent event) {
 		tagProviderFactory.generate(event);
 		datamapProviderFactory.generate(event);
+		advancementProviderFactory.generate(event);
 	}
 
 }
