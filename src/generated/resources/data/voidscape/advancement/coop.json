@@ -2,21 +2,17 @@
   "parent": "voidscape:germinated",
   "criteria": {
     "coop": {
-      "conditions": {},
       "trigger": "voidscape:coop"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.coop.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:machine_coop"
+      "count": 1,
+      "id": "voidscape:machine_coop"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.coop"
     }

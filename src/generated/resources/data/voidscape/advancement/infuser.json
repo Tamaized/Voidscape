@@ -2,21 +2,18 @@
   "parent": "voidscape:liquid",
   "criteria": {
     "infuser": {
-      "conditions": {},
       "trigger": "voidscape:infuser"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.infuser.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:machine_infuser"
+      "count": 1,
+      "id": "voidscape:machine_infuser"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.infuser"
     }

@@ -2,21 +2,18 @@
   "parent": "voidscape:purified",
   "criteria": {
     "hoe": {
-      "conditions": {},
       "trigger": "voidscape:hoe_bonemeal"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.hoe.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:titanite_hoe"
+      "count": 1,
+      "id": "voidscape:titanite_hoe"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.hoe"
     }

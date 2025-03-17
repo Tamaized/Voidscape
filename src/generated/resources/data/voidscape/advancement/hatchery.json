@@ -2,21 +2,18 @@
   "parent": "voidscape:coop",
   "criteria": {
     "hatchery": {
-      "conditions": {},
       "trigger": "voidscape:hatchery"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.hatchery.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "minecraft:dragon_egg"
+      "count": 1,
+      "id": "minecraft:dragon_egg"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.hatchery"
     }

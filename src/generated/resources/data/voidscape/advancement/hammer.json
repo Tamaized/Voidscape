@@ -3,22 +3,22 @@
   "criteria": {
     "hammer": {
       "conditions": {
-        "item": "voidscape:charred_warhammer"
+        "item": {
+          "id": "voidscape:charred_warhammer"
+        }
       },
       "trigger": "voidscape:three_by_three"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.hammer.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:charred_warhammer"
+      "count": 1,
+      "id": "voidscape:charred_warhammer"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.hammer"
     }
