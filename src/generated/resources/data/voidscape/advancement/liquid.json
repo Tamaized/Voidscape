@@ -2,21 +2,17 @@
   "parent": "voidscape:psychosis",
   "criteria": {
     "liquid": {
-      "conditions": {},
       "trigger": "voidscape:liquifier"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.liquid.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:machine_liquifier"
+      "count": 1,
+      "id": "voidscape:machine_liquifier"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.liquid"
     }

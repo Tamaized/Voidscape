@@ -3,22 +3,22 @@
   "criteria": {
     "astral_crystal": {
       "conditions": {
-        "item": "voidscape:astral_essence"
+        "item": {
+          "id": "voidscape:astral_essence"
+        }
       },
       "trigger": "voidscape:item_used_on_null_servant"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.astral_crystal.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:astral_crystal"
+      "count": 1,
+      "id": "voidscape:astral_crystal"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.astral_crystal"
     }

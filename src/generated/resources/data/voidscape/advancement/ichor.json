@@ -3,22 +3,21 @@
   "criteria": {
     "ichor": {
       "conditions": {
-        "item": "voidscape:ichor"
+        "item": {
+          "id": "voidscape:ichor"
+        }
       },
       "trigger": "voidscape:item_used_on_null_servant"
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.ichor.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:ichor_crystal"
+      "count": 1,
+      "id": "voidscape:ichor_crystal"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.ichor"
     }

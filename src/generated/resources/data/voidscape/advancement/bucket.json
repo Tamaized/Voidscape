@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "voidscape:voidic_bucket"
-            ]
+            "items": "voidscape:voidic_bucket"
           }
         ]
       },
@@ -15,16 +13,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.bucket.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:voidic_bucket"
+      "count": 1,
+      "id": "voidscape:voidic_bucket"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.bucket"
     }
