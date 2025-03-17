@@ -19,7 +19,12 @@ public abstract class AbstractAdvancementSubProvider implements AdvancementProvi
 
 	@Override
 	public final void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-		makeAndSet(registries, saver, existingFileHelper);
+		makeIfEmpty(registries, saver, existingFileHelper);
+	}
+
+	private void makeIfEmpty(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+		if (holder == null)
+			makeAndSet(registries, saver, existingFileHelper);
 	}
 
 	private AdvancementHolder makeAndSet(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {

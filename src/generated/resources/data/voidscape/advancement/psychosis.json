@@ -1,5 +1,5 @@
 {
-  "parent": "voidscape:armor",
+  "parent": "voidscape:gear",
   "criteria": {
     "pawn": {
       "conditions": {
@@ -20,16 +20,14 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancement.voidscape.psychosis.desc"
     },
     "frame": "challenge",
-    "hidden": false,
     "icon": {
-      "item": "voidscape:tendril"
+      "count": 1,
+      "id": "voidscape:tendril"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancement.voidscape.psychosis"
     }
