@@ -7,8 +7,12 @@ import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Component;
+import tamaized.beanification.Directory;
+import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.datagen.bootstrap.IBootstrap;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -16,8 +20,15 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class RegistryProvider {
 
-	private final RegistrySetBuilder builder = new RegistrySetBuilder();
+	@Directory(IBootstrap.class)
+	private List<IBootstrap> bootstraps;
+
+	private RegistrySetBuilder builder = new RegistrySetBuilder();
 	private DatapackBuiltinEntriesProvider value;
+	@PostConstruct
+	private void setup() {
+		bootstraps.forEach(bootstrap -> builder = bootstrap.bootstrap(builder));
+	}
 
 	public CompletableFuture<HolderLookup.Provider> retrieve(GatherDataEvent event) {
 		if (value == null) {
