@@ -25,6 +25,7 @@ public class RegistryProvider {
 
 	private RegistrySetBuilder builder = new RegistrySetBuilder();
 	private DatapackBuiltinEntriesProvider value;
+
 	@PostConstruct
 	private void setup() {
 		bootstraps.forEach(bootstrap -> builder = bootstrap.bootstrap(builder));

@@ -21,13 +21,13 @@ public class AdvancementProviderFactory {
 	@Directory(AbstractAdvancementSubProvider.class)
 	List<AdvancementProvider.AdvancementGenerator> subProviders;
 
-	public void generate(GatherDataEvent event) {
-		event.getGenerator().addProvider(event.includeServer(), new AdvancementProvider(
+	public AdvancementProvider make(GatherDataEvent event) {
+		return new AdvancementProvider(
 			event.getGenerator().getPackOutput(),
 			registryProvider.retrieve(event),
 			event.getExistingFileHelper(),
 			subProviders
-		));
+		);
 	}
 
 }
