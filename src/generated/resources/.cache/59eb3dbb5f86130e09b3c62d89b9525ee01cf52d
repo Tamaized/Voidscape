@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-24T09:50:03.78188996	Loot Tables
+// 1.21.1	2025-03-24T10:04:56.729878479	Loot Tables
 4ab59776f54cd2fae5dea7799c3ff1b13d7b4448 data/voidscape/loot_table/blocks/charred_brick.json
 37a6ce6eff619c3c757214faf7b1c432dcdef209 data/voidscape/loot_table/blocks/cracked_astralrock.json
 7b8214d0fddf31bfca082a4d4b93e0c84b8267ff data/voidscape/loot_table/blocks/ethereal_fruit_end.json
@@ -7,7 +7,7 @@ a78d73c2165a561794271d883105090cc1672298 data/voidscape/loot_table/blocks/ethere
 edc6b8245cb7794ca4b88d6b89dc11b0190a0bd1 data/voidscape/loot_table/blocks/ethereal_fruit_overworld.json
 d048da356266e26bb0f0a87bc83e4f9a8791abb0 data/voidscape/loot_table/blocks/ethereal_fruit_void.json
 08f3477f760e8eb329ba30dfb2fa557e159aab25 data/voidscape/loot_table/blocks/flesh_block.json
-550acdd610649d9cddbfed3936183920bcdd801d data/voidscape/loot_table/blocks/flesh_ore.json
+136b3ee82374a7cadd1290a4bef4808de5cfc12a data/voidscape/loot_table/blocks/flesh_ore.json
 1744f6aa61382f46d00c1acae24c7154f101f391 data/voidscape/loot_table/blocks/machine_collector.json
 f3ae33b3cfbab89eea1b6fbcb3c5e49741810bdb data/voidscape/loot_table/blocks/machine_coop.json
 c5fdee192add1eb4dfe437d34d9ae73d56ab796d data/voidscape/loot_table/blocks/machine_core.json

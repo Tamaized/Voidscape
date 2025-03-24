@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -37,20 +38,11 @@ public class BlockLootTableUtil {
 		);
 	}
 
-	public LootTable.Builder ore(Supplier<Item> item, Supplier<Item> itemFromSilkTouch) {
+	public LootTable.Builder silkTouch(Supplier<Item> item, Supplier<Item> itemFromSilkTouch, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		return LootTable.lootTable().withPool(
 			LootPool.lootPool().add(
 				AlternativesEntry.alternatives(
-					LootItem.lootTableItem(itemFromSilkTouch.get())
-						.when(MatchTool.toolMatches(ItemPredicate.Builder.item().withSubPredicate(
-							ItemSubPredicates.ENCHANTMENTS,
-							ItemEnchantmentsPredicate.enchantments(List.of(
-								new EnchantmentPredicate(
-									registries.join().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH),
-									MinMaxBounds.Ints.ANY
-								)
-							))
-						))),
+					LootItem.lootTableItem(itemFromSilkTouch.get()).when(hasSilkTouch.get()),
 					LootItem.lootTableItem(item.get())
 				)
 			).when(ExplosionCondition.survivesExplosion())

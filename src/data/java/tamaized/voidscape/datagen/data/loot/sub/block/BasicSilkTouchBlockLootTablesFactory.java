@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -15,7 +16,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 @Component
-public class FleshBlockBlockLootTableFactory implements IBlockLootTable {
+public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
 
 	@Autowired
 	private RegistryProvider registries;
@@ -30,10 +31,17 @@ public class FleshBlockBlockLootTableFactory implements IBlockLootTable {
 	private ModItemComponentDirectory items;
 
 	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
-		add.accept(
-			blocks.materialBlocks().FLESH_BLOCK.get(),
-			provider.createSingleItemTable(blocks.materialBlocks().FLESH_BLOCK_ITEM.get())
-		);
+		add(add, hasSilkTouch, blocks.oreBlocks().FLESH_ORE, items.materialItems().FLESH_CHUNK, blocks.oreBlocks().FLESH_ORE_ITEM);
+	}
+
+	private void add(
+		BiConsumer<Block, LootTable.Builder> add,
+		Supplier<LootItemCondition.Builder> hasSilkTouch,
+		Supplier<Block> block,
+		Supplier<Item> item,
+		Supplier<Item> itemFromSilk
+	) {
+		add.accept(block.get(), blockLootTableUtil.silkTouch(item, itemFromSilk, hasSilkTouch));
 	}
 
 }
