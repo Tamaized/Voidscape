@@ -4,19 +4,24 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.RegistryProvider;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 @Component
@@ -46,6 +51,24 @@ public class BlockLootTableUtil {
 					LootItem.lootTableItem(item.get())
 				)
 			).when(ExplosionCondition.survivesExplosion())
+		);
+	}
+
+	public LootTable.Builder slab(Supplier<Block> slabBlock, Supplier<Item> item) {
+		return LootTable.lootTable().withPool(
+			LootPool.lootPool().add(
+				LootItem.lootTableItem(item.get())
+					.apply(
+						SetItemCountFunction.setCount(ConstantValue.exactly(2F))
+							.when(
+								LootItemBlockStatePropertyCondition.hasBlockStateProperties(slabBlock.get())
+									.setProperties(
+										StatePropertiesPredicate.Builder.properties()
+											.hasProperty(SlabBlock.TYPE, SlabType.DOUBLE)
+									)
+							)
+					).apply(ApplyExplosionDecay.explosionDecay())
+			)
 		);
 	}
 

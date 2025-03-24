@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 @Component
-public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
+public class BasicSlabBlockLootTablesFactory implements IBlockLootTable {
 
 	@Autowired
 	private RegistryProvider registries;
@@ -31,18 +31,11 @@ public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
 	private ModItemComponentDirectory items;
 
 	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
-		add(add, hasSilkTouch, blocks.oreBlocks().FLESH_ORE, items.materialItems().FLESH_CHUNK, blocks.oreBlocks().FLESH_ORE_ITEM);
-		add(add, hasSilkTouch, blocks.oreBlocks().STRANGE_ORE, items.materialItems().STRANGE_PEARL, blocks.oreBlocks().STRANGE_ORE_ITEM);
+		add(add, blocks.thunderForestBiomeBlocks().THUNDER_SLAB, blocks.thunderForestBiomeBlocks().THUNDER_SLAB_ITEM);
 	}
 
-	private void add(
-		BiConsumer<Block, LootTable.Builder> add,
-		Supplier<LootItemCondition.Builder> hasSilkTouch,
-		Supplier<Block> block,
-		Supplier<Item> item,
-		Supplier<Item> itemFromSilk
-	) {
-		add.accept(block.get(), blockLootTableUtil.silkTouch(item, itemFromSilk, hasSilkTouch));
+	private void add(BiConsumer<Block, LootTable.Builder> add, Supplier<Block> block, Supplier<Item> item) {
+		add.accept(block.get(), blockLootTableUtil.slab(block, item));
 	}
 
 }
