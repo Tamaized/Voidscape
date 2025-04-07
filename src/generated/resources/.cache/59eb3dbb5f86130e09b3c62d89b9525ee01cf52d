@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-24T10:39:24.569240509	Loot Tables
+// 1.21.1	2025-04-02T14:33:04.024701452	Loot Tables
 4ab59776f54cd2fae5dea7799c3ff1b13d7b4448 data/voidscape/loot_table/blocks/charred_brick.json
 37a6ce6eff619c3c757214faf7b1c432dcdef209 data/voidscape/loot_table/blocks/cracked_astralrock.json
 7b8214d0fddf31bfca082a4d4b93e0c84b8267ff data/voidscape/loot_table/blocks/ethereal_fruit_end.json
@@ -26,11 +26,11 @@ eb9ad0ad851de04dcce3bdd06ebcb929d03f7c45 data/voidscape/loot_table/blocks/thunde
 7cf598d8d211693f4686a5012c68b25c6c183866 data/voidscape/loot_table/blocks/thunder_roots.json
 f6643269fac8563aceb0f98bddb75f1b95aa2876 data/voidscape/loot_table/blocks/thunder_roots_pot.json
 b65ae06753f28e05bad6403036544dde86df8d65 data/voidscape/loot_table/blocks/thunder_slab.json
-221ef37199848d84aed8bf6deb9efa374d05cf18 data/voidscape/loot_table/blocks/thunder_stairs.json
-68402ad8bfc67c1553fa8ac98246fbdc1615c222 data/voidscape/loot_table/blocks/thunder_stem.json
-5eaa7ec4359ceb22f30226d75b3e9b7dfcb6a435 data/voidscape/loot_table/blocks/thunder_stem_stripped.json
-2ac890ba530173ec5f979f72cc80ecbd3b43c951 data/voidscape/loot_table/blocks/thunder_vines.json
-2c5dfe42a04aaaebab65e30632f5f8b52ad0325d data/voidscape/loot_table/blocks/thunder_vines_plant.json
+e1876c0b2ed845c2fe518c33cd035031d970ac5b data/voidscape/loot_table/blocks/thunder_stairs.json
+fb21488320d5ad3c554fc34750bbce743c31a0d0 data/voidscape/loot_table/blocks/thunder_stem.json
+1bb02479670d51a116ecf38d20f391962993c46a data/voidscape/loot_table/blocks/thunder_stem_stripped.json
+7d5c55d20d6c6de07deaa64fa6d44e84ffd6ece9 data/voidscape/loot_table/blocks/thunder_vines.json
+23614cf65223e3c3a890c3bd84342a01aa871e09 data/voidscape/loot_table/blocks/thunder_vines_plant.json
 e21bd476c734676c58c93291e4887d616d5dd98a data/voidscape/loot_table/blocks/thunder_wart.json
 6070ba28a72eb48fff140bd8e804c86074bbb8bc data/voidscape/loot_table/blocks/titanite_ore.json
 5fcaf2457fb0fca86187daef89abd64dd685d280 data/voidscape/loot_table/blocks/very_drippy_dripstone.json

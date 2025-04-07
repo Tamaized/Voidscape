@@ -46,9 +46,12 @@ public class BasicSurvivesExplosionBlockLootTablesFactory implements IBlockLootT
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED, blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_STRIPPED_ITEM);
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_PLANKS, blocks.thunderForestBiomeBlocks().THUNDER_PLANKS_ITEM);
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_ROOTS, blocks.thunderForestBiomeBlocks().THUNDER_ROOTS_ITEM);
+		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STAIRS, blocks.thunderForestBiomeBlocks().THUNDER_STAIRS_ITEM);
+		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STEM, blocks.thunderForestBiomeBlocks().THUNDER_STEM_ITEM);
+		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED, blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED_ITEM);
 	}
 
-	private void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<Block> block, Supplier<? extends Item> item) {
+	private void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<? extends Block> block, Supplier<? extends Item> item) {
 		add.accept(block.get(), provider.createSingleItemTable(item.get()));
 	}
 
