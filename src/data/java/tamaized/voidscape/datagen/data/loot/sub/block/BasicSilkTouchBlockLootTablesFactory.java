@@ -31,6 +31,7 @@ public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
 	private ModItemComponentDirectory items;
 
 	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+		add(add, hasSilkTouch, blocks.oreBlocks().TITANITE_ORE, items.materialItems().TITANITE_CHUNK, blocks.oreBlocks().TITANITE_ORE_ITEM);
 		add(add, hasSilkTouch, blocks.oreBlocks().FLESH_ORE, items.materialItems().FLESH_CHUNK, blocks.oreBlocks().FLESH_ORE_ITEM);
 		add(add, hasSilkTouch, blocks.oreBlocks().STRANGE_ORE, items.materialItems().STRANGE_PEARL, blocks.oreBlocks().STRANGE_ORE_ITEM);
 	}

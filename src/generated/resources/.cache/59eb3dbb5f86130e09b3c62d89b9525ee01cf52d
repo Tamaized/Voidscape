@@ -1,4 +1,4 @@
-// 1.21.1	2025-04-02T14:33:04.024701452	Loot Tables
+// 1.21.1	2025-04-07T11:22:53.070825842	Loot Tables
 4ab59776f54cd2fae5dea7799c3ff1b13d7b4448 data/voidscape/loot_table/blocks/charred_brick.json
 37a6ce6eff619c3c757214faf7b1c432dcdef209 data/voidscape/loot_table/blocks/cracked_astralrock.json
 7b8214d0fddf31bfca082a4d4b93e0c84b8267ff data/voidscape/loot_table/blocks/ethereal_fruit_end.json
@@ -31,8 +31,8 @@ fb21488320d5ad3c554fc34750bbce743c31a0d0 data/voidscape/loot_table/blocks/thunde
 1bb02479670d51a116ecf38d20f391962993c46a data/voidscape/loot_table/blocks/thunder_stem_stripped.json
 7d5c55d20d6c6de07deaa64fa6d44e84ffd6ece9 data/voidscape/loot_table/blocks/thunder_vines.json
 23614cf65223e3c3a890c3bd84342a01aa871e09 data/voidscape/loot_table/blocks/thunder_vines_plant.json
-e21bd476c734676c58c93291e4887d616d5dd98a data/voidscape/loot_table/blocks/thunder_wart.json
-6070ba28a72eb48fff140bd8e804c86074bbb8bc data/voidscape/loot_table/blocks/titanite_ore.json
+96ee6c091eaaf7ae4011fc07ff7ea68b9bd0bd96 data/voidscape/loot_table/blocks/thunder_wart.json
+40e2a09f15da87c3a7bd750d39cf2a8708842939 data/voidscape/loot_table/blocks/titanite_ore.json
 5fcaf2457fb0fca86187daef89abd64dd685d280 data/voidscape/loot_table/blocks/very_drippy_dripstone.json
-8b23d1d0ed196783aaaf5d768f2bf14ac7181172 data/voidscape/loot_table/blocks/voidic_crystal_block.json
-259d88200ed8d3e6bc19557ec8a3c158bf1479b6 data/voidscape/loot_table/blocks/voidic_crystal_ore.json
+1dabd2b206b2ebb425c820c2050ef25d5c38a297 data/voidscape/loot_table/blocks/voidic_crystal_block.json
+ed01d6fc89b31210b66b852fc5e1164d300c56dd data/voidscape/loot_table/blocks/voidic_crystal_ore.json

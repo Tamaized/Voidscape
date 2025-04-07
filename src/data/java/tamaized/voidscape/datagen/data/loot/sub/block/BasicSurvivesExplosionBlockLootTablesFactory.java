@@ -1,12 +1,10 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
@@ -28,6 +26,7 @@ public class BasicSurvivesExplosionBlockLootTablesFactory implements IBlockLootT
 	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		add(provider, add, blocks.oreBlocks().CRACKED_ASTRALROCK, items.materialItems().ASTRAL_ESSENCE);
 
+		add(provider, add, blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK, blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK_ITEM);
 		add(provider, add, blocks.materialBlocks().CHARRED_BRICK, blocks.materialBlocks().CHARRED_BRICK_ITEM);
 		add(provider, add, blocks.materialBlocks().FLESH_BLOCK, blocks.materialBlocks().FLESH_BLOCK_ITEM);
 
@@ -49,6 +48,7 @@ public class BasicSurvivesExplosionBlockLootTablesFactory implements IBlockLootT
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STAIRS, blocks.thunderForestBiomeBlocks().THUNDER_STAIRS_ITEM);
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STEM, blocks.thunderForestBiomeBlocks().THUNDER_STEM_ITEM);
 		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED, blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED_ITEM);
+		add(provider, add, blocks.thunderForestBiomeBlocks().THUNDER_WART, blocks.thunderForestBiomeBlocks().THUNDER_WART_ITEM);
 	}
 
 	private void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<? extends Block> block, Supplier<? extends Item> item) {
