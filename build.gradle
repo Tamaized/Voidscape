@@ -6,7 +6,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "tamaized:beanification:${minecraft_version}-${beanification_version}:gradle"
+		classpath "tamaized:beanification:${beanification_version}:gradle"
 	}
 }
 
@@ -179,7 +179,7 @@ dependencies {
 //    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
 //    runtimeOnly fg.deobf("com.aetherteam.aether:aether:1.20.1-1.0.0-beta.1.2-neoforge")
 
-	def beanification = "tamaized:beanification:${project.minecraft_version}-${project.beanification_version}"
+	def beanification = "tamaized:beanification:${project.beanification_version}"
 	implementation beanification
 	shade beanification
 	testImplementation "${beanification}:tests"
