@@ -7,6 +7,7 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.datagen.data.loot.sub.BlockLootTableSubProvider;
+import tamaized.voidscape.datagen.data.loot.sub.ChestLootTableSubProvider;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,8 @@ public class LootTableProviderFactory {
 			event.getGenerator().getPackOutput(),
 			Set.of(),
 			List.of(
-				new LootTableProvider.SubProviderEntry(BlockLootTableSubProvider::new, LootContextParamSets.BLOCK)
+				new LootTableProvider.SubProviderEntry(BlockLootTableSubProvider::new, LootContextParamSets.BLOCK),
+				new LootTableProvider.SubProviderEntry(ChestLootTableSubProvider::new, LootContextParamSets.CHEST)
 			),
 			registryProvider.retrieve(event)
 		);

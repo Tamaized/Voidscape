@@ -2,7 +2,6 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": 4.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -35,10 +34,10 @@
           ],
           "name": "voidscape:ethereal_essence"
         }
-      ]
+      ],
+      "rolls": 4.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -60,10 +59,10 @@
           "type": "minecraft:item",
           "name": "minecraft:netherite_upgrade_smithing_template"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 6.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -111,7 +110,8 @@
           ],
           "name": "minecraft:iron_ingot"
         }
-      ]
+      ],
+      "rolls": 6.0
     }
   ],
   "random_sequence": "voidscape:chests/structures/charred"
