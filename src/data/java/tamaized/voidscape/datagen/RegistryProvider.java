@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
@@ -13,9 +14,11 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.bootstrap.IBootstrap;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @Component
 public class RegistryProvider {
@@ -52,6 +55,13 @@ public class RegistryProvider {
 			.filter(b -> b.value() == t)
 			.findAny().orElseThrow()
 			.unwrapKey();
+	}
+
+	public <T> Stream<T> filterStreamForModFrom(HolderLookup.Provider provider, ResourceKey<Registry<T>> registry) {
+		return provider.lookupOrThrow(registry)
+			.listElements()
+			.filter(r -> Objects.requireNonNull(r.getKey()).location().getNamespace().equals(Voidscape.MODID))
+			.map(Holder.Reference::value);
 	}
 
 }
