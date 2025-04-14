@@ -1,16 +1,13 @@
 package tamaized.voidscape.datagen.bootstrap;
 
+import com.aetherteam.aether.block.AetherBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModBiomes;
@@ -21,7 +18,6 @@ import tamaized.voidscape.surfacerule.AirAboveConditionSource;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.OptionalLong;
 
 @Component
 public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
@@ -130,17 +126,17 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 								),
 								SurfaceRules.state(Blocks.BEDROCK.defaultBlockState())
 							)
-						)/*,
+						),
 						SurfaceRules.ifTrue(
 							SurfaceRules.isBiome(biomes.AETHER),
 							SurfaceRules.sequence(
 								SurfaceRules.ifTrue(
 									new AirAboveConditionSource(),
-									SurfaceRules.state()
+									SurfaceRules.state(AetherBlocks.AETHER_GRASS_BLOCK.get().defaultBlockState())
 								),
-								SurfaceRules.state()
+								SurfaceRules.state(AetherBlocks.HOLYSTONE.get().defaultBlockState())
 							)
-						)*/
+						)
 					),
 					List.of(),
 					0,

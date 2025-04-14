@@ -172,12 +172,20 @@ repositories {
 		url "https://api.modrinth.com/maven"
 	}
 	maven githubPackage.invoke("The-Aether-Team/The-Aether")
+	maven { url 'https://maven.wispforest.io' } // Aether - owolib
+	maven { url = "https://maven.su5ed.dev/releases" } // Aether - owolib - Sinytra
 }
 
 dependencies {
 	runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
 //    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
-//    runtimeOnly fg.deobf("com.aetherteam.aether:aether:1.20.1-1.0.0-beta.1.2-neoforge")
+
+	def aether = "com.aetherteam.aether:aether:1.21.1-1.5.8-neoforge"
+    runtimeOnly aether
+	dataImplementation aether
+	def aetherLib = "io.wispforest:owo-lib-neoforge:0.12.15.1-beta.3+1.21"
+	runtimeOnly aetherLib
+	dataRuntimeOnly aetherLib
 
 	def beanification = "tamaized:beanification:${project.beanification_version}"
 	implementation beanification
