@@ -1,0 +1,52 @@
+{
+  "type": "voidscape:void",
+  "generator": {
+    "type": "voidscape:void",
+    "biome_source": {
+      "type": "voidscape:layered",
+      "layerBottomDownwards": {
+        "biomes": [],
+        "chance": 4,
+        "majorBiome": "voidscape:antispires"
+      },
+      "layerBottomDownwardsStart": 32,
+      "layerThreeSlicesBetween": {
+        "biomes": [
+          "voidscape:null",
+          "voidscape:overworld",
+          "voidscape:nether",
+          "voidscape:end",
+          {
+            "biome": "voidscape:aether",
+            "modid": "aether"
+          }
+        ],
+        "chance": 4,
+        "majorBiome": "voidscape:void"
+      },
+      "layerTopUpwards": {
+        "biomes": [
+          "voidscape:thunder_forest"
+        ],
+        "chance": 4,
+        "majorBiome": "voidscape:thunder_forest"
+      },
+      "layerTopUpwardsStart": 160,
+      "possibleBiomes": [
+        "voidscape:thunderspires",
+        "voidscape:thunder_forest",
+        "voidscape:antispires",
+        "voidscape:null",
+        "voidscape:void",
+        "voidscape:overworld",
+        "voidscape:nether",
+        "voidscape:end",
+        {
+          "biome": "voidscape:aether",
+          "modid": "aether"
+        }
+      ]
+    },
+    "settings": "voidscape:void"
+  }
+}

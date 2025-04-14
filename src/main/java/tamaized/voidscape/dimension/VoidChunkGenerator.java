@@ -104,7 +104,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		handle_setter_NoiseChunk_noiseSizeXZ = tmp_handle_setter_NoiseChunk_noiseSizeXZ;
 	}
 
-	private VoidChunkGenerator(BiomeSource biomeProvider1, Holder<NoiseGeneratorSettings> dimensionSettings) {
+	public VoidChunkGenerator(BiomeSource biomeProvider1, Holder<NoiseGeneratorSettings> dimensionSettings) {
 		super(biomeProvider1, dimensionSettings);
 	}
 

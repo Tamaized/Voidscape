@@ -26,7 +26,7 @@ public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 
 	private LayeredBiomeProvider provider;
 
-	GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, LayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
+	public GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, LayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
 		this.biomes = biomes;
 		this.loadedBiomes = LayeredBiomeProvider.getConditionalBiomes(biomes);
 		this.majorBiome = majorBiome;

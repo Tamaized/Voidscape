@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.bootstrap;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -10,6 +11,7 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModDimensions;
 
+import javax.annotation.Nullable;
 import java.util.OptionalLong;
 
 @Component
@@ -18,9 +20,12 @@ public class DimensionTypeBootstrap implements IBootstrap {
 	@Autowired
 	private ModDimensions dimensions;
 
+	@Nullable
+	private Holder<DimensionType> VOID;
+
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.DIMENSION_TYPE, context -> {
-			context.register(
+			VOID = context.register(
 				ResourceKey.create(Registries.DIMENSION_TYPE, dimensions.VOID.location()),
 				new DimensionType(
 					OptionalLong.of(6000L),
@@ -41,6 +46,12 @@ public class DimensionTypeBootstrap implements IBootstrap {
 				)
 			);
 		});
+	}
+
+	public Holder<DimensionType> getVoid(RegistrySetBuilder builder) {
+		if (VOID == null)
+			bootstrap(builder);
+		return VOID;
 	}
 
 }
