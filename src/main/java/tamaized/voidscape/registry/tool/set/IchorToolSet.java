@@ -10,9 +10,9 @@ import tamaized.regutil.AttributeData;
 import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.tool.ModToolTiers;
-import tamaized.voidscape.util.ItemAugmentUtil;
 
 @Component
 public class IchorToolSet {
@@ -29,7 +29,7 @@ public class IchorToolSet {
 	private ModAttributes attributes;
 
 	@Autowired
-	private ItemAugmentUtil itemAugmentUtil;
+	private ModItemComponents itemComponents;
 
 	public final DeferredHolder<Item, Item> ICHOR_SWORD = RegUtil.ToolAndArmorHelper.sword(
 		MATERIAL_NAME,
@@ -37,7 +37,7 @@ public class IchorToolSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.FANG, false), attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -48,7 +48,7 @@ public class IchorToolSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.FANG, false), attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -59,7 +59,7 @@ public class IchorToolSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_ARROW_DMG, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.FANG, false), attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -70,7 +70,7 @@ public class IchorToolSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.MAINHAND),
-			() -> AttributeData.make(itemAugmentUtil::fang, attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.FANG, false), attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.MAINHAND)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);

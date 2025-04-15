@@ -11,7 +11,6 @@ import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.armor.ModArmorMaterials;
-import tamaized.voidscape.util.ItemAugmentUtil;
 
 @Component
 public class VoidicCrystalArmorSet {
@@ -26,7 +25,7 @@ public class VoidicCrystalArmorSet {
 	private ModItemProperties itemProperties;
 
 	@Autowired
-	private ItemAugmentUtil itemAugmentUtil;
+	private ModItemComponents itemComponents;
 
 	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL_HELMET = RegUtil.ToolAndArmorHelper.helmet(
 		"voidic_crystal",
@@ -47,7 +46,7 @@ public class VoidicCrystalArmorSet {
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.CHEST),
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05D, EquipmentSlotGroup.CHEST)
 		),
-		(stack, tick) -> itemAugmentUtil.elytra(stack),
+		(stack, tick) -> stack.getOrDefault(itemComponents.ELYTRA, false),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
 

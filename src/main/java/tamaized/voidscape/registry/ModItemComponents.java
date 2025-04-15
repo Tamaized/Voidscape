@@ -27,4 +27,10 @@ public class ModItemComponents {
 		.networkSynchronized(ByteBufCodecs.BOOL)
 		.build());
 
+	public final Supplier<DataComponentType<Boolean>> ELYTRA = REGISTRY.register("elytra", () -> DataComponentType.<Boolean>builder()
+		.persistent(Codec.BOOL)
+		.cacheEncoding()
+		.networkSynchronized(ByteBufCodecs.BOOL)
+		.build());
+
 }

@@ -12,20 +12,22 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.data.DonatorData;
 import tamaized.voidscape.registry.ModDataAttachments;
-import tamaized.voidscape.util.ItemAugmentUtil;
+import tamaized.voidscape.registry.ModItemComponents;
 
+@Configurable
 public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	@Autowired
-	private static DonatorLayerBuffers donatorLayerBuffers;
+	private DonatorLayerBuffers donatorLayerBuffers;
 
 	@Autowired
-	private static ModDataAttachments dataAttachments;
+	private ModDataAttachments dataAttachments;
 
 	@Autowired
-	private static ItemAugmentUtil itemAugmentUtil;
+	private ModItemComponents itemComponents;
 
 	public DonatorLayer(RenderLayerParent<T, M> p_117346_) {
 		super(p_117346_);
@@ -34,7 +36,7 @@ public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 	@Override
 	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		DonatorData data = entity.getData(dataAttachments.DONATOR);
-		if (data.enabled || (itemAugmentUtil.draconic(entity.getItemBySlot(EquipmentSlot.CHEST)))) {
+		if (data.enabled || entity.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(itemComponents.DRACONIC, false)) {
 			drawWings(
 				stack,
 				donatorLayerBuffers.BUFFERS.getBuffer(donatorLayerBuffers.WRAPPED_POS_TEX_COLOR),
