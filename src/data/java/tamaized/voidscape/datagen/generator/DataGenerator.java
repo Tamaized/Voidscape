@@ -6,6 +6,7 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.data.advancement.AdvancementProviderFactory;
 import tamaized.voidscape.datagen.data.datamap.DatamapProviderFactory;
 import tamaized.voidscape.datagen.data.loot.LootTableProviderFactory;
+import tamaized.voidscape.datagen.data.recipe.RecipeProviderFactory;
 import tamaized.voidscape.datagen.data.tag.TagProviderFactory;
 
 @Component
@@ -23,11 +24,15 @@ public class DataGenerator {
 	@Autowired
 	private LootTableProviderFactory lootTableProviderFactory;
 
+	@Autowired
+	private RecipeProviderFactory recipeProviderFactory;
+
 	public void generate(GatherDataEvent event) {
 		tagProviderFactory.generate(event);
 		datamapProviderFactory.generate(event);
 		event.getGenerator().addProvider(event.includeServer(), advancementProviderFactory.make(event));
 		event.getGenerator().addProvider(event.includeServer(), lootTableProviderFactory.make(event));
+		event.getGenerator().addProvider(event.includeServer(), recipeProviderFactory.make(event));
 	}
 
 }
