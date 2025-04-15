@@ -1,5 +1,9 @@
-// 1.21.1	2025-04-14T14:59:46.285129053	Recipes
+// 1.21.1	2025-04-14T22:55:19.466530267	Recipes
 712511713701cfaffe033df35f923fd9d413d202 data/minecraft/advancement/recipes/combat/astral_axe.json
 00c4dc629fc01dd870b28334c7a3af26ad41318d data/minecraft/advancement/recipes/combat/astral_axe_fang.json
+2c9abf18072c311f914a4b5c2ea761c0518ea511 data/minecraft/advancement/recipes/combat/astral_boots.json
+ba2bc0c7d581cb8ca5a7af4760109481cac6cc41 data/minecraft/advancement/recipes/combat/astral_boots_draconic.json
 8c9a4a97bf2f7fafd42ac1f931d3e78cb40a65d2 data/minecraft/recipe/astral_axe.json
 47a7e615610ba6ed9dd566e7762ed41024e84a92 data/minecraft/recipe/astral_axe_fang.json
+1484f156467a84a3039c225b557cc7974e81d899 data/minecraft/recipe/astral_boots.json
+0278eea698229d63db5186a10792128df032e91b data/minecraft/recipe/astral_boots_draconic.json
