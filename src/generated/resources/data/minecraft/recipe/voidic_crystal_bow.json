@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "base": {
+    "item": "minecraft:bow"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:voidic_crystal_bow"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

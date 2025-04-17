@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:elytra"
+  },
+  "base": {
+    "item": "voidscape:voidic_crystal_chest"
+  },
+  "result": {
+    "components": {
+      "voidscape:elytra": true
+    },
+    "count": 1,
+    "id": "voidscape:voidic_crystal_chest"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:voidic_crystal"
+  },
+  "base": {
+    "item": "minecraft:netherite_chestplate"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:voidic_crystal_chest"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

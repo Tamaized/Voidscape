@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:voidic_crystal"
+  },
+  "base": {
+    "item": "minecraft:netherite_helmet"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:voidic_crystal_helmet"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}
