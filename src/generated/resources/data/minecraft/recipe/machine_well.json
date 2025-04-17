@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:water_bucket"
+  },
+  "base": {
+    "item": "voidscape:machine_germinator"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:machine_well"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

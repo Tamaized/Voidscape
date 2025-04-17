@@ -1,13 +1,6 @@
 {
-  "result": {
-    "item": "voidscape:machine_collector"
-  },
-  "pattern": [
-    "ABA",
-    "BCB",
-    "ABA"
-  ],
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "A": {
       "item": "voidscape:astral_crystal"
@@ -18,5 +11,14 @@
     "C": {
       "item": "voidscape:machine_core"
     }
+  },
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "voidscape:machine_collector"
   }
 }

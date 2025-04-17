@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "voidscape:charred_bone"
+    },
+    "C": {
+      "item": "voidscape:machine_core"
+    },
+    "I": {
+      "item": "voidscape:ichor_crystal"
+    }
+  },
+  "pattern": [
+    "IBI",
+    "BCB",
+    "IBI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "voidscape:machine_infuser"
+  }
+}

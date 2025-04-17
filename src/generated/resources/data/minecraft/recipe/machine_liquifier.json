@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "voidscape:charred_bone"
+    },
+    "C": {
+      "item": "voidscape:machine_core"
+    },
+    "T": {
+      "item": "voidscape:tendril"
+    }
+  },
+  "pattern": [
+    "TBT",
+    "BCB",
+    "TBT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "voidscape:machine_liquifier"
+  }
+}
