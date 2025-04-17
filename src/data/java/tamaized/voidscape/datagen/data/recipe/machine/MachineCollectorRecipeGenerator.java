@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.data.recipe.block.machine;
+package tamaized.voidscape.datagen.data.recipe.machine;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -11,7 +11,7 @@ import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 @Component
-public class MachineGerminatorRecipeGenerator implements IRecipeGenerator {
+public class MachineCollectorRecipeGenerator implements IRecipeGenerator {
 
 	@Autowired
 	private ModBlockComponentDirectory blocks;
@@ -26,16 +26,16 @@ public class MachineGerminatorRecipeGenerator implements IRecipeGenerator {
 	public void generate(RecipeOutput recipeOutput) {
 		ShapedRecipeBuilder.shaped(
 				RecipeCategory.BUILDING_BLOCKS,
-				blocks.machineBlocks().MACHINE_GERMINATOR.get()
+				blocks.machineBlocks().MACHINE_COLLECTOR.get()
 			)
-			.pattern("TBT")
+			.pattern("ABA")
 			.pattern("BCB")
-			.pattern("TBT")
-			.define('T', items.materialItems().TITANITE_SHARD.get())
+			.pattern("ABA")
+			.define('A', items.materialItems().ASTRAL_CRYSTAL.get())
 			.define('B', items.materialItems().CHARRED_BONE.get())
 			.define('C', blocks.machineBlocks().MACHINE_CORE.get())
 			.unlockedBy("has_template", recipeProviderUtil.has(blocks.machineBlocks().MACHINE_CORE.get()))
-			.save(recipeOutput, "machine_germinator");
+			.save(recipeOutput, "machine_collector");
 	}
 
 }

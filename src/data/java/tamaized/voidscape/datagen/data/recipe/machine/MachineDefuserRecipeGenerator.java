@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.data.recipe.block.machine;
+package tamaized.voidscape.datagen.data.recipe.machine;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -11,7 +11,7 @@ import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 @Component
-public class MachineLiquifierRecipeGenerator implements IRecipeGenerator {
+public class MachineDefuserRecipeGenerator implements IRecipeGenerator {
 
 	@Autowired
 	private ModBlockComponentDirectory blocks;
@@ -26,16 +26,16 @@ public class MachineLiquifierRecipeGenerator implements IRecipeGenerator {
 	public void generate(RecipeOutput recipeOutput) {
 		ShapedRecipeBuilder.shaped(
 				RecipeCategory.BUILDING_BLOCKS,
-				blocks.machineBlocks().MACHINE_LIQUIFIER.get()
+				blocks.machineBlocks().MACHINE_DEFUSER.get()
 			)
-			.pattern("TBT")
+			.pattern("VBV")
 			.pattern("BCB")
-			.pattern("TBT")
-			.define('T', items.materialItems().TENDRIL.get())
+			.pattern("VBV")
+			.define('V', items.materialItems().VOIDIC_CRYSTAL.get())
 			.define('B', items.materialItems().CHARRED_BONE.get())
 			.define('C', blocks.machineBlocks().MACHINE_CORE.get())
 			.unlockedBy("has_template", recipeProviderUtil.has(blocks.machineBlocks().MACHINE_CORE.get()))
-			.save(recipeOutput, "machine_liquifier");
+			.save(recipeOutput, "machine_defuser");
 	}
 
 }

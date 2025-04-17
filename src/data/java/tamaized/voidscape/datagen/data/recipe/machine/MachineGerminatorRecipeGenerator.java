@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.data.recipe.block.machine;
+package tamaized.voidscape.datagen.data.recipe.machine;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -11,7 +11,7 @@ import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 @Component
-public class MachineDefuserRecipeGenerator implements IRecipeGenerator {
+public class MachineGerminatorRecipeGenerator implements IRecipeGenerator {
 
 	@Autowired
 	private ModBlockComponentDirectory blocks;
@@ -26,16 +26,16 @@ public class MachineDefuserRecipeGenerator implements IRecipeGenerator {
 	public void generate(RecipeOutput recipeOutput) {
 		ShapedRecipeBuilder.shaped(
 				RecipeCategory.BUILDING_BLOCKS,
-				blocks.machineBlocks().MACHINE_DEFUSER.get()
+				blocks.machineBlocks().MACHINE_GERMINATOR.get()
 			)
-			.pattern("VBV")
+			.pattern("TBT")
 			.pattern("BCB")
-			.pattern("VBV")
-			.define('V', items.materialItems().VOIDIC_CRYSTAL.get())
+			.pattern("TBT")
+			.define('T', items.materialItems().TITANITE_SHARD.get())
 			.define('B', items.materialItems().CHARRED_BONE.get())
 			.define('C', blocks.machineBlocks().MACHINE_CORE.get())
 			.unlockedBy("has_template", recipeProviderUtil.has(blocks.machineBlocks().MACHINE_CORE.get()))
-			.save(recipeOutput, "machine_defuser");
+			.save(recipeOutput, "machine_germinator");
 	}
 
 }

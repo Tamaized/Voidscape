@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen.data.recipe.block.machine;
+package tamaized.voidscape.datagen.data.recipe.machine;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
