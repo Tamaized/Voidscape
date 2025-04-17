@@ -1,0 +1,31 @@
+package tamaized.voidscape.datagen.bootstrap.feature.configured;
+
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Component;
+import tamaized.voidscape.features.config.BooleanFeatureConfig;
+import tamaized.voidscape.features.config.ClusterConfig;
+import tamaized.voidscape.registry.feature.ModFeatures;
+
+@Component
+public class AntispireConfiguredFeatureBootstrap extends ConfiguredFeatureBootstrapHolder {
+
+	@Autowired
+	private ModFeatures features;
+
+	@Override
+	public String name() {
+		return "antispire";
+	}
+
+	@Override
+	public ConfiguredFeature<?, ?> make(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		return new ConfiguredFeature<>(features.SPIRE.get(), new BooleanFeatureConfig(
+			true
+		));
+	}
+}

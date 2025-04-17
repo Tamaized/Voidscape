@@ -1,5 +1,7 @@
-// 1.21.1	2025-04-14T13:38:24.813842376	Registries
+// 1.21.1	2025-04-17T01:35:18.377580543	Registries
 80751452a92a6050e2d65828904bdfb838e67434 data/voidscape/damage_type/voidic.json
 2e11a0a7bd86af74af564bbaa17cbb7a87403a31 data/voidscape/dimension/void.json
 470d3af142d5b914ed8d2641b3bebb68d03fe8f9 data/voidscape/dimension_type/void.json
+6236e369315d4c94a7b90ac96c2122c6454b555e data/voidscape/worldgen/configured_feature/amethyst.json
+40ab00cc1472dbcd4c56dd1bf4ad8f173ffbc108 data/voidscape/worldgen/configured_feature/antispire.json
 8e22cf98f8451f1e9205aa1f70693693e9ef4a0b data/voidscape/worldgen/noise_settings/void.json
