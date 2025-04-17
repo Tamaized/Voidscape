@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:tendril"
+  },
+  "base": {
+    "item": "voidscape:voidic_crystal_chest"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:corrupt_chest"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

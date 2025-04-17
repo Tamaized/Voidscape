@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:ethereal_spider_fang"
+  },
+  "base": {
+    "item": "voidscape:corrupt_xbow"
+  },
+  "result": {
+    "components": {
+      "voidscape:fang": true
+    },
+    "count": 1,
+    "id": "voidscape:corrupt_xbow"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}
