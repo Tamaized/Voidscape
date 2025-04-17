@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "voidscape:flesh_ore"
   },
-  "result": "voidscape:flesh_chunk"
+  "result": {
+    "count": 1,
+    "id": "voidscape:flesh_chunk"
+  }
 }

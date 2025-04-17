@@ -4,7 +4,10 @@
   "cookingtime": 100,
   "experience": 1.5,
   "ingredient": {
-    "item": "voidscape:titanite_ore"
+    "item": "voidscape:flesh_ore"
   },
-  "result": "voidscape:titanite_chunk"
+  "result": {
+    "count": 1,
+    "id": "voidscape:flesh_chunk"
+  }
 }

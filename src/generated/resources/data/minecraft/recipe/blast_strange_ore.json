@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "voidscape:strange_ore"
   },
-  "result": "voidscape:strange_pearl"
+  "result": {
+    "count": 1,
+    "id": "voidscape:strange_pearl"
+  }
 }

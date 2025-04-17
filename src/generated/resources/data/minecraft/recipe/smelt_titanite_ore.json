@@ -6,5 +6,8 @@
   "ingredient": {
     "item": "voidscape:titanite_ore"
   },
-  "result": "voidscape:titanite_chunk"
+  "result": {
+    "count": 1,
+    "id": "voidscape:titanite_chunk"
+  }
 }
