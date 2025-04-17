@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:voidic_crystal"
+  },
+  "base": {
+    "item": "voidscape:ichor_tome"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:voidic_tome"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

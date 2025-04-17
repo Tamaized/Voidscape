@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:titanite_shard"
+  },
+  "base": {
+    "item": "voidscape:ichor_tome"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:titanite_tome"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

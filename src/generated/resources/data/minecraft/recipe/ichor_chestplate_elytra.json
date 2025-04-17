@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:elytra"
+  },
+  "base": {
+    "item": "voidscape:ichor_chest"
+  },
+  "result": {
+    "components": {
+      "voidscape:elytra": true
+    },
+    "count": 1,
+    "id": "voidscape:ichor_chest"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

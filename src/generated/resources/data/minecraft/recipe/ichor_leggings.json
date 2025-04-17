@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:ichor_crystal"
+  },
+  "base": {
+    "item": "voidscape:titanite_legs"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:ichor_legs"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}
