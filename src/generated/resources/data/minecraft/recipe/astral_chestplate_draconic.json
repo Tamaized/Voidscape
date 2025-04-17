@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:dragon_egg"
+  },
+  "base": {
+    "item": "voidscape:astral_chest"
+  },
+  "result": {
+    "components": {
+      "voidscape:draconic": true
+    },
+    "count": 1,
+    "id": "voidscape:astral_chest"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}

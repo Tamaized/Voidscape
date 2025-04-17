@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "voidscape:astral_crystal"
+  },
+  "base": {
+    "item": "voidscape:ichor_pickaxe"
+  },
+  "result": {
+    "count": 1,
+    "id": "voidscape:astral_pickaxe"
+  },
+  "template": {
+    "item": "voidscape:voidic_template"
+  }
+}
