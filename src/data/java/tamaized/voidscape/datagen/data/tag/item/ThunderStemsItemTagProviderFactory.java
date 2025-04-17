@@ -9,6 +9,7 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
+import tamaized.voidscape.registry.ModItemTags;
 
 @Component
 public class ThunderStemsItemTagProviderFactory implements IItemTagProviderFactory {
@@ -17,11 +18,14 @@ public class ThunderStemsItemTagProviderFactory implements IItemTagProviderFacto
 	private RegistryProvider registryProvider;
 
 	@Autowired
+	private ModItemTags itemTags;
+
+	@Autowired
 	private ModBlockComponentDirectory blocks;
 
 	@Override
 	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "thunder_stems"))).add(
+		accessor.tag(itemTags.THUNDER_STEMS).add(
 			blocks.thunderForestBiomeBlocks().THUNDER_STEM_ITEM.get(),
 			blocks.thunderForestBiomeBlocks().THUNDER_HYPHAE_ITEM.get(),
 			blocks.thunderForestBiomeBlocks().THUNDER_STEM_STRIPPED_ITEM.get(),

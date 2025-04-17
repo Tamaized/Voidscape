@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "voidscape:thunder_stems"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "voidscape:thunder_planks"
+  }
+}
