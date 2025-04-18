@@ -1,0 +1,17 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+    "chance": 1.0,
+    "max": 9,
+    "predicate": {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:grass_block"
+    },
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:sand"
+      }
+    }
+  }
+}

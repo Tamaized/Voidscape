@@ -14,16 +14,8 @@ public class ModFeaturePlacements {
 
 	private final DeferredRegister<PlacementModifierType<?>> REGISTRY = RegUtil.create(Registries.PLACEMENT_MODIFIER_TYPE);
 
-	public final Supplier<PlacementModifierType<AirAbovePlacementMod>> AIR_ABOVE = REGISTRY.register("air_above", () -> () -> AirAbovePlacementMod.CODEC);
-
-	public final Supplier<PlacementModifierType<NotAirBelowPlacementMod>> NOT_AIR_BELOW = REGISTRY.register("not_air_below", () -> () -> NotAirBelowPlacementMod.CODEC);
-
-	public final Supplier<PlacementModifierType<NotInBlockPlacementMod>> NOT_IN_BLOCK = REGISTRY.register("not_in_block", () -> () -> NotInBlockPlacementMod.CODEC);
-
 	public final Supplier<PlacementModifierType<RandomYPlacementMod>> RANDOM_Y = REGISTRY.register("random_y", () -> () -> RandomYPlacementMod.CODEC);
 
 	public final Supplier<PlacementModifierType<SeekDownPlacementMod>> SEEK_DOWN = REGISTRY.register("seek", () -> () -> SeekDownPlacementMod.CODEC);
-
-	public final Supplier<PlacementModifierType<UnderBlockPlacementMod>> UNDER_BLOCK = REGISTRY.register("under_block", () -> () -> UnderBlockPlacementMod.CODEC);
 
 }

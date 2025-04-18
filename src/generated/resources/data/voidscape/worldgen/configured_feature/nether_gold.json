@@ -1,0 +1,17 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+    "chance": 0.25,
+    "max": 7,
+    "predicate": {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:netherrack"
+    },
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:nether_gold_ore"
+      }
+    }
+  }
+}

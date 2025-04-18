@@ -7,23 +7,27 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.features.config.BooleanFeatureConfig;
 import tamaized.voidscape.features.config.ClusterConfig;
 import tamaized.voidscape.registry.feature.ModFeatures;
 
 @Component
-public class AntispireConfiguredFeatureBootstrap extends ConfiguredFeatureBootstrapHolder {
+public class EmeraldConfiguredFeatureBootstrap extends ConfiguredFeatureBootstrapHolder {
 
 	@Autowired
 	private ModFeatures features;
 
 	@Override
 	public String name() {
-		return "antispire";
+		return "emerald";
 	}
 
 	@Override
 	public ConfiguredFeature<?, ?> make(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-		return new ConfiguredFeature<>(features.SPIRE.get(), new BooleanFeatureConfig(true));
+		return new ConfiguredFeature<>(features.CLUSTER.get(), new ClusterConfig(
+			BlockStateProvider.simple(Blocks.EMERALD_ORE),
+			BlockPredicate.matchesBlocks(Blocks.STONE),
+			0.125F,
+			5
+		));
 	}
 }

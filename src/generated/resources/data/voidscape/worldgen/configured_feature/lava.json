@@ -1,0 +1,11 @@
+{
+  "type": "voidscape:fluid",
+  "config": {
+    "state": {
+      "Name": "minecraft:lava",
+      "Properties": {
+        "falling": "true"
+      }
+    }
+  }
+}

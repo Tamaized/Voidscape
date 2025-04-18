@@ -1,0 +1,17 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+    "chance": 0.25,
+    "max": 6,
+    "predicate": {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:stone"
+    },
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:iron_ore"
+      }
+    }
+  }
+}

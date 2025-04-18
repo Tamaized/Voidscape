@@ -1,0 +1,17 @@
+{
+  "type": "voidscape:cluster",
+  "config": {
+    "chance": 0.05,
+    "max": 1,
+    "predicate": {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:stone"
+    },
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "voidscape:titanite_ore"
+      }
+    }
+  }
+}
