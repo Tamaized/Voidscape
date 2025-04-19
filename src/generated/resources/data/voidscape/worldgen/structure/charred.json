@@ -1,20 +1,18 @@
 {
   "type": "voidscape:charred",
-  "step": "raw_generation",
-  "biomes": [
-    "voidscape:void"
-  ],
+  "biomes": "voidscape:void",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
       "spawns": [
         {
           "type": "voidscape:voids_wrath",
-          "weight": 100,
+          "maxCount": 1,
           "minCount": 1,
-          "maxCount": 1
+          "weight": 100
         }
       ]
     }
-  }
+  },
+  "step": "raw_generation"
 }
