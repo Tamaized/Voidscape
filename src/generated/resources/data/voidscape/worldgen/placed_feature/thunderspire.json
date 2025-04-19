@@ -1,0 +1,12 @@
+{
+  "feature": "voidscape:thunderspires",
+  "placement": [
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "voidscape:seek",
+      "check_below": false
+    }
+  ]
+}

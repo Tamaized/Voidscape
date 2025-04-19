@@ -18,4 +18,6 @@ public class ModFeaturePlacements {
 
 	public final Supplier<PlacementModifierType<SeekDownPlacementMod>> SEEK_DOWN = REGISTRY.register("seek", () -> () -> SeekDownPlacementMod.CODEC);
 
+	public final Supplier<PlacementModifierType<UnderBlockPlacementMod>> UNDER_BLOCK = REGISTRY.register("under_block", () -> () -> UnderBlockPlacementMod.CODEC);
+
 }

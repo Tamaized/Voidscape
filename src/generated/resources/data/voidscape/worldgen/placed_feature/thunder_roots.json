@@ -1,0 +1,21 @@
+{
+  "feature": "voidscape:thunder_roots",
+  "placement": [
+    {
+      "type": "voidscape:seek",
+      "check_below": true
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air",
+        "offset": [
+          0,
+          1,
+          0
+        ]
+      }
+    }
+  ]
+}

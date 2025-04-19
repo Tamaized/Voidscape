@@ -13,10 +13,7 @@ import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.bootstrap.IBootstrap;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
@@ -31,7 +28,9 @@ public class RegistryProvider {
 
 	@PostConstruct
 	private void setup() {
-		bootstraps.forEach(bootstrap -> builder = bootstrap.bootstrap(builder));
+		bootstraps.stream()
+			.sorted(Comparator.comparingInt(IBootstrap::priority))
+			.forEach(bootstrap -> builder = bootstrap.bootstrap(builder));
 	}
 
 	public CompletableFuture<HolderLookup.Provider> retrieve(GatherDataEvent event) {
