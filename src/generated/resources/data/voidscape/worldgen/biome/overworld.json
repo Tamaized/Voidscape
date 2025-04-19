@@ -1,0 +1,122 @@
+{
+  "carvers": {},
+  "creature_spawn_probability": 0.0,
+  "downfall": 0.0,
+  "effects": {
+    "additions_sound": {
+      "sound": "voidscape:ambience",
+      "tick_chance": 0.001500000013038516
+    },
+    "fog_color": 655628,
+    "foliage_color": 5011004,
+    "grass_color": 5011004,
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": true,
+      "sound": "voidscape:music"
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:mycelium"
+      },
+      "probability": 0.025
+    },
+    "sky_color": 655628,
+    "water_color": 3750089,
+    "water_fog_color": 655628
+  },
+  "features": [
+    [
+      "voidscape:sand"
+    ],
+    [],
+    [
+      "voidscape:titanite",
+      "voidscape:copper",
+      "voidscape:diamond",
+      "voidscape:emerald",
+      "voidscape:gold",
+      "voidscape:iron",
+      "voidscape:lapis",
+      "voidscape:redstone",
+      "voidscape:coal",
+      "voidscape:coal"
+    ],
+    [],
+    [],
+    [
+      "voidscape:water"
+    ],
+    [],
+    [
+      "voidscape:oak",
+      "voidscape:cherry"
+    ],
+    [],
+    [
+      "voidscape:flower_cherry",
+      "voidscape:grass_patch",
+      "voidscape:ethereal_fruit_overworld_patch"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {
+    "minecraft:creeper": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "minecraft:skeleton": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "minecraft:spider": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "minecraft:zombie": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    }
+  },
+  "spawners": {
+    "aether:aether_aerwhale": [],
+    "aether:aether_darkness_monster": [],
+    "aether:aether_sky_monster": [],
+    "aether:aether_surface_monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:spider",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "minecraft:zombie",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 20
+      },
+      {
+        "type": "minecraft:skeleton",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:creeper",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.0
+}

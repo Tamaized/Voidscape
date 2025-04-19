@@ -1,0 +1,77 @@
+{
+  "carvers": {},
+  "creature_spawn_probability": 0.0,
+  "downfall": 0.0,
+  "effects": {
+    "additions_sound": {
+      "sound": "voidscape:ambience",
+      "tick_chance": 0.001500000013038516
+    },
+    "fog_color": 655628,
+    "foliage_color": 5446026,
+    "grass_color": 5446026,
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": true,
+      "sound": "voidscape:music"
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:witch"
+      },
+      "probability": 0.025
+    },
+    "sky_color": 655628,
+    "water_color": 655628,
+    "water_fog_color": 655628
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "voidscape:thunder_fungus",
+      "voidscape:ethereal_fruit_void_patch"
+    ],
+    [],
+    [
+      "voidscape:thunder_fungus_block",
+      "voidscape:thunder_roots",
+      "voidscape:thunder_vines"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {
+    "voidscape:voidling": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    }
+  },
+  "spawners": {
+    "aether:aether_aerwhale": [],
+    "aether:aether_darkness_monster": [],
+    "aether:aether_sky_monster": [],
+    "aether:aether_surface_monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "voidscape:voidling",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.0
+}

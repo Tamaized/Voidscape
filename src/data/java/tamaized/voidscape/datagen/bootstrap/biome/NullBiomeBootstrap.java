@@ -4,17 +4,20 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
+import net.minecraft.util.random.Weight;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.bootstrap.feature.placed.AntispirePlacedFeatureBootstrap;
-import tamaized.voidscape.datagen.bootstrap.feature.placed.EtherealFruitVoidPatchPlacedFeatureBootstrap;
+import tamaized.voidscape.datagen.bootstrap.feature.placed.*;
 import tamaized.voidscape.registry.ModBiomes;
+import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModSounds;
 
 @Component
-public class AntispiresBiomeBootstrap implements IBiomeBootstrap {
+public class NullBiomeBootstrap implements IBiomeBootstrap {
 
 	@Autowired
 	private ModBiomes biomes;
@@ -23,14 +26,17 @@ public class AntispiresBiomeBootstrap implements IBiomeBootstrap {
 	private ModSounds sounds;
 
 	@Autowired
-	private AntispirePlacedFeatureBootstrap antispirePlacedFeatureBootstrap;
+	private ModEntities entities;
 
 	@Autowired
-	private EtherealFruitVoidPatchPlacedFeatureBootstrap etherealFruitVoidPatchPlacedFeatureBootstrap;
+	private NullTreePlacedFeatureBootstrap nullTreePlacedFeatureBootstrap;
+
+	@Autowired
+	private EtherealFruitNullPatchPlacedFeatureBootstrap etherealFruitNullPatchPlacedFeatureBootstrap;
 
 	@Override
 	public ResourceKey<Biome> key() {
-		return biomes.ANTISPIRES;
+		return biomes.NULL;
 	}
 
 	@Override
@@ -43,12 +49,12 @@ public class AntispiresBiomeBootstrap implements IBiomeBootstrap {
 				.fogColor(0x0A010C)
 				.waterColor(0x0A010C)
 				.waterFogColor(0x0A010C)
-				.skyColor(0x0A010C)
+				.skyColor(0XA010C)
 				.foliageColorOverride(0x0A010C)
 				.grassColorOverride(0x0A010C)
 				.ambientParticle(new AmbientParticleSettings(
-					ParticleTypes.ASH,
-					0.025F
+					ParticleTypes.END_ROD,
+					0.001F
 				))
 				.ambientAdditionsSound(new AmbientAdditionsSettings(
 					sounds.AMBIENCE,
@@ -62,11 +68,18 @@ public class AntispiresBiomeBootstrap implements IBiomeBootstrap {
 				))
 				.build())
 			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
-				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, antispirePlacedFeatureBootstrap.get().orElseThrow())
-				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, nullTreePlacedFeatureBootstrap.get().orElseThrow())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitNullPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
 			.mobSpawnSettings(new MobSpawnSettings.Builder()
 				.creatureGenerationProbability(0F)
+				.addMobCharge(entities.NULL_SERVANT.get(), 0.7F, 0.15F)
+				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+					entities.NULL_SERVANT.get(),
+					Weight.of(20),
+					1,
+					1
+				))
 				.build())
 			.build();
 	}
