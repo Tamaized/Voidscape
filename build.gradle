@@ -31,6 +31,8 @@ configurations {
 }
 
 shadowJar {
+	finalizedBy 'deleteSlimJar'
+
 	archiveClassifier.set('')
 	dependsOn(tasks.named("jar"))
 	afterEvaluate {
@@ -43,6 +45,16 @@ shadowJar {
 
 jar {
 	archiveClassifier = "slim"
+}
+
+tasks.register('deleteSlimJar', Delete) {
+	dependsOn tasks.shadowJar
+
+	delete layout.buildDirectory.dir("libs").map { libsDir ->
+		libsDir.asFileTree.matching { PatternFilterable pf ->
+			pf.include "*-slim.jar"
+		}
+	}
 }
 
 def secrets = new Properties()
