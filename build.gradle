@@ -92,10 +92,10 @@ sourceSets {
 		compileClasspath += main.compileClasspath + main.output
 
 		java {
-			srcDirs = ['src/main/java', 'src/data/java']
+			srcDirs = ['src/data/java', 'src/main/java']
 		}
 		resources {
-			srcDirs = ['src/main/resources']
+			srcDirs = ['src/data/resources', 'src/main/resources']
 		}
 	}
 }
