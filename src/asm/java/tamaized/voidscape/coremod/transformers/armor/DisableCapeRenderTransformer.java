@@ -14,18 +14,20 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#injectLivingEntityAttributes}
+ * {@link tamaized.voidscape.asm.ASMHooks#disableCapeRender}
  */
-public class InjectLivingEntityAttributesTransformer implements ITransformer<MethodNode> {
+public class DisableCapeRenderTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findLast(ASMUtil.findFieldInstructions(node, Opcodes.PUTFIELD, "net/minecraft/world/entity/LivingEntity", "attributes")).ifPresent(instruction -> {
-			node.instructions.insert(instruction, ASMAPI.listOf(
-				new VarInsnNode(Opcodes.ALOAD, 0),
-				ASMUtil.invokeAsmHook("injectLivingEntityAttributes", "(Lnet/minecraft/world/entity/LivingEntity;)V")
-			));
-		});
+		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/world/item/ItemStack", "is", "(Lnet/minecraft/world/item/Item;)Z")
+			.findFirst()
+			.ifPresent(instruction -> {
+				node.instructions.insert(instruction, ASMAPI.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 12),
+					ASMUtil.invokeAsmHook("disableCapeRender", "(ZLnet/minecraft/world/item/ItemStack;)Z")
+				));
+			});
 		return node;
 	}
 
@@ -37,9 +39,9 @@ public class InjectLivingEntityAttributesTransformer implements ITransformer<Met
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.world.entity.LivingEntity",
-			"<init>",
-			"(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V"
+			"net.minecraft.client.renderer.entity.layers.CapeLayer",
+			"render",
+			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V"
 		));
 	}
 

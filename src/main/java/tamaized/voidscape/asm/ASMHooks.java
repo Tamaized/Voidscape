@@ -41,9 +41,10 @@ public class ASMHooks {
 	public static float PlayerEntity_getAttackStrengthScale;
 
 	/**
+	 * {@link tamaized.voidscape.coremod.transformers.armor.DisableCapeRenderTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
-	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}
 	 */
 	public static boolean disableCapeRender(boolean o, ItemStack stack) {
 		return o || stack.is(armor.corruptArmorSet().CORRUPT_CHEST.get()) || stack.getOrDefault(components.ELYTRA, false);
