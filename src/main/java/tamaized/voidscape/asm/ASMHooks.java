@@ -16,54 +16,40 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import tamaized.beanification.Autowired;
-import tamaized.voidscape.registry.ModAttributes;
+import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponents;
 
 import java.util.Map;
-import java.util.Optional;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
 
 	@Autowired
-	private static ModAttributes attributes;
+	private static ModArmorSetComponentDirectory armor;
+
+	@Autowired
+	private static ModItemComponents components;
 
 	public static float PlayerEntity_getAttackStrengthScale;
 
 	/**
 	 * Injection Point:<br>
-	 * {@link LivingEntity#LivingEntity(EntityType, Level)}<br>
-	 * [AFTER] PUTFIELD : attributes
+	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
+	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}
 	 */
-	public static void injectLivingEntityAttributes(LivingEntity entity) {
-		AttributeSupplier.Builder n = AttributeSupplier.builder();
-		n.builder.putAll(entity.attributes.supplier.instances);
-		attributes.assignAttributes(n);
-		entity.attributes = new AttributeMap(n.build());
+	public static boolean disableCapeRender(boolean o, ItemStack stack) {
+		return o || stack.is(armor.corruptArmorSet().CORRUPT_CHEST.get()) || stack.getOrDefault(components.ELYTRA, false);
 	}
 
 	/**
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
-	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static boolean capeLayer(boolean o, ItemStack stack) { // Prevents the cape from rendering
-		return o || stack.is(ModArmors.CORRUPT_CHEST.get()) || ModArmors.elytra(stack);
-	}
-
-	*//**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}<br>
 	 * [BEFORE] IRETURN

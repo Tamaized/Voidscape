@@ -3,11 +3,13 @@ package tamaized.voidscape.registry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.util.NamespaceUtils;
 
@@ -30,14 +32,17 @@ public class ModAttributes {
 
 	public final String DRACONIC_HEALTH_ID = "draconic_health";
 
-	public void assignAttributes(AttributeSupplier.Builder n) {
-		n.add(VOIDIC_VISIBILITY, 1F);
-		n.add(VOIDIC_INFUSION, 1F);
-		n.add(VOIDIC_INFUSION_RES, 1F);
-		n.add(VOIDIC_PARANOIA_RES, 1F);
-		n.add(VOIDIC_RES, 0F);
-		n.add(VOIDIC_DMG, 0F);
-		n.add(VOIDIC_ARROW_DMG, 0F);
+	@PostConstruct
+	private void setup(IEventBus bus) {
+		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
+			event.add(e, VOIDIC_VISIBILITY, 1F);
+			event.add(e, VOIDIC_INFUSION, 1F);
+			event.add(e, VOIDIC_INFUSION_RES, 1F);
+			event.add(e, VOIDIC_PARANOIA_RES, 1F);
+			event.add(e, VOIDIC_RES, 0F);
+			event.add(e, VOIDIC_DMG, 0F);
+			event.add(e, VOIDIC_ARROW_DMG, 0F);
+		}));
 	}
 
 }
