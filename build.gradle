@@ -41,6 +41,10 @@ shadowJar {
 	relocate 'tamaized.regutil', "tamaized.${project.mod_id}.regutil"
 }
 
+jar {
+	archiveClassifier = "slim"
+}
+
 def secrets = new Properties()
 def secretsFile = file('secrets.properties')
 if (secretsFile.exists()) {
@@ -170,7 +174,7 @@ neoForge {
 
 afterEvaluate {
 	tasks.withType(RunGameTask).configureEach {
-		classpathProvider.setFrom(classpathProvider.files.stream().filter(f -> !f.toString().contains('asm')).toList())
+		classpathProvider.setFrom(classpathProvider.files.stream().filter(f -> !f.toString().contains('/asm/build/')).toList())
 	}
 }
 

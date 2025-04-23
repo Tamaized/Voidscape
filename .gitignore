@@ -10,6 +10,7 @@
 !/asm/
 !/asm/**
 /asm/out
+/asm/build
 !/src/
 !/src/**
 !/libs/
