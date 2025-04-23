@@ -19,12 +19,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
+import tamaized.beanification.Autowired;
+import tamaized.voidscape.registry.ModAttributes;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,32 +36,24 @@ import java.util.Optional;
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
 
-	public static long seed;
-	public static float PlayerEntity_getAttackStrengthScale;
-/*
-	*//**
-	 * Injection Point:<br>
-	 * {@link net.minecraft.world.level.levelgen.WorldOptions#WorldOptions(long, boolean, boolean, Optional)} <br>
-	 * [BEFORE FIRST PUTFIELD]
-	 *//*
-	public static long seed(long seed) {
-		ASMHooks.seed = seed;
-		return seed;
-	}
+	@Autowired
+	private static ModAttributes attributes;
 
-	*//**
+	public static float PlayerEntity_getAttackStrengthScale;
+
+	/**
 	 * Injection Point:<br>
 	 * {@link LivingEntity#LivingEntity(EntityType, Level)}<br>
 	 * [AFTER] PUTFIELD : attributes
-	 *//*
-	public static void handleEntityAttributes(LivingEntity entity) {
+	 */
+	public static void injectLivingEntityAttributes(LivingEntity entity) {
 		AttributeSupplier.Builder n = AttributeSupplier.builder();
 		n.builder.putAll(entity.attributes.supplier.instances);
-		ModAttributes.assignAttributes(n);
+		attributes.assignAttributes(n);
 		entity.attributes = new AttributeMap(n.build());
 	}
 
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
 	 * [AFTER] INVOKEVIRTUAL {@link ItemStack#is(Item)}

@@ -45,9 +45,12 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.mutable.MutableObject;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.biome.LayeredBiomeProvider;
+import tamaized.voidscape.util.LevelUtil;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
@@ -64,7 +67,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@Configurable
 public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
+
+	@Autowired
+	private LevelUtil levelUtil;
 
 	public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder.mapCodec((p_236091_0_) -> p_236091_0_.
 			group(BiomeSource.CODEC
@@ -219,7 +226,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int centerZ = chunk.getPos().z;
 		int x = centerX * 16;
 		int z = centerZ * 16;
-		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(ASMHooks.seed));
+		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(levelUtil.getServerSideLevelSeed()));
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
 		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.STRUCTURE);
 		try {

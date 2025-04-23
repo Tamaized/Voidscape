@@ -5,10 +5,11 @@
 !donator.properties
 !gradlew
 !gradlew.bat
-!/contributors/
-!/contributors/**
 !/gradle
 !/gradle/**
+!/asm/
+!/asm/**
+/asm/out
 !/src/
 !/src/**
 !/libs/

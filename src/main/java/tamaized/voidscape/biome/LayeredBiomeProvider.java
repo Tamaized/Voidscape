@@ -15,10 +15,13 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.fml.ModList;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.biome.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.biome.genlayer.GenLayerRandomWithOneMajorBiomes;
 import tamaized.voidscape.biome.genlayer.legacy.*;
+import tamaized.voidscape.util.LevelUtil;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,6 +29,7 @@ import java.util.function.LongFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@Configurable
 public class LayeredBiomeProvider extends BiomeSource {
 
 	public static final MapCodec<LayeredBiomeProvider> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance.group(
@@ -64,6 +68,9 @@ public class LayeredBiomeProvider extends BiomeSource {
 			return result.get();
 		}).filter(Objects::nonNull).toList();
 	}
+
+	@Autowired
+	private LevelUtil levelUtil;
 
 	private final HolderGetter<Biome> registry;
 	private final List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> possibleBiomes;
@@ -163,7 +170,7 @@ public class LayeredBiomeProvider extends BiomeSource {
 	}
 
 	public Layer makeLayers(long salt, GenLayerRandomWithOneMajorBiomes layer) {
-		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, ASMHooks.seed + salt, context), layer);
+		AreaFactory<LazyArea> areaFactory = makeLayers((context) -> new LazyAreaContext(25, levelUtil.getServerSideLevelSeed() + salt, context), layer);
 		return new Layer(areaFactory) {
 			@Override
 			public Holder<Biome> get(Registry<Biome> p_242936_1_, int x, int y) {
@@ -187,7 +194,7 @@ public class LayeredBiomeProvider extends BiomeSource {
 		final int layerTopUpwardsStart = layers[3];
 		final int m1 = layers[1];
 		final int m2 = layers[2];
-		layerMergeRandom.setSeed(ASMHooks.seed + (x & -4) * 25117L + (z & -4) * 151121L);
+		layerMergeRandom.setSeed(levelUtil.getServerSideLevelSeed() + (x & -4) * 25117L + (z & -4) * 151121L);
 		return getBiome(
 
 				y < (layerBottomDownwardsStart - 2) ? genBottomDownwards.get().area.get(x, z) :

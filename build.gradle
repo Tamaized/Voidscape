@@ -1,3 +1,5 @@
+import net.neoforged.moddevgradle.internal.RunGameTask
+
 buildscript {
 	repositories {
 		maven {
@@ -30,6 +32,10 @@ configurations {
 
 shadowJar {
 	archiveClassifier.set('')
+	dependsOn(tasks.named("jar"))
+	afterEvaluate {
+		from({ tasks.named("jar").get().outputs })
+	}
 	configurations = [project.configurations.shade]
 	relocate 'tamaized.beanification', "tamaized.${project.mod_id}.beanification"
 	relocate 'tamaized.regutil', "tamaized.${project.mod_id}.regutil"
@@ -66,6 +72,10 @@ base {
 	archivesName = "Voidscape"
 }
 
+subprojects {
+	version = project(":").version
+}
+
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(21))
@@ -95,6 +105,8 @@ configurations {
 }
 
 neoForge {
+	evaluationDependsOnChildren()
+
 	def mod_id = project.mod_id
 	version = project.neoforge_version
 
@@ -111,14 +123,19 @@ neoForge {
 			it.sourceSet this.sourceSets.main
 			it.sourceSet this.sourceSets.data
 		}
+
+		'asm' {
+			it.sourceSet project(":asm").sourceSets.main
+		}
 	}
 
 	def mainMod = mods."${project.mod_id}"
 	def dataMod = mods."${project.mod_id}-data"
+	def asmMod = mods."asm"
 
 	unitTest {
 		enable()
-		testedMod = mainMod
+		testedMod = dataMod
 	}
 
 	runs {
@@ -126,7 +143,7 @@ neoForge {
 			gameDirectory = project.file('run')
 			systemProperty 'forge.logging.console.level', 'debug'
 			logLevel = org.slf4j.event.Level.DEBUG
-			loadedMods = [mainMod]
+			loadedMods = [mainMod, asmMod]
 		}
 
 		client {
@@ -146,8 +163,14 @@ neoForge {
 			gameDirectory = project.file('run-data')
 			programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 			sourceSet = this.sourceSets.data
-			loadedMods = [dataMod]
+			loadedMods = [dataMod, asmMod]
 		}
+	}
+}
+
+afterEvaluate {
+	tasks.withType(RunGameTask).configureEach {
+		classpathProvider.setFrom(classpathProvider.files.stream().filter(f -> !f.toString().contains('asm')).toList())
 	}
 }
 
@@ -170,6 +193,8 @@ repositories {
 }
 
 dependencies {
+	jarJar implementation(project(":asm"))
+
 	runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
 //    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
 
@@ -194,6 +219,10 @@ dependencies {
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
 	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.3'
 	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
+}
+
+configurations.testImplementation {
+	exclude module: 'asm'
 }
 
 test {
