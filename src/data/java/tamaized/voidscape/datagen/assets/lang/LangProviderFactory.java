@@ -6,17 +6,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
@@ -25,7 +24,6 @@ import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelProviderFactory;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.fluid.ModFluidBuckets;
 import tamaized.voidscape.registry.fluid.ModFluidTypes;
-import tamaized.voidscape.registry.fluid.ModFluids;
 
 import java.util.function.Supplier;
 
@@ -152,9 +150,9 @@ public class LangProviderFactory {
 				addAttribute(attributes.VOIDIC_VISIBILITY, "Voidic Visibility");
 				addAttribute(attributes.VOIDIC_INFUSION, "Voidic Infusion");
 
-				addEffect(effects.AURA, "Voidic Aura");
-				addEffect(effects.FORTIFIED, "Voidic Fortification");
-				addEffect(effects.ICHOR, "Ichor");
+				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
+				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");
+				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
 
 				addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration");
 
@@ -175,6 +173,11 @@ public class LangProviderFactory {
 
 			private void addTooltip(String name, String translation) {
 				add(Voidscape.MODID + ".tooltip." + name, translation);
+			}
+
+			private void addEffectWithDescription(Supplier<MobEffect> effect, String name, String description) {
+				addEffect(effect, name);
+				add(effect.get().getDescriptionId().concat(".description"), description);
 			}
 
 			private void addEntityTypeWithSpawnEgg(Supplier<? extends EntityType<? extends Entity>> entity, Supplier<Item> spawnEgg, String translation) {
