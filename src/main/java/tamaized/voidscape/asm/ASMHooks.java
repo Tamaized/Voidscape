@@ -8,11 +8,13 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -24,8 +26,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import tamaized.beanification.Autowired;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
+import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModItemComponents;
+import tamaized.voidscape.util.LevelUtil;
 
 import java.util.Map;
 
@@ -38,10 +43,16 @@ public class ASMHooks {
 	@Autowired
 	private static ModItemComponents components;
 
+	@Autowired
+	private static ModDataAttachments dataAttachments;
+
+	@Autowired
+	private static LevelUtil levelUtil;
+
 	public static float PlayerEntity_getAttackStrengthScale;
 
 	/**
-	 * {@link tamaized.voidscape.coremod.transformers.armor.DisableCapeRenderTransformer}<p>
+	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
 	 *
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
@@ -51,61 +62,38 @@ public class ASMHooks {
 	}
 
 	/**
+	 * {@link tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}<br>
-	 * [BEFORE] IRETURN
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static boolean elytraLayer(boolean o, ItemStack stack) {
-		return o || ModArmors.elytra(stack);
+	 */
+	public static boolean shouldRenderElytra(boolean o, ItemStack stack) {
+		return o || stack.getOrDefault(components.ELYTRA, false);
 	}
 
-	*//**
+	/**
+	 * {@link tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link LivingEntityRenderer#render(LivingEntity, float, float, PoseStack, MultiBufferSource, int)}<br>
-	 * [BEFORE] INVOKEVIRTUAL : {@link EntityModel#renderToBuffer(PoseStack, VertexConsumer, int, int, float, float, float, float)}
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static float handleEntityTransparency(float alpha, LivingEntity entity) {
-		return Math.min(Mth.clamp(1F - entity.getData(ModDataAttachments.INSANITY).getInfusion() / 600F, 0F, 1F), alpha);
+	 */
+	public static float modifyEntityTransparency(float alpha, LivingEntity entity) {
+		return Math.min(Mth.clamp(1F - entity.getData(dataAttachments.INSANITY).getInfusion() / 600F, 0F, 1F), alpha);
 	}
 
-	*//**
+	/**
+	 * {@link tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
-	 * [AFTER] INVOKEVIRTUAL : {@link EntityModel#renderType(ResourceLocation)}
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static RenderType handleEntityTransparencyRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
-		return entity.level() != null && Voidscape.checkForVoidDimension(entity.level()) && !(entity instanceof IEthereal) ? RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : type;
+	 */
+	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
+		return entity.level() != null && levelUtil.isInVoidDimension(entity.level()) && !(entity instanceof IEthereal) ?
+			RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) :
+			type;
 	}
 
-	*//**
-	 * Injection Point:<br>
-	 * {@link net.neoforged.neoforge.common.CommonHooks#onLivingDeath(LivingEntity, DamageSource)}<br>
-	 * [BEFORE FIRST GETSTATIC]
-	 *//*
-	public static boolean death(LivingEntity entity, DamageSource source) {
-		if (entity instanceof ServerPlayer player) {
-			if (Voidscape.checkForVoidDimension(player.level())) {
-				player.setHealth(entity.getMaxHealth() * 0.1F);
-				player.removeEffectsCuredBy(EffectCures.MILK);
-				if (!player.level().isClientSide())
-					Voidscape.getPlayersSpawnLevel(player).ifPresent(level -> player.changeDimension(level, VoidTeleporter.INSTANCE));
-				return true;
-			}
-		} else {
-			if ((source.getDirectEntity() instanceof Player || source.getEntity() instanceof Player) &&
-					Voidscape.checkForVoidDimension(entity.level()) &&
-					entity.getData(ModDataAttachments.INSANITY).getInfusion() > 200 &&
-					entity.getRandom().nextInt(3) > 0) {
-				Containers.dropItemStack(entity.level(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(ModItems.ETHEREAL_ESSENCE.get()));
-			}
-		}
-		return NeoForge.EVENT_BUS.post(new LivingDeathEvent(entity, source)).isCanceled();
-	}
-
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link Player#attack(Entity)}<br>
 	 * [AFTER INVOKEVIRTUAL {@link Player#getAttackStrengthScale(float)}]

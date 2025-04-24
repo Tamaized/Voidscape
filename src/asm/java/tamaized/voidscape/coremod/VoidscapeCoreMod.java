@@ -2,7 +2,10 @@ package tamaized.voidscape.coremod;
 
 import cpw.mods.modlauncher.api.ITransformer;
 import net.neoforged.neoforgespi.coremod.ICoreMod;
-import tamaized.voidscape.coremod.transformers.armor.DisableCapeRenderTransformer;
+import tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer;
+import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer;
+import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
+import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer;
 
 import java.util.List;
 
@@ -10,7 +13,13 @@ public class VoidscapeCoreMod implements ICoreMod {
 	@Override
 	public Iterable<? extends ITransformer<?>> getTransformers() {
 		return List.of(
-			new DisableCapeRenderTransformer()
+			// Elytra
+			new DisableCapeRenderTransformer(),
+			new ShouldRenderElytraTransformer(),
+
+			// Entity Render Transparency
+			new ModifyEntityRenderTransparencyTransformer(),
+			new ModifyEntityRenderTypeTransformer()
 		);
 	}
 }

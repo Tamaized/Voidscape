@@ -1,4 +1,4 @@
-package tamaized.voidscape.coremod.transformers.armor;
+package tamaized.voidscape.coremod.transformers.entity.render.transparency;
 
 import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
@@ -14,18 +14,18 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#disableCapeRender}
+ * {@link tamaized.voidscape.asm.ASMHooks#modifyEntityTransparency}
  */
-public class DisableCapeRenderTransformer implements ITransformer<MethodNode> {
+public class ModifyEntityRenderTransparencyTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/world/item/ItemStack", "is", "(Lnet/minecraft/world/item/Item;)Z")
+		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderToBuffer", "(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V")
 			.findFirst()
 			.ifPresent(instruction -> {
-				node.instructions.insert(instruction, ASMAPI.listOf(
-					new VarInsnNode(Opcodes.ALOAD, 12),
-					ASMUtil.invokeAsmHook("disableCapeRender", "(ZLnet/minecraft/world/item/ItemStack;)Z")
+				node.instructions.insertBefore(instruction, ASMAPI.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 1),
+					ASMUtil.invokeAsmHook("modifyEntityTransparency", "(FLnet/minecraft/world/entity/LivingEntity;)F")
 				));
 			});
 		return node;
@@ -39,9 +39,9 @@ public class DisableCapeRenderTransformer implements ITransformer<MethodNode> {
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.client.renderer.entity.layers.CapeLayer",
+			"net.minecraft.client.renderer.entity.LivingEntityRenderer",
 			"render",
-			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V"
+			"(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
 		));
 	}
 
