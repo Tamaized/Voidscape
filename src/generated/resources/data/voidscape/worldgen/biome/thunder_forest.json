@@ -35,13 +35,13 @@
     [],
     [],
     [
-      "voidscape:thunder_fungus",
-      "voidscape:ethereal_fruit_void_patch"
+      "voidscape:ethereal_fruit_void_patch",
+      "voidscape:thunder_fungus"
     ],
     [],
     [
-      "voidscape:thunder_roots",
       "voidscape:thunder_fungus_block",
+      "voidscape:thunder_roots",
       "voidscape:thunder_vines"
     ]
   ],

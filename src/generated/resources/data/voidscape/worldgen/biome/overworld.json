@@ -32,14 +32,14 @@
     ],
     [],
     [
-      "voidscape:diamond",
-      "voidscape:redstone",
-      "voidscape:iron",
-      "voidscape:copper",
-      "voidscape:lapis",
-      "voidscape:gold",
-      "voidscape:emerald",
       "voidscape:coal",
+      "voidscape:copper",
+      "voidscape:diamond",
+      "voidscape:emerald",
+      "voidscape:gold",
+      "voidscape:iron",
+      "voidscape:lapis",
+      "voidscape:redstone",
       "voidscape:titanite"
     ],
     [],
@@ -54,9 +54,9 @@
     ],
     [],
     [
+      "voidscape:ethereal_fruit_overworld_patch",
       "voidscape:flower_cherry",
-      "voidscape:grass_patch",
-      "voidscape:ethereal_fruit_overworld_patch"
+      "voidscape:grass_patch"
     ]
   ],
   "has_precipitation": false,

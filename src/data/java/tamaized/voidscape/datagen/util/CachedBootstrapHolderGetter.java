@@ -8,10 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,6 +42,7 @@ public class CachedBootstrapHolderGetter {
 			.values().stream()
 			.map(Holder::unwrapKey)
 			.map(Optional::orElseThrow)
+			.sorted()
 			.toList());
 
 		cache.put(key, entries);
