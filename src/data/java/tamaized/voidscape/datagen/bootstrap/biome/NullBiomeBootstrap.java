@@ -67,7 +67,7 @@ public class NullBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, nullTreePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitNullPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())

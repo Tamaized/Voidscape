@@ -69,7 +69,7 @@ public class EndBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, amethystPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, strangePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, chorusPlacedFeatureBootstrap.get().orElseThrow())

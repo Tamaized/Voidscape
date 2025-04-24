@@ -69,7 +69,7 @@ public class ThunderspiresBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, thunderspirePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())

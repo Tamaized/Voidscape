@@ -30,25 +30,25 @@
     [],
     [],
     [
-      "voidscape:soul_sand",
-      "voidscape:quartz",
       "voidscape:nether_gold",
       "voidscape:debris",
-      "voidscape:flesh"
+      "voidscape:quartz",
+      "voidscape:flesh",
+      "voidscape:soul_sand"
     ],
     [],
     [],
     [],
     [],
     [
-      "voidscape:crimson_fungus",
-      "voidscape:lava"
+      "voidscape:lava",
+      "voidscape:crimson_fungus"
     ],
     [],
     [
+      "voidscape:ethereal_fruit_nether_patch",
       "voidscape:crimson_fungus_block",
-      "voidscape:crimson_roots",
-      "voidscape:ethereal_fruit_nether_patch"
+      "voidscape:crimson_roots"
     ]
   ],
   "has_precipitation": false,

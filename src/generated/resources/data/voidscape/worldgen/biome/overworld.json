@@ -32,16 +32,15 @@
     ],
     [],
     [
-      "voidscape:titanite",
-      "voidscape:copper",
       "voidscape:diamond",
-      "voidscape:emerald",
-      "voidscape:gold",
-      "voidscape:iron",
-      "voidscape:lapis",
       "voidscape:redstone",
+      "voidscape:iron",
+      "voidscape:copper",
+      "voidscape:lapis",
+      "voidscape:gold",
+      "voidscape:emerald",
       "voidscape:coal",
-      "voidscape:coal"
+      "voidscape:titanite"
     ],
     [],
     [],
@@ -50,8 +49,8 @@
     ],
     [],
     [
-      "voidscape:oak",
-      "voidscape:cherry"
+      "voidscape:cherry",
+      "voidscape:oak"
     ],
     [],
     [

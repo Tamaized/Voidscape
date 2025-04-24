@@ -109,7 +109,7 @@ public class OverworldBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.RAW_GENERATION, sandPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, titanitePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, copperPlacedFeatureBootstrap.get().orElseThrow())

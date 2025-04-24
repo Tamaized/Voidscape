@@ -87,7 +87,7 @@ public class NetherBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, soulSandPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, quartzPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, netherGoldPlacedFeatureBootstrap.get().orElseThrow())

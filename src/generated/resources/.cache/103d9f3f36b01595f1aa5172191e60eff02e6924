@@ -1,13 +1,13 @@
-// 1.21.1	2025-04-19T11:48:14.310342823	Registries
+// 1.21.1	2025-04-24T17:43:40.477651906	Registries
 80751452a92a6050e2d65828904bdfb838e67434 data/voidscape/damage_type/voidic.json
 2e11a0a7bd86af74af564bbaa17cbb7a87403a31 data/voidscape/dimension/void.json
 470d3af142d5b914ed8d2641b3bebb68d03fe8f9 data/voidscape/dimension_type/void.json
 2284c02688a3501d79b56922166cc5bb654c119b data/voidscape/worldgen/biome/antispires.json
-c4ac79e5a7f000f1898591165e616ad743e00639 data/voidscape/worldgen/biome/end.json
-d0eaf38f2fb18c6ad788161db09d68bb4b2d155c data/voidscape/worldgen/biome/nether.json
+6c60256072aa2428d0127321761e5821e8535412 data/voidscape/worldgen/biome/end.json
+a37fa43d3dc0ae2ec933b5d0f1b2aaa20a8a3477 data/voidscape/worldgen/biome/nether.json
 99127bfd90ec00e76aec2fe1be7cfb4b38d04be4 data/voidscape/worldgen/biome/null.json
-e48ccb6fbb6ee73d380055b1d5ac96c3bca1d3ba data/voidscape/worldgen/biome/overworld.json
-ba1c63b88c9df40e4e0627e67337e4318a5b71e9 data/voidscape/worldgen/biome/thunder_forest.json
+5b19e9fdbdf5b52d581193e2eb02838cda6c4fb2 data/voidscape/worldgen/biome/overworld.json
+c106534eb832b5308edd8fc0173d8181731645ac data/voidscape/worldgen/biome/thunder_forest.json
 66c62287dcd0a451d48025b66aa66a994023a27b data/voidscape/worldgen/biome/thunderspires.json
 5728bf8bfe2c8b6769154fca77a316f220bbc4a1 data/voidscape/worldgen/biome/void.json
 6236e369315d4c94a7b90ac96c2122c6454b555e data/voidscape/worldgen/configured_feature/amethyst.json

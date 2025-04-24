@@ -7,11 +7,13 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.bootstrap.IBootstrap;
+import tamaized.voidscape.datagen.util.CachedBootstrapHolderGetter;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -23,11 +25,15 @@ public class RegistryProvider {
 	@Directory(IBootstrap.class)
 	private List<IBootstrap> bootstraps;
 
+	@Autowired
+	private CachedBootstrapHolderGetter cachedBootstrapHolderGetter;
+
 	private RegistrySetBuilder builder = new RegistrySetBuilder();
 	private DatapackBuiltinEntriesProvider value;
 
 	@PostConstruct
 	private void setup() {
+		cachedBootstrapHolderGetter.invalidate();
 		bootstraps.stream()
 			.sorted(Comparator.comparingInt(IBootstrap::priority))
 			.forEach(bootstrap -> builder = bootstrap.bootstrap(builder));

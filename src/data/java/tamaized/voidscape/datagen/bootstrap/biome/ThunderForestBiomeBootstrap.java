@@ -75,7 +75,7 @@ public class ThunderForestBiomeBootstrap implements IBiomeBootstrap {
 					true
 				))
 				.build())
-			.generationSettings(new BiomeGenerationSettings.PlainBuilder()
+			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, thunderFungusPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, thunderFungusBlockPlacedFeatureBootstrap.get().orElseThrow())
