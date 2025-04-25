@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.util;
 
+import com.aetherteam.aether.data.generators.AetherRegistrySets;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
@@ -43,6 +44,12 @@ public class CachedBootstrapHolderGetter {
 			.map(Holder::unwrapKey)
 			.map(Optional::orElseThrow)
 			.sorted()
+			.toList());
+
+		entries.addAll(bootstrapContextHolderLookupResolver.resolveFor(AetherRegistrySets.BUILDER).patches().lookupOrThrow(key)
+			.listElements()
+			.map(Holder.Reference::unwrapKey)
+			.map(Optional::orElseThrow)
 			.toList());
 
 		cache.put(key, entries);

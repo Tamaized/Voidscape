@@ -1,8 +1,11 @@
 package tamaized.voidscape.datagen.util;
 
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.data.registries.RegistryPatchGenerator;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Component;
@@ -14,6 +17,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class BootstrapContextHolderLookupResolver {
@@ -47,6 +51,13 @@ public class BootstrapContextHolderLookupResolver {
 				return null;
 			}
 		});
+	}
+
+	public RegistrySetBuilder.PatchedRegistries resolveFor(RegistrySetBuilder registrySetBuilder) {
+		return RegistryPatchGenerator.createLookup(
+			CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor()),
+			registrySetBuilder
+		).join();
 	}
 
 }
