@@ -13,7 +13,7 @@ import tamaized.voidscape.advancement.ItemMatchesAdvancementTrigger;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModDimensions;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.Optional;
 import java.util.function.Consumer;

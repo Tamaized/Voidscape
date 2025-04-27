@@ -4,7 +4,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
@@ -14,7 +13,7 @@ import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModDimensions;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.Optional;
 import java.util.function.Consumer;

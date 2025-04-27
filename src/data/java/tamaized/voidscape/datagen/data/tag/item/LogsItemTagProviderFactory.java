@@ -1,15 +1,11 @@
 package tamaized.voidscape.datagen.data.tag.item;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.RegistryProvider;
-import tamaized.voidscape.datagen.data.tag.block.BlockTagProviderFactory;
-import tamaized.voidscape.datagen.data.tag.block.IBlockTagProviderFactory;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 @Component
 public class LogsItemTagProviderFactory implements IItemTagProviderFactory {

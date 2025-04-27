@@ -1,9 +1,7 @@
-package tamaized.voidscape.registry.tool;
+package tamaized.voidscape.registry;
 
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
-import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import tamaized.voidscape.registry.item.*;
 
 @Component

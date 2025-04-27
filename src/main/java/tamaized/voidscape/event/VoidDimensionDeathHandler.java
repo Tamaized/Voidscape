@@ -14,7 +14,7 @@ import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.dimension.SpawnPointTeleporter;
 import tamaized.voidscape.registry.ModDataAttachments;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 import tamaized.voidscape.util.LevelUtil;
 
 @Component

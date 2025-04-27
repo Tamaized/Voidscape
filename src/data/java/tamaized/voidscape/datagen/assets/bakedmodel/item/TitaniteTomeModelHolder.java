@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 @Component
 public class TitaniteTomeModelHolder extends ItemModelHolder {

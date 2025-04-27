@@ -5,15 +5,12 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModDimensions;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.function.Consumer;
 

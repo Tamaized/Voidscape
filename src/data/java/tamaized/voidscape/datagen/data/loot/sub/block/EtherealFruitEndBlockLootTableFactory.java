@@ -9,7 +9,7 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.RegistryProvider;
 import tamaized.voidscape.datagen.util.BlockLootTableUtil;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;

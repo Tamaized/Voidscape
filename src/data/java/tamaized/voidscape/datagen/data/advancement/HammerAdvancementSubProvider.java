@@ -9,13 +9,12 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.advancement.GenericAdvancementTrigger;
 import tamaized.voidscape.advancement.ItemMatchesAdvancementTrigger;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModDimensions;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.Optional;
 import java.util.function.Consumer;

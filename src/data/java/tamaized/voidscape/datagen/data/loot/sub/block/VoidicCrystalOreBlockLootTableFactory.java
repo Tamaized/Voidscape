@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;

@@ -12,7 +12,7 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.ModDimensions;
 import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.function.Consumer;
 

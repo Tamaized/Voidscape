@@ -5,7 +5,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
-import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
@@ -13,7 +12,6 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.fluid.ModFluidBuckets;
 import tamaized.voidscape.registry.fluid.ModFluids;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 @Component
 public class VoidicBucketModelHolder extends ItemModelHolder {

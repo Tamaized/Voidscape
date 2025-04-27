@@ -11,7 +11,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModLootTables;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 @Component
 public class CharredOutpostChestLootTable implements IChestLootTable {

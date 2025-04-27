@@ -8,10 +8,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.armor.set.*;
-import tamaized.voidscape.registry.block.*;
-import tamaized.voidscape.registry.item.*;
-import tamaized.voidscape.registry.tool.ModItemComponentDirectory;
 
 import java.util.function.Supplier;
 
