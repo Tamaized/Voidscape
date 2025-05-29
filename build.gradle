@@ -21,7 +21,6 @@ plugins {
 	id 'net.neoforged.moddev' version "${mdg_version}"
 	id "com.dorongold.task-tree" version "4.0.0"
 	id 'com.gradleup.shadow' version '8.3.3'
-	id 'io.github.0ffz.github-packages' version '1.+'
 }
 
 apply plugin: 'tamaized.beanification'
@@ -203,7 +202,14 @@ repositories {
 		name 'Modrinth\'s Maven' // EnderIO
 		url "https://api.modrinth.com/maven"
 	}
-	maven githubPackage.invoke("The-Aether-Team/The-Aether")
+	// https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-with-a-personal-access-token
+	maven {
+		url = uri("https://maven.pkg.github.com/The-Aether-Team/The-Aether")
+		credentials {
+			username = secrets.getProperty("gpr.user")
+			password = secrets.getProperty("gpr.key")
+		}
+	}
 	maven { url 'https://maven.wispforest.io' } // Aether - owolib
 	maven { url = "https://maven.su5ed.dev/releases" } // Aether - owolib - Sinytra
 }
