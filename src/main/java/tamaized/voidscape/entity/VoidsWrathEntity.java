@@ -86,6 +86,7 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	}
 
 
+	@SuppressWarnings("deprecation")
 	@org.jetbrains.annotations.Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {

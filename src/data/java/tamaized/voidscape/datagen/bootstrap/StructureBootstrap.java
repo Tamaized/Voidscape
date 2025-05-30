@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
-import tamaized.voidscape.datagen.bootstrap.biome.IBiomeBootstrap;
 import tamaized.voidscape.datagen.bootstrap.structure.StructureBootstrapHolder;
 
 import java.util.List;

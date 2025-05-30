@@ -93,6 +93,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		return spawnGroupData;
 	}

@@ -117,11 +117,11 @@ public class ModNoiseGeneratorSettings {
 	/**
 	 * This is altered via ASM to use {@link CorrectedNoiseSettings} instead of {@link NoiseSettings}
 	 */
-	private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {
+	/*private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {
 		NoiseSettings s = settings.noiseSettings();
 		NoiseSettings noise = new NoiseSettings(s.minY(), s.height(),s.noiseSizeHorizontal(), s.noiseSizeVertical());
 		return new NoiseGeneratorSettings(noise, settings.defaultBlock(), settings.defaultFluid(), settings.noiseRouter(), settings.surfaceRule(), settings.spawnTarget(), settings.seaLevel(), settings.disableMobGeneration(), settings.aquifersEnabled(), settings.oreVeinsEnabled(), settings.useLegacyRandomSource());
-	}
+	}*/
 
 	/**
 	 * Extends {@link NoiseSettings)} via asm
