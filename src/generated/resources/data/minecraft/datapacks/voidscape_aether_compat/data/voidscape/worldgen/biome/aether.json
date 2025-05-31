@@ -1,0 +1,139 @@
+{
+  "carvers": {},
+  "creature_spawn_probability": 0.0,
+  "downfall": 0.0,
+  "effects": {
+    "additions_sound": {
+      "sound": "voidscape:ambience",
+      "tick_chance": 0.001500000013038516
+    },
+    "fog_color": 9671612,
+    "foliage_color": 11665355,
+    "grass_color": 11665355,
+    "music": {
+      "max_delay": 24000,
+      "min_delay": 12000,
+      "replace_current_music": true,
+      "sound": "voidscape:music"
+    },
+    "particle": {
+      "options": {
+        "type": "aether:aether_portal"
+      },
+      "probability": 0.025
+    },
+    "sky_color": 12632319,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "features": [],
+  "has_precipitation": false,
+  "spawn_costs": {
+    "aether:aechor_plant": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:aerbunny": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:blue_swet": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:cockatrice": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:flying_cow": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:golden_swet": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:phyg": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:sheepuff": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    },
+    "aether:zephyr": {
+      "charge": 0.699999988079071,
+      "energy_budget": 0.15000000596046448
+    }
+  },
+  "spawners": {
+    "aether:aether_aerwhale": [],
+    "aether:aether_darkness_monster": [],
+    "aether:aether_sky_monster": [],
+    "aether:aether_surface_monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "aether:aerbunny",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 20
+      },
+      {
+        "type": "aether:blue_swet",
+        "maxCount": 2,
+        "minCount": 2,
+        "weight": 20
+      },
+      {
+        "type": "aether:flying_cow",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 20
+      },
+      {
+        "type": "aether:golden_swet",
+        "maxCount": 2,
+        "minCount": 2,
+        "weight": 20
+      },
+      {
+        "type": "aether:phyg",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 20
+      },
+      {
+        "type": "aether:sheepuff",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 20
+      },
+      {
+        "type": "aether:aechor_plant",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 20
+      },
+      {
+        "type": "aether:cockatrice",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 20
+      },
+      {
+        "type": "aether:zephyr",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 20
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.0
+}

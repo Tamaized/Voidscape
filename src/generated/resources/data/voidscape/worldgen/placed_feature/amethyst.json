@@ -11,6 +11,9 @@
     {
       "type": "voidscape:random_y",
       "y": 13
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

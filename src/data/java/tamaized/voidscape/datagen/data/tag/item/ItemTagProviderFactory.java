@@ -12,7 +12,7 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.datagen.data.tag.block.BlockTagProviderFactory;
 
 import java.util.List;

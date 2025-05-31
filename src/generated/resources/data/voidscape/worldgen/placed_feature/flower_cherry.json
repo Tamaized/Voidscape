@@ -19,6 +19,9 @@
           "waterlogged": "false"
         }
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

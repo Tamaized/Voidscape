@@ -6,7 +6,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 
 import java.util.List;
 

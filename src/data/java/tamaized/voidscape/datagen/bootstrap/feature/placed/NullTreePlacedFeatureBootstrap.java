@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -35,7 +36,8 @@ public class NullTreePlacedFeatureBootstrap extends PlacedFeatureBootstrapHolder
 				InSquarePlacement.spread(),
 				new SeekDownPlacementMod(true),
 				placementModUtil.AIR_ABOVE,
-				placementModUtil.NOT_AIR_BELOW
+				placementModUtil.NOT_AIR_BELOW,
+				BiomeFilter.biome()
 			)
 		);
 	}

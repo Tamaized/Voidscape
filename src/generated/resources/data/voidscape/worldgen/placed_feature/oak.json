@@ -23,6 +23,9 @@
           }
         }
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

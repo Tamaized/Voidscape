@@ -1,13 +1,9 @@
 package tamaized.voidscape.datagen.data.tag.item;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModItemTags;
 

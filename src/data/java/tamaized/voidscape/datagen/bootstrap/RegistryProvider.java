@@ -1,4 +1,4 @@
-package tamaized.voidscape.datagen;
+package tamaized.voidscape.datagen.bootstrap;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -12,7 +12,6 @@ import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.bootstrap.IBootstrap;
 import tamaized.voidscape.datagen.util.CachedBootstrapHolderGetter;
 
 import java.util.*;

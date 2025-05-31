@@ -3,6 +3,7 @@ package tamaized.voidscape.datagen.bootstrap.feature.placed;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -28,7 +29,8 @@ public class CrimsonFungusPlacedFeatureBootstrap extends PlacedFeatureBootstrapH
 			List.of(
 				CountPlacement.of(6),
 				InSquarePlacement.spread(),
-				new SeekDownPlacementMod(true)
+				new SeekDownPlacementMod(true),
+				BiomeFilter.biome()
 			)
 		);
 	}

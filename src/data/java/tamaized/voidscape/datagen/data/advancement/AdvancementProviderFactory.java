@@ -5,10 +5,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
-import tamaized.voidscape.datagen.RegistryProvider;
-import tamaized.voidscape.datagen.data.tag.block.BlockTagProviderFactory;
-import tamaized.voidscape.datagen.data.tag.damagetype.DamageTypeTagProviderFactory;
-import tamaized.voidscape.datagen.data.tag.item.ItemTagProviderFactory;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 
 import java.util.List;
 

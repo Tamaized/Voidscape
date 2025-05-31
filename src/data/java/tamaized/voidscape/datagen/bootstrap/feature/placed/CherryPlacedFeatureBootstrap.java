@@ -6,6 +6,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import tamaized.beanification.Component;
@@ -30,7 +31,8 @@ public class CherryPlacedFeatureBootstrap extends PlacedFeatureBootstrapHolder {
 				BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(
 					Blocks.CHERRY_SAPLING.defaultBlockState(),
 					Vec3i.ZERO
-				))
+				)),
+				BiomeFilter.biome()
 			)
 		);
 	}

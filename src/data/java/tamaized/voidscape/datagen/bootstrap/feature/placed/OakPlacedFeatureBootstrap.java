@@ -6,10 +6,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.*;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.bootstrap.feature.configured.NetherGoldConfiguredFeatureBootstrap;
@@ -45,7 +42,8 @@ public class OakPlacedFeatureBootstrap extends PlacedFeatureBootstrapHolder {
 				BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(
 					Blocks.OAK_SAPLING.defaultBlockState(),
 					Vec3i.ZERO
-				))
+				)),
+				BiomeFilter.biome()
 			)
 		);
 	}

@@ -4,7 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.DamageTypeTags;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.registry.ModDamageSource;
 
 @Component

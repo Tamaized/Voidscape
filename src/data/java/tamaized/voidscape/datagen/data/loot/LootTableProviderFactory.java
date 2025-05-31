@@ -5,7 +5,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.datagen.data.loot.sub.BlockLootTableSubProvider;
 import tamaized.voidscape.datagen.data.loot.sub.ChestLootTableSubProvider;
 import tamaized.voidscape.datagen.data.loot.sub.EntityLootTableSubProvider;
