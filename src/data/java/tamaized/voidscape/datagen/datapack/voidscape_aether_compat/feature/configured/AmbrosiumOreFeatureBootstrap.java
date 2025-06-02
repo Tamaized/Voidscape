@@ -14,17 +14,17 @@ import tamaized.voidscape.features.placements.RandomYPlacementMod;
 import java.util.List;
 
 @Component
-public class AetherDirtOreFeatureBootstrap extends PlacedFeatureBootstrapHolder {
+public class AmbrosiumOreFeatureBootstrap extends PlacedFeatureBootstrapHolder {
 
 	@Override
 	public String name() {
-		return "aether_dirt_ore";
+		return "ambrosium_ore";
 	}
 
 	@Override
 	public PlacedFeature make(BootstrapContext<PlacedFeature> context) {
 		return new PlacedFeature(
-			DirectReferenceHolder.of(AetherConfiguredFeatures.ORE_AETHER_DIRT_CONFIGURATION),
+			DirectReferenceHolder.of(AetherConfiguredFeatures.ORE_AMBROSIUM_CONFIGURATION),
 			List.of(
 				CountPlacement.of(2),
 				InSquarePlacement.spread(),

@@ -1,5 +1,5 @@
 {
-  "feature": "aether:berry_bush_patch",
+  "feature": "aether:trees_skyroot_and_golden_oak",
   "placement": [
     {
       "type": "minecraft:count",
@@ -13,7 +13,7 @@
       "check_below": true
     },
     {
-      "type": "voidscape:air_above"
+      "type": "minecraft:biome"
     }
   ]
 }

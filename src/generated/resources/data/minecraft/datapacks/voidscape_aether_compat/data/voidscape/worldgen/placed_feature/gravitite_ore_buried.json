@@ -1,5 +1,5 @@
 {
-  "feature": "aether:zanite_ore",
+  "feature": "aether:gravitite_ore_buried",
   "placement": [
     {
       "type": "minecraft:count",
@@ -11,6 +11,9 @@
     {
       "type": "voidscape:random_y",
       "y": 13
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }
