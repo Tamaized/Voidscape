@@ -30,7 +30,7 @@ public class ItemInHandRendererIsBowTransformer implements ITransformer<MethodNo
 				node.instructions.insert(instruction, ASMAPI.listOf(
 					new VarInsnNode(Opcodes.ALOAD, stack.var),
 					new FieldInsnNode(Opcodes.GETSTATIC, item.owner, item.name, item.desc),
-					ASMUtil.invokeAsmHook("modifyEntityTransparency", "(FLnet/minecraft/world/entity/LivingEntity;)F")
+					ASMUtil.invokeAsmHook("isBowInRenderingHand", "(ZLnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item;)Z")
 				));
 			});
 		return node;
