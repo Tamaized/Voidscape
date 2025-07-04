@@ -2,7 +2,6 @@ package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -19,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -27,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
@@ -34,8 +32,6 @@ import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.util.LevelUtil;
-
-import java.util.Map;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
@@ -52,7 +48,7 @@ public class ASMHooks {
 	@Autowired
 	private static LevelUtil levelUtil;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static VoidVisibilityCache voidVisibilityCache;
 
 	/**
@@ -140,30 +136,6 @@ public class ASMHooks {
 	}
 
 	/**
-	 * Injection Point:<br>
-	 * {@link ModelBakery#ModelBakery(BlockColors, ProfilerFiller, Map, Map)}<br>
-	 * [BEFORE FIRST GETSTATIC {@link net.minecraft.core.registries.BuiltInRegistries#ITEM)}]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static void redirectModels(ModelBakery bakery) {
-		try {
-			ModelBakeListener.redirectModels(bakery);
-		} catch (NullPointerException e) {
-			// Another mod crashed earlier on, this will throw a NPE when the registry isn't populated, just fail silently and let the game error properly later
-		}
-	}
-
-	*//**
-	 * Injection Point:<br>
-	 * {@link ModelBakery#ModelBakery(BlockColors, ProfilerFiller, Map, Map)}<br>
-	 * [BEFORE LAST INVOKESTATIC {@link com.google.common.collect.Sets#newHashSet()}]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static void cleanModels(ModelBakery bakery) {
-		ModelBakeListener.clearOldModels(bakery);
-	}
-
-	*//**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.ItemInHandRenderer) all potential methods}<br>
 	 * [AFTER ALL INVOKESTATIC {@link ItemStack#is(Item)}]

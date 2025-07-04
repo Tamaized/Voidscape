@@ -1,24 +1,21 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.item.voidic;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ItemModelOverridePredicates;
-import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
+import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalShieldItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalShieldItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
@@ -36,10 +33,10 @@ public class VoidicCrystalShieldItemModelHolder extends VoidicCrystalItemModelHo
 
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
-		return provider.getBuilder(splitName())
+		return provider.getBuilder(name())
 			.override()
 				.predicate(itemModelOverridePredicates.BLOCKING, 0)
-				.model(provider.getExistingFile(provider.modLoc(splitName("base"))))
+				.model(provider.getExistingFile(provider.modLoc(name("base"))))
 			.end()
 			.override()
 				.predicate(itemModelOverridePredicates.BLOCKING, 1)
@@ -51,8 +48,8 @@ public class VoidicCrystalShieldItemModelHolder extends VoidicCrystalItemModelHo
 	public ModelFile getBlockingModel(ItemModelProvider provider) {
 		if (blockingModel == null) {
 			blockingModel = provider.withExistingParent(
-					splitName("blocking"),
-					provider.modLoc(splitName("base"))
+					name("blocking"),
+					provider.modLoc(name("base"))
 				)
 				.transforms()
 				// @formatter:off

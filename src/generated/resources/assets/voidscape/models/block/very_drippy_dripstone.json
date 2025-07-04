@@ -1,52 +1,112 @@
 {
-  "parent": "minecraft:item/generated",
-  "display": {
-    "firstperson_righthand": {
-      "rotation": [
+  "parent": "minecraft:block/pointed_dripstone",
+  "elements": [
+    {
+      "faces": {
+        "north": {
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          },
+          "texture": "#cross",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "south": {
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          },
+          "texture": "#cross",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        0.8,
         0,
-        100,
-        0
+        8
       ],
-      "scale": [
-        0.9,
-        0.9,
-        0.9
-      ],
-      "translation": [
-        0,
-        -2,
-        0
+      "rotation": {
+        "angle": 45.0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "rescale": true
+      },
+      "shade": false,
+      "to": [
+        15.2,
+        16,
+        8
       ]
     },
-    "thirdperson_righthand": {
-      "rotation": [
+    {
+      "faces": {
+        "east": {
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          },
+          "texture": "#cross",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "west": {
+          "neoforge_data": {
+            "block_light": 15,
+            "sky_light": 15
+          },
+          "texture": "#cross",
+          "uv": [
+            0.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        8,
         0,
-        100,
-        0
+        0.8
       ],
-      "scale": [
-        0.9,
-        0.9,
-        0.9
-      ],
-      "translation": [
-        -1,
-        -1,
-        0
+      "rotation": {
+        "angle": 45.0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "rescale": true
+      },
+      "shade": false,
+      "to": [
+        8,
+        16,
+        15.2
       ]
     }
-  },
-  "loader": "neoforge:item_layers",
-  "neoforge_data": {
-    "layers": {
-      "0": {
-        "block_light": 15,
-        "sky_light": 15
-      }
-    }
-  },
-  "render_types": {},
+  ],
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
-    "layer0": "voidscape:block/very_drippy_dripstone"
+    "cross": "voidscape:block/very_drippy_dripstone",
+    "particle": "#cross"
   }
 }
