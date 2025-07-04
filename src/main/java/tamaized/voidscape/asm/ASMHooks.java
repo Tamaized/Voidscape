@@ -6,6 +6,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
@@ -136,16 +138,18 @@ public class ASMHooks {
 	}
 
 	/**
+	 * {@link tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTransformer}<p>
+	 *
 	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.ItemInHandRenderer) all potential methods}<br>
-	 * [AFTER ALL INVOKESTATIC {@link ItemStack#is(Item)}]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static boolean isMyBow(boolean o, ItemStack stack, Item item) {
+	 * {@link net.minecraft.client.renderer.ItemInHandRenderer#evaluateWhichHandsToRender(LocalPlayer)}<br>
+	 * {@link net.minecraft.client.renderer.ItemInHandRenderer#selectionUsingItemWhileHoldingBowLike(LocalPlayer)}<br>
+	 * {@link net.minecraft.client.renderer.ItemInHandRenderer#isChargedCrossbow(ItemStack)}
+	 */
+	public static boolean isBowInRenderingHand(boolean o, ItemStack stack, Item item) {
 		return o || RegUtil.isMyBow(stack, item);
 	}
 
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)}<br>
 	 * [AFTER LAST INVOKEVIRTUAL {@link HumanoidArmorLayer#renderModel(PoseStack, MultiBufferSource, int, net.minecraft.world.item.ArmorItem, Model, boolean, float, float, float, ResourceLocation)}]
