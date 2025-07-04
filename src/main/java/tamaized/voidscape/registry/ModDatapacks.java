@@ -25,7 +25,7 @@ public class ModDatapacks {
 		new PackLocationInfo(
 			"voidscape_aether_compat",
 			net.minecraft.network.chat.Component.literal("Voidscape Aether Integration"),
-			PackSource.FEATURE,
+			PackSource.BUILT_IN,
 			Optional.of(new KnownPack(
 				Voidscape.MODID,
 				"integrations/aether",
