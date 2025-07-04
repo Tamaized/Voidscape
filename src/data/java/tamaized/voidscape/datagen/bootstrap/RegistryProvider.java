@@ -40,7 +40,12 @@ public class RegistryProvider {
 
 	public CompletableFuture<HolderLookup.Provider> retrieve(GatherDataEvent event) {
 		if (value == null) {
-			value = new DatapackBuiltinEntriesProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), builder, Set.of("minecraft", Voidscape.MODID));
+			value = new DatapackBuiltinEntriesProvider(
+				event.getGenerator().getPackOutput(),
+				event.getLookupProvider(),
+				builder,
+				Set.of("minecraft", Voidscape.MODID)
+			);
 			event.getGenerator().addProvider(event.includeServer(), value);
 		}
 		return value.getRegistryProvider();

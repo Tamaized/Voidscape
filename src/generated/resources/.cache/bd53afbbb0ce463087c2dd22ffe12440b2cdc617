@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-11T11:12:56.693503848	Block Models: voidscape
+// 1.21.1	2025-06-29T19:54:58.9794666	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
@@ -40,6 +40,7 @@ e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/s
 05da98b9de8b6d5370fa79c15dcd5abd975d7d60 assets/voidscape/models/block/portal_ew.json
 1c84ff4a7d1913f1aafbea8d5ed5f6450cab06d3 assets/voidscape/models/block/portal_ns.json
 4f25a4be652a6f5d0bba6584497836e15d0bbcfb assets/voidscape/models/block/strange_ore.json
+4a697ac11281e27343dba50d32718632e52e08a6 assets/voidscape/models/block/thunderrock.json
 d1a7b806ec9de239869a5c3f83a1941ccc567f3f assets/voidscape/models/block/thunder_fungus.json
 45b88a05bb5ea1f0d982a106cd18d831a4b370aa assets/voidscape/models/block/thunder_fungus_pot.json
 c1d6a5f8c1098a85bc75340712df7e0f17665487 assets/voidscape/models/block/thunder_hyphae.json
@@ -58,7 +59,6 @@ a3d9a1ea9e0599cb5c972f99d6e5fe697ec3291b assets/voidscape/models/block/thunder_p
 7077e62b83d8d328c2674e399428ea5adb66e58a assets/voidscape/models/block/thunder_vines.json
 e2e8d922c06df29b8f9d3fcb8026743affb09e3c assets/voidscape/models/block/thunder_vines_plant.json
 d5e356b9a18ce232eb112f7a1d6b04d890f04194 assets/voidscape/models/block/thunder_wart.json
-4a697ac11281e27343dba50d32718632e52e08a6 assets/voidscape/models/block/thunderrock.json
 373d583f737ef1cb0a19ac0302459c140677257d assets/voidscape/models/block/titanite_ore.json
 79288b6e88d12d628c3a45d18107343fccec684e assets/voidscape/models/block/very_drippy_dripstone.json
 1aaa810778fc847f7333755204374748c10eddaa assets/voidscape/models/block/voidic_crystal_block.json

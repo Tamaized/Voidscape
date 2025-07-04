@@ -8,6 +8,7 @@ import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.voidscape.datagen.datapack.voidscape_aether_compat.VoidscapeAetherCompatRegistryProvider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,7 +19,12 @@ public class CachedBootstrapHolderGetter {
 	@Autowired
 	private BootstrapContextHolderLookupResolver bootstrapContextHolderLookupResolver;
 
+	@Autowired
+	private VoidscapeAetherCompatRegistryProvider aetherCompatRegistryProvider;
+
 	private final Map<ResourceKey<Registry<?>>, List<ResourceKey<?>>> cache = new HashMap<>();
+
+	private HolderGetter<?> currentProvider;
 
 	public void invalidate() {
 		cache.clear();
@@ -30,6 +36,11 @@ public class CachedBootstrapHolderGetter {
 	}
 
 	private List<ResourceKey<?>> _retrieve(ResourceKey<Registry<?>> key, HolderGetter<?> provider) {
+		if (currentProvider != provider) {
+			invalidate();
+			currentProvider = provider;
+		}
+
 		if (cache.containsKey(key)) {
 			return cache.get(key);
 		}
@@ -46,7 +57,7 @@ public class CachedBootstrapHolderGetter {
 			.sorted()
 			.toList());
 
-		entries.addAll(bootstrapContextHolderLookupResolver.resolveFor(AetherRegistrySets.BUILDER).patches().lookupOrThrow(key)
+		entries.addAll(aetherCompatRegistryProvider.lookup(key).orElseThrow()
 			.listElements()
 			.map(Holder.Reference::unwrapKey)
 			.map(Optional::orElseThrow)

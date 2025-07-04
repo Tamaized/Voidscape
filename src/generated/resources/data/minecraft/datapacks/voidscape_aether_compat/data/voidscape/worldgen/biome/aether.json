@@ -26,7 +26,32 @@
     "water_color": 4159204,
     "water_fog_color": 329011
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "voidscape:aether_dirt_ore",
+      "voidscape:ambrosium_ore",
+      "voidscape:gravitite_ore",
+      "voidscape:gravitite_ore_buried",
+      "voidscape:icestone_ore",
+      "voidscape:zanite_ore"
+    ],
+    [],
+    [],
+    [
+      "voidscape:aether_grass_patch",
+      "voidscape:aether_tall_grass_patch",
+      "voidscape:berry_bush_patch",
+      "voidscape:purple_flower_patch",
+      "voidscape:trees_skyroot_and_golden_oak",
+      "voidscape:white_flower_patch"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {
     "aether:aechor_plant": {

@@ -13,7 +13,6 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.bootstrap.feature.placed.*;
 import tamaized.voidscape.registry.ModBiomes;
-import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModSounds;
 
 @Component
@@ -24,9 +23,6 @@ public class OverworldBiomeBootstrap implements IBiomeBootstrap {
 
 	@Autowired
 	private ModSounds sounds;
-
-	@Autowired
-	private ModEntities entities;
 
 	@Autowired
 	private SandPlacedFeatureBootstrap sandPlacedFeatureBootstrap;

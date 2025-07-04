@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-15T13:02:55.181776123	Block States: voidscape
+// 1.21.1	2025-06-29T19:54:58.9671101	Block States: voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -18,6 +18,7 @@ f8eefa6de96cea65fd33613db8b33d720428d7fe assets/voidscape/blockstates/machine_co
 024ffd6d26acb748c3a39403581799f8e6f1ed28 assets/voidscape/blockstates/null_white.json
 faa94ef6dad3c7b3cd471759ff736416bc2fc249 assets/voidscape/blockstates/portal.json
 051e5b1b7cc516510d27a231403e01feb1ed96b0 assets/voidscape/blockstates/strange_ore.json
+516360b5270a49675729d4fd9131ab6d49b3e8fd assets/voidscape/blockstates/thunderrock.json
 e9a21c6ef2aa92b0f3cfe5fd75ae6a4187d00224 assets/voidscape/blockstates/thunder_fungus.json
 8ef09a2355c8bc33195c20181d92053f56b78755 assets/voidscape/blockstates/thunder_fungus_pot.json
 d646f17a0bdf06d7507c6e4ad40f6ad5d4c26ef8 assets/voidscape/blockstates/thunder_hyphae.json
@@ -33,7 +34,6 @@ d4e980bf7e3353cea74e9fb4b5a525fc24fd2256 assets/voidscape/blockstates/thunder_st
 4bb867aa85c19d2f05c6d4bfca29c462d75d3779 assets/voidscape/blockstates/thunder_vines.json
 4f093f469d0b1ee40442b032ecada1873327c844 assets/voidscape/blockstates/thunder_vines_plant.json
 119d3d2e0b47f789dfa1bdfd152b45f36c623e13 assets/voidscape/blockstates/thunder_wart.json
-516360b5270a49675729d4fd9131ab6d49b3e8fd assets/voidscape/blockstates/thunderrock.json
 0ed3203ef0f2c13a20aa63784554672795870b86 assets/voidscape/blockstates/titanite_ore.json
 96cc38672094d688efe903d2470edfd819ae2b59 assets/voidscape/blockstates/very_drippy_dripstone.json
 254ff2b55366e96b58d62494d1a2141d71ba4aee assets/voidscape/blockstates/voidic_crystal_block.json

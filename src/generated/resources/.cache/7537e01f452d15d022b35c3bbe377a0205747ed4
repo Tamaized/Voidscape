@@ -1,6 +1,7 @@
-// 1.21.1	2025-02-15T11:05:56.337215557	Item Models: voidscape
+// 1.21.1	2025-06-29T19:54:58.9567845	Item Models: voidscape
 9c39555cc4596210c4bf01d2efad8d910b84e958 assets/voidscape/models/block/very_drippy_dripstone.json
 cd8847016a11fc3d2738342ea5bd29f343123e3a assets/voidscape/models/item/antirock.json
+166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 2dd6eca79d9d3c858bfcf546cbb8c78153032c00 assets/voidscape/models/item/astral/axe.json
 9d805f1d4220573c55c15a1ff2fbd4ac82787185 assets/voidscape/models/item/astral/axe_broken.json
 686e2464b92dd401df9193d9820dfcf6decdf53a assets/voidscape/models/item/astral/boots.json
@@ -32,7 +33,6 @@ e1d59f520692ff7b0b30cc385fc19cdf682b0bbd assets/voidscape/models/item/astral/xbo
 66273cc2c3e1a9c137d7227bf11d2900a8fbc955 assets/voidscape/models/item/astral_crystal.json
 0139e5dc7fd63e46677efddfb11e0c97845bc8b4 assets/voidscape/models/item/astral_essence.json
 5a0769710606e68cb4e81ee45094bd09ebe15842 assets/voidscape/models/item/astral_shards.json
-166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 ab68a910e95aaca3c81a19cedade339a974d8f36 assets/voidscape/models/item/charred/warhammer.json
 0f728ef02f4652d319607d322ace2c86d1ae5fdb assets/voidscape/models/item/charred/warhammer_in_hand.json
 c92410b5afdbb146928850edabd4e1e5ebd4ea99 assets/voidscape/models/item/charred/warhammer_in_hand_broken.json
@@ -121,6 +121,7 @@ c6d6f4e11b6fec17b15e592aa2fdb07dc6d9ec3c assets/voidscape/models/item/machine_we
 cad1ab43a548b3ac7d2e3c6175aaf2be2eeb3ccd assets/voidscape/models/item/strange_ore.json
 cdb03cfa66eb28e2f6b662803b6a11d5b75622dd assets/voidscape/models/item/strange_pearl.json
 05c96a03b9854cb76f8d42c05b5c15d87476a4a4 assets/voidscape/models/item/tendril.json
+abdd49be2778a7c45c21e4c4ad6884b611a9be7b assets/voidscape/models/item/thunderrock.json
 f2e38ee050e74b504ae571349768cb20fddd2453 assets/voidscape/models/item/thunder_fungus.json
 3ca1977782d0f1785a939a4520b057bf41bf9842 assets/voidscape/models/item/thunder_hyphae.json
 3d49b458e4f6d6c7c7a15d7481f5201e9154cd39 assets/voidscape/models/item/thunder_hyphae_stripped.json
@@ -133,7 +134,6 @@ f4a8ed213ca9bcea857b9bc91e6198d739d4965a assets/voidscape/models/item/thunder_sl
 5bf5246877bd1d894a0f6000a66cfa24258a7e33 assets/voidscape/models/item/thunder_stem_stripped.json
 3359e374486ec041fa5f9d22d6c9f4a5d12fc90a assets/voidscape/models/item/thunder_vines.json
 d13c4afc7e16d35980836d843f17fbdab2faef95 assets/voidscape/models/item/thunder_wart.json
-abdd49be2778a7c45c21e4c4ad6884b611a9be7b assets/voidscape/models/item/thunderrock.json
 a55d7aac57f38bb1b86f24ae40af8d141a7e9a74 assets/voidscape/models/item/titanite/axe.json
 7081add1d66b388c9f0e08be5b03f47e2565c6d6 assets/voidscape/models/item/titanite/axe_broken.json
 a19aa7fdac0528929e5fefda5155d333f5d88e56 assets/voidscape/models/item/titanite/boots.json

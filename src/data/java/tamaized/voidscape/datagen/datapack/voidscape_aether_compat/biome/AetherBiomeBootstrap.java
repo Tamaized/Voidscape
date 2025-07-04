@@ -15,8 +15,7 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.bootstrap.biome.IBiomeBootstrap;
 import tamaized.voidscape.datagen.bootstrap.biome.SortedFeaturesBiomeGenerationSettingsBuilder;
-import tamaized.voidscape.datagen.bootstrap.feature.placed.AntispirePlacedFeatureBootstrap;
-import tamaized.voidscape.datagen.bootstrap.feature.placed.EtherealFruitVoidPatchPlacedFeatureBootstrap;
+import tamaized.voidscape.datagen.datapack.voidscape_aether_compat.feature.configured.*;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.registry.ModSounds;
 
@@ -30,10 +29,40 @@ public class AetherBiomeBootstrap implements IBiomeBootstrap {
 	private ModSounds sounds;
 
 	@Autowired
-	private AntispirePlacedFeatureBootstrap antispirePlacedFeatureBootstrap;
+	private AetherDirtOreFeatureBootstrap aetherDirtOreFeatureBootstrap;
 
 	@Autowired
-	private EtherealFruitVoidPatchPlacedFeatureBootstrap etherealFruitVoidPatchPlacedFeatureBootstrap;
+	private IcestoneOreFeatureBootstrap icestoneOreFeatureBootstrap;
+
+	@Autowired
+	private AmbrosiumOreFeatureBootstrap ambrosiumOreFeatureBootstrap;
+
+	@Autowired
+	private ZaniteOreBuriedFeatureBootstrap zaniteOreBuriedFeatureBootstrap;
+
+	@Autowired
+	private GravititeOreBuriedFeatureBootstrap gravititeOreBuriedFeatureBootstrap;
+
+	@Autowired
+	private GravititeOreFeatureBootstrap gravititeOreFeatureBootstrap;
+
+	@Autowired
+	private SkyrootMeadowTreesFeatureBootstrap skyrootMeadowTreesFeatureBootstrap;
+
+	@Autowired
+	private AetherGrassPatchFeatureBootstrap aetherGrassPatchFeatureBootstrap;
+
+	@Autowired
+	private AetherTallGrassPatchFeatureBootstrap aetherTallGrassPatchFeatureBootstrap;
+
+	@Autowired
+	private WhiteFlowerPatchFeatureBootstrap whiteFlowerPatchFeatureBootstrap;
+
+	@Autowired
+	private PurpleFlowerPatchFeatureBootstrap purpleFlowerPatchFeatureBootstrap;
+
+	@Autowired
+	private BerryBushPatchFeatureBootstrap berryBushPatchFeatureBootstrap;
 
 	@Override
 	public ResourceKey<Biome> key() {
@@ -69,8 +98,18 @@ public class AetherBiomeBootstrap implements IBiomeBootstrap {
 				))
 				.build())
 			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
-//				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, antispirePlacedFeatureBootstrap.get().orElseThrow())
-//				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, aetherDirtOreFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, icestoneOreFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ambrosiumOreFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, zaniteOreBuriedFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, gravititeOreBuriedFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, gravititeOreFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, skyrootMeadowTreesFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, aetherGrassPatchFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, aetherTallGrassPatchFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, whiteFlowerPatchFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, purpleFlowerPatchFeatureBootstrap.asDirectReferenceHolder())
+				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, berryBushPatchFeatureBootstrap.asDirectReferenceHolder())
 				.build())
 			.mobSpawnSettings(new MobSpawnSettings.Builder()
 				.creatureGenerationProbability(0F)
