@@ -42,13 +42,13 @@ public class VoidicDamageSourceHandler {
 				if (target.getHealth() <= event.getNewDamage())
 					return;
 				if (damageState == DamageState.MELEE && (event.getSource().isDirect() ? event.getSource().getDirectEntity() : event.getSource().getEntity()) instanceof LivingEntity attacker) {
-					final float voidicMeleeDamage = (float) (attacker.getAttributeValue(attributes.VOIDIC_DMG) * (attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F));
+					final float voidicMeleeDamage = (float) (attacker.getAttributeValue(attributes.VOIDIC_DMG) * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F));
 					if (voidicMeleeDamage > 0) {
 						target.invulnerableTime = 0;
 						target.hurt(damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
 					}
 					final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION) - 1F)
-										   * (attacker instanceof Player ? ASMHooks.PlayerEntity_getAttackStrengthScale : 1F)
+										   * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F)
 										   * Insanity.MAX_INFUSION;
 					if (infusion > 0)
 						target.getData(dataAttachments.INSANITY).addInfusion(infusion, target);

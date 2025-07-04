@@ -6,6 +6,7 @@ import tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransform
 import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer;
+import tamaized.voidscape.coremod.transformers.snow.BiomeSnowAndFreezeControlTransformer;
 
 import java.util.List;
 
@@ -19,7 +20,10 @@ public class VoidscapeCoreMod implements ICoreMod {
 
 			// Entity Render Transparency
 			new ModifyEntityRenderTransparencyTransformer(),
-			new ModifyEntityRenderTypeTransformer()
+			new ModifyEntityRenderTypeTransformer(),
+
+			// Dimension Snow/Freeze Control
+			new BiomeSnowAndFreezeControlTransformer()
 		);
 	}
 }

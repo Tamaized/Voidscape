@@ -13,7 +13,11 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,8 +28,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import tamaized.beanification.Autowired;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -48,8 +54,6 @@ public class ASMHooks {
 
 	@Autowired
 	private static LevelUtil levelUtil;
-
-	public static float PlayerEntity_getAttackStrengthScale;
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
@@ -95,40 +99,22 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link Player#attack(Entity)}<br>
-	 * [AFTER INVOKEVIRTUAL {@link Player#getAttackStrengthScale(float)}]
-	 *//*
-	public static synchronized float getAttackStrengthScale(float o) {
-		PlayerEntity_getAttackStrengthScale = o;
-		return o;
-	}
-
-	*//**
-	 * Injection Point:<br>
 	 * {@link Biome#shouldSnow(LevelReader, BlockPos)} and {@link Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
-	 * [AFTER ALL ICONST_1]
-	 *//*
-	public static boolean shouldSnow(boolean o, Biome biome, LevelReader level) {
-		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :
-				level instanceof WorldGenRegion worldGenRegion ? worldGenRegion.registryAccess() :
-						null;
-		if (registryAccess != null && registryAccess.registryOrThrow(Registries.BIOME).getResourceKey(biome)
-				.map(key -> key.location().getNamespace().equals(Voidscape.MODID))
-				.orElse(false))
+	 * [BEFORE EACH IRETURN]
+	 */
+	public static boolean shouldBiomeHaveSnowfallAndLiquidFreeze(boolean o, Biome biome, LevelReader level) {
+		if (!o) // Short-circuit
 			return false;
-		return o;
+
+		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :
+			level instanceof WorldGenRegion worldGenRegion ? worldGenRegion.registryAccess() :
+				null;
+		return registryAccess == null || !registryAccess.registryOrThrow(Registries.BIOME).getResourceKey(biome)
+			.map(key -> key.location().getNamespace().equals(Voidscape.MODID))
+			.orElse(false);
 	}
 
-	*//**
-	 * Injection Point:<br>
-	 * {@link net.minecraft.world.item.enchantment.EnchantmentCategory#canEnchant(Item)}<br>
-	 * [BEFORE IRETURN]
-	 *//*
-	public static boolean axesRWeps(boolean o, Item i) { // TODO: why is this here? Can't we just use IForgeItem#canApplyAtEnchantingTable ??????
-		return o || i instanceof RegUtil.ToolAndArmorHelper.LootingAxe || i instanceof ModTools.LootingWarhammer;
-	}
-
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
 	 * [BEFORE FRETURN]
