@@ -1,4 +1,4 @@
-package tamaized.voidscape.coremod.transformers.snow;
+package tamaized.voidscape.coremod.transformers.visibility;
 
 import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
@@ -14,18 +14,16 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#shouldRenderElytra}
+ * {@link tamaized.voidscape.asm.ASMHooks#lightTextureBrightness}
  */
-public class BiomeSnowAndFreezeControlTransformer implements ITransformer<MethodNode> {
+public class LightTextureBrightnessTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findInstructions(node, Opcodes.IRETURN)
-			.findFirst()
-			.ifPresent(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
-				new VarInsnNode(Opcodes.ALOAD, 0),
-				new VarInsnNode(Opcodes.ALOAD, 1),
-				ASMUtil.invokeAsmHook("shouldBiomeHaveSnowfallAndLiquidFreeze", "(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z")
+		ASMUtil.findInstructions(node, Opcodes.FRETURN)
+			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
+				new VarInsnNode(Opcodes.ILOAD, 1),
+				ASMUtil.invokeAsmHook("lightTextureBrightness", "(FI)F")
 			)));
 		return node;
 	}
@@ -38,13 +36,9 @@ public class BiomeSnowAndFreezeControlTransformer implements ITransformer<Method
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.world.level.biome.Biome",
-			"shouldSnow",
-			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z"
-		), Target.targetMethod(
-			"net.minecraft.world.level.biome.Biome",
-			"shouldFreeze",
-			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z"
+			"net.minecraft.client.renderer.LightTexture",
+			"getBrightness",
+			"(Lnet/minecraft/world/level/dimension/DimensionType;I)F"
 		));
 	}
 

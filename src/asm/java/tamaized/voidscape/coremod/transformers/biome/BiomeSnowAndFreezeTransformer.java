@@ -1,4 +1,4 @@
-package tamaized.voidscape.coremod.transformers.elytra;
+package tamaized.voidscape.coremod.transformers.biome;
 
 import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
@@ -14,16 +14,17 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#shouldRenderElytra}
+ * {@link tamaized.voidscape.asm.ASMHooks#shouldBiomeHaveSnowfallAndLiquidFreeze}
  */
-public class ShouldRenderElytraTransformer implements ITransformer<MethodNode> {
+public class BiomeSnowAndFreezeTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
 		ASMUtil.findInstructions(node, Opcodes.IRETURN)
 			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
+				new VarInsnNode(Opcodes.ALOAD, 0),
 				new VarInsnNode(Opcodes.ALOAD, 1),
-				ASMUtil.invokeAsmHook("shouldRenderElytra", "(ZLnet/minecraft/world/item/ItemStack;)Z")
+				ASMUtil.invokeAsmHook("shouldBiomeHaveSnowfallAndLiquidFreeze", "(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z")
 			)));
 		return node;
 	}
@@ -36,9 +37,13 @@ public class ShouldRenderElytraTransformer implements ITransformer<MethodNode> {
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.client.renderer.entity.layers.ElytraLayer",
-			"shouldRender",
-			"(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)Z"
+			"net.minecraft.world.level.biome.Biome",
+			"shouldSnow",
+			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z"
+		), Target.targetMethod(
+			"net.minecraft.world.level.biome.Biome",
+			"shouldFreeze",
+			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z"
 		));
 	}
 

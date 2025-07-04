@@ -1,7 +1,7 @@
 package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -20,15 +20,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
@@ -54,6 +51,9 @@ public class ASMHooks {
 
 	@Autowired
 	private static LevelUtil levelUtil;
+
+	@Autowired
+	private static VoidVisibilityCache voidVisibilityCache;
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
@@ -98,9 +98,10 @@ public class ASMHooks {
 	}
 
 	/**
+	 * {@link tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link Biome#shouldSnow(LevelReader, BlockPos)} and {@link Biome#shouldFreeze(LevelReader, BlockPos, boolean)}<br>
-	 * [BEFORE EACH IRETURN]
 	 */
 	public static boolean shouldBiomeHaveSnowfallAndLiquidFreeze(boolean o, Biome biome, LevelReader level) {
 		if (!o) // Short-circuit
@@ -115,42 +116,30 @@ public class ASMHooks {
 	}
 
 	/**
+	 * {@link tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
-	 * [BEFORE FRETURN]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static float visibility(float o, int light) {
-		if (Voidscape.checkForVoidDimension(Minecraft.getInstance().level))
-			return VoidVisibilityCache.value(o, light);
+	 */
+	public static float lightTextureBrightness(float o, int light) {
+		if (levelUtil.isInVoidDimension(Minecraft.getInstance().level))
+			return voidVisibilityCache.value(o, light);
 		return o;
 	}
 
-	*//**
+	/**
+	 * {@link tamaized.voidscape.coremod.transformers.visibility.LightTextureNightVisionAndGammaTransformer}<p>
+	 *
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
-	 * [AFTER FIRST FLOAD 9]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static float cancelNightVision(float o, Level level) {
-		if (o > 0 && level.isClientSide() && Voidscape.checkForVoidDimension(level))
+	 */
+	public static float nightVisionAndGamma(float o, Level level) {
+		if (o > 0 && level.isClientSide() && levelUtil.isInVoidDimension(level))
 			return 0;
 		return o;
 	}
 
-	*//**
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
-	 * [AFTER GETFIELD {@link net.minecraft.client.Options#gamma}]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static float cancelGamma(float o, Level level) {
-		if (o > 0 && level.isClientSide() && Voidscape.checkForVoidDimension(level))
-			return 0;
-		return o;
-	}
-
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link ModelBakery#ModelBakery(BlockColors, ProfilerFiller, Map, Map)}<br>
 	 * [BEFORE FIRST GETSTATIC {@link net.minecraft.core.registries.BuiltInRegistries#ITEM)}]

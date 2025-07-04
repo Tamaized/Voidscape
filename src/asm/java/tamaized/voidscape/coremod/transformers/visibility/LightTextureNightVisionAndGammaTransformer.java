@@ -1,4 +1,4 @@
-package tamaized.voidscape.coremod.transformers.elytra;
+package tamaized.voidscape.coremod.transformers.visibility;
 
 import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
@@ -12,18 +12,22 @@ import org.objectweb.asm.tree.VarInsnNode;
 import tamaized.voidscape.coremod.ASMUtil;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#shouldRenderElytra}
+ * {@link tamaized.voidscape.asm.ASMHooks#lightTextureBrightness}
  */
-public class ShouldRenderElytraTransformer implements ITransformer<MethodNode> {
+public class LightTextureNightVisionAndGammaTransformer implements ITransformer<MethodNode> {
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findInstructions(node, Opcodes.IRETURN)
+		Stream.concat(
+				ASMUtil.findVarInstructions(node, Opcodes.FSTORE, 5), // Night Vision
+				ASMUtil.findVarInstructions(node, Opcodes.FSTORE, 20) // Gamma
+			)
 			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
-				new VarInsnNode(Opcodes.ALOAD, 1),
-				ASMUtil.invokeAsmHook("shouldRenderElytra", "(ZLnet/minecraft/world/item/ItemStack;)Z")
+				new VarInsnNode(Opcodes.ALOAD, 2),
+				ASMUtil.invokeAsmHook("nightVisionAndGamma", "(FLnet/minecraft/world/level/Level;)F")
 			)));
 		return node;
 	}
@@ -36,9 +40,9 @@ public class ShouldRenderElytraTransformer implements ITransformer<MethodNode> {
 	@Override
 	public @NotNull Set<Target<MethodNode>> targets() {
 		return Set.of(Target.targetMethod(
-			"net.minecraft.client.renderer.entity.layers.ElytraLayer",
-			"shouldRender",
-			"(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)Z"
+			"net.minecraft.client.renderer.LightTexture",
+			"updateLightTexture",
+			"(F)V"
 		));
 	}
 
