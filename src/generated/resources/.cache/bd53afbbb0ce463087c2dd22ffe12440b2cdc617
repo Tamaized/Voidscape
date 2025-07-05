@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-04T18:23:18.2491528	Block Models: voidscape
+// 1.21.1	2025-07-04T21:49:12.6303093	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
@@ -9,7 +9,7 @@ dfdd1ee49a1b5ea03a00dbcf38d8e8d3859ed31a assets/voidscape/models/block/ethereal_
 f9f0806db4d1f9e9df50b7cda1bd631fa5cd9548 assets/voidscape/models/block/ethereal_fruit_overworld.json
 2072342552f72433a483213173b74438221e2b23 assets/voidscape/models/block/ethereal_fruit_void.json
 39bd7711e3dda4a5889f50a7c43228035b88cc9c assets/voidscape/models/block/flesh_block.json
-39536e201361d33e2c4a02e0d9a33c3f3315f442 assets/voidscape/models/block/flesh_ore.json
+418c8abe8e4dccd353277bab609fa4611849cf7d assets/voidscape/models/block/flesh_ore.json
 e5a019ad009114c5ca26379eaa41d043a492b798 assets/voidscape/models/block/fullbright/cross.json
 fabbb3f2a76bae791516e17e57c60beaff277b57 assets/voidscape/models/block/fullbright/cube.json
 2e314e5be811f7c28df0e08f20cbd38091c2c3a6 assets/voidscape/models/block/fullbright/cube_all.json
