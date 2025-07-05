@@ -4,10 +4,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -32,16 +29,12 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-@Configurable
 public class NullServantAugmentBlockEntity extends LivingEntity implements IEntityWithComplexSpawn, IEthereal {
 
 	@Autowired
@@ -50,7 +43,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	private static final EntityDataAccessor<BlockState> MIMIC = SynchedEntityData.defineId(NullServantAugmentBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
 
 	@Autowired
-	private ModDamageSource damageSource;
+	private static ModDamageSource damageSource;
 
 	private NullServantEntity parent;
 

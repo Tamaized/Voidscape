@@ -9,20 +9,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 
-@Configurable
 public class NullServantIchorBoltEntity extends SpellBoltEntity {
 
 	@Autowired
 	private static ModEntities entities;
 
 	@Autowired
-	private ModDamageSource damageSource;
+	private static ModDamageSource damageSource;
 
 	public NullServantIchorBoltEntity(EntityType<NullServantIchorBoltEntity> type, Level level) {
 		super(type, level, 0xFF0000);
