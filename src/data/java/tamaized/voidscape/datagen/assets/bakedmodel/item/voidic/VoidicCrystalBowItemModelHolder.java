@@ -16,7 +16,7 @@ import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalBowItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalBowItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
@@ -44,7 +44,7 @@ public class VoidicCrystalBowItemModelHolder extends VoidicCrystalItemModelHolde
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/voidic/bow/bow")
@@ -122,7 +122,7 @@ public class VoidicCrystalBowItemModelHolder extends VoidicCrystalItemModelHolde
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(name),
+				name(name),
 				"item/bow"
 			)
 			.texture("layer0", "item/voidic/bow/bow_" + name)

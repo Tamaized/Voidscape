@@ -15,7 +15,7 @@ import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalLeggingsItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalLeggingsItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModArmorSetComponentDirectory armor;
@@ -34,7 +34,7 @@ public class VoidicCrystalLeggingsItemModelHolder extends VoidicCrystalItemModel
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/voidic/legs")
@@ -49,7 +49,7 @@ public class VoidicCrystalLeggingsItemModelHolder extends VoidicCrystalItemModel
 	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/generated"
 				)
 				.texture("layer0", "item/voidic/legs_broken")

@@ -15,7 +15,7 @@ import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalPickaxeItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalPickaxeItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
@@ -34,7 +34,7 @@ public class VoidicCrystalPickaxeItemModelHolder extends VoidicCrystalItemModelH
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/handheld"
 			)
 			.texture("layer0", "item/voidic/pickaxe")
@@ -49,7 +49,7 @@ public class VoidicCrystalPickaxeItemModelHolder extends VoidicCrystalItemModelH
 	private ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/voidic/pickaxe_broken")

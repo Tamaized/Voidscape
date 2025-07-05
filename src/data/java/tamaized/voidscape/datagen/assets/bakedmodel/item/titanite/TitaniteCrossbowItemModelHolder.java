@@ -55,7 +55,7 @@ public class TitaniteCrossbowItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/titanite/xbow/crossbow_standby")
@@ -156,7 +156,7 @@ public class TitaniteCrossbowItemModelHolder extends ItemModelHolder {
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(name),
+				name(name),
 				"item/crossbow"
 			)
 			.texture("layer0", "item/titanite/xbow/crossbow_" + name)

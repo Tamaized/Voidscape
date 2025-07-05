@@ -39,7 +39,7 @@ public class CorruptBootsItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/corrupt/boots")
@@ -54,7 +54,7 @@ public class CorruptBootsItemModelHolder extends ItemModelHolder {
 	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/generated"
 				)
 				.texture("layer0", "item/corrupt/boots_broken")

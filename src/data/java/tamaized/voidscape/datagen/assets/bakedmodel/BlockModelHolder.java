@@ -42,28 +42,12 @@ public abstract class BlockModelHolder extends ModelHolder {
 		return "block/" + nameToUse() + (suffix == null ? "" : ("_" + suffix));
 	}
 
-	protected String splitName() {
-		return splitName(null);
-	}
-
-	protected String splitName(@org.jetbrains.annotations.Nullable String suffix) {
-		return "block/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
-	}
-
 	protected String nameForItemBlock() {
 		return nameForItemBlock(null);
 	}
 
 	protected String nameForItemBlock(@org.jetbrains.annotations.Nullable String suffix) {
 		return "item/" + nameToUse() + (suffix == null ? "" : ("_" + suffix));
-	}
-
-	protected String splitNameForItemBlock() {
-		return splitNameForItemBlock(null);
-	}
-
-	protected String splitNameForItemBlock(@org.jetbrains.annotations.Nullable String suffix) {
-		return "item/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
 	}
 
 	@Nullable

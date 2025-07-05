@@ -39,7 +39,7 @@ public class IchorAxeItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/handheld"
 			)
 			.texture("layer0", "item/ichor/axe")
@@ -54,7 +54,7 @@ public class IchorAxeItemModelHolder extends ItemModelHolder {
 	private ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/ichor/axe_broken")

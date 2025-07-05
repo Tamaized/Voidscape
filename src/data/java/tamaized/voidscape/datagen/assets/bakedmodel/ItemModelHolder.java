@@ -36,31 +36,11 @@ public abstract class ItemModelHolder extends ModelHolder {
 		return "item/" + nameToUse() + (suffix == null ? "" : ("_" + suffix));
 	}
 
-	/**
-	 * Use #name
-	 * splitName is a maintainability burden for 0 real gain
-	 */
-	@Deprecated(forRemoval = true)
-	protected String splitName() {
-		return splitName(null);
-	}
-
-	/**
-	 * Use #name
-	 * splitName is a maintainability burden for 0 real gain
-	 */
-	@Deprecated(forRemoval = true)
-	protected String splitName(@Nullable String suffix) {
-		//return "item/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
-		return name(suffix);
-	}
-
 	@Nullable
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return null;
 	}
 
-	@Deprecated(forRemoval = true)
 	protected String nameToUse() {
 		return Objects.requireNonNull(itemForName()).getId().getPath();
 	}
