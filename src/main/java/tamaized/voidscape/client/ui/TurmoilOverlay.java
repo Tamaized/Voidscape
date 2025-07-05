@@ -85,7 +85,7 @@ public class TurmoilOverlay {
 						final float y = 0F;
 						final float w = window.getGuiScaledWidth();
 						final float h = window.getGuiScaledHeight();
-						final float z = 401F; // Catch All
+						final float z = 9000F; // Catch All
 
 						RenderSystem.setShaderTexture(0, TEXTURE_MASK);
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenUpload(perc, blit(true, 0xFFFFFFFF, x, y, z, w, h)));
