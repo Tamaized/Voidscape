@@ -130,8 +130,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 				}
 			} else {
 				pleaseLeavePortal = false;
-				boolean inVoid;
-				if (inVoid = levelUtil.isInVoidDimension(parent.level())) {
+				boolean inVoid = levelUtil.isInVoidDimension(parent.level());
+				if (inVoid) {
 					int prev = teleportTick;
 					teleportTick--;
 					if ((teleportTick > 0 && teleportTick % 20 == 0) || teleportTick <= 0 && prev > 0)
