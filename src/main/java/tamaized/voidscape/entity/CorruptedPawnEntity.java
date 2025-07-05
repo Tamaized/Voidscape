@@ -4,7 +4,6 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -31,6 +30,7 @@ import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn, IEthereal {
 
@@ -47,11 +47,12 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	private static MaterialItems materialItems;
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
-			getDisplayName() == null ? Component.empty() : getDisplayName(),
+			getDisplayName(),
 			BossEvent.BossBarColor.PURPLE,
 			BossEvent.BossBarOverlay.PROGRESS
 	)).setDarkenScreen(true);
 
+	@Nullable
 	private Entity target;
 
 	public CorruptedPawnEntity(Level level) {
@@ -106,12 +107,14 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		}
 		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 		if (!level().isClientSide()) {
-			if (target == null || !target.isAlive())
+			if (target == null || !target.isAlive()) {
 				remove(RemovalReason.DISCARDED);
-			else if (!equals(target.getData(dataAttachments.INSANITY).getHunter()))
+				return;
+			}
+			if (!equals(target.getData(dataAttachments.INSANITY).getHunter()))
 				remove(RemovalReason.DISCARDED);
 			else if (isAlive()) {
-				lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+				lookAt(EntityAnchorArgument.Anchor.EYES, Objects.requireNonNull(target).position());
 				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
 				if (target.distanceTo(this) <= 0.25F) {
 					teleport();
@@ -130,7 +133,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	}
 
 	private void teleport() {
-		if (isAlive()) {
+		if (isAlive() && !isNoAi() && target != null) {
 			playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
 			moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
@@ -163,7 +166,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		if (!level().isClientSide()) {
 			if (deathTime == 1)
 				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
-			if (deathTime == 20) {
+			if (deathTime == 20 && target != null) {
 				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(materialItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
 				target.getData(dataAttachments.INSANITY).setParanoia(0);
 			}
