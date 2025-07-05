@@ -27,26 +27,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 import javax.annotation.Nullable;
 
-@Configurable
 public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn, IEthereal {
 
 	@Autowired
 	private static ModEntities entities;
 
 	@Autowired
-	private ModDataAttachments dataAttachments;
+	private static ModDataAttachments dataAttachments;
 
 	@Autowired
-	private ModDamageSource damageSource;
+	private static ModDamageSource damageSource;
 
 	@Autowired
-	private MaterialItems materialItems;
+	private static MaterialItems materialItems;
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
 			getDisplayName() == null ? Component.empty() : getDisplayName(),
