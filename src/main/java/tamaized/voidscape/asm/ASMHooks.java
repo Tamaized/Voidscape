@@ -1,6 +1,7 @@
 package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -9,8 +10,10 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -21,12 +24,14 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.ClientHooks;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
@@ -156,21 +161,19 @@ public class ASMHooks {
 
 	/**
 	 * Injection Point:<br>
-	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel)}<br>
-	 * [AFTER LAST INVOKEVIRTUAL {@link HumanoidArmorLayer#renderModel(PoseStack, MultiBufferSource, int, net.minecraft.world.item.ArmorItem, Model, boolean, float, float, float, ResourceLocation)}]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, boolean p_117111_, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)} <br>
+	 */
+	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, ArmorMaterial.Layer armormaterial$layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
 		if (RegUtil.isArmorOverlay(stack)) {
 			RegUtil.renderingArmorOverlay = true;
-			ResourceLocation texture = layer.getArmorResource(entity, stack, slot, "overlay");
-			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, false);
-			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+			ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armormaterial$layer, true, slot);
+			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false);
+			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 			RegUtil.renderingArmorOverlay = false;
 		}
 	}
 
-	*//**
+	/**
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.GameRenderer#renderLevel(float, long, PoseStack)}<br>
 	 * [BEFORE FIRST ASTORE 7]

@@ -69,7 +69,7 @@ public class CrystallineArmorDataModel extends ArmorDataModel {
 
 	@Override
 	public Optional<ResourceLocation> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
-		return Optional.of(inner ? TEXTURE : TEXTURE_OVERLAY);
+		return Optional.of(inner ? TEXTURE_OVERLAY : TEXTURE);
 	}
 
 }
