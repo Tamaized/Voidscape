@@ -36,6 +36,7 @@ public class SpireBlocks {
 	public final DeferredHolder<Block, Block> THUNDERROCK = REGISTRY.register("thunderrock", () -> new LightningAttractorBlock
 		.Builder<>(() -> EntityType.LIGHTNING_BOLT)
 		.build(Block.Properties.of()
+			.randomTicks()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -52,6 +53,7 @@ public class SpireBlocks {
 		.Builder<>(entities.ANTI_BOLT)
 		.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
 		.build(Block.Properties.of()
+			.randomTicks()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -68,6 +70,7 @@ public class SpireBlocks {
 		.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
 		.to(() -> oreBlocks.CRACKED_ASTRALROCK.get().defaultBlockState())
 		.build(Block.Properties.of()
+			.randomTicks()
 			.sound(SoundType.STONE)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
