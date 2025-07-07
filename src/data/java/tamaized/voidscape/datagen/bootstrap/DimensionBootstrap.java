@@ -61,9 +61,10 @@ public class DimensionBootstrap implements IBootstrap {
 							160,
 							new GenLayerRandomWithOneMajorBiomes(
 								List.of(
+									Either.left(biomes.THUNDERSPIRES),
 									Either.left(biomes.THUNDER_FOREST)
 								),
-								biomes.THUNDER_FOREST,
+								biomes.VOID,
 								4
 							),
 							new GenLayerRandomWithOneMajorBiomes(
@@ -81,8 +82,8 @@ public class DimensionBootstrap implements IBootstrap {
 								4
 							),
 							new GenLayerRandomWithOneMajorBiomes(
-								List.of(),
-								biomes.ANTISPIRES,
+								List.of(Either.left(biomes.ANTISPIRES)),
+								biomes.VOID,
 								4
 							)
 						),

@@ -5,9 +5,11 @@
     "biome_source": {
       "type": "voidscape:layered",
       "layerBottomDownwards": {
-        "biomes": [],
+        "biomes": [
+          "voidscape:antispires"
+        ],
         "chance": 4,
-        "majorBiome": "voidscape:antispires"
+        "majorBiome": "voidscape:void"
       },
       "layerBottomDownwardsStart": 32,
       "layerThreeSlicesBetween": {
@@ -26,10 +28,11 @@
       },
       "layerTopUpwards": {
         "biomes": [
+          "voidscape:thunderspires",
           "voidscape:thunder_forest"
         ],
         "chance": 4,
-        "majorBiome": "voidscape:thunder_forest"
+        "majorBiome": "voidscape:void"
       },
       "layerTopUpwardsStart": 160,
       "possibleBiomes": [
