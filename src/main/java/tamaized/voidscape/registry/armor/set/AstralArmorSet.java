@@ -48,7 +48,7 @@ public class AstralArmorSet {
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD),
 			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
 			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.30D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID.concat("_head"), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
 		),
 		TOOLTIP
 	);
@@ -60,7 +60,8 @@ public class AstralArmorSet {
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST),
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.CHEST),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID.concat("_chest"), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST)
 		),
 		(stack, tick) -> stack.getOrDefault(itemComponents.ELYTRA, false),
 		TOOLTIP
@@ -73,7 +74,8 @@ public class AstralArmorSet {
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS),
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.LEGS),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID.concat("_legs"), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS)
 		),
 		TOOLTIP
 	);
@@ -85,7 +87,8 @@ public class AstralArmorSet {
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.FEET),
 			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.FEET),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.DRACONIC_HEALTH_ID.concat("_feet"), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.FEET)
 		),
 		TOOLTIP
 	);
