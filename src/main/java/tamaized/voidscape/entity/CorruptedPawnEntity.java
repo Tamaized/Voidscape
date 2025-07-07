@@ -55,6 +55,8 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	@Nullable
 	private Entity target;
 
+	private boolean modConflictDetected = false;
+
 	public CorruptedPawnEntity(Level level) {
 		this(entities.CORRUPTED_PAWN.get(), level);
 	}
@@ -99,8 +101,16 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		return isNoAi() || (player != null && player.equals(target));
 	}
 
+	public boolean detectModConflict() {
+		if (modConflictDetected)
+			return true;
+		modConflictDetected = true;
+		return false;
+	}
+
 	@Override
 	public void tick() {
+		modConflictDetected = false;
 		if (isNoAi()) {
 			super.tick();
 			return;

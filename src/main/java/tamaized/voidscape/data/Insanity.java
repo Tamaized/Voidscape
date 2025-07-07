@@ -307,6 +307,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 					} else if (!levelUtil.isInVoidDimension(parent.level()) || paranoia < 600) {
 						hunt.remove(Entity.RemovalReason.DISCARDED);
 						hunt = null;
+					} else if (hunt.detectModConflict()) {
+						hunt.tick();
 					}
 				}
 			}
