@@ -194,7 +194,7 @@ public class LangProviderFactory {
 			}
 
 			private void addAttribute(Holder<Attribute> attribute, String translation) {
-				add("attribute." + attribute.value().getDescriptionId(), translation);
+				add(attribute.value().getDescriptionId(), translation);
 			}
 
 			private void addDeathMessage(ResourceKey<DamageType> key, String translation) {
