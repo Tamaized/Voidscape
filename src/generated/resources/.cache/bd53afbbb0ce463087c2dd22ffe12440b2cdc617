@@ -1,8 +1,8 @@
-// 1.21.1	2025-07-04T21:49:12.6303093	Block Models: voidscape
+// 1.21.1	2025-07-06T22:17:44.9595985	Block Models: voidscape
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/antirock.json
 911fe93ff53b48adc8189eaf7d263be61e88032c assets/voidscape/models/block/astralrock.json
 dbbaf2aad472759e09abab996048c538392fd65e assets/voidscape/models/block/charred_brick.json
-13654e3e1b7516480e81f62c2f58933f9464a803 assets/voidscape/models/block/cracked_astralrock.json
+a7ad1faddd2a489bdf939f07c56969136d467d0a assets/voidscape/models/block/cracked_astralrock.json
 dfdd1ee49a1b5ea03a00dbcf38d8e8d3859ed31a assets/voidscape/models/block/ethereal_fruit_end.json
 51e49b6e64ebf275701f05d98ab08766ffe9f09f assets/voidscape/models/block/ethereal_fruit_nether.json
 034ee51e0947fd7dbc358d3fddc9ceb1773de152 assets/voidscape/models/block/ethereal_fruit_null.json

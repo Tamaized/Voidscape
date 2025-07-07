@@ -52,12 +52,12 @@ public class CrackedAstralrockBlockModelHolder extends BlockModelHolder {
 			.end()
 			.element()
 				.from(0, 0, 0).to(16, 16, 16)
-				.face(Direction.DOWN).texture("#base").cullface(Direction.DOWN).emissivity(15, 15).end()
-				.face(Direction.UP).texture("#base").cullface(Direction.UP).emissivity(15, 15).end()
-				.face(Direction.NORTH).texture("#base").cullface(Direction.NORTH).emissivity(15, 15).end()
-				.face(Direction.SOUTH).texture("#base").cullface(Direction.SOUTH).emissivity(15, 15).end()
-				.face(Direction.WEST).texture("#base").cullface(Direction.WEST).emissivity(15, 15).end()
-				.face(Direction.EAST).texture("#base").cullface(Direction.EAST).emissivity(15, 15).end()
+				.face(Direction.DOWN).texture("#overlay").cullface(Direction.DOWN).emissivity(15, 15).end()
+				.face(Direction.UP).texture("#overlay").cullface(Direction.UP).emissivity(15, 15).end()
+				.face(Direction.NORTH).texture("#overlay").cullface(Direction.NORTH).emissivity(15, 15).end()
+				.face(Direction.SOUTH).texture("#overlay").cullface(Direction.SOUTH).emissivity(15, 15).end()
+				.face(Direction.WEST).texture("#overlay").cullface(Direction.WEST).emissivity(15, 15).end()
+				.face(Direction.EAST).texture("#overlay").cullface(Direction.EAST).emissivity(15, 15).end()
 			.end();
 		// @formatter:on
 	}
