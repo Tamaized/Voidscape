@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.common.EffectCure;
+import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Set;
@@ -46,10 +47,11 @@ public class StandardEffect extends MobEffect {
 				float y2 = y1 + 18;
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-				buffer.addVertex(x, y2, z).setUv(0, 1);
-				buffer.addVertex(x2, y2, z).setUv(1, 1);
-				buffer.addVertex(x2, y1, z).setUv(1, 0);
-				buffer.addVertex(x, y1, z).setUv(0, 0);
+				Matrix4f matrix4f = guiGraphics.pose().last().pose();
+				buffer.addVertex(matrix4f, x, y2, z).setUv(0, 1);
+				buffer.addVertex(matrix4f, x2, y2, z).setUv(1, 1);
+				buffer.addVertex(matrix4f, x2, y1, z).setUv(1, 0);
+				buffer.addVertex(matrix4f, x, y1, z).setUv(0, 0);
 				BufferUploader.drawWithShader(buffer.buildOrThrow());
 				return true;
 			}
@@ -61,12 +63,14 @@ public class StandardEffect extends MobEffect {
 				float y1 = y + 3;
 				float x2 = x1 + 18;
 				float y2 = y1 + 18;
+				z = 0;
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-				buffer.addVertex(x1, y2, z).setUv(0, 1);
-				buffer.addVertex(x2, y2, z).setUv(1, 1);
-				buffer.addVertex(x2, y1, z).setUv(1, 0);
-				buffer.addVertex(x1, y1, z).setUv(0, 0);
+				Matrix4f matrix4f = guiGraphics.pose().last().pose();
+				buffer.addVertex(matrix4f, x1, y2, z).setUv(0, 1);
+				buffer.addVertex(matrix4f, x2, y2, z).setUv(1, 1);
+				buffer.addVertex(matrix4f, x2, y1, z).setUv(1, 0);
+				buffer.addVertex(matrix4f, x1, y1, z).setUv(0, 0);
 				BufferUploader.drawWithShader(buffer.buildOrThrow());
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 				return true;
