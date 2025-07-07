@@ -11,7 +11,7 @@ import tamaized.voidscape.entity.CorruptedPawnEntity;
 public class CorruptedPawnAntiModConflictTicker {
 
 	@PostConstruct(PostConstruct.Bus.GAME)
-	private void test(IEventBus bus) {
+	private void setup(IEventBus bus) {
 		bus.addListener(EventPriority.LOWEST, true, EntityTickEvent.Pre.class, event -> {
 			if (event.getEntity() instanceof CorruptedPawnEntity && event.isCanceled())
 				event.setCanceled(false);

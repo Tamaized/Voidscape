@@ -23,6 +23,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -89,6 +90,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	private boolean aura;
 	private int leapParticles;
 
+	@Nullable
 	private CorruptedPawnEntity hunt;
 
 	private boolean dirty;
@@ -302,8 +304,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 				if (hunt != null) {
 					if (hunt.isRemoved()) {
 						hunt = null;
-					} else if (!hunt.isAlive()) {
 						paranoia = 0;
+						if (parent instanceof ServerPlayer serverPlayer)
+							sendToClient(serverPlayer);
 					} else if (!levelUtil.isInVoidDimension(parent.level()) || paranoia < 600) {
 						hunt.remove(Entity.RemovalReason.DISCARDED);
 						hunt = null;
@@ -315,6 +318,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		}
 	}
 
+	@Nullable
 	public CorruptedPawnEntity getHunter() {
 		return hunt;
 	}
@@ -429,6 +433,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		int huntId = buffer.readInt();
 		if (huntId >= 0 && Minecraft.getInstance().level != null && Minecraft.getInstance().level.getEntity(huntId) instanceof CorruptedPawnEntity pawn)
 			hunt = pawn;
+		else if (huntId < 0)
+			hunt = null;
 	}
 
 	private void sendToClient(ServerPlayer parent) {

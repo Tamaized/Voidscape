@@ -173,23 +173,4 @@ public class ASMHooks {
 		}
 	}
 
-	/**
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.GameRenderer#renderLevel(float, long, PoseStack)}<br>
-	 * [BEFORE FIRST ASTORE 7]
-	 *//*
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	public static Entity lockCamera(@Nullable Entity entity) {
-		if (entity == null)
-			return null;
-		CorruptedPawnEntity hunt = entity.getData(ModDataAttachments.INSANITY).getHunter();
-		if (hunt != null) {
-			entity.lookAt(EntityAnchorArgument.Anchor.EYES, hunt.getEyePosition());
-			entity.yRotO = entity.getYRot();
-			entity.xRotO = entity.getXRot();
-		}
-		return entity;
-	}*/
-
 }
