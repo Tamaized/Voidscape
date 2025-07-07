@@ -113,6 +113,11 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 		buffer.addVertex(lvt_10_1_[1].x(), lvt_10_1_[1].y(), lvt_10_1_[1].z()).setUv(lvt_13_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
 		buffer.addVertex(lvt_10_1_[2].x(), lvt_10_1_[2].y(), lvt_10_1_[2].z()).setUv(lvt_12_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
 		buffer.addVertex(lvt_10_1_[3].x(), lvt_10_1_[3].y(), lvt_10_1_[3].z()).setUv(lvt_12_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+
+		buffer.addVertex(lvt_10_1_[0].x(), lvt_10_1_[0].y(), lvt_10_1_[0].z()).setUv(lvt_13_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[3].x(), lvt_10_1_[3].y(), lvt_10_1_[3].z()).setUv(lvt_12_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[2].x(), lvt_10_1_[2].y(), lvt_10_1_[2].z()).setUv(lvt_12_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		buffer.addVertex(lvt_10_1_[1].x(), lvt_10_1_[1].y(), lvt_10_1_[1].z()).setUv(lvt_13_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
 	}
 
 
