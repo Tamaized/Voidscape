@@ -20,14 +20,12 @@ public class ModifyEntityRenderTransparencyTransformer implements ITransformer<M
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderToBuffer", "(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V")
+		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderToBuffer", "(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V")
 			.findFirst()
-			.ifPresent(instruction -> {
-				node.instructions.insertBefore(instruction, ASMAPI.listOf(
-					new VarInsnNode(Opcodes.ALOAD, 1),
-					ASMUtil.invokeAsmHook("modifyEntityTransparency", "(FLnet/minecraft/world/entity/LivingEntity;)F")
-				));
-			});
+			.ifPresent(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
+				new VarInsnNode(Opcodes.ALOAD, 1),
+				ASMUtil.invokeAsmHook("modifyEntityTransparency", "(ILnet/minecraft/world/entity/LivingEntity;)I")
+			)));
 		return node;
 	}
 

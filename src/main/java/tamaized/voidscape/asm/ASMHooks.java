@@ -17,6 +17,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -79,8 +80,12 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link LivingEntityRenderer#render(LivingEntity, float, float, PoseStack, MultiBufferSource, int)}<br>
 	 */
-	public static float modifyEntityTransparency(float alpha, LivingEntity entity) {
-		return Math.min(Mth.clamp(1F - entity.getData(dataAttachments.INSANITY).getInfusion() / 600F, 0F, 1F), alpha);
+	public static int modifyEntityTransparency(int color, LivingEntity entity) {
+		float infusion = entity.getData(dataAttachments.INSANITY).getInfusion();
+		if (infusion <= 0F)
+			return color;
+		int alpha = (int) (Math.min(Mth.clamp(1F - infusion / 600F, 0F, 1F) * 255F, FastColor.ARGB32.alpha(color)));
+		return FastColor.ARGB32.color(alpha, color);
 	}
 
 	/**
@@ -90,7 +95,7 @@ public class ASMHooks {
 	 * {@link LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
 	 */
 	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
-		return entity.level() != null && levelUtil.isInVoidDimension(entity.level()) && !(entity instanceof IEthereal) ?
+		return !(entity instanceof IEthereal) && entity.getData(dataAttachments.INSANITY).getInfusion() > 0F ?
 			RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) :
 			type;
 	}
