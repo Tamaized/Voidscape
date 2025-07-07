@@ -2,6 +2,7 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.IEventBus;
@@ -12,6 +13,8 @@ import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.util.NamespaceUtils;
+
+import java.util.Locale;
 
 @Component
 public class ModAttributes {
@@ -29,8 +32,7 @@ public class ModAttributes {
 	public final Holder<Attribute> VOIDIC_DMG = REGISTERY.register("voidic_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_dmg"), 0F, 0F, 2048F));
 	public final Holder<Attribute> VOIDIC_ARROW_DMG = REGISTERY.register("voidic_arrow_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
 
-
-	public final String DRACONIC_HEALTH_ID = "draconic_health";
+	private final String DRACONIC_HEALTH_ID = "draconic_health";
 
 	@PostConstruct
 	private void setup(IEventBus bus) {
@@ -43,6 +45,10 @@ public class ModAttributes {
 			event.add(e, VOIDIC_DMG, 0F);
 			event.add(e, VOIDIC_ARROW_DMG, 0F);
 		}));
+	}
+
+	public String getDraconicHealthId(EquipmentSlot slot) {
+		return DRACONIC_HEALTH_ID.concat(slot.getName().toLowerCase(Locale.ROOT));
 	}
 
 }
