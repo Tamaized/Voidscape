@@ -7,7 +7,7 @@
       "spawns": [
         {
           "type": "voidscape:voids_wrath",
-          "maxCount": 1,
+          "maxCount": 3,
           "minCount": 1,
           "weight": 100
         }
