@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-04T18:23:18.229086	Item Models: voidscape
+// 1.21.1	2025-07-07T13:27:45.6319649	Item Models: voidscape
 cd8847016a11fc3d2738342ea5bd29f343123e3a assets/voidscape/models/item/antirock.json
 166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 02a15fddd2bb1ffcc60a38865ca1fd394191a6b8 assets/voidscape/models/item/astral_axe.json
@@ -32,7 +32,7 @@ d28b27c07236291508ec48f3729e9f028bcf04d3 assets/voidscape/models/item/astral_xbo
 8cd6bfcdbd5b45ac5978047c31b23004e1e67da0 assets/voidscape/models/item/astral_xbow_pulling_0.json
 9597e5ef444455c11c5bd401a941dc835bc5bc03 assets/voidscape/models/item/astral_xbow_pulling_1.json
 e1d59f520692ff7b0b30cc385fc19cdf682b0bbd assets/voidscape/models/item/astral_xbow_pulling_2.json
-ec9adf6a94304549c7767feaa184249571360428 assets/voidscape/models/item/charred_bone.json
+5d55ad7d28ed29a19f8716b6b3851cd1bec233b0 assets/voidscape/models/item/charred_bone.json
 e55f564e4f986512aee28378506d646300cea4f6 assets/voidscape/models/item/charred_brick.json
 1f84de10a4f557e7d7b4751a4e558034e07fcc40 assets/voidscape/models/item/charred_warhammer.json
 fa602c7a08babf1576b1d9b9246fe3b5552dc53c assets/voidscape/models/item/charred_warhammer_head.json
