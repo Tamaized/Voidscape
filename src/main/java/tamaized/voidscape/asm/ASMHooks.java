@@ -76,7 +76,7 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}<br>
 	 */
 	public static boolean shouldRenderElytra(boolean o, ItemStack stack) {
-		return o || stack.getOrDefault(components.ELYTRA, false);
+		return o || (!stack.is(armor.corruptArmorSet().CORRUPT_CHEST.get()) && stack.getOrDefault(components.ELYTRA, false));
 	}
 
 	/**
