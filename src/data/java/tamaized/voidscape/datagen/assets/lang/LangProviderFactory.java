@@ -156,6 +156,12 @@ public class LangProviderFactory {
 
 				addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration");
 
+				addCommonConfig("bedrock_teleportation_dimension_blacklist", "Bedrock Teleportation Dimension Blacklist");
+				addCommonConfig("bedrockTeleportationDimensionWhitelist", "Bedrock Teleportation Dimension Whitelist Toggle");
+
+				addConfiguration("donatorSettings", "Donor Settings");
+				addClientConfig("donatorSettings.enable", "Enable");
+				addClientConfig("donatorSettings.color", "Color");
 			}
 
 			private void addCreativeTab(String translation) {
