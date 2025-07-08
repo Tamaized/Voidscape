@@ -17,6 +17,8 @@ import tamaized.voidscape.registry.ModSurfaceRules;
 import tamaized.voidscape.surfacerule.AirAboveConditionSource;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -37,8 +39,64 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 	@Nullable
 	private Holder<NoiseGeneratorSettings> VOID;
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
+		return this.bootstrap(builder, false);
+	}
+
+	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder, boolean withAether) {
 		return builder.add(Registries.NOISE_SETTINGS, context -> {
+			List<SurfaceRules.RuleSource> surfaceRules = new ArrayList<>(Arrays.asList(
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.OVERWORLD),
+					SurfaceRules.sequence(
+						SurfaceRules.ifTrue(
+							new AirAboveConditionSource(),
+							SurfaceRules.state(Blocks.GRASS_BLOCK.defaultBlockState())
+						),
+						SurfaceRules.state(Blocks.STONE.defaultBlockState())
+					)
+				),
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.NETHER),
+					SurfaceRules.sequence(
+						SurfaceRules.ifTrue(
+							new AirAboveConditionSource(),
+							SurfaceRules.state(Blocks.CRIMSON_NYLIUM.defaultBlockState())
+						),
+						SurfaceRules.state(Blocks.NETHERRACK.defaultBlockState())
+					)
+				),
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.END),
+					SurfaceRules.state(Blocks.END_STONE.defaultBlockState())
+				),
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.NULL),
+					SurfaceRules.state(blocks.nullBiomeBlocks().NULL_BLACK.get().defaultBlockState())
+				),
+				SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.THUNDER_FOREST),
+					SurfaceRules.sequence(
+						SurfaceRules.ifTrue(
+							new AirAboveConditionSource(),
+							SurfaceRules.state(blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM.get().defaultBlockState())
+						),
+						SurfaceRules.state(Blocks.BEDROCK.defaultBlockState())
+					)
+				)
+			));
+			if (withAether)
+				surfaceRules.add(SurfaceRules.ifTrue(
+					SurfaceRules.isBiome(biomes.AETHER),
+					SurfaceRules.sequence(
+						SurfaceRules.ifTrue(
+							new AirAboveConditionSource(),
+							SurfaceRules.state(AetherBlocks.AETHER_GRASS_BLOCK.get().defaultBlockState())
+						),
+						SurfaceRules.state(AetherBlocks.HOLYSTONE.get().defaultBlockState())
+					)
+				));
 			VOID = context.register(
 				ResourceKey.create(Registries.NOISE_SETTINGS, dimensions.VOID.location()),
 				new NoiseGeneratorSettings(
@@ -88,56 +146,7 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 						DensityFunctions.zero(),
 						DensityFunctions.zero()
 					),
-					SurfaceRules.sequence(
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.OVERWORLD),
-							SurfaceRules.sequence(
-								SurfaceRules.ifTrue(
-									new AirAboveConditionSource(),
-									SurfaceRules.state(Blocks.GRASS_BLOCK.defaultBlockState())
-								),
-								SurfaceRules.state(Blocks.STONE.defaultBlockState())
-							)
-						),
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.NETHER),
-							SurfaceRules.sequence(
-								SurfaceRules.ifTrue(
-									new AirAboveConditionSource(),
-									SurfaceRules.state(Blocks.CRIMSON_NYLIUM.defaultBlockState())
-								),
-								SurfaceRules.state(Blocks.NETHERRACK.defaultBlockState())
-							)
-						),
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.END),
-							SurfaceRules.state(Blocks.END_STONE.defaultBlockState())
-						),
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.NULL),
-							SurfaceRules.state(blocks.nullBiomeBlocks().NULL_BLACK.get().defaultBlockState())
-						),
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.THUNDER_FOREST),
-							SurfaceRules.sequence(
-								SurfaceRules.ifTrue(
-									new AirAboveConditionSource(),
-									SurfaceRules.state(blocks.thunderForestBiomeBlocks().THUNDER_NYLIUM.get().defaultBlockState())
-								),
-								SurfaceRules.state(Blocks.BEDROCK.defaultBlockState())
-							)
-						),
-						SurfaceRules.ifTrue(
-							SurfaceRules.isBiome(biomes.AETHER),
-							SurfaceRules.sequence(
-								SurfaceRules.ifTrue(
-									new AirAboveConditionSource(),
-									SurfaceRules.state(AetherBlocks.AETHER_GRASS_BLOCK.get().defaultBlockState())
-								),
-								SurfaceRules.state(AetherBlocks.HOLYSTONE.get().defaultBlockState())
-							)
-						)
-					),
+					SurfaceRules.sequence(surfaceRules.toArray(new SurfaceRules.RuleSource[0])),
 					List.of(),
 					0,
 					false,
