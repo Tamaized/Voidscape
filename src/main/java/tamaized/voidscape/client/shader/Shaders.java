@@ -3,6 +3,7 @@ package tamaized.voidscape.client.shader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import tamaized.beanification.Component;
@@ -11,7 +12,7 @@ import tamaized.voidscape.Voidscape;
 
 import java.io.IOException;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class Shaders {
 
 	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_LESSTHAN_POS_COLOR;

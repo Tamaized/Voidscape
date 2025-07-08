@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.util.ColorHelper;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 
 public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityModel<T> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ColorHelper colorHelper;
 
 	private static final int[] CAST_MOVEMENT = {225, 315, 135, 270, 45, 180, 0, 90};

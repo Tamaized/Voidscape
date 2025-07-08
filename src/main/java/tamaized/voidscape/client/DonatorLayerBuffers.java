@@ -8,6 +8,7 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import tamaized.beanification.Autowired;
@@ -19,10 +20,10 @@ import tamaized.voidscape.client.shader.Shaders;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class DonatorLayerBuffers {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
 	private final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/donator.png");

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
@@ -20,7 +21,7 @@ import tamaized.voidscape.entity.NullServantEntity;
 
 public class RenderNullServant<T extends NullServantEntity> extends LivingEntityRenderer<T, ModelNullServant<T>> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static class ColorHack {

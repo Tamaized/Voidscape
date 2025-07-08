@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -23,13 +24,13 @@ import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class TurmoilOverlay {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	private final int STENCIL_INDEX = 10;

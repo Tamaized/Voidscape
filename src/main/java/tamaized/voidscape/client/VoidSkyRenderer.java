@@ -6,14 +6,15 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.client.shader.Shaders;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class VoidSkyRenderer {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
 	public void render() {

@@ -1,4 +1,4 @@
-package tamaized.voidscape.event;
+package tamaized.voidscape.client.event;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;

@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.ClientHooks;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.RegUtil;
@@ -99,6 +100,7 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
 		return !(entity instanceof IEthereal) && entity.getData(dataAttachments.INSANITY).getInfusion() > 0F ?
 			RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) :
@@ -129,6 +131,7 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static float lightTextureBrightness(float o, int light) {
 		if (levelUtil.isInVoidDimension(Minecraft.getInstance().level))
 			return voidVisibilityCache.value(o, light);
@@ -163,6 +166,7 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)} <br>
 	 */
+	@OnlyIn(Dist.CLIENT)
 	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, ArmorMaterial.Layer armormaterial$layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
 		if (RegUtil.isArmorOverlay(stack)) {
 			RegUtil.renderingArmorOverlay = true;

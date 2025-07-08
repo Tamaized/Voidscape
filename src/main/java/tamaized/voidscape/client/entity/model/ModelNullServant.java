@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.client.shader.Shaders;
@@ -31,7 +32,7 @@ import java.util.function.Function;
 
 public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T> implements ArmedModel {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static Shaders shaders;
 
 	private static final Function<ResourceLocation, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {

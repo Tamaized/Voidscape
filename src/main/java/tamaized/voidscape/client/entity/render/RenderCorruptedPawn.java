@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
@@ -16,7 +17,7 @@ import tamaized.voidscape.entity.CorruptedPawnEntity;
 
 public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelCorruptedPawn<T>> extends LivingEntityRenderer<T, M> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");

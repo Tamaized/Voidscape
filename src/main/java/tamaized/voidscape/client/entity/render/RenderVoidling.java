@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
@@ -16,7 +17,7 @@ import tamaized.voidscape.entity.VoidlingEntity;
 
 public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>> extends LivingEntityRenderer<T, M> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");

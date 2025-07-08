@@ -19,7 +19,7 @@ import tamaized.voidscape.registry.ModEntities;
 @Component(dist = Dist.CLIENT)
 public class ModModelLayerLocations {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModEntities entities;
 
 	public final ModelLayerLocation VOIDLING = make("voidling");

@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ChargedProjectiles;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -22,16 +23,16 @@ import tamaized.voidscape.registry.tool.set.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class ModelBakeListener {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ItemModelOverridePredicates itemModelOverridePredicates;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModToolSetComponentDirectory toolSets;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModArmorSetComponentDirectory armorSets;
 
 	private final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();

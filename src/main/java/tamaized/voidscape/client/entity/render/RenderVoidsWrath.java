@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
@@ -20,7 +21,7 @@ import tamaized.voidscape.entity.VoidsWrathEntity;
 
 public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");

@@ -1,6 +1,7 @@
 package tamaized.voidscape.client.shader;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.util.UnsafeUtil;
 
@@ -9,7 +10,7 @@ import java.util.function.Supplier;
 
 public class WrappedBindableShaderInstance extends BindableShaderInstance {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static UnsafeUtil unsafeUtil;
 
 	private Supplier<ShaderInstance> wrapped;
