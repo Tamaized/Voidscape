@@ -67,7 +67,7 @@ public class VoidBiomeBootstrap implements IBiomeBootstrap {
 			.generationSettings(new SortedFeaturesBiomeGenerationSettingsBuilder(context)
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(entities.VOIDS_WRATH.get(), 0.7F, 0.15F)
 				.build())

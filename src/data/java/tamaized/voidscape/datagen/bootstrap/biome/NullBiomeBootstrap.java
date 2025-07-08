@@ -71,7 +71,7 @@ public class NullBiomeBootstrap implements IBiomeBootstrap {
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, nullTreePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitNullPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(entities.NULL_SERVANT.get(), 0.7F, 0.15F)
 				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(

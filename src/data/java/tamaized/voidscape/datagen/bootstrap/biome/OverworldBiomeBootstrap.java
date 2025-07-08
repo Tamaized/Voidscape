@@ -124,7 +124,7 @@ public class OverworldBiomeBootstrap implements IBiomeBootstrap {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, grassPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, etherealFruitOverworldPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(EntityType.SPIDER, 0.7F, 0.15F)
 				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
