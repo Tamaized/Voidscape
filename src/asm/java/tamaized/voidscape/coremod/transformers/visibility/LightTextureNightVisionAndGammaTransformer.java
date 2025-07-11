@@ -22,7 +22,7 @@ public class LightTextureNightVisionAndGammaTransformer implements ITransformer<
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
 		Stream.concat(
-				ASMUtil.findVarInstructions(node, Opcodes.FSTORE, 5), // Night Vision
+				ASMUtil.findVarInstructions(node, Opcodes.FSTORE, 9), // Night Vision
 				ASMUtil.findVarInstructions(node, Opcodes.FSTORE, 20) // Gamma
 			)
 			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
