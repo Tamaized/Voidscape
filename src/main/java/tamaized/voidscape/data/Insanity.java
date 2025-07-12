@@ -192,8 +192,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			infusion--;
 		}
 		decrementInfusion = 0;
-		paranoia = Mth.clamp(paranoia, 0, MAX_INFUSION);
-		infusion = Mth.clamp(infusion, 0, MAX_PARANOIA);
+		paranoia = Mth.clamp(paranoia, 0, MAX_PARANOIA);
+		infusion = Mth.clamp(infusion, 0, MAX_INFUSION);
 		boolean infusionImmune = parent instanceof ArmorStand || (parent instanceof IEthereal ethereal && ethereal.insanityImmunity());
 		if (infusionImmune) {
 			paranoia = 0;

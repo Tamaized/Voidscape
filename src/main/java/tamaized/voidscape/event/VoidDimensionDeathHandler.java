@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.EffectCures;
@@ -47,11 +48,14 @@ public class VoidDimensionDeathHandler {
 			if (levelUtil.isInVoidDimension(player.level())) {
 				player.setHealth(player.getMaxHealth() * 0.1F);
 				player.removeEffectsCuredBy(EffectCures.MILK);
+				player.resetFallDistance();
 				if (!player.level().isClientSide())
-					levelUtil.getPlayersSpawnLevel(player).ifPresent(level -> {
-						player.changeDimension(spawnPointTeleporter.make(player, level));
-						event.setCanceled(true);
-					});
+					levelUtil.getPlayersSpawnLevel(player)
+						.or(() -> levelUtil.getLevel(player.level(), Level.OVERWORLD))
+						.ifPresent(level -> {
+							player.changeDimension(spawnPointTeleporter.make(player, level));
+							event.setCanceled(true);
+						});
 			}
 		} else {
 			if ((event.getSource().getDirectEntity() instanceof Player || event.getSource().getEntity() instanceof Player) &&
