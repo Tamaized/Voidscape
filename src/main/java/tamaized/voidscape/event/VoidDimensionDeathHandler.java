@@ -35,15 +35,11 @@ public class VoidDimensionDeathHandler {
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
-		bus.addListener(EventPriority.HIGHEST, LivingDeathEvent.class, event -> {
-			if (event.getEntity().getData(dataAttachments.INSANITY).getInfusion() >= Insanity.MAX_INFUSION - 1) {
-				handle(event);
-			}
-		});
-		bus.addListener(EventPriority.LOWEST, LivingDeathEvent.class, this::handle);
+		bus.addListener(EventPriority.HIGHEST, LivingDeathEvent.class, this::handlePlayerDeath);
+		bus.addListener(EventPriority.LOWEST, LivingDeathEvent.class, this::handleMobDeath);
 	}
 
-	private void handle(LivingDeathEvent event) {
+	private void handlePlayerDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof ServerPlayer player) {
 			if (levelUtil.isInVoidDimension(player.level())) {
 				player.setHealth(player.getMaxHealth() * 0.1F);
@@ -57,7 +53,12 @@ public class VoidDimensionDeathHandler {
 							event.setCanceled(true);
 						});
 			}
-		} else {
+		}
+	}
+
+	private void handleMobDeath(LivingDeathEvent event) {
+		if (!(event.getEntity() instanceof ServerPlayer player)
+			&& event.getEntity().getData(dataAttachments.INSANITY).getInfusion() >= Insanity.MAX_INFUSION - 1) {
 			if ((event.getSource().getDirectEntity() instanceof Player || event.getSource().getEntity() instanceof Player) &&
 				levelUtil.isInVoidDimension(event.getEntity().level()) &&
 				event.getEntity().getData(dataAttachments.INSANITY).getInfusion() > 200 &&
