@@ -60,15 +60,15 @@ public class VoidCommands {
 						ItemStack stack = new ItemStack(astralArmorSet.ASTRAL_HELMET.get());
 						stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
 								attributes.VOIDIC_VISIBILITY,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 								EquipmentSlotGroup.HEAD
 							).withModifierAdded(
 								attributes.VOIDIC_INFUSION_RES,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 								EquipmentSlotGroup.HEAD
 							).withModifierAdded(
 								attributes.VOIDIC_PARANOIA_RES,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 								EquipmentSlotGroup.HEAD
 							)
 						);

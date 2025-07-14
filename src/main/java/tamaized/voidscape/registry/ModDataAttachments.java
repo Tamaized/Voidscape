@@ -25,6 +25,8 @@ public class ModDataAttachments {
 	public final Supplier<AttachmentType<Float>> VOIDIC_ARROW = REGISTRY.register("voidicarrow", () -> AttachmentType.builder(() -> 0F).serialize(Codec.FLOAT).build());
 	public final Supplier<AttachmentType<Float>> INFUSION_ARROW = REGISTRY.register("infusionarrow", () -> AttachmentType.builder(() -> 0F).serialize(Codec.FLOAT).build());
 
+	public final Supplier<AttachmentType<Integer>> DATA_CORRECTION = REGISTRY.register("datacorrection", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).copyOnDeath().build());
+
 	@PostConstruct
 	private void setup(IEventBus bus) {
 		NeoForge.EVENT_BUS.addListener(EntityTickEvent.Post.class, event -> {

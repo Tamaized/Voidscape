@@ -12,12 +12,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -325,7 +327,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	public float calcInfusionRate(Entity parent) {
 		if (parent instanceof LivingEntity entity) {
-			return Mth.clamp(2F - (float) entity.getAttributeValue(attributes.VOIDIC_INFUSION_RES), 0F, 1F);
+			return 1F - (float) entity.getAttributeValue(attributes.VOIDIC_INFUSION_RES);
 		}
 		return 1F;
 	}
@@ -335,8 +337,8 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		/*for (EquipmentSlot equipmentSlotType : EquipmentSlot.values()) {
 			ItemStack itemstack = entity.getItemBySlot(equipmentSlotType);
 			if (!itemstack.isEmpty()) {
-				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
-				entity.getAttributes().addTransientAttributeModifiers(itemstack.getAttributeModifiers(equipmentSlotType));
+				entity.getAttributes().removeAttributeModifiers(itemstack.getAttributeModifiers());
+				entity.getAttributes().addTransientAttributeModifiers(itemstack.getAttributeModifiers());
 			}
 
 		}*/
@@ -344,7 +346,7 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	public float calcParanoiaRate(Entity parent) {
 		if (parent instanceof LivingEntity entity) {
-			return Mth.clamp(2F - (float) entity.getAttributeValue(attributes.VOIDIC_PARANOIA_RES), 0F, 1F) * 0.9F;
+			return (1F - (float) entity.getAttributeValue(attributes.VOIDIC_PARANOIA_RES)) * 0.9F;
 		}
 		return 1F;
 	}

@@ -35,9 +35,9 @@ public class TitaniteArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.20D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.HEAD),
+			() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_VALUE, 0.20D, EquipmentSlotGroup.HEAD)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -48,8 +48,8 @@ public class TitaniteArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.CHEST),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.CHEST),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.CHEST)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.CHEST),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.CHEST)
 		),
 		(stack, tick) -> stack.getOrDefault(itemComponents.ELYTRA, false),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
@@ -61,8 +61,8 @@ public class TitaniteArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.LEGS),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.LEGS),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.LEGS)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.LEGS),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.LEGS)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -73,8 +73,8 @@ public class TitaniteArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.FEET),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.15D, EquipmentSlotGroup.FEET),
-			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.25D, EquipmentSlotGroup.FEET)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.FEET),
+			() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.FEET)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);

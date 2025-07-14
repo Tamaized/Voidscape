@@ -47,7 +47,7 @@ public class VoidicDamageSourceHandler {
 						target.invulnerableTime = 0;
 						target.hurt(damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
 					}
-					final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION) - 1F)
+					final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION))
 										   * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F)
 										   * Insanity.MAX_INFUSION;
 					if (infusion > 0)

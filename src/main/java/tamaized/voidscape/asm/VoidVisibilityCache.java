@@ -21,7 +21,7 @@ public class VoidVisibilityCache {
 		double attribute = Minecraft.getInstance().player.getAttributeValue(attributes.VOIDIC_VISIBILITY);
 		o = -0.3F; // hardcode for now, need to get this value from the DimType
 		// Note to self: LightTexture#getBrightness contains the DimType
-		double light = o + (2D - o) * (attribute - 1D);
+		double light = attribute > 0 ? attribute : o;
 		if (brightnessCache == null || attributeCache != attribute) {
 			brightnessCache = fillBrightnessRamp((float) light);
 			attributeCache = attribute;
