@@ -16,6 +16,7 @@ public class PickaxeItemTagProviderFactory implements IItemTagProviderFactory {
 	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
 		accessor.tag(ItemTags.PICKAXES).add(
 			tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_PICKAXE.get(),
+			tools.charredToolSet().CHARRED_WARHAMMER.get(),
 			tools.titaniteToolSet().TITANITE_PICKAXE.get(),
 			tools.ichorToolSet().ICHOR_PICKAXE.get(),
 			tools.astralToolSet().ASTRAL_PICKAXE.get()

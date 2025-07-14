@@ -1,17 +1,17 @@
-// 1.21.1	2025-07-04T18:23:18.2279709	Tags for minecraft:item mod id voidscape
+// 1.21.1	2025-07-14T10:04:45.6352968	Tags for minecraft:item mod id voidscape
 f53b688d18ba56f04ad3edbb3be596c57835f98b data/minecraft/tags/item/axes.json
 9dda9ecb1dccaaae060cfadbd04456a3ca4ac187 data/minecraft/tags/item/chest_armor.json
 de8bd45cdfcbdbd0ad2db8c9a9aabe32253a9712 data/minecraft/tags/item/enchantable/bow.json
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/minecraft/tags/item/enchantable/crossbow.json
 2ef6612762f5d5f9a1044a10d4d206a234f83eba data/minecraft/tags/item/enchantable/durability.json
-4a317bd506812d8418888e54089ea949ff735665 data/minecraft/tags/item/enchantable/sword.json
+e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/sword.json
 ed163ff68b359d0508693ccf44614289e689ec0f data/minecraft/tags/item/foot_armor.json
 abc6ac58756cce49b3a8dd939498a20577de28cd data/minecraft/tags/item/head_armor.json
 fcc66acdcf606d2ac9367043d1bc31d2cc311d83 data/minecraft/tags/item/hoes.json
 d6e23a01364e4f9414b5821191524f7ab77dd6ce data/minecraft/tags/item/leg_armor.json
 dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/item/logs.json
 926b9496d731adec0e05bd6aa529a847359e0882 data/minecraft/tags/item/non_flammable_wood.json
-868a502d6da4ffcce42511aa72bea971cdc6be21 data/minecraft/tags/item/pickaxes.json
+cf8b878e26c46bd53d717c85fb56085c19f06aca data/minecraft/tags/item/pickaxes.json
 0603e38093539eb8aae23fadb83a82018e4908b8 data/minecraft/tags/item/planks.json
 8153b6b7e880177681265b3a88a9f1de3af8a974 data/minecraft/tags/item/shovels.json
 586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/item/slabs.json

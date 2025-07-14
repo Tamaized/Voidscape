@@ -16,6 +16,7 @@ public class EnchantableSwordItemTagProviderFactory implements IItemTagProviderF
 	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
 		accessor.tag(ItemTags.SWORD_ENCHANTABLE).add(
 			tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_AXE.get(),
+			tools.charredToolSet().CHARRED_WARHAMMER.get(),
 			tools.corruptToolSet().CORRUPT_AXE.get(),
 			tools.titaniteToolSet().TITANITE_AXE.get(),
 			tools.ichorToolSet().ICHOR_AXE.get(),
