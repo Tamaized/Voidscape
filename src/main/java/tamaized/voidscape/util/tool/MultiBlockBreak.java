@@ -94,7 +94,7 @@ public class MultiBlockBreak {
 			return (hardness == 0 ? h == 0 : h / hardness <= 3) && item.isCorrectToolForDrops(stack, state);
 		}).forEach(p -> {
 			final BlockPos blockPos = p.left();
-			final BlockState state = p.right();
+			final BlockState state = p.right().getBlock().playerWillDestroy(level, pos, p.right(), player);
 			BlockEvent.BreakEvent event = CommonHooks.fireBlockBreak(level, player.gameMode.getGameModeForPlayer(), player, blockPos, state);
 			if (!event.isCanceled()) {
 				if (player.isCreative()) {
