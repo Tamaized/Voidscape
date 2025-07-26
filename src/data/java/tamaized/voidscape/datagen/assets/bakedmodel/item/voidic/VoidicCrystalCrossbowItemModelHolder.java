@@ -67,7 +67,7 @@ public class VoidicCrystalCrossbowItemModelHolder extends ItemModelHolder {
 					.scale(0.9F)
 				.end()
 				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-					.rotation(-90, 0, 30)
+					.rotation(-90, 0, -55)
 					.translation(1.13F, 3.2F, 1.13F)
 					.scale(0.68F)
 				.end()

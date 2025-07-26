@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-07T13:27:45.6319649	Item Models: voidscape
+// 1.21.1	2025-07-26T19:54:57.2331435	Item Models: voidscape
 cd8847016a11fc3d2738342ea5bd29f343123e3a assets/voidscape/models/item/antirock.json
 166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 02a15fddd2bb1ffcc60a38865ca1fd394191a6b8 assets/voidscape/models/item/astral_axe.json
@@ -25,7 +25,7 @@ f92743f6bc29e7f6dc7be17e46c23047fd7d8ef6 assets/voidscape/models/item/astral_sho
 ad161a9a65cd9a764cb40b84e1eedc16e28b89d6 assets/voidscape/models/item/astral_shovel_broken.json
 17da81421077df0a5ca7c47d3b796496934d5d5f assets/voidscape/models/item/astral_sword.json
 8c30c27585279f9a1120a02ca3c55d151519cc72 assets/voidscape/models/item/astral_sword_broken.json
-5930567f2571d2c868a6cd348c040048ded2cfbd assets/voidscape/models/item/astral_xbow.json
+a88ec45d3452ce9a85bbdf94344af66fbe46ce07 assets/voidscape/models/item/astral_xbow.json
 d28b27c07236291508ec48f3729e9f028bcf04d3 assets/voidscape/models/item/astral_xbow_arrow.json
 61dc75bc9be6184e40f69f731797ab7a634b3cb2 assets/voidscape/models/item/astral_xbow_broken.json
 5a2c6a4b22a232e4b85c7f8cab5e730e4bc98a5a assets/voidscape/models/item/astral_xbow_firework.json
@@ -58,7 +58,7 @@ efb718f3a912e9cf15056c38bd35752b39919062 assets/voidscape/models/item/corrupt_le
 31252497fbd4940e618304e9a686486fcd9e3038 assets/voidscape/models/item/corrupt_sword.json
 cf88af94fb11bf7c36627f55f69ef6efaaaa5d59 assets/voidscape/models/item/corrupt_sword_broken.json
 034707e50d4449bc4af37e586fa5de909bb81649 assets/voidscape/models/item/corrupt_tome.json
-e1dc9b151a2fe1473413dcf0dd16067ca5fe8a21 assets/voidscape/models/item/corrupt_xbow.json
+ae786dcc2d0279ad47f4c6c7696192e206bb882e assets/voidscape/models/item/corrupt_xbow.json
 ce0f8548e3454f8f8c6331a974f5ad536ad160d3 assets/voidscape/models/item/corrupt_xbow_arrow.json
 4c14a5ee09048a3daa597b1853f3b2ac8e0b4a30 assets/voidscape/models/item/corrupt_xbow_broken.json
 3be2da6d022f05939b7dbccf5233b628e7ddf9a9 assets/voidscape/models/item/corrupt_xbow_firework.json
@@ -105,7 +105,7 @@ bb1d99ededbae8df92cb3f59f8eb4fcfbb5ca571 assets/voidscape/models/item/ichor_pick
 5e3d94b47475483e7748840bc2ef41d6dad3b1fc assets/voidscape/models/item/ichor_sword.json
 9732055872387745ccfb856004e840718e52dc1a assets/voidscape/models/item/ichor_sword_broken.json
 2fc5a479910a4ae6a0ed6f9139fb7a7d8ab66caa assets/voidscape/models/item/ichor_tome.json
-77b9a005348bb6659ecf544a5ffe5144505fa0be assets/voidscape/models/item/ichor_xbow.json
+8c900d2df91c7ead2899c234e8833472d2aaf958 assets/voidscape/models/item/ichor_xbow.json
 9d9e8dc17aef26e5bb6e60edfc7a79ae723de912 assets/voidscape/models/item/ichor_xbow_arrow.json
 a58374ab1c9e8f524d0802e17c2b38e044ae68c6 assets/voidscape/models/item/ichor_xbow_broken.json
 041b5fc1ee1db416d34d66ea1cf6fad12a1a8309 assets/voidscape/models/item/ichor_xbow_firework.json
@@ -158,7 +158,7 @@ fdc5b5548626ea83adab2e96d03d2e4a4e3d1f6e assets/voidscape/models/item/titanite_l
 8bb47e14c1170b740c116fa3db8df057548e85c9 assets/voidscape/models/item/titanite_sword.json
 546a35694be544d50153fb5a27f968bbc7d1ca99 assets/voidscape/models/item/titanite_sword_broken.json
 1f446d03e35f483a1df29b090543a1d7c045f493 assets/voidscape/models/item/titanite_tome.json
-0d40ae0e9eab4d7316c97af78040ae1c153e1097 assets/voidscape/models/item/titanite_xbow.json
+6c48fc8fb1202da32aa0731d145c5f7895c60f36 assets/voidscape/models/item/titanite_xbow.json
 23a9d511e5ea25359ee9d02b6e5b1feca2c5ba47 assets/voidscape/models/item/titanite_xbow_arrow.json
 f35d0d857e0b37db018fd37df8de6d2ca36b325d assets/voidscape/models/item/titanite_xbow_broken.json
 7e9e49630901c64a0cced6e30595d7e5d6f51fc2 assets/voidscape/models/item/titanite_xbow_firework.json
@@ -191,7 +191,7 @@ fcafc0a1fbf8825210d71b955e5c7398ff552c91 assets/voidscape/models/item/voidic_cry
 83f8d091340a69e42a72a83a064da0a51e933d4e assets/voidscape/models/item/voidic_crystal_shield_blocking.json
 83469a750ff7b107a158a62d8b25d23f0ddb9741 assets/voidscape/models/item/voidic_crystal_sword.json
 ce150b4dca8deb5fed3cff2f873c31129847007a assets/voidscape/models/item/voidic_crystal_sword_broken.json
-662dc4e367eeac21a1a53686afb44c76feadfd1d assets/voidscape/models/item/voidic_crystal_xbow.json
+eabc95d303bff297886e20adbcc7da847a9e204f assets/voidscape/models/item/voidic_crystal_xbow.json
 83e10402df90025b031c3324451f2bd2248c43c0 assets/voidscape/models/item/voidic_crystal_xbow_arrow.json
 32c4bb2af9f5acd25adc0df245a63ed4762b0e7d assets/voidscape/models/item/voidic_crystal_xbow_broken.json
 62d5f1841fcc2d7195221d290d7705c106766104 assets/voidscape/models/item/voidic_crystal_xbow_firework.json
