@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-08T09:37:12.5351746	Registries
+// 1.21.1	2025-07-26T19:50:16.199505	Registries
 80751452a92a6050e2d65828904bdfb838e67434 data/voidscape/damage_type/voidic.json
 3f50af22cd67ab1c5b3bb388c509f77040a453c8 data/voidscape/dimension/void.json
 470d3af142d5b914ed8d2641b3bebb68d03fe8f9 data/voidscape/dimension_type/void.json
@@ -78,7 +78,7 @@ cb0605a7912d5eb7f4200e782fc1230ff8d7acab data/voidscape/worldgen/placed_feature/
 837b45f1ca0b7c793c0d1eebf6e0eba8376adf33 data/voidscape/worldgen/placed_feature/redstone.json
 9a78d8344d4722893886ce901f684784ded0df15 data/voidscape/worldgen/placed_feature/sand.json
 cc994b6547818c9334c80f9bb368cc75a92976d0 data/voidscape/worldgen/placed_feature/soul_sand.json
-81886e349058b2ce9cb142465bd4152210a075dd data/voidscape/worldgen/placed_feature/strange.json
+077dd591d77c4d05ef7f5416d6019483c0617142 data/voidscape/worldgen/placed_feature/strange.json
 35d74bfd33b8bf94dc6de86d7de24b13d2987847 data/voidscape/worldgen/placed_feature/thunderspire.json
 f339898f472f8fc26380e21e075f21f232b4037f data/voidscape/worldgen/placed_feature/thunder_fungus.json
 8877c226a795d53fda5498f29172239e83fd1e0a data/voidscape/worldgen/placed_feature/thunder_fungus_block.json
