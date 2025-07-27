@@ -165,9 +165,10 @@ public class AstralAugmentGoal extends Goal {
 		Vec3 pos = phantom.position();
 		Player player = parent.level().getNearestPlayer(pos.x(), pos.y(), pos.z(), 256, false);
 		if (player != null) {
-			Vec3 dir = player.getBoundingBox().getCenter().subtract(pos).subtract(0, player.getEyeHeight(), 0).normalize().scale(0.25F);
-			pearl.setDeltaMovement(dir);
 			parent.level().addFreshEntity(pearl.setDamage(8F));
+			Vec3 dir = player.getBoundingBox().getCenter().subtract(pos).subtract(0, player.getEyeHeight(), 0).normalize().scale(0.25F);
+			pearl.accelerationPower = 0.005F;
+			pearl.setDeltaMovement(dir);
 		}
 	}
 }
