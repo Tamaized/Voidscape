@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -96,7 +97,8 @@ public class InfuserBlockEntity extends BlockEntity {
 					if (level instanceof ServerLevel serverLevel) {
 						FakePlayer fakePlayer = FakePlayerFactory.get(serverLevel, fakePlayers.INFUSER);
 						fakePlayer.moveTo(blockPos, 0, 0);
-						e.hurt(damageSource.getEntityDamageSource(level, damageSource.VOIDIC, fakePlayer), 6);
+						e.hurt(damageSource.getEntityDamageSource(level, DamageTypes.GENERIC, fakePlayer), 3);
+						e.hurt(damageSource.getEntityDamageSource(level, damageSource.VOIDIC, fakePlayer), 3);
 					}
 					if (e instanceof ServerPlayer player)
 						advancementTriggers.INFUSER_TRIGGER.get().trigger(player);

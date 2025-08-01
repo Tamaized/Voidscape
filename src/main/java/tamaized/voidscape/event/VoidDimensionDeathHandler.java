@@ -12,8 +12,8 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.dimension.SpawnPointTeleporter;
+import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 import tamaized.voidscape.util.LevelUtil;
@@ -57,11 +57,10 @@ public class VoidDimensionDeathHandler {
 	}
 
 	private void handleMobDeath(LivingDeathEvent event) {
-		if (!(event.getEntity() instanceof ServerPlayer player)
-			&& event.getEntity().getData(dataAttachments.INSANITY).getInfusion() >= Insanity.MAX_INFUSION - 1) {
+		if (!(event.getEntity() instanceof Player) && !(event.getEntity() instanceof IEthereal)) {
 			if ((event.getSource().getDirectEntity() instanceof Player || event.getSource().getEntity() instanceof Player) &&
 				levelUtil.isInVoidDimension(event.getEntity().level()) &&
-				event.getEntity().getData(dataAttachments.INSANITY).getInfusion() > 200 &&
+				event.getEntity().getData(dataAttachments.INSANITY).getInfusion() >= 200 &&
 				event.getEntity().getRandom().nextInt(3) > 0) {
 				Containers.dropItemStack(
 					event.getEntity().level(),
