@@ -81,6 +81,7 @@ public class ModCreativeTabs {
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_OVERWORLD.get());
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NETHER.get());
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_END.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_SALAD.get());
 			//// Items
 			output.accept(itemComponentDirectory.miscItems().ETHEREAL_SPIDER_EGGS.get());
 			output.accept(itemComponentDirectory.augmentItems().ETHEREAL_SPIDER_FANG.get());

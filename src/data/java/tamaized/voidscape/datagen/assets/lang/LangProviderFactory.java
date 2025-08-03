@@ -113,6 +113,8 @@ public class LangProviderFactory {
 				addAdvancement("terraform", "Terraformer", "Dig blocks with an Astral Shovel");
 
 				// TODO: these should be referenced from somewhere
+				addTooltip("fruit_salad_why", "But why?");
+				addTooltip("fruit_salad_yummy", "Fruit Salad! Yummy, yummy!");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
@@ -153,6 +155,7 @@ public class LangProviderFactory {
 				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");
 				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
+				addEffectWithDescription(effects.TRAUMATIZED, "Traumatized", "Greatly Increases Voidic Damage and Defense.");
 
 				addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration");
 

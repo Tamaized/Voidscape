@@ -4,14 +4,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import tamaized.voidscape.item.util.UseItemActionContext;
 
 import java.util.function.Consumer;
 
 public class EtherealFruitItem extends Item {
 
-	private final Consumer<LivingEntity> action;
+	private final Consumer<UseItemActionContext> action;
 
-	public EtherealFruitItem(Consumer<LivingEntity> action, Properties properties) {
+	public EtherealFruitItem(Consumer<UseItemActionContext> action, Properties properties) {
 		super(properties);
 		this.action = action;
 	}
@@ -20,9 +21,13 @@ public class EtherealFruitItem extends Item {
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 		ItemStack itemstack = super.finishUsingItem(stack, level, entity);
 		if (!level.isClientSide) {
-			action.accept(entity);
+			doAction(new UseItemActionContext(stack, level, entity));
 		}
 		return itemstack;
+	}
+
+	public void doAction(UseItemActionContext context) {
+		action.accept(context);
 	}
 
 }

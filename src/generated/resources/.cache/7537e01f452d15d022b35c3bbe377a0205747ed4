@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-26T19:54:57.2331435	Item Models: voidscape
+// 1.21.1	2025-08-03T16:48:16.4510784	Item Models: voidscape
 cd8847016a11fc3d2738342ea5bd29f343123e3a assets/voidscape/models/item/antirock.json
 166df491dd83b535f0e22a62de47b2170a7923b6 assets/voidscape/models/item/astralrock.json
 02a15fddd2bb1ffcc60a38865ca1fd394191a6b8 assets/voidscape/models/item/astral_axe.json
@@ -75,6 +75,7 @@ a14673a70214695200612fe8349d239434f28448 assets/voidscape/models/item/ethereal_f
 caa2c2f05fb8cb0828f1b7a8eef979f72b9b4d2f assets/voidscape/models/item/ethereal_fruit_null_block.json
 ae7734ace229816026e23d2a196ed8e8fd094f95 assets/voidscape/models/item/ethereal_fruit_overworld.json
 07bf9c8c5663d9b3b70fb774b610d26713fd94de assets/voidscape/models/item/ethereal_fruit_overworld_block.json
+83bc522526a781a89cd068373c197a1128aae72c assets/voidscape/models/item/ethereal_fruit_salad.json
 3990c5b1c9baab64a6c05e7babd5fb4669c2f512 assets/voidscape/models/item/ethereal_fruit_void.json
 d5c8f2f326aea4cc1d496a4321bc14e5336a6fa9 assets/voidscape/models/item/ethereal_fruit_void_block.json
 647311bb0d663bbe1c1a7070ff5982c42db9cc4f assets/voidscape/models/item/ethereal_spider_eggs.json

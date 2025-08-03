@@ -35,21 +35,21 @@ public class SpellTomeSet {
 
 	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
 
-	public final DeferredHolder<Item, Item> ICHOR_TOME = REGISTRY.register("ichor_tome", () -> new SpellTomeItem(
+	public final DeferredHolder<Item, SpellTomeItem> ICHOR_TOME = REGISTRY.register("ichor_tome", () -> new SpellTomeItem(
 		itemProperties.LAVA_IMMUNE.get().durability(100),
 		materialItems.ICHOR_CRYSTAL,
 		20 * 10,
 		context -> context.level().addFreshEntity(new IchorBoltEntity(context.parent()))
 	));
 
-	public final DeferredHolder<Item, Item> VOIDIC_TOME = REGISTRY.register("voidic_tome", () -> new SpellTomeItem(
+	public final DeferredHolder<Item, SpellTomeItem> VOIDIC_TOME = REGISTRY.register("voidic_tome", () -> new SpellTomeItem(
 		itemProperties.LAVA_IMMUNE.get().durability(100),
 		materialItems.VOIDIC_CRYSTAL,
 		20 * 45,
 		context -> context.parent().addEffect(new MobEffectInstance(modEffects.AURA, 20 * 30))
 	));
 
-	public final DeferredHolder<Item, Item> CORRUPT_TOME = REGISTRY.register("corrupt_tome", () -> new SpellTomeItem(
+	public final DeferredHolder<Item, SpellTomeItem> CORRUPT_TOME = REGISTRY.register("corrupt_tome", () -> new SpellTomeItem(
 		itemProperties.LAVA_IMMUNE.get().durability(100),
 		materialItems.TENDRIL,
 		20 * 5,
@@ -61,7 +61,7 @@ public class SpellTomeSet {
 		}
 	));
 
-	public final DeferredHolder<Item, Item> TITANITE_TOME = REGISTRY.register("titanite_tome", () -> new SpellTomeItem(
+	public final DeferredHolder<Item, SpellTomeItem> TITANITE_TOME = REGISTRY.register("titanite_tome", () -> new SpellTomeItem(
 		itemProperties.LAVA_IMMUNE.get().durability(100),
 		materialItems.TITANITE_SHARD,
 		20 * 45,
