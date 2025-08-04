@@ -400,6 +400,11 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
+	}
+
+	@Override
 	public void knockback(double pStrength, double pX, double pZ) {
 
 	}

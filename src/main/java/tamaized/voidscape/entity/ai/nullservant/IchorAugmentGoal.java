@@ -1,7 +1,11 @@
 package tamaized.voidscape.entity.ai.nullservant;
 
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import tamaized.voidscape.entity.NullServantEntity;
 import tamaized.voidscape.entity.NullServantIchorBoltEntity;
@@ -17,6 +21,7 @@ public class IchorAugmentGoal extends Goal {
 	private int nextActionTick;
 
 	private int hitCounter = 0;
+	private int maxHits = 0;
 
 	private PhantomNullServantEntity phantom1;
 	private PhantomNullServantEntity phantom2;
@@ -37,7 +42,7 @@ public class IchorAugmentGoal extends Goal {
 
 	@Override
 	public boolean canContinueToUse() {
-		return parent.getAugmentAttack() && hitCounter < 3;
+		return parent.getAugmentAttack() && hitCounter < maxHits;
 	}
 
 	@Override
@@ -45,6 +50,7 @@ public class IchorAugmentGoal extends Goal {
 		tick = 0;
 		nextActionTick = 70;
 		hitCounter = 0;
+		maxHits++;
 		primed = null;
 		parent.setAugmentAttack(true);
 		phantom1 = new PhantomNullServantEntity(parent);
@@ -76,11 +82,20 @@ public class IchorAugmentGoal extends Goal {
 		phantom4 = null;
 		nextActionTick = 0;
 		hitCounter = 0;
-		cooldown = 150;
+		cooldown = 150 + parent.getRandom().nextInt(300);
 	}
 
 	public void applyHit() {
 		hitCounter++;
+		parent.level().getEntitiesOfClass(ServerPlayer.class, parent.getBoundingBox().inflate(3D)).forEach(player -> {
+			Vec3 direction = player.getPosition(1F).subtract(parent.getPosition(1F))
+				.normalize()
+				.scale(1.5F)
+				.with(Direction.Axis.Y, 1D);
+			player.setDeltaMovement(direction);
+			player.connection.send(new ClientboundSetEntityMotionPacket(player));
+
+		});
 	}
 
 	@Override
@@ -92,13 +107,13 @@ public class IchorAugmentGoal extends Goal {
 				PhantomNullServantEntity[] phantoms = {phantom1, phantom2, phantom3, phantom4};
 				primed = phantoms[parent.getRandom().nextInt(4)];
 				primed.setAugmentAttack(true);
-				nextActionTick = tick + 120;
+				nextActionTick = tick + 50 + parent.getRandom().nextInt(30);
 			} else {
 				parent.playSound(SoundEvents.BLAZE_SHOOT, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
 				parent.level().addFreshEntity(new NullServantIchorBoltEntity(primed));
 				primed.setAugmentAttack(false);
 				primed = null;
-				nextActionTick = tick + 50;
+				nextActionTick = tick + 30 + parent.getRandom().nextInt(20);
 			}
 		}
 	}
