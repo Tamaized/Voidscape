@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-03T16:48:16.4724528	Recipes
+// 1.21.1	2025-08-09T18:32:35.0988792	Recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -108,6 +108,7 @@ d35437a7f17b5d1b4de42e9edbace16ec48ab108 data/minecraft/advancement/recipes/misc
 c3053ca971730bb483cd71a65446dea3ac49b2cf data/minecraft/advancement/recipes/misc/voidic_crystal_block_reverse.json
 bc8012e7847acd001cb5b9ee36f337f5b618d503 data/minecraft/advancement/recipes/misc/voidic_template.json
 c95f6f0938a497e5c79bc3c2345a12308d39ce44 data/minecraft/advancement/recipes/misc/voidic_template_copy.json
+28d3c9804b382e448b9daa761043b9df6e0ac012 data/minecraft/advancement/recipes/tools/charred_quiver.json
 4b6c40c45ba5a29203703b14e2f9c45734aea52c data/minecraft/advancement/recipes/tools/charred_warhammer.json
 86fb0971dfd95d7de28a073570367c7e996c000a data/minecraft/advancement/recipes/tools/charred_warhammer_head.json
 8c9a4a97bf2f7fafd42ac1f931d3e78cb40a65d2 data/minecraft/recipe/astral_axe.json
@@ -133,6 +134,7 @@ d5b233522f08e78f32b4ef87c2e4c6781cbfa97f data/minecraft/recipe/blast_flesh_ore.j
 5bd641f0637aa0f3aabafd3369f2d547d2d0ee00 data/minecraft/recipe/blast_strange_ore.json
 bbdc3229fb3e0a2ecb266797ddfa3923875d72af data/minecraft/recipe/blast_titanite_ore.json
 89541dbcd4b8d12e4372cb3762b4a3c966ef2b35 data/minecraft/recipe/charred_brick.json
+d03ffd8f30328ad663d420da3cfb37859ac8a982 data/minecraft/recipe/charred_quiver.json
 e6b4aa0bfee9b58099f2a73e329bbc8fcc293f09 data/minecraft/recipe/charred_warhammer.json
 bec8bf5b3d2cdb14a98e0b8b82625856b02e8ed1 data/minecraft/recipe/charred_warhammer_head.json
 cf37bae83bcbd6600fb1a53bd5b0c79341372394 data/minecraft/recipe/corrupt_axe.json

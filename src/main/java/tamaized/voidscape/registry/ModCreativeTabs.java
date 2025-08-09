@@ -103,6 +103,7 @@ public class ModCreativeTabs {
 			output.accept(itemComponentDirectory.materialItems().CHARRED_BONE.get());
 			output.accept(itemComponentDirectory.partItems().CHARRED_WARHAMMER_HEAD.get());
 			output.accept(toolSetComponentDirectory.charredToolSet().CHARRED_WARHAMMER.get());
+			output.accept(toolSetComponentDirectory.charredToolSet().CHARRED_QUIVER.get());
 			// Gear - Corrupt
 			output.accept(itemComponentDirectory.materialItems().TENDRIL.get());
 			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_SWORD.get());
