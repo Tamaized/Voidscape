@@ -96,6 +96,13 @@ public class QuiverContents implements TooltipComponent {
 			return items.get(slot);
 		}
 
+		public void set(int slot, ItemStack stack) {
+			if (stack.isEmpty())
+				items.remove(slot);
+			else
+				items.set(slot, stack);
+		}
+
 		public ItemStack tryInsert(ItemStack stack) {
 			ItemStack clone = stack.copy();
 			items.stream().filter(slot -> ItemStack.isSameItemSameComponents(slot, stack)).forEach(slot -> {

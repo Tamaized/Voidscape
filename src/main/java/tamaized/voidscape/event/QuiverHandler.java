@@ -2,6 +2,8 @@ package tamaized.voidscape.event;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.living.LivingGetProjectileEvent;
@@ -29,7 +31,7 @@ public class QuiverHandler {
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(LivingGetProjectileEvent.class, event -> {
-			if (event.getEntity() instanceof ServerPlayer player) {
+			if (event.getEntity() instanceof Player player) {
 				player.getInventory().contains(stack -> {
 					if (stack.getItem() instanceof QuiverItem) {
 						QuiverContents contents = stack.get(components.QUIVER_CONTENTS);
@@ -53,14 +55,25 @@ public class QuiverHandler {
 				});
 			}
 		});
+	}
 
-		bus.addListener(ArrowLooseEvent.class, event -> {
-			QuiverData data = event.getEntity().getData(dataAttachments.QUIVER_NOCKED);
+	public ItemStack useAmmo(ItemStack result, ItemStack bow, ItemStack ammo, LivingEntity shooter) {
+		if (shooter instanceof Player player) {
+			QuiverData data = player.getData(dataAttachments.QUIVER_NOCKED);
 			if (data.quiver().isEmpty() || data.arrow().isEmpty())
-				return;
+				return result;
 			QuiverContents contents = data.quiver().get(components.QUIVER_CONTENTS);
 			if (contents == null)
-				return;
+				return result;
+			if (!ItemStack.isSameItemSameComponents(ammo, data.arrow())) {
+				if (ammo.isEmpty() && data.arrow().getCount() == 1) {
+					QuiverContents.Mutable mutable = contents.toMutableCopy();
+					mutable.shrinkFirstStack(1);
+					data.quiver().set(components.QUIVER_CONTENTS, mutable.toImmutable());
+					player.setData(dataAttachments.QUIVER_NOCKED, new QuiverData());
+				}
+				return result;
+			}
 			int targetSlot = -1;
 			for (int i = 0; i < contents.view().size(); i++) {
 				ItemStack slot = contents.view().get(i);
@@ -71,11 +84,12 @@ public class QuiverHandler {
 			}
 			if (targetSlot >= 0) {
 				QuiverContents.Mutable mutable = contents.toMutableCopy();
-				mutable.shrinkFirstStack(1);
+				mutable.set(targetSlot, ammo);
 				data.quiver().set(components.QUIVER_CONTENTS, mutable.toImmutable());
 			}
-			event.getEntity().setData(dataAttachments.QUIVER_NOCKED, new QuiverData());
-		});
+			player.setData(dataAttachments.QUIVER_NOCKED, new QuiverData());
+		}
+		return result;
 	}
 
 }

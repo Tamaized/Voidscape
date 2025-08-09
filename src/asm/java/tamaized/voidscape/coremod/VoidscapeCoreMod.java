@@ -7,6 +7,7 @@ import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransfor
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer;
 import tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer;
+import tamaized.voidscape.coremod.transformers.item.ProjectileWeaponItemUseAmmoTransformer;
 import tamaized.voidscape.coremod.transformers.render.ArmorModelOverlayTransformer;
 import tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTransformer;
 import tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer;
@@ -37,7 +38,10 @@ public class VoidscapeCoreMod implements ICoreMod {
 			new ItemInHandRendererIsBowTransformer(),
 
 			// Armor Model Overlays
-			new ArmorModelOverlayTransformer()
+			new ArmorModelOverlayTransformer(),
+
+			// ProjectileWeaponItem
+			new ProjectileWeaponItemUseAmmoTransformer()
 		);
 	}
 }

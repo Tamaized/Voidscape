@@ -37,6 +37,7 @@ import tamaized.beanification.Autowired;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
+import tamaized.voidscape.event.QuiverHandler;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModItemComponents;
@@ -59,6 +60,9 @@ public class ASMHooks {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static VoidVisibilityCache voidVisibilityCache;
+
+	@Autowired
+	private static QuiverHandler quiverHandler;
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
@@ -175,6 +179,14 @@ public class ASMHooks {
 			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 			RegUtil.renderingArmorOverlay = false;
 		}
+	}
+
+	/**
+	 * Injection Point:<br>
+	 * {@link net.minecraft.world.item.ProjectileWeaponItem#useAmmo(ItemStack, ItemStack, LivingEntity, boolean)} <br>
+	 */
+	public static ItemStack useAmmo(ItemStack result, ItemStack bow, ItemStack ammo, LivingEntity shooter) {
+		return quiverHandler.useAmmo(result, bow, ammo, shooter);
 	}
 
 }
