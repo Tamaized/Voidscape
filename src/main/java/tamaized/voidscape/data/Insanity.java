@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -40,6 +41,8 @@ import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidPortalTeleporter;
 import tamaized.voidscape.util.LevelUtil;
+
+import java.util.Optional;
 
 @Configurable
 public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> { // TODO: split up this class into multiple components
@@ -68,6 +71,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
 	private static final ResourceLocation INFUSION_HEALTH_DECAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_health_decay");
 	private static final ResourceLocation INFUSION_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_attack_damage");
 	private static final ResourceLocation INFUSION_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_resistance");
@@ -77,9 +83,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	private static final SoundEvent[] PARANOIA_SOUNDS = new SoundEvent[]{
 
-			SoundEvents.CREEPER_PRIMED, SoundEvents.ENDERMAN_AMBIENT, SoundEvents.ENDERMAN_SCREAM, SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT,
+		SoundEvents.CREEPER_PRIMED, SoundEvents.ENDERMAN_AMBIENT, SoundEvents.ENDERMAN_SCREAM, SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT,
 
-			SoundEvents.ZOMBIFIED_PIGLIN_ANGRY, SoundEvents.ZOMBIFIED_PIGLIN_HURT, SoundEvents.CAT_HISS};
+		SoundEvents.ZOMBIFIED_PIGLIN_ANGRY, SoundEvents.ZOMBIFIED_PIGLIN_HURT, SoundEvents.CAT_HISS};
 
 	private boolean inPortal;
 	private boolean pleaseLeavePortal;
@@ -108,14 +114,14 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 
 	private boolean canTeleport(Entity parent) {
 		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
-			   parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
-			   commonConfig.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString()) == commonConfig.bedrockTeleportationDimensionWhitelist.get();
+			parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
+			commonConfig.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString()) == commonConfig.bedrockTeleportationDimensionWhitelist.get();
 	}
 
 	private boolean shouldTeleport(Entity parent) {
 		return parent.tickCount % 20 == 0 &&
-				parent.level().getRandom().nextInt(8) == 0 &&
-				canTeleport(parent);
+			parent.level().getRandom().nextInt(8) == 0 &&
+			canTeleport(parent);
 	}
 
 	public void tick(Entity parent) {
@@ -175,11 +181,11 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 		} else if (leapParticles > 0) {
 			for (int i = 0; i < 2; i++) {
 				parent.level().addParticle(
-						ParticleTypes.FIREWORK,
-						parent.getX() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
-						parent.getY() + parent.getBbHeight() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbHeight() / 4F)),
-						parent.getZ() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
-						0, 0, 0);
+					ParticleTypes.FIREWORK,
+					parent.getX() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
+					parent.getY() + parent.getBbHeight() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbHeight() / 4F)),
+					parent.getZ() - parent.getBbWidth() / 4F + (parent.level().getRandom().nextFloat() * (parent.getBbWidth() / 4F)),
+					0, 0, 0);
 			}
 			leapParticles--;
 		}
@@ -219,20 +225,39 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	}
 
 	private void handleAura(LivingEntity entity) {
+		Optional<PotionContents> potion = entity.getExistingData(dataAttachments.AURA_EFFECT)
+			.filter(p -> p != PotionContents.EMPTY);
 		if (entity.level().isClientSide()) {
 			for (int i = 0; i < 5; i++) {
 				Vec3 pos = new Vec3(2, 0, 0)
-						.yRot((float) Math.toRadians(entity.getRandom().nextInt(360)))
-						.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
-						.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
-				entity.level().addParticle(new ParticleTypeSpellCloud.Options(0x7700FF), pos.x(), pos.y(), pos.z(), 0, 0, 0);
+					.yRot((float) Math.toRadians(entity.getRandom().nextInt(360)))
+					.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
+					.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
+				entity.level().addParticle(new ParticleTypeSpellCloud.Options(
+					potion.map(p -> p.customColor().orElse(PotionContents.getColor(p.getAllEffects())))
+						.orElse(0x7700FF)
+				), pos.x(), pos.y(), pos.z(), 0, 0, 0);
 			}
 		} else if (entity.tickCount % 20 == 0) {
-			entity.level().getEntities(entity, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D), e -> e instanceof LivingEntity)
-					.forEach(e -> e.hurt(
-							damageSource.getEntityDamageSource(entity.level(), damageSource.VOIDIC, entity),
-							(float) (2D + entity.getAttributeValue(attributes.VOIDIC_DMG) / 2D)
-					));
+			entity.level().getEntities(potion.isEmpty() ? entity : null, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D), e -> e instanceof LivingEntity)
+				.stream().map(LivingEntity.class::cast)
+				.forEach(e -> potion.ifPresentOrElse(p -> p.forEachEffect(effect -> {
+					if (e == entity && !effect.getEffect().value().isBeneficial())
+						return;
+					if (effect.getEffect().value().isInstantenous())
+						effect.getEffect().value().applyInstantenousEffect(entity, entity, e, effect.getAmplifier(), 1F);
+					else
+						e.addEffect(new MobEffectInstance(
+							effect.getEffect(),
+							effect.mapDuration(duration -> duration / 4),
+							effect.getAmplifier(),
+							effect.isAmbient(),
+							effect.isVisible()
+						));
+				}), () -> e.hurt(
+					damageSource.getEntityDamageSource(entity.level(), damageSource.VOIDIC, entity),
+					(float) (2D + entity.getAttributeValue(attributes.VOIDIC_DMG) / 2D)
+				)));
 		}
 	}
 
@@ -273,29 +298,29 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 			if (parent.level().isClientSide() && sanity > 0.25F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.level().playSound((Player) parent,
 
-						parent.blockPosition().offset(parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30),
+					parent.blockPosition().offset(parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30),
 
-						PARANOIA_SOUNDS[parent.getRandom().nextInt(PARANOIA_SOUNDS.length)],
+					PARANOIA_SOUNDS[parent.getRandom().nextInt(PARANOIA_SOUNDS.length)],
 
-						SoundSource.MASTER,
+					SoundSource.MASTER,
 
-						parent.getRandom().nextFloat() * 0.9F + 0.1F,
+					parent.getRandom().nextFloat() * 0.9F + 0.1F,
 
-						parent.getRandom().nextFloat() * 0.5F + 0.5F);
+					parent.getRandom().nextFloat() * 0.5F + 0.5F);
 			if (!parent.level().isClientSide() && sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
 				parent.hurt(parent.damageSources().generic(), 1F);
 			if (parent.level().isClientSide() && sanity > 0.75F && parent.tickCount % (sanity == 1F ? 8 : sanity > 0.95F ? 10 : sanity > 0.80F ? 20 : 30) == 0)
 				parent.level().playSound((Player) parent,
 
-						parent.blockPosition(),
+					parent.blockPosition(),
 
-						SoundEvents.WARDEN_HEARTBEAT,
+					SoundEvents.WARDEN_HEARTBEAT,
 
-						SoundSource.MASTER,
+					SoundSource.MASTER,
 
-						4F,
+					4F,
 
-						1F);
+					1F);
 			if (!parent.level().isClientSide()) {
 				if (hunt == null && paranoia >= MAX_PARANOIA) {
 					hunt = new CorruptedPawnEntity(parent.level()).target((Player) parent);

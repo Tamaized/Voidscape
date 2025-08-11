@@ -1,9 +1,7 @@
 package tamaized.voidscape.registry;
 
 import com.mojang.serialization.Codec;
-import it.unimi.dsi.fastutil.Pair;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.NeoForge;
@@ -45,6 +43,11 @@ public class ModDataAttachments {
 	);
 	public final Supplier<AttachmentType<QuiverData>> QUIVER_NOCKED = REGISTRY.register("quiver_knocked", () -> AttachmentType
 		.builder(QuiverData::new)
+		.build()
+	);
+	public final Supplier<AttachmentType<PotionContents>> AURA_EFFECT = REGISTRY.register("aura_effect", () -> AttachmentType
+		.builder(() -> PotionContents.EMPTY)
+		.serialize(PotionContents.CODEC)
 		.build()
 	);
 	public final Supplier<AttachmentType<Integer>> DATA_CORRECTION = REGISTRY.register("datacorrection", () -> AttachmentType

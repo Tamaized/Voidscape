@@ -118,6 +118,7 @@ public class LangProviderFactory {
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
+				addTooltip("augment.lingering_potion", "Right click with a lingering potion or a snowball to change the effect.");
 				addTooltip("textures", "Textures Subject to Change");
 
 				addEntityType(entities.VOIDLING, "Voidling");

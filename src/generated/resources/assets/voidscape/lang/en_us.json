@@ -204,6 +204,7 @@
   "voidscape.config.common.bedrock_teleportation_dimension_blacklist": "Bedrock Teleportation Dimension Blacklist",
   "voidscape.configuration.donatorSettings": "Donor Settings",
   "voidscape.item_group": "Voidscape",
+  "voidscape.tooltip.augment.lingering_potion": "Right click with a lingering potion or a snowball to change the effect.",
   "voidscape.tooltip.broken": "Broken",
   "voidscape.tooltip.draconic": "Draconic",
   "voidscape.tooltip.elytra": "Elytra",
