@@ -1,9 +1,9 @@
-// 1.21.1	2025-08-03T16:48:16.4470773	Tags for minecraft:item mod id voidscape
+// 1.21.1	2025-08-10T21:00:47.3274013	Tags for minecraft:item mod id voidscape
 f53b688d18ba56f04ad3edbb3be596c57835f98b data/minecraft/tags/item/axes.json
 9dda9ecb1dccaaae060cfadbd04456a3ca4ac187 data/minecraft/tags/item/chest_armor.json
 de8bd45cdfcbdbd0ad2db8c9a9aabe32253a9712 data/minecraft/tags/item/enchantable/bow.json
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/minecraft/tags/item/enchantable/crossbow.json
-2ef6612762f5d5f9a1044a10d4d206a234f83eba data/minecraft/tags/item/enchantable/durability.json
+fb8de7d3c16700e7b2707c88794865b258a2a4a2 data/minecraft/tags/item/enchantable/durability.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/sword.json
 ed163ff68b359d0508693ccf44614289e689ec0f data/minecraft/tags/item/foot_armor.json
 abc6ac58756cce49b3a8dd939498a20577de28cd data/minecraft/tags/item/head_armor.json

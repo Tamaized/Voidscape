@@ -24,6 +24,10 @@ public class DurabilityEnchantableItemTagProviderFactory implements IItemTagProv
 			tools.titaniteToolSet().TITANITE_XBOW.get(),
 			tools.ichorToolSet().ICHOR_BOW.get(),
 			tools.ichorToolSet().ICHOR_XBOW.get(),
+			tools.spellTomeSet().VOIDIC_TOME.get(),
+			tools.spellTomeSet().CORRUPT_TOME.get(),
+			tools.spellTomeSet().TITANITE_TOME.get(),
+			tools.spellTomeSet().ICHOR_TOME.get(),
 			tools.astralToolSet().ASTRAL_BOW.get(),
 			tools.astralToolSet().ASTRAL_XBOW.get()
 		);
