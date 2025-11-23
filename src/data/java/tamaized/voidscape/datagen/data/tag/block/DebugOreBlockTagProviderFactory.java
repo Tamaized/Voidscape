@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component

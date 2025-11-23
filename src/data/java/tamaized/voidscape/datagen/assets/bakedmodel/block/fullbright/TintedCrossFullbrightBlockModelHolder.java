@@ -35,8 +35,8 @@ public class TintedCrossFullbrightBlockModelHolder extends BlockModelHolder {
 					.rescale(true)
 				.end()
 				.shade(false)
-				.face(Direction.NORTH).uvs(0, 0, 16, 16).texture("#cross").emissivity(15, 15).tintindex(0).end()
-				.face(Direction.SOUTH).uvs(0, 0, 16, 16).texture("#cross").emissivity(15, 15).tintindex(0).end()
+				.face(Direction.WEST).uvs(0, 0, 16, 16).texture("#cross").emissivity(15, 15).tintindex(0).end()
+				.face(Direction.EAST).uvs(0, 0, 16, 16).texture("#cross").emissivity(15, 15).tintindex(0).end()
 			.end();
 		// @formatter:on
 	}

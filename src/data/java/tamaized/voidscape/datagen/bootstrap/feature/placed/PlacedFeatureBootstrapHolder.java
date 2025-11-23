@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.datagen.util.DirectReferenceHolder;
 
 import java.util.Optional;
 
@@ -30,6 +31,10 @@ public abstract class PlacedFeatureBootstrapHolder {
 
 	public Optional<Holder.Reference<PlacedFeature>> get() {
 		return Optional.ofNullable(ref);
+	}
+
+	public DirectReferenceHolder<PlacedFeature> asDirectReferenceHolder() {
+		return DirectReferenceHolder.of(key());
 	}
 
 	public abstract PlacedFeature make(BootstrapContext<PlacedFeature> context);

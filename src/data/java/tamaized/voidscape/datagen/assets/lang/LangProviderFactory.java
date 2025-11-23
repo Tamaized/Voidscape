@@ -113,9 +113,12 @@ public class LangProviderFactory {
 				addAdvancement("terraform", "Terraformer", "Dig blocks with an Astral Shovel");
 
 				// TODO: these should be referenced from somewhere
+				addTooltip("fruit_salad_why", "But why?");
+				addTooltip("fruit_salad_yummy", "Fruit Salad! Yummy, yummy!");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
+				addTooltip("augment.lingering_potion", "Right click with a lingering potion or a snowball to change the effect.");
 				addTooltip("textures", "Textures Subject to Change");
 
 				addEntityType(entities.VOIDLING, "Voidling");
@@ -153,9 +156,16 @@ public class LangProviderFactory {
 				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");
 				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
+				addEffectWithDescription(effects.TRAUMATIZED, "Traumatized", "Greatly Increases Voidic Damage and Defense.");
 
 				addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration");
 
+				addCommonConfig("bedrock_teleportation_dimension_blacklist", "Bedrock Teleportation Dimension Blacklist");
+				addCommonConfig("bedrockTeleportationDimensionWhitelist", "Bedrock Teleportation Dimension Whitelist Toggle");
+
+				addConfiguration("donatorSettings", "Donor Settings");
+				addClientConfig("donatorSettings.enable", "Enable");
+				addClientConfig("donatorSettings.color", "Color");
 			}
 
 			private void addCreativeTab(String translation) {
@@ -194,7 +204,7 @@ public class LangProviderFactory {
 			}
 
 			private void addAttribute(Holder<Attribute> attribute, String translation) {
-				add("attribute." + attribute.value().getDescriptionId(), translation);
+				add(attribute.value().getDescriptionId(), translation);
 			}
 
 			private void addDeathMessage(ResourceKey<DamageType> key, String translation) {

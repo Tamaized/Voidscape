@@ -60,8 +60,14 @@ public class TitaniteAugmentGoal extends Goal {
 		parent.level().addFreshEntity(block2);
 		parent.level().addFreshEntity(block3);
 		block1.randomPosOrDiscard();
+		if (block1.isRemoved())
+			block1 = null;
 		block2.randomPosOrDiscard();
+		if (block2.isRemoved())
+			block2 = null;
 		block3.randomPosOrDiscard();
+		if (block3.isRemoved())
+			block3 = null;
 	}
 
 	@Override

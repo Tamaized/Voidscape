@@ -18,22 +18,20 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModDamageSource;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.item.MaterialItems;
 
-@Configurable
 public class StrangePearlEntity extends AbstractHurtingProjectile implements ItemSupplier {
 
 	@Autowired
 	private static ModEntities entities;
 
 	@Autowired
-	private MaterialItems materialItems;
+	private static MaterialItems materialItems;
 
 	@Autowired
-	private ModDamageSource damageSource;
+	private static ModDamageSource damageSource;
 
 	private float damage = 0F;
 	private ItemStack stack = new ItemStack(getDefaultItem());

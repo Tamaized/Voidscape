@@ -29,18 +29,17 @@ public class CommonConfig {
 	}
 
 	private CommonConfig setup(ModConfigSpec.Builder builder) {
-		bedrockTeleportationDimensionBlacklist = builder.
-			translation("config." + Voidscape.MODID + ".bedrock_teleportation_dimension_blacklist").
-			comment("""
+		bedrockTeleportationDimensionBlacklist = builder
+			.translation(configUtil.translationKey("bedrock_teleportation_dimension_blacklist"))
+			.comment("""
 				Prevent standing on bedrock at low Y levels from teleporting you to the void from these dimensions
-				Example: minecraft:overworld
-				""").
-			defineListAllowEmpty("bedrockTeleportationDimensionBlacklist", new ArrayList<>(), () -> "", s -> s instanceof String);
+				Example: minecraft:overworld""")
+			.defineListAllowEmpty("bedrockTeleportationDimensionBlacklist", new ArrayList<>(), () -> "", s -> s instanceof String);
 
-		bedrockTeleportationDimensionWhitelist = builder.
-			translation(configUtil.translationKey("bedrockTeleportationDimensionWhitelist")).
-			comment("Changes the bedrock teleportation dimension blacklist config to be a whitelist instead").
-			define("bedrockTeleportationDimensionWhitelist", false);
+		bedrockTeleportationDimensionWhitelist = builder
+			.translation(configUtil.translationKey("bedrockTeleportationDimensionWhitelist"))
+			.comment("Changes the bedrock teleportation dimension blacklist config to be a whitelist instead")
+			.define("bedrockTeleportationDimensionWhitelist", false);
 
 		return this;
 	}

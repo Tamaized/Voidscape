@@ -33,7 +33,7 @@ public class VoidicCrystalArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.HEAD),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05D, EquipmentSlotGroup.HEAD)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.05D, EquipmentSlotGroup.HEAD)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -44,7 +44,7 @@ public class VoidicCrystalArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.CHEST),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05D, EquipmentSlotGroup.CHEST)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.05D, EquipmentSlotGroup.CHEST)
 		),
 		(stack, tick) -> stack.getOrDefault(itemComponents.ELYTRA, false),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
@@ -56,7 +56,7 @@ public class VoidicCrystalArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.LEGS),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05D, EquipmentSlotGroup.LEGS)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.05D, EquipmentSlotGroup.LEGS)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);
@@ -67,7 +67,7 @@ public class VoidicCrystalArmorSet {
 		() -> itemProperties.LAVA_IMMUNE.get(),
 		AttributeFactory.make(
 			() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.FEET),
-			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, 0.05D, EquipmentSlotGroup.FEET)
+			() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.05D, EquipmentSlotGroup.FEET)
 		),
 		RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
 	);

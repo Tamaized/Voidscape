@@ -42,7 +42,7 @@ public class MiscItems {
 
 	public final DeferredHolder<Item, Item> ETHEREAL_SPIDER_EGGS = REGISTRY.register("ethereal_spider_eggs", () -> new BlockTransformerItem.Builder(
 		state -> state.is(Blocks.BEDROCK) || state.is(thunderForestBiomeBlocks.THUNDER_NYLIUM),
-		() -> oreBlocks.VOIDIC_CRYSTAL_ORE.get().defaultBlockState())
+		Blocks.AIR::defaultBlockState)
 		.advancement(advancementTriggers.ETHEREAL_SPIDER_EGGS_TRIGGER)
 		.particleCount(200)
 		.particle(() -> ParticleTypes.ASH)

@@ -39,7 +39,7 @@ public class AstralLeggingsItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/astral/legs")
@@ -54,7 +54,7 @@ public class AstralLeggingsItemModelHolder extends ItemModelHolder {
 	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/generated"
 				)
 				.texture("layer0", "item/astral/legs_broken")

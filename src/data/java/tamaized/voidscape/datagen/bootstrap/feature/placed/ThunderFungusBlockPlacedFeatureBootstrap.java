@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -30,7 +31,8 @@ public class ThunderFungusBlockPlacedFeatureBootstrap extends PlacedFeatureBoots
 			parentFeature.get().orElseThrow(),
 			List.of(
 				new SeekDownPlacementMod(true),
-				placementModUtil.AIR_ABOVE
+				placementModUtil.AIR_ABOVE,
+				BiomeFilter.biome()
 			)
 		);
 	}

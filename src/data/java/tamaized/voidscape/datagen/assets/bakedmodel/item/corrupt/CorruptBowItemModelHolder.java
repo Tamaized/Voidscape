@@ -44,7 +44,7 @@ public class CorruptBowItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/corrupt/bow/bow")
@@ -122,7 +122,7 @@ public class CorruptBowItemModelHolder extends ItemModelHolder {
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(name),
+				name(name),
 				"item/bow"
 			)
 			.texture("layer0", "item/corrupt/bow/bow_" + name)

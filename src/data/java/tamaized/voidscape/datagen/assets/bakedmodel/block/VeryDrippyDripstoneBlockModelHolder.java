@@ -41,7 +41,7 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 				"block/pointed_dripstone"
 			)
 			.renderType(RenderType.cutoutMipped().name)
-			.texture("cross", "block/very_drippy_dripstone")
+			.texture("cross", name())
 			.texture("particle", "#cross")
 			.element()
 				.from(0.8F, 0, 8).to(15.2F, 16, 8)
@@ -62,9 +62,9 @@ public class VeryDrippyDripstoneBlockModelHolder extends BlockModelHolder {
 
 	@Override
 	public ModelFile buildItemBlockModel(ItemModelProvider provider) {
-		return provider.withExistingParent(name(), "item/generated")
+		return provider.withExistingParent(nameForItemBlock(), "item/generated")
 			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
-			.texture("layer0", name())
+			.texture("layer0", nameForItemBlock())
 			.transforms()
 			// @formatter:off
 				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)

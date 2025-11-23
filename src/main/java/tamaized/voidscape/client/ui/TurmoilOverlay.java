@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -23,13 +24,13 @@ import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class TurmoilOverlay {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	private final int STENCIL_INDEX = 10;
@@ -85,7 +86,7 @@ public class TurmoilOverlay {
 						final float y = 0F;
 						final float w = window.getGuiScaledWidth();
 						final float h = window.getGuiScaledHeight();
-						final float z = 401F; // Catch All
+						final float z = 9000F; // Catch All
 
 						RenderSystem.setShaderTexture(0, TEXTURE_MASK);
 						StencilBufferUtil.setup(STENCIL_INDEX, () -> shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR.invokeThenUpload(perc, blit(true, 0xFFFFFFFF, x, y, z, w, h)));

@@ -21,13 +21,10 @@ public class ShouldRenderElytraTransformer implements ITransformer<MethodNode> {
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
 		ASMUtil.findInstructions(node, Opcodes.IRETURN)
-			.findFirst()
-			.ifPresent(instruction -> {
-				node.instructions.insertBefore(instruction, ASMAPI.listOf(
-					new VarInsnNode(Opcodes.ALOAD, 1),
-					ASMUtil.invokeAsmHook("shouldRenderElytra", "(ZLnet/minecraft/world/item/ItemStack;)Z")
-				));
-			});
+			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
+				new VarInsnNode(Opcodes.ALOAD, 1),
+				ASMUtil.invokeAsmHook("shouldRenderElytra", "(ZLnet/minecraft/world/item/ItemStack;)Z")
+			)));
 		return node;
 	}
 

@@ -65,7 +65,7 @@ public class AntispiresBiomeBootstrap implements IBiomeBootstrap {
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, antispirePlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitVoidPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.build())
 			.build();

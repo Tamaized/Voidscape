@@ -35,7 +35,7 @@ public class ArrowVoidicDamageApplicator {
 			Player player = event.getEntity();
 			OWNER_STATES.put(player.getUUID(), new AttributeStates(
 				(float) player.getAttributeValue(attributes.VOIDIC_ARROW_DMG),
-				((float) player.getAttributeValue(attributes.VOIDIC_INFUSION) - 1F) * Insanity.MAX_INFUSION
+				((float) player.getAttributeValue(attributes.VOIDIC_INFUSION)) * Insanity.MAX_INFUSION
 			));
 		});
 		bus.addListener(EntityJoinLevelEvent.class, event -> {
@@ -55,7 +55,7 @@ public class ArrowVoidicDamageApplicator {
 					float voidic = (float) shooter.getAttributeValue(attributes.VOIDIC_ARROW_DMG);
 					if (voidic > 0)
 						arrow.setData(dataAttachments.VOIDIC_ARROW, voidic);
-					final float infusion = ((float) shooter.getAttributeValue(attributes.VOIDIC_INFUSION) - 1F) * Insanity.MAX_INFUSION;
+					final float infusion = ((float) shooter.getAttributeValue(attributes.VOIDIC_INFUSION)) * Insanity.MAX_INFUSION;
 					if (infusion > 0)
 						event.getEntity().setData(dataAttachments.INFUSION_ARROW, infusion);
 				}

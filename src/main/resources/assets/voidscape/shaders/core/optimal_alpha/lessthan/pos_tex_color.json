@@ -4,7 +4,7 @@
 	"srcrgb": "srcalpha",
 	"dstrgb": "1-srcalpha"
   },
-  "vertex": "voidscape:alpha/pos_tex_color",
+  "vertex": "voidscape:optimal_alpha/pos_tex_color",
   "fragment": "voidscape:optimal_alpha/lessthan/pos_tex_color",
   "attributes": [
 	"Position",

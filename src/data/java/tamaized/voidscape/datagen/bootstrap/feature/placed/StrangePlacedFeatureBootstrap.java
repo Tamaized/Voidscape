@@ -1,12 +1,13 @@
 package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.bootstrap.feature.configured.SoulSandConfiguredFeatureBootstrap;
+import tamaized.voidscape.datagen.bootstrap.feature.configured.StrangeConfiguredFeatureBootstrap;
 import tamaized.voidscape.datagen.util.PlacementModUtil;
 import tamaized.voidscape.features.placements.RandomYPlacementMod;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class StrangePlacedFeatureBootstrap extends PlacedFeatureBootstrapHolder {
 
 	@Autowired
-	private SoulSandConfiguredFeatureBootstrap parentFeature;
+	private StrangeConfiguredFeatureBootstrap parentFeature;
 
 	@Autowired
 	private PlacementModUtil placementModUtil;
@@ -33,7 +34,8 @@ public class StrangePlacedFeatureBootstrap extends PlacedFeatureBootstrapHolder 
 			List.of(
 				CountPlacement.of(2),
 				InSquarePlacement.spread(),
-				new RandomYPlacementMod(13)
+				new RandomYPlacementMod(13),
+				BiomeFilter.biome()
 			)
 		);
 	}

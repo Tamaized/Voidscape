@@ -183,6 +183,7 @@ public final class VoidPortalTeleporter {
 		return Optional.of(new BlockUtil.FoundRectangle(blockpos.immutable(), 2, 3));
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean checkRegionForPlacement(Level level, BlockPos originalPos, BlockPos.MutableBlockPos offsetPos, Direction directionIn, int offsetScale) {
 		Direction direction = directionIn.getClockWise();
 

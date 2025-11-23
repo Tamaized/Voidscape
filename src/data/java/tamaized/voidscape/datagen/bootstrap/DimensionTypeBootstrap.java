@@ -48,9 +48,9 @@ public class DimensionTypeBootstrap implements IBootstrap {
 		});
 	}
 
-	public Holder<DimensionType> getVoid(RegistrySetBuilder builder) {
+	public Holder<DimensionType> getVoid() {
 		if (VOID == null)
-			bootstrap(builder);
+			throw new IllegalStateException("DimensionTypeBootstrap hasn't ran yet, fix your priorities!");
 		return VOID;
 	}
 

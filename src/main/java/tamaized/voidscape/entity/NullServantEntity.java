@@ -61,7 +61,6 @@ import tamaized.voidscape.registry.tool.set.TitaniteToolSet;
 
 import java.util.UUID;
 
-@Configurable
 public class NullServantEntity extends Monster implements IEthereal {
 
 	@Autowired
@@ -69,6 +68,24 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	@Autowired
 	private static ModAttributes attributes;
+
+	@Autowired
+	private static CorruptToolSet corruptToolSet;
+
+	@Autowired
+	private static TitaniteToolSet titaniteToolSet;
+
+	@Autowired
+	private static IchorToolSet ichorToolSet;
+
+	@Autowired
+	private static AstralToolSet astralToolSet;
+
+	@Autowired
+	private static MaterialItems materialItems;
+
+	@Autowired
+	private static ModAdvancementTriggers advancementTriggers;
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
@@ -82,24 +99,6 @@ public class NullServantEntity extends Monster implements IEthereal {
 	private static final ResourceLocation AUGMENT_HEALTH = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_health");
 	private static final ResourceLocation AUGMENT_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_attack_damage");
 	private static final ResourceLocation AUGMENT_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_resistance");
-
-	@Autowired
-	private CorruptToolSet corruptToolSet;
-
-	@Autowired
-	private TitaniteToolSet titaniteToolSet;
-
-	@Autowired
-	private IchorToolSet ichorToolSet;
-
-	@Autowired
-	private AstralToolSet astralToolSet;
-
-	@Autowired
-	private MaterialItems materialItems;
-
-	@Autowired
-	private ModAdvancementTriggers advancementTriggers;
 
 	@Nullable
 	private ServerBossEvent bossInfo;
@@ -398,6 +397,11 @@ public class NullServantEntity extends Monster implements IEthereal {
 			}
 		}
 		return !getAugmentAttack() && super.hurt(source, amount);
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
 	}
 
 	@Override

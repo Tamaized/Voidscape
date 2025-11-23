@@ -9,7 +9,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.beanification.Directory;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.datagen.data.loot.sub.entity.IEntityLootTable;
 
 import java.util.List;

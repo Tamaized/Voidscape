@@ -53,10 +53,6 @@
     }
   },
   "spawners": {
-    "aether:aether_aerwhale": [],
-    "aether:aether_darkness_monster": [],
-    "aether:aether_sky_monster": [],
-    "aether:aether_surface_monster": [],
     "ambient": [],
     "axolotls": [],
     "creature": [],

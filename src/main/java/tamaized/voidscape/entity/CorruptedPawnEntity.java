@@ -4,7 +4,6 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,34 +26,36 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
-@Configurable
 public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn, IEthereal {
 
 	@Autowired
 	private static ModEntities entities;
 
 	@Autowired
-	private ModDataAttachments dataAttachments;
+	private static ModDataAttachments dataAttachments;
 
 	@Autowired
-	private ModDamageSource damageSource;
+	private static ModDamageSource damageSource;
 
 	@Autowired
-	private MaterialItems materialItems;
+	private static MaterialItems materialItems;
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
-			getDisplayName() == null ? Component.empty() : getDisplayName(),
+			getDisplayName(),
 			BossEvent.BossBarColor.PURPLE,
 			BossEvent.BossBarOverlay.PROGRESS
 	)).setDarkenScreen(true);
 
+	@Nullable
 	private Entity target;
+
+	private boolean modConflictDetected = false;
 
 	public CorruptedPawnEntity(Level level) {
 		this(entities.CORRUPTED_PAWN.get(), level);
@@ -100,20 +101,30 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		return isNoAi() || (player != null && player.equals(target));
 	}
 
+	public boolean detectModConflict() {
+		if (modConflictDetected)
+			return true;
+		modConflictDetected = true;
+		return false;
+	}
+
 	@Override
 	public void tick() {
+		modConflictDetected = false;
 		if (isNoAi()) {
 			super.tick();
 			return;
 		}
 		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 		if (!level().isClientSide()) {
-			if (target == null || !target.isAlive())
+			if (target == null || !target.isAlive()) {
 				remove(RemovalReason.DISCARDED);
-			else if (!equals(target.getData(dataAttachments.INSANITY).getHunter()))
+				return;
+			}
+			if (!equals(target.getData(dataAttachments.INSANITY).getHunter()))
 				remove(RemovalReason.DISCARDED);
 			else if (isAlive()) {
-				lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+				lookAt(EntityAnchorArgument.Anchor.EYES, Objects.requireNonNull(target).position());
 				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
 				if (target.distanceTo(this) <= 0.25F) {
 					teleport();
@@ -132,7 +143,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	}
 
 	private void teleport() {
-		if (isAlive()) {
+		if (isAlive() && !isNoAi() && target != null) {
 			playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
 			moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
@@ -165,7 +176,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		if (!level().isClientSide()) {
 			if (deathTime == 1)
 				level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.WITHER_DEATH, this.getSoundSource(), 0.5F, 0.25F + random.nextFloat() * 0.5F);
-			if (deathTime == 20) {
+			if (deathTime == 20 && target != null) {
 				level().addFreshEntity(new ItemEntity(level(), target.getX(), target.getY(), target.getZ(), new ItemStack(materialItems.TENDRIL.get(), 1 + getRandom().nextInt(4))));
 				target.getData(dataAttachments.INSANITY).setParanoia(0);
 			}

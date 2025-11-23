@@ -1,4 +1,4 @@
-// 1.21.1	2025-04-17T00:03:18.120439225	Recipes
+// 1.21.1	2025-08-09T18:32:35.0988792	Recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -97,6 +97,7 @@ e524dfd87fb371f9ff6f93a34f8a3177432e6cd2 data/minecraft/advancement/recipes/comb
 88127aa91a6ae19389113bdbb170bb14987a8095 data/minecraft/advancement/recipes/combat/voidic_crystal_shield.json
 9532382fc063e8f4206a4bf21941b799ac7ca1fd data/minecraft/advancement/recipes/combat/voidic_crystal_sword.json
 d1ded14c5cf991f209c65fbc21086ba6b7e67b53 data/minecraft/advancement/recipes/combat/voidic_crystal_sword_fang.json
+100aa92fc5beec6dc505534a1d310d854d7257a1 data/minecraft/advancement/recipes/food/ethereal_fruit_salad.json
 c4a6404b131f554982b46e6b8e20f258ed02e541 data/minecraft/advancement/recipes/misc/blast_flesh_ore.json
 c57134dcba2aabfd7ee638aee6ce8da1b532d145 data/minecraft/advancement/recipes/misc/blast_strange_ore.json
 878efdd5699f860fa555ed236fec161f49c853c8 data/minecraft/advancement/recipes/misc/blast_titanite_ore.json
@@ -107,6 +108,7 @@ d35437a7f17b5d1b4de42e9edbace16ec48ab108 data/minecraft/advancement/recipes/misc
 c3053ca971730bb483cd71a65446dea3ac49b2cf data/minecraft/advancement/recipes/misc/voidic_crystal_block_reverse.json
 bc8012e7847acd001cb5b9ee36f337f5b618d503 data/minecraft/advancement/recipes/misc/voidic_template.json
 c95f6f0938a497e5c79bc3c2345a12308d39ce44 data/minecraft/advancement/recipes/misc/voidic_template_copy.json
+28d3c9804b382e448b9daa761043b9df6e0ac012 data/minecraft/advancement/recipes/tools/charred_quiver.json
 4b6c40c45ba5a29203703b14e2f9c45734aea52c data/minecraft/advancement/recipes/tools/charred_warhammer.json
 86fb0971dfd95d7de28a073570367c7e996c000a data/minecraft/advancement/recipes/tools/charred_warhammer_head.json
 8c9a4a97bf2f7fafd42ac1f931d3e78cb40a65d2 data/minecraft/recipe/astral_axe.json
@@ -132,6 +134,7 @@ d5b233522f08e78f32b4ef87c2e4c6781cbfa97f data/minecraft/recipe/blast_flesh_ore.j
 5bd641f0637aa0f3aabafd3369f2d547d2d0ee00 data/minecraft/recipe/blast_strange_ore.json
 bbdc3229fb3e0a2ecb266797ddfa3923875d72af data/minecraft/recipe/blast_titanite_ore.json
 89541dbcd4b8d12e4372cb3762b4a3c966ef2b35 data/minecraft/recipe/charred_brick.json
+d03ffd8f30328ad663d420da3cfb37859ac8a982 data/minecraft/recipe/charred_quiver.json
 e6b4aa0bfee9b58099f2a73e329bbc8fcc293f09 data/minecraft/recipe/charred_warhammer.json
 bec8bf5b3d2cdb14a98e0b8b82625856b02e8ed1 data/minecraft/recipe/charred_warhammer_head.json
 cf37bae83bcbd6600fb1a53bd5b0c79341372394 data/minecraft/recipe/corrupt_axe.json
@@ -146,6 +149,7 @@ ae1a60cd036ecce0300568f51bd4a631e3af9322 data/minecraft/recipe/corrupt_helmet.js
 4d4b9f93e0a344c57285ecf26c8f596223d13721 data/minecraft/recipe/corrupt_leggings.json
 106ba3320ca9bb022709663dca24ad370082f9e8 data/minecraft/recipe/corrupt_sword.json
 e550190e3089f494171b78e51962c1b9cd89b715 data/minecraft/recipe/corrupt_sword_fang.json
+31fc5e0125f4533d7c50601f0eac4bbfb44912c7 data/minecraft/recipe/ethereal_fruit_salad.json
 527574a4c2cdbafcda654b8a99f3feae36efc19d data/minecraft/recipe/flesh_block.json
 0565f03f23fbf9a8c1db8fb11252463c3a5bc757 data/minecraft/recipe/flesh_block_reverse.json
 5f11b962bb04678ce95badf45b3d1853a5726c0f data/minecraft/recipe/ichor.json

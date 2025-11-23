@@ -2,10 +2,16 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -13,36 +19,62 @@ import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.util.NamespaceUtils;
 
+import java.util.Locale;
+import java.util.Objects;
+
 @Component
 public class ModAttributes {
 
 	@Autowired
 	private NamespaceUtils namespaceUtils;
 
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
 	private final DeferredRegister<Attribute> REGISTERY = RegUtil.create(Registries.ATTRIBUTE);
 
-	public final Holder<Attribute> VOIDIC_VISIBILITY = REGISTERY.register("voidic_visibility", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_visibility"), 1F, 1F, 2F).setSyncable(true));
-	public final Holder<Attribute> VOIDIC_INFUSION = REGISTERY.register("voidic_infusion", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_infusion"), 1F, 1F, 2F));
-	public final Holder<Attribute> VOIDIC_INFUSION_RES = REGISTERY.register("voidic_infusion_res", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_infusion_res"), 1F, 1F, 2F).setSyncable(true));
-	public final Holder<Attribute> VOIDIC_PARANOIA_RES = REGISTERY.register("voidic_paranoia_res", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_paranoia_res"), 1F, 1F, 2F).setSyncable(true));
+	public final Holder<Attribute> VOIDIC_VISIBILITY = REGISTERY.register("voidic_visibility", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_visibility"), 0F, 0F, 1F).setSyncable(true));
+	public final Holder<Attribute> VOIDIC_INFUSION = REGISTERY.register("voidic_infusion", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion"), 0F, 0F, 1F));
+	public final Holder<Attribute> VOIDIC_INFUSION_RES = REGISTERY.register("voidic_infusion_res", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion_res"), 0F, 0F, 1F).setSyncable(true));
+	public final Holder<Attribute> VOIDIC_PARANOIA_RES = REGISTERY.register("voidic_paranoia_res", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_paranoia_res"), 0F, 0F, 1F).setSyncable(true));
 	public final Holder<Attribute> VOIDIC_RES = REGISTERY.register("voidic_res", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_res"), 0F, 0F, 2048F));
 	public final Holder<Attribute> VOIDIC_DMG = REGISTERY.register("voidic_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_dmg"), 0F, 0F, 2048F));
 	public final Holder<Attribute> VOIDIC_ARROW_DMG = REGISTERY.register("voidic_arrow_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
 
-
-	public final String DRACONIC_HEALTH_ID = "draconic_health";
+	private final String DRACONIC_HEALTH_ID = "draconic_health";
 
 	@PostConstruct
-	private void setup(IEventBus bus) {
+	private void setup(IEventBus bus, IEventBus gameBus) {
 		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
-			event.add(e, VOIDIC_VISIBILITY, 1F);
-			event.add(e, VOIDIC_INFUSION, 1F);
-			event.add(e, VOIDIC_INFUSION_RES, 1F);
-			event.add(e, VOIDIC_PARANOIA_RES, 1F);
-			event.add(e, VOIDIC_RES, 0F);
-			event.add(e, VOIDIC_DMG, 0F);
-			event.add(e, VOIDIC_ARROW_DMG, 0F);
+			event.add(e, VOIDIC_VISIBILITY);
+			event.add(e, VOIDIC_INFUSION);
+			event.add(e, VOIDIC_INFUSION_RES);
+			event.add(e, VOIDIC_PARANOIA_RES);
+			event.add(e, VOIDIC_RES);
+			event.add(e, VOIDIC_DMG);
+			event.add(e, VOIDIC_ARROW_DMG);
 		}));
+
+		// TODO: remove next major mc update
+		gameBus.addListener(PlayerEvent.PlayerLoggedInEvent.class, event -> {
+			Player player = event.getEntity();
+			final int VERSION = 1;
+			if (player.getData(dataAttachments.DATA_CORRECTION) < VERSION) {
+				if (player.getAttributeBaseValue(VOIDIC_VISIBILITY) == 1D)
+					Objects.requireNonNull(player.getAttribute(VOIDIC_VISIBILITY)).setBaseValue(0D);
+				if (player.getAttributeBaseValue(VOIDIC_INFUSION) == 1D)
+					Objects.requireNonNull(player.getAttribute(VOIDIC_INFUSION)).setBaseValue(0D);
+				if (player.getAttributeBaseValue(VOIDIC_INFUSION_RES) == 1D)
+					Objects.requireNonNull(player.getAttribute(VOIDIC_INFUSION_RES)).setBaseValue(0D);
+				if (player.getAttributeBaseValue(VOIDIC_PARANOIA_RES) == 1D)
+					Objects.requireNonNull(player.getAttribute(VOIDIC_PARANOIA_RES)).setBaseValue(0D);
+				player.setData(dataAttachments.DATA_CORRECTION, VERSION);
+			}
+		});
+	}
+
+	public String getDraconicHealthId(EquipmentSlot slot) {
+		return DRACONIC_HEALTH_ID.concat(slot.getName().toLowerCase(Locale.ROOT));
 	}
 
 }

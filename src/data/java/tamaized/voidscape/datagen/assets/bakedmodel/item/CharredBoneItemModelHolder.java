@@ -27,7 +27,7 @@ public class CharredBoneItemModelHolder extends ItemModelHolder {
 	@Override
 	public ModelFile build(ItemModelProvider provider) {
 		return provider.withExistingParent(name(), "item/generated")
-			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
+			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 1).end()
 			.texture("layer0", "item/charred_bone")
 			.texture("layer1", "item/charred_bone_overlay");
 	}

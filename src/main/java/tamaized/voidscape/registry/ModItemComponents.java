@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.data.QuiverContents;
 
 import java.util.function.Supplier;
 
@@ -31,6 +32,12 @@ public class ModItemComponents {
 		.persistent(Codec.BOOL)
 		.cacheEncoding()
 		.networkSynchronized(ByteBufCodecs.BOOL)
+		.build());
+
+	public final Supplier<DataComponentType<QuiverContents>> QUIVER_CONTENTS = REGISTRY.register("quiver_contents", () -> DataComponentType.<QuiverContents>builder()
+		.persistent(QuiverContents.CODEC)
+		.cacheEncoding()
+		.networkSynchronized(QuiverContents.STREAM_CODEC)
 		.build());
 
 }

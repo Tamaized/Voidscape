@@ -24,7 +24,7 @@ public class CharredStructureSetBootstrap extends StructureSetBootstrapHolder {
 		return new StructureSet(
 			parent.get().orElseThrow(),
 			new RandomSpreadStructurePlacement(
-				25, 10, RandomSpreadType.LINEAR, 21916695
+				4, 2, RandomSpreadType.LINEAR, 21916695
 			)
 		);
     }

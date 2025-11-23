@@ -49,7 +49,7 @@ public class TitaniteBowItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/titanite/bow/bow")
@@ -127,7 +127,7 @@ public class TitaniteBowItemModelHolder extends ItemModelHolder {
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(name),
+				name(name),
 				"item/bow"
 			)
 			.texture("layer0", "item/titanite/bow/bow_" + name)

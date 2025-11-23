@@ -8,18 +8,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.level.Level;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Configurable
 public class VoidlingEntity extends Spider implements IEthereal {
 
 	@Autowired
 	private static ModAttributes attributes;
 
 	@Autowired
-	private ModDataAttachments dataAttachments;
+	private static ModDataAttachments dataAttachments;
 
 	public VoidlingEntity(EntityType<? extends VoidlingEntity> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);

@@ -39,7 +39,7 @@ public class TitaniteHoeItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/handheld"
 			)
 			.texture("layer0", "item/titanite/hoe")
@@ -54,7 +54,7 @@ public class TitaniteHoeItemModelHolder extends ItemModelHolder {
 	private ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/titanite/hoe_broken")

@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import tamaized.beanification.Autowired;
@@ -31,7 +32,8 @@ public class ThunderspirePlacedFeatureBootstrap extends PlacedFeatureBootstrapHo
 			parentFeature.get().orElseThrow(),
 			List.of(
 				InSquarePlacement.spread(),
-				new SeekDownPlacementMod(false)
+				new SeekDownPlacementMod(false),
+				BiomeFilter.biome()
 			)
 		);
 	}

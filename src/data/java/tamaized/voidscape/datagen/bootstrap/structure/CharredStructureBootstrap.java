@@ -43,7 +43,7 @@ public class CharredStructureBootstrap extends StructureBootstrapHolder {
 				new StructureSpawnOverride(
 					StructureSpawnOverride.BoundingBoxType.STRUCTURE,
 					WeightedRandomList.create(new MobSpawnSettings.SpawnerData(
-						entities.VOIDS_WRATH.get(), Weight.of(100), 1, 1
+						entities.VOIDS_WRATH.get(), Weight.of(100), 1, 3
 					))
 				)
 			))

@@ -5,18 +5,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModEntities;
 
-@Configurable
 public class IchorBoltEntity extends SpellBoltEntity {
 
 	@Autowired
 	private static ModEntities entities;
 
 	@Autowired
-	private ModEffects effects;
+	private static ModEffects effects;
 
 	public IchorBoltEntity(EntityType<IchorBoltEntity> type, Level level) {
 		super(type, level, 0xFF7700);

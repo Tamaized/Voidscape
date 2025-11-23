@@ -195,45 +195,6 @@
             }
           ]
         }
-      },
-      {
-        "type": "minecraft:condition",
-        "if_true": {
-          "type": "minecraft:biome",
-          "biome_is": [
-            "voidscape:aether"
-          ]
-        },
-        "then_run": {
-          "type": "minecraft:sequence",
-          "sequence": [
-            {
-              "type": "minecraft:condition",
-              "if_true": {
-                "type": "voidscape:air_above"
-              },
-              "then_run": {
-                "type": "minecraft:block",
-                "result_state": {
-                  "Name": "aether:aether_grass_block",
-                  "Properties": {
-                    "double_drops": "false",
-                    "snowy": "false"
-                  }
-                }
-              }
-            },
-            {
-              "type": "minecraft:block",
-              "result_state": {
-                "Name": "aether:holystone",
-                "Properties": {
-                  "double_drops": "false"
-                }
-              }
-            }
-          ]
-        }
       }
     ]
   }

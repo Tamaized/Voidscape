@@ -36,14 +36,6 @@ public abstract class ItemModelHolder extends ModelHolder {
 		return "item/" + nameToUse() + (suffix == null ? "" : ("_" + suffix));
 	}
 
-	protected String splitName() {
-		return splitName(null);
-	}
-
-	protected String splitName(@Nullable String suffix) {
-		return "item/" + String.join("/", nameToUse().split("_", 2)) + (suffix == null ? "" : ("_" + suffix));
-	}
-
 	@Nullable
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return null;

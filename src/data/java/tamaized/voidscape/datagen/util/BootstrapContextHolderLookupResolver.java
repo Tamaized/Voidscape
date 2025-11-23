@@ -53,11 +53,11 @@ public class BootstrapContextHolderLookupResolver {
 		});
 	}
 
-	public RegistrySetBuilder.PatchedRegistries resolveFor(RegistrySetBuilder registrySetBuilder) {
+	public CompletableFuture<RegistrySetBuilder.PatchedRegistries> resolveFor(RegistrySetBuilder registrySetBuilder) {
 		return RegistryPatchGenerator.createLookup(
 			CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor()),
 			registrySetBuilder
-		).join();
+		);
 	}
 
 }

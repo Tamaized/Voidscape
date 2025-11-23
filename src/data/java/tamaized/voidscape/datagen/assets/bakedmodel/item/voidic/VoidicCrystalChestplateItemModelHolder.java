@@ -15,7 +15,7 @@ import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalChestplateItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalChestplateItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModArmorSetComponentDirectory armor;
@@ -34,7 +34,7 @@ public class VoidicCrystalChestplateItemModelHolder extends VoidicCrystalItemMod
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/voidic/chest")
@@ -49,7 +49,7 @@ public class VoidicCrystalChestplateItemModelHolder extends VoidicCrystalItemMod
 	public ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/generated"
 				)
 				.texture("layer0", "item/voidic/chest_broken")

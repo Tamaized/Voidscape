@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -33,7 +34,8 @@ public class ThunderVinesPlacedFeatureBootstrap extends PlacedFeatureBootstrapHo
 			List.of(
 				CountPlacement.of(50),
 				InSquarePlacement.spread(),
-				new RandomYPlacementMod(13)
+				new RandomYPlacementMod(13),
+				BiomeFilter.biome()
 			)
 		);
 	}

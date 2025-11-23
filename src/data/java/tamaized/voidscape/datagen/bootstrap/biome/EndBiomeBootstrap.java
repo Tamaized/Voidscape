@@ -75,7 +75,7 @@ public class EndBiomeBootstrap implements IBiomeBootstrap {
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, chorusPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, etherealFruitEndPatchPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(EntityType.ENDERMAN, 0.7F, 0.15F)
 				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(

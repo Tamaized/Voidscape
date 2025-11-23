@@ -2,6 +2,7 @@ package tamaized.voidscape.client.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import tamaized.beanification.Autowired;
@@ -10,13 +11,13 @@ import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.util.LevelUtil;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class FogColorHandler {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private LevelUtil levelUtil;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	@PostConstruct(PostConstruct.Bus.GAME)

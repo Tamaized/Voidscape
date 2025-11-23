@@ -82,7 +82,7 @@ public class ThunderForestBiomeBootstrap implements IBiomeBootstrap {
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, thunderRootsPlacedFeatureBootstrap.get().orElseThrow())
 				.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, thunderVinesPlacedFeatureBootstrap.get().orElseThrow())
 				.build())
-			.mobSpawnSettings(new MobSpawnSettings.Builder()
+			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(entities.VOIDLING.get(), 0.7F, 0.15F)
 				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(

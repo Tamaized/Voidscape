@@ -22,7 +22,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.neoforged.neoforge.common.Tags;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.RegistryProvider;
+import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
+import tamaized.voidscape.item.EtherealFruitItem;
 
 import java.util.function.Supplier;
 
@@ -36,7 +37,7 @@ public class BlockLootTableUtil {
 		return registries.join().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key);
 	}
 
-	public LootTable.Builder etherealFruit(Supplier<Item> fruit) {
+	public LootTable.Builder etherealFruit(Supplier<EtherealFruitItem> fruit) {
 		return LootTable.lootTable().withPool(
 			LootPool.lootPool().add(
 				LootItem.lootTableItem(fruit.get())

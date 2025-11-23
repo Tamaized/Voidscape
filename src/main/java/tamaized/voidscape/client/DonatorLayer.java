@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.api.distmarker.Dist;
 import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -20,13 +21,13 @@ import tamaized.voidscape.registry.ModItemComponents;
 @Configurable
 public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private DonatorLayerBuffers donatorLayerBuffers;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
 	public DonatorLayer(RenderLayerParent<T, M> p_117346_) {

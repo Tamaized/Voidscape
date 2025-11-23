@@ -121,13 +121,13 @@ public class GerminatorBlockEntity extends BlockEntity {
 								case "nether" -> etherealFruitBlocks.NETHER.get().defaultBlockState();
 								case "end" -> etherealFruitBlocks.END.get().defaultBlockState();
 							});
-							level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
+							level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
 							growths.incrementAndGet();
 							continue;
 						}
 						if (level instanceof ServerLevel serverLevel) {
 							if (BoneMealItem.applyBonemeal(new ItemStack(Items.BONE_MEAL), level, pos, FakePlayerFactory.get(serverLevel, fakePlayers.GERMINATOR))) {
-								serverLevel.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
+								serverLevel.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
 								growths.incrementAndGet();
 							}
 						}

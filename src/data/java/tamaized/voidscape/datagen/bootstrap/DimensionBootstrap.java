@@ -24,20 +24,22 @@ public class DimensionBootstrap implements IBootstrap {
 	private DimensionTypeBootstrap dimensionTypeBootstrap;
 
 	@Autowired
-	private ModDimensions dimensions;
-
-	@Autowired
 	private ModBiomes biomes;
 
 	@Autowired
 	private NoiseGeneratorSettingsBootstrap noiseGeneratorSettingsBootstrap;
+
+	@Override
+	public int priority() {
+		return dimensionTypeBootstrap.priority() + 1;
+	}
 
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.LEVEL_STEM, context -> {
 			context.register(
 				ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void")),
 				new LevelStem(
-					dimensionTypeBootstrap.getVoid(builder),
+					dimensionTypeBootstrap.getVoid(),
 					new VoidChunkGenerator(
 						new LayeredBiomeProvider(
 							context.lookup(Registries.BIOME),
@@ -59,9 +61,10 @@ public class DimensionBootstrap implements IBootstrap {
 							160,
 							new GenLayerRandomWithOneMajorBiomes(
 								List.of(
+									Either.left(biomes.THUNDERSPIRES),
 									Either.left(biomes.THUNDER_FOREST)
 								),
-								biomes.THUNDER_FOREST,
+								biomes.VOID,
 								4
 							),
 							new GenLayerRandomWithOneMajorBiomes(
@@ -79,8 +82,8 @@ public class DimensionBootstrap implements IBootstrap {
 								4
 							),
 							new GenLayerRandomWithOneMajorBiomes(
-								List.of(),
-								biomes.ANTISPIRES,
+								List.of(Either.left(biomes.ANTISPIRES)),
+								biomes.VOID,
 								4
 							)
 						),

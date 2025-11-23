@@ -1,10 +1,10 @@
-// 1.21.1	2025-03-09T00:50:13.749931806	Tags for minecraft:block mod id voidscape
-cfab2ab481bf476a645d326b87627918009b9e50 data/c/tags/block/ore_bearing_ground/bedrock.json
-9994f212884e8264af96eaba34aa7e89696d8994 data/c/tags/block/ore_bearing_ground/end_stone.json
+// 1.21.1	2025-08-03T16:48:16.4601826	Tags for minecraft:block mod id voidscape
 3f611ce11efe1a29ec5758cb2a3bf606a991c473 data/c/tags/block/ores_in_ground/bedrock.json
 a92ff84fbf3ac283cd6003dfa52ae5ab187f0db5 data/c/tags/block/ores_in_ground/end_stone.json
 51e1cba6f20d43210e9c1250f82295de4a664b47 data/c/tags/block/ores_in_ground/netherrack.json
 e119c4cb97f44b563ac4cd811ad387aa6a13e846 data/c/tags/block/ores_in_ground/stone.json
+cfab2ab481bf476a645d326b87627918009b9e50 data/c/tags/block/ore_bearing_ground/bedrock.json
+9994f212884e8264af96eaba34aa7e89696d8994 data/c/tags/block/ore_bearing_ground/end_stone.json
 92e6852a31d2dbe93ff9872f4d12c33adedae400 data/minecraft/tags/block/dragon_immune.json
 dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/block/logs.json
 926b9496d731adec0e05bd6aa529a847359e0882 data/minecraft/tags/block/mineable/axe.json
@@ -20,6 +20,13 @@ d9a6b95c5c4455d3d7222352acfe6da770db1b94 data/minecraft/tags/block/sword_efficie
 92e6852a31d2dbe93ff9872f4d12c33adedae400 data/minecraft/tags/block/wither_immune.json
 586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/block/wooden_slabs.json
 8be45699e0effa510c76e06807267a57d64a2c94 data/voidscape/tags/block/debug_ore.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/voidscape/tags/block/incorrect_for_astral_tool.json
+5ef3d02342ffe50661c4f3828b89bc44223f8f82 data/voidscape/tags/block/incorrect_for_corrupt_tool.json
+9b0d45557bdd8b8bae15dc4ac10b52a3744c1db8 data/voidscape/tags/block/incorrect_for_ichor_tool.json
+12945b5ba9c468bbe25224302d4707d1e3434966 data/voidscape/tags/block/incorrect_for_titanite_tool.json
+843f270c1aeec31ce66e45802b3466b2341a855c data/voidscape/tags/block/incorrect_for_voidic_crystal_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/voidscape/tags/block/needs_astral_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/voidscape/tags/block/needs_corrupt_tool.json
 b884da0d6edb0217f655ea8635e5fb314c966325 data/voidscape/tags/block/needs_ichor_tool.json
 51e1cba6f20d43210e9c1250f82295de4a664b47 data/voidscape/tags/block/needs_titanite_tool.json
 e119c4cb97f44b563ac4cd811ad387aa6a13e846 data/voidscape/tags/block/needs_voidic_tool.json

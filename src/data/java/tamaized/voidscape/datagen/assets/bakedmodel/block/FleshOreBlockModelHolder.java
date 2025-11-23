@@ -41,7 +41,7 @@ public class FleshOreBlockModelHolder extends BlockModelHolder {
 			)
 			.renderType(RenderType.cutoutMipped().name)
 			.texture("base", provider.mcLoc("block/netherrack"))
-			.texture("side", "block/flesh_ore")
+			.texture("overlay", "block/flesh_ore")
 			.texture("particle", "#base");
 	}
 

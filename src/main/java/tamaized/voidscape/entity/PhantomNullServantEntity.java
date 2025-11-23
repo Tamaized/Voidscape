@@ -37,15 +37,27 @@ public class PhantomNullServantEntity extends NullServantEntity {
 
 	private NullServantEntity parent;
 
+	private final int summonedCount;
+	private int hitCount = 0;
+
 	public PhantomNullServantEntity(NullServantEntity parent) {
-		this(entities.NULL_SERVANT_PHANTOM.get(), parent.level());
+		this(parent, 0);
+	}
+
+	public PhantomNullServantEntity(NullServantEntity parent, int summonedCount) {
+		this(entities.NULL_SERVANT_PHANTOM.get(), parent.level(), summonedCount);
 		this.parent = parent;
 	}
 
 	public PhantomNullServantEntity(EntityType<? extends PhantomNullServantEntity> type, Level level) {
+		this(type, level, 0);
+	}
+
+	public PhantomNullServantEntity(EntityType<? extends PhantomNullServantEntity> type, Level level, int summonedCount) {
 		super(type, level);
 		setNoGravity(true);
 		noPhysics = true;
+		this.summonedCount = summonedCount;
 	}
 
 
@@ -93,6 +105,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		return spawnGroupData;
 	}
@@ -125,7 +138,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.getDirectEntity() instanceof StrangePearlEntity && !(source.getEntity() instanceof NullServantEntity))
-			return super.hurt(source, 300F);
+			return super.hurt(source, hitCount++ >= summonedCount ? Float.MAX_VALUE : 20F);
 		return false;
 	}
 

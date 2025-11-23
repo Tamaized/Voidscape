@@ -3,7 +3,7 @@
   "render_type": "minecraft:cutout_mipped",
   "textures": {
     "base": "minecraft:block/netherrack",
-    "particle": "#base",
-    "side": "voidscape:block/flesh_ore"
+    "overlay": "voidscape:block/flesh_ore",
+    "particle": "#base"
   }
 }

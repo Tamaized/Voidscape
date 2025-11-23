@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import tamaized.beanification.Autowired;
@@ -34,7 +35,8 @@ public class FlowerCherryPlacedFeatureBootstrap extends PlacedFeatureBootstrapHo
 			List.of(
 				CountPlacement.of(12),
 				new SeekDownPlacementMod(true),
-				new UnderBlockPlacementMod(Blocks.CHERRY_LEAVES.defaultBlockState())
+				new UnderBlockPlacementMod(Blocks.CHERRY_LEAVES.defaultBlockState()),
+				BiomeFilter.biome()
 			)
 		);
 	}

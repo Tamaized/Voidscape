@@ -45,6 +45,9 @@
         "type": "minecraft:matching_blocks",
         "blocks": "minecraft:air"
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
@@ -20,7 +21,7 @@ import tamaized.voidscape.entity.NullServantEntity;
 
 public class RenderNullServant<T extends NullServantEntity> extends LivingEntityRenderer<T, ModelNullServant<T>> {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static class ColorHack {
@@ -38,7 +39,7 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 		super(rendererManager, new ModelNullServant<>(rendererManager.bakeLayer(modelLayerLocations.NULL_SERVANT)) {
 			@Override
 			public void renderToBuffer(PoseStack stack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-				super.renderToBuffer(stack, buffer, packedLight, packedOverlay, COLOR_STATE.eyes ? FastColor.ARGB32.color(FastColor.ARGB32.alpha(color), COLOR_STATE.color) : color);
+				super.renderToBuffer(stack, buffer, packedLight, packedOverlay, COLOR_STATE.eyes ? color : FastColor.ARGB32.color(0xFF, COLOR_STATE.color));
 			}
 		}, 0F);
 		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));

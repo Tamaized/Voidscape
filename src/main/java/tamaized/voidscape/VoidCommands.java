@@ -9,6 +9,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -38,41 +39,60 @@ public class VoidCommands {
 		return context.getArgument(id, Integer.class);
 	}
 
+	private ItemStack sword() {
+		ItemStack stack = new ItemStack(corruptToolSet.CORRUPT_SWORD.get());
+		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
+			attributes.VOIDIC_DMG,
+			new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 100, AttributeModifier.Operation.ADD_VALUE),
+			EquipmentSlotGroup.MAINHAND
+		));
+		return stack;
+	}
+
+	private ItemStack eyes() {
+		ItemStack stack = new ItemStack(astralArmorSet.ASTRAL_HELMET.get());
+		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
+				attributes.VOIDIC_VISIBILITY,
+				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.HEAD
+			).withModifierAdded(
+				attributes.VOIDIC_INFUSION_RES,
+				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.HEAD
+			).withModifierAdded(
+				attributes.VOIDIC_PARANOIA_RES,
+				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.HEAD
+			)
+		);
+		return stack;
+	}
+
 	public LiteralArgumentBuilder<CommandSourceStack> factory() {
 		return LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape")
 			.then(Commands.literal("debug")
 				.requires(cs -> cs.hasPermission(2))
+				.then(Commands.literal("dev-clear-inventory-and-effects")
+					.executes(context -> {
+						Player me = context.getSource().getPlayerOrException();
+						me.removeAllEffects();
+						me.getInventory().clearContent();
+						me.getInventory().armor.set(EquipmentSlot.HEAD.getIndex(), eyes());
+						me.getInventory().items.set(EquipmentSlot.MAINHAND.getIndex(), sword());
+						me.getData(dataAttachments.INSANITY).setInfusion(0);
+						me.getData(dataAttachments.INSANITY).setParanoia(0);
+						return 0;
+					}))
 				.then(Commands.literal("sword")
 					.executes(context -> {
 						Player me = context.getSource().getPlayerOrException();
-						ItemStack stack = new ItemStack(corruptToolSet.CORRUPT_SWORD.get());
-						stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
-							attributes.VOIDIC_DMG,
-							new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 100, AttributeModifier.Operation.ADD_VALUE),
-							EquipmentSlotGroup.MAINHAND
-						));
-						me.getInventory().add(stack);
+						me.getInventory().add(sword());
 						return 0;
 					}))
 				.then(Commands.literal("eyes")
 					.executes(context -> {
 						Player me = context.getSource().getPlayerOrException();
-						ItemStack stack = new ItemStack(astralArmorSet.ASTRAL_HELMET.get());
-						stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
-								attributes.VOIDIC_VISIBILITY,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-								EquipmentSlotGroup.HEAD
-							).withModifierAdded(
-								attributes.VOIDIC_INFUSION_RES,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-								EquipmentSlotGroup.HEAD
-							).withModifierAdded(
-								attributes.VOIDIC_PARANOIA_RES,
-								new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-								EquipmentSlotGroup.HEAD
-							)
-						);
-						me.getInventory().add(stack);
+						me.getInventory().add(eyes());
 						return 0;
 					}))
 				.then(Commands.literal("get")

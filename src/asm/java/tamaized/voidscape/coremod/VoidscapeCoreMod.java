@@ -6,6 +6,12 @@ import tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransform
 import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer;
+import tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer;
+import tamaized.voidscape.coremod.transformers.item.ProjectileWeaponItemUseAmmoTransformer;
+import tamaized.voidscape.coremod.transformers.render.ArmorModelOverlayTransformer;
+import tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTransformer;
+import tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer;
+import tamaized.voidscape.coremod.transformers.visibility.LightTextureNightVisionAndGammaTransformer;
 
 import java.util.List;
 
@@ -19,7 +25,23 @@ public class VoidscapeCoreMod implements ICoreMod {
 
 			// Entity Render Transparency
 			new ModifyEntityRenderTransparencyTransformer(),
-			new ModifyEntityRenderTypeTransformer()
+			new ModifyEntityRenderTypeTransformer(),
+
+			// Dimension Snow/Freeze Control
+			new BiomeSnowAndFreezeTransformer(),
+
+			// Visibility
+			new LightTextureBrightnessTransformer(),
+			new LightTextureNightVisionAndGammaTransformer(),
+
+			// ItemInHandRenderer
+			new ItemInHandRendererIsBowTransformer(),
+
+			// Armor Model Overlays
+			new ArmorModelOverlayTransformer(),
+
+			// ProjectileWeaponItem
+			new ProjectileWeaponItemUseAmmoTransformer()
 		);
 	}
 }

@@ -26,7 +26,7 @@ public class LevelUtil {
 	}
 
 	public Optional<ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
-		return Optional.ofNullable(Objects.requireNonNull(level.getServer()).getLevel(dest));
+		return Optional.ofNullable(level.getServer()).map(serverLevel -> serverLevel.getLevel(dest));
 	}
 
 	public Optional<ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {

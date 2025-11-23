@@ -55,7 +55,7 @@ public class AstralCrossbowItemModelHolder extends ItemModelHolder {
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/generated"
 			)
 			.texture("layer0", "item/astral/xbow/crossbow_standby")
@@ -72,7 +72,7 @@ public class AstralCrossbowItemModelHolder extends ItemModelHolder {
 					.scale(0.9F)
 				.end()
 				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-					.rotation(-90, 0, 30)
+					.rotation(-90, 0, -55)
 					.translation(1.13F, 3.2F, 1.13F)
 					.scale(0.68F)
 				.end()
@@ -156,7 +156,7 @@ public class AstralCrossbowItemModelHolder extends ItemModelHolder {
 
 	private ModelFile makeAdditionalModel(ItemModelProvider provider, String name) {
 		return provider.withExistingParent(
-				splitName(name),
+				name(name),
 				"item/crossbow"
 			)
 			.texture("layer0", "item/astral/xbow/crossbow_" + name)

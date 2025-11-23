@@ -81,6 +81,7 @@ public class ModCreativeTabs {
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_OVERWORLD.get());
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NETHER.get());
 			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_END.get());
+			output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_SALAD.get());
 			//// Items
 			output.accept(itemComponentDirectory.miscItems().ETHEREAL_SPIDER_EGGS.get());
 			output.accept(itemComponentDirectory.augmentItems().ETHEREAL_SPIDER_FANG.get());
@@ -102,6 +103,7 @@ public class ModCreativeTabs {
 			output.accept(itemComponentDirectory.materialItems().CHARRED_BONE.get());
 			output.accept(itemComponentDirectory.partItems().CHARRED_WARHAMMER_HEAD.get());
 			output.accept(toolSetComponentDirectory.charredToolSet().CHARRED_WARHAMMER.get());
+			output.accept(toolSetComponentDirectory.charredToolSet().CHARRED_QUIVER.get());
 			// Gear - Corrupt
 			output.accept(itemComponentDirectory.materialItems().TENDRIL.get());
 			output.accept(toolSetComponentDirectory.corruptToolSet().CORRUPT_SWORD.get());

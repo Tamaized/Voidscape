@@ -15,7 +15,7 @@ import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalSwordItemModelHolder extends VoidicCrystalItemModelHolder {
+public class VoidicCrystalSwordItemModelHolder extends ItemModelHolder {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
@@ -34,7 +34,7 @@ public class VoidicCrystalSwordItemModelHolder extends VoidicCrystalItemModelHol
 	public ModelFile build(ItemModelProvider provider) {
 		// @formatter:off
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/handheld"
 			)
 			.texture("layer0", "item/voidic/sword")
@@ -49,7 +49,7 @@ public class VoidicCrystalSwordItemModelHolder extends VoidicCrystalItemModelHol
 	private ModelFile getBrokenModel(ItemModelProvider provider) {
 		if (brokenModel == null) {
 			brokenModel = provider.withExistingParent(
-					splitName("broken"),
+					name("broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/voidic/sword_broken")

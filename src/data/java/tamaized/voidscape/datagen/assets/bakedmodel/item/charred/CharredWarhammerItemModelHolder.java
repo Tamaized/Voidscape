@@ -45,7 +45,7 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 
 	public ModelFile build(ItemModelProvider provider) {
 		return provider.withExistingParent(
-				splitName(),
+				name(),
 				"item/handheld"
 			)
 			.customLoader(SeparateTransformsModelBuilder::begin)
@@ -62,7 +62,7 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 	public ItemModelBuilder getSmallModel(ItemModelProvider provider) {
 		if (smallModel == null) {
 			smallModel = provider.withExistingParent(
-					splitName("small"),
+					name("small"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/charred/warhammer_small")
@@ -80,7 +80,7 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 	public ModelFile getBrokenSmallModel(ItemModelProvider provider) {
 		if (brokenSmallModel == null) {
 			brokenSmallModel = provider.withExistingParent(
-					splitName("small_broken"),
+					name("small_broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/charred/warhammer_small_broken")
@@ -92,7 +92,7 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 	public ItemModelBuilder getBigModel(ItemModelProvider provider) {
 		if (bigModel == null) {
 			bigModel = provider.withExistingParent(
-					splitName("in_hand"),
+					name("in_hand"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/charred/warhammer")
@@ -138,7 +138,7 @@ public class CharredWarhammerItemModelHolder extends ItemModelHolder {
 	public ModelFile getBrokenBigModel(ItemModelProvider provider) {
 		if (brokenBigModel == null) {
 			brokenBigModel = provider.withExistingParent(
-					splitName("in_hand_broken"),
+					name("in_hand_broken"),
 					"item/handheld"
 				)
 				.texture("layer0", "item/charred/warhammer_broken")

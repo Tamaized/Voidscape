@@ -1,7 +1,6 @@
 package tamaized.voidscape.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -33,15 +32,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.entity.ai.wrath.ChargedExplosionGoal;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.tool.set.CharredToolSet;
 
-import javax.annotation.Nullable;
-
-@Configurable
 public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal {
 
 	@Autowired
@@ -50,10 +45,10 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	@Autowired
 	private static ModAttributes attributes;
 
-	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(VoidsWrathEntity.class, EntityDataSerializers.BOOLEAN);
-
 	@Autowired
-	private CharredToolSet charredToolSet;
+	private static CharredToolSet charredToolSet;
+
+	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(VoidsWrathEntity.class, EntityDataSerializers.BOOLEAN);
 
 	public VoidsWrathEntity(Level level) {
 		this(entities.VOIDS_WRATH.get(), level);
@@ -86,6 +81,7 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	}
 
 
+	@SuppressWarnings("deprecation")
 	@org.jetbrains.annotations.Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {

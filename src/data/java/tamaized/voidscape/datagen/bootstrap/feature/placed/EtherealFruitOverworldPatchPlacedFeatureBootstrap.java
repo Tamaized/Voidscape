@@ -2,10 +2,7 @@ package tamaized.voidscape.datagen.bootstrap.feature.placed;
 
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.*;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.bootstrap.feature.configured.EtherealFruitOverworldConfiguredFeatureBootstrap;
@@ -38,7 +35,8 @@ public class EtherealFruitOverworldPatchPlacedFeatureBootstrap extends PlacedFea
 				new SeekDownPlacementMod(true),
 				placementModUtil.AIR_ABOVE,
 				placementModUtil.NOT_AIR_BELOW,
-				BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)
+				BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),
+				BiomeFilter.biome()
 			)
 		);
 	}

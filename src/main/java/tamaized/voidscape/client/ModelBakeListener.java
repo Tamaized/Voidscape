@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ChargedProjectiles;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -22,16 +23,16 @@ import tamaized.voidscape.registry.tool.set.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class ModelBakeListener {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ItemModelOverridePredicates itemModelOverridePredicates;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModToolSetComponentDirectory toolSets;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModArmorSetComponentDirectory armorSets;
 
 	private final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
@@ -151,90 +152,6 @@ public class ModelBakeListener {
 		ItemProperties.register(item, itemModelOverridePredicates.BLOCKING, (stack, level, entity, prop) ->
 
 			entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-	}
-
-	public void redirectModels(ModelBakery bakery) {
-		redirectModelLocation(bakery, "voidic", "voidic_crystal_",
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_AXE,
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_PICKAXE,
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_SWORD,
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_SHIELD,
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_BOW,
-			toolSets.voidicCrystalToolSet().VOIDIC_CRYSTAL_XBOW,
-			armorSets.voidicCrystalArmorSet().VOIDIC_CRYSTAL_HELMET,
-			armorSets.voidicCrystalArmorSet().VOIDIC_CRYSTAL_CHEST,
-			armorSets.voidicCrystalArmorSet().VOIDIC_CRYSTAL_LEGS,
-			armorSets.voidicCrystalArmorSet().VOIDIC_CRYSTAL_BOOTS
-		);
-		redirectModelLocation(bakery, "charred", "charred_", toolSets.charredToolSet().CHARRED_WARHAMMER);
-		redirectModelLocation(bakery, "corrupt", "corrupt_",
-			toolSets.corruptToolSet().CORRUPT_AXE,
-			toolSets.corruptToolSet().CORRUPT_SWORD,
-			toolSets.corruptToolSet().CORRUPT_BOW,
-			toolSets.corruptToolSet().CORRUPT_XBOW,
-			armorSets.corruptArmorSet().CORRUPT_HELMET,
-			armorSets.corruptArmorSet().CORRUPT_CHEST,
-			armorSets.corruptArmorSet().CORRUPT_LEGS,
-			armorSets.corruptArmorSet().CORRUPT_BOOTS
-		);
-		redirectModelLocation(bakery, "titanite", "titanite_",
-			toolSets.titaniteToolSet().TITANITE_AXE,
-			toolSets.titaniteToolSet().TITANITE_PICKAXE,
-			toolSets.titaniteToolSet().TITANITE_HOE,
-			toolSets.titaniteToolSet().TITANITE_SWORD,
-			toolSets.titaniteToolSet().TITANITE_BOW,
-			toolSets.titaniteToolSet().TITANITE_XBOW,
-			armorSets.titaniteArmorSet().TITANITE_HELMET,
-			armorSets.titaniteArmorSet().TITANITE_CHEST,
-			armorSets.titaniteArmorSet().TITANITE_LEGS,
-			armorSets.titaniteArmorSet().TITANITE_BOOTS
-		);
-		redirectModelLocation(bakery, "ichor", "ichor_",
-			toolSets.ichorToolSet().ICHOR_SWORD,
-			toolSets.ichorToolSet().ICHOR_AXE,
-			toolSets.ichorToolSet().ICHOR_PICKAXE,
-			toolSets.ichorToolSet().ICHOR_BOW,
-			toolSets.ichorToolSet().ICHOR_XBOW,
-			armorSets.ichorArmorSet().ICHOR_HELMET,
-			armorSets.ichorArmorSet().ICHOR_CHEST,
-			armorSets.ichorArmorSet().ICHOR_LEGS,
-			armorSets.ichorArmorSet().ICHOR_BOOTS
-		);
-		redirectModelLocation(bakery, "astral", "astral_",
-			toolSets.astralToolSet().ASTRAL_SWORD,
-			toolSets.astralToolSet().ASTRAL_AXE,
-			toolSets.astralToolSet().ASTRAL_PICKAXE,
-			toolSets.astralToolSet().ASTRAL_SHOVEL,
-			toolSets.astralToolSet().ASTRAL_BOW,
-			toolSets.astralToolSet().ASTRAL_XBOW,
-			armorSets.astralArmorSet().ASTRAL_HELMET,
-			armorSets.astralArmorSet().ASTRAL_CHEST,
-			armorSets.astralArmorSet().ASTRAL_LEGS,
-			armorSets.astralArmorSet().ASTRAL_BOOTS
-		);
-	}
-
-	@SafeVarargs
-	private void redirectModelLocation(ModelBakery bakery, String subfolder, String remove, DeferredHolder<Item, Item>... items) {
-		// TODO: do we even need this anymore?
-		/*for (DeferredHolder<Item, Item> item : items) {
-			ResourceLocation location = item.getId();
-			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(location.getNamespace(), subfolder.concat("/").concat(location.getPath().replaceFirst(remove, "")));
-			ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");
-			REMAPPER.put(location, rl);
-			bakery.getBakedTopLevelModels().loadTopLevel(mrl);
-			bakery.unbakedCache.put(oldMrl, bakery.unbakedCache.get(mrl));
-			Minecraft.getInstance().getItemRenderer().getItemModelShaper().register(item.get(), mrl);
-		}*/
-	}
-
-	public void clearOldModels(ModelBakery bakery) {
-		/*REMAPPER.keySet().forEach(location -> {
-			ModelResourceLocation oldMrl = new ModelResourceLocation(location, "inventory");
-			bakery.unbakedCache.remove(oldMrl);
-			bakery.topLevelModels.remove(oldMrl);
-		});*/
 	}
 
 }

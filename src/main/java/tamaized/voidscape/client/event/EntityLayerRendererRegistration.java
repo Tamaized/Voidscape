@@ -3,13 +3,14 @@ package tamaized.voidscape.client.event;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.client.DonatorLayer;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class EntityLayerRendererRegistration {
 
 	@PostConstruct
