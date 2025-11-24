@@ -189,6 +189,9 @@ afterEvaluate {
 	}
 }
 
+def gprUser = hasProperty("GPRUser") ? GPRUser : secrets.getProperty("gpr.user")
+def gprKey = hasProperty("GPRKey") ? GPRKey : secrets.getProperty("gpr.key")
+
 repositories {
 	maven {
 		name 'Jared\'s Maven' // JEI
@@ -206,8 +209,8 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/The-Aether-Team/The-Aether")
 		credentials {
-			username = secrets.getProperty("gpr.user")
-			password = secrets.getProperty("gpr.key")
+			username = gprUser
+			password = gprKey
 		}
 	}
 	maven { url 'https://maven.wispforest.io' } // Aether - owolib
