@@ -2,7 +2,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @TypeUseAreNonnullByDefault
-package tamaized.voidscape.biome.genlayer.legacy;
+package tamaized.voidscape.item.util;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
