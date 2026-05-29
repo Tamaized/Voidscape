@@ -12,6 +12,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.ArmorDataModel;
+import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
@@ -88,7 +89,7 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 
 	@Override
 	public Optional<ResourceLocation> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
-		return Optional.of(inner ? TEXTURE_OVERLAY : TEXTURE);
+		return Optional.of(RegUtil.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
 	}
 
 }
