@@ -1,4 +1,5 @@
 import net.neoforged.moddevgradle.internal.RunGameTask
+import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
 
 buildscript {
 	repositories {
@@ -8,7 +9,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "tamaized:beanification:${beanification_version}:gradle"
+		classpath "tamaized:beanification:${beanification_gradle_plugin_version}:gradle"
 	}
 }
 
@@ -20,39 +21,35 @@ plugins {
 	// Version List: https://projects.neoforged.net/neoforged/ModDevGradle
 	id 'net.neoforged.moddev' version "${mdg_version}"
 	id "com.dorongold.task-tree" version "4.0.0"
-	id 'com.gradleup.shadow' version '8.3.3'
+	id 'com.gradleup.shadow' version "${shadowjar_version}"
 }
 
 apply plugin: 'tamaized.beanification'
+
+repositories {
+	gradlePluginPortal()
+}
+
+dependencies { // Forces intellij to grab sources for the gradle build script
+	compileOnly "com.gradleup.shadow:shadow-gradle-plugin:${shadowjar_version}"
+	compileOnly "net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:${mdg_version}"
+}
+
+wrapper {
+	gradleVersion = '9.1.0'
+	distributionType = Wrapper.DistributionType.ALL
+}
 
 configurations {
 	shade
 }
 
 shadowJar {
-	finalizedBy 'deleteSlimJar'
-
+	mustRunAfter jar
 	archiveClassifier.set('')
-	dependsOn(tasks.named("jar"))
-	afterEvaluate {
-		from({ tasks.named("jar").get().outputs })
-	}
 	configurations = [project.configurations.shade]
-	relocate 'tamaized.beanification', "tamaized.${project.mod_id}.beanification"
-	relocate 'tamaized.regutil', "tamaized.${project.mod_id}.regutil"
-}
-
-jar {
-	archiveClassifier = "slim"
-}
-
-tasks.register('deleteSlimJar', Delete) {
-	dependsOn tasks.shadowJar
-
-	delete layout.buildDirectory.dir("libs").map { libsDir ->
-		libsDir.asFileTree.matching { PatternFilterable pf ->
-			pf.include "*-slim.jar"
-		}
+	relocate(new SimpleRelocator('tamaized', 'tamaized.beatdownstick')) {
+		exclude 'tamaized.beatdownstick.**'
 	}
 }
 
@@ -93,7 +90,7 @@ subprojects {
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(21))
+		languageVersion.set(JavaLanguageVersion.of(25))
 	}
 }
 
@@ -107,10 +104,17 @@ sourceSets {
 		compileClasspath += main.compileClasspath + main.output
 
 		java {
-			srcDirs = ['src/data/java', 'src/main/java']
+			srcDirs = ['src/main/java', 'src/data/java']
 		}
 		resources {
-			srcDirs = ['src/data/resources', 'src/main/resources']
+			srcDirs = ['src/main/resources']
+		}
+	}
+	dataForPublishing {
+		compileClasspath += data.compileClasspath
+
+		java {
+			srcDirs = ['src/data/java']
 		}
 	}
 }
@@ -150,7 +154,8 @@ neoForge {
 
 	unitTest {
 		enable()
-		testedMod = dataMod
+		testedMod = mainMod
+		loadedMods = [mainMod]
 	}
 
 	runs {
@@ -174,7 +179,7 @@ neoForge {
 		}
 
 		data {
-			data()
+			clientData()
 			gameDirectory = project.file('run-data')
 			programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 			sourceSet = this.sourceSets.data
@@ -198,7 +203,7 @@ repositories {
 		url 'https://maven.blamejared.com/'
 	}
 	maven {
-		name 'Tama\'s Maven' // Beanification, RegUtil
+		name 'Tama\'s Maven'
 		url 'https://maven.tamaized.com/releases/'
 	}
 	maven {
@@ -220,30 +225,29 @@ repositories {
 dependencies {
 	jarJar implementation(project(":asm"))
 
-	runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
+//	runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
 //    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
 
-	def aether = "com.aetherteam.aether:aether:1.21.1-1.5.8-neoforge"
+	/*def aether = "com.aetherteam.aether:aether:1.21.1-1.5.8-neoforge"
     runtimeOnly aether
 	dataImplementation aether
 	def aetherLib = "io.wispforest:owo-lib-neoforge:0.12.15.1-beta.3+1.21"
 	runtimeOnly aetherLib
-	dataRuntimeOnly aetherLib
+	dataRuntimeOnly aetherLib*/
 
-	def beanification = "tamaized:beanification:${project.beanification_version}"
-	implementation beanification
-	shade beanification
+	def regUtil = "tamaized:regutil:${project.regutil_version}"
+	implementation regUtil
+	shade regUtil
+
+	def beanification = "tamaized:beanification:"
 	testImplementation "${beanification}:tests"
 	testCompileOnly "${beanification}:test-sources"
 
-	def reg = "tamaized:regutil:${project.minecraft_version}-${project.regutil_version}"
-	implementation reg
-	shade reg
-
-	testImplementation group: 'net.neoforged', name: 'testframework', version: project.neoforge_version
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.3'
-	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.3'
-	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
+	testImplementation "net.neoforged:testframework:${project.neoforge_version}"
+	testImplementation "org.junit.jupiter:junit-jupiter:6.0.1"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.0.1"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:6.0.1"
+	testImplementation "org.mockito:mockito-junit-jupiter:5.21.0"
 }
 
 configurations.testImplementation {
@@ -264,13 +268,16 @@ test {
 	}
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+	srcDir 'src/generated/resources'
+	exclude '.cache'
+}
 
 processResources {
 	def ver = project.version
 	filesMatching("META-INF/neoforge.mods.toml") {
 		expand([
-			'file'           : [
+			'file': [
 				'jarVersion': ver
 			]
 		])
@@ -305,6 +312,28 @@ publishing {
 			}
 			groupId 'tamaized'
 			artifactId this.project.mod_id
+
+			def depsProvider = this.project.provider {
+				[
+					regutil_version: this.project.regutil_version
+				]
+			}
+
+			pom.withXml {
+				def dependenciesNode = asNode().appendNode('dependencies')
+
+				def addDep = { String group, String name, String version ->
+					def depNode = dependenciesNode.appendNode('dependency')
+					depNode.appendNode('groupId', group)
+					depNode.appendNode('artifactId', name)
+					depNode.appendNode('version', version)
+					depNode.appendNode('scope', 'compile')
+				}
+
+				def deps = depsProvider.get()
+
+				addDep('tamaized', 'regutil', deps.regutil_version)
+			}
 		}
 	}
 	repositories {
@@ -324,26 +353,16 @@ tasks.register('sourceJar', Jar) {
 	archiveClassifier = 'sources'
 }
 
-tasks.register('dataClassesForPublishing', JavaCompile) {
-	dependsOn "dataClasses"
-	source = fileTree('src/data/java')
-	classpath = sourceSets.named('data').get().compileClasspath
-	destinationDirectory = layout.buildDirectory.dir("classes/java/dataForPublishing")
-}
-
 tasks.register('dataJar', Jar) {
-	dependsOn 'dataClassesForPublishing'
-	from layout.buildDirectory.dir("classes/java/dataForPublishing")
+	dependsOn 'classes'
+	from sourceSets.dataForPublishing.output
 	archiveClassifier = 'data'
 }
 
 tasks.register('dataSourceJar', Jar) {
-	from sourceSets.data.allSource
+	dependsOn 'classes'
+	from sourceSets.dataForPublishing.allSource
 	archiveClassifier = 'data-sources'
-}
-
-tasks.withType(JavaCompile).configureEach {
-	options.encoding = 'UTF-8'
 }
 
 build.dependsOn shadowJar
