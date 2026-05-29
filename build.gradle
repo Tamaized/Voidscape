@@ -243,6 +243,14 @@ dependencies {
 	testImplementation "${beanification}:tests"
 	testCompileOnly "${beanification}:test-sources"
 
+	afterEvaluate {
+		project(':asm').dependencies {
+			compileOnly rootProject.configurations.compileOnly.dependencies.find {
+				it.name == 'pkginfoutil'
+			}
+		}
+	}
+
 	testImplementation "net.neoforged:testframework:${project.neoforge_version}"
 	testImplementation "org.junit.jupiter:junit-jupiter:6.0.1"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.0.1"

@@ -16,7 +16,7 @@ repositories {
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(21))
+		languageVersion.set(JavaLanguageVersion.of(25))
 	}
 }
 
@@ -35,7 +35,8 @@ sourceSets {
 
 dependencies {
 	compileOnly "org.jetbrains:annotations:24.0.1"
-	compileOnly "net.neoforged.fancymodloader:loader:4.0.8"
+	// Version List: https://projects.neoforged.net/neoforged/fancymodloader
+	compileOnly "net.neoforged.fancymodloader:loader:11.0.13"
 
 	// This is for javadoc, please do not actually classload anything from the main source set!!!!!!
 	def jankAssShit = IntelliJOutputDirectoryValueSource.getIntellijOutputDirectory(rootProject)

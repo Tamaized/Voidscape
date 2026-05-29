@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -71,14 +72,16 @@ public class VoidCommands {
 	public LiteralArgumentBuilder<CommandSourceStack> factory() {
 		return LiteralArgumentBuilder.<CommandSourceStack>literal("voidscape")
 			.then(Commands.literal("debug")
-				.requires(cs -> cs.hasPermission(2))
+				.requires(cs -> cs.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
 				.then(Commands.literal("dev-clear-inventory-and-effects")
 					.executes(context -> {
 						Player me = context.getSource().getPlayerOrException();
 						me.removeAllEffects();
+						PlayerInventoryWrapper inv = PlayerInventoryWrapper.of(me);
 						me.getInventory().clearContent();
-						me.getInventory().armor.set(EquipmentSlot.HEAD.getIndex(), eyes());
-						me.getInventory().items.set(EquipmentSlot.MAINHAND.getIndex(), sword());
+						inv.getArmorSlot(EquipmentSlot.HEAD)
+						me.getInventory().setItem(EquipmentSlot.HEAD.getIndex(me.getInventory().getNonEquipmentItems().size()), eyes());
+						me.getInventory().getNonEquipmentItems().set(EquipmentSlot.MAINHAND.getIndex(), sword());
 						me.getData(dataAttachments.INSANITY).setInfusion(0);
 						me.getData(dataAttachments.INSANITY).setParanoia(0);
 						return 0;
