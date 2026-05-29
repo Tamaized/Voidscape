@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -114,7 +114,7 @@ public class GerminatorBlockEntity extends BlockEntity {
 					list.remove(pos);
 					if (level.getBlockState(pos.above()).isAir()) {
 						if (isVoid && etherealFruitBlocks.VOID.get().defaultBlockState().canSurvive(level, pos.above())) {
-							level.setBlockAndUpdate(pos.above(), switch (level.getBiome(pos.above()).unwrapKey().map(ResourceKey::location).orElse(ResourceLocation.withDefaultNamespace("")).getPath()) {
+							level.setBlockAndUpdate(pos.above(), switch (level.getBiome(pos.above()).unwrapKey().map(ResourceKey::location).orElse(Identifier.withDefaultNamespace("")).getPath()) {
 								default -> etherealFruitBlocks.VOID.get().defaultBlockState();
 								case "null" -> etherealFruitBlocks.NULL.get().defaultBlockState();
 								case "overworld" -> etherealFruitBlocks.OVERWORLD.get().defaultBlockState();

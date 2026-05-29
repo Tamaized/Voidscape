@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceProvider;
 
 import javax.annotation.Nullable;
@@ -15,7 +15,7 @@ public class BindableShaderInstance extends ShaderInstance {
 
 	private ShaderInstance last;
 
-	public BindableShaderInstance(ResourceProvider p_173336_, ResourceLocation shaderLocation, VertexFormat p_173338_) throws IOException {
+	public BindableShaderInstance(ResourceProvider p_173336_, Identifier shaderLocation, VertexFormat p_173338_) throws IOException {
 		super(p_173336_, shaderLocation, p_173338_);
 	}
 

@@ -3,7 +3,7 @@ package tamaized.voidscape.datagen.data.advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public abstract class AbstractAdvancementSubProvider implements AdvancementProvi
 	}
 
 	protected final String location() {
-		return ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, name()).toString();
+		return Identifier.fromNamespaceAndPath(Voidscape.MODID, name()).toString();
 	}
 
 }

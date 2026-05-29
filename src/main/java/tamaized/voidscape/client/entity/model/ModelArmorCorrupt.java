@@ -12,7 +12,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import tamaized.regutil.RegUtil;
 
@@ -41,7 +41,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 		this(p_170677_, RenderType::entityCutoutNoCull);
 	}
 
-	public ModelArmorCorrupt(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_) {
+	public ModelArmorCorrupt(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
 		super(parent, p_170680_);
 
 		ImmutableList.Builder<ModelPart> builder = ImmutableList.builder();

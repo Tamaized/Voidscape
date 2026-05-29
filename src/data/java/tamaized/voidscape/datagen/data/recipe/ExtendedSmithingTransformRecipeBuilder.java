@@ -8,7 +8,7 @@ import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
@@ -47,7 +47,7 @@ public class ExtendedSmithingTransformRecipeBuilder extends SmithingTransformRec
 	}
 
 	@Override
-	public void save(RecipeOutput recipeOutput, ResourceLocation recipeId) {
+	public void save(RecipeOutput recipeOutput, Identifier recipeId) {
 		this.ensureValid(recipeId);
 		Advancement.Builder advancement$builder = recipeOutput.advancement()
 			.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId))
@@ -63,7 +63,7 @@ public class ExtendedSmithingTransformRecipeBuilder extends SmithingTransformRec
 		return super.unlocks(key, criterion);
 	}
 
-	private void ensureValid(ResourceLocation location) {
+	private void ensureValid(Identifier location) {
 		if (this.criteria.isEmpty()) {
 			throw new IllegalStateException("No way of obtaining recipe " + location);
 		}

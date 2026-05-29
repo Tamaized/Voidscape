@@ -2,7 +2,7 @@ package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -188,7 +188,7 @@ public class ThunderForestBiomeBlocks {
 		.register(THUNDER_HYPHAE_STRIPPED.getId().getPath(), () -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), itemProperties.LAVA_IMMUNE.get()));
 
 	public final BlockSetType THUNDER_SET = new BlockSetType(
-		ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "thunder").toString(),
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "thunder").toString(),
 		true,
 		true,
 		true,

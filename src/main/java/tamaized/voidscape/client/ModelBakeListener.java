@@ -3,7 +3,7 @@ package tamaized.voidscape.client;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
@@ -35,7 +35,7 @@ public class ModelBakeListener {
 	@Autowired(dist = Dist.CLIENT)
 	private ModArmorSetComponentDirectory armorSets;
 
-	private final Map<ResourceLocation, ResourceLocation> REMAPPER = new HashMap<>();
+	private final Map<Identifier, Identifier> REMAPPER = new HashMap<>();
 
 	@PostConstruct
 	private void setup(IEventBus bus) {

@@ -1,6 +1,6 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.item;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -29,7 +29,7 @@ public class VoidicBucketModelHolder extends ItemModelHolder {
 
 	@Override
 	public ModelFile build(ItemModelProvider provider) {
-		return provider.withExistingParent(name(), ResourceLocation.fromNamespaceAndPath("neoforge", "item/bucket"))
+		return provider.withExistingParent(name(), Identifier.fromNamespaceAndPath("neoforge", "item/bucket"))
 			.customLoader(DynamicFluidContainerModelBuilder::begin).fluid(fluids.VOIDIC_SOURCE.get()).end();
 	}
 }

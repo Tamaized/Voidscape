@@ -4,14 +4,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.voidscape.data.QuiverContents;
 
 public class ClientQuiverTooltip implements ClientTooltipComponent {
-	private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("container/bundle/background");
+	private static final Identifier BACKGROUND_SPRITE = Identifier.withDefaultNamespace("container/bundle/background");
 	private static final int MARGIN_Y = 4;
 	private static final int BORDER_WIDTH = 1;
 	private static final int SLOT_SIZE_X = 18;
@@ -85,14 +85,14 @@ public class ClientQuiverTooltip implements ClientTooltipComponent {
 
 	@OnlyIn(Dist.CLIENT)
 	static enum Texture {
-		BLOCKED_SLOT(ResourceLocation.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
-		SLOT(ResourceLocation.withDefaultNamespace("container/bundle/slot"), 18, 20);
+		BLOCKED_SLOT(Identifier.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
+		SLOT(Identifier.withDefaultNamespace("container/bundle/slot"), 18, 20);
 
-		public final ResourceLocation sprite;
+		public final Identifier sprite;
 		public final int w;
 		public final int h;
 
-		private Texture(ResourceLocation sprite, int w, int h) {
+		private Texture(Identifier sprite, int w, int h) {
 			this.sprite = sprite;
 			this.w = w;
 			this.h = h;

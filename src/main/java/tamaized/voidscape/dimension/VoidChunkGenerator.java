@@ -15,7 +15,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
@@ -300,7 +300,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 																worldGenRegion_.registryAccess().asGetterLookup(),
 																generatorSettings().unwrapKey().orElse(ResourceKey.create(
 																		Registries.NOISE_SETTINGS,
-																		ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void"))),
+																		Identifier.fromNamespaceAndPath(Voidscape.MODID, "void"))),
 																seed).sampler());
 								if (biome.value().getGenerationSettings().hasFeature(placedfeature)) {
 									BlockPos pos = new BlockPos(x, y, z);

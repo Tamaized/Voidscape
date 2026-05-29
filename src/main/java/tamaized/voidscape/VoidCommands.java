@@ -1,14 +1,14 @@
 package tamaized.voidscape;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -43,7 +43,7 @@ public class VoidCommands {
 		ItemStack stack = new ItemStack(corruptToolSet.CORRUPT_SWORD.get());
 		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
 			attributes.VOIDIC_DMG,
-			new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 100, AttributeModifier.Operation.ADD_VALUE),
+			new AttributeModifier(Identifier.fromNamespaceAndPath(Voidscape.MODID, "god"), 100, AttributeModifier.Operation.ADD_VALUE),
 			EquipmentSlotGroup.MAINHAND
 		));
 		return stack;
@@ -53,15 +53,15 @@ public class VoidCommands {
 		ItemStack stack = new ItemStack(astralArmorSet.ASTRAL_HELMET.get());
 		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.getAttributeModifiers().withModifierAdded(
 				attributes.VOIDIC_VISIBILITY,
-				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				new AttributeModifier(Identifier.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 				EquipmentSlotGroup.HEAD
 			).withModifierAdded(
 				attributes.VOIDIC_INFUSION_RES,
-				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				new AttributeModifier(Identifier.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 				EquipmentSlotGroup.HEAD
 			).withModifierAdded(
 				attributes.VOIDIC_PARANOIA_RES,
-				new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
+				new AttributeModifier(Identifier.fromNamespaceAndPath(Voidscape.MODID, "god"), 1, AttributeModifier.Operation.ADD_VALUE),
 				EquipmentSlotGroup.HEAD
 			)
 		);

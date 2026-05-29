@@ -3,7 +3,7 @@ package tamaized.voidscape.structure;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -60,9 +60,9 @@ public class CharredStructure extends Structure {
 	}
 
 	public static class Pieces {
-		private static final ResourceLocation TEMPLATE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "charred");
+		private static final Identifier TEMPLATE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "charred");
 
-		public static void addPieces(StructureTemplateManager manager, BlockPos pos, Rotation rotation, ResourceLocation location, StructurePieceAccessor accessor) {
+		public static void addPieces(StructureTemplateManager manager, BlockPos pos, Rotation rotation, Identifier location, StructurePieceAccessor accessor) {
 			accessor.addPiece(new Piece(manager, location, pos, rotation));
 		}
 
@@ -72,7 +72,7 @@ public class CharredStructure extends Structure {
 				this(context.structureTemplateManager(), tag);
 			}
 
-			public Piece(StructureTemplateManager manager, ResourceLocation location, BlockPos pos, Rotation rotation) {
+			public Piece(StructureTemplateManager manager, Identifier location, BlockPos pos, Rotation rotation) {
 				super(structurePieces.CHARRED_MAIN.get(), 0, manager, location, location.toString(), makeSettings(rotation), pos);
 			}
 

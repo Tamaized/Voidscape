@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FastColor;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
@@ -67,13 +67,13 @@ public class RenderNullServant<T extends NullServantEntity> extends LivingEntity
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return TheEndPortalRenderer.END_PORTAL_LOCATION;
 	}
 
 	private class EyeLayer extends EyesLayer<T, ModelNullServant<T>> {
 
-		private static final RenderType EYES = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/nullservant.png"));
+		private static final RenderType EYES = RenderType.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/nullservant.png"));
 
 		public EyeLayer(RenderLayerParent<T, ModelNullServant<T>> p_117346_) {
 			super(p_117346_);

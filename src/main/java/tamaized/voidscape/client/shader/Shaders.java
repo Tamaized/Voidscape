@@ -2,7 +2,7 @@ package tamaized.voidscape.client.shader;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
@@ -35,61 +35,61 @@ public class Shaders {
 			try {
 				event.registerShader(new OptimalAlphaShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_color"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_color"),
 						DefaultVertexFormat.POSITION_COLOR),
 					shader -> OPTIMAL_ALPHA_LESSTHAN_POS_COLOR = (OptimalAlphaShaderInstance) shader
 				);
 				event.registerShader(new OptimalAlphaShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_tex_color"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_tex_color"),
 						DefaultVertexFormat.POSITION_TEX_COLOR),
 					shader -> OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader
 				);
 				event.registerShader(new OptimalAlphaShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_color"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_color"),
 						DefaultVertexFormat.POSITION_COLOR),
 					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR = (OptimalAlphaShaderInstance) shader
 				);
 				event.registerShader(new OptimalAlphaShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex"),
 						DefaultVertexFormat.POSITION_TEX),
 					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX = (OptimalAlphaShaderInstance) shader
 				);
 				event.registerShader(new OptimalAlphaShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex_color"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex_color"),
 						DefaultVertexFormat.POSITION_TEX_COLOR),
 					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader
 				);
 				event.registerShader(new BindableShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "voidsky/sky"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/sky"),
 						DefaultVertexFormat.POSITION),
 					shader -> VOIDSKY = (BindableShaderInstance) shader
 				);
 				event.registerShader(new BindableShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "voidsky/entity"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/entity"),
 						DefaultVertexFormat.NEW_ENTITY),
 					shader -> VOIDSKY_ENTITY = (BindableShaderInstance) shader
 				);
 				event.registerShader(new BindableShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "voidsky/wings"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/wings"),
 						DefaultVertexFormat.POSITION_TEX),
 					shader -> VOIDSKY_WINGS = (BindableShaderInstance) shader
 				);
 				event.registerShader(new BindableShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "lines/lines"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "lines/lines"),
 						DefaultVertexFormat.POSITION_COLOR_NORMAL),
 					shader -> LINES = (BindableShaderInstance) shader
 				);
 				event.registerShader(new AuroraShaderInstance(
 						event.getResourceProvider(),
-						ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "aurora/aurora"),
+						Identifier.fromNamespaceAndPath(Voidscape.MODID, "aurora/aurora"),
 						DefaultVertexFormat.POSITION_COLOR),
 					shader -> THUNDER_AURORA = (AuroraShaderInstance) shader
 				);

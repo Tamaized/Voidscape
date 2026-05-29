@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
@@ -17,7 +17,7 @@ public abstract class StructureBootstrapHolder {
 	private Holder.Reference<Structure> ref;
 
 	public ResourceKey<Structure> key() {
-		return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, name()));
+		return ResourceKey.create(Registries.STRUCTURE, Identifier.fromNamespaceAndPath(Voidscape.MODID, name()));
 	}
 
 	public abstract String name();

@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -34,9 +34,9 @@ public class TurmoilOverlay {
 	private ModDataAttachments dataAttachments;
 
 	private final int STENCIL_INDEX = 10;
-	private final ResourceLocation TEXTURE_MASK = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/mask.png");
-	private final ResourceLocation TEXTURE_VOIDICINFUSION = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
-	private final ResourceLocation TEXTURE_WATCHINGYOU = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watchingyou.png");
+	private final Identifier TEXTURE_MASK = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/mask.png");
+	private final Identifier TEXTURE_VOIDICINFUSION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
+	private final Identifier TEXTURE_WATCHINGYOU = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watchingyou.png");
 
 	private int tick;
 	private float deltaTick;
@@ -70,7 +70,7 @@ public class TurmoilOverlay {
 	}
 
 	private void renderOverlay(RegisterGuiLayersEvent event) {
-		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "turmoil"), (graphics, delta) -> {
+		event.registerAboveAll(Identifier.fromNamespaceAndPath(Voidscape.MODID, "turmoil"), (graphics, delta) -> {
 			Level world = Minecraft.getInstance().level;
 			if (world != null && Minecraft.getInstance().player != null) {
 				Insanity data = Minecraft.getInstance().player.getData(dataAttachments.INSANITY);

@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
@@ -52,7 +52,7 @@ public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityMod
 		this(p_170677_, RenderType::entityTranslucent);
 	}
 
-	public ModelCorruptedPawn(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_) {
+	public ModelCorruptedPawn(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
 		super(p_170680_);
 
 		ImmutableList.Builder<TransparentModelWrapper> builder = ImmutableList.builder();

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
 public class RenderNoOp<T extends Entity> extends EntityRenderer<T> {
@@ -20,7 +20,7 @@ public class RenderNoOp<T extends Entity> extends EntityRenderer<T> {
 
 	@Override
 	@SuppressWarnings("ConstantConditions")
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return null;
 	}
 }

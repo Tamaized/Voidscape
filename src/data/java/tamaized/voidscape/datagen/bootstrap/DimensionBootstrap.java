@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.dimension.LevelStem;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -37,7 +37,7 @@ public class DimensionBootstrap implements IBootstrap {
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.LEVEL_STEM, context -> {
 			context.register(
-				ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void")),
+				ResourceKey.create(Registries.LEVEL_STEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "void")),
 				new LevelStem(
 					dimensionTypeBootstrap.getVoid(),
 					new VoidChunkGenerator(

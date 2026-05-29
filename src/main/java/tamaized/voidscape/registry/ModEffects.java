@@ -1,7 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,16 +26,16 @@ public class ModEffects {
 	public final DeferredHolder<MobEffect, MobEffect> FORTIFIED = REGISTRY.register("fortified", () -> new StandardEffect("fortified", MobEffectCategory.BENEFICIAL, 0x00FFAA, false));
 	public final DeferredHolder<MobEffect, MobEffect> TRAUMATIZED = REGISTRY.register("traumatized", () -> new StandardEffect("traumatized", MobEffectCategory.BENEFICIAL, 0x7700FF, false)
 		.addAttributeModifier(
-			attributes.VOIDIC_DMG, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0, AttributeModifier.Operation.ADD_VALUE
+			attributes.VOIDIC_DMG, Identifier.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0, AttributeModifier.Operation.ADD_VALUE
 		)
 		.addAttributeModifier(
-			attributes.VOIDIC_ARROW_DMG, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0, AttributeModifier.Operation.ADD_VALUE
+			attributes.VOIDIC_ARROW_DMG, Identifier.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0, AttributeModifier.Operation.ADD_VALUE
 		)
 		.addAttributeModifier(
-			attributes.VOIDIC_RES, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0D, AttributeModifier.Operation.ADD_VALUE
+			attributes.VOIDIC_RES, Identifier.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 5.0D, AttributeModifier.Operation.ADD_VALUE
 		)
 		.addAttributeModifier(
-			attributes.VOIDIC_INFUSION, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 0.15D, AttributeModifier.Operation.ADD_VALUE
+			attributes.VOIDIC_INFUSION, Identifier.fromNamespaceAndPath(Voidscape.MODID, "effect.traumatized"), 0.15D, AttributeModifier.Operation.ADD_VALUE
 		)
 	);
 

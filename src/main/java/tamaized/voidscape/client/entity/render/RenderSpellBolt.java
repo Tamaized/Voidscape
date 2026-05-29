@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
@@ -16,7 +16,7 @@ import tamaized.voidscape.entity.SpellBoltEntity;
 
 public class RenderSpellBolt<T extends SpellBoltEntity> extends EntityRenderer<T> {
 
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/spells/mage/bolt.png");
+	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/spells/mage/bolt.png");
 
 	private final int color;
 
@@ -57,7 +57,7 @@ public class RenderSpellBolt<T extends SpellBoltEntity> extends EntityRenderer<T
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return TEXTURE;
 	}
 

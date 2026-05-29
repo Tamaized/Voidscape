@@ -2,7 +2,7 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +17,7 @@ public class ModDamageSource {
 	public final ResourceKey<DamageType> VOIDIC = create("voidic");
 
 	private ResourceKey<DamageType> create(String name) {
-		return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, name));
+		return ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(Voidscape.MODID, name));
 	}
 
 	public DamageSource getDamageSource(Level level, ResourceKey<DamageType> type) {

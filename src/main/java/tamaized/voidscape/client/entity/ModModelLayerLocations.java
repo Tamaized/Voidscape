@@ -4,7 +4,7 @@ import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -35,7 +35,7 @@ public class ModModelLayerLocations {
 	public final ModelLayerLocation MODEL_ARMOR_ASTRAL = make("astral");
 
 	private ModelLayerLocation make(String name) {
-		return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "main"), name);
+		return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Voidscape.MODID, "main"), name);
 	}
 
 	@PostConstruct

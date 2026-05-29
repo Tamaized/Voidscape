@@ -25,7 +25,7 @@ public class ArmorModelOverlayTransformer implements ITransformer<MethodNode> {
 			Opcodes.INVOKEVIRTUAL,
 			"net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer",
 			"renderModel",
-			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/model/Model;ILnet/minecraft/resources/ResourceLocation;)V"
+			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/model/Model;ILnet/minecraft/resources/Identifier;)V"
 		).forEach(instruction -> {
 			node.instructions.insert(instruction, ASMAPI.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 0),

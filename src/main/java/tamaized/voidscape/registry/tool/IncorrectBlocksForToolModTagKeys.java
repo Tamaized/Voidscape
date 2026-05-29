@@ -1,7 +1,7 @@
 package tamaized.voidscape.registry.tool;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import tamaized.beanification.Component;
@@ -16,8 +16,8 @@ public class IncorrectBlocksForToolModTagKeys {
 	public final TagKey<Block> ICHOR = TagKey.create(Registries.BLOCK, name("ichor"));
 	public final TagKey<Block> ASTRAL = TagKey.create(Registries.BLOCK, name("astral"));
 
-	private ResourceLocation name(String type) {
-		return ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "incorrect_for_" + type + "_tool");
+	private Identifier name(String type) {
+		return Identifier.fromNamespaceAndPath(Voidscape.MODID, "incorrect_for_" + type + "_tool");
 	}
 
 }

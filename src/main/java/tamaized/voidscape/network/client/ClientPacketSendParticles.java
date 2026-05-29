@@ -6,7 +6,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import tamaized.voidscape.Voidscape;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) implements CustomPacketPayload {
 
-	public static final Type<ClientPacketSendParticles> ID = new Type<>(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "s2c_send_particles"));
+	public static final Type<ClientPacketSendParticles> ID = new Type<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "s2c_send_particles"));
 
 	public static final StreamCodec<RegistryFriendlyByteBuf, ClientPacketSendParticles> CODEC = StreamCodec.ofMember(ClientPacketSendParticles::write, ClientPacketSendParticles::new);
 

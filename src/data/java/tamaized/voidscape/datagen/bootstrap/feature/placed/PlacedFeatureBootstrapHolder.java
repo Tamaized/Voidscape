@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
@@ -18,7 +18,7 @@ public abstract class PlacedFeatureBootstrapHolder {
 	private Holder.Reference<PlacedFeature> ref;
 
 	public ResourceKey<PlacedFeature> key() {
-		return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, name()));
+		return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(Voidscape.MODID, name()));
 	}
 
 	public abstract String name();

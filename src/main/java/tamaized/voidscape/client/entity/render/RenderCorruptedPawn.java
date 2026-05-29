@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
@@ -20,8 +20,8 @@ public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelC
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");
-	private static final RenderType OVERLAY = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
+	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");
+	private static final RenderType OVERLAY = RenderType.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
 
 	public RenderCorruptedPawn(EntityRendererProvider.Context rendererManager, M model) {
 		super(rendererManager, model, 0F);
@@ -50,7 +50,7 @@ public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelC
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return TEXTURE;
 	}
 }

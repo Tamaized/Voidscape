@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
@@ -20,7 +20,7 @@ public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");
+	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");
 
 	public RenderVoidling(EntityRendererProvider.Context rendererManager, M model) {
 		super(rendererManager, model, 0F);
@@ -41,7 +41,7 @@ public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return TEXTURE;
 	}
 

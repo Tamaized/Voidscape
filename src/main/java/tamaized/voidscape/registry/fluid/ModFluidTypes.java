@@ -3,7 +3,7 @@ package tamaized.voidscape.registry.fluid;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FluidState;
@@ -42,8 +42,8 @@ public class ModFluidTypes {
 				.lightLevel(1)
 				.density(4000)
 				.viscosity(4000))),
-		ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "block/fluid/voidic/still"),
-		ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "block/fluid/voidic/flowing"),
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/fluid/voidic/still"),
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/fluid/voidic/flowing"),
 		null,
 		new Vector3f(0.5F, 0F, 1F),
 		null
@@ -53,17 +53,17 @@ public class ModFluidTypes {
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterClientExtensionsEvent.class, event -> clientData.forEach(data -> event.registerFluidType(new IClientFluidTypeExtensions() {
 			@Override
-			public ResourceLocation getStillTexture() {
+			public Identifier getStillTexture() {
 				return data.stillpath;
 			}
 
 			@Override
-			public ResourceLocation getFlowingTexture() {
+			public Identifier getFlowingTexture() {
 				return data.flowingpath;
 			}
 
 			@Override
-			public @Nullable ResourceLocation getOverlayTexture() {
+			public @Nullable Identifier getOverlayTexture() {
 				return data.overlay;
 			}
 
@@ -79,12 +79,12 @@ public class ModFluidTypes {
 		}, data.fluid)));
 	}
 
-	private DeferredHolder<FluidType, FluidType> addClientData(DeferredHolder<FluidType, FluidType> fluid, ResourceLocation stillpath, ResourceLocation flowingpath, @Nullable ResourceLocation overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
+	private DeferredHolder<FluidType, FluidType> addClientData(DeferredHolder<FluidType, FluidType> fluid, Identifier stillpath, Identifier flowingpath, @Nullable Identifier overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
 		clientData.add(new ClientData(fluid, stillpath, flowingpath, overlay, fog, color));
 		return fluid;
 	}
 
-	private record ClientData(DeferredHolder<FluidType, FluidType> fluid, ResourceLocation stillpath, ResourceLocation flowingpath, @Nullable ResourceLocation overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
+	private record ClientData(DeferredHolder<FluidType, FluidType> fluid, Identifier stillpath, Identifier flowingpath, @Nullable Identifier overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
 
 	}
 

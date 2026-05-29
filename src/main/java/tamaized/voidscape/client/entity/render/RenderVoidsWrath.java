@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
@@ -24,7 +24,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");
+	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");
 
 	public RenderVoidsWrath(EntityRendererProvider.Context rendererManager) {
 		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(modelLayerLocations.VOIDS_WRATH)), 0F);
@@ -44,13 +44,13 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(T entityIn) {
 		return TEXTURE;
 	}
 
 	private class OverlayLayer extends EyesLayer<T, ModelVoidsWrath<T>> {
 
-		private static final RenderType OVERLAY = RenderType.eyes(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
+		private static final RenderType OVERLAY = RenderType.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
 
 		public OverlayLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_117346_) {
 			super(p_117346_);
@@ -63,7 +63,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 	}
 
 	private class PowerLayer extends EnergySwirlLayer<T, ModelVoidsWrath<T>> {
-		private static final ResourceLocation POWER_LOCATION = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
+		private static final Identifier POWER_LOCATION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
 		private final ModelVoidsWrath<T> model;
 
 		public PowerLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_174471_, EntityModelSet p_174472_) {
@@ -80,7 +80,7 @@ public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRe
 			return p_116683_ * 0.01F;
 		}
 
-		protected ResourceLocation getTextureLocation() {
+		protected Identifier getTextureLocation() {
 			return POWER_LOCATION;
 		}
 

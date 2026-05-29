@@ -2,7 +2,7 @@ package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Blocks;
 import tamaized.beanification.Autowired;
@@ -22,7 +22,7 @@ public class DebugOreBlockTagProviderFactory implements IBlockTagProviderFactory
 
 	@Override
 	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "debug_ore"))).add(
+		accessor.tag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "debug_ore"))).add(
 			Blocks.IRON_ORE,
 			Blocks.GOLD_ORE,
 			Blocks.COPPER_ORE,

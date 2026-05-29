@@ -2,7 +2,7 @@ package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Tier;
@@ -18,11 +18,11 @@ import tamaized.voidscape.registry.tool.ModToolTiers;
 @Configurable
 public class RequiresVoidToolBlock extends Block {
 
-	public static final TagKey<Block> NEEDS_VOIDIC_TOOL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "needs_voidic_tool"));
-	public static final TagKey<Block> NEEDS_CORRUPT_TOOL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "needs_corrupt_tool"));
-	public static final TagKey<Block> NEEDS_TITANITE_TOOL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "needs_titanite_tool"));
-	public static final TagKey<Block> NEEDS_ICHOR_TOOL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "needs_ichor_tool"));
-	public static final TagKey<Block> NEEDS_ASTRAL_TOOL = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "needs_astral_tool"));
+	public static final TagKey<Block> NEEDS_VOIDIC_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_voidic_tool"));
+	public static final TagKey<Block> NEEDS_CORRUPT_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_corrupt_tool"));
+	public static final TagKey<Block> NEEDS_TITANITE_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_titanite_tool"));
+	public static final TagKey<Block> NEEDS_ICHOR_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_ichor_tool"));
+	public static final TagKey<Block> NEEDS_ASTRAL_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_astral_tool"));
 
 	@Autowired
 	private ModToolTiers toolTiers;

@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -96,9 +96,9 @@ public class NullServantEntity extends Monster implements IEthereal {
 	public static final int AUGMENT_ICHOR = 2;
 	public static final int AUGMENT_ASTRAL = 3;
 
-	private static final ResourceLocation AUGMENT_HEALTH = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_health");
-	private static final ResourceLocation AUGMENT_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_attack_damage");
-	private static final ResourceLocation AUGMENT_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "augment_resistance");
+	private static final Identifier AUGMENT_HEALTH = Identifier.fromNamespaceAndPath(Voidscape.MODID, "augment_health");
+	private static final Identifier AUGMENT_ATTACK_DAMAGE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "augment_attack_damage");
+	private static final Identifier AUGMENT_RESISTANCE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "augment_resistance");
 
 	@Nullable
 	private ServerBossEvent bossInfo;

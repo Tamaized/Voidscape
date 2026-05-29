@@ -18,7 +18,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -35,7 +35,7 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 	@Autowired(dist = Dist.CLIENT)
 	private static Shaders shaders;
 
-	private static final Function<ResourceLocation, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {
+	private static final Function<Identifier, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {
 		RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().
 				setShaderState(new RenderStateShard.ShaderStateShard(() -> shaders.VOIDSKY_ENTITY)).
 				setTextureState(RenderStateShard.MultiTextureStateShard.builder().add(p_173204_, false, false).add(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false).build()).
@@ -58,7 +58,7 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 		this(p_170677_, RENDERTYPE);
 	}
 
-	public ModelNullServant(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_) {
+	public ModelNullServant(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
 		super(p_170680_);
 		head = parent.getChild("head");
 		body = parent.getChild("body");

@@ -4,7 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import tamaized.beanification.Autowired;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public record ClientPacketDonatorSync(@Nullable DonatorData handler, int entity, @Nullable DetatchedFriendlyByteBuf data) implements CustomPacketPayload {
 
-	public static final Type<ClientPacketDonatorSync> ID = new Type<>(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "s2c_donator_sync"));
+	public static final Type<ClientPacketDonatorSync> ID = new Type<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "s2c_donator_sync"));
 
 	public static final StreamCodec<FriendlyByteBuf, ClientPacketDonatorSync> CODEC = StreamCodec.ofMember(ClientPacketDonatorSync::write, ClientPacketDonatorSync::new);
 

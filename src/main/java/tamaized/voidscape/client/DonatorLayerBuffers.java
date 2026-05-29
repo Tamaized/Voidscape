@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -26,7 +26,7 @@ public class DonatorLayerBuffers {
 	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	private final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/donator.png");
+	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/donator.png");
 
 	private final Function<Supplier<ShaderInstance>, RenderType> RENDER_TYPE = Util.memoize(shader -> RenderType.create("voidscape_wings", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, true, true, RenderType.CompositeState.builder().
 		setTransparencyState(RenderStateAccessor.TRANSLUCENT_TRANSPARENCY()).

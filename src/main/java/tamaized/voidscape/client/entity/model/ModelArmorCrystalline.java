@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import tamaized.regutil.RegUtil;
 
@@ -38,7 +38,7 @@ public class ModelArmorCrystalline<T extends LivingEntity> extends HumanoidModel
 		this(p_170677_, RenderType::entityCutoutNoCull, fullbright);
 	}
 
-	public ModelArmorCrystalline(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_, boolean fullbright) {
+	public ModelArmorCrystalline(ModelPart parent, Function<Identifier, RenderType> p_170680_, boolean fullbright) {
 		super(parent, p_170680_);
 		this.fullbright = fullbright;
 

@@ -2,7 +2,7 @@ package tamaized.voidscape.registry.armor;
 
 import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -38,7 +38,7 @@ public class ModArmorMaterials {
 		17,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
 		() -> Ingredient.of(materialItems.VOIDIC_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"))),
+		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"))),
 		4F,
 		0.10F
 	)), 39, new ArmorDataModel(true, false, false));
@@ -54,7 +54,7 @@ public class ModArmorMaterials {
 		19,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		() -> Ingredient.of(materialItems.TENDRIL.get()),
-		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "corrupt"))),
+		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt"))),
 		5F,
 		0.15F
 	)), 41, new CorruptArmorDataModel());
@@ -70,7 +70,7 @@ public class ModArmorMaterials {
 		17,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		() -> Ingredient.of(materialItems.TITANITE_SHARD.get()),
-		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
+		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
 		6F,
 		0.20F
 	)), 43, new TitaniteArmorDataModel());
@@ -86,7 +86,7 @@ public class ModArmorMaterials {
 		23,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		() -> Ingredient.of(materialItems.ICHOR_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
+		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
 		7F,
 		0.25F
 	)), 45, new IchorArmorDataModel());
@@ -102,7 +102,7 @@ public class ModArmorMaterials {
 		25,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
 		() -> Ingredient.of(materialItems.ASTRAL_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
+		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,
 		0.30F
 	)), 47, new AstralArmorDataModel());

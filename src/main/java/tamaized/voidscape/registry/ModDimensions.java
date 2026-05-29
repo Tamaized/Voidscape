@@ -2,7 +2,7 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -19,7 +19,7 @@ public class ModDimensions {
 	@Autowired(dist = Dist.CLIENT)
 	private VoidDimensionSpecialEffectsFactory voidDimensionSpecialEffectsFactory;
 
-	public final ResourceKey<Level> VOID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "void"));
+	public final ResourceKey<Level> VOID = ResourceKey.create(Registries.DIMENSION, Identifier.fromNamespaceAndPath(Voidscape.MODID, "void"));
 
 	@PostConstruct
 	private void setup(IEventBus bus) {

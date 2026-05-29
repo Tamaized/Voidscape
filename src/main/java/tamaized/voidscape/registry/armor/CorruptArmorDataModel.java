@@ -2,7 +2,7 @@ package tamaized.voidscape.registry.armor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,8 +23,8 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
-	private final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt.png");
-	private final ResourceLocation TEXTURE_OVERLAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt_overlay.png");
+	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt.png");
+	private final Identifier TEXTURE_OVERLAY = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt_overlay.png");
 
 	public CorruptArmorDataModel() {
 		super(false, true, true);
@@ -87,7 +87,7 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 	}
 
 	@Override
-	public Optional<ResourceLocation> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
+	public Optional<Identifier> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
 		return Optional.of(inner ? TEXTURE_OVERLAY : TEXTURE);
 	}
 

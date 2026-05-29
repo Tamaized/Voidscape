@@ -2,7 +2,7 @@ package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -32,7 +32,7 @@ public class OreInGroundBlockTagProviderFactory implements IBlockTagProviderFact
 	private void tag(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider, Block ground, Block... blocks) {
 		accessor.tag(TagKey.create(
 			Registries.BLOCK,
-			ResourceLocation.fromNamespaceAndPath(
+			Identifier.fromNamespaceAndPath(
 				"c",
 				"ores_in_ground/" + registryProvider.findKeyFrom(provider, Registries.BLOCK, ground).orElseThrow().location().getPath()
 			)

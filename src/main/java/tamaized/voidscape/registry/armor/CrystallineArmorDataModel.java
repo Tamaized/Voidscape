@@ -3,7 +3,7 @@ package tamaized.voidscape.registry.armor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,15 +20,15 @@ import java.util.function.Supplier;
 
 public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 
-	private final ResourceLocation TEXTURE;
-	private final ResourceLocation TEXTURE_OVERLAY;
+	private final Identifier TEXTURE;
+	private final Identifier TEXTURE_OVERLAY;
 
 	private final boolean overlay;
 
 	public CrystallineArmorDataModel(String textureName, boolean overlay) {
 		super(!overlay, overlay, overlay);
-		TEXTURE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+".png");
-		TEXTURE_OVERLAY = overlay ? ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+"_overlay.png") : TEXTURE;
+		TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+".png");
+		TEXTURE_OVERLAY = overlay ? Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/"+textureName+"_overlay.png") : TEXTURE;
 		this.overlay = overlay;
 	}
 
@@ -73,7 +73,7 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 	}
 
 	@Override
-	public Optional<ResourceLocation> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
+	public Optional<Identifier> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
 		return Optional.of(inner ? TEXTURE_OVERLAY : TEXTURE);
 	}
 

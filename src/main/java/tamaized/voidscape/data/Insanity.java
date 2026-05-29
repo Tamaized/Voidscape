@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -74,9 +74,9 @@ public class Insanity implements INetworkHandler, INBTSerializable<CompoundTag> 
 	@Autowired
 	private ModDataAttachments dataAttachments;
 
-	private static final ResourceLocation INFUSION_HEALTH_DECAY = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_health_decay");
-	private static final ResourceLocation INFUSION_ATTACK_DAMAGE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_attack_damage");
-	private static final ResourceLocation INFUSION_RESISTANCE = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "infusion_resistance");
+	private static final Identifier INFUSION_HEALTH_DECAY = Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion_health_decay");
+	private static final Identifier INFUSION_ATTACK_DAMAGE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion_attack_damage");
+	private static final Identifier INFUSION_RESISTANCE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion_resistance");
 
 	public static final float MAX_INFUSION = 600;
 	public static final float MAX_PARANOIA = 600;

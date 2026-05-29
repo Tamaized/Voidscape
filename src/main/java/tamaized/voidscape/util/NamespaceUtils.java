@@ -1,7 +1,7 @@
 package tamaized.voidscape.util;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 
@@ -12,7 +12,7 @@ public class NamespaceUtils {
 		return dot(key.location());
 	}
 
-	public String dot(ResourceLocation key) {
+	public String dot(Identifier key) {
 		return key.getNamespace() + "." + key.getPath();
 	}
 
@@ -20,7 +20,7 @@ public class NamespaceUtils {
 		return slash(key.location());
 	}
 
-	public String slash(ResourceLocation key) {
+	public String slash(Identifier key) {
 		return key.getNamespace() + "/" + key.getPath();
 	}
 

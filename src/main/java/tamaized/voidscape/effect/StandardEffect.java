@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,12 +20,12 @@ import java.util.function.Consumer;
 
 public class StandardEffect extends MobEffect {
 
-	private final ResourceLocation texture;
+	private final Identifier texture;
 	private final boolean allowCure;
 
 	public StandardEffect(String texture, MobEffectCategory type, int color, boolean allowCure) {
 		super(type, color);
-		this.texture = ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "textures/effect/" + texture + ".png");
+		this.texture = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/effect/" + texture + ".png");
 		this.allowCure = allowCure;
 	}
 

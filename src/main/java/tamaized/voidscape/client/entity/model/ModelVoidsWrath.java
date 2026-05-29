@@ -14,7 +14,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -36,7 +36,7 @@ public class ModelVoidsWrath<T extends VoidsWrathEntity> extends EntityModel<T> 
 		this(p_170677_, RenderType::entityCutoutNoCull);
 	}
 
-	public ModelVoidsWrath(ModelPart parent, Function<ResourceLocation, RenderType> p_170680_) {
+	public ModelVoidsWrath(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
 		super(p_170680_);
 		head = parent.getChild("head");
 		body = parent.getChild("body");

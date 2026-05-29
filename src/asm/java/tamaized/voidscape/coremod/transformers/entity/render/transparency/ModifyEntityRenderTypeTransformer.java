@@ -20,7 +20,7 @@ public class ModifyEntityRenderTypeTransformer implements ITransformer<MethodNod
 
 	@Override
 	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
-		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderType", "(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;")
+		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderType", "(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/RenderType;")
 			.findFirst()
 			.ifPresent(instruction -> node.instructions.insert(instruction, ASMAPI.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 0),

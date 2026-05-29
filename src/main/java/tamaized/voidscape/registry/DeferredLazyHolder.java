@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
@@ -42,7 +42,7 @@ public class DeferredLazyHolder<R, T extends R> extends DeferredHolder<R, T> {
 	}
 
 	@Override
-	public ResourceLocation getId() {
+	public Identifier getId() {
 		return delegate.get().getId();
 	}
 
@@ -73,7 +73,7 @@ public class DeferredLazyHolder<R, T extends R> extends DeferredHolder<R, T> {
 	}
 
 	@Override
-	public boolean is(ResourceLocation id) {
+	public boolean is(Identifier id) {
 		return delegate.get().is(id);
 	}
 

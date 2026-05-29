@@ -4,7 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import tamaized.beanification.Autowired;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public record ClientPacketInsanitySync(@Nullable Insanity handler, int entity, @Nullable DetatchedFriendlyByteBuf data) implements CustomPacketPayload {
 
-	public static final Type<ClientPacketInsanitySync> ID = new Type<>(ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "s2c_insanity_sync"));
+	public static final Type<ClientPacketInsanitySync> ID = new Type<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "s2c_insanity_sync"));
 
 	public static final StreamCodec<FriendlyByteBuf, ClientPacketInsanitySync> CODEC = StreamCodec.ofMember(ClientPacketInsanitySync::write, ClientPacketInsanitySync::new);
 

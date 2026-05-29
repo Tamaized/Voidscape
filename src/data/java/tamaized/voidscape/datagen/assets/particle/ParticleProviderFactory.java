@@ -1,6 +1,6 @@
 package tamaized.voidscape.datagen.assets.particle;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.ParticleDescriptionProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
@@ -21,7 +21,7 @@ public class ParticleProviderFactory {
 		) {
 			@Override
 			protected void addDescriptions() {
-				sprite(particles.SPELL_CLOUD.get(), ResourceLocation.fromNamespaceAndPath(Voidscape.MODID, "spell_cloud"));
+				sprite(particles.SPELL_CLOUD.get(), Identifier.fromNamespaceAndPath(Voidscape.MODID, "spell_cloud"));
 			}
 		};
 	}
