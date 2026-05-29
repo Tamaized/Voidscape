@@ -10,8 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.util.Lazy;
 import tamaized.regutil.ArmorDataModel;
+import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.model.ModelArmorCrystalline;
 
@@ -74,7 +74,7 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 
 	@Override
 	public Optional<Identifier> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
-		return Optional.of(inner ? TEXTURE_OVERLAY : TEXTURE);
+		return Optional.of(RegUtil.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
 	}
 
 }
