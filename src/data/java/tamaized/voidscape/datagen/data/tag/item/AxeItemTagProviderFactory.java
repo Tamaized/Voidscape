@@ -19,7 +19,7 @@ public class AxeItemTagProviderFactory implements IItemTagProviderFactory {
 			tools.corruptToolSet().CORRUPT_AXE.get(),
 			tools.titaniteToolSet().TITANITE_AXE.get(),
 			tools.ichorToolSet().ICHOR_AXE.get(),
-			tools.astralToolSet().ASTRAL_XBOW.get()
+			tools.astralToolSet().ASTRAL_AXE.get()
 		);
 	}
 }
