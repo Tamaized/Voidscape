@@ -244,9 +244,12 @@ dependencies {
 	testCompileOnly "${beanification}:test-sources"
 
 	afterEvaluate {
-		project(':asm').dependencies {
-			compileOnly rootProject.configurations.compileOnly.dependencies.find {
-				it.name == 'pkginfoutil'
+		def pkg = rootProject.configurations.compileClasspath
+			.resolvedConfiguration.resolvedArtifacts
+			.find { it.name == 'pkginfoutil' }?.moduleVersion?.id
+		if (pkg != null) {
+			project(':asm').dependencies {
+				compileOnly pkg.toString()
 			}
 		}
 	}

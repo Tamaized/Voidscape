@@ -2,7 +2,7 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @TypeUseAreNonnullByDefault
-package tamaized.voidscape.coremod;
+package tamaized.voidscape.coremod.transformers;
 
 import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
