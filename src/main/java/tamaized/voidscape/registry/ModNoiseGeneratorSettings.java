@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 import net.neoforged.bus.api.IEventBus;
 import tamaized.regutil.RegUtil;
-import tamaized.regutil.RegistryClass;
 import tamaized.voidscape.Voidscape;
 
 import java.util.ArrayList;

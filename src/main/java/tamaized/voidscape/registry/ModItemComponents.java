@@ -14,30 +14,32 @@ import java.util.function.Supplier;
 @Component
 public class ModItemComponents {
 
-	private final DeferredRegister<DataComponentType<?>> REGISTRY = RegUtil.create(Registries.DATA_COMPONENT_TYPE);
+	public final Supplier<DataComponentType<Boolean>> FANG = RegUtil.register(Registries.DATA_COMPONENT_TYPE, "fang",
+		() -> DataComponentType.<Boolean>builder()
+			.persistent(Codec.BOOL)
+			.cacheEncoding()
+			.networkSynchronized(ByteBufCodecs.BOOL)
+			.build());
 
-	public final Supplier<DataComponentType<Boolean>> FANG = REGISTRY.register("fang", () -> DataComponentType.<Boolean>builder()
-		.persistent(Codec.BOOL)
-		.cacheEncoding()
-		.networkSynchronized(ByteBufCodecs.BOOL)
-		.build());
+	public final Supplier<DataComponentType<Boolean>> DRACONIC = RegUtil.register(Registries.DATA_COMPONENT_TYPE, "draconic",
+		() -> DataComponentType.<Boolean>builder()
+			.persistent(Codec.BOOL)
+			.cacheEncoding()
+			.networkSynchronized(ByteBufCodecs.BOOL)
+			.build());
 
-	public final Supplier<DataComponentType<Boolean>> DRACONIC = REGISTRY.register("draconic", () -> DataComponentType.<Boolean>builder()
-		.persistent(Codec.BOOL)
-		.cacheEncoding()
-		.networkSynchronized(ByteBufCodecs.BOOL)
-		.build());
+	public final Supplier<DataComponentType<Boolean>> ELYTRA = RegUtil.register(Registries.DATA_COMPONENT_TYPE, "elytra",
+		() -> DataComponentType.<Boolean>builder()
+			.persistent(Codec.BOOL)
+			.cacheEncoding()
+			.networkSynchronized(ByteBufCodecs.BOOL)
+			.build());
 
-	public final Supplier<DataComponentType<Boolean>> ELYTRA = REGISTRY.register("elytra", () -> DataComponentType.<Boolean>builder()
-		.persistent(Codec.BOOL)
-		.cacheEncoding()
-		.networkSynchronized(ByteBufCodecs.BOOL)
-		.build());
-
-	public final Supplier<DataComponentType<QuiverContents>> QUIVER_CONTENTS = REGISTRY.register("quiver_contents", () -> DataComponentType.<QuiverContents>builder()
-		.persistent(QuiverContents.CODEC)
-		.cacheEncoding()
-		.networkSynchronized(QuiverContents.STREAM_CODEC)
-		.build());
+	public final Supplier<DataComponentType<QuiverContents>> QUIVER_CONTENTS = RegUtil.register(Registries.DATA_COMPONENT_TYPE, "quiver_contents",
+		() -> DataComponentType.<QuiverContents>builder()
+			.persistent(QuiverContents.CODEC)
+			.cacheEncoding()
+			.networkSynchronized(QuiverContents.STREAM_CODEC)
+			.build());
 
 }
