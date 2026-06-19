@@ -9,7 +9,7 @@ import tamaized.voidscape.Voidscape;
 public class NamespaceUtils {
 
 	public String dot(ResourceKey<?> key) {
-		return dot(key.location());
+		return dot(key.identifier());
 	}
 
 	public String dot(Identifier key) {
@@ -17,7 +17,7 @@ public class NamespaceUtils {
 	}
 
 	public String slash(ResourceKey<?> key) {
-		return slash(key.location());
+		return slash(key.identifier());
 	}
 
 	public String slash(Identifier key) {
