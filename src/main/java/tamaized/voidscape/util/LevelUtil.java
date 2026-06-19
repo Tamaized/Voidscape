@@ -25,24 +25,29 @@ public class LevelUtil {
 		return level.dimension() == dimensions.VOID;
 	}
 
-	public Optional<ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
-		return Optional.ofNullable(level.getServer()).map(serverLevel -> serverLevel.getLevel(dest));
+	public Optional<@Nullable ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
+		return Optional.ofNullable(level.getServer())
+			.map(server -> server.getLevel(dest));
 	}
 
-	public Optional<ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
-		return getLevel(player.level(), player.getRespawnDimension());
+	public Optional<@Nullable ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
+		ResourceKey<Level> dest = Level.OVERWORLD;
+		if (player.getRespawnConfig() != null) {
+			dest = player.getRespawnConfig().respawnData().dimension();
+		}
+		return getLevel(player.level(), dest);
 	}
 
-	public Optional<ServerLevel> getVoidDimension(Level currentLevel) {
+	public Optional<@Nullable ServerLevel> getVoidDimension(Level currentLevel) {
 		return getLevel(currentLevel, dimensions.VOID);
 	}
 
-	public Optional<ServerLevel> getDimensionForTeleport(Level currentLevel) {
+	public Optional<@Nullable ServerLevel> getDimensionForTeleport(Level currentLevel) {
 		return isInVoidDimension(currentLevel) ? getLevel(currentLevel, Level.OVERWORLD) : getVoidDimension(currentLevel);
 	}
 
 	public long getServerSideLevelSeed() {
-		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldData().worldGenOptions().seed();
+		return Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldGenSettings().options().seed();
 	}
 
 }
