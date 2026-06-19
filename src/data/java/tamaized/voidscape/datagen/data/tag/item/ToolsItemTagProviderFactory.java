@@ -9,7 +9,7 @@ import tamaized.voidscape.datagen.util.TagProviderUtil;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
 @Component
-public class CrossbowItemTagProviderFactory implements IItemTagProviderFactory {
+public class ToolsItemTagProviderFactory implements IItemTagProviderFactory {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
@@ -21,17 +21,13 @@ public class CrossbowItemTagProviderFactory implements IItemTagProviderFactory {
 	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
 		tagProviderUtil.multiTagAll(
 			accessor::tag,
-			Tags.Items.TOOLS_CROSSBOW,
-			Tags.Items.RANGED_WEAPON_TOOLS,
-			ItemTags.CROSSBOW_ENCHANTABLE,
-			ItemTags.DURABILITY_ENCHANTABLE,
-			ItemTags.VANISHING_ENCHANTABLE
+			Tags.Items.TOOLS,
+			ItemTags.DURABILITY_ENCHANTABLE
 		).add(
-			tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_XBOW.getKey(),
-			tools.corruptToolSet().CORRUPT_XBOW.getKey(),
-			tools.titaniteToolSet().TITANITE_XBOW.getKey(),
-			tools.ichorToolSet().ICHOR_XBOW.getKey(),
-			tools.astralToolSet().ASTRAL_XBOW.getKey()
+			tools.spellTomeSet().VOIDIC_TOME.getKey(),
+			tools.spellTomeSet().CORRUPT_TOME.getKey(),
+			tools.spellTomeSet().TITANITE_TOME.getKey(),
+			tools.spellTomeSet().ICHOR_TOME.getKey()
 		);
 	}
 }
