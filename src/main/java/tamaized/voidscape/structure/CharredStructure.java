@@ -77,7 +77,7 @@ public class CharredStructure extends Structure {
 			}
 
 			public Piece(StructureTemplateManager manager, CompoundTag tag) {
-				super(structurePieces.CHARRED_MAIN.get(), tag, manager, (location) -> makeSettings(Rotation.valueOf(tag.getString("Rot"))));
+				super(structurePieces.CHARRED_MAIN.get(), tag, manager, (location) -> makeSettings(Rotation.valueOf(tag.getStringOr("Rot", "none"))));
 			}
 
 			private static StructurePlaceSettings makeSettings(Rotation rotation) {
