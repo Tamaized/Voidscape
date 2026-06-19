@@ -20,7 +20,7 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
@@ -44,7 +44,11 @@ public class MultiBlockBreak {
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void postConstruct(IEventBus bus) {
-		bus.addListener(PlayerInteractEvent.LeftClickBlock.class, event -> LAST_HIT_BLOCK_FACE.put(event.getEntity().getUUID(), event.getFace()));
+		bus.addListener(PlayerInteractEvent.LeftClickBlock.class, event -> {
+			if (event.getFace() == null)
+				return;
+			LAST_HIT_BLOCK_FACE.put(event.getEntity().getUUID(), event.getFace());
+		});
 		bus.addListener(PlayerEvent.PlayerLoggedOutEvent.class, event -> LAST_HIT_BLOCK_FACE.remove(event.getEntity().getUUID()));
 	}
 
@@ -53,10 +57,10 @@ public class MultiBlockBreak {
 	}
 
 	public synchronized boolean doBreak(int radius, ItemStack stack, BlockPos pos, Player pl, Predicate<ItemStack> shouldDelegate, BooleanSupplier delegate) {
-		if (running || pl.level().isClientSide || !(pl instanceof final ServerPlayer player) || player.isShiftKeyDown() || shouldDelegate.test(stack))
+		if (running || pl.level().isClientSide() || !(pl instanceof final ServerPlayer player) || player.isShiftKeyDown() || shouldDelegate.test(stack))
 			return delegate.getAsBoolean();
 		final Item item = stack.getItem();
-		final ServerLevel level = player.serverLevel();
+		final ServerLevel level = player.level();
 		final BlockState oState = level.getBlockState(pos);
 		if (!item.isCorrectToolForDrops(stack, oState))
 			return false;
@@ -95,10 +99,10 @@ public class MultiBlockBreak {
 		}).forEach(p -> {
 			final BlockPos blockPos = p.left();
 			final BlockState state = p.right().getBlock().playerWillDestroy(level, blockPos, p.right(), player);
-			BlockEvent.BreakEvent event = CommonHooks.fireBlockBreak(level, player.gameMode.getGameModeForPlayer(), player, blockPos, state);
+			BreakBlockEvent event = CommonHooks.fireBlockBreak(level, player.gameMode.getGameModeForPlayer(), player, blockPos, state);
 			if (!event.isCanceled()) {
 				if (player.isCreative()) {
-					removeBlock(level, player, blockPos, false);
+					removeBlock(level, player, blockPos, stack, false);
 				} else {
 					BlockEntity blockentity = level.getBlockEntity(blockPos);
 					ItemStack cloneStack = stack.copy();
@@ -106,7 +110,7 @@ public class MultiBlockBreak {
 					stack.mineBlock(level, state, blockPos, player);
 					if (stack.isEmpty() && !cloneStack.isEmpty())
 						EventHooks.onPlayerDestroyItem(player, cloneStack, InteractionHand.MAIN_HAND);
-					boolean flag = removeBlock(level, player, blockPos, flag1);
+					boolean flag = removeBlock(level, player, blockPos, stack, flag1);
 
 					if (flag && flag1) {
 						state.getBlock().playerDestroy(level, player, blockPos, state, blockentity, cloneStack);
@@ -122,9 +126,9 @@ public class MultiBlockBreak {
 		return true;
 	}
 
-	private boolean removeBlock(Level level, Player player, BlockPos pos, boolean canHarvest) {
+	private boolean removeBlock(Level level, Player player, BlockPos pos, ItemStack stack, boolean canHarvest) {
 		BlockState state = level.getBlockState(pos);
-		boolean removed = state.onDestroyedByPlayer(level, pos, player, canHarvest, level.getFluidState(pos));
+		boolean removed = state.onDestroyedByPlayer(level, pos, player, stack, canHarvest, level.getFluidState(pos));
 		if (removed)
 			state.getBlock().destroy(level, pos, state);
 		return removed;
