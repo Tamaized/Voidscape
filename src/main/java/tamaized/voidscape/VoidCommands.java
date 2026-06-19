@@ -14,7 +14,9 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -79,9 +81,11 @@ public class VoidCommands {
 						me.removeAllEffects();
 						PlayerInventoryWrapper inv = PlayerInventoryWrapper.of(me);
 						me.getInventory().clearContent();
-						inv.getArmorSlot(EquipmentSlot.HEAD)
-						me.getInventory().setItem(EquipmentSlot.HEAD.getIndex(me.getInventory().getNonEquipmentItems().size()), eyes());
-						me.getInventory().getNonEquipmentItems().set(EquipmentSlot.MAINHAND.getIndex(), sword());
+						try (Transaction transaction = Transaction.openRoot()) {
+							inv.getArmorSlot(EquipmentSlot.HEAD).insert(ItemResource.of(eyes()), 1, transaction);
+							inv.getMainHandSlot().insert(ItemResource.of(sword()), 1, transaction);
+							transaction.commit();
+						}
 						me.getData(dataAttachments.INSANITY).setInfusion(0);
 						me.getData(dataAttachments.INSANITY).setParanoia(0);
 						return 0;
