@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.tool.ModToolTiers;
+import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Configurable
 public class RequiresVoidToolBlock extends Block {
@@ -25,7 +25,7 @@ public class RequiresVoidToolBlock extends Block {
 	public static final TagKey<Block> NEEDS_ASTRAL_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_astral_tool"));
 
 	@Autowired
-	private ModToolTiers toolTiers;
+	private ModToolMaterials toolTiers;
 
 	public RequiresVoidToolBlock(Properties pProperties) {
 		super(pProperties);

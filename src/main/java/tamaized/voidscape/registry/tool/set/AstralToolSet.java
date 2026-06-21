@@ -13,7 +13,7 @@ import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.tool.ExtraToolTypes;
-import tamaized.voidscape.registry.tool.ModToolTiers;
+import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Component
 public class AstralToolSet {
@@ -21,7 +21,7 @@ public class AstralToolSet {
 	private final String MATERIAL_NAME = "astral";
 
 	@Autowired
-	private ModToolTiers toolTiers;
+	private ModToolMaterials toolTiers;
 
 	@Autowired
 	private ModItemProperties itemProperties;

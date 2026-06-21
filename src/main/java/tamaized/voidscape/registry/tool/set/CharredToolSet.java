@@ -11,13 +11,12 @@ import tamaized.beanification.Component;
 import tamaized.regutil.AttributeData;
 import tamaized.regutil.AttributeFactory;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.item.BlockTransformerItem;
 import tamaized.voidscape.item.QuiverItem;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.tool.ExtraToolTypes;
-import tamaized.voidscape.registry.tool.ModToolTiers;
+import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Component
 public class CharredToolSet {
@@ -25,7 +24,7 @@ public class CharredToolSet {
 	private final String MATERIAL_NAME = "charred";
 
 	@Autowired
-	private ModToolTiers toolTiers;
+	private ModToolMaterials toolTiers;
 
 	@Autowired
 	private ModItemProperties itemProperties;

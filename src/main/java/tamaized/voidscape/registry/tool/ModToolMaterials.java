@@ -12,7 +12,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 @Component
-public class ModToolTiers {
+public class ModToolMaterials {
 
 	@Autowired
 	private IncorrectBlocksForToolModTagKeys incorrectBlocksForToolTags;

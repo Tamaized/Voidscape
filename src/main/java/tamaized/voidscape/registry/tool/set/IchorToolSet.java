@@ -12,7 +12,7 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemProperties;
-import tamaized.voidscape.registry.tool.ModToolTiers;
+import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Component
 public class IchorToolSet {
@@ -20,7 +20,7 @@ public class IchorToolSet {
 	private final String MATERIAL_NAME = "ichor";
 
 	@Autowired
-	private ModToolTiers toolTiers;
+	private ModToolMaterials toolTiers;
 
 	@Autowired
 	private ModItemProperties itemProperties;
