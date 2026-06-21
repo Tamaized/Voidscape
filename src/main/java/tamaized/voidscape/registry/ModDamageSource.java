@@ -29,7 +29,7 @@ public class ModDamageSource {
 	}
 
 	public DamageSource getIndirectEntityDamageSource(Level level, ResourceKey<DamageType> type, @Nullable Entity attacker, @Nullable Entity indirectAttacker) {
-		return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type), attacker, indirectAttacker);
+		return new DamageSource(level.registryAccess().getOrThrow(type), attacker, indirectAttacker);
 	}
 
 }
