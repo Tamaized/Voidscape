@@ -1,9 +1,14 @@
 package tamaized.voidscape.registry.tool;
 
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import net.neoforged.neoforge.common.util.Lazy;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.regutil.ToolTier;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.item.MaterialItems;
 
 @Component
@@ -15,40 +20,46 @@ public class ModToolTiers {
 	@Autowired
 	private MaterialItems materialItems;
 
-	public final ToolTier VOIDIC_CRYSTAL = new ToolTier(
-		() -> incorrectBlocksForToolTags.VOIDIC_CRYSTAL,
+	public final TagKey<Item> REPAIR_TAG_VOIDIC_CRYSTAL = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"));
+	public final Lazy<ToolMaterial> VOIDIC_CRYSTAL = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.VOIDIC_CRYSTAL,
 		2538, 9.5F, 5F, 17,
-		() -> Ingredient.of(materialItems.VOIDIC_CRYSTAL.get())
-	);
+		REPAIR_TAG_VOIDIC_CRYSTAL
+	));
 
-	public final ToolTier CHARRED = new ToolTier(
-		() -> incorrectBlocksForToolTags.VOIDIC_CRYSTAL,
+	public final TagKey<Item> REPAIR_TAG_CHARRED = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "charred"));
+	public final Lazy<ToolMaterial> CHARRED = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.VOIDIC_CRYSTAL,
 		2538, 9.5F, 5F, 17,
-		() -> Ingredient.of(materialItems.CHARRED_BONE.get()
-		));
+		REPAIR_TAG_CHARRED
+	));
 
-	public final ToolTier CORRUPT = new ToolTier(
-		() -> incorrectBlocksForToolTags.CORRUPT,
+	public final TagKey<Item> REPAIR_TAG_CORRUPT = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt"));
+	public final Lazy<ToolMaterial> CORRUPT = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.CORRUPT,
 		3041, 10.0F, 6F, 19,
-		() -> Ingredient.of(materialItems.TENDRIL.get()
-		));
+		REPAIR_TAG_CORRUPT
+	));
 
-	public final ToolTier TITANITE = new ToolTier(
-		() -> incorrectBlocksForToolTags.TITANITE,
+	public final TagKey<Item> REPAIR_TAG_TITANITE = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite"));
+	public final Lazy<ToolMaterial> TITANITE = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.TITANITE,
 		3544, 10.5F, 7F, 21,
-		() -> Ingredient.of(materialItems.TITANITE_SHARD.get()
-		));
+		REPAIR_TAG_TITANITE
+	));
 
-	public final ToolTier ICHOR = new ToolTier(
-		() -> incorrectBlocksForToolTags.ICHOR,
+	public final TagKey<Item> REPAIR_TAG_ICHOR = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor"));
+	public final Lazy<ToolMaterial> ICHOR = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.ICHOR,
 		4047, 11.0F, 8F, 23,
-		() -> Ingredient.of(materialItems.ICHOR_CRYSTAL.get()
-		));
+		REPAIR_TAG_ICHOR
+	));
 
-	public final ToolTier ASTRAL = new ToolTier(
-		() -> incorrectBlocksForToolTags.ASTRAL,
+	public final TagKey<Item> REPAIR_TAG_ASTRAL = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral"));
+	public final Lazy<ToolMaterial> ASTRAL = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.ASTRAL,
 		4550, 11.5F, 9F, 25,
-		() -> Ingredient.of(materialItems.ASTRAL_CRYSTAL.get()
-		));
+		REPAIR_TAG_ASTRAL
+	));
 
 }
