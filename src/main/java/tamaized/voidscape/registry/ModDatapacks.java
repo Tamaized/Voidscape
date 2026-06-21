@@ -21,8 +21,8 @@ import java.util.Optional;
 @Component
 public class ModDatapacks {
 
-	public final Lazy<Pack> AETHER_INTEGRATION = Lazy.of(() -> Pack.readMetaAndCreate(
-		new PackLocationInfo(
+	public final Lazy<Pack> AETHER_INTEGRATION = Lazy.of(() -> {
+		PackLocationInfo info = new PackLocationInfo(
 			"voidscape_aether_compat",
 			net.minecraft.network.chat.Component.literal("Voidscape Aether Integration"),
 			PackSource.BUILT_IN,
@@ -31,18 +31,26 @@ public class ModDatapacks {
 				"integrations/aether",
 				"1.0.0"
 			))
-		),
-		BuiltInPackSource.fromName(name -> new PathPackResources(
-			name,
-			ModList.get().getModFileById(Voidscape.MODID).getFile().findResource("data", "minecraft", "datapacks", "voidscape_aether_compat")
-		)),
-		PackType.SERVER_DATA,
-		new PackSelectionConfig(
-			false,
-			Pack.Position.TOP,
-			true
-		)
-	));
+		);
+		Pack pack = Pack.readMetaAndCreate(
+			info,
+			BuiltInPackSource.fixedResources(new PathPackResources(
+				info,
+				ModList.get().getModFileById(Voidscape.MODID).getFile().getContents().getPrimaryPath().resolve("data", "minecraft", "datapacks", "voidscape_aether_compat")
+			)),
+			PackType.SERVER_DATA,
+			new PackSelectionConfig(
+				false,
+				Pack.Position.TOP,
+				true
+			)
+		);
+
+		if (pack == null)
+			throw new IllegalStateException("Could not locate internal datapack: voidscape_aether_compat");
+
+		return pack;
+	});
 
 	@PostConstruct
 	private void init(IEventBus bus) {
