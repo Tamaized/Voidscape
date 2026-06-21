@@ -20,41 +20,46 @@ import java.util.function.Supplier;
 @Component
 public class ModDataAttachments {
 
-	private final DeferredRegister<AttachmentType<?>> REGISTRY = RegUtil.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES);
-
-	public final Supplier<AttachmentType<Insanity>> INSANITY = REGISTRY.register("insanity", () -> AttachmentType
-		.serializable(Insanity::new)
-		.build()
+	public final Supplier<AttachmentType<Insanity>> INSANITY = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "insanity",
+		() -> AttachmentType
+			.serializable(Insanity::new)
+			.build()
 	);
-	public final Supplier<AttachmentType<DonatorData>> DONATOR = REGISTRY.register("donator", () -> AttachmentType
-		.serializable(DonatorData::new)
-		.copyOnDeath()
-		.build()
+	public final Supplier<AttachmentType<DonatorData>> DONATOR = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "donator",
+		() -> AttachmentType
+			.serializable(DonatorData::new)
+			.copyOnDeath()
+			.build()
 	);
-	public final Supplier<AttachmentType<Float>> VOIDIC_ARROW = REGISTRY.register("voidicarrow", () -> AttachmentType
-		.builder(() -> 0F)
-		.serialize(Codec.FLOAT)
-		.build()
+	public final Supplier<AttachmentType<Float>> VOIDIC_ARROW = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "voidicarrow",
+		(key) -> AttachmentType
+			.builder(() -> 0F)
+			.serialize(Codec.FLOAT.fieldOf(key.getPath()))
+			.build()
 	);
-	public final Supplier<AttachmentType<Float>> INFUSION_ARROW = REGISTRY.register("infusionarrow", () -> AttachmentType
-		.builder(() -> 0F)
-		.serialize(Codec.FLOAT)
-		.build()
+	public final Supplier<AttachmentType<Float>> INFUSION_ARROW = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "infusionarrow",
+		(key) -> AttachmentType
+			.builder(() -> 0F)
+			.serialize(Codec.FLOAT.fieldOf(key.getPath()))
+			.build()
 	);
-	public final Supplier<AttachmentType<QuiverData>> QUIVER_NOCKED = REGISTRY.register("quiver_knocked", () -> AttachmentType
-		.builder(QuiverData::new)
-		.build()
+	public final Supplier<AttachmentType<QuiverData>> QUIVER_NOCKED = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "quiver_knocked",
+		() -> AttachmentType
+			.builder(QuiverData::new)
+			.build()
 	);
-	public final Supplier<AttachmentType<PotionContents>> AURA_EFFECT = REGISTRY.register("aura_effect", () -> AttachmentType
-		.builder(() -> PotionContents.EMPTY)
-		.serialize(PotionContents.CODEC)
-		.build()
+	public final Supplier<AttachmentType<PotionContents>> AURA_EFFECT = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "aura_effect",
+		(key) -> AttachmentType
+			.builder(() -> PotionContents.EMPTY)
+			.serialize(PotionContents.CODEC.fieldOf(key.getPath()))
+			.build()
 	);
-	public final Supplier<AttachmentType<Integer>> DATA_CORRECTION = REGISTRY.register("datacorrection", () -> AttachmentType
-		.builder(() -> 0)
-		.serialize(Codec.INT)
-		.copyOnDeath()
-		.build()
+	public final Supplier<AttachmentType<Integer>> DATA_CORRECTION = RegUtil.register(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, "datacorrection",
+		(key) -> AttachmentType
+			.builder(() -> 0)
+			.serialize(Codec.INT.fieldOf(key.getPath()))
+			.copyOnDeath()
+			.build()
 	);
 
 	@PostConstruct

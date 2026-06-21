@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.UnknownNullability;
 import tamaized.beanification.Autowired;
@@ -14,7 +14,7 @@ import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 
 import java.util.Optional;
 
-public class DonatorData implements INetworkHandler, INBTSerializable<CompoundTag> {
+public class DonatorData implements INetworkHandler, ValueIOSerializable<CompoundTag> {
 
 	@Autowired
 	private static DonatorHandler donatorHandler;
