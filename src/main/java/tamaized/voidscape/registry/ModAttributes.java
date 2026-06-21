@@ -31,17 +31,26 @@ public class ModAttributes {
 	@Autowired
 	private ModDataAttachments dataAttachments;
 
-	private final DeferredRegister<Attribute> REGISTERY = RegUtil.create(Registries.ATTRIBUTE);
+	public final Holder<Attribute> VOIDIC_VISIBILITY = RegUtil.register(Registries.ATTRIBUTE, "voidic_visibility",
+		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_visibility"), 0F, 0F, 1F).setSyncable(true));
 
-	public final Holder<Attribute> VOIDIC_VISIBILITY = REGISTERY.register("voidic_visibility", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_visibility"), 0F, 0F, 1F).setSyncable(true));
-	public final Holder<Attribute> VOIDIC_INFUSION = REGISTERY.register("voidic_infusion", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion"), 0F, 0F, 1F));
-	public final Holder<Attribute> VOIDIC_INFUSION_RES = REGISTERY.register("voidic_infusion_res", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion_res"), 0F, 0F, 1F).setSyncable(true));
-	public final Holder<Attribute> VOIDIC_PARANOIA_RES = REGISTERY.register("voidic_paranoia_res", () -> new PercentageAttribute(namespaceUtils.prefixId("voidic_paranoia_res"), 0F, 0F, 1F).setSyncable(true));
-	public final Holder<Attribute> VOIDIC_RES = REGISTERY.register("voidic_res", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_res"), 0F, 0F, 2048F));
-	public final Holder<Attribute> VOIDIC_DMG = REGISTERY.register("voidic_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_dmg"), 0F, 0F, 2048F));
-	public final Holder<Attribute> VOIDIC_ARROW_DMG = REGISTERY.register("voidic_arrow_dmg", () -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
+	public final Holder<Attribute> VOIDIC_INFUSION = RegUtil.register(Registries.ATTRIBUTE, "voidic_infusion",
+		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion"), 0F, 0F, 1F));
 
-	private final String DRACONIC_HEALTH_ID = "draconic_health";
+	public final Holder<Attribute> VOIDIC_INFUSION_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_infusion_res",
+		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion_res"), 0F, 0F, 1F).setSyncable(true));
+
+	public final Holder<Attribute> VOIDIC_PARANOIA_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_paranoia_res",
+		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_paranoia_res"), 0F, 0F, 1F).setSyncable(true));
+
+	public final Holder<Attribute> VOIDIC_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_res",
+		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_res"), 0F, 0F, 2048F));
+
+	public final Holder<Attribute> VOIDIC_DMG = RegUtil.register(Registries.ATTRIBUTE, "voidic_dmg",
+		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_dmg"), 0F, 0F, 2048F));
+
+	public final Holder<Attribute> VOIDIC_ARROW_DMG = RegUtil.register(Registries.ATTRIBUTE, "voidic_arrow_dmg",
+		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
 
 	@PostConstruct
 	private void setup(IEventBus bus, IEventBus gameBus) {
@@ -74,7 +83,7 @@ public class ModAttributes {
 	}
 
 	public String getDraconicHealthId(EquipmentSlot slot) {
-		return DRACONIC_HEALTH_ID.concat(slot.getName().toLowerCase(Locale.ROOT));
+		return "draconic_health".concat(slot.getName().toLowerCase(Locale.ROOT));
 	}
 
 }
