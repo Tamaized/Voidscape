@@ -3,13 +3,16 @@ package tamaized.voidscape.item.tool;
 import com.google.common.collect.Sets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
+import tamaized.regutil.ExtraTooltipContext;
 import tamaized.regutil.RegUtil;
 
 import java.util.Set;
@@ -24,8 +27,8 @@ public class LootingWarhammer extends BreakableWarhammer {
 		Stream.of(ItemAbilities.SWORD_SWEEP)
 	).collect(Collectors.toCollection(Sets::newIdentityHashSet));
 
-	public LootingWarhammer(Tier tier, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
-		super(tier, properties, tooltipConsumer);
+	public LootingWarhammer(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
+		super(material, properties, tooltipConsumer);
 	}
 
 	@Override

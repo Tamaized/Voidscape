@@ -3,13 +3,15 @@ package tamaized.voidscape.item.tool;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.BlockHitResult;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.regutil.ExtraTooltipContext;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableHelper;
 import tamaized.regutil.item.BreakableHoe;
@@ -23,8 +25,8 @@ public class BonemealHoe extends BreakableHoe {
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
-	public BonemealHoe(Tier tier, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
-		super(tier, properties, tooltipConsumer);
+	public BonemealHoe(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
+		super(material, properties, tooltipConsumer);
 	}
 
 	@Override

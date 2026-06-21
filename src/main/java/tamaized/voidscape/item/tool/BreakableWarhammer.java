@@ -11,45 +11,32 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.regutil.ExtraTooltipContext;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableHelper;
+import tamaized.regutil.item.BreakableTool;
 import tamaized.voidscape.util.tool.MultiBlockBreak;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 @Configurable
-public class BreakableWarhammer extends PickaxeItem {
+public class BreakableWarhammer extends BreakableTool {
 
 	@Autowired
 	private MultiBlockBreak multiBlockBreak;
 
 	private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer;
 
-	public BreakableWarhammer(Tier tier, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
+	public BreakableWarhammer(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
 		super(tier, properties.attributes(PickaxeItem.createAttributes(tier, 7, -3.5F)));
 		this.tooltipConsumer = tooltipConsumer;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 		BreakableHelper.appendHoverText(stack, context, tooltipComponents, tooltipFlag, tooltipConsumer);
 		super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-	}
-
-	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @org.jetbrains.annotations.Nullable T entity, Consumer<Item> onBroken) {
-		return BreakableHelper.damageItem(stack, amount, onBroken);
-	}
-
-	@Override
-	public float getDestroySpeed(ItemStack stack, BlockState state) {
-		return BreakableHelper.getDestroySpeed(stack, () -> super.getDestroySpeed(stack, state));
-	}
-
-	@Override
-	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		return BreakableHelper.hurtEnemy(stack, () -> super.hurtEnemy(stack, target, attacker));
 	}
 
 	@Override

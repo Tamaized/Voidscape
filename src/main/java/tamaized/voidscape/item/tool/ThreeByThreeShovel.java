@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.regutil.ExtraTooltipContext;
 import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableShovel;
 import tamaized.voidscape.util.tool.MultiBlockBreak;
@@ -19,8 +20,8 @@ public class ThreeByThreeShovel extends BreakableShovel {
 	@Autowired
 	private MultiBlockBreak multiBlockBreak;
 
-	public ThreeByThreeShovel(Tier tier, Properties properties, Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer) {
-		super(tier, properties, tooltipConsumer);
+	public ThreeByThreeShovel(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
+		super(material, properties, tooltipConsumer);
 	}
 
 	@Override
