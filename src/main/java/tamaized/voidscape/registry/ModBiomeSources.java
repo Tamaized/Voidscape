@@ -13,8 +13,6 @@ import java.util.function.Supplier;
 @Component
 public class ModBiomeSources {
 
-	private final DeferredRegister<MapCodec<? extends BiomeSource>> REGISTRY = RegUtil.create(Registries.BIOME_SOURCE);
-
-	public final Supplier<MapCodec<LayeredBiomeProvider>> LAYERED = REGISTRY.register("layered", () -> LayeredBiomeProvider.CODEC);
+	public final Supplier<MapCodec<LayeredBiomeProvider>> LAYERED = RegUtil.register(Registries.BIOME_SOURCE, "layered", () -> LayeredBiomeProvider.CODEC);
 
 }
