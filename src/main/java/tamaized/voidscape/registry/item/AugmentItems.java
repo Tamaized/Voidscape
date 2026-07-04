@@ -15,10 +15,8 @@ public class AugmentItems {
 	@Autowired
 	private ModItemProperties itemProperties;
 
-	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
+	public final DeferredHolder<Item, Item> VOIDIC_TEMPLATE = RegUtil.register(Registries.ITEM, "voidic_template", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> VOIDIC_TEMPLATE = REGISTRY.register("voidic_template", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
-
-	public final DeferredHolder<Item, Item> ETHEREAL_SPIDER_FANG = REGISTRY.register("ethereal_spider_fang", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> ETHEREAL_SPIDER_FANG = RegUtil.register(Registries.ITEM, "ethereal_spider_fang", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
 }

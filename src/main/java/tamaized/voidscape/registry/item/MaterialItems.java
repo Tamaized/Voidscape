@@ -22,33 +22,31 @@ public class MaterialItems {
 	@Autowired
 	private ModItemProperties itemProperties;
 
-	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
+	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL = RegUtil.register(Registries.ITEM, "voidic_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> VOIDIC_CRYSTAL = REGISTRY.register("voidic_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> CHARRED_BONE = RegUtil.register(Registries.ITEM, "charred_bone", () -> new VoidPortalActivatorItem(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> CHARRED_BONE = REGISTRY.register("charred_bone", () -> new VoidPortalActivatorItem(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> TENDRIL = RegUtil.register(Registries.ITEM, "tendril", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> TENDRIL = REGISTRY.register("tendril", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> TITANITE_CHUNK = RegUtil.register(Registries.ITEM, "titanite_chunk", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> TITANITE_CHUNK = REGISTRY.register("titanite_chunk", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> TITANITE_SHARD = RegUtil.register(Registries.ITEM, "titanite_shard", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> TITANITE_SHARD = REGISTRY.register("titanite_shard", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> FLESH_CHUNK = RegUtil.register(Registries.ITEM, "flesh_chunk", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> FLESH_CHUNK = REGISTRY.register("flesh_chunk", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> ICHOR = RegUtil.register(Registries.ITEM, "ichor", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> ICHOR = REGISTRY.register("ichor", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> ICHOR_CRYSTAL = RegUtil.register(Registries.ITEM, "ichor_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> ICHOR_CRYSTAL = REGISTRY.register("ichor_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> STRANGE_PEARL = RegUtil.register(Registries.ITEM, "strange_pearl", () -> new StrangePearlThrowableItem(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> STRANGE_PEARL = REGISTRY.register("strange_pearl", () -> new StrangePearlThrowableItem(itemProperties.LAVA_IMMUNE.get()));
-
-	public final DeferredHolder<Item, Item> ASTRAL_SHARDS = REGISTRY.register("astral_shards", () -> new BlockTransformerItem.Builder(
+	public final DeferredHolder<Item, Item> ASTRAL_SHARDS = RegUtil.register(Registries.ITEM, "astral_shards", () -> new BlockTransformerItem.Builder(
 		state -> state.is(spireBlocks.ANTIROCK),
 		() -> spireBlocks.ASTRALROCK.get().defaultBlockState()
 	).build(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> ASTRAL_ESSENCE = REGISTRY.register("astral_essence", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> ASTRAL_ESSENCE = RegUtil.register(Registries.ITEM, "astral_essence", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
-	public final DeferredHolder<Item, Item> ASTRAL_CRYSTAL = REGISTRY.register("astral_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> ASTRAL_CRYSTAL = RegUtil.register(Registries.ITEM, "astral_crystal", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
 }

@@ -15,8 +15,6 @@ public class PartItems {
 	@Autowired
 	private ModItemProperties itemProperties;
 
-	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
-
-	public final DeferredHolder<Item, Item> CHARRED_WARHAMMER_HEAD = REGISTRY.register("charred_warhammer_head", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
+	public final DeferredHolder<Item, Item> CHARRED_WARHAMMER_HEAD = RegUtil.register(Registries.ITEM, "charred_warhammer_head", () -> new Item(itemProperties.LAVA_IMMUNE.get()));
 
 }

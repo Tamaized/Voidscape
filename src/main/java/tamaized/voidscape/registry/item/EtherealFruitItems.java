@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
@@ -16,6 +17,7 @@ import tamaized.voidscape.item.EtherealFruitItem;
 import tamaized.voidscape.registry.*;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Component
 public class EtherealFruitItems {
@@ -32,34 +34,32 @@ public class EtherealFruitItems {
 	@Autowired
 	private ModEffects effects;
 
-	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
-
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_VOID = REGISTRY.register("ethereal_fruit_void", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_VOID = RegUtil.register(Registries.ITEM, "ethereal_fruit_void", () -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).addInfusion(150, context.parent()),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NULL = REGISTRY.register("ethereal_fruit_null", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NULL = RegUtil.register(Registries.ITEM, "ethereal_fruit_null", () -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).removeInfusion(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_OVERWORLD = REGISTRY.register("ethereal_fruit_overworld", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_OVERWORLD = RegUtil.register(Registries.ITEM, "ethereal_fruit_overworld", () -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).removeParanoia(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NETHER = REGISTRY.register("ethereal_fruit_nether", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NETHER = RegUtil.register(Registries.ITEM, "ethereal_fruit_nether", () -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).addParanoia(150),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_END = REGISTRY.register("ethereal_fruit_end", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_END = RegUtil.register(Registries.ITEM, "ethereal_fruit_end", () -> new EtherealFruitItem(
 		context -> context.parent().addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3)),
 		itemProperties.ETHEREAL_FRUIT.get()
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_SALAD = REGISTRY.register("ethereal_fruit_salad", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_SALAD = RegUtil.register(Registries.ITEM, "ethereal_fruit_salad", () -> new EtherealFruitItem(
 		context -> {
 			switch (context.parent().getRandom().nextInt(11)) {
 				case 1 -> ETHEREAL_FRUIT_VOID.get().doAction(context);
@@ -78,20 +78,21 @@ public class EtherealFruitItems {
 			.nutrition(18)
 			.saturationModifier(0.5F)
 			.alwaysEdible()
-			.usingConvertsTo(Items.BOWL)
 			.build())
+			.usingConvertsTo(Items.BOWL)
 			.rarity(Rarity.RARE)
 			.stacksTo(16)
 	) {
+
 		@Override
-		public void appendHoverText(ItemStack stack, TooltipContext context, List<net.minecraft.network.chat.Component> tooltipComponents, TooltipFlag tooltipFlag) {
-			super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-			tooltipComponents.add(net.minecraft.network.chat.Component.empty());
-			tooltipComponents.add(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.fruit_salad_why").withStyle(
+		public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> builder, TooltipFlag tooltipFlag) {
+			super.appendHoverText(stack, context, display, builder, tooltipFlag);
+			builder.accept(net.minecraft.network.chat.Component.empty());
+			builder.accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.fruit_salad_why").withStyle(
 				ChatFormatting.DARK_GRAY
 			));
-			tooltipComponents.add(net.minecraft.network.chat.Component.empty());
-			tooltipComponents.add(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.fruit_salad_yummy").withStyle(
+			builder.accept(net.minecraft.network.chat.Component.empty());
+			builder.accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.fruit_salad_yummy").withStyle(
 				ChatFormatting.LIGHT_PURPLE,
 				ChatFormatting.ITALIC
 			));
