@@ -14,12 +14,10 @@ import java.util.function.Supplier;
 @Component
 public class ModFluids {
 
-	private final DeferredRegister<Fluid> REGISTERY = RegUtil.create(Registries.FLUID);
-
 	@Autowired
 	private ModFluidProperties fluidProperties;
 
-	public final Supplier<FlowingFluid> VOIDIC_SOURCE = REGISTERY.register("voidic_source", () -> new VoidicFluid.Source(fluidProperties.VOIDIC.get()));
-	public final Supplier<FlowingFluid> VOIDIC_FLOWING = REGISTERY.register("voidic_flowing", () -> new VoidicFluid.Flowing(fluidProperties.VOIDIC.get()));
+	public final Supplier<FlowingFluid> VOIDIC_SOURCE = RegUtil.register(Registries.FLUID, "voidic_source", () -> new VoidicFluid.Source(fluidProperties.VOIDIC.get()));
+	public final Supplier<FlowingFluid> VOIDIC_FLOWING = RegUtil.register(Registries.FLUID, "voidic_flowing", () -> new VoidicFluid.Flowing(fluidProperties.VOIDIC.get()));
 
 }

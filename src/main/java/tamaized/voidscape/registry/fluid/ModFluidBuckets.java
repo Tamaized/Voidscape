@@ -16,14 +16,12 @@ import java.util.function.Supplier;
 @Component
 public class ModFluidBuckets {
 
-	private final DeferredRegister<Item> REGISTERY = RegUtil.create(Registries.ITEM);
-
 	@Autowired
 	private ModItemProperties itemProperties;
 
 	@Autowired
 	private ModFluids fluids;
 
-	public final DeferredHolder<Item, Item> VOIDIC = REGISTERY.register("voidic_bucket", () -> new BucketItem(fluids.VOIDIC_SOURCE.get(), itemProperties.DEFAULT.get().stacksTo(1).craftRemainder(Items.BUCKET)));
+	public final DeferredHolder<Item, Item> VOIDIC = RegUtil.register(Registries.ITEM, "voidic_bucket", () -> new BucketItem(fluids.VOIDIC_SOURCE.get(), itemProperties.DEFAULT.get().stacksTo(1).craftRemainder(Items.BUCKET)));
 
 }

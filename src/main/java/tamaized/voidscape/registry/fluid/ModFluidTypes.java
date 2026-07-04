@@ -5,7 +5,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -31,11 +30,9 @@ import java.util.function.Supplier;
 @Component
 public class ModFluidTypes {
 
-	private final DeferredRegister<FluidType> REGISTERY = RegUtil.create(NeoForgeRegistries.Keys.FLUID_TYPES);
-
 	private final List<ClientData> clientData = new ArrayList<>();
 
-	public final DeferredHolder<FluidType, FluidType> VOIDIC = addClientData(REGISTERY.register("voidic", () -> new FluidType(
+	public final DeferredHolder<FluidType, FluidType> VOIDIC = addClientData(RegUtil.register(NeoForgeRegistries.Keys.FLUID_TYPES, "voidic", () -> new FluidType(
 			FluidType.Properties.create()
 				.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
 				.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
@@ -51,7 +48,8 @@ public class ModFluidTypes {
 
 	@PostConstruct
 	private void init(IEventBus bus) {
-		bus.addListener(RegisterClientExtensionsEvent.class, event -> clientData.forEach(data -> event.registerFluidType(new IClientFluidTypeExtensions() {
+		// FIXME
+		/*bus.addListener(RegisterClientExtensionsEvent.class, event -> clientData.forEach(data -> event.registerFluidType(new IClientFluidTypeExtensions() {
 			@Override
 			public Identifier getStillTexture() {
 				return data.stillpath;
@@ -76,7 +74,7 @@ public class ModFluidTypes {
 			public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
 				return data.fog;
 			}
-		}, data.fluid)));
+		}, data.fluid)));*/
 	}
 
 	private DeferredHolder<FluidType, FluidType> addClientData(DeferredHolder<FluidType, FluidType> fluid, Identifier stillpath, Identifier flowingpath, @Nullable Identifier overlay, Vector3f fog, @Nullable Supplier<Function<BlockPos, Integer>> color) {
