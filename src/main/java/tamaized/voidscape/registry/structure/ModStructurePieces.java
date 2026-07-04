@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 @Component
 public class ModStructurePieces {
 
-	private final DeferredRegister<StructurePieceType> REGISTRY = RegUtil.create(Registries.STRUCTURE_PIECE);
-
-	public final Supplier<StructurePieceType> CHARRED_MAIN = REGISTRY.register("charred_pieces_main", () -> CharredStructure.Pieces.Piece::new);
+	public final Supplier<StructurePieceType> CHARRED_MAIN = RegUtil.register(Registries.STRUCTURE_PIECE, "charred_pieces_main", () -> CharredStructure.Pieces.Piece::new);
 
 }
