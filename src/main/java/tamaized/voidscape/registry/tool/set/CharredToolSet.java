@@ -5,12 +5,9 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.regutil.AttributeData;
-import tamaized.regutil.AttributeFactory;
-import tamaized.regutil.RegUtil;
+import tamaized.regutil.*;
 import tamaized.voidscape.item.QuiverItem;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemComponents;
@@ -21,38 +18,34 @@ import tamaized.voidscape.registry.tool.ModToolMaterials;
 @Component
 public class CharredToolSet {
 
-	private final String MATERIAL_NAME = "charred";
-
-	@Autowired
-	private ModToolMaterials toolTiers;
-
 	@Autowired
 	private ModItemProperties itemProperties;
 
-	@Autowired
-	private ModAttributes attributes;
-
-	@Autowired
-	private ModItemComponents itemComponents;
-
-	private final DeferredRegister<Item> REGISTRY = RegUtil.create(Registries.ITEM);
-
 	public final DeferredHolder<Item, Item> CHARRED_WARHAMMER;
 
-	public final DeferredHolder<Item, Item> CHARRED_QUIVER = REGISTRY.register("charred_quiver", () -> new QuiverItem(
+	public final DeferredHolder<Item, Item> CHARRED_QUIVER = RegUtil.register(Registries.ITEM, "charred_quiver", () -> new QuiverItem(
 		itemProperties.LAVA_IMMUNE.get()
 	));
 
-	public CharredToolSet(@Autowired ExtraToolTypes extraToolTypes) {
+	public CharredToolSet(
+		@Autowired AttributeFactoryProvider attributeFactoryProvider,
+		@Autowired ModToolMaterials toolTiers,
+		@Autowired ModItemProperties itemProperties,
+		@Autowired ModAttributes attributes,
+		@Autowired ModItemComponents itemComponents,
+		@Autowired ExtraToolTypes extraToolTypes
+	) {
+		final String MATERIAL_NAME = "charred";
+
 		CHARRED_WARHAMMER = extraToolTypes.hammer(
 			MATERIAL_NAME,
-			() -> toolTiers.CHARRED,
-			() -> itemProperties.LAVA_IMMUNE.get(),
-			AttributeFactory.make(
+			toolTiers.CHARRED,
+			itemProperties.LAVA_IMMUNE,
+			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_DMG, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.MAINHAND),
 				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.FANG, false), attributes.VOIDIC_INFUSION, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.MAINHAND)
 			),
-			RegUtil.ToolAndArmorHelper.TooltipContext.EMPTY
+			ExtraTooltipContext.EMPTY
 		);
 	}
 
