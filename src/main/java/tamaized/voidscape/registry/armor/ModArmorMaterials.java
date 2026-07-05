@@ -1,110 +1,128 @@
 package tamaized.voidscape.registry.armor;
 
-import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import tamaized.beanification.Autowired;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Util;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import tamaized.beanification.Component;
 import tamaized.regutil.ArmorData;
 import tamaized.regutil.ArmorDataModel;
-import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.item.MaterialItems;
 
 import java.util.EnumMap;
-import java.util.List;
 
 @Component
 public class ModArmorMaterials {
 
-	@Autowired
-	private MaterialItems materialItems;
-
-	private final DeferredRegister<ArmorMaterial> REGISTRY = RegUtil.create(Registries.ARMOR_MATERIAL);
-
-	public final ArmorData VOIDIC_CRYSTAL = new ArmorData(REGISTRY.register("voidic_crystal", () -> new ArmorMaterial(
-		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-			map.put(ArmorItem.Type.BOOTS, 3);
-			map.put(ArmorItem.Type.LEGGINGS, 6);
-			map.put(ArmorItem.Type.CHESTPLATE, 8);
-			map.put(ArmorItem.Type.HELMET, 3);
-			map.put(ArmorItem.Type.BODY, 11);
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL = TagKey.create(
+		Registries.ITEM,
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal")
+	);
+	public final ArmorData VOIDIC_CRYSTAL = new ArmorData(new ArmorMaterial(
+		39,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 3);
+			map.put(ArmorType.LEGGINGS, 6);
+			map.put(ArmorType.CHESTPLATE, 8);
+			map.put(ArmorType.HELMET, 3);
+			map.put(ArmorType.BODY, 11);
 		}),
 		17,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
-		() -> Ingredient.of(materialItems.VOIDIC_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"))),
 		4F,
-		0.10F
-	)), 39, new ArmorDataModel(true, false, false));
+		0.10F,
+		TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL.location())
+	), new ArmorDataModel(true, false, false));
 
-	public final ArmorData CORRUPT = new ArmorData(REGISTRY.register("corrupt", () -> new ArmorMaterial(
-		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-			map.put(ArmorItem.Type.BOOTS, 4);
-			map.put(ArmorItem.Type.LEGGINGS, 7);
-			map.put(ArmorItem.Type.CHESTPLATE, 9);
-			map.put(ArmorItem.Type.HELMET, 4);
-			map.put(ArmorItem.Type.BODY, 12);
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_CORRUPT = TagKey.create(
+		Registries.ITEM,
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt")
+	);
+	public final ArmorData CORRUPT = new ArmorData(new ArmorMaterial(
+		41,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 4);
+			map.put(ArmorType.LEGGINGS, 7);
+			map.put(ArmorType.CHESTPLATE, 9);
+			map.put(ArmorType.HELMET, 4);
+			map.put(ArmorType.BODY, 12);
 		}),
 		19,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(materialItems.TENDRIL.get()),
-		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt"))),
 		5F,
-		0.15F
-	)), 41, new CorruptArmorDataModel());
+		0.15F,
+		TAG_REPAIR_MATERIAL_CORRUPT,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_CORRUPT.location())
+	), new CorruptArmorDataModel());
 
-	public final ArmorData TITANITE = new ArmorData(REGISTRY.register("titanite", () -> new ArmorMaterial(
-		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-			map.put(ArmorItem.Type.BOOTS, 5);
-			map.put(ArmorItem.Type.LEGGINGS, 8);
-			map.put(ArmorItem.Type.CHESTPLATE, 10);
-			map.put(ArmorItem.Type.HELMET, 5);
-			map.put(ArmorItem.Type.BODY, 13);
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_TITANITE = TagKey.create(
+		Registries.ITEM,
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite")
+	);
+	public final ArmorData TITANITE = new ArmorData(new ArmorMaterial(
+		43,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 5);
+			map.put(ArmorType.LEGGINGS, 8);
+			map.put(ArmorType.CHESTPLATE, 10);
+			map.put(ArmorType.HELMET, 5);
+			map.put(ArmorType.BODY, 13);
 		}),
 		17,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(materialItems.TITANITE_SHARD.get()),
-		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite"))),
 		6F,
-		0.20F
-	)), 43, new TitaniteArmorDataModel());
+		0.20F,
+		TAG_REPAIR_MATERIAL_TITANITE,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_TITANITE.location())
+	), new TitaniteArmorDataModel());
 
-	public final ArmorData ICHOR = new ArmorData(REGISTRY.register("ichor", () -> new ArmorMaterial(
-		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-			map.put(ArmorItem.Type.BOOTS, 6);
-			map.put(ArmorItem.Type.LEGGINGS, 9);
-			map.put(ArmorItem.Type.CHESTPLATE, 11);
-			map.put(ArmorItem.Type.HELMET, 6);
-			map.put(ArmorItem.Type.BODY, 14);
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_ICHOR = TagKey.create(
+		Registries.ITEM,
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor")
+	);
+	public final ArmorData ICHOR = new ArmorData(new ArmorMaterial(
+		45,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 6);
+			map.put(ArmorType.LEGGINGS, 9);
+			map.put(ArmorType.CHESTPLATE, 11);
+			map.put(ArmorType.HELMET, 6);
+			map.put(ArmorType.BODY, 14);
 		}),
 		23,
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
-		() -> Ingredient.of(materialItems.ICHOR_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor"))),
 		7F,
-		0.25F
-	)), 45, new IchorArmorDataModel());
+		0.25F,
+		TAG_REPAIR_MATERIAL_ICHOR,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ICHOR.location())
+	), new IchorArmorDataModel());
 
-	public final ArmorData ASTRAL = new ArmorData(REGISTRY.register("astral", () -> new ArmorMaterial(
-		Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-			map.put(ArmorItem.Type.BOOTS, 7);
-			map.put(ArmorItem.Type.LEGGINGS, 10);
-			map.put(ArmorItem.Type.CHESTPLATE, 12);
-			map.put(ArmorItem.Type.HELMET, 7);
-			map.put(ArmorItem.Type.BODY, 15);
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_ASTRAL = TagKey.create(
+		Registries.ITEM,
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral")
+	);
+	public final ArmorData ASTRAL = new ArmorData(new ArmorMaterial(
+		47,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 7);
+			map.put(ArmorType.LEGGINGS, 10);
+			map.put(ArmorType.CHESTPLATE, 12);
+			map.put(ArmorType.HELMET, 7);
+			map.put(ArmorType.BODY, 15);
 		}),
 		25,
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
-		() -> Ingredient.of(materialItems.ASTRAL_CRYSTAL.get()),
-		List.of(new ArmorMaterial.Layer(Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral"))),
 		8F,
-		0.30F
-	)), 47, new AstralArmorDataModel());
+		0.30F,
+		TAG_REPAIR_MATERIAL_ASTRAL,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ASTRAL.location())
+	), new AstralArmorDataModel());
 
 }
