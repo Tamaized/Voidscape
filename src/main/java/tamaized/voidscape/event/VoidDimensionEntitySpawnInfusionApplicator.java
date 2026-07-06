@@ -1,6 +1,6 @@
 package tamaized.voidscape.event;
 
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import tamaized.beanification.Autowired;
@@ -22,7 +22,7 @@ public class VoidDimensionEntitySpawnInfusionApplicator {
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(FinalizeSpawnEvent.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL &&
+			if (event.getSpawnType() == EntitySpawnReason.NATURAL &&
 				!(event.getEntity() instanceof IEthereal) &&
 				levelUtil.isInVoidDimension(event.getEntity().level())) {
 				event.getEntity().getData(dataAttachments.INSANITY).addInfusion(event.getEntity().getRandom().nextInt(200) + 100, event.getEntity());

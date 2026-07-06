@@ -2,8 +2,8 @@ package tamaized.voidscape.event;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.player.Player;
@@ -24,13 +24,13 @@ public class VoidDimensionValidSpawnHandler {
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(MobSpawnEvent.SpawnPlacementCheck.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL && levelUtil.isInVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
+			if (event.getSpawnType() == EntitySpawnReason.NATURAL && levelUtil.isInVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {
 				event.setResult(MobSpawnEvent.SpawnPlacementCheck.Result.SUCCEED);
 			}
 		});
 
 		bus.addListener(MobSpawnEvent.PositionCheck.class, event -> {
-			if (event.getSpawnType() == MobSpawnType.NATURAL && levelUtil.isInVoidDimension(event.getLevel().getLevel())) {
+			if (event.getSpawnType() == EntitySpawnReason.NATURAL && levelUtil.isInVoidDimension(event.getLevel().getLevel())) {
 				Player player = event.getLevel().getNearestPlayer(event.getX(), event.getY(), event.getZ(), -1.0D, false);
 				if (player != null &&
 					isValidPositionForMob(

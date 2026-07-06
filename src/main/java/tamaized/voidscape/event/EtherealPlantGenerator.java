@@ -10,7 +10,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.block.EtherealFruitBlocks;
 import tamaized.voidscape.util.LevelUtil;
 
@@ -19,9 +18,6 @@ public class EtherealPlantGenerator {
 
 	@Autowired
 	private LevelUtil levelUtil;
-
-	@Autowired
-	private ModDataAttachments dataAttachments;
 
 	@Autowired
 	private EtherealFruitBlocks etherealFruitBlocks;
@@ -37,7 +33,7 @@ public class EtherealPlantGenerator {
 					final int rad = dist / 2;
 					BlockPos dest = player.blockPosition().offset(randomOffset(player, dist, rad), randomOffset(player, dist, rad), randomOffset(player, dist, rad));
 					if (level.getBlockState(dest).isAir() && etherealFruitBlocks.VOID.get().defaultBlockState().canSurvive(level, dest))
-						level.setBlockAndUpdate(dest, switch (level.getBiome(dest).unwrapKey().map(ResourceKey::location).orElse(Identifier.withDefaultNamespace("")).getPath()) {
+						level.setBlockAndUpdate(dest, switch (level.getBiome(dest).unwrapKey().map(ResourceKey::identifier).orElse(Identifier.withDefaultNamespace("")).getPath()) {
 							// TODO: Make this datapack friendly (maybe something like data/voidscape/ethereal_fruit_growths/ethereal_fruit_id.json {"replace": true/false, biomes: ["id"]})
 							default -> etherealFruitBlocks.VOID.get().defaultBlockState();
 							case "null" -> etherealFruitBlocks.NULL.get().defaultBlockState();

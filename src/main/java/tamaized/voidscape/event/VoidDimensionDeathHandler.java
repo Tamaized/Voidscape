@@ -5,9 +5,9 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -43,13 +43,13 @@ public class VoidDimensionDeathHandler {
 		if (event.getEntity() instanceof ServerPlayer player) {
 			if (levelUtil.isInVoidDimension(player.level())) {
 				player.setHealth(player.getMaxHealth() * 0.1F);
-				player.removeEffectsCuredBy(EffectCures.MILK);
+				player.removeAllEffects();
 				player.resetFallDistance();
 				if (!player.level().isClientSide())
 					levelUtil.getPlayersSpawnLevel(player)
 						.or(() -> levelUtil.getLevel(player.level(), Level.OVERWORLD))
 						.ifPresent(level -> {
-							player.changeDimension(spawnPointTeleporter.make(player, level));
+							player.teleport(spawnPointTeleporter.make(player, level));
 							event.setCanceled(true);
 						});
 			}
