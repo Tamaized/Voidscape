@@ -12,7 +12,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.regutil.ExtraTooltipContext;
-import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableHelper;
 import tamaized.regutil.item.BreakableHoe;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
@@ -25,13 +24,16 @@ public class BonemealHoe extends BreakableHoe {
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
+	@Autowired
+	private BreakableHelper breakableHelper;
+
 	public BonemealHoe(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
 		super(material, properties, tooltipConsumer);
 	}
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		return BreakableHelper.useOn(context, () -> {
+		return breakableHelper.useOn(context, () -> {
 			InteractionResult result = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? InteractionResult.PASS : super.useOn(context);
 			if (result == InteractionResult.PASS) {
 				result = Items.BONE_MEAL.useOn(new UseOnContext(

@@ -20,7 +20,7 @@ public class EtherealFruitItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
 		ItemStack itemstack = super.finishUsingItem(stack, level, entity);
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			doAction(new UseItemActionContext(stack, level, entity));
 		}
 		return itemstack;

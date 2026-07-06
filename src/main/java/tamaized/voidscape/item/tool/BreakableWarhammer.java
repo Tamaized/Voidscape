@@ -26,26 +26,28 @@ public class BreakableWarhammer extends BreakableTool {
 	@Autowired
 	private MultiBlockBreak multiBlockBreak;
 
-	private final Consumer<RegUtil.ToolAndArmorHelper.TooltipContext> tooltipConsumer;
+	@Autowired
+	private BreakableHelper breakableHelper;
 
 	public BreakableWarhammer(ToolMaterial material, Item.Properties properties, Consumer<ExtraTooltipContext> tooltipConsumer) {
-		super(tier, properties.attributes(PickaxeItem.createAttributes(tier, 7, -3.5F)));
-		this.tooltipConsumer = tooltipConsumer;
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-		BreakableHelper.appendHoverText(stack, context, tooltipComponents, tooltipFlag, tooltipConsumer);
-		super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+		super(properties.pickaxe(material, 7, -3.5F), tooltipConsumer);
 	}
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		return BreakableHelper.useOn(context, () -> super.useOn(context));
+		return breakableHelper.useOn(context, () -> super.useOn(context));
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-		return multiBlockBreak.doBreak(multiBlockBreak.THREE_BY_THREE_RADIUS, player.getMainHandItem(), pos, player, () -> super.canAttackBlock(state, level, pos, player));
+	public boolean canDestroyBlock(ItemStack itemStack, BlockState state, Level level, BlockPos pos, LivingEntity user) {
+		if (!(user instanceof Player player))
+			return super.canDestroyBlock(itemStack, state, level, pos, user);
+		return multiBlockBreak.doBreak(
+			multiBlockBreak.THREE_BY_THREE_RADIUS,
+			player.getMainHandItem(),
+			pos,
+			player,
+			() -> super.canDestroyBlock(itemStack, state, level, pos, player)
+		);
 	}
 }

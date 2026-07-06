@@ -74,12 +74,11 @@ public class BlockTransformerItem extends Item {
 				for (int i = 0; i < particleCount; i++)
 					particles.queueParticle(
 						particle.get(),
-						false,
 						context.getClickedPos().getX() + context.getLevel().getRandom().nextFloat(),
 						context.getClickedPos().getY() + context.getLevel().getRandom().nextFloat(),
 						context.getClickedPos().getZ() + context.getLevel().getRandom().nextFloat(),
 						0, 0, 0);
-				PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(context.getClickedPos()), particles);
+				PacketDistributor.sendToPlayersTrackingChunk(level, ChunkPos.containing(context.getClickedPos()), particles);
 			}
 			if (advancement != null && context.getPlayer() instanceof ServerPlayer serverPlayer)
 				advancement.get().trigger(serverPlayer);

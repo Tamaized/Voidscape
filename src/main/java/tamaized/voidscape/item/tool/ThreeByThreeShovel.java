@@ -1,6 +1,7 @@
 package tamaized.voidscape.item.tool;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -25,7 +26,15 @@ public class ThreeByThreeShovel extends BreakableShovel {
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-		return multiBlockBreak.doBreak(multiBlockBreak.THREE_BY_THREE_RADIUS, player.getMainHandItem(), pos, player, () -> super.canAttackBlock(state, level, pos, player));
+	public boolean canDestroyBlock(ItemStack itemStack, BlockState state, Level level, BlockPos pos, LivingEntity user) {
+		if (!(user instanceof Player player))
+			return super.canDestroyBlock(itemStack, state, level, pos, user);
+		return multiBlockBreak.doBreak(
+			multiBlockBreak.THREE_BY_THREE_RADIUS,
+			user.getMainHandItem(),
+			pos,
+			player,
+			() -> super.canDestroyBlock(itemStack, state, level, pos, user)
+		);
 	}
 }

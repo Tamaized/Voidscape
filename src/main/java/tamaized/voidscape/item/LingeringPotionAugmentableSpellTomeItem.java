@@ -8,23 +8,21 @@ import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.TooltipDisplay;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.item.util.UseItemActionContext;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class LingeringPotionAugmentableSpellTomeItem extends SpellTomeItem {
 
-	public LingeringPotionAugmentableSpellTomeItem(Properties properties, Supplier<Item> repairMaterial, int cooldown, Consumer<UseItemActionContext> action) {
-		super(properties, repairMaterial, cooldown, action);
+	public LingeringPotionAugmentableSpellTomeItem(Properties properties, int cooldown, Consumer<UseItemActionContext> action) {
+		super(properties, cooldown, action);
 	}
 
 	@Override
@@ -45,16 +43,22 @@ public class LingeringPotionAugmentableSpellTomeItem extends SpellTomeItem {
 		return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-		super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-		tooltipComponents.add(Component.empty());
-		tooltipComponents.add(Component.translatable(Voidscape.MODID + ".tooltip.augment.lingering_potion")
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		super.appendHoverText(stack, context, display, builder, tooltipFlag);
+		builder.accept(Component.empty());
+		builder.accept(Component.translatable(Voidscape.MODID + ".tooltip.augment.lingering_potion")
 			.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-		tooltipComponents.add(Component.empty());
+		builder.accept(Component.empty());
 		if (stack.has(DataComponents.POTION_CONTENTS) && stack.get(DataComponents.POTION_CONTENTS) != PotionContents.EMPTY) {
-			Objects.requireNonNull(stack.get(DataComponents.POTION_CONTENTS)).addPotionTooltip(tooltipComponents::add, 0.25F, context.tickRate());
-			tooltipComponents.add(Component.empty());
+			PotionContents.addPotionTooltip(
+				Objects.requireNonNull(stack.get(DataComponents.POTION_CONTENTS)).getAllEffects(),
+				builder,
+				0.25F,
+				context.tickRate()
+			);
+			builder.accept(Component.empty());
 		}
 	}
 }

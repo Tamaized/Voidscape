@@ -6,9 +6,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Mth;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
@@ -21,18 +21,19 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.data.QuiverContents;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.tooltip.QuiverTooltip;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class QuiverItem extends Item {
 
-	private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+	private static final int BAR_COLOR = ARGB.colorFromFloat(1F, 0.4F, 0.4F, 1.0F);
 
 	@Autowired
 	private static ModItemComponents components;
@@ -64,7 +65,7 @@ public class QuiverItem extends Item {
 						ItemStack itemstack2 = slot.safeInsert(itemstack1);
 						mutable.tryInsert(itemstack2);
 					}
-				} else if (itemstack.getItem().canFitInsideContainerItems() && itemstack.is(ItemTags.ARROWS)) {
+				} else if (itemstack.canFitInsideContainerItems() && itemstack.is(ItemTags.ARROWS)) {
 					ItemStack result = mutable.tryInsert(itemstack);
 					if (result.getCount() != itemstack.getCount()) {
 						slot.set(result);
@@ -117,14 +118,14 @@ public class QuiverItem extends Item {
 	 * Called to trigger the item's "innate" right click behavior. To handle when this item is used on a Block, see {@link net.minecraft.world.item.Item#useOn(net.minecraft.world.item.context.UseOnContext)}.
 	 */
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+	public InteractionResult use(Level level, Player player, InteractionHand usedHand) {
 		ItemStack itemstack = player.getItemInHand(usedHand);
 		if (dropContents(itemstack, player)) {
 			this.playDropContentsSound(player);
 			player.awardStat(Stats.ITEM_USED.get(this));
-			return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+			return InteractionResult.SUCCESS;
 		} else {
-			return InteractionResultHolder.fail(itemstack);
+			return InteractionResult.FAIL;
 		}
 	}
 
@@ -160,13 +161,15 @@ public class QuiverItem extends Item {
 
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP)
+		TooltipDisplay display = stack.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT);
+		return !display.shows(components.QUIVER_CONTENTS.get())
 			? Optional.ofNullable(stack.get(components.QUIVER_CONTENTS)).map(QuiverTooltip::new)
 			: Optional.empty();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
 		/*QuiverContents contents = stack.get(components.QUIVER_CONTENTS);
 		if (contents != null) {
 			int i = Mth.mulAndTruncate(contents.weight(), 64);
@@ -179,7 +182,7 @@ public class QuiverItem extends Item {
 		QuiverContents contents = itemEntity.getItem().get(components.QUIVER_CONTENTS);
 		if (contents != null) {
 			itemEntity.getItem().set(components.QUIVER_CONTENTS, QuiverContents.EMPTY);
-			ItemUtils.onContainerDestroyed(itemEntity, contents.view());
+			ItemUtils.onContainerDestroyed(itemEntity, contents.view().stream());
 		}
 	}
 
