@@ -22,6 +22,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -45,6 +47,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	@Autowired
 	private static ModDamageSource damageSource;
 
+	@Nullable
 	private NullServantEntity parent;
 
 	public NullServantAugmentBlockEntity(EntityType<NullServantAugmentBlockEntity> pEntityType, Level pLevel) {
@@ -60,11 +63,11 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 
 	public static AttributeSupplier.Builder createAttributes() {
 		return LivingEntity.createLivingAttributes()
-				.add(Attributes.MAX_HEALTH, 10.0D);
+			.add(Attributes.MAX_HEALTH, 10.0D);
 	}
 
 	private void initAugment() {
-		if (level().isClientSide())
+		if (level().isClientSide() || parent == null)
 			return;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE) {
 			entityData.set(MIMIC, random.nextBoolean() ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.STONE.defaultBlockState());
@@ -88,23 +91,22 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	public void randomPosOrDiscard() {
-		if (level().isClientSide())
+		if (level().isClientSide() || parent == null)
 			return;
 		Vec3 pos;
 		if ((pos = randomPos(level(), getRandom(), parent.position(), this)) != null) {
-			moveTo(pos);
+			snapTo(pos);
 			playSound(SoundEvents.ITEM_PICKUP, 1F, 0.2F + random.nextFloat() * 0.3F);
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			for (int j = 0; j < 50; j++) {
 				particles.queueParticle(
-						ParticleTypes.END_ROD,
-						false,
-						position().x() - 0.5D + random.nextFloat(),
-						position().y() - 0.5D + random.nextFloat(),
-						position().z() - 0.5D + random.nextFloat(),
-						0D,
-						0D,
-						0D
+					ParticleTypes.END_ROD,
+					position().x() - 0.5D + random.nextFloat(),
+					position().y() - 0.5D + random.nextFloat(),
+					position().z() - 0.5D + random.nextFloat(),
+					0D,
+					0D,
+					0D
 				);
 			}
 			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
@@ -124,20 +126,23 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		if (tag.hasUUID("parent") && level() instanceof ServerLevel serverLevel)
-			if (serverLevel.getEntity(tag.getUUID("parent")) instanceof NullServantEntity p)
-				parent = p;
-		entityData.set(MIMIC, NbtUtils.readBlockState(level().holderLookup(Registries.BLOCK), tag.getCompound("mimic")));
-		super.readAdditionalSaveData(tag);
+	protected void readAdditionalSaveData(ValueInput input) {
+		if (level() instanceof ServerLevel serverLevel) {
+			EntityReference<NullServantEntity> parentRef = EntityReference.read(input, "parent");
+			if (parentRef != null) {
+				parent = parentRef.getEntity(serverLevel, NullServantEntity.class);
+			}
+		}
+		input.read("mimic", BlockState.CODEC).ifPresent(state -> entityData.set(MIMIC, state));
+		super.readAdditionalSaveData(input);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
+	protected void addAdditionalSaveData(ValueOutput output) {
 		if (parent != null)
-			tag.putUUID("parent", parent.getUUID());
-		tag.put("mimic", NbtUtils.writeBlockState(getMimic()));
-		super.addAdditionalSaveData(tag);
+			EntityReference.store(EntityReference.of(parent), output, "parent");
+		output.store("mimic", BlockState.CODEC, getMimic());
+		super.addAdditionalSaveData(output);
 	}
 
 	@Override
@@ -147,14 +152,14 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 
 	@Override
 	public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
-		if(level().getEntity(additionalData.readInt()) instanceof NullServantEntity p)
+		if (level().getEntity(additionalData.readInt()) instanceof NullServantEntity p)
 			parent = p;
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		if (source.is(DamageTypes.GENERIC_KILL))
-			return super.hurt(source, amount);
+			return super.hurtServer(level, source, amount);
 		if (parent == null) {
 			discard();
 			return true;
@@ -162,13 +167,13 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 		if (source.is(DamageTypes.IN_WALL))
 			return false;
 		if (parent.getAugment() == NullServantEntity.AUGMENT_TITANITE)
-			return super.hurt(source, source.is(damageSource.VOIDIC) ? amount : amount * 0.1F);
+			return super.hurtServer(level, source, source.is(damageSource.VOIDIC) ? amount : amount * 0.1F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ICHOR)
-			return super.hurt(source, source.getEntity() == parent ? amount : amount * 0.01F);
+			return super.hurtServer(level, source, source.getEntity() == parent ? amount : amount * 0.01F);
 		else if (parent.getAugment() == NullServantEntity.AUGMENT_ASTRAL)
-			return super.hurt(source, source.getEntity() != parent && source.getDirectEntity() instanceof StrangePearlEntity ? amount : amount * 0.01F);
+			return super.hurtServer(level, source, source.getEntity() != parent && source.getDirectEntity() instanceof StrangePearlEntity ? amount : amount * 0.01F);
 		else
-			return super.hurt(source, amount);
+			return super.hurtServer(level, source, amount);
 	}
 
 	@Override
@@ -179,11 +184,6 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	@Override
 	public HumanoidArm getMainArm() {
 		return HumanoidArm.RIGHT;
-	}
-
-	@Override
-	public Iterable<ItemStack> getArmorSlots() {
-		return new ArrayList<>();
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 	}
 
 	@Override
-	public boolean canBeCollidedWith() {
+	public boolean canBeCollidedWith(@org.jspecify.annotations.Nullable Entity other) {
 		return false;
 	}
 
@@ -240,7 +240,7 @@ public class NullServantAugmentBlockEntity extends LivingEntity implements IEnti
 			discard();
 		if (level().isClientSide() && parent != null && parent.isAlive() && random.nextInt(5) == 0) {
 			Vec3 dir = new Vec3(parent.getX(), parent.getY() + parent.getEyeHeight() / 2F, parent.getZ()).subtract(position()).normalize().scale(0.5D);
-			level().addParticle(ParticleTypes.END_ROD, false, getX(), getY() + getBbHeight() / 2F, getZ(), dir.x(), dir.y(), dir.z());
+			level().addParticle(ParticleTypes.END_ROD, getX(), getY() + getBbHeight() / 2F, getZ(), dir.x(), dir.y(), dir.z());
 		}
 	}
 

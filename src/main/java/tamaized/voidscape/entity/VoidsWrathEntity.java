@@ -10,13 +10,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PowerableMob;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -37,7 +31,7 @@ import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.tool.set.CharredToolSet;
 
-public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal {
+public class VoidsWrathEntity extends Monster implements IEthereal {
 
 	@Autowired
 	private static ModEntities entities;
@@ -84,7 +78,7 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	@SuppressWarnings("deprecation")
 	@org.jetbrains.annotations.Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
 		this.populateDefaultEquipmentSlots(getRandom(), difficulty);
 		this.populateDefaultEquipmentEnchantments(level, getRandom(), difficulty);
 		return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
@@ -113,7 +107,6 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 		builder.define(GLOWING, false);
 	}
 
-	@Override
 	public boolean isPowered() {
 		return this.entityData.get(GLOWING);
 	}
@@ -128,8 +121,8 @@ public class VoidsWrathEntity extends Monster implements PowerableMob, IEthereal
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		return super.hurt(source, amount * (isPowered() ? 0.25F : 1F));
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		return super.hurtServer(level, source, amount * (isPowered() ? 0.25F : 1F));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package tamaized.voidscape.entity;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,10 +33,10 @@ public class VoidlingEntity extends Spider implements IEthereal {
 	}
 
 	@Override
-	public boolean doHurtTarget(Entity entity) {
-		if (super.doHurtTarget(entity)) {
-			if (entity instanceof LivingEntity living)
-				entity.getData(dataAttachments.INSANITY.get()).addInfusion(25, living);
+	public boolean doHurtTarget(ServerLevel level, Entity target) {
+		if (super.doHurtTarget(level, target)) {
+			if (target instanceof LivingEntity living)
+				target.getData(dataAttachments.INSANITY.get()).addInfusion(25, living);
 			return true;
 		}
 		return false;

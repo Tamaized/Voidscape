@@ -5,9 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -47,9 +49,10 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	private static MaterialItems materialItems;
 
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(
-			getDisplayName(),
-			BossEvent.BossBarColor.PURPLE,
-			BossEvent.BossBarOverlay.PROGRESS
+		Mth.createInsecureUUID(level().getRandom()),
+		getDisplayName(),
+		BossEvent.BossBarColor.PURPLE,
+		BossEvent.BossBarOverlay.PROGRESS
 	)).setDarkenScreen(true);
 
 	@Nullable
@@ -116,7 +119,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 			return;
 		}
 		bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
-		if (!level().isClientSide()) {
+		if (!level().isClientSide() && level() instanceof ServerLevel serverLevel) {
 			if (target == null || !target.isAlive()) {
 				remove(RemovalReason.DISCARDED);
 				return;
@@ -128,7 +131,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 				setDeltaMovement(position().subtract(target.position()).normalize().scale(-0.5F));
 				if (target.distanceTo(this) <= 0.25F) {
 					teleport();
-					target.hurt(damageSource.getEntityDamageSource(level(), damageSource.VOIDIC, this), 10);
+					target.hurtServer(serverLevel, damageSource.getEntityDamageSource(level(), damageSource.VOIDIC, this), 10);
 					heal(5F);
 				}
 			}
@@ -146,7 +149,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 		if (isAlive() && !isNoAi() && target != null) {
 			playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			Vec3 vec = new Vec3(0, 100, 0).xRot(getRandom().nextFloat() * 2F - 1F).yRot(getRandom().nextFloat());
-			moveTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
+			snapTo(target.getX() + vec.x(), target.getY() + vec.y(), target.getZ() + vec.z(), getYRot(), getXRot());
 		}
 	}
 
@@ -161,9 +164,9 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		float dmg = source.is(damageSource.VOIDIC) ? amount : amount * 0.1F;
-		if (super.hurt(source, dmg)) {
+		if (super.hurtServer(level, source, dmg)) {
 			teleport();
 			return true;
 		}
@@ -181,11 +184,6 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 				target.getData(dataAttachments.INSANITY).setParanoia(0);
 			}
 		}
-	}
-
-	@Override
-	public Iterable<ItemStack> getArmorSlots() {
-		return NonNullList.create();
 	}
 
 	@Override
@@ -209,8 +207,7 @@ public class CorruptedPawnEntity extends Mob implements IEntityWithComplexSpawn,
 	}
 
 	@Override
-	public boolean canBeCollidedWith() {
-		// Same as super... except we account for ASM/Mixins
+	public boolean canBeCollidedWith(@org.jspecify.annotations.Nullable Entity other) {
 		return false;
 	}
 

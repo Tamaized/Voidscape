@@ -4,9 +4,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import tamaized.voidscape.entity.NullServantEntity;
-import tamaized.voidscape.entity.NullServantIchorBoltEntity;
 import tamaized.voidscape.entity.PhantomNullServantEntity;
 import tamaized.voidscape.entity.StrangePearlEntity;
 
@@ -22,9 +22,13 @@ public class AstralAugmentGoal extends Goal {
 	private int nextActionTick3;
 	private int nextActionTick4;
 
+	@Nullable
 	private PhantomNullServantEntity phantom1;
+	@Nullable
 	private PhantomNullServantEntity phantom2;
+	@Nullable
 	private PhantomNullServantEntity phantom3;
+	@Nullable
 	private PhantomNullServantEntity phantom4;
 
 	private boolean primed1;

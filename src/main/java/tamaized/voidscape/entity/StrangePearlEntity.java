@@ -13,6 +13,7 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -78,7 +79,7 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	}
 
 	private ParticleOptions getParticle() {
-		return new ItemParticleOption(ParticleTypes.ITEM, getItem());
+		return new ItemParticleOption(ParticleTypes.ITEM, ItemStackTemplate.fromNonEmptyStack(getItem()));
 	}
 
 	@Override
@@ -127,7 +128,7 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	@Override
 	protected void onHit(HitResult pResult) {
 		super.onHit(pResult);
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.level().broadcastEntityEvent(this, (byte)3);
 			this.discard();
 			playSound(SoundEvents.AMETHYST_CLUSTER_BREAK);

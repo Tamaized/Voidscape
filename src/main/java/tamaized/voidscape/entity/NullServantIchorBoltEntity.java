@@ -40,7 +40,7 @@ public class NullServantIchorBoltEntity extends SpellBoltEntity {
 	protected void doPostHurtEffects(LivingEntity entity) {
 		if (!level().isClientSide()) {
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
-			particles.queueParticle(ParticleTypes.EXPLOSION, false, position().x(), position().y(), position().z(), 0, 0, 0);
+			particles.queueParticle(ParticleTypes.EXPLOSION, position().x(), position().y(), position().z(), 0, 0, 0);
 			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		}
 		level().playSound(null, blockPosition(), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 4F, 1F);

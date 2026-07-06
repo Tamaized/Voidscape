@@ -1,12 +1,14 @@
 package tamaized.voidscape.entity.ai.nullservant;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -27,11 +29,16 @@ public class TitaniteAugmentGoal extends Goal {
 	private int cooldown;
 	private int tick;
 
+	@Nullable
 	private NullServantAugmentBlockEntity block1;
+	@Nullable
 	private NullServantAugmentBlockEntity block2;
+	@Nullable
 	private NullServantAugmentBlockEntity block3;
 
+	@Nullable
 	private Vec3 aoe1;
+	@Nullable
 	private Vec3 aoe2;
 
 	public TitaniteAugmentGoal(NullServantEntity parent) {
@@ -104,14 +111,16 @@ public class TitaniteAugmentGoal extends Goal {
 	}
 
 	private void boom(Vec3 pos) {
+		if (!(parent.level() instanceof ServerLevel serverLevel))
+			return;
 		parent.level().getEntities(
 				(Entity) null,
 				new AABB(pos.x(), pos.y(), pos.z(), pos.x() + 1, pos.y() + 1, pos.z() + 1).inflate(4D),
 				e -> !(e instanceof NullServantAugmentBlockEntity) && e != parent && e.distanceToSqr(pos) <= 9D
-		).forEach(e -> e.hurt(damageSource.getEntityDamageSource(e.level(), damageSource.VOIDIC, parent), 6F));
+		).forEach(e -> e.hurtServer(serverLevel, damageSource.getEntityDamageSource(e.level(), damageSource.VOIDIC, parent), 6F));
 		parent.playSound(SoundEvents.GENERIC_EXPLODE.value(), 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);
 		ClientPacketSendParticles particles = new ClientPacketSendParticles();
-		particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, false, pos, Vec3.ZERO);
+		particles.queueParticle(ParticleTypes.EXPLOSION_EMITTER, pos, Vec3.ZERO);
 		PacketDistributor.sendToPlayersTrackingEntity(parent, particles);
 	}
 

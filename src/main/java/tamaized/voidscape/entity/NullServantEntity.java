@@ -15,13 +15,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -40,13 +40,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.ai.nullservant.AstralAugmentGoal;
 import tamaized.voidscape.entity.ai.nullservant.IchorAugmentGoal;
@@ -58,8 +59,6 @@ import tamaized.voidscape.registry.tool.set.AstralToolSet;
 import tamaized.voidscape.registry.tool.set.CorruptToolSet;
 import tamaized.voidscape.registry.tool.set.IchorToolSet;
 import tamaized.voidscape.registry.tool.set.TitaniteToolSet;
-
-import java.util.UUID;
 
 public class NullServantEntity extends Monster implements IEthereal {
 
@@ -89,8 +88,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 
 	private static final EntityDataAccessor<Integer> AUGMENT = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Boolean> AUGMENT_ATTACK = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
-	private static final EntityDataAccessor<Vector3f> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
+	private static final EntityDataAccessor<Vector3fc> AUGMENT_ATTACK_AOE1 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
+	private static final EntityDataAccessor<Vector3fc> AUGMENT_ATTACK_AOE2 = SynchedEntityData.defineId(NullServantEntity.class, EntityDataSerializers.VECTOR3);
 
 	public static final int AUGMENT_TITANITE = 1;
 	public static final int AUGMENT_ICHOR = 2;
@@ -140,10 +139,11 @@ public class NullServantEntity extends Monster implements IEthereal {
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Deprecated
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		this.populateDefaultEquipmentSlots(getRandom(), difficulty);
 		this.populateDefaultEquipmentEnchantments(level, getRandom(), difficulty);
 		return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
@@ -185,32 +185,50 @@ public class NullServantEntity extends Monster implements IEthereal {
 		ClientPacketSendParticles particles = new ClientPacketSendParticles();
 		for (int i = 0; i < 100; i++) {
 			particles.queueParticle(
-					ParticleTypes.END_ROD,
-					false,
-					position().x() - 1D + getRandom().nextFloat() * 2D,
-					position().y() + 0.5D + getRandom().nextFloat() * 2D,
-					position().z() - 1D + getRandom().nextFloat() * 2D,
-					0D,
-					0D,
-					0D
+				ParticleTypes.END_ROD,
+				position().x() - 1D + getRandom().nextFloat() * 2D,
+				position().y() + 0.5D + getRandom().nextFloat() * 2D,
+				position().z() - 1D + getRandom().nextFloat() * 2D,
+				0D,
+				0D,
+				0D
 			);
 		}
 		PacketDistributor.sendToPlayersTrackingEntity(this, particles);
 		playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 4F, 0.5F + getRandom().nextFloat() * 0.5F);
-		if (bossInfo != null && getCommandSenderWorld().getChunkSource() instanceof ServerChunkCache serverChunkCache) {
-			for(ServerPlayerConnection serverplayerconnection : serverChunkCache.chunkMap.entityMap.get(getId()).seenBy) {
-				bossInfo.addPlayer(serverplayerconnection.getPlayer());
+		if (bossInfo != null && level() instanceof ServerLevel serverLevel) {
+			for (ServerPlayer player : serverLevel.getPlayers(
+				EntitySelector.ENTITY_STILL_ALIVE.and(
+					EntitySelector.withinDistance(position().x(), position().y(), position().z(), 128D)
+				)
+			)) {
+				bossInfo.addPlayer(player);
 			}
 		}
 	}
 
 	protected void initBossBar() {
 		if (getAugment() == AUGMENT_TITANITE) {
-			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.titanite"), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+			bossInfo = new ServerBossEvent(
+				Mth.createInsecureUUID(level().getRandom()),
+				Component.translatable("entity.voidscape.null_servant.titanite"),
+				BossEvent.BossBarColor.GREEN,
+				BossEvent.BossBarOverlay.PROGRESS
+			);
 		} else if (getAugment() == AUGMENT_ICHOR) {
-			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.ichor"), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+			bossInfo = new ServerBossEvent(
+				Mth.createInsecureUUID(level().getRandom()),
+				Component.translatable("entity.voidscape.null_servant.ichor"),
+				BossEvent.BossBarColor.RED,
+				BossEvent.BossBarOverlay.PROGRESS
+			);
 		} else if (getAugment() == AUGMENT_ASTRAL) {
-			bossInfo = new ServerBossEvent(Component.translatable("entity.voidscape.null_servant.astral"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS);
+			bossInfo = new ServerBossEvent(
+				Mth.createInsecureUUID(level().getRandom()),
+				Component.translatable("entity.voidscape.null_servant.astral"),
+				BossEvent.BossBarColor.PINK,
+				BossEvent.BossBarOverlay.PROGRESS
+			);
 		}
 	}
 
@@ -327,15 +345,15 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		compound.putInt("augment", getAugment());
-		super.addAdditionalSaveData(compound);
+	protected void addAdditionalSaveData(ValueOutput output) {
+		output.putInt("augment", getAugment());
+		super.addAdditionalSaveData(output);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		setAugment(compound.getInt("augment")); // This first before health is read from nbt
-		super.readAdditionalSaveData(compound);
+	protected void readAdditionalSaveData(ValueInput input) {
+		setAugment(input.getInt("augment").orElse(0)); // This first before health is read from nbt
+		super.readAdditionalSaveData(input);
 
 		Component displayName = this.getDisplayName();
 		if (hasCustomName() && bossInfo != null && displayName != null) {
@@ -346,17 +364,12 @@ public class NullServantEntity extends Monster implements IEthereal {
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 		if (getAugment() == AUGMENT_TITANITE) {
-			this.spawnAtLocation(new ItemStack(materialItems.TITANITE_SHARD.get()));
+			this.spawnAtLocation(level, new ItemStack(materialItems.TITANITE_SHARD.get()));
 		} else if (getAugment() == AUGMENT_ICHOR) {
-			this.spawnAtLocation(new ItemStack(materialItems.ICHOR_CRYSTAL.get()));
+			this.spawnAtLocation(level, new ItemStack(materialItems.ICHOR_CRYSTAL.get()));
 		} else if (getAugment() == AUGMENT_ASTRAL) {
-			this.spawnAtLocation(new ItemStack(materialItems.ASTRAL_CRYSTAL.get()));
+			this.spawnAtLocation(level, new ItemStack(materialItems.ASTRAL_CRYSTAL.get()));
 		}
-	}
-
-	@Override
-	protected SoundEvent getAmbientSound() {
-		return null;
 	}
 
 	@Override
@@ -379,24 +392,24 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		if (source.is(DamageTypes.GENERIC_KILL))
-			return super.hurt(source, amount);
+			return super.hurtServer(level, source, amount);
 		if (this instanceof PhantomNullServantEntity && source.getDirectEntity() instanceof StrangePearlEntity && !(source.getEntity() instanceof NullServantEntity))
-			return super.hurt(source, amount);
+			return super.hurtServer(level, source, amount);
 		if (getAugmentAttack() && source.getEntity() instanceof PhantomNullServantEntity) {
 			switch (getAugment()) {
 				case AUGMENT_ICHOR -> {
 					if (ichorAugmentGoal != null)
 						ichorAugmentGoal.applyHit();
-					super.hurt(source, amount);
+					super.hurtServer(level, source, amount);
 				}
 				case AUGMENT_ASTRAL -> {
 
 				}
 			}
 		}
-		return !getAugmentAttack() && super.hurt(source, amount);
+		return !getAugmentAttack() && super.hurtServer(level, source, amount);
 	}
 
 	@Override
@@ -427,8 +440,8 @@ public class NullServantEntity extends Monster implements IEthereal {
 	}
 
 	@Override
-	public boolean canBeCollidedWith() {
-		return !getAugmentAttack() && super.canBeCollidedWith();
+	public boolean canBeCollidedWith(@org.jspecify.annotations.Nullable Entity other) {
+		return !getAugmentAttack() && super.canBeCollidedWith(other);
 	}
 
 	@Override
@@ -463,7 +476,6 @@ public class NullServantEntity extends Monster implements IEthereal {
 	protected void augmentClientTick() {
 		level().addParticle(
 				ParticleTypes.END_ROD,
-				false,
 				position().x() - 1D + getRandom().nextFloat() * 2D,
 				position().y() + 0.5D + getRandom().nextFloat() * 2D,
 				position().z() - 1D + getRandom().nextFloat() * 2D,
@@ -472,12 +484,12 @@ public class NullServantEntity extends Monster implements IEthereal {
 				0D);
 	}
 
-	private void doAoeParticles(Vector3f aoe) {
+	private void doAoeParticles(Vector3fc aoe) {
 		if (aoe.x() != 0 || aoe.y() != 0 || aoe.z() != 0) {
 			Vec3 rot = new Vec3(4, 0, 0).yRot((float) Math.toRadians(getRandom().nextFloat() * 360F)).xRot((float) Math.toRadians(getRandom().nextFloat() * 360F));
 			Vec3 pos = new Vec3(aoe).add(rot);
 			Vec3 dir = new Vec3(aoe.x(), aoe.y(), aoe.z()).subtract(pos).normalize().scale(0.35D);
-			level().addParticle(ParticleTypes.END_ROD, false, pos.x(), pos.y(), pos.z(), dir.x(), dir.y(), dir.z());
+			level().addParticle(ParticleTypes.END_ROD, pos.x(), pos.y(), pos.z(), dir.x(), dir.y(), dir.z());
 		}
 	}
 

@@ -6,12 +6,18 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import tamaized.voidscape.entity.NullServantEntity;
 import tamaized.voidscape.entity.NullServantIchorBoltEntity;
 import tamaized.voidscape.entity.PhantomNullServantEntity;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class IchorAugmentGoal extends Goal {
 
@@ -23,11 +29,16 @@ public class IchorAugmentGoal extends Goal {
 	private int hitCounter = 0;
 	private int maxHits = 0;
 
+	@Nullable
 	private PhantomNullServantEntity phantom1;
+	@Nullable
 	private PhantomNullServantEntity phantom2;
+	@Nullable
 	private PhantomNullServantEntity phantom3;
+	@Nullable
 	private PhantomNullServantEntity phantom4;
 
+	@Nullable
 	private PhantomNullServantEntity primed;
 
 	public IchorAugmentGoal(NullServantEntity parent) {
@@ -104,9 +115,17 @@ public class IchorAugmentGoal extends Goal {
 			parent.heal(1F);
 		if (tick > nextActionTick) {
 			if (primed == null) {
-				PhantomNullServantEntity[] phantoms = {phantom1, phantom2, phantom3, phantom4};
-				primed = phantoms[parent.getRandom().nextInt(4)];
-				primed.setAugmentAttack(true);
+				Stream<PhantomNullServantEntity> s = Stream.of(
+						phantom1,
+						phantom2,
+						phantom3,
+						phantom4
+					).filter(Objects::nonNull);
+				List<PhantomNullServantEntity> phantoms = s.toList();
+				primed = phantoms.isEmpty() ? null : phantoms.get(parent.getRandom().nextInt(phantoms.size()));
+				if (primed != null) {
+					primed.setAugmentAttack(true);
+				}
 				nextActionTick = tick + 50 + parent.getRandom().nextInt(30);
 			} else {
 				parent.playSound(SoundEvents.BLAZE_SHOOT, 4F, (1.0F + (parent.getRandom().nextFloat() - parent.getRandom().nextFloat()) * 0.2F) * 0.7F);

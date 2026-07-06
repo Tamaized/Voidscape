@@ -338,6 +338,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 						hunt = null;
 					} else if (hunt.detectModConflict()) {
 						hunt.tick();
+						hunt.detectModConflict(); // Call again to check if the bool is still set next tick
 					}
 				}
 			}

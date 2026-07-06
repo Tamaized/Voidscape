@@ -2,8 +2,6 @@ package tamaized.voidscape.entity;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -13,8 +11,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -23,7 +21,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
@@ -35,6 +32,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	@Autowired
 	private static ModEntities entities;
 
+	@Nullable
 	private NullServantEntity parent;
 
 	private final int summonedCount;
@@ -61,30 +59,17 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 
-	@Nullable
-	public static Vec3 randomPos(Level level, RandomSource random, Vec3 from, Entity clipSource) {
-		for (int i = 0; i < 10; i++) {
-			Vec3 vec = new Vec3(5, 0.125, 0).yRot(Mth.DEG_TO_RAD * (random.nextFloat() * 360F)).add(from);
-			BlockHitResult result = level.clip(new ClipContext(vec, from, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, clipSource));
-			if (result.getType() != HitResult.Type.BLOCK) {
-				return vec;
-			}
-		}
-		return null;
-	}
-
 	public void randomPosOrDiscard() {
-		if (level().isClientSide())
+		if (level().isClientSide() || parent == null)
 			return;
 		Vec3 pos;
-		if ((pos = randomPos(level(), getRandom(), parent.position().add(0, 4, 0), this)) != null) {
-			moveTo(pos);
+		if ((pos = NullServantAugmentBlockEntity.randomPos(level(), getRandom(), parent.position().add(0, 4, 0), this)) != null) {
+			snapTo(pos);
 			playSound(SoundEvents.ITEM_PICKUP, 1F, 0.2F + random.nextFloat() * 0.3F);
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			for (int j = 0; j < 50; j++) {
 				particles.queueParticle(
 						ParticleTypes.END_ROD,
-						false,
 						position().x() - 0.5D + random.nextFloat(),
 						position().y() - 0.5D + random.nextFloat(),
 						position().z() - 0.5D + random.nextFloat(),
@@ -106,7 +91,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		return spawnGroupData;
 	}
 
@@ -136,9 +121,9 @@ public class PhantomNullServantEntity extends NullServantEntity {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
 		if (source.getDirectEntity() instanceof StrangePearlEntity && !(source.getEntity() instanceof NullServantEntity))
-			return super.hurt(source, hitCount++ >= summonedCount ? Float.MAX_VALUE : 20F);
+			return super.hurtServer(level, source, hitCount++ >= summonedCount ? Float.MAX_VALUE : 20F);
 		return false;
 	}
 
@@ -162,7 +147,7 @@ public class PhantomNullServantEntity extends NullServantEntity {
 				if (parent.getRandom().nextInt(5) == 0) {
 					Vec3 dir = new Vec3(parent.getX(), parent.getY() + parent.getEyeHeight() / 2F, parent.getZ()).subtract(position()).normalize().scale(0.5D);
 					ClientPacketSendParticles packet = new ClientPacketSendParticles();
-					packet.queueParticle(ParticleTypes.END_ROD, false, getX(), getY() + getBbHeight() / 2F, getZ(), dir.x(), dir.y(), dir.z());
+					packet.queueParticle(ParticleTypes.END_ROD, getX(), getY() + getBbHeight() / 2F, getZ(), dir.x(), dir.y(), dir.z());
 					PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 				}
 			}
@@ -174,7 +159,6 @@ public class PhantomNullServantEntity extends NullServantEntity {
 		if (entityData.get(AUGMENT_ATTACK)) {
 			level().addParticle(
 					ParticleTypes.ENCHANT,
-					false,
 					position().x() - 1D + getRandom().nextFloat() * 2D,
 					position().y() + 0.5D + getRandom().nextFloat() * 2D,
 					position().z() - 1D + getRandom().nextFloat() * 2D,
