@@ -28,7 +28,7 @@ public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) im
 		this();
 		int size = packet.readInt();
 		for (int i = 0; i < size; i++) {
-			this.queuedParticles.add(new QueuedParticle(ParticleTypes.STREAM_CODEC.decode(packet), packet.readBoolean(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
+			this.queuedParticles.add(new QueuedParticle(ParticleTypes.STREAM_CODEC.decode(packet), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble(), packet.readDouble()));
 		}
 	}
 
@@ -36,7 +36,6 @@ public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) im
 		packet.writeInt(this.queuedParticles.size());
 		for (QueuedParticle queuedParticle : this.queuedParticles) {
 			ParticleTypes.STREAM_CODEC.encode(packet, queuedParticle.particleOptions);
-			packet.writeBoolean(queuedParticle.b);
 			packet.writeDouble(queuedParticle.x);
 			packet.writeDouble(queuedParticle.y);
 			packet.writeDouble(queuedParticle.z);
@@ -51,20 +50,20 @@ public record ClientPacketSendParticles(List<QueuedParticle> queuedParticles) im
 		return ID;
 	}
 
-	public void queueParticle(ParticleOptions particleOptions, boolean b, double x, double y, double z, double x2, double y2, double z2) {
-		this.queuedParticles.add(new QueuedParticle(particleOptions, b, x, y, z, x2, y2, z2));
+	public void queueParticle(ParticleOptions particleOptions, double x, double y, double z, double x2, double y2, double z2) {
+		this.queuedParticles.add(new QueuedParticle(particleOptions, x, y, z, x2, y2, z2));
 	}
 
-	public void queueParticle(ParticleOptions particleOptions, boolean b, Vec3 xyz, Vec3 xyz2) {
-		this.queuedParticles.add(new QueuedParticle(particleOptions, b, xyz.x, xyz.y, xyz.z, xyz2.x, xyz2.y, xyz2.z));
+	public void queueParticle(ParticleOptions particleOptions, Vec3 xyz, Vec3 xyz2) {
+		this.queuedParticles.add(new QueuedParticle(particleOptions, xyz.x, xyz.y, xyz.z, xyz2.x, xyz2.y, xyz2.z));
 	}
 
 	public static void handle(ClientPacketSendParticles payload, IPayloadContext context) {
 		if (!(context.player().level() instanceof ClientLevel level))
 			return;
-		context.enqueueWork(() -> payload.queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.b, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2)));
+		context.enqueueWork(() -> payload.queuedParticles.forEach(queuedParticle -> level.addParticle(queuedParticle.particleOptions, queuedParticle.x, queuedParticle.y, queuedParticle.z, queuedParticle.x2, queuedParticle.y2, queuedParticle.z2)));
 	}
 
-	private record QueuedParticle(ParticleOptions particleOptions, boolean b, double x, double y, double z, double x2, double y2, double z2) {
+	private record QueuedParticle(ParticleOptions particleOptions, double x, double y, double z, double x2, double y2, double z2) {
 	}
 }

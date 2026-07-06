@@ -10,8 +10,6 @@ import net.minecraft.network.codec.StreamCodec;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.registry.ModParticles;
 
-import javax.annotation.Nonnull;
-
 public class ParticleTypeSpellCloud extends ParticleType<ParticleTypeSpellCloud.Options> {
 
 	public ParticleTypeSpellCloud() {
@@ -43,7 +41,6 @@ public class ParticleTypeSpellCloud extends ParticleType<ParticleTypeSpellCloud.
 		@Autowired
 		private static ModParticles particles;
 
-		@Nonnull
 		@Override
 		public ParticleType<?> getType() {
 			return particles.SPELL_CLOUD.get();

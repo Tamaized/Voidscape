@@ -37,7 +37,7 @@ public class NetworkMessages {
 
 	@Bean
 	private static DonatorHandler donatorHandler() {
-		return FMLEnvironment.production ? new DonatorHandler() : new DonatorHandler() {
+		return FMLEnvironment.isProduction() ? new DonatorHandler() : new DonatorHandler() {
 			@Override
 			public boolean isDonator(UUID uuid) {
 				return true;
