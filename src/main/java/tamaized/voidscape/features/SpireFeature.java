@@ -31,8 +31,8 @@ public class SpireFeature extends Feature<BooleanFeatureConfig> {
 		int base = pos.getY();
 		int length = context.random().nextInt(25) + 5;
 		boolean canGen = false;
-		int antiYLimit = context.chunkGenerator().getBiomeSource() instanceof LayeredBiomeProvider provider ? provider.getLayerY(0) : context.level().getMinBuildHeight() + 32;
-		while ((context.config().get() ? base + length < antiYLimit : base < context.level().getMaxBuildHeight() - length) &&
+		int antiYLimit = context.chunkGenerator().getBiomeSource() instanceof LayeredBiomeProvider provider ? provider.getLayerY(0) : context.level().getMinY() + 32;
+		while ((context.config().get() ? base + length < antiYLimit : base < context.level().getMaxY() - length) &&
 				!(canGen = checkForRoom(context.level(), pos.set(pos.getX(), context.config().get() ? base + length : base, pos.getZ()), length, context.config().get())))
 			base++;
 		if (canGen) {

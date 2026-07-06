@@ -34,7 +34,7 @@ public class UnderBlockPlacementMod extends PlacementModifier {
 	public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
 		for (int i = 1; i < 14; i++) {
 			BlockPos check = pos.above(i);
-			if (check.getY() > context.getLevel().getMaxBuildHeight())
+			if (check.getY() > context.getLevel().getMaxY())
 				break;
 			if (context.getBlockState(check).is(state.getBlock()))
 				return Stream.of(pos);

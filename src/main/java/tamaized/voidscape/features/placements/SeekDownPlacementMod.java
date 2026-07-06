@@ -37,7 +37,7 @@ public class SeekDownPlacementMod extends PlacementModifier {
 		final int y = pos.getY();
 		BlockPos.MutableBlockPos seek = pos.mutable().move(Direction.UP, random.nextInt(15));
 		BlockPos.MutableBlockPos check = seek.mutable().move(Direction.DOWN, 1);
-		while ((check_below ? check : seek).getY() > y && seek.getY() > context.getLevel().getMinBuildHeight() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {
+		while ((check_below ? check : seek).getY() > y && seek.getY() > context.getLevel().getMinY() && context.getLevel().getBlockState(check_below ? check : seek).isAir()) {
 			seek.move(Direction.DOWN, 1);
 			check.move(Direction.DOWN, 1);
 		}

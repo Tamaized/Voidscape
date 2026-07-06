@@ -29,7 +29,7 @@ public abstract class VoidicFluid extends BaseFlowingFluid {
     @OnlyIn(Dist.CLIENT)
     public void animateTick(Level worldIn, BlockPos pos, FluidState state, RandomSource random) {
         BlockPos blockpos = pos.above();
-        if (worldIn.getBlockState(blockpos).isAir() && !worldIn.getBlockState(blockpos).isSolidRender(worldIn, blockpos)) {
+        if (worldIn.getBlockState(blockpos).isAir() && !worldIn.getBlockState(blockpos).isSolidRender()) {
             if (random.nextInt(100) == 0) {
                 double d0 = (float)pos.getX() + random.nextFloat();
                 double d1 = pos.getY() + 1;

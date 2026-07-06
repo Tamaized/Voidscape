@@ -11,44 +11,51 @@ import tamaized.voidscape.features.config.ClusterConfig;
 
 public class ClusterFeature extends Feature<ClusterConfig> {
 
-    public ClusterFeature() {
-        super(ClusterConfig.CODEC);
-    }
+	public ClusterFeature() {
+		super(ClusterConfig.CODEC);
+	}
 
-    @Override
-    public boolean place(FeaturePlaceContext<ClusterConfig> context) {
+	@Override
+	public boolean place(FeaturePlaceContext<ClusterConfig> context) {
 		int count = 0;
-        boolean flag = false;
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    BlockPos pos = context.origin().offset(x, y, z);
-                    if (context.random().nextFloat() <= context.config().chance && place(context.level(), pos, context.config().provider.getState(context.random(), pos), context.config().predicate)) {
+		boolean flag = false;
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				for (int z = -1; z <= 1; z++) {
+					BlockPos pos = context.origin().offset(x, y, z);
+					if (context.random().nextFloat() <= context.config().chance &&
+						place(
+							context.level(),
+							pos,
+							context.config().provider.getState(context.level(), context.random(), pos),
+							context.config().predicate
+						)
+					) {
 						flag = true;
 						count++;
 						if (count >= context.config().max)
 							return true;
 					}
-                }
-            }
-        }
-        return flag;
-    }
+				}
+			}
+		}
+		return flag;
+	}
 
-    private boolean place(WorldGenLevel level, BlockPos pos, BlockState state, BlockPredicate predicate) {
-        if (predicate.test(level, pos) && state.canSurvive(level, pos)) {
-            if (state.getBlock() instanceof DoublePlantBlock) {
-                if (!level.isEmptyBlock(pos.above())) {
-                    return false;
-                }
-                DoublePlantBlock.placeAt(level, state, pos, 2);
-            } else {
-                level.setBlock(pos, state, 2);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
+	private boolean place(WorldGenLevel level, BlockPos pos, BlockState state, BlockPredicate predicate) {
+		if (predicate.test(level, pos) && state.canSurvive(level, pos)) {
+			if (state.getBlock() instanceof DoublePlantBlock) {
+				if (!level.isEmptyBlock(pos.above())) {
+					return false;
+				}
+				DoublePlantBlock.placeAt(level, state, pos, 2);
+			} else {
+				level.setBlock(pos, state, 2);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
