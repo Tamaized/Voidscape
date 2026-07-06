@@ -1,28 +1,26 @@
 package tamaized.voidscape.registry.armor;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
-import tamaized.regutil.RegUtil;
+import tamaized.regutil.GearItemHandler;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
-import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 
 import java.util.Optional;
 
+@Configurable
 public class CorruptArmorDataModel extends ArmorDataModel {
 
 	@Autowired(dist = Dist.CLIENT)
-	private static ModModelLayerLocations modelLayerLocations;
+	private ModModelLayerLocations modelLayerLocations;
+
+	@Autowired
+	private GearItemHandler gearItemHandler;
 
 	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt.png");
 	private final Identifier TEXTURE_OVERLAY = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/models/armor/corrupt_overlay.png");
@@ -31,10 +29,9 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 		super(false, true, true);
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	@SuppressWarnings("unchecked")
-	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+	// FIXME
+	/*@Override
+	public @Nullable Model<?> getArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model<?> original) {
 		ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(
 			armorSlot == EquipmentSlot.LEGS ?
 				modelLayerLocations.MODEL_ARMOR_CORRUPT_INNER :
@@ -85,11 +82,11 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 			}
 		}
 		return (A) model;
-	}
+	}*/
 
 	@Override
-	public Optional<Identifier> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
-		return Optional.of(RegUtil.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
+	public Optional<Identifier> getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer) {
+		return Optional.of(gearItemHandler.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
 	}
 
 }

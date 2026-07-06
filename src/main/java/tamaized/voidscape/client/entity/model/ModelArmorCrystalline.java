@@ -7,14 +7,15 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
 import tamaized.regutil.RegUtil;
 
 import java.util.function.Function;
 
-public class ModelArmorCrystalline<T extends LivingEntity> extends HumanoidModel<T> {
+public class ModelArmorCrystalline<T extends HumanoidRenderState> extends HumanoidModel<T> {
 
 	private final ImmutableList<ModelPart> parts;
 
@@ -35,7 +36,7 @@ public class ModelArmorCrystalline<T extends LivingEntity> extends HumanoidModel
 	}
 
 	public ModelArmorCrystalline(ModelPart p_170677_, boolean fullbright) {
-		this(p_170677_, RenderType::entityCutoutNoCull, fullbright);
+		this(p_170677_, RenderTypes::armorCutoutNoCull, fullbright);
 	}
 
 	public ModelArmorCrystalline(ModelPart parent, Function<Identifier, RenderType> p_170680_, boolean fullbright) {

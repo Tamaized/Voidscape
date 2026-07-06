@@ -1,24 +1,24 @@
 package tamaized.voidscape.registry.armor;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
-import tamaized.regutil.RegUtil;
+import tamaized.regutil.GearItemHandler;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.model.ModelArmorCrystalline;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
+@Configurable
 public abstract class CrystallineArmorDataModel extends ArmorDataModel {
+
+	@Autowired
+	private GearItemHandler gearItemHandler;
 
 	private final Identifier TEXTURE;
 	private final Identifier TEXTURE_OVERLAY;
@@ -36,10 +36,10 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 	@OnlyIn(Dist.CLIENT)
 	protected abstract ModelLayerLocation modelLayerLocation();
 
-	@Override
-	@SuppressWarnings("unchecked")
+	// FIXME
+	/*@Override
 	@OnlyIn(Dist.CLIENT)
-	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+	public @Nullable Model<?> getArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model<?> original) {
 		ModelArmorCrystalline<LivingEntity> model = new ModelArmorCrystalline<>(Minecraft.getInstance().getEntityModels().bakeLayer(modelLayerLocation()), !overlay);
 		model.head.visible = false;
 		model.headoverlay.visible = false;
@@ -70,11 +70,11 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 			}
 		}
 		return (A) model;
-	}
+	}*/
 
 	@Override
-	public Optional<Identifier> getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, boolean inner) {
-		return Optional.of(RegUtil.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
+	public Optional<Identifier> getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer) {
+		return Optional.of(gearItemHandler.renderingArmorOverlay ? TEXTURE_OVERLAY : TEXTURE);
 	}
 
 }
