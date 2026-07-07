@@ -65,7 +65,7 @@ public class ConfigurablePortalShape {
 
 	@Nullable
 	private BlockPos calculateBottomLeft(BlockPos blockPos) {
-		int i = Math.max(this.level.getMinBuildHeight(), blockPos.getY() - MAX_HEIGHT);
+		int i = Math.max(this.level.getMinY(), blockPos.getY() - MAX_HEIGHT);
 
 		while (blockPos.getY() > i && isEmpty(this.level.getBlockState(blockPos.below()), level, blockPos.below(), igniterTest, portalTest)) {
 			blockPos = blockPos.below();

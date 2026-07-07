@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 public final class DirectTeleporter {
 
-	public DimensionTransition make(Entity entity, ServerLevel destination) {
+	public TeleportTransition make(Entity entity, ServerLevel destination) {
 		WorldBorder border = destination.getWorldBorder();
 		double minX = Math.max(-2.9999872E7D, border.getMinX() + 16.0D);
 		double minZ = Math.max(-2.9999872E7D, border.getMinZ() + 16.0D);
@@ -30,13 +30,13 @@ public final class DirectTeleporter {
 			BlockPos.containing(Mth.clamp(entity.getX() * offset, minX, maxX), entity.getY(), Mth.clamp(entity.getZ() * offset, minZ, maxZ))
 		).orElse(entity.position());
 
-		return new DimensionTransition(
+		return new TeleportTransition(
 			destination,
 			location,
 			Vec3.ZERO,
 			entity.getYRot(),
 			entity.getXRot(),
-			DimensionTransition.PLAY_PORTAL_SOUND
+			TeleportTransition.PLAY_PORTAL_SOUND
 		);
 	}
 
