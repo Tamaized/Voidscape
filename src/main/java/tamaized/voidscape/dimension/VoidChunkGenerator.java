@@ -48,7 +48,6 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.biome.LayeredBiomeProvider;
 import tamaized.voidscape.util.LevelUtil;
 
@@ -84,7 +83,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 	private static final Object object_BeardifierMarker_INSTANCE;
+	@Nullable
 	private static final MethodHandle handle_setter_NoiseChunk_cellWidth;
+	@Nullable
 	private static final MethodHandle handle_setter_NoiseChunk_noiseSizeXZ;
 
 	static {
@@ -122,6 +123,9 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 	private void setupNoiseChunk(NoiseChunk noisechunk, int i, int cellWidth, ChunkPos chunkpos, Blender blender) {
 		try {
+			if (handle_setter_NoiseChunk_cellWidth == null || handle_setter_NoiseChunk_noiseSizeXZ == null) {
+				return;
+			}
 			handle_setter_NoiseChunk_cellWidth.invokeExact(noisechunk, cellWidth);
 			noisechunk.firstCellX = Math.floorDiv(chunkpos.getMinBlockX(), cellWidth);
 			noisechunk.firstCellZ = Math.floorDiv(chunkpos.getMinBlockZ(), cellWidth);
@@ -129,20 +133,21 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 			handle_setter_NoiseChunk_noiseSizeXZ.invokeExact(noisechunk, noiseSizeXZ);
 			int firstNoiseX = QuartPos.fromBlock(chunkpos.getMinBlockX());
 			int firstNoiseZ = QuartPos.fromBlock(chunkpos.getMinBlockZ());
-			for(int ii = 0; ii <= noiseSizeXZ; ++ii) {
-				int j = firstNoiseX + ii;
-				int k = QuartPos.toBlock(j);
+			int sizeXZ = noiseSizeXZ + 1;
+			for(int x = 0; x <= noiseSizeXZ; ++x) {
+				int quartX = firstNoiseX + x;
+				int blockX = QuartPos.toBlock(quartX);
 
-				for(int l = 0; l <= noiseSizeXZ; ++l) {
-					int i1 = firstNoiseZ + l;
-					int j1 = QuartPos.toBlock(i1);
-					Blender.BlendingOutput blender$blendingoutput = blender.blendOffsetAndFactor(k, j1);
-					noisechunk.blendAlpha.values[ii][l] = blender$blendingoutput.alpha();
-					noisechunk.blendOffset.values[ii][l] = blender$blendingoutput.blendingOffset();
+				for(int z = 0; z <= noiseSizeXZ; ++z) {
+					int quartZ = firstNoiseZ + z;
+					int blockZ = QuartPos.toBlock(quartZ);
+					Blender.BlendingOutput blender$blendingoutput = blender.blendOffsetAndFactor(blockX, blockZ);
+					noisechunk.blendAlpha.values[x + z * sizeXZ] = blender$blendingoutput.alpha();
+					noisechunk.blendOffset.values[x + z * sizeXZ] = blender$blendingoutput.blendingOffset();
 				}
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
+			Voidscape.LOGGER.error("Exception", e);
 		}
 	}
 
@@ -222,18 +227,18 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	 */
 	@Override
 	public void applyBiomeDecoration(WorldGenLevel worldGenRegion_, ChunkAccess chunk, StructureManager structureManager_) {
-		int centerX = chunk.getPos().x;
-		int centerZ = chunk.getPos().z;
+		int centerX = chunk.getPos().x();
+		int centerZ = chunk.getPos().z();
 		int x = centerX * 16;
 		int z = centerZ * 16;
 		WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(levelUtil.getServerSideLevelSeed()));
 		long seed = rand.setDecorationSeed(worldGenRegion_.getSeed(), x, z);
-		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.STRUCTURE);
+		Registry<Structure> structureRegistry = worldGenRegion_.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 		try {
 			Map<Integer, List<Structure>> map = structureRegistry.stream().collect(Collectors.groupingBy(structure -> structure.step().ordinal()));
 			List<FeatureSorter.StepFeatureData> list = this.featuresPerStep.get();
 			int j = list.size();
-			Registry<PlacedFeature> featureRegistry = worldGenRegion_.registryAccess().registryOrThrow(Registries.PLACED_FEATURE);
+			Registry<PlacedFeature> featureRegistry = worldGenRegion_.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE);
 			int k = Math.max(GenerationStep.Decoration.values().length, j);
 
 			for (int l = 0; l < k; ++l) {
@@ -248,7 +253,7 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 						try {
 							worldGenRegion_.setCurrentlyGenerating(supplier);
-							structureManager_.startsForStructure(SectionPos.of(chunk.getPos(), chunk.getMinSection()), structurefeature).forEach((p_196726_) -> {
+							structureManager_.startsForStructure(SectionPos.of(chunk.getPos(), chunk.getMinSectionY()), structurefeature).forEach((p_196726_) -> {
 								p_196726_.placeInChunk(worldGenRegion_, structureManager_, this, rand, writableArea(chunk), chunk.getPos());
 							});
 						} catch (Exception exception) {
@@ -290,14 +295,14 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
 						try {
 							worldGenRegion_.setCurrentlyGenerating(supplier1);
-							for (int y = worldGenRegion_.getMinBuildHeight(); y < worldGenRegion_.getMaxBuildHeight() - 15; y += 15) {
+							for (int y = worldGenRegion_.getMinY(); y < worldGenRegion_.getMaxY() - 15; y += 15) {
 								Holder<Biome> biome = biomeSource instanceof LayeredBiomeProvider voidscapeLayeredBiomeProvider ? voidscapeLayeredBiomeProvider.
 										getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) : this.biomeSource.
 										getNoiseBiome((centerX << 2) + 2, (y >> 2), (centerZ << 2) + 2,
 												worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?
 														serverChunkCache.randomState().sampler() :
 														RandomState.create(
-																worldGenRegion_.registryAccess().asGetterLookup(),
+																worldGenRegion_.registryAccess(),
 																generatorSettings().unwrapKey().orElse(ResourceKey.create(
 																		Registries.NOISE_SETTINGS,
 																		Identifier.fromNamespaceAndPath(Voidscape.MODID, "void"))),
@@ -327,8 +332,8 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 		int i = chunkpos.getMinBlockX();
 		int j = chunkpos.getMinBlockZ();
 		LevelHeightAccessor levelheightaccessor = p_187718_.getHeightAccessorForGeneration();
-		int k = levelheightaccessor.getMinBuildHeight() + 1;
-		int l = levelheightaccessor.getMaxBuildHeight() - 1;
+		int k = levelheightaccessor.getMinY() + 1;
+		int l = levelheightaccessor.getMaxY() - 1;
 		return new BoundingBox(i, k, j, i + 15, l, j + 15);
 	}
 
