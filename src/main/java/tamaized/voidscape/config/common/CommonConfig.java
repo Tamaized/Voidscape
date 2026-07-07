@@ -4,10 +4,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.config.ConfigUtil;
 
 import java.util.ArrayList;
@@ -19,7 +19,9 @@ public class CommonConfig {
 	@Autowired("common")
 	private ConfigUtil configUtil;
 
+	@Nullable
 	public ModConfigSpec.ConfigValue<List<? extends String>> bedrockTeleportationDimensionBlacklist;
+	@Nullable
 	public ModConfigSpec.BooleanValue bedrockTeleportationDimensionWhitelist;
 
 	@PostConstruct

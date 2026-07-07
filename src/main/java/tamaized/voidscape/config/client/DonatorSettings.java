@@ -5,8 +5,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
@@ -24,7 +25,9 @@ public class DonatorSettings {
 	@Autowired
 	private DonatorHandler donatorHandler;
 
+	@Nullable
 	public ModConfigSpec.BooleanValue enable;
+	@Nullable
 	public ModConfigSpec.IntValue color;
 
 	private boolean dirty;
@@ -42,7 +45,7 @@ public class DonatorSettings {
 			else if (isDirty()) {
 				unmarkDirty();
 				if (donatorHandler.isDonator(Minecraft.getInstance().player.getUUID()))
-					PacketDistributor.sendToServer(new ServerPacketDonatorSettings(new DonatorHandler.Settings(enable.get(), color.get())));
+					ClientPacketDistributor.sendToServer(new ServerPacketDonatorSettings(new DonatorHandler.Settings(enable.get(), color.get())));
 			}
 		});
 	}

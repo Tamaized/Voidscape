@@ -6,13 +6,9 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.voidscape.config.ConfigUtil;
 
 @Component
 public class ClientConfig {
-
-	@Autowired("client")
-	private ConfigUtil configUtil;
 
 	@Autowired
 	private DonatorSettings donatorSettings;

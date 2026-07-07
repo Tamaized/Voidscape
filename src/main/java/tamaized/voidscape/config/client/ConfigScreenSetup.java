@@ -8,6 +8,8 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 
+import java.util.Objects;
+
 @Component(dist = Dist.CLIENT)
 public class ConfigScreenSetup {
 
@@ -22,10 +24,10 @@ public class ConfigScreenSetup {
 		ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (mod, parent) -> new ConfigurationScreen(
 			mod,
 			parent,
-			(context, s, element) -> s.equals("color") ? new ConfigurationScreen.ConfigurationSectionScreen.Element(
+			(_, s, element) -> s.equals("color") ? new ConfigurationScreen.ConfigurationSectionScreen.Element(
 				element.name(),
 				element.tooltip(),
-				hexColorEditBoxFactory.make(donatorSettings.color),
+				hexColorEditBoxFactory.make(Objects.requireNonNull(donatorSettings.color)),
 				false
 			) : element)
 		);

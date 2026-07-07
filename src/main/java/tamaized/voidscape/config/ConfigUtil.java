@@ -8,6 +8,7 @@ import tamaized.voidscape.Voidscape;
 @Component
 public class ConfigUtil {
 
+	@Nullable
 	private final String suffix;
 
 	@SuppressWarnings("unused")
