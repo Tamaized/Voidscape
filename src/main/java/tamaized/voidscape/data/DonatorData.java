@@ -1,20 +1,19 @@
 package tamaized.voidscape.data;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.UnknownNullability;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.network.DonatorHandler;
 import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 
 import java.util.Optional;
 
-public class DonatorData implements INetworkHandler, ValueIOSerializable<CompoundTag> {
+public class DonatorData implements INetworkHandler, ValueIOSerializable {
 
 	@Autowired
 	private static DonatorHandler donatorHandler;
@@ -55,16 +54,14 @@ public class DonatorData implements INetworkHandler, ValueIOSerializable<Compoun
 	}
 
 	@Override
-	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("enabled", enabled);
-		nbt.putInt("color", color);
-		return nbt;
+	public void serialize(ValueOutput output) {
+		output.putBoolean("enabled", enabled);
+		output.putInt("color", color);
 	}
 
 	@Override
-	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-		enabled = nbt.getBoolean("enabled");
-		color = nbt.getInt("color");
+	public void deserialize(ValueInput input) {
+		enabled = input.getBooleanOr("enabled", false);
+		color = input.getIntOr("color", 0);
 	}
 }
