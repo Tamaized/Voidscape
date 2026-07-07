@@ -1,11 +1,11 @@
 package tamaized.voidscape.data;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -21,12 +21,13 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
@@ -41,10 +42,11 @@ import tamaized.voidscape.registry.*;
 import tamaized.voidscape.dimension.VoidPortalTeleporter;
 import tamaized.voidscape.util.LevelUtil;
 
+import java.util.List;
 import java.util.Optional;
 
 @Configurable
-public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTag> { // TODO: split up this class into multiple components
+public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO: split up this class into multiple components
 
 	@Autowired
 	private LevelUtil levelUtil;
@@ -80,11 +82,15 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 	public static final float MAX_INFUSION = 600;
 	public static final float MAX_PARANOIA = 600;
 
-	private static final SoundEvent[] PARANOIA_SOUNDS = new SoundEvent[]{
-
-		SoundEvents.CREEPER_PRIMED, SoundEvents.ENDERMAN_AMBIENT, SoundEvents.ENDERMAN_SCREAM, SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT,
-
-		SoundEvents.ZOMBIFIED_PIGLIN_ANGRY, SoundEvents.ZOMBIFIED_PIGLIN_HURT, SoundEvents.CAT_HISS};
+	private static final List<Holder<SoundEvent>> PARANOIA_SOUNDS = List.of(
+		Holder.direct(SoundEvents.CREEPER_PRIMED),
+		Holder.direct(SoundEvents.ENDERMAN_AMBIENT),
+		Holder.direct(SoundEvents.ENDERMAN_SCREAM),
+		Holder.direct(SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT),
+		Holder.direct(SoundEvents.ZOMBIFIED_PIGLIN_ANGRY),
+		Holder.direct(SoundEvents.ZOMBIFIED_PIGLIN_HURT),
+		SoundEvents.CAT_HISS_BABY
+	);
 
 	private boolean inPortal;
 	private boolean pleaseLeavePortal;
@@ -112,9 +118,9 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 	}
 
 	private boolean canTeleport(Entity parent) {
-		return parent.getY() <= parent.level().getMinBuildHeight() + 15 &&
+		return parent.getY() <= parent.level().getMinY() + 15 &&
 			parent.level().getBlockState(parent.getOnPos()).is(Blocks.BEDROCK) &&
-			commonConfig.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().location().toString()) == commonConfig.bedrockTeleportationDimensionWhitelist.get();
+			commonConfig.bedrockTeleportationDimensionBlacklist.get().contains(parent.level().dimension().identifier().toString()) == commonConfig.bedrockTeleportationDimensionWhitelist.get();
 	}
 
 	private boolean shouldTeleport(Entity parent) {
@@ -135,7 +141,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 				}
 				teleportTick = Mth.clamp(teleportTick, 0, 200);
 				if (!pleaseLeavePortal && teleportTick >= 200) {
-					levelUtil.getDimensionForTeleport(parent.level()).flatMap(destLevel -> voidPortalTeleporter.make(parent, destLevel)).ifPresent(parent::changeDimension);
+					levelUtil.getDimensionForTeleport(parent.level()).flatMap(destLevel -> voidPortalTeleporter.make(parent, destLevel)).ifPresent(parent::teleport);
 				}
 			} else {
 				pleaseLeavePortal = false;
@@ -173,7 +179,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 				}
 				teleportTick = Mth.clamp(teleportTick, 0, 200);
 				if (!inVoid && teleportTick >= 200) {
-					levelUtil.getVoidDimension(parent.level()).map(destLevel -> directTeleporter.make(parent, destLevel)).ifPresent(parent::changeDimension);
+					levelUtil.getVoidDimension(parent.level()).map(destLevel -> directTeleporter.make(parent, destLevel)).ifPresent(parent::teleport);
 					return;
 				}
 			}
@@ -233,18 +239,19 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 					.scale(0.2F + entity.getRandom().nextFloat() * 0.8F)
 					.add(entity.position().add(0, entity.getBbHeight() / 2F, 0));
 				entity.level().addParticle(new ParticleTypeSpellCloud.Options(
-					potion.map(p -> p.customColor().orElse(PotionContents.getColor(p.getAllEffects())))
-						.orElse(0x7700FF)
+					potion.flatMap(p -> p.customColor()
+						.or(() -> PotionContents.getColorOptional(p.getAllEffects()).stream().boxed().findAny())
+					).orElse(0x7700FF)
 				), pos.x(), pos.y(), pos.z(), 0, 0, 0);
 			}
-		} else if (entity.tickCount % 20 == 0) {
+		} else if (entity.level() instanceof ServerLevel serverLevel && entity.tickCount % 20 == 0) {
 			entity.level().getEntities(potion.isEmpty() ? entity : null, new AABB(entity.position().add(-0.5D, -0.5F, -0.5F), entity.position().add(0.5F, 0.5F, 0.5F)).inflate(2D), e -> e instanceof LivingEntity)
 				.stream().map(LivingEntity.class::cast)
 				.forEach(e -> potion.ifPresentOrElse(p -> p.forEachEffect(effect -> {
 					if (e == entity && !effect.getEffect().value().isBeneficial())
 						return;
 					if (effect.getEffect().value().isInstantenous())
-						effect.getEffect().value().applyInstantenousEffect(entity, entity, e, effect.getAmplifier(), 1F);
+						effect.getEffect().value().applyInstantenousEffect(serverLevel, entity, entity, e, effect.getAmplifier(), 1F);
 					else
 						e.addEffect(new MobEffectInstance(
 							effect.getEffect(),
@@ -253,7 +260,8 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 							effect.isAmbient(),
 							effect.isVisible()
 						));
-				}), () -> e.hurt(
+				}, 1), () -> e.hurtServer(
+					serverLevel,
 					damageSource.getEntityDamageSource(entity.level(), damageSource.VOIDIC, entity),
 					(float) (2D + entity.getAttributeValue(attributes.VOIDIC_DMG) / 2D)
 				)));
@@ -288,18 +296,19 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 				if (perc >= 1F && levelUtil.isInVoidDimension(parent.level())) {
 					if (parent instanceof ServerPlayer player)
 						advancementTriggers.INFUSED_TRIGGER.get().trigger(player);
-					parent.hurt(parent.damageSources().fellOutOfWorld(), 1024F);
+					levelUtil.asServerLevel(parent.level())
+						.ifPresent(serverLevel -> parent.hurtServer(serverLevel, parent.damageSources().fellOutOfWorld(), 1024F));
 				}
 			}
 		}
 		if (parent instanceof Player) {
 			float sanity = paranoia / MAX_PARANOIA;
 			if (parent.level().isClientSide() && sanity > 0.25F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
-				parent.level().playSound((Player) parent,
+				parent.level().playSound(parent,
 
 					parent.blockPosition().offset(parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30, parent.getRandom().nextInt(30) - 30),
 
-					PARANOIA_SOUNDS[parent.getRandom().nextInt(PARANOIA_SOUNDS.length)],
+					PARANOIA_SOUNDS.get(parent.getRandom().nextInt(PARANOIA_SOUNDS.size())).value(),
 
 					SoundSource.MASTER,
 
@@ -307,9 +316,10 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 
 					parent.getRandom().nextFloat() * 0.5F + 0.5F);
 			if (!parent.level().isClientSide() && sanity > 0.5F && parent.tickCount % (20 * 5) == 0 && parent.getRandom().nextFloat() <= 0.1F)
-				parent.hurt(parent.damageSources().generic(), 1F);
+				levelUtil.asServerLevel(parent.level())
+					.ifPresent(serverLevel -> parent.hurtServer(serverLevel, parent.damageSources().generic(), 1F));
 			if (parent.level().isClientSide() && sanity > 0.75F && parent.tickCount % (sanity == 1F ? 8 : sanity > 0.95F ? 10 : sanity > 0.80F ? 20 : 30) == 0)
-				parent.level().playSound((Player) parent,
+				parent.level().playSound(parent,
 
 					parent.blockPosition(),
 
@@ -421,23 +431,21 @@ public class Insanity implements INetworkHandler, ValueIOSerializable<CompoundTa
 	}
 
 	@Override
-	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-		CompoundTag nbt = new CompoundTag();
-		nbt.putFloat("paranoia", paranoia);
-		nbt.putFloat("infusion", infusion);
-		nbt.putBoolean("inPortal", inPortal);
-		nbt.putBoolean("pleaseLeavePortal", pleaseLeavePortal);
-		nbt.putInt("teleportTick", teleportTick);
-		return nbt;
+	public void serialize(ValueOutput output) {
+		output.putFloat("paranoia", paranoia);
+		output.putFloat("infusion", infusion);
+		output.putBoolean("inPortal", inPortal);
+		output.putBoolean("pleaseLeavePortal", pleaseLeavePortal);
+		output.putInt("teleportTick", teleportTick);
 	}
 
 	@Override
-	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-		paranoia = nbt.getFloat("paranoia");
-		infusion = nbt.getFloat("infusion");
-		inPortal = nbt.getBoolean("inPortal");
-		pleaseLeavePortal = nbt.getBoolean("pleaseLeavePortal");
-		teleportTick = nbt.getInt("teleportTick");
+	public void deserialize(ValueInput input) {
+		paranoia = input.getFloatOr("paranoia", 0);
+		infusion = input.getFloatOr("infusion", 0);
+		inPortal = input.getBooleanOr("inPortal", false);
+		pleaseLeavePortal = input.getBooleanOr("pleaseLeavePortal", false);
+		teleportTick = input.getIntOr("teleportTick", 0);
 	}
 
 	@Override

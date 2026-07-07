@@ -19,18 +19,26 @@ public class LevelUtil {
 	@Autowired
 	private ModDimensions dimensions;
 
+	public Optional<ServerLevel> asServerLevel(Level level) {
+		if (level instanceof ServerLevel serverLevel) {
+			return Optional.of(serverLevel);
+		}
+
+		return Optional.empty();
+	}
+
 	public boolean isInVoidDimension(@Nullable Level level) {
 		if (level == null)
 			return false;
 		return level.dimension() == dimensions.VOID;
 	}
 
-	public Optional<@Nullable ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
+	public Optional<ServerLevel> getLevel(Level level, ResourceKey<Level> dest) {
 		return Optional.ofNullable(level.getServer())
 			.map(server -> server.getLevel(dest));
 	}
 
-	public Optional<@Nullable ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
+	public Optional<ServerLevel> getPlayersSpawnLevel(ServerPlayer player) {
 		ResourceKey<Level> dest = Level.OVERWORLD;
 		if (player.getRespawnConfig() != null) {
 			dest = player.getRespawnConfig().respawnData().dimension();
@@ -38,11 +46,11 @@ public class LevelUtil {
 		return getLevel(player.level(), dest);
 	}
 
-	public Optional<@Nullable ServerLevel> getVoidDimension(Level currentLevel) {
+	public Optional<ServerLevel> getVoidDimension(Level currentLevel) {
 		return getLevel(currentLevel, dimensions.VOID);
 	}
 
-	public Optional<@Nullable ServerLevel> getDimensionForTeleport(Level currentLevel) {
+	public Optional<ServerLevel> getDimensionForTeleport(Level currentLevel) {
 		return isInVoidDimension(currentLevel) ? getLevel(currentLevel, Level.OVERWORLD) : getVoidDimension(currentLevel);
 	}
 
