@@ -1,11 +1,11 @@
 package tamaized.voidscape.dimension;
 
-import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.util.BlockUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -45,7 +45,7 @@ public final class VoidPortalTeleporter {
 	@Autowired
 	private FunctionalBlocks functionalBlocks;
 
-	public Optional<DimensionTransition> make(Entity entity, ServerLevel destination) {
+	public Optional<TeleportTransition> make(Entity entity, ServerLevel destination) {
 		WorldBorder border = destination.getWorldBorder();
 		double minX = Math.max(-2.9999872E7D, border.getMinX() + 16.0D);
 		double minZ = Math.max(-2.9999872E7D, border.getMinZ() + 16.0D);
@@ -65,10 +65,7 @@ public final class VoidPortalTeleporter {
 			Direction.Axis.X,
 			new Vec3(0.0D, 0.0D, 1.0D),
 			entity,
-			entity.getDeltaMovement(),
-			entity.getYRot(),
-			entity.getXRot(),
-			DimensionTransition.PLAY_PORTAL_SOUND.then(transition -> transition.placePortalTicket(portal.minCorner))
+			TeleportTransition.PLAY_PORTAL_SOUND.then(transition -> transition.placePortalTicket(portal.minCorner))
 		));
 	}
 
@@ -87,7 +84,7 @@ public final class VoidPortalTeleporter {
 				.findFirst();
 		return optional.map((poi) -> {
 			BlockPos blockpos = poi.getPos();
-			level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(blockpos), 3, blockpos);
+			level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(blockpos), 3);
 			BlockState blockstate = level.getBlockState(blockpos);
 			return BlockUtil.getLargestRectangleAround(blockpos, blockstate.getValue(BlockStateProperties.HORIZONTAL_AXIS), 21, Direction.Axis.Y, 21, (posIn) -> level.getBlockState(posIn) == blockstate);
 		});
