@@ -1,20 +1,18 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
+// FIXME: Vanilla rendering looks to support stencil now, see GlCommandEncoder#clearStencilTexture for example
 public final class StencilBufferUtil {
 
 	private StencilBufferUtil() {
 
 	}
 
-	public static void setup(int index) {
+	/*public static void setup(int index) {
 		Minecraft.getInstance().getMainRenderTarget().enableStencil();
 		RenderSystem.enableBlend();
 		invisibleBlend();
@@ -96,6 +94,6 @@ public final class StencilBufferUtil {
 
 	public static void invisibleBlend() {
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO);
-	}
+	}*/
 
 }
