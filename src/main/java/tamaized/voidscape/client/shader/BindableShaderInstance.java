@@ -2,9 +2,7 @@ package tamaized.voidscape.client.shader;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceProvider;
 

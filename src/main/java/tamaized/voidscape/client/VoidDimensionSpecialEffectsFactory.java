@@ -1,23 +1,16 @@
 package tamaized.voidscape.client;
 
-import net.minecraft.client.Camera;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
-import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 
-import javax.annotation.Nullable;
-
 @Component(dist = Dist.CLIENT)
-public class VoidDimensionSpecialEffectsFactory {
+public class VoidDimensionSpecialEffectsFactory { // FIXME: EnvironmentAttribute
 
 	@Autowired(dist = Dist.CLIENT)
 	private VoidSkyRenderer voidSkyRenderer;
 
-	public DimensionSpecialEffects make() {
+	/*public DimensionSpecialEffects make() {
 		return new DimensionSpecialEffects(Float.NaN, false, DimensionSpecialEffects.SkyType.NONE, false, false) {
 			@Override
 			public Vec3 getBrightnessDependentFogColor(Vec3 p_230494_1_, float p_230494_2_) {
@@ -41,6 +34,6 @@ public class VoidDimensionSpecialEffectsFactory {
 				return true;
 			}
 		};
-	}
+	}*/
 
 }

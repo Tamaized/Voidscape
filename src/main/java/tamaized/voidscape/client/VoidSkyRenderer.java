@@ -17,7 +17,7 @@ public class VoidSkyRenderer {
 	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	public void render() {
+	public void render() { // FIXME
 
 		BufferBuilder vertexbuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
@@ -58,8 +58,8 @@ public class VoidSkyRenderer {
 		vertexbuffer.addVertex(x + diameter, y, z);
 		vertexbuffer.addVertex(x, y, z);
 
-		RenderSystem.setShaderTexture(0, TheEndPortalRenderer.END_SKY_LOCATION);
-		RenderSystem.setShaderTexture(1, TheEndPortalRenderer.END_PORTAL_LOCATION);
+		/*RenderSystem.setShaderTexture(0, TheEndPortalRenderer.END_SKY_LOCATION);
+		RenderSystem.setShaderTexture(1, TheEndPortalRenderer.END_PORTAL_LOCATION);*/
 		shaders.VOIDSKY.invokeThenUpload(vertexbuffer);
 	}
 
