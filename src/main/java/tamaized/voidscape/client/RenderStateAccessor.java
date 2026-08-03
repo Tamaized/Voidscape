@@ -1,9 +1,9 @@
 package tamaized.voidscape.client;
 
-import net.minecraft.client.renderer.RenderStateShard;
 
-public class RenderStateAccessor extends RenderStateShard {
-	private RenderStateAccessor(String p_i225973_1_, Runnable p_i225973_2_, Runnable p_i225973_3_) {
+// FIXME: Is this still needed?
+public class RenderStateAccessor /*extends RenderStateShard*/ {
+	/*private RenderStateAccessor(String p_i225973_1_, Runnable p_i225973_2_, Runnable p_i225973_3_) {
 		super(p_i225973_1_, p_i225973_2_, p_i225973_3_);
 	}
 
@@ -53,5 +53,5 @@ public class RenderStateAccessor extends RenderStateShard {
 
 	public static ShaderStateShard RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER() {
 		return RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER;
-	}
+	}*/
 }
