@@ -1,54 +1,55 @@
-package tamaized.voidscape.client;
+package tamaized.voidscape.client.entity.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.context.ContextKey;
 import net.neoforged.api.distmarker.Dist;
 import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
-import tamaized.voidscape.data.DonatorData;
-import tamaized.voidscape.registry.ModDataAttachments;
-import tamaized.voidscape.registry.ModItemComponents;
+import tamaized.voidscape.client.DonatorLayerBuffers;
+import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 
 @Configurable
-public class DonatorLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private DonatorLayerBuffers donatorLayerBuffers;
 
 	@Autowired(dist = Dist.CLIENT)
-	private ModDataAttachments dataAttachments;
+	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
 
-	@Autowired(dist = Dist.CLIENT)
-	private ModItemComponents itemComponents;
-
-	public DonatorLayer(RenderLayerParent<T, M> p_117346_) {
-		super(p_117346_);
+	public ShroudWingLayer(RenderLayerParent<T, M> renderer) {
+		super(renderer);
 	}
 
 	@Override
-	public void render(PoseStack stack, MultiBufferSource multibuffer, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		DonatorData data = entity.getData(dataAttachments.DONATOR);
-		if (data.enabled || entity.getItemBySlot(EquipmentSlot.CHEST).getOrDefault(itemComponents.DRACONIC, false)) {
+	public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, T state, float yRot, float xRot) {
+		boolean donatorEnabled = check(shroudWingLayerRenderStateExtension.isDonatorAndEnabled, state);
+		if (donatorEnabled || check(shroudWingLayerRenderStateExtension.hasDraconicAttribute, state)) {
 			drawWings(
-				stack,
+				poseStack,
 				donatorLayerBuffers.BUFFERS.getBuffer(donatorLayerBuffers.WRAPPED_POS_TEX_COLOR),
-				FastColor.ARGB32.colorFromFloat(0.25F, 0F, 0F, 0F)
+				ARGB.colorFromFloat(0.25F, 0F, 0F, 0F)
 			);
+			Integer donatorColor = state.getRenderData(shroudWingLayerRenderStateExtension.donatorColor);
 			drawWings(
-				stack,
+				poseStack,
 				donatorLayerBuffers.BUFFERS.getBuffer(donatorLayerBuffers.WINGS),
-				FastColor.ARGB32.color((int) (0.25F * 255), data.enabled ? data.color : 0xFFA4EA)
+				ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
 			);
 		}
+	}
+
+	public boolean check(ContextKey<Boolean> key, T state) {
+		return Boolean.TRUE.equals(state.getRenderData(key));
 	}
 
 	private void drawWings(PoseStack stack, VertexConsumer buffer, int color) {

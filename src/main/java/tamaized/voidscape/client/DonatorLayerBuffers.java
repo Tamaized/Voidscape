@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.Util;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -45,9 +47,8 @@ public class DonatorLayerBuffers {
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
-		bus.addListener(RenderLevelStageEvent.class, event -> {
-			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
-				BUFFERS.endBatch();
+		bus.addListener(RenderLevelStageEvent.AfterTranslucentBlocks.class, event -> {
+			BUFFERS.endBatch();
 		});
 	}
 
