@@ -1,7 +1,5 @@
 package tamaized.voidscape.client;
 
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
@@ -9,12 +7,10 @@ import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.regutil.item.BreakableHelper;
-import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import tamaized.voidscape.registry.armor.set.*;
@@ -24,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component(dist = Dist.CLIENT)
-public class ModelBakeListener {
+public class ModelBakeListener { // FIXME: Revisit this during datagen porting
 
-	@Autowired(dist = Dist.CLIENT)
+	/*@Autowired(dist = Dist.CLIENT)
 	private ItemModelOverridePredicates itemModelOverridePredicates;
 
 	@Autowired(dist = Dist.CLIENT)
@@ -152,6 +148,6 @@ public class ModelBakeListener {
 		ItemProperties.register(item, itemModelOverridePredicates.BLOCKING, (stack, level, entity, prop) ->
 
 			entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-	}
+	}*/
 
 }
