@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import tamaized.beanification.Autowired;
@@ -59,6 +61,14 @@ public class LiquifierBlockEntity extends BlockEntity {
 
 	public LiquifierBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.LIQUIFIER.get(), pPos, pBlockState);
+	}
+
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		IItemHandler items = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
+		if (items != null)
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(0));
+		super.preRemoveSideEffects(pos, state);
 	}
 
 	@Override

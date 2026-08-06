@@ -2,7 +2,7 @@ package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -54,7 +54,7 @@ public class WellBlock extends Block implements EntityBlock, BucketPickup {
     }
 
 	@Override
-	public ItemStack pickupBlock(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, BlockState pState) {
+	public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {
 		return new ItemStack(Items.WATER_BUCKET);
 	}
 

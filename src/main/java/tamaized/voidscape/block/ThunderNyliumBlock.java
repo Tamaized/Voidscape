@@ -1,8 +1,7 @@
 package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.feature.ModConfiguredFeatures;
-import tamaized.voidscape.registry.feature.ModFeatures;
 
 @Configurable
 public class ThunderNyliumBlock extends Block implements BonemealableBlock {
@@ -39,16 +37,15 @@ public class ThunderNyliumBlock extends Block implements BonemealableBlock {
     }
 
 	@Override
-    public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
-        BlockPos blockpos = pPos.above();
-        ChunkGenerator chunkgenerator = pLevel.getChunkSource().getGenerator();
-        Registry<ConfiguredFeature<?, ?>> registry = pLevel.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-        this.place(registry, configuredFeatures.THUNDER_FOREST_VEGETATION_BONEMEAL, pLevel, chunkgenerator, pRandom, blockpos); // TODO
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        BlockPos blockpos = pos.above();
+        ChunkGenerator chunkgenerator = level.getChunkSource().getGenerator();
+        this.place(level.registryAccess(), configuredFeatures.THUNDER_FOREST_VEGETATION_BONEMEAL, level, chunkgenerator, random, blockpos);
 
     }
 
-    private void place(Registry<ConfiguredFeature<?, ?>> pFeatureRegistry, ResourceKey<ConfiguredFeature<?, ?>> pFeatureKey, ServerLevel pLevel, ChunkGenerator pChunkGenerator, RandomSource pRandom, BlockPos pPos) {
-        pFeatureRegistry.getHolder(pFeatureKey).ifPresent((p_255920_) -> {
+    private void place(RegistryAccess registryAccess, ResourceKey<ConfiguredFeature<?, ?>> pFeatureKey, ServerLevel pLevel, ChunkGenerator pChunkGenerator, RandomSource pRandom, BlockPos pPos) {
+		registryAccess.get(pFeatureKey).ifPresent((p_255920_) -> {
             p_255920_.value().place(pLevel, pChunkGenerator, pRandom, pPos);
         });
     }

@@ -2,12 +2,15 @@ package tamaized.voidscape.dimension;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -18,13 +21,14 @@ public class ConfigurablePortalShape {
 	private static final int MIN_HEIGHT = 3;
 	public static final int MAX_HEIGHT = 21;
 
-	private final LevelAccessor level;
+	private final LevelReader level;
 	private final Direction.Axis axis;
 	private final BlockBehaviour.StatePredicate frameTest;
 	private final BlockBehaviour.StatePredicate portalTest;
 	private final BlockBehaviour.StatePredicate igniterTest;
 	private final Direction rightDir;
 	private int numPortalBlocks;
+	@Nullable
 	private BlockPos bottomLeft;
 	private int height;
 	private final int width;
@@ -43,7 +47,7 @@ public class ConfigurablePortalShape {
 		}
 	}
 
-	public ConfigurablePortalShape(LevelAccessor levelAccessor, BlockPos blockPos, Direction.Axis axis, BlockBehaviour.StatePredicate frame, BlockBehaviour.StatePredicate portal, BlockBehaviour.StatePredicate igniter) {
+	public ConfigurablePortalShape(LevelReader levelAccessor, BlockPos blockPos, Direction.Axis axis, BlockBehaviour.StatePredicate frame, BlockBehaviour.StatePredicate portal, BlockBehaviour.StatePredicate igniter) {
 		this.level = levelAccessor;
 		this.axis = axis;
 		this.frameTest = frame;
@@ -77,7 +81,7 @@ public class ConfigurablePortalShape {
 	}
 
 	private int calculateWidth() {
-		int i = this.getDistanceUntilEdgeAboveFrame(this.bottomLeft, this.rightDir);
+		int i = this.getDistanceUntilEdgeAboveFrame(Objects.requireNonNull(this.bottomLeft), this.rightDir);
 		return i >= MIN_WIDTH && i <= MAX_WIDTH ? i : 0;
 	}
 
@@ -111,7 +115,7 @@ public class ConfigurablePortalShape {
 
 	private boolean hasTopFrame(BlockPos.MutableBlockPos mutableBlockPos, int up) {
 		for (int i = 0; i < this.width; ++i) {
-			BlockPos.MutableBlockPos blockpos$mutableblockpos = mutableBlockPos.set(this.bottomLeft).move(Direction.UP, up).move(this.rightDir, i);
+			BlockPos.MutableBlockPos blockpos$mutableblockpos = mutableBlockPos.set(Objects.requireNonNull(this.bottomLeft)).move(Direction.UP, up).move(this.rightDir, i);
 			if (!frameTest.test(this.level.getBlockState(blockpos$mutableblockpos), this.level, blockpos$mutableblockpos)) {
 				return false;
 			}
@@ -122,7 +126,7 @@ public class ConfigurablePortalShape {
 
 	private int getDistanceUntilTop(BlockPos.MutableBlockPos mutableBlockPos) {
 		for (int i = 0; i < MAX_HEIGHT; ++i) {
-			mutableBlockPos.set(this.bottomLeft).move(Direction.UP, i).move(this.rightDir, -1);
+			mutableBlockPos.set(Objects.requireNonNull(this.bottomLeft)).move(Direction.UP, i).move(this.rightDir, -1);
 			if (!frameTest.test(this.level.getBlockState(mutableBlockPos), this.level, mutableBlockPos)) {
 				return i;
 			}
@@ -148,7 +152,7 @@ public class ConfigurablePortalShape {
 		return MAX_HEIGHT;
 	}
 
-	private static boolean isEmpty(BlockState state, LevelAccessor level, BlockPos pos, BlockBehaviour.StatePredicate igniter, BlockBehaviour.StatePredicate portal) {
+	private static boolean isEmpty(BlockState state, LevelReader level, BlockPos pos, BlockBehaviour.StatePredicate igniter, BlockBehaviour.StatePredicate portal) {
 		return state.isAir() || igniter.test(state, level, pos) || portal.test(state, level, pos);
 	}
 
@@ -156,10 +160,10 @@ public class ConfigurablePortalShape {
 		return this.bottomLeft != null && this.width >= MIN_WIDTH && this.width <= MAX_WIDTH && this.height >= MIN_HEIGHT && this.height <= MAX_HEIGHT;
 	}
 
-	public void createPortalBlocks(BlockState portal, EnumProperty<Direction.Axis> axisProperty) {
+	public void createPortalBlocks(Level level, BlockState portal, EnumProperty<Direction.Axis> axisProperty) {
 		BlockState blockstate = portal.setValue(axisProperty, this.axis);
-		BlockPos.betweenClosed(this.bottomLeft, this.bottomLeft.relative(Direction.UP, this.height - 1).relative(this.rightDir, this.width - 1))
-				.forEach(pos -> this.level.setBlock(pos, blockstate, 18));
+		BlockPos.betweenClosed(Objects.requireNonNull(this.bottomLeft), this.bottomLeft.relative(Direction.UP, this.height - 1).relative(this.rightDir, this.width - 1))
+				.forEach(pos -> level.setBlock(pos, blockstate, 18));
 	}
 
 	public boolean isComplete() {

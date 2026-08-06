@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class BlockPosDirectionCapabilityCacher<R> {
 
 	private final Map<BlockPosAndDirection, BlockCapabilityCache<R, Direction>> data = new HashMap<>();
 
+	@Nullable
 	public R get(BlockCapability<R, Direction> capability, ServerLevel level, BlockPos pos, Direction direction) {
 		BlockCapabilityCache<R, Direction> cache = data.get(new BlockPosAndDirection(pos, direction));
 		if (cache == null) {

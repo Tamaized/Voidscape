@@ -5,15 +5,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Configurable
 public class RequiresVoidToolBlock extends Block {
@@ -23,9 +19,6 @@ public class RequiresVoidToolBlock extends Block {
 	public static final TagKey<Block> NEEDS_TITANITE_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_titanite_tool"));
 	public static final TagKey<Block> NEEDS_ICHOR_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_ichor_tool"));
 	public static final TagKey<Block> NEEDS_ASTRAL_TOOL = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "needs_astral_tool"));
-
-	@Autowired
-	private ModToolMaterials toolTiers;
 
 	public RequiresVoidToolBlock(Properties pProperties) {
 		super(pProperties);
@@ -39,11 +32,11 @@ public class RequiresVoidToolBlock extends Block {
 			return 0.0F;
 		} else {
 			int i = canHarvestBlock(pState, pLevel, pPos, pPlayer) ? 30 : 1000;
-			return pPlayer.getDigSpeed(pState, pPos) / f / (float)i;
+			return pPlayer.getDestroySpeed(pState, pPos) / f / (float)i;
 		}
 	}
 
-	@Override
+	/*@Override FIXME: Should be handled through purely tags now
 	@Deprecated // No I don't think I will use TierSortingRegistry, I only want to allow MY tools!
 	public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
 		Tier tier = player.getMainHandItem().isEmpty() ? null : player.getMainHandItem().getItem() instanceof TieredItem tieredItem ? tieredItem.getTier() : null;
@@ -80,5 +73,5 @@ public class RequiresVoidToolBlock extends Block {
 		if (tier == toolTiers.ASTRAL)
 			return 5;
 		return -1;
-	}
+	}*/
 }

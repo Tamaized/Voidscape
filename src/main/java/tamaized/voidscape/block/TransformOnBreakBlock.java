@@ -2,6 +2,7 @@ package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,9 +20,9 @@ public class TransformOnBreakBlock extends Block {
 	}
 
 	@Override
-	public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		boolean flag = super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
-		world.setBlock(pos, to.get(), world.isClientSide() ? 11 : 3);
+	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, ItemStack toolStack, boolean willHarvest, FluidState fluid) {
+		boolean flag = super.onDestroyedByPlayer(state, level, pos, player, toolStack, willHarvest, fluid);
+		level.setBlock(pos, to.get(), level.isClientSide() ? 11 : 3);
 		return flag;
 	}
 

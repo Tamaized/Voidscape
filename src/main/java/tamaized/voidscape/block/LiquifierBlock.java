@@ -1,8 +1,10 @@
 package tamaized.voidscape.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -52,17 +54,9 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	}
 
 	@Override
-	@Deprecated
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			BlockEntity be = level.getBlockEntity(pos);
-			if (be instanceof LiquifierBlockEntity) {
-				IItemHandler items = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
-				if (items != null)
-					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(0));
-			}
-			super.onRemove(state, level, pos, newState, isMoving);
-		}
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+		super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+		Containers.updateNeighboursAfterDestroy(state, level, pos);
 	}
 
 	@Nullable
@@ -78,7 +72,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	}
 
 	@Override
-	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
+	public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {
 		BlockEntity be = level.getBlockEntity(pos);
 		if (be instanceof LiquifierBlockEntity entity && entity.fluids.getFluidAmount() >= 1000) {
 			entity.fluids.drain(1000, IFluidHandler.FluidAction.EXECUTE);

@@ -7,10 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Fallable;
@@ -30,7 +27,6 @@ import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.VeryDrippyDripstoneBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fallable {
 
@@ -80,22 +76,22 @@ public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fall
 	}
 
 	@Override
-	public VoxelShape getOcclusionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+	protected VoxelShape getOcclusionShape(BlockState state) {
 		return Shapes.empty();
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		Vec3 vec3 = pState.getOffset(pLevel, pPos);
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		Vec3 vec3 = state.getOffset(pos);
 		return TIP_SHAPE_DOWN.move(vec3.x, 0.0, vec3.z);
 	}
 
 	@Override
-	public BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pPos, BlockPos pNeighborPos) {
-		if (!this.canSurvive(pState, pLevel, pPos)) {
-			pLevel.scheduleTick(pPos, this, 1);
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+		if (!this.canSurvive(state, level, pos)) {
+			ticks.scheduleTick(pos, this, 1);
 		}
-		return super.updateShape(pState, pDirection, pNeighborState, pLevel, pPos, pNeighborPos);
+		return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
 	}
 
 	@Override

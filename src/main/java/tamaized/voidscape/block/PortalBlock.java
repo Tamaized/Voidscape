@@ -6,9 +6,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -62,27 +61,23 @@ public class PortalBlock extends HalfTransparentBlock {
 	}
 
 	@Override
-	@Deprecated
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-		Direction.Axis directionAxis = facing.getAxis();
-		Direction.Axis directionAxis1 = stateIn.getValue(AXIS);
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+		Direction.Axis directionAxis = directionToNeighbour.getAxis();
+		Direction.Axis directionAxis1 = state.getValue(AXIS);
 		boolean flag = directionAxis1 != directionAxis && directionAxis.isHorizontal();
 		if (!flag &&
-			!facingState.is(this) &&
-			!new ConfigurablePortalShape(worldIn, currentPos, directionAxis1, portalFramePredicates.FRAME_TEST, portalFramePredicates.PORTAL_TEST, portalFramePredicates.IGNITER_TEST).isComplete()
+			!neighbourState.is(this) &&
+			!new ConfigurablePortalShape(level, pos, directionAxis1, portalFramePredicates.FRAME_TEST, portalFramePredicates.PORTAL_TEST, portalFramePredicates.IGNITER_TEST).isComplete()
 		) {
 			return Blocks.AIR.defaultBlockState();
 		}
-		return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+		return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
 	}
 
 	@Override
-	@Deprecated
-	public void entityInside(BlockState state, Level currLevel, BlockPos pos, Entity entity) {
-		levelUtil.getDimensionForTeleport(currLevel).ifPresent(destLevel -> {
-			if (!entity.isPassenger() && !entity.isVehicle() && entity.canChangeDimensions(currLevel, destLevel))
-				entity.getData(dataAttachments.INSANITY).setInPortal(true);
-		});
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+		if (!entity.isVehicle() && entity.canUsePortal(false))
+			entity.getData(dataAttachments.INSANITY).setInPortal(true);
 	}
 
 	@Override
