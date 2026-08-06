@@ -19,7 +19,9 @@ public class CorruptedPawnCameraLocker {
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(ViewportEvent.ComputeCameraAngles.class, event -> {
-			Entity camera = event.getCamera().getEntity();
+			Entity camera = event.getCamera().entity();
+			if (camera == null)
+				return;
 			CorruptedPawnEntity hunt = camera.getData(dataAttachments.INSANITY).getHunter();
 			if (hunt != null && hunt.isAlive() && !hunt.isRemoved()) {
 				camera.lookAt(EntityAnchorArgument.Anchor.EYES, hunt.getEyePosition());
