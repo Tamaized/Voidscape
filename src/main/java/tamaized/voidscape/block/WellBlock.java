@@ -20,15 +20,18 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.WellBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 
 import java.util.Optional;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class WellBlock extends Block implements EntityBlock, BucketPickup {
 
 	@Autowired
 	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private SimpleBlockEntityTickerFactory simpleBlockEntityTickerFactory;
 
     public WellBlock(Properties pProperties) {
         super(pProperties);
@@ -47,11 +50,11 @@ public class WellBlock extends Block implements EntityBlock, BucketPickup {
         return new WellBlockEntity(pos, state);
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return blockEntities.WELL.get() == entity && !level.isClientSide() ? WellBlockEntity::tick : null;
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return simpleBlockEntityTickerFactory.makeCasted(blockEntities.WELL.get(), level, type);
+	}
 
 	@Override
 	public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {

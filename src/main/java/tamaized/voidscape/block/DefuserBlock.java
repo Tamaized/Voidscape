@@ -13,13 +13,16 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.DefuserBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class DefuserBlock extends Block implements EntityBlock {
 
 	@Autowired
 	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private SimpleBlockEntityTickerFactory simpleBlockEntityTickerFactory;
 
     public DefuserBlock(Properties pProperties) {
         super(pProperties);
@@ -38,10 +41,10 @@ public class DefuserBlock extends Block implements EntityBlock {
         return new DefuserBlockEntity(pos, state);
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return blockEntities.DEFUSER.get() == entity && !level.isClientSide() ? DefuserBlockEntity::tick : null;
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return simpleBlockEntityTickerFactory.makeCasted(blockEntities.DEFUSER.get(), level, type);
+	}
 
 }

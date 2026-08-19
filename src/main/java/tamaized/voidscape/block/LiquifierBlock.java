@@ -15,8 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -26,6 +24,7 @@ import tamaized.voidscape.registry.fluid.ModFluidBuckets;
 import tamaized.voidscape.registry.fluid.ModFluids;
 import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
+import tamaized.voidscape.util.TransactionUtil;
 
 import java.util.Optional;
 
@@ -46,6 +45,9 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
 
 	public LiquifierBlock(Properties pProperties) {
 		super(pProperties);
@@ -80,10 +82,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {
 		BlockEntity be = level.getBlockEntity(pos);
 		if (be instanceof LiquifierBlockEntity entity && singleResourceCapabilityUtil.amount(entity.fluids) >= 1000) {
-			try (Transaction transaction = Transaction.openRoot()) {
-				singleResourceCapabilityUtil.extract(entity.fluids, 1000, transaction);
-				transaction.commit();
-			}
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(entity.fluids, 1000, transaction));
 			return new ItemStack(buckets.VOIDIC.get());
 		}
 		return ItemStack.EMPTY;

@@ -13,13 +13,16 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.InfuserBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class InfuserBlock extends Block implements EntityBlock {
 
 	@Autowired
 	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private SimpleBlockEntityTickerFactory simpleBlockEntityTickerFactory;
 
     public InfuserBlock(Properties pProperties) {
         super(pProperties);
@@ -38,10 +41,10 @@ public class InfuserBlock extends Block implements EntityBlock {
         return new InfuserBlockEntity(pos, state);
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-        return blockEntities.INFUSER.get() == entity && !level.isClientSide() ? InfuserBlockEntity::tick : null;
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return simpleBlockEntityTickerFactory.makeCasted(blockEntities.INFUSER.get(), level, type);
+	}
 
 }

@@ -1,6 +1,5 @@
 package tamaized.voidscape.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
@@ -17,8 +16,6 @@ import tamaized.voidscape.registry.block.NullBiomeBlocks;
 @Configurable
 public class EtherealPlantBlock extends BushBlock {
 
-	public static final MapCodec<EtherealPlantBlock> CODEC = simpleCodec(EtherealPlantBlock::new);
-
 	private static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
 
 	@Autowired
@@ -26,11 +23,6 @@ public class EtherealPlantBlock extends BushBlock {
 
 	public EtherealPlantBlock(Properties prop) {
 		super(prop);
-	}
-
-	@Override
-	protected MapCodec<? extends BushBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

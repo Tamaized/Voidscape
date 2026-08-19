@@ -13,13 +13,16 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.HatcheryBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class HatcheryBlock extends Block implements EntityBlock {
 
 	@Autowired
 	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private SimpleBlockEntityTickerFactory simpleBlockEntityTickerFactory;
 
 	public HatcheryBlock(Properties pProperties) {
 		super(pProperties);
@@ -40,8 +43,8 @@ public class HatcheryBlock extends Block implements EntityBlock {
 
 	@Nullable
 	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return blockEntities.HATCHERY.get() == entity && !level.isClientSide() ? HatcheryBlockEntity::tick : null;
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return simpleBlockEntityTickerFactory.makeCasted(blockEntities.HATCHERY.get(), level, type);
 	}
 
 }

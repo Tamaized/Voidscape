@@ -18,7 +18,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import tamaized.beanification.Autowired;
@@ -27,7 +26,6 @@ import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.capability.FilteredItemStacksResourceHandler;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
-import tamaized.voidscape.registry.fluid.ModFluidTypes;
 import tamaized.voidscape.registry.fluid.ModFluids;
 import tamaized.voidscape.registry.item.MaterialItems;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
@@ -45,9 +43,6 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 
 	@Autowired
 	private ModFluids modFluids;
-
-	@Autowired
-	private ModFluidTypes fluidTypes;
 
 	@Autowired
 	private MaterialItems materialItems;
@@ -78,9 +73,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
 		if (level == null)
 			return;
-		ResourceHandler<ItemResource> items = level.getCapability(Capabilities.Item.BLOCK, pos, null);
-		if (items != null)
-			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getResource(0).toStack());
+		Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), singleResourceCapabilityUtil.asItemStack(items));
 		super.preRemoveSideEffects(pos, state);
 	}
 
@@ -100,6 +93,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 		fluids.get().serialize(output);
 	}
 
+	@Override
 	public void tick(Level level, BlockPos blockPos, BlockState blockState) {
 		if (level.hasNeighborSignal(blockPos))
 			return;

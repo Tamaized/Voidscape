@@ -3,6 +3,7 @@ package tamaized.voidscape.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.block.Block;
@@ -32,9 +33,9 @@ public class LightningAttractorBlock<T extends LightningBolt> extends Block {
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		if (random.nextBoolean() || level.players().stream().noneMatch(p -> pos.distSqr(p.blockPosition()) <= 10000))
 			return;
-		T lit = entityType.get().create(level);
+		T lit = entityType.get().create(level, EntitySpawnReason.SPAWNER);
 		if (lit != null) {
-			lit.moveTo(positionModifier.apply(Vec3.atBottomCenterOf(pos)));
+			lit.snapTo(positionModifier.apply(Vec3.atBottomCenterOf(pos)));
 			level.addFreshEntity(lit);
 			if (to != null)
 				level.setBlockAndUpdate(pos, to.get());

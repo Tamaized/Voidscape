@@ -1,57 +1,67 @@
 package tamaized.voidscape.block.entity;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
+import tamaized.voidscape.capability.FilteredItemStacksResourceHandler;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.fluid.ModFluids;
+import tamaized.voidscape.util.SingleResourceCapabilityUtil;
+import tamaized.voidscape.util.TransactionUtil;
 
-public class CoopBlockEntity extends BlockEntity {
+import java.util.function.Supplier;
 
-	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+@Configurable
+public class CoopBlockEntity extends TickableBlockEntity {
 
 	@Autowired
 	private static ModBlockEntities blockEntities;
 
 	@Autowired
-	private static ModFluids modFluids;
+	private ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private ModFluids modFluids;
+
+	@Autowired
+	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, blockEntities.COOP.get(), (object, context) -> object.items);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.COOP.get(), (object, context) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.COOP.get(), (object, _) -> object.items);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.COOP.get(), (object, _) -> object.fluids.get());
 	}
 
-	public final ItemStackHandler items = new ItemStackHandler(1) {
-		@Override
-		public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-			return stack.is(Items.EGG);
-		}
-	};
-	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == modFluids.VOIDIC_SOURCE.get());
+	public final ItemStacksResourceHandler items = new FilteredItemStacksResourceHandler(1, (_, resource) -> resource.is(Items.EGG));
+	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
+		new FluidStack(modFluids.VOIDIC_SOURCE.get(), 0)
+	), 10000));
 
-	private final BlockPosDirectionCapabilityCacher<IItemHandler> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
+	private final BlockPosDirectionCapabilityCacher<ResourceHandler<ItemResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
 	private int processTick;
 
@@ -60,33 +70,41 @@ public class CoopBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
-		processTick = tag.getInt("processTick");
-		items.deserializeNBT(registries, tag.getCompound("inventory"));
-		fluids.readFromNBT(registries, tag.getCompound("tank"));
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		if (level == null)
+			return;
+		Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), singleResourceCapabilityUtil.asItemStack(items));
+		super.preRemoveSideEffects(pos, state);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-		tag.putInt("processTick", processTick);
-		tag.put("inventory", items.serializeNBT(registries));
-		tag.put("tank", fluids.writeToNBT(registries, new CompoundTag()));
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		processTick = input.getIntOr("processTick", 0);
+		items.deserialize(input);
+		fluids.get().deserialize(input);
 	}
 
-	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-		if (!(be instanceof CoopBlockEntity entity) || level.hasNeighborSignal(blockPos))
+	@Override
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt("processTick", processTick);
+		items.serialize(output);
+		fluids.get().serialize(output);
+	}
+
+	@Override
+	public void tick(Level level, BlockPos blockPos, BlockState blockState) {
+		if (level.hasNeighborSignal(blockPos))
 			return;
-		IFluidHandler fluid = entity.fluids;
-		if (entity.processTick <= 0 && fluid.getFluidInTank(0).getAmount() > 0) {
-			fluid.drain(1, IFluidHandler.FluidAction.EXECUTE);
-			entity.processTick = 60 + level.getRandom().nextInt(140);
-		} else if (entity.processTick > 0) {
-			entity.processTick--;
-			if (entity.processTick <= 0) {
-				if (!ItemHandlerHelper.insertItemStacked(entity.items, new ItemStack(Items.EGG), false).isEmpty())
-					entity.processTick = 200;
+		if (processTick <= 0 && singleResourceCapabilityUtil.amount(fluids) > 0) {
+			if (transactionUtil.executeNegation(transaction -> singleResourceCapabilityUtil.extract(fluids, 1, transaction), 0))
+				processTick = 60 + level.getRandom().nextInt(140);
+		} else if (processTick > 0) {
+			processTick--;
+			if (processTick <= 0) {
+				if (transactionUtil.executeComparing(transaction -> singleResourceCapabilityUtil.insert(items, ItemResource.of(Items.EGG), 1, transaction), 0))
+					processTick = 200;
 				else {
 					level.getEntities((Entity) null, new AABB(blockPos).inflate(6D), e -> e instanceof ServerPlayer player && !player.isSpectator()).stream()
 						.map(ServerPlayer.class::cast)
@@ -94,16 +112,18 @@ public class CoopBlockEntity extends BlockEntity {
 				}
 			}
 		}
-		if (!entity.items.getStackInSlot(0).isEmpty() && level instanceof ServerLevel serverLevel) {
+		if (singleResourceCapabilityUtil.amount(items) > 0 && level instanceof ServerLevel serverLevel) {
 			for (Direction face : Direction.values()) {
-				IItemHandler other = entity.capabilityCache.get(Capabilities.ItemHandler.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
+				ResourceHandler<ItemResource> other = capabilityCache.get(Capabilities.Item.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
 				if (other != null) {
-					ItemStack item = entity.items.getStackInSlot(0);
-					int count = item.getCount();
-					ItemStack consumed = ItemHandlerHelper.insertItemStacked(other, item, false);
-					if (!consumed.isEmpty() && count == consumed.getCount())
+					int count = singleResourceCapabilityUtil.amount(items);
+					if (transactionUtil.executeNegation(transaction -> singleResourceCapabilityUtil.extract(
+						items,
+						other.insert(singleResourceCapabilityUtil.resource(items), count, transaction),
+						transaction
+					), 0)) {
 						continue;
-					entity.items.setStackInSlot(0, consumed);
+					}
 					break;
 				}
 			}
