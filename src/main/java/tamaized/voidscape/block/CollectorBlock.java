@@ -13,13 +13,16 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.block.entity.CollectorBlockEntity;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SimpleBlockEntityTickerFactory;
 
-@SuppressWarnings("deprecation")
 @Configurable
 public class CollectorBlock extends Block implements EntityBlock {
 
 	@Autowired
 	private ModBlockEntities blockEntities;
+
+	@Autowired
+	private SimpleBlockEntityTickerFactory simpleBlockEntityTickerFactory;
 
 	public CollectorBlock(Properties pProperties) {
 		super(pProperties);
@@ -39,8 +42,8 @@ public class CollectorBlock extends Block implements EntityBlock {
 
 	@Nullable
 	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entity) {
-		return blockEntities.COLLECTOR.get() == entity && !level.isClientSide() ? CollectorBlockEntity::tick : null;
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return simpleBlockEntityTickerFactory.makeCasted(blockEntities.COLLECTOR.get(), level, type);
 	}
 
 }
