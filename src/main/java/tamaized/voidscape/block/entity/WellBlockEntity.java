@@ -1,25 +1,31 @@
 package tamaized.voidscape.block.entity;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
+import tamaized.voidscape.util.SingleResourceCapabilityUtil;
+import tamaized.voidscape.util.TransactionUtil;
 
-public class WellBlockEntity extends BlockEntity {
+import java.util.function.Supplier;
+
+public class WellBlockEntity extends TickableBlockEntity {
 
 	@Autowired
 	private static ModAdvancementTriggers advancementTriggers;
@@ -27,13 +33,21 @@ public class WellBlockEntity extends BlockEntity {
 	@Autowired
 	private static ModBlockEntities blockEntities;
 
+	@Autowired
+	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
+
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.WELL.get(), (object, context) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.WELL.get(), (object, _) -> object.fluids.get());
 	}
 
-	public final FluidTank fluids = new FluidTank(Integer.MAX_VALUE, fluidStack -> fluidStack.getFluid() == Fluids.WATER);
+	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
+		new FluidStack(Fluids.WATER, 0)
+	), Integer.MAX_VALUE));
 
-	private final BlockPosDirectionCapabilityCacher<IFluidHandler> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
+	private final BlockPosDirectionCapabilityCacher<ResourceHandler<FluidResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
 	private int tick;
 
@@ -41,18 +55,19 @@ public class WellBlockEntity extends BlockEntity {
 		super(blockEntities.WELL.get(), pPos, pBlockState);
 	}
 
-	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-		if (!(be instanceof WellBlockEntity entity) || level.hasNeighborSignal(blockPos))
+	@Override
+	public void tick(Level level, BlockPos blockPos, BlockState blockState) {
+		if (level.hasNeighborSignal(blockPos))
 			return;
-		if (entity.fluids.getFluidAmount() < Integer.MAX_VALUE)
-			entity.fluids.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
-		entity.tick++;
+		if (singleResourceCapabilityUtil.amount(fluids) < Integer.MAX_VALUE)
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.insert(fluids, Integer.MAX_VALUE, transaction));
+		tick++;
 		if (level instanceof ServerLevel serverLevel) {
 			boolean filled = false;
 			for (Direction face : Direction.values()) {
-				IFluidHandler other = entity.capabilityCache.get(Capabilities.FluidHandler.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
+				ResourceHandler<FluidResource> other = capabilityCache.get(Capabilities.Fluid.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
 				if (other != null) {
-					if (other.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE) > 0)
+					if (transactionUtil.executeNegation(transaction -> other.insert(FluidResource.of(Fluids.WATER), Integer.MAX_VALUE, transaction), 0))
 						filled = true;
 				}
 			}
