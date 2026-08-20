@@ -1,11 +1,10 @@
 package tamaized.voidscape.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
@@ -17,9 +16,12 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
@@ -32,6 +34,7 @@ import java.lang.reflect.Method;
 public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
+	@Nullable
 	private static final MethodHandle handle_method_AbstractCauldronBlock_receiveStalactiteDrip;
 
 	static {
@@ -56,15 +59,15 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
-		tick = tag.getInt("tick");
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		tick = input.getIntOr("tick", 0);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-		tag.putInt("tick", tick);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt("tick", tick);
 	}
 
 	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
@@ -75,10 +78,10 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 			BlockPos fluidPos = blockPos.above(2);
 			if (!level.isOutsideBuildHeight(fluidPos) && !level.getBlockState(blockPos.above()).isAir()) {
 				BlockState fluidBlockState = level.getBlockState(fluidPos);
-				if (fluidBlockState.is(Blocks.MUD) && !level.dimensionType().ultraWarm()) {
+				if (fluidBlockState.is(Blocks.MUD) && !level.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, fluidPos)) {
 					if (level instanceof ServerLevel serverLevel)
 						spawnDripParticles(serverLevel, blockPos, blockState, Fluids.WATER);
-					if (level.random.nextInt(4) == 0) {
+					if (level.getRandom().nextInt(4) == 0) {
 						BlockState clay = Blocks.CLAY.defaultBlockState();
 						level.setBlockAndUpdate(fluidPos, clay);
 						Block.pushEntitiesUp(fluidBlockState, clay, level, fluidPos);
@@ -90,7 +93,7 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 						Fluid fluid = fluidState.getType();
 						if (level instanceof ServerLevel serverLevel)
 							spawnDripParticles(serverLevel, blockPos, blockState, fluid);
-						if (handle_method_AbstractCauldronBlock_receiveStalactiteDrip != null && level.random.nextInt(4) == 0) {
+						if (handle_method_AbstractCauldronBlock_receiveStalactiteDrip != null && level.getRandom().nextInt(4) == 0) {
 							for (int i = 1; i <= 11; i++) {
 								BlockPos cauldronPos = blockPos.below(i);
 								if (!level.isOutsideBuildHeight(cauldronPos)) {
@@ -117,15 +120,15 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 	}
 
 	private static void spawnDripParticles(ServerLevel level, BlockPos pos, BlockState state, Fluid fluid) {
-		Vec3 vec3 = state.getOffset(level, pos);
+		Vec3 vec3 = state.getOffset(pos);
 		ClientPacketSendParticles packet = new ClientPacketSendParticles();
 		double d1 = (double) pos.getX() + 0.5 + vec3.x;
 		double d2 = (double) ((float) (pos.getY() + 1) - 0.6875F) - 0.0625;
 		double d3 = (double) pos.getZ() + 0.5 + vec3.z;
 		ParticleOptions particleoptions = fluid.getFluidType().getDripInfo() != null ? fluid.getFluidType().getDripInfo().dripParticle() : ParticleTypes.DRIPPING_DRIPSTONE_WATER;
 		if (particleoptions != null)
-			packet.queueParticle(particleoptions, false, d1, d2, d3, 0, 0, 0);
-		PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(pos), packet);
+			packet.queueParticle(particleoptions, d1, d2, d3, 0, 0, 0);
+		PacketDistributor.sendToPlayersTrackingChunk(level, ChunkPos.containing(pos), packet);
 	}
 
 }
