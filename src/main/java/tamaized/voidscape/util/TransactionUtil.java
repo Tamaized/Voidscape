@@ -8,6 +8,7 @@ import tamaized.pkginfoutil.PublicApi;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Component
@@ -31,6 +32,13 @@ public class TransactionUtil {
 	 */
 	public <T> boolean executeComparing(Function<Transaction, T> exec, T expected) {
 		return execute(exec).filter(result -> Objects.equals(result, expected)).isPresent();
+	}
+
+	public void run(Consumer<Transaction> exec) {
+		execute(transaction -> {
+			exec.accept(transaction);
+			return 0;
+		});
 	}
 
 	@PublicApi

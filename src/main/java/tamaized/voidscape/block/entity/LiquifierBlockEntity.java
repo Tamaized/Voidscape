@@ -29,6 +29,7 @@ import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.fluid.ModFluids;
 import tamaized.voidscape.registry.item.MaterialItems;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
+import tamaized.voidscape.util.TransactionUtil;
 
 import java.util.function.Supplier;
 
@@ -49,6 +50,9 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.items);
@@ -104,11 +108,10 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 			processTick++;
 			if (processTick >= 80) {
 				processTick = 0;
-				try (Transaction transaction = Transaction.openRoot()) {
+				transactionUtil.run(transaction -> {
 					singleResourceCapabilityUtil.insert(fluids.get(), 250, transaction);
 					singleResourceCapabilityUtil.extract(items, 1, transaction);
-					transaction.commit();
-				}
+				});
 				level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
 						.filter(e -> e instanceof ServerPlayer)
 						.map(ServerPlayer.class::cast)
@@ -121,11 +124,10 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 			for (Direction face : Direction.values()) {
 				ResourceHandler<FluidResource> other = capabilityCache.get(Capabilities.Fluid.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
 				if (other != null) {
-					try (Transaction transaction = Transaction.openRoot()) {
+					transactionUtil.run(transaction -> {
 						int amount = other.insert(fluids.get().getResource(0), Math.min(singleResourceCapabilityUtil.amount(fluids), 1000), transaction);
 						singleResourceCapabilityUtil.extract(fluids, amount, transaction);
-						transaction.commit();
-					}
+					});
 				}
 				if (singleResourceCapabilityUtil.amount(fluids) <= 0)
 					break;
