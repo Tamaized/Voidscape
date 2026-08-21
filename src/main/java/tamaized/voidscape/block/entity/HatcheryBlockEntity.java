@@ -1,8 +1,6 @@
 package tamaized.voidscape.block.entity;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.PowerParticleOption;
 import net.minecraft.server.level.ServerLevel;
@@ -19,58 +17,53 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.BeanContext;
+import tamaized.beanification.Configurable;
+import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.registry.fluid.ModFluids;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
-import tamaized.voidscape.util.TransactionUtil;
 
-import java.util.function.Supplier;
-
+@Configurable
 public class HatcheryBlockEntity extends TickableBlockEntity {
 
-	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
+	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
-	private static ModFluids modFluids;
+	private ModFluids modFluids;
 
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
 
-	@Autowired
-	private TransactionUtil transactionUtil;
-
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.INFUSER.get(), (object, _) -> object.fluids.get());
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().HATCHERY.get(), (object, _) -> object.fluids);
 	}
 
-	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
-		new FluidStack(modFluids.VOIDIC_SOURCE.get(), 0)
-	), 100000));
+	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 100000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
 
 	public HatcheryBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.HATCHERY.get(), pPos, pBlockState);
+		super(blockEntities.get().HATCHERY.get(), pPos, pBlockState);
 	}
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		fluids.get().deserialize(input);
+		fluids.deserialize(input);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
-		fluids.get().serialize(output);
+		fluids.serialize(output);
 	}
 
 	@Override

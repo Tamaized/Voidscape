@@ -1,8 +1,6 @@
 package tamaized.voidscape.block.entity;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -19,10 +17,13 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.BeanContext;
+import tamaized.beanification.Configurable;
+import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.particle.ParticleTypeSpellCloud;
@@ -33,27 +34,26 @@ import tamaized.voidscape.util.SingleResourceCapabilityUtil;
 import tamaized.voidscape.util.TransactionUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
+@Configurable
 public class InfuserBlockEntity extends TickableBlockEntity {
 
-	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
+	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
-	private static ModDamageSource damageSource;
+	private ModDamageSource damageSource;
 
 	@Autowired
-	private static ModDataAttachments dataAttachments;
+	private ModDataAttachments dataAttachments;
 
 	@Autowired
-	private static FakePlayers fakePlayers;
+	private FakePlayers fakePlayers;
 
 	@Autowired
-	private static ModFluids modFluids;
+	private ModFluids modFluids;
 
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
@@ -62,31 +62,29 @@ public class InfuserBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.INFUSER.get(), (object, _) -> object.fluids.get());
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().INFUSER.get(), (object, _) -> object.fluids);
 	}
 
-	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
-		new FluidStack(modFluids.VOIDIC_SOURCE.get(), 0)
-	), 10000));
+	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 10000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
 
 	private int processTick;
 
 	public InfuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.INFUSER.get(), pPos, pBlockState);
+		super(blockEntities.get().INFUSER.get(), pPos, pBlockState);
 	}
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		processTick = input.getIntOr("processTick", 0);
-		fluids.get().deserialize(input);
+		fluids.deserialize(input);
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		output.putInt("processTick", processTick);
-		fluids.get().serialize(output);
+		fluids.serialize(output);
 	}
 
 	@Override

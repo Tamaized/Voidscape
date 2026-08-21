@@ -1,9 +1,7 @@
 package tamaized.voidscape.block.entity;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -12,26 +10,27 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.BeanContext;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
+import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
 import tamaized.voidscape.util.TransactionUtil;
 
-import java.util.function.Supplier;
-
+@Configurable
 public class WellBlockEntity extends TickableBlockEntity {
 
-	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
+	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
@@ -40,28 +39,25 @@ public class WellBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.WELL.get(), (object, _) -> object.fluids.get());
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().WELL.get(), (object, _) -> object.fluids);
 	}
 
-	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
-		new FluidStack(Fluids.WATER, 0)
-	), Integer.MAX_VALUE));
+	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, Integer.MAX_VALUE, (_, resource) -> resource.is(Fluids.WATER));
 
 	private final BlockPosDirectionCapabilityCacher<ResourceHandler<FluidResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
-	private int tick;
-
 	public WellBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.WELL.get(), pPos, pBlockState);
+		super(blockEntities.get().WELL.get(), pPos, pBlockState);
 	}
 
 	@Override
 	public void tick(Level level, BlockPos blockPos, BlockState blockState) {
 		if (level.hasNeighborSignal(blockPos))
 			return;
+
 		if (singleResourceCapabilityUtil.amount(fluids) < Integer.MAX_VALUE)
 			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.insert(fluids, Integer.MAX_VALUE, transaction));
-		tick++;
+
 		if (level instanceof ServerLevel serverLevel) {
 			boolean filled = false;
 			for (Direction face : Direction.values()) {
