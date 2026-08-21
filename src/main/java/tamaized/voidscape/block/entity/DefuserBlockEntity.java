@@ -1,51 +1,64 @@
 package tamaized.voidscape.block.entity;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.Configurable;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
-import tamaized.voidscape.registry.ModAdvancementTriggers;
+import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
-import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.fluid.ModFluids;
+import tamaized.voidscape.util.SingleResourceCapabilityUtil;
+import tamaized.voidscape.util.TransactionUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
-public class DefuserBlockEntity extends BlockEntity {
-
-	@Autowired
-	private static ModAdvancementTriggers advancementTriggers;
+@Configurable
+public class DefuserBlockEntity extends TickableBlockEntity {
 
 	@Autowired
 	private static ModBlockEntities blockEntities;
 
 	@Autowired
-	private static ModDataAttachments dataAttachments;
+	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
-	private static ModFluids modFluids;
+	private ModDataAttachments dataAttachments;
+
+	@Autowired
+	private ModFluids modFluids;
+
+	@Autowired
+	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
+
+	@Autowired
+	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, blockEntities.DEFUSER.get(), (object, context) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.DEFUSER.get(), (object, _) -> object.fluids.get());
 	}
 
-	public final FluidTank fluids = new FluidTank(10000, fluidStack -> fluidStack.getFluid() == modFluids.VOIDIC_SOURCE.get());
+	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
+		new FluidStack(modFluids.VOIDIC_SOURCE.get(), 0)
+	), 10000));
 
 	private int processTick;
 
@@ -54,27 +67,27 @@ public class DefuserBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
-		processTick = tag.getInt("processTick");
-		fluids.readFromNBT(registries, tag.getCompound("tank"));
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		processTick = input.getIntOr("processTick", 0);
+		fluids.get().deserialize(input);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-		tag.putInt("processTick", processTick);
-		tag.put("tank", fluids.writeToNBT(registries, new CompoundTag()));
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.putInt("processTick", processTick);
+		fluids.get().serialize(output);
 	}
 
-	public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity be) {
-		if (!(be instanceof DefuserBlockEntity entity) || level.hasNeighborSignal(blockPos))
+	@Override
+	public void tick(Level level, BlockPos blockPos, BlockState blockState) {
+		if (level.hasNeighborSignal(blockPos))
 			return;
-		IFluidHandler fluid = entity.fluids;
-		if (entity.processTick <= 0 && fluid.getFluidInTank(0).getAmount() > 0) {
-			fluid.drain(1, IFluidHandler.FluidAction.EXECUTE);
-			entity.processTick = 100;
-		} else if (entity.processTick > 0) {
+		if (processTick <= 0 && singleResourceCapabilityUtil.amount(fluids) > 0) {
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(fluids, 1, transaction));
+			processTick = 100;
+		} else if (processTick > 0) {
 			ClientPacketSendParticles packet = new ClientPacketSendParticles();
 			AtomicBoolean process = new AtomicBoolean(false);
 			AtomicBoolean particle = new AtomicBoolean(false);
@@ -87,15 +100,15 @@ public class DefuserBlockEntity extends BlockEntity {
 					process.set(true);
 					Vec3 dir = new Vec3(blockPos.getX() + 0.5D, blockPos.getY() - 0.5D, blockPos.getZ() + 0.5D).subtract(e.position()).normalize().scale(0.15D);
 					if (level.getRandom().nextInt(100) == 0) {
-						packet.queueParticle(ParticleTypes.END_ROD, false, e.getX(), e.getY() + e.getBbHeight() / 2F, e.getZ(), dir.x(), dir.y(), dir.z());
+						packet.queueParticle(ParticleTypes.END_ROD, e.getX(), e.getY() + e.getBbHeight() / 2F, e.getZ(), dir.x(), dir.y(), dir.z());
 						particle.set(true);
 					}
 				}
 			});
 			if (process.get()) {
-				entity.processTick--;
+				processTick--;
 				if (particle.get() && level instanceof ServerLevel serverLevel)
-					PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(blockPos), packet);
+					PacketDistributor.sendToPlayersTrackingChunk(serverLevel, ChunkPos.containing(blockPos), packet);
 			}
 		}
 	}
