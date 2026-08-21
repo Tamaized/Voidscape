@@ -16,7 +16,7 @@ public class GenericAdvancementTrigger extends SimpleCriterionTrigger<GenericAdv
 	).apply(instance, Instance::new));
 
 	public void trigger(ServerPlayer player) {
-		this.trigger(player, instance -> true);
+		this.trigger(player, _ -> true);
 	}
 
 	@Override

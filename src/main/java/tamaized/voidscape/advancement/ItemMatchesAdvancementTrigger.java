@@ -14,7 +14,7 @@ public class ItemMatchesAdvancementTrigger extends SimpleCriterionTrigger<ItemMa
 
 	private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
-		ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(Instance::item)
+		ItemStack.CODEC.fieldOf("item").forGetter(Instance::item)
 	).apply(instance, Instance::new));
 
 	@Override
