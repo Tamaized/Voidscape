@@ -6,11 +6,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.biome.LayeredBiomeProvider;
 import tamaized.voidscape.biome.genlayer.legacy.AreaTransformer0;
 import tamaized.voidscape.biome.genlayer.legacy.Context;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 	public static final Codec<GenLayerRandomWithOneMajorBiomes> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -24,6 +26,7 @@ public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 	private final ResourceKey<Biome> majorBiome;
 	private final int chance;
 
+	@Nullable
 	private LayeredBiomeProvider provider;
 
 	public GenLayerRandomWithOneMajorBiomes(List<Either<ResourceKey<Biome>, LayeredBiomeProvider.ConditionalBiomeHolder>> biomes, ResourceKey<Biome> majorBiome, int chance) {
@@ -44,7 +47,7 @@ public class GenLayerRandomWithOneMajorBiomes implements AreaTransformer0 {
 	}
 
 	private int getRandomBiome(Context random) {
-		return provider.getBiomeId(loadedBiomes.get(random.nextRandom(loadedBiomes.size())));
+		return Objects.requireNonNull(provider).getBiomeId(loadedBiomes.get(random.nextRandom(loadedBiomes.size())));
 	}
 
 }

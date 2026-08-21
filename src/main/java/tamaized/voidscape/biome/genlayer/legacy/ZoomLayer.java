@@ -23,6 +23,8 @@ public enum ZoomLayer implements AreaTransformer1 {
 	}
 
 	@Override
+	// This is due to ZOOM_BITS/MASK being 1, if those are changed to be greater than 1, this suppression won't be necessary.
+	@SuppressWarnings("ConstantValue")
 	public int applyPixel(BigContext<?> context, Area area, int u, int v) {
 		int i = area.get(this.getParentX(u), this.getParentY(v));
 		context.initRandom(u >> ZOOM_BITS << ZOOM_BITS, v >> ZOOM_BITS << ZOOM_BITS);
