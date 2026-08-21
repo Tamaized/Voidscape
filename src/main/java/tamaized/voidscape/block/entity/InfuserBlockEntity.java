@@ -17,11 +17,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.data.Insanity;
@@ -38,7 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Configurable
 public class InfuserBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -62,7 +61,7 @@ public class InfuserBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().INFUSER.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.INFUSER.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 10000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
@@ -70,7 +69,7 @@ public class InfuserBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public InfuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().INFUSER.get(), pPos, pBlockState);
+		super(blockEntities.INFUSER.get(), pPos, pBlockState);
 	}
 
 	@Override

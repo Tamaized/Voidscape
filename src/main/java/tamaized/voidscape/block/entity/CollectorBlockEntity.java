@@ -17,13 +17,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
@@ -41,7 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Configurable
 public class CollectorBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -56,7 +55,7 @@ public class CollectorBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().COLLECTOR.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.COLLECTOR.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 10000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
@@ -66,7 +65,7 @@ public class CollectorBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public CollectorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().COLLECTOR.get(), pPos, pBlockState);
+		super(blockEntities.COLLECTOR.get(), pPos, pBlockState);
 	}
 
 	@Override

@@ -12,13 +12,11 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
@@ -33,7 +31,8 @@ import tamaized.voidscape.util.TransactionUtil;
 @Configurable
 public class LiquifierBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -51,8 +50,8 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.get().LIQUIFIER.get(), (object, _) -> object.items);
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().LIQUIFIER.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.items);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.fluids);
 	}
 
 	public final ItemStacksResourceHandler items = new FilteredItemStacksResourceHandler(1, (_, resource) -> resource.is(materialItems.VOIDIC_CRYSTAL));
@@ -64,7 +63,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public LiquifierBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().LIQUIFIER.get(), pPos, pBlockState);
+		super(blockEntities.LIQUIFIER.get(), pPos, pBlockState);
 	}
 
 	@Override

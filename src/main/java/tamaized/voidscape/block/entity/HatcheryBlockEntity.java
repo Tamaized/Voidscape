@@ -17,11 +17,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
@@ -33,7 +31,8 @@ import tamaized.voidscape.util.SingleResourceCapabilityUtil;
 @Configurable
 public class HatcheryBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -45,13 +44,13 @@ public class HatcheryBlockEntity extends TickableBlockEntity {
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().HATCHERY.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.HATCHERY.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 100000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
 
 	public HatcheryBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().HATCHERY.get(), pPos, pBlockState);
+		super(blockEntities.HATCHERY.get(), pPos, pBlockState);
 	}
 
 	@Override

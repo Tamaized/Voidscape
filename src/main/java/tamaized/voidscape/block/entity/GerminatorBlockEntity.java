@@ -21,10 +21,8 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.registry.*;
@@ -42,7 +40,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Configurable
 public class GerminatorBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -66,7 +65,7 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().GERMINATOR.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.GERMINATOR.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 10000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
@@ -74,7 +73,7 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public GerminatorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().GERMINATOR.get(), pPos, pBlockState);
+		super(blockEntities.GERMINATOR.get(), pPos, pBlockState);
 	}
 
 	@Override

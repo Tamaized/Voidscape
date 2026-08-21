@@ -20,10 +20,9 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import tamaized.beanification.BeanContext;
+import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
@@ -50,12 +49,13 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 		handle_method_AbstractCauldronBlock_receiveStalactiteDrip = tmp_handle_method_AbstractCauldronBlock_receiveStalactiteDrip;
 	}
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	private int tick;
 
 	public VeryDrippyDripstoneBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().VERY_DRIPPY_DRIPSTONE.get(), pPos, pBlockState);
+		super(blockEntities.VERY_DRIPPY_DRIPSTONE.get(), pPos, pBlockState);
 	}
 
 	@Override

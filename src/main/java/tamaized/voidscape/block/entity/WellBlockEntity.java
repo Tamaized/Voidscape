@@ -10,12 +10,10 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
@@ -27,7 +25,8 @@ import tamaized.voidscape.util.TransactionUtil;
 @Configurable
 public class WellBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -39,7 +38,7 @@ public class WellBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().WELL.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.WELL.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, Integer.MAX_VALUE, (_, resource) -> resource.is(Fluids.WATER));
@@ -47,7 +46,7 @@ public class WellBlockEntity extends TickableBlockEntity {
 	private final BlockPosDirectionCapabilityCacher<ResourceHandler<FluidResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
 	public WellBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().WELL.get(), pPos, pBlockState);
+		super(blockEntities.WELL.get(), pPos, pBlockState);
 	}
 
 	@Override

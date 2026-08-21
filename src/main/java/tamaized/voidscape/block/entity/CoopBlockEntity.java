@@ -14,13 +14,11 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import tamaized.beanification.Autowired;
-import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
 import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
@@ -34,7 +32,8 @@ import tamaized.voidscape.util.TransactionUtil;
 @Configurable
 public class CoopBlockEntity extends TickableBlockEntity {
 
-	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
+	@Autowired
+	private static ModBlockEntities blockEntities;
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -49,8 +48,8 @@ public class CoopBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.get().COOP.get(), (object, _) -> object.items);
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().COOP.get(), (object, _) -> object.fluids);
+		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.COOP.get(), (object, _) -> object.items);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.COOP.get(), (object, _) -> object.fluids);
 	}
 
 	public final ItemStacksResourceHandler items = new FilteredItemStacksResourceHandler(1, (_, resource) -> resource.is(Items.EGG));
@@ -61,7 +60,7 @@ public class CoopBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public CoopBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.get().COOP.get(), pPos, pBlockState);
+		super(blockEntities.COOP.get(), pPos, pBlockState);
 	}
 
 	@Override
