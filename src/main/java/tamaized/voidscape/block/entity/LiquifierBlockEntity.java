@@ -1,9 +1,7 @@
 package tamaized.voidscape.block.entity;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
@@ -14,15 +12,16 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.BeanContext;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.capability.BlockPosDirectionCapabilityCacher;
+import tamaized.voidscape.capability.FilteredFluidStacksResourceHandler;
 import tamaized.voidscape.capability.FilteredItemStacksResourceHandler;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
@@ -31,13 +30,10 @@ import tamaized.voidscape.registry.item.MaterialItems;
 import tamaized.voidscape.util.SingleResourceCapabilityUtil;
 import tamaized.voidscape.util.TransactionUtil;
 
-import java.util.function.Supplier;
-
 @Configurable
 public class LiquifierBlockEntity extends TickableBlockEntity {
 
-	@Autowired
-	private static ModBlockEntities blockEntities;
+	private static final Lazy<ModBlockEntities> blockEntities = BeanContext.injectLazy(ModBlockEntities.class);
 
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
@@ -55,14 +51,12 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	private TransactionUtil transactionUtil;
 
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.items);
-		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.fluids.get());
+		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.get().LIQUIFIER.get(), (object, _) -> object.items);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.get().LIQUIFIER.get(), (object, _) -> object.fluids);
 	}
 
 	public final ItemStacksResourceHandler items = new FilteredItemStacksResourceHandler(1, (_, resource) -> resource.is(materialItems.VOIDIC_CRYSTAL));
-	public final Supplier<FluidStacksResourceHandler> fluids = Suppliers.memoize(() -> new FluidStacksResourceHandler(NonNullList.of(
-		new FluidStack(modFluids.VOIDIC_SOURCE.get(), 0)
-	), 10000));
+	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 10000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
 
 	private final BlockPosDirectionCapabilityCacher<ResourceHandler<FluidResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
@@ -70,7 +64,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	private int processTick;
 
 	public LiquifierBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(blockEntities.LIQUIFIER.get(), pPos, pBlockState);
+		super(blockEntities.get().LIQUIFIER.get(), pPos, pBlockState);
 	}
 
 	@Override
@@ -86,7 +80,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 		super.loadAdditional(input);
 		processTick = input.getIntOr("processTick", 0);
 		items.deserialize(input);
-		fluids.get().deserialize(input);
+		fluids.deserialize(input);
 	}
 
 	@Override
@@ -94,7 +88,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 		super.saveAdditional(output);
 		output.putInt("processTick", processTick);
 		items.serialize(output);
-		fluids.get().serialize(output);
+		fluids.serialize(output);
 	}
 
 	@Override
@@ -109,7 +103,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 			if (processTick >= 80) {
 				processTick = 0;
 				transactionUtil.run(transaction -> {
-					singleResourceCapabilityUtil.insert(fluids.get(), 250, transaction);
+					singleResourceCapabilityUtil.insert(fluids, 250, transaction);
 					singleResourceCapabilityUtil.extract(items, 1, transaction);
 				});
 				level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
@@ -125,7 +119,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 				ResourceHandler<FluidResource> other = capabilityCache.get(Capabilities.Fluid.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
 				if (other != null) {
 					transactionUtil.run(transaction -> {
-						int amount = other.insert(fluids.get().getResource(0), Math.min(singleResourceCapabilityUtil.amount(fluids), 1000), transaction);
+						int amount = other.insert(fluids.getResource(0), Math.min(singleResourceCapabilityUtil.amount(fluids), 1000), transaction);
 						singleResourceCapabilityUtil.extract(fluids, amount, transaction);
 					});
 				}
