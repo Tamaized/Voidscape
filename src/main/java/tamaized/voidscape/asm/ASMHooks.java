@@ -1,30 +1,25 @@
 package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -32,9 +27,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.ClientHooks;
 import tamaized.beanification.Autowired;
-import tamaized.regutil.RegUtil;
+import tamaized.regutil.ToolAndArmorHelper;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.event.QuiverHandler;
@@ -63,6 +57,9 @@ public class ASMHooks {
 
 	@Autowired
 	private static QuiverHandler quiverHandler;
+
+	@Autowired
+	private static ToolAndArmorHelper toolAndArmorHelper;
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
@@ -94,8 +91,8 @@ public class ASMHooks {
 		float infusion = entity.getData(dataAttachments.INSANITY).getInfusion();
 		if (infusion <= 0F)
 			return color;
-		int alpha = (int) (Math.min(Mth.clamp(1F - infusion / 600F, 0F, 1F) * 255F, FastColor.ARGB32.alpha(color)));
-		return FastColor.ARGB32.color(alpha, color);
+		int alpha = (int) (Math.min(Mth.clamp(1F - infusion / 600F, 0F, 1F) * 255F, ARGB.alpha(color)));
+		return ARGB.color(alpha, color);
 	}
 
 	/**
@@ -105,9 +102,9 @@ public class ASMHooks {
 	 * {@link LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer, LivingEntity entity) {
+	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> renderer, LivingEntity entity) {
 		return !(entity instanceof IEthereal) && entity.getData(dataAttachments.INSANITY).getInfusion() > 0F ?
-			RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) :
+			null : //RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : // FIXME
 			type;
 	}
 
@@ -124,8 +121,8 @@ public class ASMHooks {
 		RegistryAccess registryAccess = level instanceof ServerLevel serverLevel ? serverLevel.registryAccess() :
 			level instanceof WorldGenRegion worldGenRegion ? worldGenRegion.registryAccess() :
 				null;
-		return registryAccess == null || !registryAccess.registryOrThrow(Registries.BIOME).getResourceKey(biome)
-			.map(key -> key.location().getNamespace().equals(Voidscape.MODID))
+		return registryAccess == null || !registryAccess.lookupOrThrow(Registries.BIOME).getResourceKey(biome)
+			.map(key -> key.identifier().getNamespace().equals(Voidscape.MODID))
 			.orElse(false);
 	}
 
@@ -163,14 +160,14 @@ public class ASMHooks {
 	 * {@link net.minecraft.client.renderer.ItemInHandRenderer#isChargedCrossbow(ItemStack)}
 	 */
 	public static boolean isBowInRenderingHand(boolean o, ItemStack stack, Item item) {
-		return o || RegUtil.isMyBow(stack, item);
+		return o || toolAndArmorHelper.isMyBow(stack, item);
 	}
 
 	/**
 	 * Injection Point:<br>
 	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)} <br>
 	 */
-	@OnlyIn(Dist.CLIENT)
+	/*@OnlyIn(Dist.CLIENT) FIXME
 	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, ArmorMaterial.Layer armormaterial$layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
 		if (RegUtil.isArmorOverlay(stack)) {
 			RegUtil.renderingArmorOverlay = true;
@@ -179,7 +176,7 @@ public class ASMHooks {
 			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 			RegUtil.renderingArmorOverlay = false;
 		}
-	}
+	}*/
 
 	/**
 	 * Injection Point:<br>

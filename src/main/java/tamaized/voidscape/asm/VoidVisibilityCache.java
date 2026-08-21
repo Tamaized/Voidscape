@@ -13,7 +13,7 @@ public class VoidVisibilityCache {
 	private ModAttributes attributes;
 
 	private double attributeCache;
-	private float[] brightnessCache;
+	private float[] brightnessCache = new float[0];
 
 	public float value(float o, int l) {
 		if (Minecraft.getInstance().player == null)
@@ -22,7 +22,7 @@ public class VoidVisibilityCache {
 		o = -0.3F; // hardcode for now, need to get this value from the DimType
 		// Note to self: LightTexture#getBrightness contains the DimType
 		double light = attribute > 0 ? attribute : o;
-		if (brightnessCache == null || attributeCache != attribute) {
+		if (brightnessCache.length == 0 || attributeCache != attribute) {
 			brightnessCache = fillBrightnessRamp((float) light);
 			attributeCache = attribute;
 		}
