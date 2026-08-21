@@ -17,14 +17,13 @@ import net.minecraft.world.level.biome.Climate;
 import net.neoforged.fml.ModList;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
-import tamaized.voidscape.asm.ASMHooks;
 import tamaized.voidscape.biome.genlayer.GenLayerBiomeStabilize;
 import tamaized.voidscape.biome.genlayer.GenLayerRandomWithOneMajorBiomes;
 import tamaized.voidscape.biome.genlayer.legacy.*;
 import tamaized.voidscape.util.LevelUtil;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.LongFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -57,16 +56,12 @@ public class LayeredBiomeProvider extends BiomeSource {
 	}
 
 	public static List<ResourceKey<Biome>> getConditionalBiomes(List<Either<ResourceKey<Biome>, ConditionalBiomeHolder>> biomes) {
-		return biomes.stream().map(e -> {
-			AtomicReference<ResourceKey<Biome>> result = new AtomicReference<>();
-			e.ifLeft(result::set);
-			e.ifRight(r -> {
-				if (ModList.get().isLoaded(r.modid())) {
-					result.set(r.biome());
-				}
-			});
-			return result.get();
-		}).filter(Objects::nonNull).toList();
+		return biomes.stream().map(e -> e.map(Function.identity(), r -> {
+			if (ModList.get().isLoaded(r.modid())) {
+				return r.biome();
+			}
+			return null;
+		})).filter(Objects::nonNull).toList();
 	}
 
 	@Autowired
