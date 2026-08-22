@@ -1,7 +1,6 @@
 package tamaized.voidscape.coremod;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import net.neoforged.neoforgespi.coremod.ICoreMod;
+import net.neoforged.neoforgespi.transformation.ClassProcessorProvider;
 import tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer;
 import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
@@ -13,35 +12,31 @@ import tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTra
 import tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer;
 import tamaized.voidscape.coremod.transformers.visibility.LightTextureNightVisionAndGammaTransformer;
 
-import java.util.List;
-
-public class VoidscapeCoreMod implements ICoreMod {
+public class VoidscapeCoreMod implements ClassProcessorProvider {
 	@Override
-	public Iterable<? extends ITransformer<?>> getTransformers() {
-		return List.of(
-			// Elytra
-			new DisableCapeRenderTransformer(),
-			new ShouldRenderElytraTransformer(),
+	public void createProcessors(Context context, Collector collector) {
+		// Elytra
+		collector.add(new DisableCapeRenderTransformer());
+		collector.add(new ShouldRenderElytraTransformer());
 
-			// Entity Render Transparency
-			new ModifyEntityRenderTransparencyTransformer(),
-			new ModifyEntityRenderTypeTransformer(),
+		// Entity Render Transparency
+		collector.add(new ModifyEntityRenderTransparencyTransformer());
+		collector.add(new ModifyEntityRenderTypeTransformer());
 
-			// Dimension Snow/Freeze Control
-			new BiomeSnowAndFreezeTransformer(),
+		// Dimension Snow/Freeze Control
+		collector.add(new BiomeSnowAndFreezeTransformer());
 
-			// Visibility
-			new LightTextureBrightnessTransformer(),
-			new LightTextureNightVisionAndGammaTransformer(),
+		// Visibility
+		collector.add(new LightTextureBrightnessTransformer());
+		collector.add(new LightTextureNightVisionAndGammaTransformer());
 
-			// ItemInHandRenderer
-			new ItemInHandRendererIsBowTransformer(),
+		// ItemInHandRenderer
+		collector.add(new ItemInHandRendererIsBowTransformer());
 
-			// Armor Model Overlays
-			new ArmorModelOverlayTransformer(),
+		// Armor Model Overlays
+		collector.add(new ArmorModelOverlayTransformer());
 
-			// ProjectileWeaponItem
-			new ProjectileWeaponItemUseAmmoTransformer()
-		);
+		// ProjectileWeaponItem
+		collector.add(new ProjectileWeaponItemUseAmmoTransformer());
 	}
 }

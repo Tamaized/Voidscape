@@ -1,11 +1,8 @@
 package tamaized.voidscape.coremod.transformers.elytra;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
-import cpw.mods.modlauncher.api.TargetType;
-import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforgespi.transformation.ProcessorName;
+import net.neoforged.neoforgespi.transformation.SimpleMethodProcessor;
+import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -16,38 +13,32 @@ import java.util.Set;
 /**
  * {@link tamaized.voidscape.asm.ASMHooks#disableCapeRender}
  */
-public class DisableCapeRenderTransformer implements ITransformer<MethodNode> {
+public class DisableCapeRenderTransformer extends SimpleMethodProcessor {
 
 	@Override
-	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
+	public ProcessorName name() {
+		return ASMUtil.named("disable_cape_render");
+	}
+
+	@Override
+	public void transform(MethodNode node, SimpleTransformationContext context) {
 		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/world/item/ItemStack", "is", "(Lnet/minecraft/world/item/Item;)Z")
 			.findFirst()
 			.ifPresent(instruction -> {
-				node.instructions.insert(instruction, ASMAPI.listOf(
+				node.instructions.insert(instruction, ASMUtil.listOf(
 					new VarInsnNode(Opcodes.ALOAD, 12),
 					ASMUtil.invokeAsmHook("disableCapeRender", "(ZLnet/minecraft/world/item/ItemStack;)Z")
 				));
 			});
-		return node;
 	}
 
 	@Override
-	public @NotNull TransformerVoteResult castVote(ITransformerVotingContext context) {
-		return TransformerVoteResult.YES;
-	}
-
-	@Override
-	public @NotNull Set<Target<MethodNode>> targets() {
-		return Set.of(Target.targetMethod(
+	public Set<Target> targets() {
+		return Set.of(new Target(
 			"net.minecraft.client.renderer.entity.layers.CapeLayer",
 			"render",
 			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V"
 		));
-	}
-
-	@Override
-	public @NotNull TargetType<MethodNode> getTargetType() {
-		return TargetType.METHOD;
 	}
 
 }

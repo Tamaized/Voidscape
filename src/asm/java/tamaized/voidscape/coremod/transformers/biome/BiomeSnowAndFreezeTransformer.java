@@ -1,11 +1,8 @@
 package tamaized.voidscape.coremod.transformers.biome;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
-import cpw.mods.modlauncher.api.TargetType;
-import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforgespi.transformation.ProcessorName;
+import net.neoforged.neoforgespi.transformation.SimpleMethodProcessor;
+import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -16,40 +13,34 @@ import java.util.Set;
 /**
  * {@link tamaized.voidscape.asm.ASMHooks#shouldBiomeHaveSnowfallAndLiquidFreeze}
  */
-public class BiomeSnowAndFreezeTransformer implements ITransformer<MethodNode> {
+public class BiomeSnowAndFreezeTransformer extends SimpleMethodProcessor {
 
 	@Override
-	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
+	public ProcessorName name() {
+		return ASMUtil.named("biome_snow_and_freeze");
+	}
+
+	@Override
+	public void transform(MethodNode node, SimpleTransformationContext context) {
 		ASMUtil.findInstructions(node, Opcodes.IRETURN)
-			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMAPI.listOf(
+			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMUtil.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 0),
 				new VarInsnNode(Opcodes.ALOAD, 1),
 				ASMUtil.invokeAsmHook("shouldBiomeHaveSnowfallAndLiquidFreeze", "(ZLnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;)Z")
 			)));
-		return node;
 	}
 
 	@Override
-	public @NotNull TransformerVoteResult castVote(ITransformerVotingContext context) {
-		return TransformerVoteResult.YES;
-	}
-
-	@Override
-	public @NotNull Set<Target<MethodNode>> targets() {
-		return Set.of(Target.targetMethod(
+	public Set<Target> targets() {
+		return Set.of(new Target(
 			"net.minecraft.world.level.biome.Biome",
 			"shouldSnow",
 			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z"
-		), Target.targetMethod(
+		), new Target(
 			"net.minecraft.world.level.biome.Biome",
 			"shouldFreeze",
 			"(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z"
 		));
-	}
-
-	@Override
-	public @NotNull TargetType<MethodNode> getTargetType() {
-		return TargetType.METHOD;
 	}
 
 }

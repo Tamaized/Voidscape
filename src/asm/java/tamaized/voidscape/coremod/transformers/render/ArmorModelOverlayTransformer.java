@@ -1,11 +1,8 @@
 package tamaized.voidscape.coremod.transformers.render;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
-import cpw.mods.modlauncher.api.TargetType;
-import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforgespi.transformation.ProcessorName;
+import net.neoforged.neoforgespi.transformation.SimpleMethodProcessor;
+import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -16,10 +13,15 @@ import java.util.Set;
 /**
  * {@link tamaized.voidscape.asm.ASMHooks#armorOverlay}
  */
-public class ArmorModelOverlayTransformer implements ITransformer<MethodNode> {
+public class ArmorModelOverlayTransformer extends SimpleMethodProcessor {
 
 	@Override
-	public @NotNull MethodNode transform(MethodNode node, ITransformerVotingContext context) {
+	public ProcessorName name() {
+		return ASMUtil.named("armor_model_overlay");
+	}
+
+	@Override
+	public void transform(MethodNode node, SimpleTransformationContext context) {
 		ASMUtil.findMethodInstructions(
 			node,
 			Opcodes.INVOKEVIRTUAL,
@@ -27,7 +29,7 @@ public class ArmorModelOverlayTransformer implements ITransformer<MethodNode> {
 			"renderModel",
 			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/model/Model;ILnet/minecraft/resources/Identifier;)V"
 		).forEach(instruction -> {
-			node.instructions.insert(instruction, ASMAPI.listOf(
+			node.instructions.insert(instruction, ASMUtil.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 0),
 				new VarInsnNode(Opcodes.ALOAD, 21),
 				new VarInsnNode(Opcodes.ALOAD, 1),
@@ -40,26 +42,15 @@ public class ArmorModelOverlayTransformer implements ITransformer<MethodNode> {
 				ASMUtil.invokeAsmHook("armorOverlay", "(Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;Lnet/minecraft/world/item/ArmorMaterial$Layer;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/model/Model;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)V")
 			));
 		});
-		return node;
 	}
 
 	@Override
-	public @NotNull TransformerVoteResult castVote(ITransformerVotingContext context) {
-		return TransformerVoteResult.YES;
-	}
-
-	@Override
-	public @NotNull Set<Target<MethodNode>> targets() {
-		return Set.of(Target.targetMethod(
+	public Set<Target> targets() {
+		return Set.of(new Target(
 			"net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer",
 			"renderArmorPiece",
 			"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;FFFFFF)V"
 		));
-	}
-
-	@Override
-	public @NotNull TargetType<MethodNode> getTargetType() {
-		return TargetType.METHOD;
 	}
 
 }

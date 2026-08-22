@@ -1,5 +1,6 @@
 package tamaized.voidscape.coremod;
 
+import net.neoforged.neoforgespi.transformation.ProcessorName;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -12,6 +13,18 @@ public class ASMUtil {
 
 	private ASMUtil() {
 
+	}
+
+	public static ProcessorName named(String name) {
+		return new ProcessorName("voidscape", name);
+	}
+
+	public static InsnList listOf(AbstractInsnNode... instructions) {
+		InsnList list = new InsnList();
+		for (AbstractInsnNode node : instructions) {
+			list.add(node);
+		}
+		return list;
 	}
 
 	public static MethodInsnNode invokeAsmHook(String name, String descriptor) {
