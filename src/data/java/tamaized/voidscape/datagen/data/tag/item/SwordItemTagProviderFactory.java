@@ -8,6 +8,8 @@ import tamaized.beanification.Component;
 import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.List;
+
 @Component
 public class SwordItemTagProviderFactory implements IItemTagProviderFactory {
 
@@ -16,12 +18,12 @@ public class SwordItemTagProviderFactory implements IItemTagProviderFactory {
 
 	@Override
 	public void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider) {
-		accessor.tag(ItemTags.SWORDS).add(
+		accessor.tag(ItemTags.SWORDS).addAll(List.of(
 			tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_SWORD.getKey(),
 			tools.corruptToolSet().CORRUPT_SWORD.getKey(),
 			tools.titaniteToolSet().TITANITE_SWORD.getKey(),
 			tools.ichorToolSet().ICHOR_SWORD.getKey(),
 			tools.astralToolSet().ASTRAL_SWORD.getKey()
-		);
+		));
 	}
 }

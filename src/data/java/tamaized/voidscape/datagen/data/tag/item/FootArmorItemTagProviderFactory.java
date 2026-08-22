@@ -8,6 +8,8 @@ import tamaized.beanification.Component;
 import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 
+import java.util.List;
+
 @Component
 public class FootArmorItemTagProviderFactory implements IItemTagProviderFactory {
 
@@ -16,12 +18,12 @@ public class FootArmorItemTagProviderFactory implements IItemTagProviderFactory 
 
 	@Override
 	public void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider) {
-		accessor.tag(ItemTags.FOOT_ARMOR).add(
+		accessor.tag(ItemTags.FOOT_ARMOR).addAll(List.of(
 			armor.voidicCrystalArmorSet().VOIDIC_CRYSTAL_BOOTS.getKey(),
 			armor.corruptArmorSet().CORRUPT_BOOTS.getKey(),
 			armor.titaniteArmorSet().TITANITE_BOOTS.getKey(),
 			armor.ichorArmorSet().ICHOR_BOOTS.getKey(),
 			armor.astralArmorSet().ASTRAL_BOOTS.getKey()
-		);
+		));
 	}
 }

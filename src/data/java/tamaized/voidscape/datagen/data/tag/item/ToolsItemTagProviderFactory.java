@@ -2,11 +2,13 @@ package tamaized.voidscape.datagen.data.tag.item;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraft.world.item.Item;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.util.TagProviderUtil;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
+
+import java.util.List;
 
 @Component
 public class ToolsItemTagProviderFactory implements IItemTagProviderFactory {
@@ -14,20 +16,13 @@ public class ToolsItemTagProviderFactory implements IItemTagProviderFactory {
 	@Autowired
 	private ModToolSetComponentDirectory tools;
 
-	@Autowired
-	private TagProviderUtil tagProviderUtil;
-
 	@Override
-	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		tagProviderUtil.multiTagAll(
-			accessor::tag,
-			Tags.Items.TOOLS,
-			ItemTags.DURABILITY_ENCHANTABLE
-		).add(
+	public void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider) {
+		accessor.tag(ItemTags.DURABILITY_ENCHANTABLE).addAll(List.of(
 			tools.spellTomeSet().VOIDIC_TOME.getKey(),
 			tools.spellTomeSet().CORRUPT_TOME.getKey(),
 			tools.spellTomeSet().TITANITE_TOME.getKey(),
 			tools.spellTomeSet().ICHOR_TOME.getKey()
-		);
+		));
 	}
 }

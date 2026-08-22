@@ -8,6 +8,8 @@ import tamaized.beanification.Component;
 import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
+import java.util.List;
+
 @Component
 public class PickaxeItemTagProviderFactory implements IItemTagProviderFactory {
 
@@ -16,12 +18,12 @@ public class PickaxeItemTagProviderFactory implements IItemTagProviderFactory {
 
 	@Override
 	public void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider) {
-		accessor.tag(ItemTags.PICKAXES).add(
+		accessor.tag(ItemTags.PICKAXES).addAll(List.of(
 			tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_PICKAXE.getKey(),
 			tools.charredToolSet().CHARRED_WARHAMMER.getKey(),
 			tools.titaniteToolSet().TITANITE_PICKAXE.getKey(),
 			tools.ichorToolSet().ICHOR_PICKAXE.getKey(),
 			tools.astralToolSet().ASTRAL_PICKAXE.getKey()
-		);
+		));
 	}
 }
