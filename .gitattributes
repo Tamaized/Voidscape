@@ -1,2 +1,3 @@
-text eol=lf
+text=auto eol=lf
+*.bat text eol=crlf
 src/generated/** linguist-generated
