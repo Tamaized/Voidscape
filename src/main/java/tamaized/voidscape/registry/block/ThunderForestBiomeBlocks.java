@@ -177,7 +177,7 @@ public class ThunderForestBiomeBlocks {
 			}
 		}
 	);
-	public final Supplier<Item> THUNDER_STEM_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STEM_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STEM.getId().getPath(),
 		() -> new BlockItem(THUNDER_STEM.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -189,7 +189,7 @@ public class ThunderForestBiomeBlocks {
 			.strength(2.0F)
 		)
 	);
-	public final Supplier<Item> THUNDER_STEM_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM_STRIPPED.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STEM_STRIPPED_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STEM_STRIPPED.getId().getPath(),
 		() -> new BlockItem(THUNDER_STEM_STRIPPED.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -209,7 +209,7 @@ public class ThunderForestBiomeBlocks {
 			}
 		}
 	);
-	public final Supplier<Item> THUNDER_HYPHAE_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_ITEM =RegUtil.register(Registries.ITEM, THUNDER_HYPHAE.getId().getPath(),
 		() -> new BlockItem(THUNDER_HYPHAE.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -221,7 +221,7 @@ public class ThunderForestBiomeBlocks {
 			.strength(2.0F)
 		)
 	);
-	public final Supplier<Item> THUNDER_HYPHAE_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE_STRIPPED.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_STRIPPED_ITEM =RegUtil.register(Registries.ITEM, THUNDER_HYPHAE_STRIPPED.getId().getPath(),
 		() -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -251,7 +251,7 @@ public class ThunderForestBiomeBlocks {
 			.strength(2.0F, 3.0F)
 		)
 	);
-	public final Supplier<Item> THUNDER_PLANKS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_PLANKS.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_PLANKS_ITEM =RegUtil.register(Registries.ITEM, THUNDER_PLANKS.getId().getPath(),
 		() -> new BlockItem(THUNDER_PLANKS.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -263,7 +263,7 @@ public class ThunderForestBiomeBlocks {
 			.strength(2.0F, 3.0F)
 		)
 	);
-	public final Supplier<Item> THUNDER_STAIRS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STAIRS.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STAIRS_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STAIRS.getId().getPath(),
 		() -> new BlockItem(THUNDER_STAIRS.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -274,7 +274,7 @@ public class ThunderForestBiomeBlocks {
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F, 3.0F)
 		));
-	public final Supplier<Item> THUNDER_SLAB_ITEM = RegUtil.register(Registries.ITEM, THUNDER_SLAB.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_SLAB_ITEM = RegUtil.register(Registries.ITEM, THUNDER_SLAB.getId().getPath(),
 		() -> new BlockItem(THUNDER_SLAB.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 

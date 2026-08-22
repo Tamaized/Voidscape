@@ -1,10 +1,11 @@
 package tamaized.voidscape.datagen.data.tag.item;
 
 import net.minecraft.core.HolderLookup;
-import tamaized.voidscape.datagen.data.tag.block.BlockTagProviderFactory;
+import net.minecraft.world.item.Item;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 
 public interface IItemTagProviderFactory {
 
-	void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider);
+	void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider);
 
 }

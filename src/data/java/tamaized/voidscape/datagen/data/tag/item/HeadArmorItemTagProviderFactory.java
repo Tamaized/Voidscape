@@ -2,8 +2,10 @@ package tamaized.voidscape.datagen.data.tag.item;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 
 @Component
@@ -13,13 +15,13 @@ public class HeadArmorItemTagProviderFactory implements IItemTagProviderFactory 
 	private ModArmorSetComponentDirectory armor;
 
 	@Override
-	public void make(ItemTagProviderFactory.ItemTagsProviderAccessor accessor, HolderLookup.Provider provider) {
+	public void make(ExposedKeyTagProvider<Item> accessor, HolderLookup.Provider provider) {
 		accessor.tag(ItemTags.HEAD_ARMOR).add(
-			armor.voidicCrystalArmorSet().VOIDIC_CRYSTAL_HELMET.get(),
-			armor.corruptArmorSet().CORRUPT_HELMET.get(),
-			armor.titaniteArmorSet().TITANITE_HELMET.get(),
-			armor.ichorArmorSet().ICHOR_HELMET.get(),
-			armor.astralArmorSet().ASTRAL_HELMET.get()
+			armor.voidicCrystalArmorSet().VOIDIC_CRYSTAL_HELMET.getKey(),
+			armor.corruptArmorSet().CORRUPT_HELMET.getKey(),
+			armor.titaniteArmorSet().TITANITE_HELMET.getKey(),
+			armor.ichorArmorSet().ICHOR_HELMET.getKey(),
+			armor.astralArmorSet().ASTRAL_HELMET.getKey()
 		);
 	}
 }

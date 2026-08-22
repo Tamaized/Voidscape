@@ -24,10 +24,10 @@ public class TagProviderFactory {
 	private EntityTypeTagProviderFactory entityTypeTagProviderFactory;
 
 	public void generate(GatherDataEvent event) {
-		event.getGenerator().addProvider(event.includeServer(), blockTagProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeServer(), itemTagProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeServer(), damageTypeTagProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeServer(), entityTypeTagProviderFactory.make(event));
+		event.getGenerator().addProvider(true, blockTagProviderFactory.make(event));
+		event.getGenerator().addProvider(true, itemTagProviderFactory.make(event));
+		event.getGenerator().addProvider(true, damageTypeTagProviderFactory.make(event));
+		event.getGenerator().addProvider(true, entityTypeTagProviderFactory.make(event));
 	}
 
 }

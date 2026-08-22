@@ -28,11 +28,11 @@ public class AssetsGenerator {
 	private ParticleProviderFactory particleProviderFactory;
 
 	public void generate(GatherDataEvent event) {
-		event.getGenerator().addProvider(event.includeClient(), blockModelProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeClient(), itemModelProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeClient(), blockStateProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeClient(), langProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeClient(), particleProviderFactory.make(event));
+		event.getGenerator().addProvider(true, blockModelProviderFactory.make(event));
+		event.getGenerator().addProvider(true, itemModelProviderFactory.make(event));
+		event.getGenerator().addProvider(true, blockStateProviderFactory.make(event));
+		event.getGenerator().addProvider(true, langProviderFactory.make(event));
+		event.getGenerator().addProvider(true, particleProviderFactory.make(event));
 	}
 
 }

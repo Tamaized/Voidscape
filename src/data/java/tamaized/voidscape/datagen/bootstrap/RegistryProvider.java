@@ -46,7 +46,7 @@ public class RegistryProvider {
 				builder,
 				Set.of("minecraft", Voidscape.MODID)
 			);
-			event.getGenerator().addProvider(event.includeServer(), value);
+			event.getGenerator().addProvider(true, value);
 		}
 		return value.getRegistryProvider();
 	}
@@ -69,7 +69,7 @@ public class RegistryProvider {
 	public <T> Stream<T> filterStreamForModFrom(HolderLookup.Provider provider, ResourceKey<Registry<T>> registry) {
 		return provider.lookupOrThrow(registry)
 			.listElements()
-			.filter(r -> Objects.requireNonNull(r.getKey()).location().getNamespace().equals(Voidscape.MODID))
+			.filter(r -> Objects.requireNonNull(r.getKey()).identifier().getNamespace().equals(Voidscape.MODID))
 			.map(Holder.Reference::value);
 	}
 

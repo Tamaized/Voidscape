@@ -30,9 +30,9 @@ public class DataGenerator {
 	public void generate(GatherDataEvent event) {
 		tagProviderFactory.generate(event);
 		datamapProviderFactory.generate(event);
-		event.getGenerator().addProvider(event.includeServer(), advancementProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeServer(), lootTableProviderFactory.make(event));
-		event.getGenerator().addProvider(event.includeServer(), recipeProviderFactory.make(event));
+		event.getGenerator().addProvider(true, advancementProviderFactory.make(event));
+		event.getGenerator().addProvider(true, lootTableProviderFactory.make(event));
+		event.getGenerator().addProvider(true, recipeProviderFactory.make(event));
 	}
 
 }
