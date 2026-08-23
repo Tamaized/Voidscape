@@ -1,6 +1,8 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -27,7 +29,7 @@ public class VoidicCrystalOreBlockLootTableFactory implements IBlockLootTable {
 	private ModItemComponentDirectory items;
 
 	@Override
-	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+	public void add(BlockLootSubProvider provider, HolderGetter<Item> itemProvider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		add.accept(
 			blocks.oreBlocks().VOIDIC_CRYSTAL_ORE.get(),
 			LootTable.lootTable().withPool(

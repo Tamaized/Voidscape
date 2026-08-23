@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -7,7 +8,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.datagen.util.BlockLootTableUtil;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
@@ -19,9 +19,6 @@ import java.util.function.Supplier;
 public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
 
 	@Autowired
-	private RegistryProvider registries;
-
-	@Autowired
 	private BlockLootTableUtil blockLootTableUtil;
 
 	@Autowired
@@ -30,7 +27,8 @@ public class BasicSilkTouchBlockLootTablesFactory implements IBlockLootTable {
 	@Autowired
 	private ModItemComponentDirectory items;
 
-	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+	@Override
+	public void add(BlockLootSubProvider provider, HolderGetter<Item> itemProvider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		add(add, hasSilkTouch, blocks.oreBlocks().TITANITE_ORE, items.materialItems().TITANITE_CHUNK, blocks.oreBlocks().TITANITE_ORE_ITEM);
 		add(add, hasSilkTouch, blocks.oreBlocks().FLESH_ORE, items.materialItems().FLESH_CHUNK, blocks.oreBlocks().FLESH_ORE_ITEM);
 		add(add, hasSilkTouch, blocks.oreBlocks().STRANGE_ORE, items.materialItems().STRANGE_PEARL, blocks.oreBlocks().STRANGE_ORE_ITEM);

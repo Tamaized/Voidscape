@@ -1,12 +1,13 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.datagen.util.BlockLootTableUtil;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
@@ -18,9 +19,6 @@ import java.util.function.Supplier;
 public class EtherealFruitEndBlockLootTableFactory implements IBlockLootTable {
 
 	@Autowired
-	private RegistryProvider registries;
-
-	@Autowired
 	private BlockLootTableUtil blockLootTableUtil;
 
 	@Autowired
@@ -29,7 +27,8 @@ public class EtherealFruitEndBlockLootTableFactory implements IBlockLootTable {
 	@Autowired
 	private ModItemComponentDirectory items;
 
-	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+	@Override
+	public void add(BlockLootSubProvider provider, HolderGetter<Item> itemProvider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		add.accept(
 			blocks.etherealFruitBlocks().VOID.get(),
 			blockLootTableUtil.etherealFruit(items.etherealFruitItems().ETHEREAL_FRUIT_VOID)

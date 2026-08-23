@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.data.loot.sub.block;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +24,7 @@ public class BasicSurvivesExplosionBlockLootTablesFactory implements IBlockLootT
 	private ModItemComponentDirectory items;
 
 	@Override
-	public void add(BlockLootSubProvider provider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+	public void add(BlockLootSubProvider provider, HolderGetter<Item> itemProvider, BiConsumer<Block, LootTable.Builder> add, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		add(provider, add, blocks.oreBlocks().CRACKED_ASTRALROCK, items.materialItems().ASTRAL_ESSENCE);
 
 		add(provider, add, blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK, blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK_ITEM);

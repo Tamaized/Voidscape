@@ -1,7 +1,8 @@
 package tamaized.voidscape.datagen.util;
 
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -79,12 +80,12 @@ public class BlockLootTableUtil {
 		);
 	}
 
-	public LootTable.Builder vine(Supplier<? extends Item> item, Supplier<LootItemCondition.Builder> hasSilkTouch) {
+	public LootTable.Builder vine(HolderGetter<Item> itemProvider, Supplier<? extends Item> item, Supplier<LootItemCondition.Builder> hasSilkTouch) {
 		return LootTable.lootTable().withPool(
 			LootPool.lootPool().add(
 				AlternativesEntry.alternatives(
 					LootItem.lootTableItem(item.get()).when(AnyOfCondition.anyOf(
-						MatchTool.toolMatches(ItemPredicate.Builder.item().of(Tags.Items.TOOLS_SHEAR)),
+						MatchTool.toolMatches(ItemPredicate.Builder.item().of(itemProvider, Tags.Items.TOOLS_SHEAR)),
 						hasSilkTouch.get()
 					)),
 					LootItem.lootTableItem(item.get()).when(
