@@ -11,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -172,10 +171,6 @@ public class LangProviderFactory {
 				add(Voidscape.MODID + ".item_group", translation);
 			}
 
-			private void addBiome(ResourceKey<Biome> biome, String translation) {
-				addResourceKey(biome, "biome", translation);
-			}
-
 			private void addAdvancement(String name, String title, String desc) {
 				add("advancement." + Voidscape.MODID + "." + name, title);
 				add("advancement." + Voidscape.MODID + "." + name + ".desc", desc);
@@ -212,7 +207,7 @@ public class LangProviderFactory {
 			}
 
 			private void addSubtitle(SoundEvent key, String translation) {
-				add(key.getLocation().toLanguageKey("subtitles"), translation);
+				add(key.location().toLanguageKey("subtitles"), translation);
 			}
 
 			private void addConfiguration(String configuration, String translation) {
@@ -232,7 +227,7 @@ public class LangProviderFactory {
 			}
 
 			private void addResourceKey(ResourceKey<?> key, String prefix, String translation) {
-				add(key.location().toLanguageKey(prefix), translation);
+				add(key.identifier().toLanguageKey(prefix), translation);
 			}
 
 			private void addDatapack(Lazy<Pack> pack, String translation) {
