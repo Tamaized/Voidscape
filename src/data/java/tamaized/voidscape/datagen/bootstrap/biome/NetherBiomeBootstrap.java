@@ -4,7 +4,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
-import net.minecraft.util.random.Weight;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -102,37 +101,32 @@ public class NetherBiomeBootstrap implements IBiomeBootstrap {
 			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(EntityType.WITHER_SKELETON, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(
 					EntityType.WITHER_SKELETON,
-					Weight.of(5),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.ZOMBIFIED_PIGLIN, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 20, new MobSpawnSettings.SpawnerData(
 					EntityType.ZOMBIFIED_PIGLIN,
-					Weight.of(20),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.ZOGLIN, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(
 					EntityType.ZOGLIN,
-					Weight.of(10),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.GHAST, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 25, new MobSpawnSettings.SpawnerData(
 					EntityType.GHAST,
-					Weight.of(25),
 					4,
 					4
 				))
 				.addMobCharge(EntityType.BLAZE, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(
 					EntityType.BLAZE,
-					Weight.of(5),
 					1,
 					1
 				))

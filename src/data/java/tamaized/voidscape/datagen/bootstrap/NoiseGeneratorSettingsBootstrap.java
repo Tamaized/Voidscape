@@ -1,6 +1,5 @@
 package tamaized.voidscape.datagen.bootstrap;
 
-import com.aetherteam.aether.block.AetherBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -13,7 +12,6 @@ import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModBiomes;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 import tamaized.voidscape.registry.ModDimensions;
-import tamaized.voidscape.registry.ModSurfaceRules;
 import tamaized.voidscape.surfacerule.AirAboveConditionSource;
 
 import javax.annotation.Nullable;
@@ -29,9 +27,6 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 
 	@Autowired
 	private ModBiomes biomes;
-
-	@Autowired
-	private ModSurfaceRules surfaceRules;
 
 	@Autowired
 	private ModBlockComponentDirectory blocks;
@@ -86,7 +81,7 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 					)
 				)
 			));
-			if (withAether)
+			/*if (withAether) FIXME
 				surfaceRules.add(SurfaceRules.ifTrue(
 					SurfaceRules.isBiome(biomes.AETHER),
 					SurfaceRules.sequence(
@@ -96,9 +91,9 @@ public class NoiseGeneratorSettingsBootstrap implements IBootstrap {
 						),
 						SurfaceRules.state(AetherBlocks.HOLYSTONE.get().defaultBlockState())
 					)
-				));
+				));*/
 			VOID = context.register(
-				ResourceKey.create(Registries.NOISE_SETTINGS, dimensions.VOID.location()),
+				ResourceKey.create(Registries.NOISE_SETTINGS, dimensions.VOID.identifier()),
 				new NoiseGeneratorSettings(
 					new NoiseSettings(
 						0,

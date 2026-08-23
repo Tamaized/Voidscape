@@ -4,7 +4,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
-import net.minecraft.util.random.Weight;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -127,30 +126,26 @@ public class OverworldBiomeBootstrap implements IBiomeBootstrap {
 			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(EntityType.SPIDER, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(
 					EntityType.SPIDER,
-					Weight.of(5),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.ZOMBIE, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 20, new MobSpawnSettings.SpawnerData(
 					EntityType.ZOMBIE,
-					Weight.of(20),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.SKELETON, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(
 					EntityType.SKELETON,
-					Weight.of(10),
 					1,
 					1
 				))
 				.addMobCharge(EntityType.CREEPER, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 5, new MobSpawnSettings.SpawnerData(
 					EntityType.CREEPER,
-					Weight.of(5),
 					1,
 					1
 				))

@@ -23,10 +23,11 @@ public class DimensionTypeBootstrap implements IBootstrap {
 	@Nullable
 	private Holder<DimensionType> VOID;
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.DIMENSION_TYPE, context -> {
 			VOID = context.register(
-				ResourceKey.create(Registries.DIMENSION_TYPE, dimensions.VOID.location()),
+				ResourceKey.create(Registries.DIMENSION_TYPE, dimensions.VOID.identifier()),
 				new DimensionType(
 					OptionalLong.of(6000L),
 					false,
@@ -40,9 +41,9 @@ public class DimensionTypeBootstrap implements IBootstrap {
 					256,
 					256,
 					BlockTags.INFINIBURN_OVERWORLD,
-					dimensions.VOID.location(),
+					dimensions.VOID.identifier(),
 					-0.3F,
-					new DimensionType.MonsterSettings(false, false, ConstantInt.ZERO, 0)
+					new DimensionType.MonsterSettings(ConstantInt.ZERO, 0)
 				)
 			);
 		});

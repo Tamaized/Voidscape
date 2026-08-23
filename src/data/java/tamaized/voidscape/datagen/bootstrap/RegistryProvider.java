@@ -7,6 +7,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.Directory;
@@ -28,6 +29,8 @@ public class RegistryProvider {
 	private CachedBootstrapHolderGetter cachedBootstrapHolderGetter;
 
 	private RegistrySetBuilder builder = new RegistrySetBuilder();
+
+	@Nullable
 	private DatapackBuiltinEntriesProvider value;
 
 	@PostConstruct
@@ -52,7 +55,7 @@ public class RegistryProvider {
 	}
 
 	public HolderLookup.Provider join() {
-		return value.getRegistryProvider().join();
+		return Objects.requireNonNull(value).getRegistryProvider().join();
 	}
 
 	public <T> Optional<ResourceKey<T>> findKey(ResourceKey<Registry<T>> registry, T t) {

@@ -4,7 +4,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
-import net.minecraft.util.random.Weight;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -78,9 +77,8 @@ public class EndBiomeBootstrap implements IBiomeBootstrap {
 			.mobSpawnSettings(new ExtendedMobSpawnSettingsBuilder()
 				.creatureGenerationProbability(0F)
 				.addMobCharge(EntityType.ENDERMAN, 0.7F, 0.15F)
-				.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(
+				.addSpawn(MobCategory.MONSTER, 20, new MobSpawnSettings.SpawnerData(
 					EntityType.ENDERMAN,
-					Weight.of(20),
 					1,
 					1
 				))

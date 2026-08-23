@@ -3,8 +3,8 @@ package tamaized.voidscape.datagen.bootstrap.structure;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -42,9 +42,9 @@ public class CharredStructureBootstrap extends StructureBootstrapHolder {
 				MobCategory.MONSTER,
 				new StructureSpawnOverride(
 					StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-					WeightedRandomList.create(new MobSpawnSettings.SpawnerData(
-						entities.VOIDS_WRATH.get(), Weight.of(100), 1, 3
-					))
+					WeightedList.<MobSpawnSettings.SpawnerData>of(new Weighted<>(new MobSpawnSettings.SpawnerData(
+						entities.VOIDS_WRATH.get(), 1, 3
+					), 100))
 				)
 			))
 			.build());

@@ -27,6 +27,7 @@ public class VoidscapeAetherCompatPlacedFeatureBootstrap implements IBootstrap {
 		return configuredFeatureBootstrap.priority() + 1;
 	}
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.PLACED_FEATURE, context -> placedFeatures.forEach(placedFeature -> placedFeature.getOrMake(context)));
 	}

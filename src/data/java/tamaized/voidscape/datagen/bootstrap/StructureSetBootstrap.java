@@ -23,6 +23,7 @@ public class StructureSetBootstrap implements IBootstrap {
 		return structureBootstrap.priority() + 1;
 	}
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.STRUCTURE_SET, context -> structureSets.forEach(structureSet -> structureSet.getOrMake(context)));
 	}

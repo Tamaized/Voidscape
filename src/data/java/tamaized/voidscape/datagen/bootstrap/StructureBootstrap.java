@@ -23,6 +23,7 @@ public class StructureBootstrap implements IBootstrap {
 		return biomeBootstrap.priority() + 1;
 	}
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.STRUCTURE, context -> structures.forEach(structure -> structure.getOrMake(context)));
 	}

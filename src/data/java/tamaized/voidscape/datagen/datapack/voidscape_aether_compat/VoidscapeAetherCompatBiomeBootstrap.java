@@ -25,6 +25,7 @@ public class VoidscapeAetherCompatBiomeBootstrap implements IBootstrap {
 		return placedFeatureBootstrap.priority() + 1;
 	}
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.BIOME, context -> biomes.forEach(biome -> context.register(biome.key(), biome.make(context))));
 	}

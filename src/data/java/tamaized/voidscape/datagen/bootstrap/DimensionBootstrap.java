@@ -13,7 +13,6 @@ import tamaized.voidscape.biome.LayeredBiomeProvider;
 import tamaized.voidscape.biome.genlayer.GenLayerRandomWithOneMajorBiomes;
 import tamaized.voidscape.dimension.VoidChunkGenerator;
 import tamaized.voidscape.registry.ModBiomes;
-import tamaized.voidscape.registry.ModDimensions;
 
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class DimensionBootstrap implements IBootstrap {
 		return dimensionTypeBootstrap.priority() + 1;
 	}
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.LEVEL_STEM, context -> {
 			context.register(

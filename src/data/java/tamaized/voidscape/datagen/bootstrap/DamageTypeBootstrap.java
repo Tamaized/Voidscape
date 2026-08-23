@@ -18,6 +18,7 @@ public class DamageTypeBootstrap implements IBootstrap {
 	@Autowired
 	private ModDamageSource damageTypes;
 
+	@Override
 	public RegistrySetBuilder bootstrap(RegistrySetBuilder builder) {
 		return builder.add(Registries.DAMAGE_TYPE, context -> {
 			context.register(damageTypes.VOIDIC, new DamageType(namespaceUtils.dot(damageTypes.VOIDIC), DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.0F));
