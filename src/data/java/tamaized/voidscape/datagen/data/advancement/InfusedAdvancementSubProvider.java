@@ -5,14 +5,10 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.advancement.GenericAdvancementTrigger;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlockComponentDirectory;
-import tamaized.voidscape.registry.ModDimensions;
-import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.Optional;
@@ -30,24 +26,15 @@ public class InfusedAdvancementSubProvider extends AbstractAdvancementSubProvide
 	@Autowired
 	private ModItemComponentDirectory items;
 
-	@Autowired
-	private ModBlockComponentDirectory blocks;
-
-	@Autowired
-	private ModDimensions dimensions;
-
-	@Autowired
-	private ModEntities entities;
-
 	@Override
 	protected String name() {
 		return "infused";
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
-			.parent(parent.getOrMake(registries, saver, existingFileHelper))
+			.parent(parent.getOrMake(registries, saver))
 			.display(
 				items.etherealFruitItems().ETHEREAL_FRUIT_VOID.get(),
 				title(),

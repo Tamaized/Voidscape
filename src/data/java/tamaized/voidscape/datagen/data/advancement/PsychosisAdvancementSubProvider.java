@@ -4,9 +4,11 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.KilledTrigger;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.HolderLookup;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.core.registries.Registries;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModDimensions;
@@ -36,9 +38,9 @@ public class PsychosisAdvancementSubProvider extends AbstractAdvancementSubProvi
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
-			.parent(parent.getOrMake(registries, saver, existingFileHelper))
+			.parent(parent.getOrMake(registries, saver))
 			.display(
 				items.materialItems().TENDRIL.get(),
 				title(),
@@ -52,7 +54,7 @@ public class PsychosisAdvancementSubProvider extends AbstractAdvancementSubProvi
 			.requirements(AdvancementRequirements.Strategy.OR)
 			.addCriterion("pawn", KilledTrigger.TriggerInstance.playerKilledEntity(
 				EntityPredicate.Builder.entity()
-					.entityType(EntityTypePredicate.of(entities.CORRUPTED_PAWN.get()))
+					.of(registries.lookupOrThrow(Registries.ENTITY_TYPE), entities.CORRUPTED_PAWN.get())
 					.located(LocationPredicate.Builder.location().setDimension(dimensions.VOID))
 			))
 			.sendsTelemetryEvent()

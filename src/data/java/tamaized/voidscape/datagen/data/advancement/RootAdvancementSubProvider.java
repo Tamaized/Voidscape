@@ -4,11 +4,10 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.PlayerTrigger;
+import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.criterion.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModDimensions;
@@ -31,7 +30,7 @@ public class RootAdvancementSubProvider extends AbstractAdvancementSubProvider {
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
 			.display(
 				items.materialItems().VOIDIC_CRYSTAL.get(),

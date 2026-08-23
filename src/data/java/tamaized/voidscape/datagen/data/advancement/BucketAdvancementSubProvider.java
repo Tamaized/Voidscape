@@ -4,14 +4,10 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModDimensions;
-import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.fluid.ModFluidBuckets;
 
 import java.util.function.Consumer;
@@ -23,16 +19,7 @@ public class BucketAdvancementSubProvider extends AbstractAdvancementSubProvider
 	private LiquidAdvancementSubProvider parent;
 
 	@Autowired
-	private ModAdvancementTriggers advancementTriggers;
-
-	@Autowired
 	private ModFluidBuckets buckets;
-
-	@Autowired
-	private ModDimensions dimensions;
-
-	@Autowired
-	private ModEntities entities;
 
 	@Override
 	protected String name() {
@@ -40,9 +27,9 @@ public class BucketAdvancementSubProvider extends AbstractAdvancementSubProvider
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
-			.parent(parent.getOrMake(registries, saver, existingFileHelper))
+			.parent(parent.getOrMake(registries, saver))
 			.display(
 				buckets.VOIDIC.get(),
 				title(),

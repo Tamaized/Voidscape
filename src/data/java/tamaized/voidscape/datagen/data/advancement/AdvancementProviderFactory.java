@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.data.advancement;
 
-import net.neoforged.neoforge.common.data.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -16,13 +17,12 @@ public class AdvancementProviderFactory {
 	private RegistryProvider registryProvider;
 
 	@Directory(AbstractAdvancementSubProvider.class)
-	List<AdvancementProvider.AdvancementGenerator> subProviders;
+	List<AdvancementSubProvider> subProviders;
 
 	public AdvancementProvider make(GatherDataEvent event) {
 		return new AdvancementProvider(
 			event.getGenerator().getPackOutput(),
 			registryProvider.retrieve(event),
-			event.getExistingFileHelper(),
 			subProviders
 		);
 	}

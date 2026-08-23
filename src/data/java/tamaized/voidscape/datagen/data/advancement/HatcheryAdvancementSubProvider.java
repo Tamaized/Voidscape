@@ -6,15 +6,10 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.advancement.GenericAdvancementTrigger;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
-import tamaized.voidscape.registry.ModBlockComponentDirectory;
-import tamaized.voidscape.registry.ModDimensions;
-import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -28,27 +23,15 @@ public class HatcheryAdvancementSubProvider extends AbstractAdvancementSubProvid
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
-	@Autowired
-	private ModItemComponentDirectory items;
-
-	@Autowired
-	private ModBlockComponentDirectory blocks;
-
-	@Autowired
-	private ModDimensions dimensions;
-
-	@Autowired
-	private ModEntities entities;
-
 	@Override
 	protected String name() {
 		return "hatchery";
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
-			.parent(parent.getOrMake(registries, saver, existingFileHelper))
+			.parent(parent.getOrMake(registries, saver))
 			.display(
 				Items.DRAGON_EGG,
 				title(),

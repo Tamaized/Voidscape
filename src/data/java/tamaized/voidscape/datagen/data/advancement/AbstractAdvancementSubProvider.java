@@ -2,33 +2,32 @@ package tamaized.voidscape.datagen.data.advancement;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class AbstractAdvancementSubProvider implements AdvancementProvider.AdvancementGenerator {
+public abstract class AbstractAdvancementSubProvider implements AdvancementSubProvider {
 
 	@Nullable
 	private AdvancementHolder holder;
 
 	@Override
-	public final void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-		makeIfEmpty(registries, saver, existingFileHelper);
+	public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> output) {
+		makeIfEmpty(registries, output);
 	}
 
-	private void makeIfEmpty(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	private void makeIfEmpty(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		if (holder == null)
-			makeAndSet(registries, saver, existingFileHelper);
+			makeAndSet(registries, saver);
 	}
 
-	private AdvancementHolder makeAndSet(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-		holder = make(registries, saver, existingFileHelper);
+	private AdvancementHolder makeAndSet(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
+		holder = make(registries, saver);
 		return holder;
 	}
 
@@ -36,11 +35,11 @@ public abstract class AbstractAdvancementSubProvider implements AdvancementProvi
 		return Optional.ofNullable(holder);
 	}
 
-	public final AdvancementHolder getOrMake(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-		return get().orElseGet(() -> makeAndSet(registries, saver, existingFileHelper));
+	public final AdvancementHolder getOrMake(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
+		return get().orElseGet(() -> makeAndSet(registries, saver));
 	}
 
-	public abstract AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper);
+	public abstract AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver);
 
 	protected abstract String name();
 

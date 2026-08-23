@@ -4,12 +4,10 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.registry.ModDimensions;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 import java.util.function.Consumer;
@@ -23,18 +21,15 @@ public class VoidmancerAdvancementSubProvider extends AbstractAdvancementSubProv
 	@Autowired
 	private ModItemComponentDirectory items;
 
-	@Autowired
-	private ModDimensions dimensions;
-
 	@Override
 	protected String name() {
 		return "voidmancer";
 	}
 
 	@Override
-	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+	public AdvancementHolder make(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 		return Advancement.Builder.advancement()
-			.parent(parent.getOrMake(registries, saver, existingFileHelper))
+			.parent(parent.getOrMake(registries, saver))
 			.display(
 				items.toolSetComponentDirectory().spellTomeSet().VOIDIC_TOME.get(),
 				title(),
