@@ -1,26 +1,23 @@
 package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.block.Block;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.block.RequiresVoidToolBlock;
-import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
 public class NeedsVoidicToolBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
-	private RegistryProvider registryProvider;
-
-	@Autowired
 	private ModBlockComponentDirectory blocks;
 
 	@Override
-	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
+	public void make(ExposedKeyTagProvider<Block> accessor, HolderLookup.Provider provider) {
 		accessor.tag(RequiresVoidToolBlock.NEEDS_VOIDIC_TOOL).add(
-			blocks.oreBlocks().TITANITE_ORE.get()
+			blocks.oreBlocks().TITANITE_ORE.getKey()
 		);
 	}
-
 }

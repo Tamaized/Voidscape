@@ -2,31 +2,30 @@ package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
+
+import java.util.List;
 
 @Component
 public class NeedsIronToolBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Autowired
-	private RegistryProvider registryProvider;
-
-	@Autowired
 	private ModBlockComponentDirectory blocks;
 
 	@Override
-	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.NEEDS_IRON_TOOL).add(
-			blocks.machineBlocks().MACHINE_LIQUIFIER.get(),
-			blocks.machineBlocks().MACHINE_DEFUSER.get(),
-			blocks.machineBlocks().MACHINE_GERMINATOR.get(),
-			blocks.machineBlocks().MACHINE_WELL.get(),
-			blocks.machineBlocks().MACHINE_COOP.get(),
-			blocks.machineBlocks().MACHINE_INFUSER.get(),
-			blocks.machineBlocks().MACHINE_COLLECTOR.get()
-		);
+	public void make(ExposedKeyTagProvider<Block> accessor, HolderLookup.Provider provider) {
+		accessor.tag(BlockTags.NEEDS_IRON_TOOL).addAll(List.of(
+			blocks.machineBlocks().MACHINE_LIQUIFIER.getKey(),
+			blocks.machineBlocks().MACHINE_DEFUSER.getKey(),
+			blocks.machineBlocks().MACHINE_GERMINATOR.getKey(),
+			blocks.machineBlocks().MACHINE_WELL.getKey(),
+			blocks.machineBlocks().MACHINE_COOP.getKey(),
+			blocks.machineBlocks().MACHINE_INFUSER.getKey(),
+			blocks.machineBlocks().MACHINE_COLLECTOR.getKey()
+		));
 	}
-
 }

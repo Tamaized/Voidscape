@@ -1,28 +1,24 @@
 package tamaized.voidscape.datagen.data.tag.block;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.bootstrap.RegistryProvider;
-import tamaized.voidscape.registry.ModBlockComponentDirectory;
+
+import java.util.stream.Stream;
 
 @Component
 public class DebugOreBlockTagProviderFactory implements IBlockTagProviderFactory {
 
-	@Autowired
-	private RegistryProvider registryProvider;
-
-	@Autowired
-	private ModBlockComponentDirectory blocks;
-
 	@Override
-	public void make(BlockTagProviderFactory.BlockTagsProviderAccessor accessor, HolderLookup.Provider provider) {
-		accessor.tag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "debug_ore"))).add(
+	public void make(ExposedKeyTagProvider<Block> accessor, HolderLookup.Provider provider) {
+		accessor.tag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Voidscape.MODID, "debug_ore"))).addAll(Stream.of(
 			Blocks.IRON_ORE,
 			Blocks.GOLD_ORE,
 			Blocks.COPPER_ORE,
@@ -34,7 +30,6 @@ public class DebugOreBlockTagProviderFactory implements IBlockTagProviderFactory
 			Blocks.NETHER_GOLD_ORE,
 			Blocks.STONE,
 			Blocks.NETHERRACK
-		);
+		).map(block -> BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow()));
 	}
-
 }
