@@ -11,7 +11,7 @@ public class DatamapProviderFactory {
 	private CompostablesDatamapProviderFactory compostablesDatamapProviderFactory;
 
 	public void generate(GatherDataEvent event) {
-		event.getGenerator().addProvider(event.includeServer(), compostablesDatamapProviderFactory.make(event));
+		event.getGenerator().addProvider(true, compostablesDatamapProviderFactory.make(event));
 	}
 
 }

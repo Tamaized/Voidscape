@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.data.datamap;
 
+import net.minecraft.core.HolderLookup;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
@@ -28,7 +29,7 @@ public class CompostablesDatamapProviderFactory {
 			registryProvider.retrieve(event)
 		) {
 			@Override
-			protected void gather() {
+			protected void gather(HolderLookup.Provider provider) {
 				this.builder(NeoForgeDataMaps.COMPOSTABLES)
 					.add(blocks.thunderForestBiomeBlocks().THUNDER_WART_ITEM, new Compostable(0.85F), false)
 					.add(blocks.thunderForestBiomeBlocks().THUNDER_ROOTS_ITEM, new Compostable(0.65F), false)
