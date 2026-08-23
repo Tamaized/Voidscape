@@ -1,18 +1,21 @@
 package tamaized.voidscape.datagen.data.recipe.voidic;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.data.recipe.IRecipeGenerator;
-import tamaized.voidscape.datagen.util.RecipeProviderUtil;
+import tamaized.datagenutil.data.recipe.RecipeHolder;
+import tamaized.datagenutil.data.recipe.RecipeProviderUtil;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 @Component
-public class VoidicBowRecipeGenerator implements IRecipeGenerator {
+public class VoidicBowRecipeGenerator extends RecipeHolder {
 
 	@Autowired
 	private ModItemComponentDirectory items;
@@ -21,7 +24,7 @@ public class VoidicBowRecipeGenerator implements IRecipeGenerator {
 	private RecipeProviderUtil recipeProviderUtil;
 
 	@Override
-	public void generate(RecipeOutput recipeOutput) {
+	public void make(HolderLookup.Provider provider, HolderGetter<Item> itemProvider, RecipeOutput recipeOutput) {
 		SmithingTransformRecipeBuilder.smithing(
 			Ingredient.of(items.augmentItems().VOIDIC_TEMPLATE.get()),
 			Ingredient.of(Items.BOW),
@@ -29,7 +32,7 @@ public class VoidicBowRecipeGenerator implements IRecipeGenerator {
 			RecipeCategory.COMBAT,
 			items.toolSetComponentDirectory().voidicCrystalToolSet().VOIDIC_CRYSTAL_BOW.get()
 		)
-			.unlocks("has_template", recipeProviderUtil.has(items.augmentItems().VOIDIC_TEMPLATE.get()))
+			.unlocks("has_template", recipeProviderUtil.has(itemProvider, items.augmentItems().VOIDIC_TEMPLATE.get()))
 			.save(recipeOutput, "voidic_crystal_bow");
 	}
 

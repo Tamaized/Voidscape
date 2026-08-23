@@ -1,19 +1,23 @@
 package tamaized.voidscape.datagen.data.recipe.corrupt;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.data.recipe.ExtendedSmithingTransformRecipeBuilder;
-import tamaized.voidscape.datagen.data.recipe.IRecipeGenerator;
-import tamaized.voidscape.datagen.util.RecipeProviderUtil;
+import tamaized.datagenutil.data.recipe.RecipeHolder;
+import tamaized.datagenutil.data.recipe.RecipeProviderUtil;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 
 @Component
-public class CorruptCrossbowFangRecipeGenerator implements IRecipeGenerator {
+public class CorruptCrossbowFangRecipeGenerator extends RecipeHolder {
 
 	@Autowired
 	private ModItemComponentDirectory items;
@@ -25,17 +29,19 @@ public class CorruptCrossbowFangRecipeGenerator implements IRecipeGenerator {
 	private RecipeProviderUtil recipeProviderUtil;
 
 	@Override
-	public void generate(RecipeOutput recipeOutput) {
-		ItemStack result = new ItemStack(items.toolSetComponentDirectory().corruptToolSet().CORRUPT_XBOW.get());
-		result.set(itemComponents.FANG, true);
-		ExtendedSmithingTransformRecipeBuilder.extendedSmithing(
+	public void make(HolderLookup.Provider provider, HolderGetter<Item> itemProvider, RecipeOutput recipeOutput) {
+		ItemStackTemplate result = new ItemStackTemplate(
+			items.toolSetComponentDirectory().corruptToolSet().CORRUPT_XBOW.get(),
+			DataComponentPatch.builder().set(itemComponents.FANG.get(), true).build()
+		);
+		new SmithingTransformRecipeBuilder(
 			Ingredient.of(items.augmentItems().VOIDIC_TEMPLATE.get()),
 			Ingredient.of(items.toolSetComponentDirectory().corruptToolSet().CORRUPT_XBOW.get()),
 			Ingredient.of(items.augmentItems().ETHEREAL_SPIDER_FANG.get()),
 			RecipeCategory.COMBAT,
 			result
 		)
-			.unlocks("has_template", recipeProviderUtil.has(items.augmentItems().VOIDIC_TEMPLATE.get()))
+			.unlocks("has_template", recipeProviderUtil.has(itemProvider, items.augmentItems().VOIDIC_TEMPLATE.get()))
 			.save(recipeOutput, "corrupt_crossbow_fang");
 	}
 
