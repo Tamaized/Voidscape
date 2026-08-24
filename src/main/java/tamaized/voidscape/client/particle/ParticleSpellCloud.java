@@ -1,34 +1,27 @@
 package tamaized.voidscape.client.particle;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 
-import javax.annotation.Nonnull;
-
-public class ParticleSpellCloud extends TextureSheetParticle {
+public class ParticleSpellCloud extends SingleQuadParticle {
 
 	private final Vec3 target;
 	private float rot;
 
-	ParticleSpellCloud(ClientLevel world, double x, double y, double z, double vx, double vy, double vz) {
-		this(world, x, y, z, vx, vy, vz, 1.0F);
-	}
-
-	ParticleSpellCloud(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, float scale) {
-		super(world, x, y, z, vx, vy, vz);
+	ParticleSpellCloud(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, TextureAtlasSprite sprite) {
+		super(world, x, y, z, vx, vy, vz, sprite);
 		target = new Vec3(x, y, z);
 		this.xd = vx;
 		this.yd = vy;
@@ -36,17 +29,14 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 		this.rCol = this.gCol = this.bCol = 1.0F;
 		this.alpha = 0F;
 		this.quadSize *= 1.5F * (random.nextBoolean() ? -1F : 1F);
-		this.quadSize *= scale;
 		this.lifetime = 30 + ((int) (random.nextFloat() * 30F));
-		this.lifetime = (int) (this.lifetime * scale);
 		this.hasPhysics = true;
 		this.oRoll = this.roll = random.nextFloat() * 2F - 1F;
 	}
 
-	@Nonnull
 	@Override
-	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	protected SingleQuadParticle.Layer getLayer() {
+		return SingleQuadParticle.Layer.TRANSLUCENT;
 	}
 
 	@Override
@@ -81,49 +71,20 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 	}
 
 	@Override
-	public void render(VertexConsumer buffer, Camera entity, float partialTicks) {
+	public void extract(QuadParticleRenderState particleTypeRenderState, Camera camera, float partialTickTime) {
 		alpha = Math.min(Mth.clamp(age, 0, 20) / 20F, Mth.clamp(lifetime - age, 0, 20) / 20F);
-		Vec3 lvt_4_1_ = entity.getPosition();
-		float lvt_5_1_ = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - lvt_4_1_.x());
-		float lvt_6_1_ = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - lvt_4_1_.y());
-		float lvt_7_1_ = (float) (Mth.lerp((double) partialTicks, this.zo, this.z) - lvt_4_1_.z());
-		Quaternionf lvt_8_2_ = new Quaternionf(entity.rotation());
+		Quaternionf rotation = new Quaternionf(camera.rotation());
 		if (this.roll != 0.0F) {
-			float lvt_9_1_ = Mth.lerp(partialTicks, this.oRoll, this.roll);
-			lvt_8_2_.mul(Axis.ZP.rotation(lvt_9_1_));
+			rotation.rotateZ(Mth.lerp(partialTickTime, this.oRoll, this.roll));
 		}
-		lvt_8_2_.mul(Axis.YP.rotation(Mth.cos((float) Math.toRadians(rot % 360F))));
-		Vector3f lvt_9_2_ = new Vector3f(-1.0F, -1.0F, 0.0F);
-		lvt_9_2_.rotate(lvt_8_2_);
-		Vector3f[] lvt_10_1_ = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
-		float lvt_11_1_ = this.getQuadSize(partialTicks);
-
-		for (int lvt_12_1_ = 0; lvt_12_1_ < 4; ++lvt_12_1_) {
-			Vector3f lvt_13_1_ = lvt_10_1_[lvt_12_1_];
-			lvt_13_1_.rotate(lvt_8_2_);
-			lvt_13_1_.mul(lvt_11_1_);
-			lvt_13_1_.add(lvt_5_1_, lvt_6_1_, lvt_7_1_);
-		}
-		float lvt_12_2_ = this.getU0();
-		float lvt_13_2_ = this.getU1();
-		float lvt_14_1_ = this.getV0();
-		float lvt_15_1_ = this.getV1();
-		int lvt_16_1_ = this.getLightColor(partialTicks);
-		buffer.addVertex(lvt_10_1_[0].x(), lvt_10_1_[0].y(), lvt_10_1_[0].z()).setUv(lvt_13_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[1].x(), lvt_10_1_[1].y(), lvt_10_1_[1].z()).setUv(lvt_13_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[2].x(), lvt_10_1_[2].y(), lvt_10_1_[2].z()).setUv(lvt_12_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[3].x(), lvt_10_1_[3].y(), lvt_10_1_[3].z()).setUv(lvt_12_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-
-		buffer.addVertex(lvt_10_1_[0].x(), lvt_10_1_[0].y(), lvt_10_1_[0].z()).setUv(lvt_13_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[3].x(), lvt_10_1_[3].y(), lvt_10_1_[3].z()).setUv(lvt_12_2_, lvt_15_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[2].x(), lvt_10_1_[2].y(), lvt_10_1_[2].z()).setUv(lvt_12_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
-		buffer.addVertex(lvt_10_1_[1].x(), lvt_10_1_[1].y(), lvt_10_1_[1].z()).setUv(lvt_13_2_, lvt_14_1_).setColor(rCol, gCol, bCol, alpha).setLight(lvt_16_1_);
+		rotation.rotateY(Mth.cos((float) Math.toRadians(rot % 360F)));
+		extractRotatedQuad(particleTypeRenderState, camera, rotation, partialTickTime);
+		extractRotatedQuad(particleTypeRenderState, camera, rotation.rotateY((float) Math.PI), partialTickTime);
 	}
 
-
 	@Override
-	public int getLightColor(float partialTicks) {
-		return 0xF000F0; // 0xF0 | 0xF0 << 16;
+	protected int getLightCoords(float partialTicks) {
+		return 0xF000F0;
 	}
 
 	public static class Factory implements ParticleProvider<ParticleTypeSpellCloud.Options> {
@@ -135,10 +96,9 @@ public class ParticleSpellCloud extends TextureSheetParticle {
 
 		@Nullable
 		@Override
-		public Particle createParticle(ParticleTypeSpellCloud.Options data, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			ParticleSpellCloud particle = new ParticleSpellCloud(level, x, y, z, xSpeed, ySpeed, zSpeed);
+		public Particle createParticle(ParticleTypeSpellCloud.Options data, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, RandomSource random) {
+			ParticleSpellCloud particle = new ParticleSpellCloud(level, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet.get(random));
 			particle.setColor(((data.color() >> 16) & 0xFF) / 255F, ((data.color() >> 8) & 0xFF) / 255F, (data.color() & 0xFF) / 255F);
-			particle.pickSprite(this.spriteSet);
 			return particle;
 		}
 	}

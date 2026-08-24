@@ -88,7 +88,7 @@ public class ClientQuiverTooltip implements ClientTooltipComponent {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	static enum Texture {
+	enum Texture {
 		BLOCKED_SLOT(Identifier.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
 		SLOT(Identifier.withDefaultNamespace("container/bundle/slot"), 18, 20);
 
@@ -96,7 +96,7 @@ public class ClientQuiverTooltip implements ClientTooltipComponent {
 		public final int w;
 		public final int h;
 
-		private Texture(Identifier sprite, int w, int h) {
+		Texture(Identifier sprite, int w, int h) {
 			this.sprite = sprite;
 			this.w = w;
 			this.h = h;
