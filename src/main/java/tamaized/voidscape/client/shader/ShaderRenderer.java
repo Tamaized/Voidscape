@@ -13,6 +13,9 @@ import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.MeshData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.DynamicUniformStorage;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
@@ -26,7 +29,7 @@ import tamaized.beanification.PostConstruct;
 
 import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
-import java.util.Objects;
+import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
@@ -54,23 +57,27 @@ public class ShaderRenderer {
 	}
 
 	public void draw(RenderPipeline pipeline, MeshData mesh) {
-		draw(pipeline, mesh, noColorModulation, null, null);
+		draw(pipeline, mesh, noColorModulation, Map.of(), null, null);
+	}
+
+	public void draw(RenderPipeline pipeline, MeshData mesh, Map<String, Identifier> textures) {
+		draw(pipeline, mesh, noColorModulation, textures, null, null);
 	}
 
 	public void draw(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator) {
-		draw(pipeline, mesh, colorModulator, null, null);
+		draw(pipeline, mesh, colorModulator, Map.of(), null, null);
 	}
 
 	public void drawOptimalAlpha(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, float alpha) {
-		draw(pipeline, mesh, colorModulator, shaders.ALPHA_UNIFORM, alphaStorage.get().writeUniform(new AlphaUniform(alpha)));
+		draw(pipeline, mesh, colorModulator, Map.of(), shaders.ALPHA_UNIFORM, alphaStorage.get().writeUniform(new AlphaUniform(alpha)));
 	}
 
 	public void drawAurora(MeshData mesh, Vector4fc colorModulator, int seed, float x, float y, float z) {
-		draw(shaders.THUNDER_AURORA, mesh, colorModulator, shaders.AURORA_UNIFORM,
+		draw(shaders.THUNDER_AURORA, mesh, colorModulator, Map.of(), shaders.AURORA_UNIFORM,
 			auroraStorage.get().writeUniform(new AuroraUniform(seed, x, y, z)));
 	}
 
-	private void draw(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, @Nullable String uniformName, @Nullable GpuBufferSlice uniform) {
+	private void draw(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, Map<String, Identifier> textures, @Nullable String uniformName, @Nullable GpuBufferSlice uniform) {
 		GpuDevice device = RenderSystem.getDevice();
 		GpuBufferSlice transforms = RenderSystem.getDynamicUniforms().
 			writeTransform(RenderSystem.getModelViewMatrix(), colorModulator, new Vector3f(), new Matrix4f());
@@ -90,6 +97,11 @@ public class ShaderRenderer {
 					 OptionalDouble.empty())
 			) {
 				pass.setPipeline(pipeline);
+				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+				textures.forEach((name, location) -> {
+					AbstractTexture texture = textureManager.getTexture(location);
+					pass.bindTexture(name, texture.getTextureView(), texture.getSampler());
+				});
 				RenderSystem.bindDefaultUniforms(pass);
 				pass.setUniform("DynamicTransforms", transforms);
 				if (uniformName != null && uniform != null)

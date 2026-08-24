@@ -1,15 +1,17 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
+import net.minecraft.client.renderer.blockentity.AbstractEndPortalRenderer;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.voidscape.client.shader.ShaderRenderer;
 import tamaized.voidscape.client.shader.Shaders;
+
+import java.util.Map;
 
 @Component(dist = Dist.CLIENT)
 public class VoidSkyRenderer {
@@ -17,7 +19,10 @@ public class VoidSkyRenderer {
 	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	public void render() { // FIXME
+	@Autowired(dist = Dist.CLIENT)
+	private ShaderRenderer shaderRenderer;
+
+	public void render() {
 
 		BufferBuilder vertexbuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 
@@ -58,9 +63,10 @@ public class VoidSkyRenderer {
 		vertexbuffer.addVertex(x + diameter, y, z);
 		vertexbuffer.addVertex(x, y, z);
 
-		/*RenderSystem.setShaderTexture(0, TheEndPortalRenderer.END_SKY_LOCATION);
-		RenderSystem.setShaderTexture(1, TheEndPortalRenderer.END_PORTAL_LOCATION);*/
-		shaders.VOIDSKY.invokeThenUpload(vertexbuffer);
+		shaderRenderer.draw(shaders.VOIDSKY, vertexbuffer.buildOrThrow(), Map.of(
+			"Sampler0", AbstractEndPortalRenderer.END_SKY_LOCATION,
+			"Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION
+		));
 	}
 
 }
