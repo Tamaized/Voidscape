@@ -1,6 +1,5 @@
 package tamaized.voidscape.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -14,10 +13,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import org.joml.Vector4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
-import tamaized.voidscape.client.shader.Shaders;
+import tamaized.voidscape.client.shader.ShaderRenderer;
 import tamaized.voidscape.registry.ModBiomes;
 
 @Component(dist = Dist.CLIENT)
@@ -27,7 +27,7 @@ public class ThunderAuroraRenderer {
 	private ModBiomes biomes;
 
 	@Autowired(dist = Dist.CLIENT)
-	private Shaders shaders;
+	private ShaderRenderer shaderRenderer;
 
 	private int aurora, lastAurora;
 
@@ -40,8 +40,8 @@ public class ThunderAuroraRenderer {
 				return;
 
 			lastAurora = aurora;
-			if (mc.level != null && mc.cameraEntity != null) {
-				Holder<Biome> biome = mc.level.getBiome(mc.cameraEntity.blockPosition());
+			if (mc.level != null && mc.getCameraEntity() != null) {
+				Holder<Biome> biome = mc.level.getBiome(mc.getCameraEntity().blockPosition());
 				if (biome.is(biomes.THUNDER_FOREST) || biome.is(biomes.THUNDERSPIRES))
 					aurora++;
 				else
@@ -51,40 +51,31 @@ public class ThunderAuroraRenderer {
 				aurora = 0;
 			}
 		});
-		bus.addListener(RenderLevelStageEvent.class, event -> {
-			if (Minecraft.getInstance().level == null)
+		bus.addListener(RenderLevelStageEvent.AfterWeather.class, event -> {
+			Minecraft mc = Minecraft.getInstance();
+			if (mc.level == null)
 				return;
 
-			if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && (aurora > 0 || lastAurora > 0) && shaders.THUNDER_AURORA != null) {
-				Tesselator tesselator = Tesselator.getInstance();
-				BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+			if (aurora > 0 || lastAurora > 0) {
+				BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-				final float scale = 2048F * (Minecraft.getInstance().gameRenderer.getRenderDistance() / 32F);
-				Vec3 pos = event.getCamera().getPosition();
+				final float scale = 2048F * (mc.options.getEffectiveRenderDistance() * 16F / 32F);
+				Vec3 pos = event.getLevelRenderState().cameraRenderState.pos;
 				float y = (float) (256F - pos.y());
 				buffer.addVertex(-scale, y, scale).setColor(1F, 1F, 1F, 1F);
 				buffer.addVertex(-scale, y, -scale).setColor(1F, 1F, 1F, 1F);
 				buffer.addVertex(scale, y, -scale).setColor(1F, 1F, 1F, 1F);
 				buffer.addVertex(scale, y, scale).setColor(1F, 1F, 1F, 1F);
 
-				RenderSystem.enableBlend();
-				RenderSystem.enableDepthTest();
-				RenderSystem.setShaderColor(
-					1F,
-					1F,
-					1F,
-					(Mth.lerp(event.getPartialTick().getGameTimeDeltaTicks(), lastAurora, aurora)) / 60F * 0.5F
-				);
-				shaders.THUNDER_AURORA.invokeThenUpload(
-					Minecraft.getInstance().level == null ? 0 : Mth.abs((int) Minecraft.getInstance().level.getBiomeManager().biomeZoomSeed),
+				float alpha = Mth.lerp(mc.getDeltaTracker().getGameTimeDeltaTicks(), lastAurora, aurora) / 60F * 0.5F;
+				shaderRenderer.drawAurora(
+					buffer.buildOrThrow(),
+					new Vector4f(1F, 1F, 1F, alpha),
+					Mth.abs((int) mc.level.getBiomeManager().biomeZoomSeed),
 					(float) pos.x(),
 					(float) pos.y(),
-					(float) pos.z(),
-					buffer
+					(float) pos.z()
 				);
-				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-				RenderSystem.disableDepthTest();
-				RenderSystem.disableBlend();
 			}
 		});
 	}
