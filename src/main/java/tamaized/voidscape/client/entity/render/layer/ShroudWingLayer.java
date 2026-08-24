@@ -36,13 +36,13 @@ public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<
 		if (donatorEnabled || check(shroudWingLayerRenderStateExtension.hasDraconicAttribute, state)) {
 			drawWings(
 				poseStack,
-				donatorLayerBuffers.BUFFERS.getBuffer(donatorLayerBuffers.WRAPPED_POS_TEX_COLOR),
+				donatorLayerBuffers.BUFFERS.get().getBuffer(donatorLayerBuffers.WRAPPED_POS_TEX_COLOR.get()),
 				ARGB.colorFromFloat(0.25F, 0F, 0F, 0F)
 			);
 			Integer donatorColor = state.getRenderData(shroudWingLayerRenderStateExtension.donatorColor);
 			drawWings(
 				poseStack,
-				donatorLayerBuffers.BUFFERS.getBuffer(donatorLayerBuffers.WINGS),
+				donatorLayerBuffers.BUFFERS.get().getBuffer(donatorLayerBuffers.WINGS.get()),
 				ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
 			);
 		}

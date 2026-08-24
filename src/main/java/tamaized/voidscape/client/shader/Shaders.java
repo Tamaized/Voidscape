@@ -31,7 +31,18 @@ public class Shaders {
 		withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).
 		build();
 
-	public final RenderPipeline OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+	public final RenderPipeline POSITION_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+		withLocation(id("pipeline/position_tex_color")).
+		withVertexShader("core/position_tex_color").
+		withFragmentShader("core/position_tex_color").
+		withSampler("Sampler0").
+		withCull(false).
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		withDepthStencilState(DepthStencilState.DEFAULT).
+		build();
+
+	public final RenderPipeline OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR =RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
 		withLocation(id("pipeline/optimal_alpha_lessthan_pos_tex_color")).
 		withVertexShader(id("core/optimal_alpha/pos_tex_color")).
 		withFragmentShader(id("core/optimal_alpha/pos_tex_color")).
@@ -79,6 +90,7 @@ public class Shaders {
 		withFragmentShader(id("core/voidsky/wings")).
 		withSampler("Sampler0").
 		withSampler("Sampler1").
+		withCull(false).
 		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
 		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
 		withDepthStencilState(DepthStencilState.DEFAULT).
@@ -103,6 +115,7 @@ public class Shaders {
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterRenderPipelinesEvent.class, event -> {
 			event.registerPipeline(POSITION_COLOR);
+			event.registerPipeline(POSITION_TEX_COLOR);
 			event.registerPipeline(OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR);
 			event.registerPipeline(OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR);
 			event.registerPipeline(VOIDSKY);

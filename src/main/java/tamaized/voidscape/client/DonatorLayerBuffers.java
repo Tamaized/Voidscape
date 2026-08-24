@@ -1,12 +1,12 @@
 package tamaized.voidscape.client;
 
+import com.google.common.base.Suppliers;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.ByteBufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
+import net.minecraft.client.renderer.blockentity.AbstractEndPortalRenderer;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
@@ -19,7 +19,6 @@ import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.shader.Shaders;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Component(dist = Dist.CLIENT)
@@ -30,26 +29,32 @@ public class DonatorLayerBuffers {
 
 	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/donator.png");
 
-	private final Function<Supplier<ShaderInstance>, RenderType> RENDER_TYPE = Util.memoize(shader -> RenderType.create("voidscape_wings", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, true, true, RenderType.CompositeState.builder().
-		setTransparencyState(RenderStateAccessor.TRANSLUCENT_TRANSPARENCY()).
-		setCullState(RenderStateAccessor.NO_CULL()).
-		setShaderState(new RenderStateShard.ShaderStateShard(shader)).
-		setTextureState(new RenderStateShard.MultiTextureStateShard.Builder().add(TEXTURE, false, false).add(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false).build()).
-		createCompositeState(true)));
+	public final Supplier<RenderType> WRAPPED_POS_TEX_COLOR = Suppliers.
+		memoize(() -> RenderType.create("voidscape_wings_wrapped", renderSetup(shaders.POSITION_TEX_COLOR).createRenderSetup()));
 
-	public final RenderType WRAPPED_POS_TEX_COLOR = RENDER_TYPE.apply(GameRenderer::getPositionTexColorShader);
-	public final RenderType WINGS = RENDER_TYPE.apply(() -> shaders.VOIDSKY_WINGS);
+	public final Supplier<RenderType> WINGS = Suppliers.
+		memoize(() -> RenderType.create("voidscape_wings", renderSetup(shaders.VOIDSKY_WINGS).
+			withTexture("Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION).
+			createRenderSetup()));
 
-	public final MultiBufferSource.BufferSource BUFFERS = MultiBufferSource.immediateWithBuffers(Util.make(new Object2ObjectLinkedOpenHashMap<>(), map -> {
-		map.put(WRAPPED_POS_TEX_COLOR, new ByteBufferBuilder(WRAPPED_POS_TEX_COLOR.bufferSize()));
-		map.put(WINGS, new ByteBufferBuilder(WINGS.bufferSize()));
-	}), new ByteBufferBuilder(256));
+	public final Supplier<MultiBufferSource.BufferSource> BUFFERS = Suppliers.
+		memoize(() -> MultiBufferSource.immediateWithBuffers(Util.make(new Object2ObjectLinkedOpenHashMap<>(), map -> {
+			map.put(WRAPPED_POS_TEX_COLOR.get(), new ByteBufferBuilder(WRAPPED_POS_TEX_COLOR.get().bufferSize()));
+			map.put(WINGS.get(), new ByteBufferBuilder(WINGS.get().bufferSize()));
+		}), new ByteBufferBuilder(256)));
+
+	private RenderSetup.RenderSetupBuilder renderSetup(RenderPipeline pipeline) {
+		return RenderSetup.builder(pipeline).
+			withTexture("Sampler0", TEXTURE).
+			bufferSize(256).
+			affectsCrumbling().
+			sortOnUpload().
+			setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE);
+	}
 
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
-		bus.addListener(RenderLevelStageEvent.AfterTranslucentBlocks.class, event -> {
-			BUFFERS.endBatch();
-		});
+		bus.addListener(RenderLevelStageEvent.AfterTranslucentBlocks.class, _ -> BUFFERS.get().endBatch());
 	}
 
 }
