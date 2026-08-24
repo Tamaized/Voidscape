@@ -1,10 +1,18 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright;
 
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.ModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.datagen.util.ModTextureSlots;
+
+import java.util.Optional;
 
 @Component
 public class CubeColumnOverlayFullbrightBlockModelHolder extends BlockModelHolder {
@@ -12,23 +20,33 @@ public class CubeColumnOverlayFullbrightBlockModelHolder extends BlockModelHolde
 	@Autowired
 	private CubeOverlayFullbrightBlockModelHolder parent;
 
-	public ModelFile build(BlockModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent("block/fullbright/cube_column_overlay", parent.getOrBuild(provider).getLocation())
-			.texture("particle", "#side")
-			.texture("down", "#end")
-			.texture("up", "#end")
-			.texture("north", "#side")
-			.texture("east", "#side")
-			.texture("south", "#side")
-			.texture("west", "#side")
-			.texture("down-overlay", "#end-overlay")
-			.texture("up-overlay", "#end-overlay")
-			.texture("north-overlay", "#side-overlay")
-			.texture("east-overlay", "#side-overlay")
-			.texture("south-overlay", "#side-overlay")
-			.texture("west-overlay", "#side-overlay");
-		// @formatter:on
+	@Override
+	public Optional<ModelHolder<BlockModelGenerators>> parent() {
+		return Optional.of(parent);
 	}
 
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended()
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/fullbright/cube_column_overlay"), textures(), provider.modelOutput);
+	}
+
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping
+			.putRef(TextureSlot.PARTICLE, TextureSlot.SIDE)
+			.putRef(TextureSlot.DOWN, TextureSlot.END)
+			.putRef(TextureSlot.UP, TextureSlot.END)
+			.putRef(TextureSlot.NORTH, TextureSlot.SIDE)
+			.putRef(TextureSlot.EAST, TextureSlot.SIDE)
+			.putRef(TextureSlot.SOUTH, TextureSlot.SIDE)
+			.putRef(TextureSlot.WEST, TextureSlot.SIDE)
+			.putRef(ModTextureSlots.DOWN_OVERLAY, ModTextureSlots.END_OVERLAY)
+			.putRef(ModTextureSlots.UP_OVERLAY, ModTextureSlots.END_OVERLAY)
+			.putRef(ModTextureSlots.NORTH_OVERLAY, ModTextureSlots.SIDE_OVERLAY)
+			.putRef(ModTextureSlots.EAST_OVERLAY, ModTextureSlots.SIDE_OVERLAY)
+			.putRef(ModTextureSlots.SOUTH_OVERLAY, ModTextureSlots.SIDE_OVERLAY)
+			.putRef(ModTextureSlots.WEST_OVERLAY, ModTextureSlots.SIDE_OVERLAY);
+	}
 }

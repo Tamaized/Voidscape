@@ -1,17 +1,23 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.ModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.SlabFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
@@ -44,14 +50,24 @@ public class ThunderSlabBlockModelHolder extends BlockModelHolder {
 		return true;
 	}
 
-	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent(
-				name(),
-				parent.getOrBuild(provider).getLocation()
-			)
-			.texture("bottom", "block/thunder_planks")
-			.texture("side", "block/thunder_planks")
-			.texture("top", "block/thunder_planks");
+	@Override
+	public Optional<ModelHolder<BlockModelGenerators>> parent() {
+		return Optional.of(parent);
+	}
+
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended()
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, name()), textures(), provider.modelOutput);
+	}
+
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping
+			.putForced(TextureSlot.BOTTOM, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/thunder_planks")))
+			.putForced(TextureSlot.SIDE, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/thunder_planks")))
+			.putForced(TextureSlot.TOP, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/thunder_planks")));
 	}
 
 	@Override
@@ -60,11 +76,15 @@ public class ThunderSlabBlockModelHolder extends BlockModelHolder {
 	}
 
 	@Override
-	public void buildBlockState(BlockStateProvider provider) {
-		provider.getVariantBuilder(Objects.requireNonNull(blockForName()).get())
-			.partialState().with(SlabBlock.TYPE, SlabType.BOTTOM).addModels(ConfiguredModel.builder().modelFile(get().orElseThrow()).build())
-			.partialState().with(SlabBlock.TYPE, SlabType.DOUBLE).addModels(ConfiguredModel.builder().modelFile(planks.get().orElseThrow()).build())
-			.partialState().with(SlabBlock.TYPE, SlabType.TOP).addModels(ConfiguredModel.builder().modelFile(slabTop.get().orElseThrow()).build());
+	public MultiVariantGenerator buildBlockState(BlockModelGenerators provider) {
+		return MultiVariantGenerator
+			.dispatch(Objects.requireNonNull(blockForName()).get())
+			.with(
+				PropertyDispatch.initial(SlabBlock.TYPE)
+					.select(SlabType.BOTTOM, BlockModelGenerators.plainVariant(getOrBuild(provider)))
+					.select(SlabType.DOUBLE, BlockModelGenerators.plainVariant(planks.getOrBuild(provider)))
+					.select(SlabType.TOP, BlockModelGenerators.plainVariant(slabTop.getOrBuild(provider)))
+			);
 	}
 
 	@Override

@@ -1,36 +1,44 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block.overlay;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.datagen.util.ModTextureSlots;
 
 @Component
 public class BaseFullbrightOverlayOverlayBlockModelHolder extends BlockModelHolder {
 
-	public ModelFile build(BlockModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent("block/overlay/base_fullbright_overlay", "block/block")
-			.element()
-				.from(0, 0, 0).to(16, 16, 16)
-				.face(Direction.DOWN).texture("#down").cullface(Direction.DOWN).end()
-				.face(Direction.UP).texture("#up").cullface(Direction.UP).end()
-				.face(Direction.NORTH).texture("#north").cullface(Direction.NORTH).end()
-				.face(Direction.SOUTH).texture("#south").cullface(Direction.SOUTH).end()
-				.face(Direction.WEST).texture("#west").cullface(Direction.WEST).end()
-				.face(Direction.EAST).texture("#east").cullface(Direction.EAST).end()
-			.end()
-			.element()
-				.from(0, 0, 0).to(16, 16, 16)
-				.face(Direction.DOWN).texture("#overlay-down").cullface(Direction.DOWN).emissivity(15, 15).end()
-				.face(Direction.UP).texture("#overlay-up").cullface(Direction.UP).emissivity(15, 15).end()
-				.face(Direction.NORTH).texture("#overlay-north").cullface(Direction.NORTH).emissivity(15, 15).end()
-				.face(Direction.SOUTH).texture("#overlay-south").cullface(Direction.SOUTH).emissivity(15, 15).end()
-				.face(Direction.WEST).texture("#overlay-west").cullface(Direction.WEST).emissivity(15, 15).end()
-				.face(Direction.EAST).texture("#overlay-east").cullface(Direction.EAST).emissivity(15, 15).end()
-			.end();
-		// @formatter:on
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended(m -> m
+				.parent(Identifier.withDefaultNamespace("block/block"))
+				.element(e -> e
+					.from(0, 0, 0).to(16, 16, 16)
+					.face(Direction.DOWN, f -> f.texture(TextureSlot.DOWN).cullface(Direction.DOWN))
+					.face(Direction.UP, f -> f.texture(TextureSlot.UP).cullface(Direction.UP))
+					.face(Direction.NORTH, f -> f.texture(TextureSlot.NORTH).cullface(Direction.NORTH))
+					.face(Direction.SOUTH, f -> f.texture(TextureSlot.SOUTH).cullface(Direction.SOUTH))
+					.face(Direction.WEST, f -> f.texture(TextureSlot.WEST).cullface(Direction.WEST))
+					.face(Direction.EAST, f -> f.texture(TextureSlot.EAST).cullface(Direction.EAST)))
+				.element(e -> e
+					.from(0, 0, 0).to(16, 16, 16)
+					.face(Direction.DOWN, f -> f.texture(ModTextureSlots.OVERLAY_DOWN).cullface(Direction.DOWN).lightEmission(15))
+					.face(Direction.UP, f -> f.texture(ModTextureSlots.OVERLAY_UP).cullface(Direction.UP).lightEmission(15))
+					.face(Direction.NORTH, f -> f.texture(ModTextureSlots.OVERLAY_NORTH).cullface(Direction.NORTH).lightEmission(15))
+					.face(Direction.SOUTH, f -> f.texture(ModTextureSlots.OVERLAY_SOUTH).cullface(Direction.SOUTH).lightEmission(15))
+					.face(Direction.WEST, f -> f.texture(ModTextureSlots.OVERLAY_WEST).cullface(Direction.WEST).lightEmission(15))
+					.face(Direction.EAST, f -> f.texture(ModTextureSlots.OVERLAY_EAST).cullface(Direction.EAST).lightEmission(15))))
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/overlay/base_fullbright_overlay"), textures(), provider.modelOutput);
 	}
 
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+	}
 }

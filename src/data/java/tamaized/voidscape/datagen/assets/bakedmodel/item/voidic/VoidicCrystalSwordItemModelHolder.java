@@ -1,66 +1,38 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.item.voidic;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.client.ItemModelOverridePredicates;
-import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelHolder;
+import tamaized.voidscape.datagen.assets.bakedmodel.item.BreakableFullbrightItemModelHolder;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 
 import java.util.Optional;
 
 @Component
-public class VoidicCrystalSwordItemModelHolder extends ItemModelHolder {
+public class VoidicCrystalSwordItemModelHolder extends BreakableFullbrightItemModelHolder {
 
 	@Autowired
 	private ModToolSetComponentDirectory tools;
-
-	@Autowired
-	private ItemModelOverridePredicates itemModelOverridePredicates;
-
-	@Nullable
-	private ModelFile brokenModel;
 
 	@Override
 	protected DeferredHolder<Item, ? extends Item> itemForName() {
 		return tools.voidicCrystalToolSet().VOIDIC_CRYSTAL_SWORD;
 	}
 
-	public ModelFile build(ItemModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent(
-				name(),
-				"item/handheld"
-			)
-			.texture("layer0", "item/voidic/sword")
-			.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end()
-			.override()
-				.predicate(itemModelOverridePredicates.BROKEN, 1)
-				.model(getBrokenModel(provider))
-			.end();
-		// @formatter:on
+	@Override
+	protected Identifier modelParent() {
+		return Identifier.withDefaultNamespace("item/handheld");
 	}
 
-	private ModelFile getBrokenModel(ItemModelProvider provider) {
-		if (brokenModel == null) {
-			brokenModel = provider.withExistingParent(
-					name("broken"),
-					"item/handheld"
-				)
-				.texture("layer0", "item/voidic/sword_broken")
-				.customLoader(ItemLayerModelBuilder::begin).emissive(15, 15, 0).end();
-		}
-		return brokenModel;
+	@Override
+	protected String texturePath() {
+		return "item/voidic/sword";
 	}
 
 	@Override
 	public Optional<String> lang() {
 		return Optional.of("Voidic Crystal Sword");
 	}
-
 }

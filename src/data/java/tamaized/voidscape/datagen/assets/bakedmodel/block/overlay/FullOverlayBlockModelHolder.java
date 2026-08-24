@@ -1,10 +1,18 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block.overlay;
 
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.ModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.datagen.util.ModTextureSlots;
+
+import java.util.Optional;
 
 @Component
 public class FullOverlayBlockModelHolder extends BlockModelHolder {
@@ -12,23 +20,33 @@ public class FullOverlayBlockModelHolder extends BlockModelHolder {
 	@Autowired
 	private BaseOverlayBlockModelHolder parent;
 
-	public ModelFile build(BlockModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent("block/overlay/full", parent.getOrBuild(provider).getLocation())
-			.texture("particle", "#base")
-			.texture("down", "#base")
-			.texture("up", "#base")
-			.texture("north", "#base")
-			.texture("east", "#base")
-			.texture("south", "#base")
-			.texture("west", "#base")
-			.texture("overlay-down", "#overlay")
-			.texture("overlay-up", "#overlay")
-			.texture("overlay-north", "#overlay")
-			.texture("overlay-east", "#overlay")
-			.texture("overlay-south", "#overlay")
-			.texture("overlay-west", "#overlay");
-		// @formatter:on
+	@Override
+	public Optional<ModelHolder<BlockModelGenerators>> parent() {
+		return Optional.of(parent);
 	}
 
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended()
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/overlay/full"), textures(), provider.modelOutput);
+	}
+
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping
+			.putRef(TextureSlot.PARTICLE, ModTextureSlots.BASE)
+			.putRef(TextureSlot.DOWN, ModTextureSlots.BASE)
+			.putRef(TextureSlot.UP, ModTextureSlots.BASE)
+			.putRef(TextureSlot.NORTH, ModTextureSlots.BASE)
+			.putRef(TextureSlot.EAST, ModTextureSlots.BASE)
+			.putRef(TextureSlot.SOUTH, ModTextureSlots.BASE)
+			.putRef(TextureSlot.WEST, ModTextureSlots.BASE)
+			.putRef(ModTextureSlots.OVERLAY_DOWN, ModTextureSlots.OVERLAY)
+			.putRef(ModTextureSlots.OVERLAY_UP, ModTextureSlots.OVERLAY)
+			.putRef(ModTextureSlots.OVERLAY_NORTH, ModTextureSlots.OVERLAY)
+			.putRef(ModTextureSlots.OVERLAY_EAST, ModTextureSlots.OVERLAY)
+			.putRef(ModTextureSlots.OVERLAY_SOUTH, ModTextureSlots.OVERLAY)
+			.putRef(ModTextureSlots.OVERLAY_WEST, ModTextureSlots.OVERLAY);
+	}
 }

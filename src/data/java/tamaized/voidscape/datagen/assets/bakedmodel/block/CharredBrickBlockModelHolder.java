@@ -1,15 +1,21 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.ModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.overlay.FullFullbrightOverlayOverlayBlockModelHolder;
+import tamaized.voidscape.datagen.util.ModTextureSlots;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 import java.util.Optional;
@@ -34,15 +40,24 @@ public class CharredBrickBlockModelHolder extends BlockModelHolder {
 		return true;
 	}
 
-	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent(
-				name(),
-				parent.getOrBuild(provider).getLocation()
-			)
-			.renderType(RenderType.cutoutMipped().name)
-			.texture("base", "block/charred_brick")
-			.texture("overlay", "block/charred_brick_overlay")
-			.texture("particle", "#base");
+	@Override
+	public Optional<ModelHolder<BlockModelGenerators>> parent() {
+		return Optional.of(parent);
+	}
+
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended()
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, name()), textures(), provider.modelOutput);
+	}
+
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping
+			.putRef(TextureSlot.PARTICLE, ModTextureSlots.BASE)
+			.putForced(ModTextureSlots.BASE, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, name())))
+			.putForced(ModTextureSlots.OVERLAY, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, name("overlay"))));
 	}
 
 	@Override
@@ -54,5 +69,4 @@ public class CharredBrickBlockModelHolder extends BlockModelHolder {
 	public Optional<String> lang() {
 		return Optional.of("Charred Bone Brick");
 	}
-
 }

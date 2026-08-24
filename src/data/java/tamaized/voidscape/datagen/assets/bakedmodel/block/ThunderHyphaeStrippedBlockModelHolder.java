@@ -1,13 +1,19 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.ModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright.CubeAllFullbrightBlockModelHolder;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
@@ -33,13 +39,23 @@ public class ThunderHyphaeStrippedBlockModelHolder extends BlockModelHolder {
 		return true;
 	}
 
-	public ModelFile build(BlockModelProvider provider) {
-		return provider.withExistingParent(
-				name(),
-				parent.getOrBuild(provider).getLocation()
-			)
-			.texture("all", "block/thunder_stem_stripped")
-			.texture("particle", "#all");
+	@Override
+	public Optional<ModelHolder<BlockModelGenerators>> parent() {
+		return Optional.of(parent);
+	}
+
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended()
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, name()), textures(), provider.modelOutput);
+	}
+
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping
+			.putRef(TextureSlot.PARTICLE, TextureSlot.ALL)
+			.putForced(TextureSlot.ALL, new Material(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/thunder_stem_stripped")));
 	}
 
 	@Override
@@ -51,5 +67,4 @@ public class ThunderHyphaeStrippedBlockModelHolder extends BlockModelHolder {
 	public Optional<String> lang() {
 		return Optional.of("Stripped Thunder Hyphae");
 	}
-
 }

@@ -1,30 +1,19 @@
 package tamaized.voidscape.datagen.assets.lang;
 
-import net.minecraft.core.Holder;
 import net.minecraft.locale.Language;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.fluids.FluidType;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.Directory;
+import tamaized.datagenutil.assets.lang.ExtendedLangProvider;
+import tamaized.datagenutil.assets.lang.LangProvider;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelProviderFactory;
-import tamaized.voidscape.datagen.assets.bakedmodel.ItemModelProviderFactory;
 import tamaized.voidscape.registry.*;
 import tamaized.voidscape.registry.fluid.ModFluidBuckets;
 import tamaized.voidscape.registry.fluid.ModFluidTypes;
 
-import java.util.function.Supplier;
+import java.util.List;
 
 @Component
 public class LangProviderFactory {
@@ -45,13 +34,7 @@ public class LangProviderFactory {
 	private ModFluidBuckets buckets;
 
 	@Autowired
-	private BlockModelProviderFactory blockModelProviderFactory;
-
-	@Autowired
 	private ModBlockComponentDirectory blocks;
-
-	@Autowired
-	private ItemModelProviderFactory itemModelProviderFactory;
 
 	@Autowired
 	private ModAttributes attributes;
@@ -62,14 +45,18 @@ public class LangProviderFactory {
 	@Autowired
 	private ModDatapacks datapacks;
 
+	@Directory(LangProvider.class)
+	private List<LangProvider> langProviders;
+
 	public LanguageProvider make(GatherDataEvent event) {
-		return new LanguageProvider(
+		return new ExtendedLangProvider(
 			event.getGenerator().getPackOutput(),
 			Voidscape.MODID,
-			Language.DEFAULT
+			Language.DEFAULT,
+			langProviders
 		) {
 			@Override
-			protected void addTranslations() {
+			protected void addAdditionalTranslations() {
 				addCreativeTab("Voidscape");
 
 				addDimension(dimensions.VOID, "The Void");
@@ -132,7 +119,6 @@ public class LangProviderFactory {
 				addFluid(fluids.VOIDIC, "Liquid Voidic Crystal");
 				addItem(buckets.VOIDIC, "Liquid Voidic Crystal Bucket");
 
-				blockModelProviderFactory.addLangEntries(this);
 				addBlock(blocks.imposterBlocks().FRAGILE_VOIDIC_CRYSTAL_BLOCK, "Fragile Voidic Crystal");
 				addBlock(blocks.functionalBlocks().PORTAL, "Voidic Portal");
 				addBlock(blocks.machineBlocks().MACHINE_CORE, "Voidic Core");
@@ -141,8 +127,6 @@ public class LangProviderFactory {
 				addBlock(blocks.machineBlocks().MACHINE_GERMINATOR, "Voidic Germinator");
 				addBlock(blocks.machineBlocks().MACHINE_INFUSER, "Voidic Infuser");
 				addBlock(blocks.machineBlocks().MACHINE_COLLECTOR, "Voidic Collector");
-
-				itemModelProviderFactory.addLangEntries(this);
 
 				addAttribute(attributes.VOIDIC_INFUSION_RES, "Voidic Infusion Resistance");
 				addAttribute(attributes.VOIDIC_PARANOIA_RES, "Voidic Paranoia Resistance");
@@ -165,73 +149,6 @@ public class LangProviderFactory {
 				addConfiguration("donatorSettings", "Donor Settings");
 				addClientConfig("donatorSettings.enable", "Enable");
 				addClientConfig("donatorSettings.color", "Color");
-			}
-
-			private void addCreativeTab(String translation) {
-				add(Voidscape.MODID + ".item_group", translation);
-			}
-
-			private void addAdvancement(String name, String title, String desc) {
-				add("advancement." + Voidscape.MODID + "." + name, title);
-				add("advancement." + Voidscape.MODID + "." + name + ".desc", desc);
-			}
-
-			private void addTooltip(String name, String translation) {
-				add(Voidscape.MODID + ".tooltip." + name, translation);
-			}
-
-			private void addEffectWithDescription(Supplier<MobEffect> effect, String name, String description) {
-				addEffect(effect, name);
-				add(effect.get().getDescriptionId().concat(".description"), description);
-			}
-
-			private void addEntityTypeWithSpawnEgg(Supplier<? extends EntityType<? extends Entity>> entity, Supplier<Item> spawnEgg, String translation) {
-				addEntityType(entity, translation);
-				addItem(spawnEgg, translation.concat(" Spawn Egg"));
-			}
-
-			private void addEntityTypeSuffix(Supplier<? extends EntityType<? extends Entity>> entity, String suffix, String translation) {
-				add(entity.get().getDescriptionId() + "." + suffix, translation);
-			}
-
-			private void addFluid(Supplier<FluidType> fluid, String translation) {
-				add(fluid.get().getDescriptionId(), translation);
-			}
-
-			private void addAttribute(Holder<Attribute> attribute, String translation) {
-				add(attribute.value().getDescriptionId(), translation);
-			}
-
-			private void addDeathMessage(ResourceKey<DamageType> key, String translation) {
-				addResourceKey(key, "death.attack", translation);
-			}
-
-			private void addSubtitle(SoundEvent key, String translation) {
-				add(key.location().toLanguageKey("subtitles"), translation);
-			}
-
-			private void addConfiguration(String configuration, String translation) {
-				add(Voidscape.MODID + ".configuration." + configuration, translation);
-			}
-
-			private void addConfig(String config, String translation) {
-				add(Voidscape.MODID + ".config." + config, translation);
-			}
-
-			private void addCommonConfig(String config, String translation) {
-				addConfig("common." + config, translation);
-			}
-
-			private void addClientConfig(String config, String translation) {
-				addConfig("client." + config, translation);
-			}
-
-			private void addResourceKey(ResourceKey<?> key, String prefix, String translation) {
-				add(key.identifier().toLanguageKey(prefix), translation);
-			}
-
-			private void addDatapack(Lazy<Pack> pack, String translation) {
-				add("pack." + Voidscape.MODID + "." + pack.get().getId(), translation);
 			}
 		};
 	}

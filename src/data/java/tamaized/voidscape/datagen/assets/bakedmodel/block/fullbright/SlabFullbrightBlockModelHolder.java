@@ -1,30 +1,38 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
 
 @Component
 public class SlabFullbrightBlockModelHolder extends BlockModelHolder {
 
-	public ModelFile build(BlockModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent("block/fullbright/slab", "block/block")
-			.ao(false)
-			.texture("particle", "#side")
-			.element()
-				.from(0, 0, 0).to(16, 8, 16)
-				.shade(false)
-				.face(Direction.DOWN).uvs(0, 0, 16, 16).texture("#bottom").emissivity(15, 15).cullface(Direction.DOWN).end()
-				.face(Direction.UP).uvs(0, 0, 16, 16).texture("#top").emissivity(15, 15).end()
-				.face(Direction.NORTH).uvs(0, 8, 16, 16).texture("#side").emissivity(15, 15).cullface(Direction.NORTH).end()
-				.face(Direction.SOUTH).uvs(0, 8, 16, 16).texture("#side").emissivity(15, 15).cullface(Direction.SOUTH).end()
-				.face(Direction.WEST).uvs(0, 8, 16, 16).texture("#side").emissivity(15, 15).cullface(Direction.WEST).end()
-				.face(Direction.EAST).uvs(0, 8, 16, 16).texture("#side").emissivity(15, 15).cullface(Direction.EAST).end()
-			.end();
-		// @formatter:on
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended(m -> m
+				.parent(Identifier.withDefaultNamespace("block/block"))
+				.ambientOcclusion(false)
+				.element(e -> e
+					.from(0, 0, 0).to(16, 8, 16)
+					.shade(false)
+					.face(Direction.DOWN, f -> f.uvs(0, 0, 16, 16).texture(TextureSlot.BOTTOM).lightEmission(15).cullface(Direction.DOWN))
+					.face(Direction.UP, f -> f.uvs(0, 0, 16, 16).texture(TextureSlot.TOP).lightEmission(15))
+					.face(Direction.NORTH, f -> f.uvs(0, 8, 16, 16).texture(TextureSlot.SIDE).lightEmission(15).cullface(Direction.NORTH))
+					.face(Direction.SOUTH, f -> f.uvs(0, 8, 16, 16).texture(TextureSlot.SIDE).lightEmission(15).cullface(Direction.SOUTH))
+					.face(Direction.WEST, f -> f.uvs(0, 8, 16, 16).texture(TextureSlot.SIDE).lightEmission(15).cullface(Direction.WEST))
+					.face(Direction.EAST, f -> f.uvs(0, 8, 16, 16).texture(TextureSlot.SIDE).lightEmission(15).cullface(Direction.EAST))))
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/fullbright/slab"), textures(), provider.modelOutput);
 	}
 
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		mapping.putRef(TextureSlot.PARTICLE, TextureSlot.SIDE);
+	}
 }

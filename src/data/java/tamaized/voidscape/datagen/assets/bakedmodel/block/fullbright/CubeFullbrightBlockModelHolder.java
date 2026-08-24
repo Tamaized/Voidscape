@@ -1,29 +1,37 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block.fullbright;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.resources.Identifier;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.assets.bakedmodel.BlockModelHolder;
+import tamaized.datagenutil.assets.bakedmodel.ExtendedTextureMapping;
+import tamaized.datagenutil.assets.bakedmodel.FurtherExtendedModelTemplateBuilder;
+import tamaized.datagenutil.assets.bakedmodel.block.BlockModelHolder;
+import tamaized.voidscape.Voidscape;
 
 @Component
 public class CubeFullbrightBlockModelHolder extends BlockModelHolder {
 
-	public ModelFile build(BlockModelProvider provider) {
-		// @formatter:off
-		return provider.withExistingParent("block/fullbright/cube", "block/block")
-			.ao(false)
-			.element()
-				.from(0, 0, 0).to(16, 16, 16)
-				.shade(false)
-				.face(Direction.DOWN).texture("#down").cullface(Direction.DOWN).emissivity(15, 15).end()
-				.face(Direction.UP).texture("#up").cullface(Direction.UP).emissivity(15, 15).end()
-				.face(Direction.NORTH).texture("#north").cullface(Direction.NORTH).emissivity(15, 15).end()
-				.face(Direction.SOUTH).texture("#south").cullface(Direction.SOUTH).emissivity(15, 15).end()
-				.face(Direction.WEST).texture("#west").cullface(Direction.WEST).emissivity(15, 15).end()
-				.face(Direction.EAST).texture("#east").cullface(Direction.EAST).emissivity(15, 15).end()
-			.end();
-		// @formatter:on
+	@Override
+	public Identifier finalize(BlockModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
+		return model
+			.buildExtended(m -> m
+				.parent(Identifier.withDefaultNamespace("block/block"))
+				.ambientOcclusion(false)
+				.element(e -> e
+					.from(0, 0, 0).to(16, 16, 16)
+					.shade(false)
+					.face(Direction.DOWN, f -> f.texture(TextureSlot.DOWN).cullface(Direction.DOWN).lightEmission(15))
+					.face(Direction.UP, f -> f.texture(TextureSlot.UP).cullface(Direction.UP).lightEmission(15))
+					.face(Direction.NORTH, f -> f.texture(TextureSlot.NORTH).cullface(Direction.NORTH).lightEmission(15))
+					.face(Direction.SOUTH, f -> f.texture(TextureSlot.SOUTH).cullface(Direction.SOUTH).lightEmission(15))
+					.face(Direction.WEST, f -> f.texture(TextureSlot.WEST).cullface(Direction.WEST).lightEmission(15))
+					.face(Direction.EAST, f -> f.texture(TextureSlot.EAST).cullface(Direction.EAST).lightEmission(15))))
+			.create(Identifier.fromNamespaceAndPath(Voidscape.MODID, "block/fullbright/cube"), textures(), provider.modelOutput);
 	}
 
+	@Override
+	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+	}
 }
