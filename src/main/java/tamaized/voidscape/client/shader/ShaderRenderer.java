@@ -68,8 +68,8 @@ public class ShaderRenderer {
 		draw(pipeline, mesh, colorModulator, Map.of(), null, null);
 	}
 
-	public void drawOptimalAlpha(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, float alpha) {
-		draw(pipeline, mesh, colorModulator, Map.of(), shaders.ALPHA_UNIFORM, alphaStorage.get().writeUniform(new AlphaUniform(alpha)));
+	public void drawOptimalAlpha(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, Map<String, Identifier> textures, float alpha) {
+		draw(pipeline, mesh, colorModulator, textures, shaders.ALPHA_UNIFORM, alphaStorage.get().writeUniform(new AlphaUniform(alpha)));
 	}
 
 	public void drawAurora(MeshData mesh, Vector4fc colorModulator, int seed, float x, float y, float z) {

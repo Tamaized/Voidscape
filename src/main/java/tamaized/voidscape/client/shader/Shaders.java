@@ -5,6 +5,8 @@ import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.CompareOp;
+import com.mojang.blaze3d.platform.DestFactor;
+import com.mojang.blaze3d.platform.SourceFactor;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -13,6 +15,9 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+import net.neoforged.neoforge.client.stencil.StencilOperation;
+import net.neoforged.neoforge.client.stencil.StencilPerFaceTest;
+import net.neoforged.neoforge.client.stencil.StencilTest;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
@@ -22,6 +27,8 @@ public class Shaders {
 
 	public final String ALPHA_UNIFORM = "VoidscapeAlpha";
 	public final String AURORA_UNIFORM = "VoidscapeAurora";
+
+	private final int STENCIL_INDEX = 10;
 
 	public final RenderPipeline POSITION_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
 		withLocation(id("pipeline/position_color")).
@@ -42,25 +49,21 @@ public class Shaders {
 		withDepthStencilState(DepthStencilState.DEFAULT).
 		build();
 
-	public final RenderPipeline OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR =RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+	public final RenderPipeline OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
 		withLocation(id("pipeline/optimal_alpha_lessthan_pos_tex_color")).
 		withVertexShader(id("core/optimal_alpha/pos_tex_color")).
 		withFragmentShader(id("core/optimal_alpha/pos_tex_color")).
 		withSampler("Sampler0").
 		withUniform(ALPHA_UNIFORM, UniformType.UNIFORM_BUFFER).
-		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withColorTargetState(new ColorTargetState(new BlendFunction(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.SRC_COLOR, DestFactor.ZERO))).
 		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false)).
+		withStencilTest(new StencilTest(new StencilPerFaceTest(StencilOperation.KEEP, StencilOperation.KEEP, StencilOperation.REPLACE, CompareOp.ALWAYS_PASS), 0xFF, 0xFF, STENCIL_INDEX)).
 		build();
 
-	public final RenderPipeline OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
-		withLocation(id("pipeline/optimal_alpha_greaterthan_pos_tex_color")).
-		withVertexShader(id("core/optimal_alpha/pos_tex_color")).
-		withFragmentShader(id("core/optimal_alpha/pos_tex_color")).
-		withShaderDefine("ALPHA_GREATER").
-		withSampler("Sampler0").
-		withUniform(ALPHA_UNIFORM, UniformType.UNIFORM_BUFFER).
-		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
-		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+	public final RenderPipeline STENCIL_MASKED_GUI = RenderPipeline.builder(RenderPipelines.GUI_SNIPPET).
+		withLocation(id("pipeline/stencil_masked_gui")).
+		withStencilTest(new StencilTest(new StencilPerFaceTest(StencilOperation.KEEP, StencilOperation.KEEP, StencilOperation.KEEP, CompareOp.EQUAL), 0xFF, 0x00, STENCIL_INDEX)).
 		build();
 
 	public final RenderPipeline VOIDSKY = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET).
@@ -117,7 +120,7 @@ public class Shaders {
 			event.registerPipeline(POSITION_COLOR);
 			event.registerPipeline(POSITION_TEX_COLOR);
 			event.registerPipeline(OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR);
-			event.registerPipeline(OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR);
+			event.registerPipeline(STENCIL_MASKED_GUI);
 			event.registerPipeline(VOIDSKY);
 			event.registerPipeline(VOIDSKY_ENTITY);
 			event.registerPipeline(VOIDSKY_WINGS);

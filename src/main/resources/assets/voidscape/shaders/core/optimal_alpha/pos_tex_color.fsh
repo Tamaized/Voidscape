@@ -15,14 +15,8 @@ out vec4 fragColor;
 
 void main() {
     vec4 color = texture(Sampler0, texCoord0) * vertexColor;
-#ifdef ALPHA_GREATER
-    if (color.a <= Alpha) {
-        discard;
-    }
-#else
     if (color.a >= Alpha) {
         discard;
     }
-#endif
     fragColor = color * ColorModulator;
 }
