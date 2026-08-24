@@ -1,11 +1,10 @@
-#version 150
+#version 330
 
-#moj_import <matrix.glsl>
+#moj_import <minecraft:globals.glsl>
+#moj_import <minecraft:matrix.glsl>
 
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
-
-uniform float GameTime;
 
 in vec4 texProj0;
 in vec4 vertexColor;

@@ -1,105 +1,115 @@
 package tamaized.voidscape.client.shader;
 
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.CompareOp;
+import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.client.renderer.GameRenderer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
+import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
 
-import java.io.IOException;
-
 @Component(dist = Dist.CLIENT)
 public class Shaders {
 
-	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_LESSTHAN_POS_COLOR;
-	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR;
-	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR;
-	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_TEX;
-	public OptimalAlphaShaderInstance OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR;
-	public WrappedBindableShaderInstance WRAPPED_POS_COLOR;
-	public WrappedBindableShaderInstance WRAPPED_POS_TEX;
-	public WrappedBindableShaderInstance WRAPPED_POS_TEX_COLOR;
-	public BindableShaderInstance LINES;
-	public BindableShaderInstance VOIDSKY;
-	public BindableShaderInstance VOIDSKY_ENTITY;
-	public BindableShaderInstance VOIDSKY_WINGS;
-	public AuroraShaderInstance THUNDER_AURORA;
+	public final String ALPHA_UNIFORM = "VoidscapeAlpha";
+	public final String AURORA_UNIFORM = "VoidscapeAurora";
+
+	public final RenderPipeline POSITION_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+		withLocation(id("pipeline/position_color")).
+		withVertexShader("core/position_color").
+		withFragmentShader("core/position_color").
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).
+		build();
+
+	public final RenderPipeline OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+		withLocation(id("pipeline/optimal_alpha_lessthan_pos_tex_color")).
+		withVertexShader(id("core/optimal_alpha/pos_tex_color")).
+		withFragmentShader(id("core/optimal_alpha/pos_tex_color")).
+		withSampler("Sampler0").
+		withUniform(ALPHA_UNIFORM, UniformType.UNIFORM_BUFFER).
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		build();
+
+	public final RenderPipeline OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+		withLocation(id("pipeline/optimal_alpha_greaterthan_pos_tex_color")).
+		withVertexShader(id("core/optimal_alpha/pos_tex_color")).
+		withFragmentShader(id("core/optimal_alpha/pos_tex_color")).
+		withShaderDefine("ALPHA_GREATER").
+		withSampler("Sampler0").
+		withUniform(ALPHA_UNIFORM, UniformType.UNIFORM_BUFFER).
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		build();
+
+	public final RenderPipeline VOIDSKY = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET).
+		withLocation(id("pipeline/voidsky")).
+		withVertexShader(id("core/voidsky/sky")).
+		withFragmentShader(id("core/voidsky/sky")).
+		withSampler("Sampler0").
+		withSampler("Sampler1").
+		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
+		withVertexFormat(DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS).
+		build();
+
+	public final RenderPipeline VOIDSKY_ENTITY = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET).
+		withLocation(id("pipeline/voidsky_entity")).
+		withVertexShader(id("core/voidsky/entity")).
+		withFragmentShader(id("core/voidsky/entity")).
+		withSampler("Sampler0").
+		withSampler("Sampler1").
+		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
+		withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS).
+		withDepthStencilState(DepthStencilState.DEFAULT).
+		build();
+
+	public final RenderPipeline VOIDSKY_WINGS = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET).
+		withLocation(id("pipeline/voidsky_wings")).
+		withVertexShader(id("core/voidsky/wings")).
+		withFragmentShader(id("core/voidsky/wings")).
+		withSampler("Sampler0").
+		withSampler("Sampler1").
+		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
+		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		withDepthStencilState(DepthStencilState.DEFAULT).
+		build();
+
+	public final RenderPipeline THUNDER_AURORA = RenderPipeline.
+		builder(RenderPipelines.MATRICES_FOG_SNIPPET, RenderPipelines.GLOBALS_SNIPPET).
+		withLocation(id("pipeline/thunder_aurora")).
+		withVertexShader(id("core/aurora/aurora")).
+		withFragmentShader(id("core/aurora/aurora")).
+		withUniform(AURORA_UNIFORM, UniformType.UNIFORM_BUFFER).
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).
+		withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false)).
+		build();
+
+	private Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(Voidscape.MODID, path);
+	}
 
 	@PostConstruct
 	private void init(IEventBus bus) {
-		bus.addListener(RegisterShadersEvent.class, event -> {
-			try {
-				event.registerShader(new OptimalAlphaShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_color"),
-						DefaultVertexFormat.POSITION_COLOR),
-					shader -> OPTIMAL_ALPHA_LESSTHAN_POS_COLOR = (OptimalAlphaShaderInstance) shader
-				);
-				event.registerShader(new OptimalAlphaShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/lessthan/pos_tex_color"),
-						DefaultVertexFormat.POSITION_TEX_COLOR),
-					shader -> OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader
-				);
-				event.registerShader(new OptimalAlphaShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_color"),
-						DefaultVertexFormat.POSITION_COLOR),
-					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_COLOR = (OptimalAlphaShaderInstance) shader
-				);
-				event.registerShader(new OptimalAlphaShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex"),
-						DefaultVertexFormat.POSITION_TEX),
-					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX = (OptimalAlphaShaderInstance) shader
-				);
-				event.registerShader(new OptimalAlphaShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "optimal_alpha/greaterthan/pos_tex_color"),
-						DefaultVertexFormat.POSITION_TEX_COLOR),
-					shader -> OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR = (OptimalAlphaShaderInstance) shader
-				);
-				event.registerShader(new BindableShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/sky"),
-						DefaultVertexFormat.POSITION),
-					shader -> VOIDSKY = (BindableShaderInstance) shader
-				);
-				event.registerShader(new BindableShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/entity"),
-						DefaultVertexFormat.NEW_ENTITY),
-					shader -> VOIDSKY_ENTITY = (BindableShaderInstance) shader
-				);
-				event.registerShader(new BindableShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidsky/wings"),
-						DefaultVertexFormat.POSITION_TEX),
-					shader -> VOIDSKY_WINGS = (BindableShaderInstance) shader
-				);
-				event.registerShader(new BindableShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "lines/lines"),
-						DefaultVertexFormat.POSITION_COLOR_NORMAL),
-					shader -> LINES = (BindableShaderInstance) shader
-				);
-				event.registerShader(new AuroraShaderInstance(
-						event.getResourceProvider(),
-						Identifier.fromNamespaceAndPath(Voidscape.MODID, "aurora/aurora"),
-						DefaultVertexFormat.POSITION_COLOR),
-					shader -> THUNDER_AURORA = (AuroraShaderInstance) shader
-				);
-			} catch (IOException e) {
-				Voidscape.LOGGER.error(e);
-			}
+		bus.addListener(RegisterRenderPipelinesEvent.class, event -> {
+			event.registerPipeline(POSITION_COLOR);
+			event.registerPipeline(OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR);
+			event.registerPipeline(OPTIMAL_ALPHA_GREATERTHAN_POS_TEX_COLOR);
+			event.registerPipeline(VOIDSKY);
+			event.registerPipeline(VOIDSKY_ENTITY);
+			event.registerPipeline(VOIDSKY_WINGS);
+			event.registerPipeline(THUNDER_AURORA);
 		});
-		WRAPPED_POS_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionColorShader);
-		WRAPPED_POS_TEX = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexShader);
-		WRAPPED_POS_TEX_COLOR = WrappedBindableShaderInstance.make(GameRenderer::getPositionTexColorShader);
 	}
 
 }
