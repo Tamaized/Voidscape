@@ -62,7 +62,7 @@ public class VoidscapeAetherCompatRegistryProvider {
 
 		bus.addListener(GatherDataEvent.class, event -> {
 			event.getGenerator()
-				.getBuiltinDatapack(event.includeServer(), "minecraft", "voidscape_aether_compat")
+				.getBuiltinDatapack(true, "minecraft", "voidscape_aether_compat")
 				.addProvider(f -> new DatapackBuiltinEntriesProvider(
 					new PackOutput(f.getOutputFolder()),
 					event.getLookupProvider().thenApply(v -> new HolderLookup.Provider() {
@@ -116,7 +116,7 @@ public class VoidscapeAetherCompatRegistryProvider {
 				));
 
 			event.getGenerator()
-				.getBuiltinDatapack(event.includeServer(), "minecraft", "voidscape_aether_compat")
+				.getBuiltinDatapack(true, "minecraft", "voidscape_aether_compat")
 				.addProvider(f -> new PackMetadataGenerator(new PackOutput(f.getOutputFolder()))
 					.add(PackMetadataSection.TYPE, new PackMetadataSection(
 							net.minecraft.network.chat.Component.literal("Resources for Voidscape - Aether Compat"),

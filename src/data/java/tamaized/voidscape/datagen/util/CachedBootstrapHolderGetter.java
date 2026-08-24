@@ -1,6 +1,5 @@
 package tamaized.voidscape.datagen.util;
 
-import com.aetherteam.aether.data.generators.AetherRegistrySets;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
@@ -8,7 +7,6 @@ import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.datagen.datapack.voidscape_aether_compat.VoidscapeAetherCompatRegistryProvider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,8 +17,8 @@ public class CachedBootstrapHolderGetter {
 	@Autowired
 	private BootstrapContextHolderLookupResolver bootstrapContextHolderLookupResolver;
 
-	@Autowired
-	private VoidscapeAetherCompatRegistryProvider aetherCompatRegistryProvider;
+//	@Autowired TODO
+//	private VoidscapeAetherCompatRegistryProvider aetherCompatRegistryProvider;
 
 	private final Map<ResourceKey<Registry<?>>, List<ResourceKey<?>>> cache = new HashMap<>();
 
@@ -57,11 +55,11 @@ public class CachedBootstrapHolderGetter {
 			.sorted()
 			.toList());
 
-		entries.addAll(aetherCompatRegistryProvider.lookup(key).orElseThrow()
+		/*entries.addAll(aetherCompatRegistryProvider.lookup(key).orElseThrow() TODO
 			.listElements()
 			.map(Holder.Reference::unwrapKey)
 			.map(Optional::orElseThrow)
-			.toList());
+			.toList());*/
 
 		cache.put(key, entries);
 
