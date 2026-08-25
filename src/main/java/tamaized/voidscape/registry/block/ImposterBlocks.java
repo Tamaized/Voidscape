@@ -29,9 +29,9 @@ public class ImposterBlocks {
 		)
 	);
 	public final DeferredHolder<Item, Item> FRAGILE_VOIDIC_CRYSTAL_BLOCK_ITEM = RegUtil.register(Registries.ITEM, FRAGILE_VOIDIC_CRYSTAL_BLOCK.getId().getPath(),
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			FRAGILE_VOIDIC_CRYSTAL_BLOCK.get(),
-			itemProperties.LAVA_IMMUNE.get()
+			itemProperties.LAVA_IMMUNE.apply(id)
 		)
 	);
 

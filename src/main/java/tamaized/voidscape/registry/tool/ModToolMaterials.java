@@ -17,9 +17,6 @@ public class ModToolMaterials {
 	@Autowired
 	private IncorrectBlocksForToolModTagKeys incorrectBlocksForToolTags;
 
-	@Autowired
-	private MaterialItems materialItems;
-
 	public final TagKey<Item> REPAIR_TAG_VOIDIC_CRYSTAL = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal"));
 	public final Lazy<ToolMaterial> VOIDIC_CRYSTAL = Lazy.of(() -> new ToolMaterial(
 		incorrectBlocksForToolTags.VOIDIC_CRYSTAL,

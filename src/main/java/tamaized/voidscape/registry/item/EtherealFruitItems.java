@@ -32,32 +32,33 @@ public class EtherealFruitItems {
 	@Autowired
 	private ModEffects effects;
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_VOID = RegUtil.register(Registries.ITEM, "ethereal_fruit_void", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_VOID = RegUtil.register(Registries.ITEM, "ethereal_fruit_void", (id) -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).addInfusion(150, context.parent()),
-		itemProperties.ETHEREAL_FRUIT.get()
+		itemProperties.ETHEREAL_FRUIT.apply(id)
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NULL = RegUtil.register(Registries.ITEM, "ethereal_fruit_null", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NULL = RegUtil.register(Registries.ITEM, "ethereal_fruit_null", (id) -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).removeInfusion(150),
-		itemProperties.ETHEREAL_FRUIT.get()
+		itemProperties.ETHEREAL_FRUIT.apply(id)
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_OVERWORLD = RegUtil.register(Registries.ITEM, "ethereal_fruit_overworld", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_OVERWORLD = RegUtil.register(Registries.ITEM, "ethereal_fruit_overworld", (id) -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).removeParanoia(150),
-		itemProperties.ETHEREAL_FRUIT.get()
+		itemProperties.ETHEREAL_FRUIT.apply(id)
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NETHER = RegUtil.register(Registries.ITEM, "ethereal_fruit_nether", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_NETHER = RegUtil.register(Registries.ITEM, "ethereal_fruit_nether", (id) -> new EtherealFruitItem(
 		context -> context.parent().getData(dataAttachments.INSANITY).addParanoia(150),
-		itemProperties.ETHEREAL_FRUIT.get()
+		itemProperties.ETHEREAL_FRUIT.apply(id)
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_END = RegUtil.register(Registries.ITEM, "ethereal_fruit_end", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_END = RegUtil.register(Registries.ITEM, "ethereal_fruit_end", (id) -> new EtherealFruitItem(
 		context -> context.parent().addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 3)),
-		itemProperties.ETHEREAL_FRUIT.get()
+		itemProperties.ETHEREAL_FRUIT.apply(id)
 	));
 
-	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_SALAD = RegUtil.register(Registries.ITEM, "ethereal_fruit_salad", () -> new EtherealFruitItem(
+	public final DeferredHolder<Item, EtherealFruitItem> ETHEREAL_FRUIT_SALAD = RegUtil.register(Registries.ITEM, "ethereal_fruit_salad", (id
+	) -> new EtherealFruitItem(
 		context -> {
 			switch (context.parent().getRandom().nextInt(11)) {
 				case 1 -> ETHEREAL_FRUIT_VOID.get().doAction(context);
@@ -72,7 +73,8 @@ public class EtherealFruitItems {
 				default -> { /* Do nothing */}
 			}
 		},
-		itemProperties.LAVA_IMMUNE.get().food(new FoodProperties.Builder()
+		itemProperties.LAVA_IMMUNE.apply(id)
+			.food(new FoodProperties.Builder()
 			.nutrition(18)
 			.saturationModifier(0.5F)
 			.alwaysEdible()

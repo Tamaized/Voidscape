@@ -36,9 +36,9 @@ public class EtherealFruitBlocks {
 		)
 	);
 	public final Supplier<Item> VOID_ITEM = RegUtil.register(Registries.ITEM, VOID.getId().getPath() + "_block",
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			VOID.get(),
-			itemProperties.DEFAULT.get()
+			itemProperties.DEFAULT.apply(id)
 		)
 	);
 
@@ -54,9 +54,9 @@ public class EtherealFruitBlocks {
 		)
 	);
 	public final Supplier<Item> NULL_ITEM = RegUtil.register(Registries.ITEM, NULL.getId().getPath() + "_block",
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			NULL.get(),
-			itemProperties.DEFAULT.get()
+			itemProperties.DEFAULT.apply(id)
 		)
 	);
 
@@ -72,9 +72,9 @@ public class EtherealFruitBlocks {
 		)
 	);
 	public final Supplier<Item> OVERWORLD_ITEM = RegUtil.register(Registries.ITEM, OVERWORLD.getId().getPath() + "_block",
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			OVERWORLD.get(),
-			itemProperties.DEFAULT.get()
+			itemProperties.DEFAULT.apply(id)
 		)
 	);
 
@@ -90,9 +90,9 @@ public class EtherealFruitBlocks {
 		)
 	);
 	public final Supplier<Item> NETHER_ITEM = RegUtil.register(Registries.ITEM, NETHER.getId().getPath() + "_block",
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			NETHER.get(),
-			itemProperties.DEFAULT.get()
+			itemProperties.DEFAULT.apply(id)
 		)
 	);
 
@@ -108,9 +108,9 @@ public class EtherealFruitBlocks {
 		)
 	);
 	public final Supplier<Item> END_ITEM = RegUtil.register(Registries.ITEM, END.getId().getPath() + "_block",
-		() -> new BlockItem(
+		(id) -> new BlockItem(
 			END.get(),
-			itemProperties.DEFAULT.get()
+			itemProperties.DEFAULT.apply(id)
 		)
 	);
 

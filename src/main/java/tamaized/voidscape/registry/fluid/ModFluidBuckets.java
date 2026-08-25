@@ -5,13 +5,10 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.registry.ModItemProperties;
-
-import java.util.function.Supplier;
 
 @Component
 public class ModFluidBuckets {
@@ -22,6 +19,8 @@ public class ModFluidBuckets {
 	@Autowired
 	private ModFluids fluids;
 
-	public final DeferredHolder<Item, Item> VOIDIC = RegUtil.register(Registries.ITEM, "voidic_bucket", () -> new BucketItem(fluids.VOIDIC_SOURCE.get(), itemProperties.DEFAULT.get().stacksTo(1).craftRemainder(Items.BUCKET)));
+	public final DeferredHolder<Item, Item> VOIDIC = RegUtil.register(Registries.ITEM, "voidic_bucket", (id) -> new BucketItem(
+		fluids.VOIDIC_SOURCE.get(), itemProperties.DEFAULT.apply(id).stacksTo(1).craftRemainder(Items.BUCKET)
+	));
 
 }

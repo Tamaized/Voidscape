@@ -23,8 +23,8 @@ public class CharredToolSet {
 
 	public final DeferredHolder<Item, Item> CHARRED_WARHAMMER;
 
-	public final DeferredHolder<Item, Item> CHARRED_QUIVER = RegUtil.register(Registries.ITEM, "charred_quiver", () -> new QuiverItem(
-		itemProperties.LAVA_IMMUNE.get()
+	public final DeferredHolder<Item, Item> CHARRED_QUIVER = RegUtil.register(Registries.ITEM, "charred_quiver", (id) -> new QuiverItem(
+		itemProperties.LAVA_IMMUNE.apply(id)
 	));
 
 	public CharredToolSet(

@@ -7,7 +7,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.*;
-import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.armor.ModArmorMaterials;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemProperties;
@@ -25,8 +24,7 @@ public class CorruptArmorSet {
 		@Autowired AttributeFactoryProvider attributeFactoryProvider,
 		@Autowired ModAttributes attributes,
 		@Autowired ModArmorMaterials armorMaterials,
-		@Autowired ModItemProperties itemProperties,
-		@Autowired ModItemComponents itemComponents
+		@Autowired ModItemProperties itemProperties
 	) {
 		CORRUPT_HELMET = toolAndArmorHelper.helmet(
 			"corrupt",
