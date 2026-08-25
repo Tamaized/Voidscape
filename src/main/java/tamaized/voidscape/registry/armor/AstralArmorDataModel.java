@@ -9,7 +9,7 @@ import tamaized.voidscape.client.entity.ModModelLayerLocations;
 public class AstralArmorDataModel extends CrystallineArmorDataModel {
 
 	@Autowired(dist = Dist.CLIENT)
-	private static ModModelLayerLocations modelLayerLocations;
+	private ModModelLayerLocations modelLayerLocations;
 
 	public AstralArmorDataModel() {
 		super("astral", false);

@@ -30,7 +30,7 @@ public class CorruptArmorSet {
 	) {
 		CORRUPT_HELMET = toolAndArmorHelper.helmet(
 			"corrupt",
-			() -> armorMaterials.CORRUPT,
+			armorMaterials.CORRUPT,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.HEAD),
@@ -43,7 +43,7 @@ public class CorruptArmorSet {
 
 		CORRUPT_CHEST = toolAndArmorHelper.chest(
 			"corrupt",
-			() -> armorMaterials.CORRUPT,
+			armorMaterials.CORRUPT,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.CHEST),
@@ -56,7 +56,7 @@ public class CorruptArmorSet {
 
 		CORRUPT_LEGS = toolAndArmorHelper.legs(
 			"corrupt",
-			() -> armorMaterials.CORRUPT,
+			armorMaterials.CORRUPT,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.LEGS),
@@ -68,7 +68,7 @@ public class CorruptArmorSet {
 
 		CORRUPT_BOOTS = toolAndArmorHelper.boots(
 			"corrupt",
-			() -> armorMaterials.CORRUPT,
+			armorMaterials.CORRUPT,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.FEET),

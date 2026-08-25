@@ -30,7 +30,7 @@ public class IchorArmorSet {
 	) {
 		ICHOR_HELMET = toolAndArmorHelper.helmet(
 			"ichor",
-			() -> armorMaterials.ICHOR,
+			armorMaterials.ICHOR,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.HEAD),
@@ -43,7 +43,7 @@ public class IchorArmorSet {
 
 		ICHOR_CHEST = toolAndArmorHelper.chest(
 			"ichor",
-			() -> armorMaterials.ICHOR,
+			armorMaterials.ICHOR,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.CHEST),
@@ -56,7 +56,7 @@ public class IchorArmorSet {
 
 		ICHOR_LEGS = toolAndArmorHelper.legs(
 			"ichor",
-			() -> armorMaterials.ICHOR,
+			armorMaterials.ICHOR,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.LEGS),
@@ -68,7 +68,7 @@ public class IchorArmorSet {
 
 		ICHOR_BOOTS = toolAndArmorHelper.boots(
 			"ichor",
-			() -> armorMaterials.ICHOR,
+			armorMaterials.ICHOR,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 4D, EquipmentSlotGroup.FEET),

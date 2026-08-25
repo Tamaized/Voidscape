@@ -9,7 +9,7 @@ import tamaized.voidscape.client.entity.ModModelLayerLocations;
 public class TitaniteArmorDataModel extends CrystallineArmorDataModel {
 
 	@Autowired(dist = Dist.CLIENT)
-	private static ModModelLayerLocations modelLayerLocations;
+	private ModModelLayerLocations modelLayerLocations;
 
 	public TitaniteArmorDataModel() {
 		super("titanite", true);

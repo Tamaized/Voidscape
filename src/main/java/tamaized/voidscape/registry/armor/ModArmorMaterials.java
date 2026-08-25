@@ -1,5 +1,6 @@
 package tamaized.voidscape.registry.armor;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -16,6 +17,7 @@ import tamaized.regutil.ArmorDataModel;
 import tamaized.voidscape.Voidscape;
 
 import java.util.EnumMap;
+import java.util.function.Supplier;
 
 @Component
 public class ModArmorMaterials {
@@ -45,7 +47,7 @@ public class ModArmorMaterials {
 		Registries.ITEM,
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt")
 	);
-	public final ArmorData CORRUPT = new ArmorData(new ArmorMaterial(
+	public final Supplier<ArmorData> CORRUPT = Suppliers.memoize(() -> new ArmorData(new ArmorMaterial(
 		41,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
 			map.put(ArmorType.BOOTS, 4);
@@ -60,13 +62,13 @@ public class ModArmorMaterials {
 		0.15F,
 		TAG_REPAIR_MATERIAL_CORRUPT,
 		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_CORRUPT.location())
-	), new CorruptArmorDataModel());
+	), new CorruptArmorDataModel()));
 
 	public final TagKey<Item> TAG_REPAIR_MATERIAL_TITANITE = TagKey.create(
 		Registries.ITEM,
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite")
 	);
-	public final ArmorData TITANITE = new ArmorData(new ArmorMaterial(
+	public final Supplier<ArmorData> TITANITE = Suppliers.memoize(() -> new ArmorData(new ArmorMaterial(
 		43,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
 			map.put(ArmorType.BOOTS, 5);
@@ -81,13 +83,13 @@ public class ModArmorMaterials {
 		0.20F,
 		TAG_REPAIR_MATERIAL_TITANITE,
 		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_TITANITE.location())
-	), new TitaniteArmorDataModel());
+	), new TitaniteArmorDataModel()));
 
 	public final TagKey<Item> TAG_REPAIR_MATERIAL_ICHOR = TagKey.create(
 		Registries.ITEM,
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor")
 	);
-	public final ArmorData ICHOR = new ArmorData(new ArmorMaterial(
+	public final Supplier<ArmorData> ICHOR = Suppliers.memoize(() -> new ArmorData(new ArmorMaterial(
 		45,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
 			map.put(ArmorType.BOOTS, 6);
@@ -102,13 +104,13 @@ public class ModArmorMaterials {
 		0.25F,
 		TAG_REPAIR_MATERIAL_ICHOR,
 		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ICHOR.location())
-	), new IchorArmorDataModel());
+	), new IchorArmorDataModel()));
 
 	public final TagKey<Item> TAG_REPAIR_MATERIAL_ASTRAL = TagKey.create(
 		Registries.ITEM,
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral")
 	);
-	public final ArmorData ASTRAL = new ArmorData(new ArmorMaterial(
+	public final Supplier<ArmorData> ASTRAL = Suppliers.memoize(() -> new ArmorData(new ArmorMaterial(
 		47,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
 			map.put(ArmorType.BOOTS, 7);
@@ -123,6 +125,6 @@ public class ModArmorMaterials {
 		0.30F,
 		TAG_REPAIR_MATERIAL_ASTRAL,
 		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ASTRAL.location())
-	), new AstralArmorDataModel());
+	), new AstralArmorDataModel()));
 
 }

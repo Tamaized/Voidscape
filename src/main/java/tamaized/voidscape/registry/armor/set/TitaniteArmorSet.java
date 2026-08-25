@@ -32,7 +32,7 @@ public class TitaniteArmorSet {
 
 		TITANITE_HELMET = toolAndArmorHelper.helmet(
 			"titanite",
-			() -> armorMaterials.TITANITE,
+			armorMaterials.TITANITE,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.HEAD),
@@ -45,7 +45,7 @@ public class TitaniteArmorSet {
 
 		TITANITE_CHEST = toolAndArmorHelper.chest(
 			"titanite",
-			() -> armorMaterials.TITANITE,
+			armorMaterials.TITANITE,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.CHEST),
@@ -58,7 +58,7 @@ public class TitaniteArmorSet {
 
 		TITANITE_LEGS = toolAndArmorHelper.legs(
 			"titanite",
-			() -> armorMaterials.TITANITE,
+			armorMaterials.TITANITE,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.LEGS),
@@ -70,7 +70,7 @@ public class TitaniteArmorSet {
 
 		TITANITE_BOOTS = toolAndArmorHelper.boots(
 			"titanite",
-			() -> armorMaterials.TITANITE,
+			armorMaterials.TITANITE,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 3D, EquipmentSlotGroup.FEET),

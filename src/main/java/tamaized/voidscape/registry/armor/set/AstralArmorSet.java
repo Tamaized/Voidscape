@@ -45,7 +45,7 @@ public class AstralArmorSet {
 
 		ASTRAL_HELMET = toolAndArmorHelper.helmet(
 			"astral",
-			() -> armorMaterials.ASTRAL,
+			armorMaterials.ASTRAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD),
@@ -59,7 +59,7 @@ public class AstralArmorSet {
 
 		ASTRAL_CHEST = toolAndArmorHelper.chest(
 			"astral",
-			() -> armorMaterials.ASTRAL,
+			armorMaterials.ASTRAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST),
@@ -73,7 +73,7 @@ public class AstralArmorSet {
 
 		ASTRAL_LEGS = toolAndArmorHelper.legs(
 			"astral",
-			() -> armorMaterials.ASTRAL,
+			armorMaterials.ASTRAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS),
@@ -86,7 +86,7 @@ public class AstralArmorSet {
 
 		ASTRAL_BOOTS = toolAndArmorHelper.boots(
 			"astral",
-			() -> armorMaterials.ASTRAL,
+			armorMaterials.ASTRAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.FEET),
