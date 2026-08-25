@@ -36,17 +36,12 @@
       ]
     }
   },
-  "loader": "neoforge:item_layers",
-  "neoforge_data": {
-    "layers": {
-      "0": {
-        "block_light": 15,
-        "sky_light": 15
-      }
-    }
-  },
-  "render_types": {},
   "textures": {
-    "layer0": "voidscape:item/very_drippy_dripstone"
+    "layer0": {
+      "neoforge_data": {
+        "light_emission": 15
+      },
+      "sprite": "voidscape:item/very_drippy_dripstone"
+    }
   }
 }

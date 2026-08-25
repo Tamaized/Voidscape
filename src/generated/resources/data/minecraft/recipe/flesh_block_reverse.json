@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "voidscape:flesh_block"
-    }
+    "voidscape:flesh_block"
   ],
   "result": {
     "count": 9,

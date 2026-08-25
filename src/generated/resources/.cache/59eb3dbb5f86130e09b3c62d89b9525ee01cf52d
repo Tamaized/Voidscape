@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-03T16:48:16.462315	Loot Tables
+// 26.1.2	2026-08-25T19:21:05.6366618	Loot Tables
 4ab59776f54cd2fae5dea7799c3ff1b13d7b4448 data/voidscape/loot_table/blocks/charred_brick.json
 37a6ce6eff619c3c757214faf7b1c432dcdef209 data/voidscape/loot_table/blocks/cracked_astralrock.json
 7b8214d0fddf31bfca082a4d4b93e0c84b8267ff data/voidscape/loot_table/blocks/ethereal_fruit_end.json
@@ -37,7 +37,13 @@ fb21488320d5ad3c554fc34750bbce743c31a0d0 data/voidscape/loot_table/blocks/thunde
 1dabd2b206b2ebb425c820c2050ef25d5c38a297 data/voidscape/loot_table/blocks/voidic_crystal_block.json
 ed01d6fc89b31210b66b852fc5e1164d300c56dd data/voidscape/loot_table/blocks/voidic_crystal_ore.json
 6549bacfbcd5656080b8892d215b2ccc755e983d data/voidscape/loot_table/chests/structures/charred.json
+f5b8d3c19fa68e95f7518ef92f38e6751aa4f2d0 data/voidscape/loot_table/entities/anti_bolt.json
 b02a21a24bd7bd27d778e36a6348bf3ba216ed39 data/voidscape/loot_table/entities/corrupted_pawn.json
+acd14b90f2e1b62550a67822d1e5af2bd3c32774 data/voidscape/loot_table/entities/ichor_bolt.json
 b2273413e66f69ad256839496fc5c574a88d15b9 data/voidscape/loot_table/entities/null_servant.json
+6e5854d165aa182885eaf6b090b17e7faf5ec1d1 data/voidscape/loot_table/entities/null_servant_augment_block.json
+77c9e4c53e98d05c0fe994fdac7bc5746bbaa86a data/voidscape/loot_table/entities/null_servant_ichor_bolt.json
+9957805c04f2271d2e15677e1b6483b60933fff3 data/voidscape/loot_table/entities/null_servant_phantom.json
+9c828da41e2abd1ccd9bb0a33a455b084dee340a data/voidscape/loot_table/entities/strange_pearl.json
 cec5aba40eac58713686305a667eabf816806621 data/voidscape/loot_table/entities/voidling.json
 72f7996e7703288107b7cd68ed4be3d8c1b3d826 data/voidscape/loot_table/entities/voids_wrath.json

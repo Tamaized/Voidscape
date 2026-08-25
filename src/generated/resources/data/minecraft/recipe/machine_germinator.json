@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "B": {
-      "item": "voidscape:charred_bone"
-    },
-    "C": {
-      "item": "voidscape:machine_core"
-    },
-    "T": {
-      "item": "voidscape:titanite_shard"
-    }
+    "B": "voidscape:charred_bone",
+    "C": "voidscape:machine_core",
+    "T": "voidscape:titanite_shard"
   },
   "pattern": [
     "TBT",
@@ -18,7 +12,6 @@
     "TBT"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:machine_germinator"
   }
 }

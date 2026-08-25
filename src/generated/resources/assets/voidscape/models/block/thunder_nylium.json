@@ -1,6 +1,5 @@
 {
   "parent": "voidscape:block/overlay/side_top_fullbright_overlay",
-  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "bottom": "minecraft:block/bedrock",
     "overlay-bottom": "voidscape:block/blank",

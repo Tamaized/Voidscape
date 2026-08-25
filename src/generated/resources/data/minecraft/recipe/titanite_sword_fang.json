@@ -1,19 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:ethereal_spider_fang"
-  },
-  "base": {
-    "item": "voidscape:titanite_sword"
-  },
+  "addition": "voidscape:ethereal_spider_fang",
+  "base": "voidscape:titanite_sword",
   "result": {
     "components": {
       "voidscape:fang": true
     },
-    "count": 1,
     "id": "voidscape:titanite_sword"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

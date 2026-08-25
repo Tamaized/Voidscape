@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "C": {
-      "item": "voidscape:voidic_crystal"
-    }
+    "C": "voidscape:voidic_crystal"
   },
   "pattern": [
     "CCC",
@@ -12,7 +10,6 @@
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:voidic_crystal_block"
   }
 }

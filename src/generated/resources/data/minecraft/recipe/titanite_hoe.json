@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:titanite_shard"
-  },
-  "base": {
-    "item": "minecraft:netherite_hoe"
-  },
+  "addition": "voidscape:titanite_shard",
+  "base": "minecraft:netherite_hoe",
   "result": {
-    "count": 1,
     "id": "voidscape:titanite_hoe"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

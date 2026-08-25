@@ -2,27 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:bowl"
-    },
-    {
-      "item": "voidscape:ethereal_fruit_void"
-    },
-    {
-      "item": "voidscape:ethereal_fruit_null"
-    },
-    {
-      "item": "voidscape:ethereal_fruit_overworld"
-    },
-    {
-      "item": "voidscape:ethereal_fruit_nether"
-    },
-    {
-      "item": "voidscape:ethereal_fruit_end"
-    }
+    "minecraft:bowl",
+    "voidscape:ethereal_fruit_void",
+    "voidscape:ethereal_fruit_null",
+    "voidscape:ethereal_fruit_overworld",
+    "voidscape:ethereal_fruit_nether",
+    "voidscape:ethereal_fruit_end"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:ethereal_fruit_salad"
   }
 }

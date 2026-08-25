@@ -3,11 +3,8 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 1.5,
-  "ingredient": {
-    "item": "voidscape:flesh_ore"
-  },
+  "ingredient": "voidscape:flesh_ore",
   "result": {
-    "count": 1,
     "id": "voidscape:flesh_chunk"
   }
 }

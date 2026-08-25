@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:titanite_shard"
-  },
-  "base": {
-    "item": "voidscape:corrupt_helmet"
-  },
+  "addition": "voidscape:titanite_shard",
+  "base": "voidscape:corrupt_helmet",
   "result": {
-    "count": 1,
     "id": "voidscape:titanite_helmet"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

@@ -1,30 +1,38 @@
 {
-  "carvers": {},
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "voidscape:ambience",
+        "tick_chance": 0.0015
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "replace_current_music": true,
+        "sound": "voidscape:music"
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:crimson_spore"
+        },
+        "probability": 0.025
+      }
+    ],
+    "minecraft:visual/fog_color": "#0a010c",
+    "minecraft:visual/sky_color": "#0a010c",
+    "minecraft:visual/water_fog_color": "#0a010c"
+  },
+  "carvers": [],
   "creature_spawn_probability": 0.0,
   "downfall": 0.0,
   "effects": {
-    "additions_sound": {
-      "sound": "voidscape:ambience",
-      "tick_chance": 0.001500000013038516
-    },
-    "fog_color": 655628,
-    "foliage_color": 2165762,
-    "grass_color": 2165762,
-    "music": {
-      "max_delay": 24000,
-      "min_delay": 12000,
-      "replace_current_music": true,
-      "sound": "voidscape:music"
-    },
-    "particle": {
-      "options": {
-        "type": "minecraft:crimson_spore"
-      },
-      "probability": 0.025
-    },
-    "sky_color": 655628,
-    "water_color": 655628,
-    "water_fog_color": 655628
+    "foliage_color": "#210c02",
+    "grass_color": "#210c02",
+    "water_color": "#0a010c"
   },
   "features": [
     [],

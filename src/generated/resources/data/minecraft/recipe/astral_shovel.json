@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:astral_crystal"
-  },
-  "base": {
-    "item": "minecraft:netherite_shovel"
-  },
+  "addition": "voidscape:astral_crystal",
+  "base": "minecraft:netherite_shovel",
   "result": {
-    "count": 1,
     "id": "voidscape:astral_shovel"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

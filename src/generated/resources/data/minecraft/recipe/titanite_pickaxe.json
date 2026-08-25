@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:titanite_shard"
-  },
-  "base": {
-    "item": "voidscape:voidic_crystal_pickaxe"
-  },
+  "addition": "voidscape:titanite_shard",
+  "base": "voidscape:voidic_crystal_pickaxe",
   "result": {
-    "count": 1,
     "id": "voidscape:titanite_pickaxe"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

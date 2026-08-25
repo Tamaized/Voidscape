@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": {
-      "item": "voidscape:voidic_crystal"
-    },
-    "H": {
-      "item": "voidscape:charred_warhammer_head"
-    },
-    "N": {
-      "item": "minecraft:netherite_ingot"
-    }
+    "C": "voidscape:voidic_crystal",
+    "H": "voidscape:charred_warhammer_head",
+    "N": "minecraft:netherite_ingot"
   },
   "pattern": [
     "H",
@@ -18,7 +12,6 @@
     "C"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:charred_warhammer"
   }
 }

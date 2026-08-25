@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "A": {
-      "item": "voidscape:astral_crystal"
-    },
-    "B": {
-      "item": "voidscape:charred_bone"
-    },
-    "C": {
-      "item": "voidscape:machine_core"
-    }
+    "A": "voidscape:astral_crystal",
+    "B": "voidscape:charred_bone",
+    "C": "voidscape:machine_core"
   },
   "pattern": [
     "ABA",
@@ -18,7 +12,6 @@
     "ABA"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:machine_collector"
   }
 }

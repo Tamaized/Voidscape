@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:condition",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "voidscape:item/charred_warhammer_in_hand"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "voidscape:item/charred_warhammer_in_hand_broken"
+          },
+          "property": "minecraft:broken"
+        },
+        "when": [
+          "firstperson_lefthand",
+          "firstperson_righthand",
+          "thirdperson_lefthand",
+          "thirdperson_righthand"
+        ]
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "voidscape:item/charred_warhammer_small"
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "voidscape:item/charred_warhammer_small_broken"
+      },
+      "property": "minecraft:broken"
+    },
+    "property": "minecraft:display_context"
+  }
+}

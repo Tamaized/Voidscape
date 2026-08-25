@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "P": {
-      "item": "voidscape:thunder_planks"
-    }
+    "P": "voidscape:thunder_planks"
   },
   "pattern": [
     "PPP"

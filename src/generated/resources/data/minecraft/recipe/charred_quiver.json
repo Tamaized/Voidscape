@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "voidscape:charred_bone"
-    },
-    "C": {
-      "item": "voidscape:voidic_crystal"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "T": {
-      "item": "voidscape:tendril"
-    }
+    "B": "voidscape:charred_bone",
+    "C": "voidscape:voidic_crystal",
+    "L": "minecraft:leather",
+    "T": "voidscape:tendril"
   },
   "pattern": [
     "LCL",
@@ -21,7 +13,6 @@
     "LCT"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:charred_quiver"
   }
 }

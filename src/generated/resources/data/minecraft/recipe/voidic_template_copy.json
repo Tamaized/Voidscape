@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "voidscape:voidic_crystal"
-    },
-    "T": {
-      "item": "voidscape:voidic_template"
-    }
+    "C": "voidscape:voidic_crystal",
+    "T": "voidscape:voidic_template"
   },
   "pattern": [
     "CCC",

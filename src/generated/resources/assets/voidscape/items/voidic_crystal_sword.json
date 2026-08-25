@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "voidscape:item/voidic_crystal_sword"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "voidscape:item/voidic_crystal_sword_broken"
+    },
+    "property": "minecraft:broken"
+  }
+}

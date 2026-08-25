@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:ichor_crystal"
-  },
-  "base": {
-    "item": "voidscape:titanite_xbow"
-  },
+  "addition": "voidscape:ichor_crystal",
+  "base": "voidscape:titanite_xbow",
   "result": {
-    "count": 1,
     "id": "voidscape:ichor_xbow"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

@@ -70,45 +70,12 @@
       ]
     }
   },
-  "loader": "neoforge:item_layers",
-  "neoforge_data": {
-    "layers": {
-      "0": {
-        "block_light": 15,
-        "sky_light": 15
-      }
-    }
-  },
-  "overrides": [
-    {
-      "model": "voidscape:item/titanite_bow_broken",
-      "predicate": {
-        "voidscape:broken": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_bow_pulling_0",
-      "predicate": {
-        "voidscape:pulling": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_bow_pulling_1",
-      "predicate": {
-        "voidscape:pull": 0.65,
-        "voidscape:pulling": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_bow_pulling_2",
-      "predicate": {
-        "voidscape:pull": 0.9,
-        "voidscape:pulling": 1.0
-      }
-    }
-  ],
-  "render_types": {},
   "textures": {
-    "layer0": "voidscape:item/titanite/bow/bow"
+    "layer0": {
+      "neoforge_data": {
+        "light_emission": 15
+      },
+      "sprite": "voidscape:item/titanite/bow/bow"
+    }
   }
 }

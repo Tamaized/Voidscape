@@ -1,6 +1,5 @@
 {
   "parent": "voidscape:block/germinator",
-  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "0": "voidscape:block/machine/hatchery/frame",
     "1": "voidscape:block/machine/core",

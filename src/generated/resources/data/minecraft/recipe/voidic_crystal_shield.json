@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "minecraft:shield"
-  },
+  "addition": "minecraft:netherite_ingot",
+  "base": "minecraft:shield",
   "result": {
-    "count": 1,
     "id": "voidscape:voidic_crystal_shield"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

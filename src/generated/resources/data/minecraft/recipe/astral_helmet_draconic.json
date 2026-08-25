@@ -1,19 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:dragon_egg"
-  },
-  "base": {
-    "item": "voidscape:astral_helmet"
-  },
+  "addition": "minecraft:dragon_egg",
+  "base": "voidscape:astral_helmet",
   "result": {
     "components": {
       "voidscape:draconic": true
     },
-    "count": 1,
     "id": "voidscape:astral_helmet"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:astral_crystal"
-  },
-  "base": {
-    "item": "voidscape:machine_coop"
-  },
+  "addition": "voidscape:astral_crystal",
+  "base": "voidscape:machine_coop",
   "result": {
-    "count": 1,
     "id": "voidscape:machine_hatchery"
   },
-  "template": {
-    "item": "minecraft:dragon_head"
-  }
+  "template": "minecraft:dragon_head"
 }

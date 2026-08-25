@@ -6,8 +6,7 @@
         "down": {
           "cullface": "down",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -15,8 +14,7 @@
         "east": {
           "cullface": "east",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -24,8 +22,7 @@
         "north": {
           "cullface": "north",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -33,8 +30,7 @@
         "south": {
           "cullface": "south",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -42,8 +38,7 @@
         "up": {
           "cullface": "up",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -51,8 +46,7 @@
         "west": {
           "cullface": "west",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#base",
           "tintindex": 0
@@ -74,48 +68,42 @@
         "down": {
           "cullface": "down",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         },
         "east": {
           "cullface": "east",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         },
         "north": {
           "cullface": "north",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         },
         "south": {
           "cullface": "south",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         },
         "up": {
           "cullface": "up",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         },
         "west": {
           "cullface": "west",
           "neoforge_data": {
-            "block_light": 15,
-            "sky_light": 15
+            "light_emission": 15
           },
           "texture": "#overlay"
         }
@@ -132,7 +120,6 @@
       ]
     }
   ],
-  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "base": "minecraft:block/bedrock",
     "overlay": "voidscape:block/cracked_astralrock",

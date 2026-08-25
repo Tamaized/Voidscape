@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:titanite_shard"
-  },
-  "base": {
-    "item": "voidscape:corrupt_bow"
-  },
+  "addition": "voidscape:titanite_shard",
+  "base": "voidscape:corrupt_bow",
   "result": {
-    "count": 1,
     "id": "voidscape:titanite_bow"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

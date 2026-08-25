@@ -70,58 +70,12 @@
       ]
     }
   },
-  "loader": "neoforge:item_layers",
-  "neoforge_data": {
-    "layers": {
-      "0": {
-        "block_light": 15,
-        "sky_light": 15
-      }
-    }
-  },
-  "overrides": [
-    {
-      "model": "voidscape:item/titanite_xbow_broken",
-      "predicate": {
-        "voidscape:broken": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_xbow_pulling_0",
-      "predicate": {
-        "voidscape:pulling": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_xbow_pulling_1",
-      "predicate": {
-        "voidscape:pull": 0.58,
-        "voidscape:pulling": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_xbow_pulling_2",
-      "predicate": {
-        "voidscape:pull": 1.0,
-        "voidscape:pulling": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_xbow_arrow",
-      "predicate": {
-        "voidscape:charged": 1.0
-      }
-    },
-    {
-      "model": "voidscape:item/titanite_xbow_firework",
-      "predicate": {
-        "voidscape:charged": 1.0,
-        "voidscape:firework": 1.0
-      }
-    }
-  ],
-  "render_types": {},
   "textures": {
-    "layer0": "voidscape:item/titanite/xbow/crossbow_standby"
+    "layer0": {
+      "neoforge_data": {
+        "light_emission": 15
+      },
+      "sprite": "voidscape:item/titanite/xbow/crossbow_standby"
+    }
   }
 }

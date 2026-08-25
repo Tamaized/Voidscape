@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "voidscape:block/astralrock",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -10088141
+      }
+    ]
+  }
+}

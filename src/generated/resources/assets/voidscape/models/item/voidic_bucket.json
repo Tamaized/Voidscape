@@ -1,5 +1,0 @@
-{
-  "parent": "neoforge:item/bucket",
-  "fluid": "voidscape:voidic_source",
-  "loader": "neoforge:fluid_container"
-}

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "C": {
-      "item": "voidscape:flesh_chunk"
-    }
+    "C": "voidscape:flesh_chunk"
   },
   "pattern": [
     "CCC",
@@ -12,7 +10,6 @@
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "voidscape:flesh_block"
   }
 }

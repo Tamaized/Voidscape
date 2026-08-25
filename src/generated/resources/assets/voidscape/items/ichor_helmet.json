@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "voidscape:item/ichor_helmet"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "voidscape:item/ichor_helmet_broken"
+    },
+    "property": "minecraft:broken"
+  }
+}

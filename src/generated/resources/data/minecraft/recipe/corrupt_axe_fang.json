@@ -1,19 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:ethereal_spider_fang"
-  },
-  "base": {
-    "item": "voidscape:corrupt_axe"
-  },
+  "addition": "voidscape:ethereal_spider_fang",
+  "base": "voidscape:corrupt_axe",
   "result": {
     "components": {
       "voidscape:fang": true
     },
-    "count": 1,
     "id": "voidscape:corrupt_axe"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

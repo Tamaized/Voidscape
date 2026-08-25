@@ -1,6 +1,5 @@
 {
   "parent": "voidscape:block/fullbright/cross",
-  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "cross": "voidscape:block/thunder_vines_plant"
   }

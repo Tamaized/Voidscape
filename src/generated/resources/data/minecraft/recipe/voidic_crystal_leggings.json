@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:voidic_crystal"
-  },
-  "base": {
-    "item": "minecraft:netherite_leggings"
-  },
+  "addition": "voidscape:voidic_crystal",
+  "base": "minecraft:netherite_leggings",
   "result": {
-    "count": 1,
     "id": "voidscape:voidic_crystal_legs"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

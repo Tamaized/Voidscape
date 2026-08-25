@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:astral_crystal"
-  },
-  "base": {
-    "item": "voidscape:ichor_xbow"
-  },
+  "addition": "voidscape:astral_crystal",
+  "base": "voidscape:ichor_xbow",
   "result": {
-    "count": 1,
     "id": "voidscape:astral_xbow"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

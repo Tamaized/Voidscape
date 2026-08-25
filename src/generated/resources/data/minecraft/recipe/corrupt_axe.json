@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:tendril"
-  },
-  "base": {
-    "item": "voidscape:voidic_crystal_axe"
-  },
+  "addition": "voidscape:tendril",
+  "base": "voidscape:voidic_crystal_axe",
   "result": {
-    "count": 1,
     "id": "voidscape:corrupt_axe"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }

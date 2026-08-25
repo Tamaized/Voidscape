@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "voidscape:tendril"
-  },
-  "base": {
-    "item": "voidscape:voidic_crystal_sword"
-  },
+  "addition": "voidscape:tendril",
+  "base": "voidscape:voidic_crystal_sword",
   "result": {
-    "count": 1,
     "id": "voidscape:corrupt_sword"
   },
-  "template": {
-    "item": "voidscape:voidic_template"
-  }
+  "template": "voidscape:voidic_template"
 }
