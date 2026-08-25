@@ -1,6 +1,7 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.block;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
@@ -17,6 +18,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.datagen.util.ModTextureSlots;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -34,6 +36,13 @@ public class CrackedAstralrockBlockModelHolder extends BlockModelHolder {
 	@Override
 	public boolean hasStandardBlockItem() {
 		return true;
+	}
+
+	@Override
+	public Identifier buildItemBlockModel(BlockModelGenerators provider) {
+		Identifier id = getOrBuild(provider);
+		provider.registerSimpleTintedItemModel(Objects.requireNonNull(blockForName()).get(), id, ItemModelUtils.constantTint(0x661133));
+		return id;
 	}
 
 	@Override
