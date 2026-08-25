@@ -49,7 +49,7 @@ public class DimensionTypeBootstrap implements IBootstrap {
 					BlockTags.INFINIBURN_OVERWORLD,
 					-0.3F,
 					new DimensionType.MonsterSettings(ConstantInt.ZERO, 0),
-					DimensionType.Skybox.NONE,
+					DimensionType.Skybox.OVERWORLD,
 					CardinalLighting.Type.DEFAULT,
 					EnvironmentAttributeMap.builder()
 						.set(EnvironmentAttributes.CAN_START_RAID, false)
