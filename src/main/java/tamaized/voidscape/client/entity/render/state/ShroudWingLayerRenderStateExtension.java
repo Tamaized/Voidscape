@@ -23,14 +23,14 @@ public class ShroudWingLayerRenderStateExtension {
 	@Autowired(dist = Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
-	public ContextKey<Boolean> isDonatorAndEnabled = createKey("isDonatorAndEnabled");
+	public ContextKey<Boolean> isDonatorAndEnabled = createKey("is_donator_and_enabled");
 
-	public ContextKey<Integer> donatorColor = createKey("donatorColor");
+	public ContextKey<Integer> donatorColor = createKey("donator_color");
 
-	public ContextKey<Boolean> hasDraconicAttribute = createKey("hasDraconicAttribute");
+	public ContextKey<Boolean> hasDraconicAttribute = createKey("has_draconic_attribute");
 
 	private <T> ContextKey<T> createKey(String name) {
-		return new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "shroudWingLayer_").withSuffix(name));
+		return new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "shroud_wing_layer_").withSuffix(name));
 	}
 
 	public <T extends Avatar & ClientAvatarEntity> void apply(T avatar, AvatarRenderState state) {
