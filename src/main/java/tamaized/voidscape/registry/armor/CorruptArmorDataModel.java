@@ -1,15 +1,24 @@
 package tamaized.voidscape.registry.armor;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.regutil.GearItemHandler;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
+import tamaized.voidscape.client.entity.model.ModelArmorCorrupt;
 
 import java.util.Optional;
 
@@ -29,10 +38,14 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 		super(false, true, true);
 	}
 
-	// FIXME
-	/*@Override
+	@Override
+	@OnlyIn(Dist.CLIENT)
 	public @Nullable Model<?> getArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model<?> original) {
-		ModelArmorCorrupt<LivingEntity> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(
+		Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
+		if (equippable == null)
+			return null;
+		EquipmentSlot armorSlot = equippable.slot();
+		ModelArmorCorrupt<HumanoidRenderState> model = new ModelArmorCorrupt<>(Minecraft.getInstance().getEntityModels().bakeLayer(
 			armorSlot == EquipmentSlot.LEGS ?
 				modelLayerLocations.MODEL_ARMOR_CORRUPT_INNER :
 				modelLayerLocations.MODEL_ARMOR_CORRUPT_OUTER
@@ -61,18 +74,6 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 				model.body.visible = true;
 				model.rightarm.visible = true;
 				model.leftarm.visible = true;
-				float tick = entityLiving.tickCount + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
-				float scale = 0.05F;
-				float amp = 0.15F;
-				float offset = 0.25F;
-				model.topLeftTentacle.xRot = Mth.cos(tick * scale) * amp + offset;
-				model.topLeftTentacle.yRot = Mth.sin(tick * scale + 0.2F) * amp + offset;
-				model.topRightTentacle.xRot = Mth.sin(tick * scale + 0.4F) * amp + offset;
-				model.topRightTentacle.yRot = Mth.cos(tick * scale + 0.6F) * amp - offset;
-				model.bottomLeftTentacle.xRot = Mth.sin(tick * scale + 0.7F) * amp - offset;
-				model.bottomLeftTentacle.yRot = Mth.cos(tick * scale + 0.5F) * amp + offset;
-				model.bottomRightTentacle.xRot = Mth.cos(tick * scale + 0.3F) * amp - offset;
-				model.bottomRightTentacle.yRot = Mth.sin(tick * scale + 0.1F) * amp - offset;
 			}
 			case HEAD -> {
 				model.head.visible = true;
@@ -81,8 +82,8 @@ public class CorruptArmorDataModel extends ArmorDataModel {
 			default -> {
 			}
 		}
-		return (A) model;
-	}*/
+		return model;
+	}
 
 	@Override
 	public Optional<Identifier> getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer) {

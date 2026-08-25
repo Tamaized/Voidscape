@@ -11,14 +11,21 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
-import tamaized.regutil.RegUtil;
+import net.minecraft.util.Mth;
+import net.neoforged.api.distmarker.Dist;
+import tamaized.beanification.Autowired;
+import tamaized.regutil.GearItemHandler;
 
 import java.util.function.Function;
 
-public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> {
+public class ModelArmorCorrupt<T extends HumanoidRenderState> extends HumanoidModel<T> {
+
+	@Autowired(dist = Dist.CLIENT)
+	private static GearItemHandler gearItemHandler;
 
 	private final ImmutableList<ModelPart> parts;
 
@@ -38,7 +45,7 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 	public ModelPart bottomRightTentacle;
 
 	public ModelArmorCorrupt(ModelPart p_170677_) {
-		this(p_170677_, RenderType::entityCutoutNoCull);
+		this(p_170677_, RenderTypes::entityCutout);
 	}
 
 	public ModelArmorCorrupt(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
@@ -159,25 +166,36 @@ public class ModelArmorCorrupt<T extends LivingEntity> extends HumanoidModel<T> 
 
 	}
 
-	private void setRotateAngle(ModelPart model, float x, float y, float z) {
-		model.xRot = x;
-		model.yRot = y;
-		model.zRot = z;
+	@Override
+	public void setupAnim(T state) {
+		super.setupAnim(state);
+		float tick = state.ageInTicks;
+		float scale = 0.05F;
+		float amp = 0.15F;
+		float offset = 0.25F;
+		topLeftTentacle.xRot = Mth.cos(tick * scale) * amp + offset;
+		topLeftTentacle.yRot = Mth.sin(tick * scale + 0.2F) * amp + offset;
+		topRightTentacle.xRot = Mth.sin(tick * scale + 0.4F) * amp + offset;
+		topRightTentacle.yRot = Mth.cos(tick * scale + 0.6F) * amp - offset;
+		bottomLeftTentacle.xRot = Mth.sin(tick * scale + 0.7F) * amp - offset;
+		bottomLeftTentacle.yRot = Mth.cos(tick * scale + 0.5F) * amp + offset;
+		bottomRightTentacle.xRot = Mth.cos(tick * scale + 0.3F) * amp - offset;
+		bottomRightTentacle.yRot = Mth.sin(tick * scale + 0.1F) * amp - offset;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-		head.copyFrom(super.head);
-		headoverlay.copyFrom(super.hat);
-		body.copyFrom(super.body);
-		rightarm.copyFrom(super.rightArm);
-		leftarm.copyFrom(super.leftArm);
-		bodyToLeg.copyFrom(body);
-		rightleg.copyFrom(super.rightLeg);
-		leftleg.copyFrom(super.leftLeg);
-		rightfoot.copyFrom(super.rightLeg);
-		leftfoot.copyFrom(super.leftLeg);
-		parts.forEach((modelRenderer_) -> modelRenderer_.render(poseStack, buffer, RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLight, packedOverlay, color));
+		head.loadPose(super.head.storePose());
+		headoverlay.loadPose(super.hat.storePose());
+		body.loadPose(super.body.storePose());
+		rightarm.loadPose(super.rightArm.storePose());
+		leftarm.loadPose(super.leftArm.storePose());
+		bodyToLeg.loadPose(body.storePose());
+		rightleg.loadPose(super.rightLeg.storePose());
+		leftleg.loadPose(super.leftLeg.storePose());
+		rightfoot.loadPose(super.rightLeg.storePose());
+		leftfoot.loadPose(super.leftLeg.storePose());
+		parts.forEach((modelRenderer_) -> modelRenderer_.render(poseStack, buffer, gearItemHandler.renderingArmorOverlay ? 0xF000F0 : packedLight, packedOverlay, color));
 	}
 
 	@Override

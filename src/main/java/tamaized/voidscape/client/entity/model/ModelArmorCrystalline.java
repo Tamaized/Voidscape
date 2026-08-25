@@ -11,11 +11,16 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import tamaized.regutil.RegUtil;
+import net.neoforged.api.distmarker.Dist;
+import tamaized.beanification.Autowired;
+import tamaized.regutil.GearItemHandler;
 
 import java.util.function.Function;
 
 public class ModelArmorCrystalline<T extends HumanoidRenderState> extends HumanoidModel<T> {
+
+	@Autowired(dist = Dist.CLIENT)
+	private static GearItemHandler gearItemHandler;
 
 	private final ImmutableList<ModelPart> parts;
 
@@ -135,17 +140,17 @@ public class ModelArmorCrystalline<T extends HumanoidRenderState> extends Humano
 
 	@Override
 	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
-		head.copyFrom(super.head);
-		headoverlay.copyFrom(super.hat);
-		body.copyFrom(super.body);
-		leftarm.copyFrom(super.leftArm);
-		rightarm.copyFrom(super.rightArm);
-		leftleg.copyFrom(super.leftLeg);
-		rightleg.copyFrom(super.rightLeg);
-		leftfoot.copyFrom(super.leftLeg);
-		rightfoot.copyFrom(super.rightLeg);
+		head.loadPose(super.head.storePose());
+		headoverlay.loadPose(super.hat.storePose());
+		body.loadPose(super.body.storePose());
+		leftarm.loadPose(super.leftArm.storePose());
+		rightarm.loadPose(super.rightArm.storePose());
+		leftleg.loadPose(super.leftLeg.storePose());
+		rightleg.loadPose(super.rightLeg.storePose());
+		leftfoot.loadPose(super.leftLeg.storePose());
+		rightfoot.loadPose(super.rightLeg.storePose());
 
-		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || RegUtil.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, color));
+		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || gearItemHandler.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, color));
 	}
 
 	@Override

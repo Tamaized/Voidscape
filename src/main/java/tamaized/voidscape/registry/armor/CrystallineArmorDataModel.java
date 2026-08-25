@@ -1,16 +1,24 @@
 package tamaized.voidscape.registry.armor;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.regutil.ArmorDataModel;
 import tamaized.regutil.GearItemHandler;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.entity.model.ModelArmorCrystalline;
 
 import java.util.Optional;
 
@@ -36,11 +44,14 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 	@OnlyIn(Dist.CLIENT)
 	protected abstract ModelLayerLocation modelLayerLocation();
 
-	// FIXME
-	/*@Override
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public @Nullable Model<?> getArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model<?> original) {
-		ModelArmorCrystalline<LivingEntity> model = new ModelArmorCrystalline<>(Minecraft.getInstance().getEntityModels().bakeLayer(modelLayerLocation()), !overlay);
+		Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
+		if (equippable == null)
+			return null;
+		EquipmentSlot armorSlot = equippable.slot();
+		ModelArmorCrystalline<HumanoidRenderState> model = new ModelArmorCrystalline<>(Minecraft.getInstance().getEntityModels().bakeLayer(modelLayerLocation()), !overlay);
 		model.head.visible = false;
 		model.headoverlay.visible = false;
 		model.body.visible = false;
@@ -68,9 +79,11 @@ public abstract class CrystallineArmorDataModel extends ArmorDataModel {
 				model.head.visible = true;
 				model.headoverlay.visible = true;
 			}
+			default -> {
+			}
 		}
-		return (A) model;
-	}*/
+		return model;
+	}
 
 	@Override
 	public Optional<Identifier> getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer) {
