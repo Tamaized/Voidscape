@@ -135,7 +135,7 @@ public class LangProviderFactory {
 				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
 				addEffectWithDescription(effects.TRAUMATIZED, "Traumatized", "Greatly Increases Voidic Damage and Defense.");
 
-				addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration");
+				// addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration"); TODO
 
 				addCommonConfig("bedrock_teleportation_dimension_blacklist", "Bedrock Teleportation Dimension Blacklist");
 				addCommonConfig("bedrockTeleportationDimensionWhitelist", "Bedrock Teleportation Dimension Whitelist Toggle");
