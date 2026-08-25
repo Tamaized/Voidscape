@@ -18,8 +18,11 @@ import java.util.function.Supplier;
 @Component
 public class ExtraToolTypes {
 
-	@Autowired
-	private ToolAndArmorHelper toolAndArmorHelper;
+	private final ToolAndArmorHelper toolAndArmorHelper;
+
+	public ExtraToolTypes(@Autowired ToolAndArmorHelper toolAndArmorHelper) {
+		this.toolAndArmorHelper = toolAndArmorHelper;
+	}
 
 	public DeferredHolder<Item, Item> hammer(
 		String baseName,
