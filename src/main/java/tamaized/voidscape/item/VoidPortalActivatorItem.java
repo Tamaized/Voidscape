@@ -53,7 +53,7 @@ public class VoidPortalActivatorItem extends Item {
 			portalFramePredicates.IGNITER_TEST
 		);
 		if (configurablePortalShape.isPresent()) {
-			configurablePortalShape.get().createPortalBlocks(functionalBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
+			configurablePortalShape.get().createPortalBlocks(context.getLevel(), functionalBlocks.PORTAL.get().defaultBlockState(), PortalBlock.AXIS);
 			level.playSound(player, blockpos1, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.BLOCKS, 1F, 0.75F + context.getLevel().getRandom().nextFloat() * 0.5F);
 			ItemStack stack = context.getItemInHand();
 
