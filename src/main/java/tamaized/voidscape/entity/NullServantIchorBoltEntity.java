@@ -1,6 +1,7 @@
 package tamaized.voidscape.entity;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -38,13 +39,13 @@ public class NullServantIchorBoltEntity extends SpellBoltEntity {
 
 	@Override
 	protected void doPostHurtEffects(LivingEntity entity) {
-		if (!level().isClientSide()) {
+		if (level() instanceof ServerLevel serverLevel) {
 			ClientPacketSendParticles particles = new ClientPacketSendParticles();
 			particles.queueParticle(ParticleTypes.EXPLOSION, position().x(), position().y(), position().z(), 0, 0, 0);
 			PacketDistributor.sendToPlayersTrackingEntity(this, particles);
+			entity.hurtServer(serverLevel, damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, shootingEntity), 16F);
 		}
 		level().playSound(null, blockPosition(), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 4F, 1F);
-		entity.hurt(damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, shootingEntity), 16F);
 	}
 
 }

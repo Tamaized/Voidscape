@@ -62,6 +62,7 @@ public class WellBlock extends Block implements EntityBlock, BucketPickup {
 	}
 
 	@Override
+	@Deprecated
 	public Optional<SoundEvent> getPickupSound() {
 		return Fluids.WATER.getPickupSound();
 	}

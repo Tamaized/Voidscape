@@ -1,5 +1,6 @@
 package tamaized.voidscape.event;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +45,8 @@ public class VoidicDamageSourceHandler {
 					final float voidicMeleeDamage = (float) (attacker.getAttributeValue(attributes.VOIDIC_DMG) * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F));
 					if (voidicMeleeDamage > 0) {
 						target.invulnerableTime = 0;
-						target.hurt(damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
+						if (target.level() instanceof ServerLevel serverLevel)
+							target.hurtServer(serverLevel, damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
 					}
 					final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION))
 										   * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F)
@@ -57,7 +59,8 @@ public class VoidicDamageSourceHandler {
 						if (target.getHealth() <= event.getNewDamage())
 							return;
 						target.invulnerableTime = 0;
-						target.hurt(damageSource.getEntityDamageSource(arrowEntity.level(), damageSource.VOIDIC, arrowEntity.getOwner()), voidic);
+						if (target.level() instanceof ServerLevel serverLevel)
+							target.hurtServer(serverLevel, damageSource.getEntityDamageSource(arrowEntity.level(), damageSource.VOIDIC, arrowEntity.getOwner()), voidic);
 					}
 					float infusion = arrowEntity.getData(dataAttachments.INFUSION_ARROW);
 					if (infusion > 0) {

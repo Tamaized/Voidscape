@@ -3,6 +3,7 @@ package tamaized.voidscape.entity;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -119,7 +120,8 @@ public class StrangePearlEntity extends AbstractHurtingProjectile implements Ite
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
 		super.onHitEntity(pResult);
-		pResult.getEntity().hurt(damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, getOwner()), damage);
+		if (level() instanceof ServerLevel serverLevel)
+			pResult.getEntity().hurtServer(serverLevel, damageSource.getIndirectEntityDamageSource(level(), damageSource.VOIDIC, this, getOwner()), damage);
 		if (pResult.getEntity() instanceof EndCrystal && getItem().is(materialItems.STRANGE_PEARL.get())) {
 			this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), new ItemStack(materialItems.ASTRAL_SHARDS.get())));
 		}

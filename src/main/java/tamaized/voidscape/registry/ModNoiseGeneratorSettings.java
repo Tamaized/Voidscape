@@ -113,7 +113,7 @@ public class ModNoiseGeneratorSettings {
 		return new DensityFunctions.HolderHolder(BuiltinRegistries.DENSITY_FUNCTION.getHolderOrThrow(ResourceKey.create(Registry.DENSITY_FUNCTION_REGISTRY, new Identifier(key))));
 	}*/
 
-	/**
+	/*
 	 * This is altered via ASM to use {@link CorrectedNoiseSettings} instead of {@link NoiseSettings}
 	 */
 	/*private static NoiseGeneratorSettings fixSettings(NoiseGeneratorSettings settings) {

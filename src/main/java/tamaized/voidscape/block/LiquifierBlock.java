@@ -89,6 +89,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	}
 
 	@Override
+	@Deprecated
 	public Optional<SoundEvent> getPickupSound() {
 		return fluids.VOIDIC_SOURCE.get().getPickupSound();
 	}

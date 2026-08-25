@@ -8,7 +8,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
@@ -16,7 +15,6 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.item.EtherealFruitItem;
 import tamaized.voidscape.registry.*;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @Component
@@ -85,6 +83,7 @@ public class EtherealFruitItems {
 	) {
 
 		@Override
+		@SuppressWarnings("deprecation")
 		public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> builder, TooltipFlag tooltipFlag) {
 			super.appendHoverText(stack, context, display, builder, tooltipFlag);
 			builder.accept(net.minecraft.network.chat.Component.empty());

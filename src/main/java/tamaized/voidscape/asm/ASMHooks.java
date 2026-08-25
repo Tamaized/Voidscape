@@ -163,7 +163,7 @@ public class ASMHooks {
 		return o || toolAndArmorHelper.isMyBow(stack, item);
 	}
 
-	/**
+	/*
 	 * Injection Point:<br>
 	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)} <br>
 	 */
