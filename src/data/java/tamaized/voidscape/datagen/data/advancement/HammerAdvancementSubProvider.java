@@ -5,7 +5,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.advancement.ItemMatchesAdvancementTrigger;
@@ -50,7 +50,7 @@ public class HammerAdvancementSubProvider extends AbstractAdvancementSubProvider
 			.addCriterion("hammer", advancementTriggers.THREE_BY_THREE.get().createCriterion(
 				new ItemMatchesAdvancementTrigger.Instance(
 					Optional.empty(),
-					new ItemStack(items.toolSetComponentDirectory().charredToolSet().CHARRED_WARHAMMER)
+					new ItemStackTemplate(items.toolSetComponentDirectory().charredToolSet().CHARRED_WARHAMMER)
 				)
 			))
 			.sendsTelemetryEvent()

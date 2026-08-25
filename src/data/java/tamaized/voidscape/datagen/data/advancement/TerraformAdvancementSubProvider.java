@@ -5,7 +5,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.advancement.ItemMatchesAdvancementTrigger;
@@ -50,7 +50,7 @@ public class TerraformAdvancementSubProvider extends AbstractAdvancementSubProvi
 			.addCriterion("terraform", advancementTriggers.THREE_BY_THREE.get().createCriterion(
 				new ItemMatchesAdvancementTrigger.Instance(
 					Optional.empty(),
-					new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_SHOVEL)
+					new ItemStackTemplate(items.toolSetComponentDirectory().astralToolSet().ASTRAL_SHOVEL)
 				)
 			))
 			.sendsTelemetryEvent()

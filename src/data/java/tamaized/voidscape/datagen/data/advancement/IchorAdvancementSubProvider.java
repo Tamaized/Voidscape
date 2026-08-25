@@ -5,7 +5,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.advancement.ItemMatchesAdvancementTrigger;
@@ -48,7 +48,7 @@ public class IchorAdvancementSubProvider extends AbstractAdvancementSubProvider 
 			)
 			.requirements(AdvancementRequirements.Strategy.OR)
 			.addCriterion("ichor", advancementTriggers.ITEM_USED_ON_NULL_SERVANT_TRIGGER.get().createCriterion(
-				new ItemMatchesAdvancementTrigger.Instance(Optional.empty(), new ItemStack(items.materialItems().ICHOR))
+				new ItemMatchesAdvancementTrigger.Instance(Optional.empty(), new ItemStackTemplate(items.materialItems().ICHOR))
 			))
 			.sendsTelemetryEvent()
 			.save(saver, location());
