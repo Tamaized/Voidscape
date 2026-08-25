@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +25,8 @@ public class EtherealFruitBlocks {
 	private ModItemProperties itemProperties;
 
 	public final DeferredHolder<Block, Block> VOID = RegUtil.register(Registries.BLOCK, "ethereal_fruit_void",
-		() -> new EtherealPlantBlock(Block.Properties.of()
+		(id) -> new EtherealPlantBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.noCollision()
@@ -41,7 +43,8 @@ public class EtherealFruitBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> NULL = RegUtil.register(Registries.BLOCK, "ethereal_fruit_null",
-		() -> new EtherealPlantBlock(Block.Properties.of()
+		(id) -> new EtherealPlantBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_LIGHT_GRAY)
 			.noCollision()
@@ -58,7 +61,8 @@ public class EtherealFruitBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> OVERWORLD = RegUtil.register(Registries.BLOCK, "ethereal_fruit_overworld",
-		() -> new EtherealPlantBlock(Block.Properties.of()
+		(id) -> new EtherealPlantBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_CYAN)
 			.noCollision()
@@ -75,7 +79,8 @@ public class EtherealFruitBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> NETHER = RegUtil.register(Registries.BLOCK, "ethereal_fruit_nether",
-		() -> new EtherealPlantBlock(Block.Properties.of()
+		(id) -> new EtherealPlantBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_RED)
 			.noCollision()
@@ -92,7 +97,8 @@ public class EtherealFruitBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> END = RegUtil.register(Registries.BLOCK, "ethereal_fruit_end",
-		() -> new EtherealPlantBlock(Block.Properties.of()
+		(id) -> new EtherealPlantBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.CROP)
 			.mapColor(MapColor.COLOR_PINK)
 			.noCollision()

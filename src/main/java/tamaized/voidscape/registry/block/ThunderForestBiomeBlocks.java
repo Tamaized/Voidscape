@@ -2,6 +2,7 @@ package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -42,7 +43,8 @@ public class ThunderForestBiomeBlocks {
 	private ModConfiguredFeatures configuredFeatures;
 
 	public final DeferredHolder<Block, Block> THUNDER_NYLIUM = RegUtil.register(Registries.BLOCK, "thunder_nylium",
-		() -> new ThunderNyliumBlock(BlockBehaviour.Properties.of()
+		(id) -> new ThunderNyliumBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NYLIUM)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(-1.0F, 3600000.0F)
@@ -59,7 +61,8 @@ public class ThunderForestBiomeBlocks {
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "supports_thunder_roots")
 	);
 	public final DeferredHolder<Block, Block> THUNDER_ROOTS = RegUtil.register(Registries.BLOCK, "thunder_roots",
-		() -> new NetherRootsBlock(TAG_THUNDER_ROOTS_SUPPORTS, BlockBehaviour.Properties.of()
+		(id) -> new NetherRootsBlock(TAG_THUNDER_ROOTS_SUPPORTS, BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.ROOTS)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.noCollision()
@@ -73,10 +76,11 @@ public class ThunderForestBiomeBlocks {
 		() -> new BlockItem(THUNDER_ROOTS.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 	public final DeferredHolder<Block, Block> THUNDER_ROOTS_POT = RegUtil.register(Registries.BLOCK, "thunder_roots_pot",
-		() -> new FlowerPotBlock(
+		(id) -> new FlowerPotBlock(
 			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
 			THUNDER_ROOTS,
 			BlockBehaviour.Properties.of()
+				.setId(ResourceKey.create(Registries.BLOCK, id))
 				.instabreak()
 				.noOcclusion()
 				.pushReaction(PushReaction.DESTROY)
@@ -88,11 +92,12 @@ public class ThunderForestBiomeBlocks {
 		Identifier.fromNamespaceAndPath(Voidscape.MODID, "supports_thunder_roots")
 	);
 	public final DeferredHolder<Block, Block> THUNDER_FUNGUS = RegUtil.register(Registries.BLOCK, "thunder_fungus",
-		() -> new NetherFungusBlock(
+		(id) -> new NetherFungusBlock(
 			configuredFeatures.THUNDER_FUNGUS,
 			THUNDER_NYLIUM.get(),
 			TAG_THUNDER_FUNGUS_SUPPORTS,
 			BlockBehaviour.Properties.of()
+				.setId(ResourceKey.create(Registries.BLOCK, id))
 				.sound(SoundType.FUNGUS)
 				.mapColor(MapColor.COLOR_PURPLE)
 				.noCollision()
@@ -106,10 +111,11 @@ public class ThunderForestBiomeBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_FUNGUS_POT = RegUtil.register(Registries.BLOCK, "thunder_fungus_pot",
-		() -> new FlowerPotBlock(
+		(id) -> new FlowerPotBlock(
 			() -> (FlowerPotBlock) Blocks.FLOWER_POT,
 			THUNDER_FUNGUS,
 			BlockBehaviour.Properties.of()
+				.setId(ResourceKey.create(Registries.BLOCK, id))
 				.instabreak()
 				.noOcclusion()
 				.pushReaction(PushReaction.DESTROY)
@@ -117,7 +123,8 @@ public class ThunderForestBiomeBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_WART = RegUtil.register(Registries.BLOCK, "thunder_wart",
-		() -> new Block(BlockBehaviour.Properties.of()
+		(id) -> new Block(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.WART_BLOCK)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(1.0F)
@@ -128,7 +135,8 @@ public class ThunderForestBiomeBlocks {
 	);
 
 	public final DeferredHolder<Block, GrowingPlantHeadBlock> THUNDER_VINES = RegUtil.register(Registries.BLOCK, "thunder_vines",
-		() -> new WeepingVinesBlock(BlockBehaviour.Properties.of()
+		(id) -> new WeepingVinesBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.WEEPING_VINES)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.randomTicks()
@@ -143,7 +151,8 @@ public class ThunderForestBiomeBlocks {
 		}
 	);
 	public final DeferredHolder<Block, Block> THUNDER_VINES_PLANT = RegUtil.register(Registries.BLOCK, "thunder_vines_plant",
-		() -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
+		(id) -> new WeepingVinesPlantBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.WEEPING_VINES)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.randomTicks()
@@ -162,7 +171,8 @@ public class ThunderForestBiomeBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_STEM = RegUtil.register(Registries.BLOCK, "thunder_stem",
-		() -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+		(id) -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.STEM)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.instrument(NoteBlockInstrument.BASS)
@@ -177,24 +187,26 @@ public class ThunderForestBiomeBlocks {
 			}
 		}
 	);
-	public final DeferredHolder<Item, Item> THUNDER_STEM_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STEM.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STEM_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM.getId().getPath(),
 		() -> new BlockItem(THUNDER_STEM.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_STEM_STRIPPED = RegUtil.register(Registries.BLOCK, "thunder_stem_stripped",
-		() -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+		(id) -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.STEM)
 			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
 		)
 	);
-	public final DeferredHolder<Item, Item> THUNDER_STEM_STRIPPED_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STEM_STRIPPED.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STEM_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM_STRIPPED.getId().getPath(),
 		() -> new BlockItem(THUNDER_STEM_STRIPPED.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_HYPHAE = RegUtil.register(Registries.BLOCK, "thunder_hyphae",
-		() -> new Block(BlockBehaviour.Properties.of()
+		(id) -> new Block(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.STEM)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.instrument(NoteBlockInstrument.BASS)
@@ -209,19 +221,20 @@ public class ThunderForestBiomeBlocks {
 			}
 		}
 	);
-	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_ITEM =RegUtil.register(Registries.ITEM, THUNDER_HYPHAE.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE.getId().getPath(),
 		() -> new BlockItem(THUNDER_HYPHAE.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_HYPHAE_STRIPPED = RegUtil.register(Registries.BLOCK, "thunder_hyphae_stripped",
-		() -> new Block(BlockBehaviour.Properties.of()
+		(id) -> new Block(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.STEM)
 			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F)
 		)
 	);
-	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_STRIPPED_ITEM =RegUtil.register(Registries.ITEM, THUNDER_HYPHAE_STRIPPED.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE_STRIPPED.getId().getPath(),
 		() -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
@@ -244,31 +257,34 @@ public class ThunderForestBiomeBlocks {
 	public final WoodType THUNDER_WOOD_TYPE = WoodType.register(new WoodType(THUNDER_SET.name(), THUNDER_SET));
 
 	public final DeferredHolder<Block, Block> THUNDER_PLANKS = RegUtil.register(Registries.BLOCK, "thunder_planks",
-		() -> new Block(BlockBehaviour.Properties.of()
+		(id) -> new Block(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NETHER_WOOD)
 			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F, 3.0F)
 		)
 	);
-	public final DeferredHolder<Item, Item> THUNDER_PLANKS_ITEM =RegUtil.register(Registries.ITEM, THUNDER_PLANKS.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_PLANKS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_PLANKS.getId().getPath(),
 		() -> new BlockItem(THUNDER_PLANKS.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
 	public final DeferredHolder<Block, StairBlock> THUNDER_STAIRS = RegUtil.register(Registries.BLOCK, "thunder_stairs",
-		() -> new StairBlock(THUNDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+		(id) -> new StairBlock(THUNDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NETHER_WOOD)
 			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)
 			.strength(2.0F, 3.0F)
 		)
 	);
-	public final DeferredHolder<Item, Item> THUNDER_STAIRS_ITEM =RegUtil.register(Registries.ITEM, THUNDER_STAIRS.getId().getPath(),
+	public final DeferredHolder<Item, Item> THUNDER_STAIRS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STAIRS.getId().getPath(),
 		() -> new BlockItem(THUNDER_STAIRS.get(), itemProperties.LAVA_IMMUNE.get())
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_SLAB = RegUtil.register(Registries.BLOCK, "thunder_slab",
-		() -> new SlabBlock(BlockBehaviour.Properties.of()
+		(id) -> new SlabBlock(BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NETHER_WOOD)
 			.mapColor(MapColor.COLOR_CYAN)
 			.instrument(NoteBlockInstrument.BASS)

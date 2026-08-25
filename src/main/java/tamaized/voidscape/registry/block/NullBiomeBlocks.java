@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -21,7 +22,8 @@ public class NullBiomeBlocks {
 	private ModItemProperties itemProperties;
 
 	public final DeferredHolder<Block, Block> NULL_BLACK = RegUtil.register(Registries.BLOCK, "null_black",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -37,7 +39,8 @@ public class NullBiomeBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> NULL_WHITE = RegUtil.register(Registries.BLOCK, "null_white",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)

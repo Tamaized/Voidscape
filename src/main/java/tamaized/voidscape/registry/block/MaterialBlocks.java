@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -21,7 +22,8 @@ public class MaterialBlocks {
 	private ModItemProperties itemProperties;
 
 	public final DeferredHolder<Block, Block> VOIDIC_CRYSTAL_BLOCK = RegUtil.register(Registries.BLOCK, "voidic_crystal_block",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 1200.0F)
@@ -36,7 +38,8 @@ public class MaterialBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> CHARRED_BRICK = RegUtil.register(Registries.BLOCK, "charred_brick",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NETHER_BRICKS)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(3F, 1200.0F)
@@ -51,7 +54,8 @@ public class MaterialBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> FLESH_BLOCK = RegUtil.register(Registries.BLOCK, "flesh_block",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
 			.strength(2F, 6F)

@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +20,8 @@ public class ImposterBlocks {
 	private ModItemProperties itemProperties;
 
 	public final DeferredHolder<Block, Block> FRAGILE_VOIDIC_CRYSTAL_BLOCK = RegUtil.register(Registries.BLOCK, "fragile_voidic_crystal_block",
-		() -> new Block(Block.Properties.of()
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PURPLE)
 			.strength(3F, 1200.0F)

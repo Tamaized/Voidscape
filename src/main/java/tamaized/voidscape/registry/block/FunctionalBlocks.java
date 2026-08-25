@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +27,8 @@ public class FunctionalBlocks {
 	private ModItemProperties itemProperties;
 
 	public final Supplier<PortalBlock> PORTAL = RegUtil.register(Registries.BLOCK, "portal",
-		() -> new PortalBlock(Block.Properties.of()
+		(id) -> new PortalBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
 			.strength(-1.0F, 3600000.0F)
@@ -37,7 +39,8 @@ public class FunctionalBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> VERY_DRIPPY_DRIPSTONE = RegUtil.register(Registries.BLOCK, "very_drippy_dripstone",
-		() -> new VeryDrippyDripstoneBlock(Block.Properties.of()
+		(id) -> new VeryDrippyDripstoneBlock(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.mapColor(MapColor.TERRACOTTA_PURPLE)
 			.forceSolidOn()
 			.instrument(NoteBlockInstrument.BASEDRUM)
@@ -48,8 +51,8 @@ public class FunctionalBlocks {
 			.dynamicShape()
 			.offsetType(BlockBehaviour.OffsetType.XZ)
 			.pushReaction(PushReaction.DESTROY)
-			.isRedstoneConductor((state, level, pos) -> false)
-			.isValidSpawn((t1, t2, t3, t4) -> false)
+			.isRedstoneConductor((_, _, _) -> false)
+			.isValidSpawn((_, _, _, _) -> false)
 		)
 	);
 	public final Supplier<Item> VERY_DRIPPY_DRIPSTONE_ITEM = RegUtil.register(Registries.ITEM, VERY_DRIPPY_DRIPSTONE.getId().getPath(),

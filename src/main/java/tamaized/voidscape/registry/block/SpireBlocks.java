@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -30,15 +31,16 @@ public class SpireBlocks {
 	private ModItemProperties itemProperties;
 
 	public final DeferredHolder<Block, Block> THUNDERROCK = RegUtil.register(Registries.BLOCK, "thunderrock",
-		() -> new LightningAttractorBlock
+		(id) -> new LightningAttractorBlock
 			.Builder<>(() -> EntityType.LIGHTNING_BOLT)
 			.build(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 				.randomTicks()
 				.sound(SoundType.STONE)
 				.mapColor(MapColor.COLOR_BLACK)
 				.strength(-1.0F, 3600000.0F)
 				.noLootTable()
-				.lightLevel(state -> 15)
+				.lightLevel(_ -> 15)
 				.isValidSpawn((_, _, _, _) -> false)
 			)
 	);
@@ -50,10 +52,11 @@ public class SpireBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> ANTIROCK = RegUtil.register(Registries.BLOCK, "antirock",
-		() -> new LightningAttractorBlock
+		(id) -> new LightningAttractorBlock
 			.Builder<>(entities.ANTI_BOLT)
 			.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
 			.build(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 				.randomTicks()
 				.sound(SoundType.STONE)
 				.mapColor(MapColor.COLOR_BLACK)
@@ -70,11 +73,12 @@ public class SpireBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> ASTRALROCK = RegUtil.register(Registries.BLOCK, "astralrock",
-		() -> new LightningAttractorBlock
+		(id) -> new LightningAttractorBlock
 			.Builder<>(entities.ANTI_BOLT)
 			.positionModifier(pos -> pos.subtract(0, 0.01F, 0))
 			.to(() -> oreBlocks.CRACKED_ASTRALROCK.get().defaultBlockState())
 			.build(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
 				.randomTicks()
 				.sound(SoundType.STONE)
 				.mapColor(MapColor.COLOR_BLACK)
