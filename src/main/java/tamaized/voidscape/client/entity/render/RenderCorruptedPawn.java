@@ -2,29 +2,32 @@ package tamaized.voidscape.client.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
+import tamaized.voidscape.client.entity.render.state.CorruptedPawnRenderState;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 
-public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelCorruptedPawn<T>> extends LivingEntityRenderer<T, M> {
+public class RenderCorruptedPawn<T extends CorruptedPawnEntity> extends MobRenderer<T, CorruptedPawnRenderState, ModelCorruptedPawn<CorruptedPawnRenderState>> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");
-	private static final RenderType OVERLAY = RenderType.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
+	private static final RenderType OVERLAY = RenderTypes.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn_overlay.png"));
 
-	public RenderCorruptedPawn(EntityRendererProvider.Context rendererManager, M model) {
-		super(rendererManager, model, 0F);
+	public RenderCorruptedPawn(EntityRendererProvider.Context context) {
+		super(context, new ModelCorruptedPawn<>(context.bakeLayer(modelLayerLocations.CORRUPTED_PAWN)), 0F);
 		addLayer(new EyesLayer<>(this) {
 			@Override
 			public RenderType renderType() {
@@ -33,24 +36,27 @@ public class RenderCorruptedPawn<T extends CorruptedPawnEntity, M extends ModelC
 		});
 	}
 
-	public static <T extends CorruptedPawnEntity> RenderCorruptedPawn<T, ModelCorruptedPawn<T>> factory(EntityRendererProvider.Context manager) {
-		return new RenderCorruptedPawn<>(manager, new ModelCorruptedPawn<>(manager.bakeLayer(modelLayerLocations.CORRUPTED_PAWN)));
+	@Override
+	public CorruptedPawnRenderState createRenderState() {
+		return new CorruptedPawnRenderState();
 	}
 
 	@Override
-	protected boolean shouldShowName(T entityIn) {
-		return super.shouldShowName(entityIn) && (entityIn.shouldShowName() || entityIn.hasCustomName() && entityIn == this.entityRenderDispatcher.crosshairPickEntity);
+	public void extractRenderState(T entity, CorruptedPawnRenderState state, float partialTicks) {
+		super.extractRenderState(entity, state, partialTicks);
+		state.shouldRender = entity.shouldRender(Minecraft.getInstance().player);
 	}
 
 	@Override
-	public void render(T entity, float yaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-		if (entity.shouldRender(Minecraft.getInstance().player)) {
-			super.render(entity, yaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	public void submit(CorruptedPawnRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+		if (state.shouldRender) {
+			super.submit(state, poseStack, submitNodeCollector, camera);
 		}
 	}
 
 	@Override
-	public Identifier getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(CorruptedPawnRenderState state) {
 		return TEXTURE;
 	}
+
 }

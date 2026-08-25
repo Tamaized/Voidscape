@@ -3,18 +3,19 @@ package tamaized.voidscape.client.entity.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
-import org.joml.Matrix3f;
+import net.minecraft.util.LightCoordsUtil;
 import org.joml.Matrix4f;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.SpellBoltEntity;
 
-public class RenderSpellBolt<T extends SpellBoltEntity> extends EntityRenderer<T> {
+public class RenderSpellBolt<T extends SpellBoltEntity> extends EntityRenderer<T, EntityRenderState> {
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/spells/mage/bolt.png");
 
@@ -25,40 +26,37 @@ public class RenderSpellBolt<T extends SpellBoltEntity> extends EntityRenderer<T
 		this.color = color;
 	}
 
-	private void vertex(VertexConsumer buffer, Matrix4f vertex, PoseStack.Pose normals, float x, float y, float z, float red, float green, float blue, float alpha, float texU, float texV, int overlayUV, int lightmapUV, float normalX, float normalY, float normalZ) {
+	@Override
+	public EntityRenderState createRenderState() {
+		return new EntityRenderState();
+	}
+
+	private void vertex(VertexConsumer buffer, Matrix4f vertex, PoseStack.Pose normals, float x, float y, float z, float red, float green, float blue, float alpha, float texU, float texV, int lightmapUV, float normalX, float normalY, float normalZ) {
 		buffer.addVertex(vertex, x, y, z)
 			.setColor(red, green, blue, alpha)
 			.setUv(texU, texV)
 			.setLight(lightmapUV)
 			.setNormal(normals, normalX, normalY, normalZ);
-		//buffer.overlayCoords(overlayUV);
 	}
 
 	@Override
-	public void render(T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-		VertexConsumer buffer = bufferIn.getBuffer(RenderType.beaconBeam(getTextureLocation(entityIn), true));
-		matrixStackIn.pushPose();
-		PoseStack.Pose stack = matrixStackIn.last();
-		Matrix4f v = stack.pose();
+	public void submit(EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
 		final float size = 0.5F;
 		final float red = ((color >> 16) & 0xFF) / 255F;
 		final float green = ((color >> 8) & 0xFF) / 255F;
 		final float blue = (color & 0xFF) / 255F;
-		for (int i = 0; i < 8; i++) {
-			int deg = (45 * i + entityIn.tickCount * 2) % 360;
-			matrixStackIn.mulPose(Axis.XP.rotationDegrees(deg));
-			matrixStackIn.mulPose(Axis.YP.rotationDegrees(deg));
-			vertex(buffer, v, stack, -size, -size, 0, red, green, blue, 0.75F, 0, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, stack, -size, size, 0, red, green, blue, 0.75F, 0, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, stack, size, size, 0, red, green, blue, 0.75F, 1, 1, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-			vertex(buffer, v, stack, size, -size, 0, red, green, blue, 0.75F, 1, 0, 0xF000F0, OverlayTexture.NO_OVERLAY, 0F, 1F, 0F);
-		}
-		matrixStackIn.popPose();
-	}
-
-	@Override
-	public Identifier getTextureLocation(T entityIn) {
-		return TEXTURE;
+		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.beaconBeam(TEXTURE, true), (pose, buffer) -> {
+			Matrix4f v = new Matrix4f(pose.pose());
+			for (int i = 0; i < 8; i++) {
+				int deg = (int) (45 * i + state.ageInTicks * 2) % 360;
+				v.rotate(Axis.XP.rotationDegrees(deg));
+				v.rotate(Axis.YP.rotationDegrees(deg));
+				vertex(buffer, v, pose, -size, -size, 0, red, green, blue, 0.75F, 0, 0, LightCoordsUtil.FULL_BRIGHT, 0F, 1F, 0F);
+				vertex(buffer, v, pose, -size, size, 0, red, green, blue, 0.75F, 0, 1, LightCoordsUtil.FULL_BRIGHT, 0F, 1F, 0F);
+				vertex(buffer, v, pose, size, size, 0, red, green, blue, 0.75F, 1, 1, LightCoordsUtil.FULL_BRIGHT, 0F, 1F, 0F);
+				vertex(buffer, v, pose, size, -size, 0, red, green, blue, 0.75F, 1, 0, LightCoordsUtil.FULL_BRIGHT, 0F, 1F, 0F);
+			}
+		});
 	}
 
 }

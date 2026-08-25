@@ -1,8 +1,5 @@
 package tamaized.voidscape.client.entity.model;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,68 +7,41 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import tamaized.beanification.Autowired;
-import tamaized.voidscape.entity.CorruptedPawnEntity;
-import tamaized.voidscape.util.ColorHelper;
 
 import java.util.function.Function;
 
-public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityModel<T> {
+public class ModelCorruptedPawn<S extends LivingEntityRenderState> extends EntityModel<S> {
 
-	@Autowired(dist = Dist.CLIENT)
-	private static ColorHelper colorHelper;
+	private final ModelPart head;
+	private final ModelPart topTentacle;
+	private final ModelPart topRightTentacle;
+	private final ModelPart rightTentacle;
+	private final ModelPart bottomRightTentacle;
+	private final ModelPart bottomTentacle;
+	private final ModelPart bottomLeftTentacle;
+	private final ModelPart leftTentacle;
+	private final ModelPart topLeftTentacle;
 
-	private static final int[] CAST_MOVEMENT = {225, 315, 135, 270, 45, 180, 0, 90};
-
-	private final ImmutableList<TransparentModelWrapper> parts;
-
-	private final TransparentModelWrapper head;
-	private final TransparentModelWrapper topTentacle;
-	private final TransparentModelWrapper topRightTentacle;
-	private final TransparentModelWrapper rightTentacle;
-	private final TransparentModelWrapper bottomRightTentacle;
-	private final TransparentModelWrapper bottomTentacle;
-	private final TransparentModelWrapper bottomLeftTentacle;
-	private final TransparentModelWrapper leftTentacle;
-	private final TransparentModelWrapper topLeftTentacle;
-
-	private static class TransparentModelWrapper {
-		private float alpha = 1F;
-		private final ModelPart part;
-
-		private TransparentModelWrapper(ModelPart part) {
-			this.part = part;
-		}
+	public ModelCorruptedPawn(ModelPart root) {
+		this(root, RenderTypes::entityTranslucent);
 	}
 
-	public ModelCorruptedPawn(ModelPart p_170677_) {
-		this(p_170677_, RenderType::entityTranslucent);
-	}
-
-	public ModelCorruptedPawn(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
-		super(p_170680_);
-
-		ImmutableList.Builder<TransparentModelWrapper> builder = ImmutableList.builder();
-
-		builder.add(
-
-				head = new TransparentModelWrapper(parent.getChild("head")),
-				topTentacle = new TransparentModelWrapper(parent.getChild("topTentacle")),
-				topRightTentacle = new TransparentModelWrapper(parent.getChild("topRightTentacle")),
-				rightTentacle = new TransparentModelWrapper(parent.getChild("rightTentacle")),
-				bottomRightTentacle = new TransparentModelWrapper(parent.getChild("bottomRightTentacle")),
-				bottomTentacle = new TransparentModelWrapper(parent.getChild("bottomTentacle")),
-				bottomLeftTentacle = new TransparentModelWrapper(parent.getChild("bottomLeftTentacle")),
-				leftTentacle = new TransparentModelWrapper(parent.getChild("leftTentacle")),
-				topLeftTentacle = new TransparentModelWrapper(parent.getChild("topLeftTentacle"))
-
-		);
-
-		parts = builder.build();
+	public ModelCorruptedPawn(ModelPart root, Function<Identifier, RenderType> renderType) {
+		super(root, renderType);
+		head = root.getChild("head");
+		topTentacle = root.getChild("topTentacle");
+		topRightTentacle = root.getChild("topRightTentacle");
+		rightTentacle = root.getChild("rightTentacle");
+		bottomRightTentacle = root.getChild("bottomRightTentacle");
+		bottomTentacle = root.getChild("bottomTentacle");
+		bottomLeftTentacle = root.getChild("bottomLeftTentacle");
+		leftTentacle = root.getChild("leftTentacle");
+		topLeftTentacle = root.getChild("topLeftTentacle");
 	}
 
 	public static LayerDefinition createMesh() {
@@ -127,30 +97,24 @@ public class ModelCorruptedPawn<T extends CorruptedPawnEntity> extends EntityMod
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.part.xRot = headPitch / (180F / (float) Math.PI);
-		this.head.part.yRot = netHeadYaw / (180F / (float) Math.PI);
+	public void setupAnim(S state) {
+		super.setupAnim(state);
 
-		float swing = limbSwingAmount * 4F;
-		float swingCorner = swing * 0.45F + Mth.sin(limbSwing) * 0.25F;
-		float swingCardinal = swing * 0.95F + Mth.cos(limbSwing) * 0.25F;
+		this.head.xRot = state.xRot / (180F / (float) Math.PI);
+		this.head.yRot = state.yRot / (180F / (float) Math.PI);
 
-		this.topRightTentacle.part.xRot = swingCorner;
-		this.topLeftTentacle.part.xRot = swingCorner;
-		this.bottomRightTentacle.part.xRot = swingCorner;
-		this.bottomLeftTentacle.part.xRot = swingCorner;
-		this.topTentacle.part.xRot = swingCardinal;
-		this.leftTentacle.part.xRot = swingCardinal;
-		this.rightTentacle.part.xRot = swingCardinal;
-		this.bottomTentacle.part.xRot = swingCardinal;
-	}
+		float swing = state.walkAnimationSpeed * 4F;
+		float swingCorner = swing * 0.45F + Mth.sin(state.walkAnimationPos) * 0.25F;
+		float swingCardinal = swing * 0.95F + Mth.cos(state.walkAnimationPos) * 0.25F;
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-		this.parts.forEach((part) -> {
-			part.part.render(poseStack, buffer, packedLight, packedOverlay, colorHelper.colorWithAlphaMul(color, part.alpha));
-			part.alpha = 1F;
-		});
+		this.topRightTentacle.xRot = swingCorner;
+		this.topLeftTentacle.xRot = swingCorner;
+		this.bottomRightTentacle.xRot = swingCorner;
+		this.bottomLeftTentacle.xRot = swingCorner;
+		this.topTentacle.xRot = swingCardinal;
+		this.leftTentacle.xRot = swingCardinal;
+		this.rightTentacle.xRot = swingCardinal;
+		this.bottomTentacle.xRot = swingCardinal;
 	}
 
 }

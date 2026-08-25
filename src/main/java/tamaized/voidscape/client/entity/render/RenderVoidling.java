@@ -1,12 +1,13 @@
 package tamaized.voidscape.client.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.neoforged.api.distmarker.Dist;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
@@ -15,45 +16,43 @@ import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidling;
 import tamaized.voidscape.entity.VoidlingEntity;
 
-public class RenderVoidling<T extends VoidlingEntity, M extends ModelVoidling<T>> extends LivingEntityRenderer<T, M> {
+public class RenderVoidling<T extends VoidlingEntity> extends MobRenderer<T, LivingEntityRenderState, ModelVoidling> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");
 
-	public RenderVoidling(EntityRendererProvider.Context rendererManager, M model) {
-		super(rendererManager, model, 0F);
-	}
-
-	public static <T extends VoidlingEntity> RenderVoidling<T, ModelVoidling<T>> factory(EntityRendererProvider.Context manager) {
-		return new RenderVoidling<>(manager, new ModelVoidling<>(manager.bakeLayer(modelLayerLocations.VOIDLING)));
+	public RenderVoidling(EntityRendererProvider.Context context) {
+		super(context, new ModelVoidling(context.bakeLayer(modelLayerLocations.VOIDLING)), 0F);
 	}
 
 	@Override
-	protected boolean shouldShowName(T entityIn) {
-		return super.shouldShowName(entityIn) && (entityIn.shouldShowName() || entityIn.hasCustomName() && entityIn == this.entityRenderDispatcher.crosshairPickEntity);
+	public LivingEntityRenderState createRenderState() {
+		return new LivingEntityRenderState();
 	}
 
 	@Override
-	public void render(T entity, float yaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-		super.render(entity, yaw, partialTicks, matrixStackIn, bufferIn, LightTexture.FULL_BRIGHT);
+	public void extractRenderState(T entity, LivingEntityRenderState state, float partialTicks) {
+		super.extractRenderState(entity, state, partialTicks);
+		state.lightCoords = LightCoordsUtil.FULL_BRIGHT;
 	}
 
 	@Override
-	public Identifier getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(LivingEntityRenderState state) {
 		return TEXTURE;
 	}
 
 	@Nullable
 	@Override
-	protected RenderType getRenderType(T entity, boolean bodyVisible, boolean translucent, boolean glowing) {
-		return RenderType.entityTranslucentCull(getTextureLocation(entity));
+	protected RenderType getRenderType(LivingEntityRenderState state, boolean isBodyVisible, boolean forceTransparent, boolean appearGlowing) {
+		return RenderTypes.entityTranslucent(getTextureLocation(state));
 	}
 
 	@Override
-	protected void scale(T entity, PoseStack stack, float partialTick) {
+	protected void scale(LivingEntityRenderState state, PoseStack poseStack) {
 		float scale = 0.7F;
-		stack.scale(scale, scale, scale);
+		poseStack.scale(scale, scale, scale);
 	}
+
 }

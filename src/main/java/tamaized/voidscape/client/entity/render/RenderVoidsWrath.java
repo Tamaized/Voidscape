@@ -1,92 +1,109 @@
 package tamaized.voidscape.client.entity.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.entity.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
+import tamaized.voidscape.client.entity.render.state.VoidsWrathRenderState;
 import tamaized.voidscape.entity.VoidsWrathEntity;
 
-public class RenderVoidsWrath<T extends VoidsWrathEntity> extends LivingEntityRenderer<T, ModelVoidsWrath<T>> {
+public class RenderVoidsWrath<T extends VoidsWrathEntity> extends MobRenderer<T, VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");
 
-	public RenderVoidsWrath(EntityRendererProvider.Context rendererManager) {
-		super(rendererManager, new ModelVoidsWrath<>(rendererManager.bakeLayer(modelLayerLocations.VOIDS_WRATH)), 0F);
-		this.addLayer(new ItemInHandLayer<>(this, rendererManager.getItemInHandRenderer()));
+	public RenderVoidsWrath(EntityRendererProvider.Context context) {
+		super(context, new ModelVoidsWrath<>(context.bakeLayer(modelLayerLocations.VOIDS_WRATH)), 0F);
+		this.addLayer(new ItemInHandLayer<>(this));
 		this.addLayer(new OverlayLayer(this));
-		this.addLayer(new PowerLayer(this, rendererManager.getModelSet()));
+		this.addLayer(new PowerLayer(this, context.getModelSet()));
 	}
 
 	@Override
-	protected boolean shouldShowName(T entityIn) {
-		return super.shouldShowName(entityIn) && (entityIn.shouldShowName() || entityIn.hasCustomName() && entityIn == this.entityRenderDispatcher.crosshairPickEntity);
+	public VoidsWrathRenderState createRenderState() {
+		return new VoidsWrathRenderState();
 	}
 
 	@Override
-	public void render(T entity, float yaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-		super.render(entity, yaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	public void extractRenderState(T entity, VoidsWrathRenderState state, float partialTicks) {
+		super.extractRenderState(entity, state, partialTicks);
+		HumanoidMobRenderer.extractHumanoidRenderState(entity, state, partialTicks, this.itemModelResolver);
+		state.isPowered = entity.isPowered();
 	}
 
 	@Override
-	public Identifier getTextureLocation(T entityIn) {
+	public Identifier getTextureLocation(VoidsWrathRenderState state) {
 		return TEXTURE;
 	}
 
-	private class OverlayLayer extends EyesLayer<T, ModelVoidsWrath<T>> {
+	private static class OverlayLayer extends EyesLayer<VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> {
 
-		private static final RenderType OVERLAY = RenderType.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
+		private static final RenderType OVERLAY = RenderTypes.eyes(Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_overlay.png"));
 
-		public OverlayLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_117346_) {
-			super(p_117346_);
+		public OverlayLayer(RenderLayerParent<VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> renderer) {
+			super(renderer);
 		}
 
 		@Override
 		public RenderType renderType() {
 			return OVERLAY;
 		}
+
 	}
 
-	private class PowerLayer extends EnergySwirlLayer<T, ModelVoidsWrath<T>> {
-		private static final Identifier POWER_LOCATION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
-		private final ModelVoidsWrath<T> model;
+	private static class PowerLayer extends EnergySwirlLayer<VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> {
 
-		public PowerLayer(RenderLayerParent<T, ModelVoidsWrath<T>> p_174471_, EntityModelSet p_174472_) {
-			super(p_174471_);
-			this.model = new ModelVoidsWrath<>(p_174472_.bakeLayer(modelLayerLocations.VOIDS_WRATH_CHARGED));
+		private static final Identifier POWER_LOCATION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath_armor.png");
+
+		private final ModelVoidsWrath<VoidsWrathRenderState> model;
+
+		public PowerLayer(RenderLayerParent<VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> renderer, EntityModelSet modelSet) {
+			super(renderer);
+			this.model = new ModelVoidsWrath<>(modelSet.bakeLayer(modelLayerLocations.VOIDS_WRATH_CHARGED));
 		}
 
 		@Override
-		public void render(PoseStack p_116970_, MultiBufferSource p_116971_, int p_116972_, T p_116973_, float p_116974_, float p_116975_, float p_116976_, float p_116977_, float p_116978_, float p_116979_) {
-			super.render(p_116970_, p_116971_, 0xF000F0, p_116973_, p_116974_, p_116975_, p_116976_, p_116977_, p_116978_, p_116979_);
+		public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, VoidsWrathRenderState state, float yRot, float xRot) {
+			super.submit(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, state, yRot, xRot);
 		}
 
-		protected float xOffset(float p_116683_) {
-			return p_116683_ * 0.01F;
+		@Override
+		protected boolean isPowered(VoidsWrathRenderState state) {
+			return state.isPowered;
 		}
 
+		@Override
+		protected float xOffset(float t) {
+			return t * 0.01F;
+		}
+
+		@Override
 		protected Identifier getTextureLocation() {
 			return POWER_LOCATION;
 		}
 
-		protected EntityModel<T> model() {
+		@Override
+		protected ModelVoidsWrath<VoidsWrathRenderState> model() {
 			return this.model;
 		}
+
 	}
 
 }

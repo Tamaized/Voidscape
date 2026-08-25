@@ -60,8 +60,8 @@ public class ModModelLayerLocations {
 	}
 
 	private void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(entities.VOIDLING.get(), RenderVoidling::factory);
-		event.registerEntityRenderer(entities.CORRUPTED_PAWN.get(), RenderCorruptedPawn::factory);
+		event.registerEntityRenderer(entities.VOIDLING.get(), RenderVoidling::new);
+		event.registerEntityRenderer(entities.CORRUPTED_PAWN.get(), RenderCorruptedPawn::new);
 		event.registerEntityRenderer(entities.VOIDS_WRATH.get(), RenderVoidsWrath::new);
 		event.registerEntityRenderer(entities.NULL_SERVANT.get(), RenderNullServant::new);
 		event.registerEntityRenderer(entities.NULL_SERVANT_AUGMENT_BLOCK.get(), RenderNullServantAugmentBlock::new);

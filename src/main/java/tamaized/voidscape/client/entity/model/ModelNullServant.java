@@ -1,10 +1,6 @@
 package tamaized.voidscape.client.entity.model;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -15,55 +11,48 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
+import net.minecraft.client.renderer.blockentity.AbstractEndPortalRenderer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
-import tamaized.voidscape.client.RenderStateAccessor;
 import tamaized.voidscape.client.shader.Shaders;
-import tamaized.voidscape.entity.NullServantEntity;
 
 import java.util.function.Function;
 
-public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T> implements ArmedModel {
+public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel<S> implements ArmedModel<S> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static Shaders shaders;
 
-	private static final Function<Identifier, RenderType> RENDERTYPE = Util.memoize((p_173204_) -> {
-		RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().
-				setShaderState(new RenderStateShard.ShaderStateShard(() -> shaders.VOIDSKY_ENTITY)).
-				setTextureState(RenderStateShard.MultiTextureStateShard.builder().add(p_173204_, false, false).add(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false).build()).
-				setTransparencyState(RenderStateAccessor.NO_TRANSPARENCY()).
-				setLightmapState(RenderStateAccessor.NO_LIGHTMAP()).
-				setOverlayState(RenderStateAccessor.NO_OVERLAY()).
-				createCompositeState(true);
-		return RenderType.create("entity_solid_voidskyshader", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, rendertype$compositestate);
-	});
+	private static final Function<Identifier, RenderType> RENDERTYPE = Util.memoize(texture -> RenderType.
+			create("entity_solid_voidskyshader", RenderSetup.builder(shaders.VOIDSKY_ENTITY).
+					withTexture("Sampler0", texture).
+					withTexture("Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION).
+					setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE).
+					createRenderSetup()));
 
-	public ModelPart head;
-	public ModelPart body;
-	public ModelPart leftArm;
-	public ModelPart rightArm;
+	public final ModelPart head;
+	public final ModelPart body;
+	public final ModelPart leftArm;
+	public final ModelPart rightArm;
 
-	public HumanoidModel.ArmPose leftArmPose = HumanoidModel.ArmPose.EMPTY;
-	public HumanoidModel.ArmPose rightArmPose = HumanoidModel.ArmPose.EMPTY;
-
-	public ModelNullServant(ModelPart p_170677_) {
-		this(p_170677_, RENDERTYPE);
+	public ModelNullServant(ModelPart root) {
+		this(root, RENDERTYPE);
 	}
 
-	public ModelNullServant(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
-		super(p_170680_);
-		head = parent.getChild("head");
-		body = parent.getChild("body");
-		leftArm = parent.getChild("leftArm");
-		rightArm = parent.getChild("rightArm");
+	public ModelNullServant(ModelPart root, Function<Identifier, RenderType> renderType) {
+		super(root, renderType);
+		head = root.getChild("head");
+		body = root.getChild("body");
+		leftArm = root.getChild("leftArm");
+		rightArm = root.getChild("rightArm");
 	}
 
 	public static LayerDefinition createMesh() {
@@ -95,9 +84,11 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-		this.head.xRot = headPitch * ((float) Math.PI / 180F);
+	public void setupAnim(S state) {
+		super.setupAnim(state);
+
+		this.head.yRot = state.yRot * ((float) Math.PI / 180F);
+		this.head.xRot = state.xRot * ((float) Math.PI / 180F);
 
 		this.body.yRot = 0.0F;
 		this.rightArm.z = 0.0F;
@@ -105,34 +96,33 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 		this.leftArm.z = 0.0F;
 		this.leftArm.x = 5.0F;
 
-		float f = 1.0F;
-		this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;
-		this.leftArm.xRot = Mth.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F / f;
+		this.rightArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float) Math.PI) * 2.0F * state.walkAnimationSpeed * 0.5F;
+		this.leftArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 2.0F * state.walkAnimationSpeed * 0.5F;
 		this.rightArm.zRot = 0.0F;
 		this.leftArm.zRot = 0.0F;
 
 		this.rightArm.yRot = 0.0F;
 		this.leftArm.yRot = 0.0F;
-		boolean flag2 = entity.getMainArm() == HumanoidArm.RIGHT;
-		if (entity.isUsingItem()) {
-			boolean flag3 = entity.getUsedItemHand() == InteractionHand.MAIN_HAND;
-			if (flag3 == flag2) {
-				this.poseRightArm(entity);
+		boolean rightHanded = state.mainArm == HumanoidArm.RIGHT;
+		if (state.isUsingItem) {
+			boolean mainHandUsed = state.useItemHand == InteractionHand.MAIN_HAND;
+			if (mainHandUsed == rightHanded) {
+				this.poseRightArm(state);
 			} else {
-				this.poseLeftArm(entity);
+				this.poseLeftArm(state);
 			}
 		} else {
-			boolean flag4 = flag2 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
-			if (flag2 != flag4) {
-				this.poseLeftArm(entity);
-				this.poseRightArm(entity);
+			boolean twoHandedOffhand = rightHanded ? state.leftArmPose.isTwoHanded() : state.rightArmPose.isTwoHanded();
+			if (rightHanded != twoHandedOffhand) {
+				this.poseLeftArm(state);
+				this.poseRightArm(state);
 			} else {
-				this.poseRightArm(entity);
-				this.poseLeftArm(entity);
+				this.poseRightArm(state);
+				this.poseLeftArm(state);
 			}
 		}
 
-		this.setupAttackAnimation(entity, ageInTicks);
+		this.setupAttackAnimation(state);
 
 		this.body.xRot = 0.0F;
 		this.head.y = 0.0F;
@@ -140,14 +130,14 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 		this.leftArm.y = 2.0F;
 		this.rightArm.y = 2.0F;
 
-		if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS)
-			AnimationUtils.bobModelPart(this.rightArm, ageInTicks, 1.0F);
-		if (this.leftArmPose != HumanoidModel.ArmPose.SPYGLASS)
-			AnimationUtils.bobModelPart(this.leftArm, ageInTicks, -1.0F);
+		if (state.rightArmPose != HumanoidModel.ArmPose.SPYGLASS)
+			AnimationUtils.bobModelPart(this.rightArm, state.ageInTicks, 1.0F);
+		if (state.leftArmPose != HumanoidModel.ArmPose.SPYGLASS)
+			AnimationUtils.bobModelPart(this.leftArm, state.ageInTicks, -1.0F);
 	}
 
-	private void poseRightArm(T p_102876_) {
-		switch (this.rightArmPose) {
+	private void poseRightArm(S state) {
+		switch (state.rightArmPose) {
 			case EMPTY -> this.rightArm.yRot = 0.0F;
 			case BLOCK -> {
 				this.rightArm.xRot = this.rightArm.xRot * 0.5F - 0.9424779F;
@@ -157,7 +147,7 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 				this.rightArm.xRot = this.rightArm.xRot * 0.5F - ((float) Math.PI / 10F);
 				this.rightArm.yRot = 0.0F;
 			}
-			case THROW_SPEAR -> {
+			case THROW_TRIDENT -> {
 				this.rightArm.xRot = this.rightArm.xRot * 0.5F - (float) Math.PI;
 				this.rightArm.yRot = 0.0F;
 			}
@@ -167,17 +157,18 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 				this.rightArm.xRot = (-(float) Math.PI / 2F) + this.head.xRot;
 				this.leftArm.xRot = (-(float) Math.PI / 2F) + this.head.xRot;
 			}
-			case CROSSBOW_CHARGE -> AnimationUtils.animateCrossbowCharge(this.rightArm, this.leftArm, p_102876_, true);
+			case CROSSBOW_CHARGE -> AnimationUtils.animateCrossbowCharge(this.rightArm, this.leftArm, state.maxCrossbowChargeDuration, state.ticksUsingItem, true);
 			case CROSSBOW_HOLD -> AnimationUtils.animateCrossbowHold(this.rightArm, this.leftArm, this.head, true);
 			case SPYGLASS -> {
-				this.rightArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (p_102876_.isCrouching() ? 0.2617994F : 0.0F), -2.4F, 3.3F);
+				this.rightArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (state.isCrouching ? 0.2617994F : 0.0F), -2.4F, 3.3F);
 				this.rightArm.yRot = this.head.yRot - 0.2617994F;
 			}
+			default -> {}
 		}
 	}
 
-	private void poseLeftArm(T p_102879_) {
-		switch (this.leftArmPose) {
+	private void poseLeftArm(S state) {
+		switch (state.leftArmPose) {
 			case EMPTY -> this.leftArm.yRot = 0.0F;
 			case BLOCK -> {
 				this.leftArm.xRot = this.leftArm.xRot * 0.5F - 0.9424779F;
@@ -187,7 +178,7 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 				this.leftArm.xRot = this.leftArm.xRot * 0.5F - ((float) Math.PI / 10F);
 				this.leftArm.yRot = 0.0F;
 			}
-			case THROW_SPEAR -> {
+			case THROW_TRIDENT -> {
 				this.leftArm.xRot = this.leftArm.xRot * 0.5F - (float) Math.PI;
 				this.leftArm.yRot = 0.0F;
 			}
@@ -197,22 +188,21 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 				this.rightArm.xRot = (-(float) Math.PI / 2F) + this.head.xRot;
 				this.leftArm.xRot = (-(float) Math.PI / 2F) + this.head.xRot;
 			}
-			case CROSSBOW_CHARGE -> AnimationUtils.animateCrossbowCharge(this.rightArm, this.leftArm, p_102879_, false);
+			case CROSSBOW_CHARGE -> AnimationUtils.animateCrossbowCharge(this.rightArm, this.leftArm, state.maxCrossbowChargeDuration, state.ticksUsingItem, false);
 			case CROSSBOW_HOLD -> AnimationUtils.animateCrossbowHold(this.rightArm, this.leftArm, this.head, false);
 			case SPYGLASS -> {
-				this.leftArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (p_102879_.isCrouching() ? 0.2617994F : 0.0F), -2.4F, 3.3F);
+				this.leftArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (state.isCrouching ? 0.2617994F : 0.0F), -2.4F, 3.3F);
 				this.leftArm.yRot = this.head.yRot + 0.2617994F;
 			}
+			default -> {}
 		}
 	}
 
-	protected void setupAttackAnimation(T p_102858_, float p_102859_) {
-		if (!(this.attackTime <= 0.0F)) {
-			HumanoidArm humanoidarm = this.getAttackArm(p_102858_);
-			ModelPart modelpart = this.getArm(humanoidarm);
-			float f = this.attackTime;
-			this.body.yRot = Mth.sin(Mth.sqrt(f) * ((float) Math.PI * 2F)) * 0.2F;
-			if (humanoidarm == HumanoidArm.LEFT) {
+	private void setupAttackAnimation(S state) {
+		if (!(state.attackTime <= 0.0F)) {
+			ModelPart attackArm = this.getArm(state.attackArm);
+			this.body.yRot = Mth.sin(Mth.sqrt(state.attackTime) * ((float) Math.PI * 2F)) * 0.2F;
+			if (state.attackArm == HumanoidArm.LEFT) {
 				this.body.yRot *= -1.0F;
 			}
 
@@ -223,36 +213,26 @@ public class ModelNullServant<T extends NullServantEntity> extends EntityModel<T
 			this.rightArm.yRot += this.body.yRot;
 			this.leftArm.yRot += this.body.yRot;
 			this.leftArm.xRot += this.body.yRot;
-			f = 1.0F - this.attackTime;
-			f = f * f;
-			f = f * f;
-			f = 1.0F - f;
-			float f1 = Mth.sin(f * (float) Math.PI);
-			float f2 = Mth.sin(this.attackTime * (float) Math.PI) * -(this.head.xRot - 0.7F) * 0.75F;
-			modelpart.xRot = (float) ((double) modelpart.xRot - ((double) f1 * 1.2D + (double) f2));
-			modelpart.yRot += this.body.yRot * 2.0F;
-			modelpart.zRot += Mth.sin(this.attackTime * (float) Math.PI) * -0.4F;
+			float swing = 1.0F - state.attackTime;
+			swing = swing * swing;
+			swing = swing * swing;
+			swing = 1.0F - swing;
+			float f1 = Mth.sin(swing * (float) Math.PI);
+			float f2 = Mth.sin(state.attackTime * (float) Math.PI) * -(this.head.xRot - 0.7F) * 0.75F;
+			attackArm.xRot = (float) ((double) attackArm.xRot - ((double) f1 * 1.2D + (double) f2));
+			attackArm.yRot += this.body.yRot * 2.0F;
+			attackArm.zRot += Mth.sin(state.attackTime * (float) Math.PI) * -0.4F;
 		}
 	}
 
-	private HumanoidArm getAttackArm(T p_102857_) {
-		HumanoidArm humanoidarm = p_102857_.getMainArm();
-		return p_102857_.swingingArm == InteractionHand.MAIN_HAND ? humanoidarm : humanoidarm.getOpposite();
-	}
-
-	public void translateToHand(HumanoidArm p_102854_, PoseStack p_102855_) {
-		this.getArm(p_102854_).translateAndRotate(p_102855_);
-	}
-
-	protected ModelPart getArm(HumanoidArm p_102852_) {
-		return p_102852_ == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
-	}
-
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-		head.render(poseStack, buffer, packedLight, packedOverlay, color);
-		body.render(poseStack, buffer, packedLight, packedOverlay, color);
-		leftArm.render(poseStack, buffer, packedLight, packedOverlay, color);
-		rightArm.render(poseStack, buffer, packedLight, packedOverlay, color);
+	public void translateToHand(S state, HumanoidArm arm, PoseStack poseStack) {
+		this.root.translateAndRotate(poseStack);
+		this.getArm(arm).translateAndRotate(poseStack);
 	}
+
+	public ModelPart getArm(HumanoidArm arm) {
+		return arm == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
+	}
+
 }
