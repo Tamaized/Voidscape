@@ -3,8 +3,12 @@ package tamaized.voidscape.datagen.bootstrap.feature.placed;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.NetherFeatures;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.datagen.util.PlacementModUtil;
@@ -27,12 +31,15 @@ public class CrimsonRootsPlacedFeatureBootstrap extends PlacedFeatureBootstrapHo
 	public PlacedFeature make(BootstrapContext<PlacedFeature> context) {
 		return new PlacedFeature(
 			context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(
-				NetherFeatures.PATCH_CRIMSON_ROOTS
+				NetherFeatures.CRIMSON_ROOTS
 			),
 			List.of(
 				new SeekDownPlacementMod(true),
 				placementModUtil.AIR_ABOVE,
-				BiomeFilter.biome()
+				BiomeFilter.biome(),
+				CountPlacement.of(96),
+				RandomOffsetPlacement.ofTriangle(7, 3),
+				BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)
 			)
 		);
 	}

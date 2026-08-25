@@ -36,7 +36,10 @@ public class EtherealFruitOverworldPatchPlacedFeatureBootstrap extends PlacedFea
 				placementModUtil.AIR_ABOVE,
 				placementModUtil.NOT_AIR_BELOW,
 				BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE),
-				BiomeFilter.biome()
+				BiomeFilter.biome(),
+				CountPlacement.of(16),
+				RandomOffsetPlacement.ofTriangle(3, 3),
+				BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)
 			)
 		);
 	}

@@ -13,15 +13,10 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
 @Component
 public class OakTreeConfiguredFeatureBootstrap extends ConfiguredFeatureBootstrapHolder {
-
-	@Autowired
-	private ModBlockComponentDirectory blocks;
 
 	@Override
 	public String name() {
@@ -42,7 +37,6 @@ public class OakTreeConfiguredFeatureBootstrap extends ConfiguredFeatureBootstra
 			new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.ZERO, 3),
 			new TwoLayersFeatureSize(1, 0, 1)
 		)
-			.dirt(SimpleStateProvider.simple(Blocks.DIRT))
 			.ignoreVines()
 			.build());
 	}
