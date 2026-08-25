@@ -14,6 +14,7 @@ import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.CardinalLighting;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.timeline.Timeline;
+import net.neoforged.neoforge.common.world.NeoForgeEnvironmentAttributes;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
@@ -53,6 +54,7 @@ public class DimensionTypeBootstrap implements IBootstrap {
 					EnvironmentAttributeMap.builder()
 						.set(EnvironmentAttributes.CAN_START_RAID, false)
 						.set(EnvironmentAttributes.BED_RULE, BedRule.EXPLODES)
+						.set(NeoForgeEnvironmentAttributes.CUSTOM_SKYBOX, dimensions.VOID.identifier())
 						.build(),
 					timelines.getOrThrow(TimelineTags.UNIVERSAL),
 					Optional.empty()
