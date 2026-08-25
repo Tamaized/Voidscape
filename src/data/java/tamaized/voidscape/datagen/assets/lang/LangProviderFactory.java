@@ -121,12 +121,6 @@ public class LangProviderFactory {
 
 				addBlock(blocks.imposterBlocks().FRAGILE_VOIDIC_CRYSTAL_BLOCK, "Fragile Voidic Crystal");
 				addBlock(blocks.functionalBlocks().PORTAL, "Voidic Portal");
-				addBlock(blocks.machineBlocks().MACHINE_CORE, "Voidic Core");
-				addBlock(blocks.machineBlocks().MACHINE_LIQUIFIER, "Voidic Liquifier");
-				addBlock(blocks.machineBlocks().MACHINE_DEFUSER, "Voidic Defuser");
-				addBlock(blocks.machineBlocks().MACHINE_GERMINATOR, "Voidic Germinator");
-				addBlock(blocks.machineBlocks().MACHINE_INFUSER, "Voidic Infuser");
-				addBlock(blocks.machineBlocks().MACHINE_COLLECTOR, "Voidic Collector");
 
 				addAttribute(attributes.VOIDIC_INFUSION_RES, "Voidic Infusion Resistance");
 				addAttribute(attributes.VOIDIC_PARANOIA_RES, "Voidic Paranoia Resistance");
