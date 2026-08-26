@@ -12,12 +12,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.regutil.ExtraTooltipContext;
-import tamaized.regutil.RegUtil;
 import tamaized.regutil.item.BreakableHelper;
 import tamaized.regutil.item.BreakableTool;
 import tamaized.voidscape.util.tool.MultiBlockBreak;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @Configurable
