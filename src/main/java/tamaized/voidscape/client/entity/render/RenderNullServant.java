@@ -14,7 +14,7 @@ import net.minecraft.util.ARGB;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.ModModelLayerLocations;
+import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
 import tamaized.voidscape.client.entity.render.state.NullServantRenderState;
 import tamaized.voidscape.entity.NullServantEntity;

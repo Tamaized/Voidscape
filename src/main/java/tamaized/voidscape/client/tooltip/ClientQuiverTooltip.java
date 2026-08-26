@@ -6,8 +6,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.voidscape.data.QuiverContents;
 
 public class ClientQuiverTooltip implements ClientTooltipComponent {
@@ -87,7 +85,6 @@ public class ClientQuiverTooltip implements ClientTooltipComponent {
 		return 1;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	enum Texture {
 		BLOCKED_SLOT(Identifier.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
 		SLOT(Identifier.withDefaultNamespace("container/bundle/slot"), 18, 20);

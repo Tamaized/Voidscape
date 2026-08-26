@@ -1,0 +1,11 @@
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+@TypeUseAreNonnullByDefault
+package tamaized.voidscape.client.armor;
+
+import com.mojang.logging.annotations.FieldsAreNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+import tamaized.pkginfoutil.TypeUseAreNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -10,8 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
 public abstract class VoidicFluid extends BaseFlowingFluid {
@@ -26,7 +24,6 @@ public abstract class VoidicFluid extends BaseFlowingFluid {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(Level worldIn, BlockPos pos, FluidState state, RandomSource random) {
         BlockPos blockpos = pos.above();
         if (worldIn.getBlockState(blockpos).isAir() && !worldIn.getBlockState(blockpos).isSolidRender()) {
@@ -51,16 +48,19 @@ public abstract class VoidicFluid extends BaseFlowingFluid {
             registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
-        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+        @Override
+		protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
 
-        public int getAmount(FluidState state) {
+        @Override
+		public int getAmount(FluidState state) {
             return state.getValue(LEVEL);
         }
 
-        public boolean isSource(FluidState state) {
+        @Override
+		public boolean isSource(FluidState state) {
             return false;
         }
 
@@ -72,11 +72,13 @@ public abstract class VoidicFluid extends BaseFlowingFluid {
             super(properties);
         }
 
-        public int getAmount(FluidState state) {
+        @Override
+		public int getAmount(FluidState state) {
             return 8;
         }
 
-        public boolean isSource(FluidState state) {
+        @Override
+		public boolean isSource(FluidState state) {
             return true;
         }
 

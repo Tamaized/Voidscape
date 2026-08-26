@@ -8,6 +8,7 @@ import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
@@ -84,7 +85,7 @@ public class ParticleSpellCloud extends SingleQuadParticle {
 
 	@Override
 	protected int getLightCoords(float partialTicks) {
-		return 0xF000F0;
+		return LightCoordsUtil.FULL_BRIGHT;
 	}
 
 	public static class Factory implements ParticleProvider<ParticleTypeSpellCloud.Options> {

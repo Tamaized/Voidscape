@@ -1,4 +1,4 @@
-package tamaized.voidscape.client.entity;
+package tamaized.voidscape.client;
 
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -12,6 +12,8 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.client.armor.model.ModelArmorCorrupt;
+import tamaized.voidscape.client.armor.model.ModelArmorCrystalline;
 import tamaized.voidscape.client.entity.model.*;
 import tamaized.voidscape.client.entity.render.*;
 import tamaized.voidscape.registry.ModEntities;

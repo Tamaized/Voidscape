@@ -1,4 +1,4 @@
-package tamaized.voidscape.client.entity.model;
+package tamaized.voidscape.client.armor.model;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,18 +11,20 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import net.neoforged.api.distmarker.Dist;
-import tamaized.beanification.Autowired;
-import tamaized.regutil.GearItemHandler;
+import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class ModelArmorCrystalline<T extends HumanoidRenderState> extends HumanoidModel<T> {
-
-	@Autowired(dist = Dist.CLIENT)
-	private static GearItemHandler gearItemHandler;
+public class ModelArmorCrystalline<T extends HumanoidRenderState> extends HumanoidModel<T> implements IOverlayArmorModel {
 
 	private final ImmutableList<ModelPart> parts;
+
+	@Nullable
+	private final Identifier overlayTexture;
+
+	private final boolean fullbright;
 
 	public ModelPart head;
 	public ModelPart headoverlay;
@@ -34,18 +36,13 @@ public class ModelArmorCrystalline<T extends HumanoidRenderState> extends Humano
 	public ModelPart leftfoot;
 	public ModelPart rightfoot;
 
-	private final boolean fullbright;
-
-	public ModelArmorCrystalline(ModelPart p_170677_) {
-		this(p_170677_, false);
+	public ModelArmorCrystalline(ModelPart parent, @Nullable Identifier overlayTexture, boolean fullbright) {
+		this(parent, RenderTypes::armorCutoutNoCull, overlayTexture, fullbright);
 	}
 
-	public ModelArmorCrystalline(ModelPart p_170677_, boolean fullbright) {
-		this(p_170677_, RenderTypes::armorCutoutNoCull, fullbright);
-	}
-
-	public ModelArmorCrystalline(ModelPart parent, Function<Identifier, RenderType> p_170680_, boolean fullbright) {
+	public ModelArmorCrystalline(ModelPart parent, Function<Identifier, RenderType> p_170680_, @Nullable Identifier overlayTexture, boolean fullbright) {
 		super(parent, p_170680_);
+		this.overlayTexture = overlayTexture;
 		this.fullbright = fullbright;
 
 		ImmutableList.Builder<ModelPart> builder = ImmutableList.builder();
@@ -150,12 +147,56 @@ public class ModelArmorCrystalline<T extends HumanoidRenderState> extends Humano
 		leftfoot.loadPose(super.leftLeg.storePose());
 		rightfoot.loadPose(super.rightLeg.storePose());
 
-		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright || gearItemHandler.renderingArmorOverlay ? 0xF000F0 : packedLightIn, packedOverlayIn, color));
+		parts.forEach((part) -> part.render(matrixStackIn, bufferIn, fullbright ? LightCoordsUtil.FULL_BRIGHT : packedLightIn, packedOverlayIn, color));
 	}
 
 	@Override
 	public ModelPart getHead() {
 		return head;
+	}
+
+	@Override
+	public @Nullable Identifier overlayTexture() {
+		return overlayTexture;
+	}
+
+	@Override
+	public boolean overlayFullbright() {
+		return true;
+	}
+
+
+	public void setVisibleFor(EquipmentSlot armorSlot) {
+		head.visible = false;
+		headoverlay.visible = false;
+		body.visible = false;
+		leftarm.visible = false;
+		rightarm.visible = false;
+		leftleg.visible = false;
+		rightleg.visible = false;
+		leftfoot.visible = false;
+		rightfoot.visible = false;
+		switch (armorSlot) {
+			case FEET -> {
+				rightfoot.visible = true;
+				leftfoot.visible = true;
+			}
+			case LEGS -> {
+				rightleg.visible = true;
+				leftleg.visible = true;
+			}
+			case CHEST -> {
+				body.visible = true;
+				rightarm.visible = true;
+				leftarm.visible = true;
+			}
+			case HEAD -> {
+				head.visible = true;
+				headoverlay.visible = true;
+			}
+			default -> {
+			}
+		}
 	}
 
 }

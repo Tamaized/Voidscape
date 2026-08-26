@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ]
+  }
+}

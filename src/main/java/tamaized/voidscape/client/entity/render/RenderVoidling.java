@@ -12,7 +12,7 @@ import net.neoforged.api.distmarker.Dist;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.ModModelLayerLocations;
+import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidling;
 import tamaized.voidscape.entity.VoidlingEntity;
 

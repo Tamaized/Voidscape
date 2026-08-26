@@ -3,12 +3,10 @@ package tamaized.voidscape.asm;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.BlockPos;
@@ -18,7 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.ToolAndArmorHelper;
 import tamaized.voidscape.Voidscape;
@@ -101,7 +97,6 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link LivingEntityRenderer#getRenderType(LivingEntity, boolean, boolean, boolean)}<br>
 	 */
-	@OnlyIn(Dist.CLIENT)
 	public static RenderType modifyEntityRenderType(RenderType type, LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> renderer, LivingEntity entity) {
 		return !(entity instanceof IEthereal) && entity.getData(dataAttachments.INSANITY).getInfusion() > 0F ?
 			null : //RenderType.entityTranslucentCull(renderer.getTextureLocation(entity)) : // FIXME
@@ -132,7 +127,6 @@ public class ASMHooks {
 	 * Injection Point:<br>
 	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
 	 */
-	@OnlyIn(Dist.CLIENT)
 	public static float lightTextureBrightness(float o, int light) {
 		if (levelUtil.isInVoidDimension(Minecraft.getInstance().level))
 			return voidVisibilityCache.value(o, light);
@@ -162,21 +156,6 @@ public class ASMHooks {
 	public static boolean isBowInRenderingHand(boolean o, ItemStack stack, Item item) {
 		return o || toolAndArmorHelper.isMyBow(stack, item);
 	}
-
-	/*
-	 * Injection Point:<br>
-	 * {@link HumanoidArmorLayer#renderArmorPiece(PoseStack, MultiBufferSource, LivingEntity, EquipmentSlot, int, HumanoidModel, float, float, float, float, float, float)} <br>
-	 */
-	/*@OnlyIn(Dist.CLIENT) FIXME
-	public static void armorOverlay(HumanoidArmorLayer<?, ?, ?> layer, ArmorMaterial.Layer armormaterial$layer, PoseStack poseStack, MultiBufferSource bufferSource, int light, Model model, LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
-		if (RegUtil.isArmorOverlay(stack)) {
-			RegUtil.renderingArmorOverlay = true;
-			Identifier texture = ClientHooks.getArmorTexture(entity, stack, armormaterial$layer, true, slot);
-			VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false);
-			model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-			RegUtil.renderingArmorOverlay = false;
-		}
-	}*/
 
 	/**
 	 * Injection Point:<br>

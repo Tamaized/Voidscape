@@ -17,7 +17,7 @@ import net.minecraft.util.LightCoordsUtil;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.ModModelLayerLocations;
+import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
 import tamaized.voidscape.client.entity.render.state.VoidsWrathRenderState;
 import tamaized.voidscape.entity.VoidsWrathEntity;

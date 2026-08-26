@@ -1,4 +1,4 @@
-package tamaized.voidscape.client.entity.model;
+package tamaized.voidscape.client.armor.model;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -16,18 +16,17 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import tamaized.beanification.Autowired;
-import tamaized.regutil.GearItemHandler;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class ModelArmorCorrupt<T extends HumanoidRenderState> extends HumanoidModel<T> {
-
-	@Autowired(dist = Dist.CLIENT)
-	private static GearItemHandler gearItemHandler;
+public class ModelArmorCorrupt<T extends HumanoidRenderState> extends HumanoidModel<T> implements IOverlayArmorModel {
 
 	private final ImmutableList<ModelPart> parts;
+
+	@Nullable
+	private final Identifier overlayTexture;
 
 	public ModelPart head;
 	public ModelPart headoverlay;
@@ -44,12 +43,13 @@ public class ModelArmorCorrupt<T extends HumanoidRenderState> extends HumanoidMo
 	public ModelPart bottomLeftTentacle;
 	public ModelPart bottomRightTentacle;
 
-	public ModelArmorCorrupt(ModelPart p_170677_) {
-		this(p_170677_, RenderTypes::entityCutout);
+	public ModelArmorCorrupt(ModelPart parent, @Nullable Identifier overlayTexture) {
+		this(parent, RenderTypes::entityCutout, overlayTexture);
 	}
 
-	public ModelArmorCorrupt(ModelPart parent, Function<Identifier, RenderType> p_170680_) {
+	public ModelArmorCorrupt(ModelPart parent, Function<Identifier, RenderType> p_170680_, @Nullable Identifier overlayTexture) {
 		super(parent, p_170680_);
+		this.overlayTexture = overlayTexture;
 
 		ImmutableList.Builder<ModelPart> builder = ImmutableList.builder();
 
@@ -195,12 +195,58 @@ public class ModelArmorCorrupt<T extends HumanoidRenderState> extends HumanoidMo
 		leftleg.loadPose(super.leftLeg.storePose());
 		rightfoot.loadPose(super.rightLeg.storePose());
 		leftfoot.loadPose(super.leftLeg.storePose());
-		parts.forEach((modelRenderer_) -> modelRenderer_.render(poseStack, buffer, gearItemHandler.renderingArmorOverlay ? 0xF000F0 : packedLight, packedOverlay, color));
+		parts.forEach((modelRenderer_) -> modelRenderer_.render(poseStack, buffer, packedLight, packedOverlay, color));
 	}
 
 	@Override
 	public ModelPart getHead() {
 		return head;
+	}
+
+	@Override
+	public @Nullable Identifier overlayTexture() {
+		return overlayTexture;
+	}
+
+	@Override
+	public boolean overlayFullbright() {
+		return true;
+	}
+
+
+	public void setVisibleFor(EquipmentSlot armorSlot) {
+		head.visible = false;
+		headoverlay.visible = false;
+		body.visible = false;
+		rightarm.visible = false;
+		leftarm.visible = false;
+		bodyToLeg.visible = false;
+		rightleg.visible = false;
+		leftleg.visible = false;
+		rightfoot.visible = false;
+		leftfoot.visible = false;
+		switch (armorSlot) {
+			case FEET -> {
+				rightfoot.visible = true;
+				leftfoot.visible = true;
+			}
+			case LEGS -> {
+				rightleg.visible = true;
+				leftleg.visible = true;
+			}
+			case CHEST -> {
+				bodyToLeg.visible = true;
+				body.visible = true;
+				rightarm.visible = true;
+				leftarm.visible = true;
+			}
+			case HEAD -> {
+				head.visible = true;
+				headoverlay.visible = true;
+			}
+			default -> {
+			}
+		}
 	}
 
 }
