@@ -1,5 +1,6 @@
 package tamaized.voidscape.datagen.assets.bakedmodel.item;
 
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,16 @@ public class CharredBoneItemModelHolder extends FullbrightItemModelHolder {
 	@Override
 	protected @Nullable DeferredHolder<Item, ? extends Item> itemForName() {
 		return items.materialItems().CHARRED_BONE;
+	}
+
+	@Override
+	protected boolean hasOverlay() {
+		return true;
+	}
+
+	@Override
+	protected String fullbrightLayer() {
+		return TextureSlot.LAYER1.getId();
 	}
 
 	@Override

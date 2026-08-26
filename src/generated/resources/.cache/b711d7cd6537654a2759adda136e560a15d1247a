@@ -1,4 +1,4 @@
-// 26.1.2	2026-08-25T19:21:05.641806	Model Definitions - voidscape
+// 26.1.2	2026-08-25T20:33:40.3715768	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -257,7 +257,7 @@ faf1bd3aae4059aa1ada0111e00a7db301b5ed16 assets/voidscape/models/item/astral_xbo
 6cd2ba4187107865d440ae96424c242b4240105d assets/voidscape/models/item/astral_xbow_pulling_0.json
 b7916f23dab25c59c2c252ccec6b363735d670ce assets/voidscape/models/item/astral_xbow_pulling_1.json
 90ed38e0b6b4019cf0a9d936319d93d15bffa56f assets/voidscape/models/item/astral_xbow_pulling_2.json
-fdf02cc7337751f24283f433c9e98f1462634bf4 assets/voidscape/models/item/charred_bone.json
+e21b92d3e62f1e714955cf4d93f6d42ee42490d6 assets/voidscape/models/item/charred_bone.json
 a55adac4dcb1e7b83407ce022196b754de7a06c1 assets/voidscape/models/item/charred_quiver.json
 cdce77fcd24086bab5f8da5958e4547c553c1a4a assets/voidscape/models/item/charred_warhammer_head.json
 c5f4b3d2b0dc7450e90e7084fad91cb4c5e3df99 assets/voidscape/models/item/charred_warhammer_in_hand.json
@@ -294,7 +294,7 @@ eaf0f4c9b0c04ded0fb2ce8fb453806dc088915b assets/voidscape/models/item/ethereal_e
 a73d7a91351176f5f5a72ad917c081c34c237812 assets/voidscape/models/item/ethereal_fruit_nether.json
 7a5c800cd7f1358da3cc5ef142b1d177b6edea07 assets/voidscape/models/item/ethereal_fruit_null.json
 2a3cd30499df6839f08f15bc9f67019ab1b75b2c assets/voidscape/models/item/ethereal_fruit_overworld.json
-c01ba601955f09dbbf32d6926af2b33cbd8b8d0c assets/voidscape/models/item/ethereal_fruit_salad.json
+b6651e7702505fab85099c2011fffe65acb96679 assets/voidscape/models/item/ethereal_fruit_salad.json
 230aa29ac1a8098a22e32d3f30af6d47a5b4dd20 assets/voidscape/models/item/ethereal_fruit_void.json
 fb4771457f9a6a83f4670268b03bbf3289341f18 assets/voidscape/models/item/ethereal_spider_eggs.json
 b7c57a97bc28d7846b32d88fca109abda1fbc7e6 assets/voidscape/models/item/ethereal_spider_fang.json
@@ -344,7 +344,7 @@ d5a58dcebbe32f09329202aeb1ef4ae93881a1d8 assets/voidscape/models/item/titanite_b
 61e12895b4b031fb66e9e0a9c8e9123ff7e24f59 assets/voidscape/models/item/titanite_bow_pulling_2.json
 4dc0ed576dcb488a2061f6e7df40e04c2757b84f assets/voidscape/models/item/titanite_chest.json
 fa635bf63b3d9bd16c9752d8c6ceeb6dd333af3b assets/voidscape/models/item/titanite_chest_broken.json
-ef777c383694d039c965bf1098826aaaf59df50a assets/voidscape/models/item/titanite_chunk.json
+f95a995f11d46c75d900d4bf7aee613c06fda508 assets/voidscape/models/item/titanite_chunk.json
 c8ca06c59c9b68b737f818ab3b20206f24684bf7 assets/voidscape/models/item/titanite_helmet.json
 9e9e1d5352054b8fe5a078a2ba3e875825430f7d assets/voidscape/models/item/titanite_helmet_broken.json
 8bbfb68cfcdeb31f9c56d1238c116730f2f5221f assets/voidscape/models/item/titanite_hoe.json

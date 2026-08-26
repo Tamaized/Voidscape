@@ -28,6 +28,14 @@ public abstract class FullbrightItemModelHolder extends ItemModelHolder {
 		return name();
 	}
 
+	protected boolean hasOverlay() {
+		return false;
+	}
+
+	protected String fullbrightLayer() {
+		return TextureSlot.LAYER0.getId();
+	}
+
 	protected final Identifier modLoc(String path) {
 		return Identifier.fromNamespaceAndPath(Voidscape.MODID, path);
 	}
@@ -45,15 +53,18 @@ public abstract class FullbrightItemModelHolder extends ItemModelHolder {
 	}
 
 	protected final Identifier makeModel(ItemModelGenerators provider, Identifier parent, String path, String texture, UnaryOperator<ExtendedModelTemplateBuilder> config) {
+		ExtendedModelTemplateBuilder builder = ExtendedModelTemplateBuilder.builder()
+			.parent(parent)
+			.requiredTextureSlot(TextureSlot.LAYER0);
+		TextureMapping mapping = new TextureMapping().put(TextureSlot.LAYER0, new Material(modLoc(texture)));
+		if (hasOverlay()) {
+			builder.requiredTextureSlot(TextureSlot.LAYER1);
+			mapping.put(TextureSlot.LAYER1, new Material(modLoc(texture + "_overlay")));
+		}
 		return config
-			.apply(
-				ExtendedModelTemplateBuilder.builder()
-					.parent(parent)
-					.requiredTextureSlot(TextureSlot.LAYER0)
-					.itemLayerFaceData("layer0", fullbright)
-			)
+			.apply(builder.itemLayerFaceData(fullbrightLayer(), fullbright))
 			.build()
-			.create(modLoc(path), new TextureMapping().put(TextureSlot.LAYER0, new Material(modLoc(texture))), provider.modelOutput);
+			.create(modLoc(path), mapping, provider.modelOutput);
 	}
 
 	@Override

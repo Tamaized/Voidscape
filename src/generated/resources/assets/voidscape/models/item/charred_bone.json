@@ -1,11 +1,12 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": {
+    "layer0": "voidscape:item/charred_bone",
+    "layer1": {
       "neoforge_data": {
         "light_emission": 15
       },
-      "sprite": "voidscape:item/charred_bone"
+      "sprite": "voidscape:item/charred_bone_overlay"
     }
   }
 }

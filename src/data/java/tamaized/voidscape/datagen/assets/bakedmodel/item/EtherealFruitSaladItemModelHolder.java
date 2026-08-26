@@ -21,6 +21,11 @@ public class EtherealFruitSaladItemModelHolder extends FullbrightItemModelHolder
 	}
 
 	@Override
+	protected boolean hasOverlay() {
+		return true;
+	}
+
+	@Override
 	public Optional<String> lang() {
 		return Optional.of("Ethereal Fruit Salad");
 	}

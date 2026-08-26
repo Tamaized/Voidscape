@@ -6,6 +6,7 @@
         "light_emission": 15
       },
       "sprite": "voidscape:item/titanite_chunk"
-    }
+    },
+    "layer1": "voidscape:item/titanite_chunk_overlay"
   }
 }

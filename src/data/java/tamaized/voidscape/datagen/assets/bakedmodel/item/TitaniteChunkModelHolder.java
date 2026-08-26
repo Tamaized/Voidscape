@@ -21,6 +21,11 @@ public class TitaniteChunkModelHolder extends FullbrightItemModelHolder {
 	}
 
 	@Override
+	protected boolean hasOverlay() {
+		return true;
+	}
+
+	@Override
 	public Optional<String> lang() {
 		return Optional.of("Titanite Chunk");
 	}

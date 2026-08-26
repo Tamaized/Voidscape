@@ -6,6 +6,7 @@
         "light_emission": 15
       },
       "sprite": "voidscape:item/ethereal_fruit_salad"
-    }
+    },
+    "layer1": "voidscape:item/ethereal_fruit_salad_overlay"
   }
 }
