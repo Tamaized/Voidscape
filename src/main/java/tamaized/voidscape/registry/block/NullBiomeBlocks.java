@@ -34,7 +34,7 @@ public class NullBiomeBlocks {
 	public final Supplier<Item> NULL_BLACK_ITEM = RegUtil.register(Registries.ITEM, NULL_BLACK.getId().getPath(),
 		(id) -> new BlockItem(
 			NULL_BLACK.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 
@@ -51,7 +51,7 @@ public class NullBiomeBlocks {
 	public final Supplier<Item> NULL_WHITE_ITEM = RegUtil.register(Registries.ITEM, NULL_WHITE.getId().getPath(),
 		(id) -> new BlockItem(
 			NULL_WHITE.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 

@@ -16,6 +16,10 @@ public class ModItemProperties {
 
 	public final Function<Identifier, Item.Properties> LAVA_IMMUNE = (id) -> DEFAULT.apply(id).fireResistant();
 
+	public final Function<Identifier, Item.Properties> BLOCK_DEFAULT = (id) -> DEFAULT.apply(id).useBlockDescriptionPrefix();
+
+	public final Function<Identifier, Item.Properties> BLOCK_LAVA_IMMUNE = (id) -> LAVA_IMMUNE.apply(id).useBlockDescriptionPrefix();
+
 	public final Function<Identifier, Item.Properties> ETHEREAL_FRUIT = (id) -> LAVA_IMMUNE.apply(id).food(new FoodProperties.Builder()
 		.nutrition(4)
 		.saturationModifier(0.3F)

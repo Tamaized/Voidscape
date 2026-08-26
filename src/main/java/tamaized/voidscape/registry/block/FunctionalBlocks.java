@@ -58,7 +58,7 @@ public class FunctionalBlocks {
 	public final Supplier<Item> VERY_DRIPPY_DRIPSTONE_ITEM = RegUtil.register(Registries.ITEM, VERY_DRIPPY_DRIPSTONE.getId().getPath(),
 		(id) -> new BlockItem(
 			VERY_DRIPPY_DRIPSTONE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 

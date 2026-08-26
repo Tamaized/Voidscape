@@ -39,7 +39,7 @@ public class OreBlocks {
 	public final Supplier<Item> VOIDIC_CRYSTAL_ORE_ITEM = RegUtil.register(Registries.ITEM, VOIDIC_CRYSTAL_ORE.getId().getPath(),
 		(id) -> new BlockItem(
 			VOIDIC_CRYSTAL_ORE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -55,7 +55,7 @@ public class OreBlocks {
 	public final Supplier<Item> TITANITE_ORE_ITEM = RegUtil.register(Registries.ITEM, TITANITE_ORE.getId().getPath(),
 		(id) -> new BlockItem(
 			TITANITE_ORE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -71,7 +71,7 @@ public class OreBlocks {
 	public final Supplier<Item> FLESH_ORE_ITEM = RegUtil.register(Registries.ITEM, FLESH_ORE.getId().getPath(),
 		(id) -> new BlockItem(
 			FLESH_ORE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -87,7 +87,7 @@ public class OreBlocks {
 	public final Supplier<Item> STRANGE_ORE_ITEM = RegUtil.register(Registries.ITEM, STRANGE_ORE.getId().getPath(),
 		(id) -> new BlockItem(
 			STRANGE_ORE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -103,7 +103,7 @@ public class OreBlocks {
 	public final Supplier<Item> CRACKED_ASTRALROCK_ITEM = RegUtil.register(Registries.ITEM, CRACKED_ASTRALROCK.getId().getPath(),
 		(id) -> new BlockItem(
 			CRACKED_ASTRALROCK.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 

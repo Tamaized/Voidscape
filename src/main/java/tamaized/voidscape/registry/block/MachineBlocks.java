@@ -37,7 +37,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_CORE_ITEM = RegUtil.register(Registries.ITEM, MACHINE_CORE.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_CORE.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -54,7 +54,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_LIQUIFIER_ITEM = RegUtil.register(Registries.ITEM, MACHINE_LIQUIFIER.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_LIQUIFIER.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -72,7 +72,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_DEFUSER_ITEM = RegUtil.register(Registries.ITEM, MACHINE_DEFUSER.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_DEFUSER.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -90,7 +90,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_GERMINATOR_ITEM = RegUtil.register(Registries.ITEM, MACHINE_GERMINATOR.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_GERMINATOR.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -108,7 +108,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_WELL_ITEM = RegUtil.register(Registries.ITEM, MACHINE_WELL.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_WELL.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -126,7 +126,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_COOP_ITEM = RegUtil.register(Registries.ITEM, MACHINE_COOP.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_COOP.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -144,7 +144,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_HATCHERY_ITEM = RegUtil.register(Registries.ITEM, MACHINE_HATCHERY.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_HATCHERY.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -162,7 +162,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_INFUSER_ITEM = RegUtil.register(Registries.ITEM, MACHINE_INFUSER.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_INFUSER.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -180,7 +180,7 @@ public class MachineBlocks {
 	public final Supplier<Item> MACHINE_COLLECTOR_ITEM = RegUtil.register(Registries.ITEM, MACHINE_COLLECTOR.getId().getPath(),
 		(id) -> new BlockItem(
 			MACHINE_COLLECTOR.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 

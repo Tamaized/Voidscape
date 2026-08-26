@@ -33,7 +33,7 @@ public class MaterialBlocks {
 	public final Supplier<Item> VOIDIC_CRYSTAL_BLOCK_ITEM = RegUtil.register(Registries.ITEM, VOIDIC_CRYSTAL_BLOCK.getId().getPath(),
 		(id) -> new BlockItem(
 			VOIDIC_CRYSTAL_BLOCK.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -49,7 +49,7 @@ public class MaterialBlocks {
 	public final Supplier<Item> CHARRED_BRICK_ITEM = RegUtil.register(Registries.ITEM, CHARRED_BRICK.getId().getPath(),
 		(id) -> new BlockItem(
 			CHARRED_BRICK.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 
@@ -64,7 +64,7 @@ public class MaterialBlocks {
 	public final Supplier<Item> FLESH_BLOCK_ITEM = RegUtil.register(Registries.ITEM, FLESH_BLOCK.getId().getPath(),
 		(id) -> new BlockItem(
 			FLESH_BLOCK.get(),
-			itemProperties.LAVA_IMMUNE.apply(id)
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
 	);
 

@@ -47,7 +47,7 @@ public class SpireBlocks {
 	public final Supplier<Item> THUNDERROCK_ITEM = RegUtil.register(Registries.ITEM, THUNDERROCK.getId().getPath(),
 		(id) -> new BlockItem(
 			THUNDERROCK.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 
@@ -68,7 +68,7 @@ public class SpireBlocks {
 	public final Supplier<Item> ANTIROCK_ITEM = RegUtil.register(Registries.ITEM, ANTIROCK.getId().getPath(),
 		(id) -> new BlockItem(
 			ANTIROCK.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 
@@ -90,7 +90,7 @@ public class SpireBlocks {
 	public final Supplier<Item> ASTRALROCK_ITEM = RegUtil.register(Registries.ITEM, ASTRALROCK.getId().getPath(),
 		(id) -> new BlockItem(
 			ASTRALROCK.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.BLOCK_DEFAULT.apply(id)
 		)
 	);
 

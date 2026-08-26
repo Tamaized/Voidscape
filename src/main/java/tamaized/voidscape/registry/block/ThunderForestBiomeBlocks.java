@@ -53,7 +53,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final Supplier<Item> THUNDER_NYLIUM_ITEM = RegUtil.register(Registries.ITEM, THUNDER_NYLIUM.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_NYLIUM.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_NYLIUM.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final TagKey<Block> TAG_THUNDER_ROOTS_SUPPORTS = TagKey.create(
@@ -73,7 +73,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, BlockItem> THUNDER_ROOTS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_ROOTS.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_ROOTS.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_ROOTS.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 	public final DeferredHolder<Block, Block> THUNDER_ROOTS_POT = RegUtil.register(Registries.BLOCK, "thunder_roots_pot",
 		(id) -> new FlowerPotBlock(
@@ -107,7 +107,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, BlockItem> THUNDER_FUNGUS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_FUNGUS.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_FUNGUS.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_FUNGUS.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_FUNGUS_POT = RegUtil.register(Registries.BLOCK, "thunder_fungus_pot",
@@ -131,7 +131,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, BlockItem> THUNDER_WART_ITEM = RegUtil.register(Registries.ITEM, THUNDER_WART.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_WART.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_WART.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, GrowingPlantHeadBlock> THUNDER_VINES = RegUtil.register(Registries.BLOCK, "thunder_vines",
@@ -167,7 +167,7 @@ public class ThunderForestBiomeBlocks {
 		}
 	);
 	public final DeferredHolder<Item, BlockItem> THUNDER_VINES_ITEM = RegUtil.register(Registries.ITEM, THUNDER_VINES.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_VINES.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_VINES.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_STEM = RegUtil.register(Registries.BLOCK, "thunder_stem",
@@ -188,7 +188,7 @@ public class ThunderForestBiomeBlocks {
 		}
 	);
 	public final DeferredHolder<Item, Item> THUNDER_STEM_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_STEM.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_STEM.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_STEM_STRIPPED = RegUtil.register(Registries.BLOCK, "thunder_stem_stripped",
@@ -201,7 +201,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, Item> THUNDER_STEM_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STEM_STRIPPED.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_STEM_STRIPPED.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_STEM_STRIPPED.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_HYPHAE = RegUtil.register(Registries.BLOCK, "thunder_hyphae",
@@ -222,7 +222,7 @@ public class ThunderForestBiomeBlocks {
 		}
 	);
 	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_HYPHAE.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_HYPHAE.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_HYPHAE_STRIPPED = RegUtil.register(Registries.BLOCK, "thunder_hyphae_stripped",
@@ -235,7 +235,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, Item> THUNDER_HYPHAE_STRIPPED_ITEM = RegUtil.register(Registries.ITEM, THUNDER_HYPHAE_STRIPPED.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_HYPHAE_STRIPPED.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final BlockSetType THUNDER_SET = new BlockSetType(
@@ -266,7 +266,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, Item> THUNDER_PLANKS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_PLANKS.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_PLANKS.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_PLANKS.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, StairBlock> THUNDER_STAIRS = RegUtil.register(Registries.BLOCK, "thunder_stairs",
@@ -279,7 +279,7 @@ public class ThunderForestBiomeBlocks {
 		)
 	);
 	public final DeferredHolder<Item, Item> THUNDER_STAIRS_ITEM = RegUtil.register(Registries.ITEM, THUNDER_STAIRS.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_STAIRS.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_STAIRS.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	public final DeferredHolder<Block, Block> THUNDER_SLAB = RegUtil.register(Registries.BLOCK, "thunder_slab",
@@ -291,7 +291,7 @@ public class ThunderForestBiomeBlocks {
 			.strength(2.0F, 3.0F)
 		));
 	public final DeferredHolder<Item, Item> THUNDER_SLAB_ITEM = RegUtil.register(Registries.ITEM, THUNDER_SLAB.getId().getPath(),
-		(id) -> new BlockItem(THUNDER_SLAB.get(), itemProperties.LAVA_IMMUNE.apply(id))
+		(id) -> new BlockItem(THUNDER_SLAB.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 	@PostConstruct

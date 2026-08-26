@@ -38,7 +38,7 @@ public class EtherealFruitBlocks {
 	public final Supplier<Item> VOID_ITEM = RegUtil.register(Registries.ITEM, VOID.getId().getPath() + "_block",
 		(id) -> new BlockItem(
 			VOID.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.DEFAULT.apply(id).overrideDescription(VOID.get().getDescriptionId())
 		)
 	);
 
@@ -56,7 +56,7 @@ public class EtherealFruitBlocks {
 	public final Supplier<Item> NULL_ITEM = RegUtil.register(Registries.ITEM, NULL.getId().getPath() + "_block",
 		(id) -> new BlockItem(
 			NULL.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.DEFAULT.apply(id).overrideDescription(NULL.get().getDescriptionId())
 		)
 	);
 
@@ -74,7 +74,7 @@ public class EtherealFruitBlocks {
 	public final Supplier<Item> OVERWORLD_ITEM = RegUtil.register(Registries.ITEM, OVERWORLD.getId().getPath() + "_block",
 		(id) -> new BlockItem(
 			OVERWORLD.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.DEFAULT.apply(id).overrideDescription(OVERWORLD.get().getDescriptionId())
 		)
 	);
 
@@ -92,7 +92,7 @@ public class EtherealFruitBlocks {
 	public final Supplier<Item> NETHER_ITEM = RegUtil.register(Registries.ITEM, NETHER.getId().getPath() + "_block",
 		(id) -> new BlockItem(
 			NETHER.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.DEFAULT.apply(id).overrideDescription(NETHER.get().getDescriptionId())
 		)
 	);
 
@@ -110,7 +110,7 @@ public class EtherealFruitBlocks {
 	public final Supplier<Item> END_ITEM = RegUtil.register(Registries.ITEM, END.getId().getPath() + "_block",
 		(id) -> new BlockItem(
 			END.get(),
-			itemProperties.DEFAULT.apply(id)
+			itemProperties.DEFAULT.apply(id).overrideDescription(END.get().getDescriptionId())
 		)
 	);
 
