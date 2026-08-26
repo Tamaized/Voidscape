@@ -29,6 +29,7 @@ import tamaized.beanification.PostConstruct;
 
 import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -87,6 +88,9 @@ public class ShaderRenderer {
 			GpuTextureView colorTextureView = Minecraft.getInstance().getMainRenderTarget().getColorTextureView();
 			if (colorTextureView == null)
 				return;
+			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+			Map<String, AbstractTexture> resolvedTextures = new HashMap<>(textures.size());
+			textures.forEach((name, location) -> resolvedTextures.put(name, textureManager.getTexture(location)));
 			try (GpuBuffer ownedIndexBuffer = indices == null ? null : device.createBuffer(() -> "Voidscape shader indices", GpuBuffer.USAGE_INDEX, indices);
 				 GpuBuffer vertexBuffer = device.createBuffer(() -> "Voidscape shader vertices", GpuBuffer.USAGE_VERTEX, mesh.vertexBuffer());
 				 RenderPass pass = device.createCommandEncoder().createRenderPass(
@@ -97,11 +101,7 @@ public class ShaderRenderer {
 					 OptionalDouble.empty())
 			) {
 				pass.setPipeline(pipeline);
-				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-				textures.forEach((name, location) -> {
-					AbstractTexture texture = textureManager.getTexture(location);
-					pass.bindTexture(name, texture.getTextureView(), texture.getSampler());
-				});
+				resolvedTextures.forEach((name, texture) -> pass.bindTexture(name, texture.getTextureView(), texture.getSampler()));
 				RenderSystem.bindDefaultUniforms(pass);
 				pass.setUniform("DynamicTransforms", transforms);
 				if (uniformName != null && uniform != null)
