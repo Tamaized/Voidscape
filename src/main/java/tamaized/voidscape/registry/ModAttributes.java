@@ -53,7 +53,7 @@ public class ModAttributes {
 		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
 
 	@PostConstruct
-	private void setup(IEventBus bus, IEventBus gameBus) {
+	private void setup(IEventBus bus) {
 		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
 			event.add(e, VOIDIC_VISIBILITY);
 			event.add(e, VOIDIC_INFUSION);
@@ -63,23 +63,6 @@ public class ModAttributes {
 			event.add(e, VOIDIC_DMG);
 			event.add(e, VOIDIC_ARROW_DMG);
 		}));
-
-		// TODO: remove next major mc update
-		gameBus.addListener(PlayerEvent.PlayerLoggedInEvent.class, event -> {
-			Player player = event.getEntity();
-			final int VERSION = 1;
-			if (player.getData(dataAttachments.DATA_CORRECTION) < VERSION) {
-				if (player.getAttributeBaseValue(VOIDIC_VISIBILITY) == 1D)
-					Objects.requireNonNull(player.getAttribute(VOIDIC_VISIBILITY)).setBaseValue(0D);
-				if (player.getAttributeBaseValue(VOIDIC_INFUSION) == 1D)
-					Objects.requireNonNull(player.getAttribute(VOIDIC_INFUSION)).setBaseValue(0D);
-				if (player.getAttributeBaseValue(VOIDIC_INFUSION_RES) == 1D)
-					Objects.requireNonNull(player.getAttribute(VOIDIC_INFUSION_RES)).setBaseValue(0D);
-				if (player.getAttributeBaseValue(VOIDIC_PARANOIA_RES) == 1D)
-					Objects.requireNonNull(player.getAttribute(VOIDIC_PARANOIA_RES)).setBaseValue(0D);
-				player.setData(dataAttachments.DATA_CORRECTION, VERSION);
-			}
-		});
 	}
 
 	public String getDraconicHealthId(EquipmentSlot slot) {
