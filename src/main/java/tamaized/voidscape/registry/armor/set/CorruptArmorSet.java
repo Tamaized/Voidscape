@@ -34,7 +34,7 @@ public class CorruptArmorSet {
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 2D, EquipmentSlotGroup.HEAD),
 				() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.10D, EquipmentSlotGroup.HEAD),
 				() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.HEAD),
-				() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_VALUE, 0.15D, EquipmentSlotGroup.HEAD)
+				() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_VALUE, 0.04D, EquipmentSlotGroup.HEAD)
 			),
 			ExtraTooltipContext.EMPTY
 		);

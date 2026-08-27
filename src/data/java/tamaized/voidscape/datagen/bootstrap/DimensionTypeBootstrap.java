@@ -54,6 +54,8 @@ public class DimensionTypeBootstrap implements IBootstrap {
 					EnvironmentAttributeMap.builder()
 						.set(EnvironmentAttributes.CAN_START_RAID, false)
 						.set(EnvironmentAttributes.BED_RULE, BedRule.EXPLODES)
+						.set(EnvironmentAttributes.BLOCK_LIGHT_TINT, 0x40305A)
+						.set(EnvironmentAttributes.NIGHT_VISION_COLOR, 0) // Prevent Night Vision
 						.set(NeoForgeEnvironmentAttributes.CUSTOM_SKYBOX, dimensions.VOID.identifier())
 						.build(),
 					timelines.getOrThrow(TimelineTags.UNIVERSAL),

@@ -8,8 +8,6 @@ import tamaized.voidscape.coremod.transformers.entity.render.transparency.Modify
 import tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer;
 import tamaized.voidscape.coremod.transformers.item.ProjectileWeaponItemUseAmmoTransformer;
 import tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTransformer;
-import tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer;
-import tamaized.voidscape.coremod.transformers.visibility.LightTextureNightVisionAndGammaTransformer;
 
 public class VoidscapeCoreMod implements ClassProcessorProvider {
 	@Override
@@ -24,10 +22,6 @@ public class VoidscapeCoreMod implements ClassProcessorProvider {
 
 		// Dimension Snow/Freeze Control
 		collector.add(new BiomeSnowAndFreezeTransformer());
-
-		// Visibility
-		collector.add(new LightTextureBrightnessTransformer());
-		collector.add(new LightTextureNightVisionAndGammaTransformer());
 
 		// ItemInHandRenderer
 		collector.add(new ItemInHandRendererIsBowTransformer());

@@ -7,6 +7,8 @@
       "explodes": true
     },
     "minecraft:gameplay/can_start_raid": false,
+    "minecraft:visual/block_light_tint": "#40305a",
+    "minecraft:visual/night_vision_color": "#000000",
     "neoforge:custom_skybox": "voidscape:void"
   },
   "coordinate_scale": 1.0,

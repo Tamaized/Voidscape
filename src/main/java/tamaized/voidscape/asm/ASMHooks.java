@@ -1,7 +1,6 @@
 package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -19,10 +18,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.regutil.ToolAndArmorHelper;
 import tamaized.voidscape.Voidscape;
@@ -31,7 +28,6 @@ import tamaized.voidscape.event.QuiverHandler;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModItemComponents;
-import tamaized.voidscape.util.LevelUtil;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
@@ -44,12 +40,6 @@ public class ASMHooks {
 
 	@Autowired
 	private static ModDataAttachments dataAttachments;
-
-	@Autowired
-	private static LevelUtil levelUtil;
-
-	@Autowired(dist = Dist.CLIENT)
-	private static VoidVisibilityCache voidVisibilityCache;
 
 	@Autowired
 	private static QuiverHandler quiverHandler;
@@ -119,30 +109,6 @@ public class ASMHooks {
 		return registryAccess == null || !registryAccess.lookupOrThrow(Registries.BIOME).getResourceKey(biome)
 			.map(key -> key.identifier().getNamespace().equals(Voidscape.MODID))
 			.orElse(false);
-	}
-
-	/**
-	 * {@link tamaized.voidscape.coremod.transformers.visibility.LightTextureBrightnessTransformer}<p>
-	 *
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.LightTexture#getBrightness(net.minecraft.world.level.dimension.DimensionType, int)}<br>
-	 */
-	public static float lightTextureBrightness(float o, int light) {
-		if (levelUtil.isInVoidDimension(Minecraft.getInstance().level))
-			return voidVisibilityCache.value(o, light);
-		return o;
-	}
-
-	/**
-	 * {@link tamaized.voidscape.coremod.transformers.visibility.LightTextureNightVisionAndGammaTransformer}<p>
-	 *
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.LightTexture#updateLightTexture(float)}<br>
-	 */
-	public static float nightVisionAndGamma(float o, Level level) {
-		if (o > 0 && level.isClientSide() && levelUtil.isInVoidDimension(level))
-			return 0;
-		return o;
 	}
 
 	/**

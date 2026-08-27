@@ -1,7 +1,7 @@
-// 26.1.2	2026-08-25T19:21:05.6386642	Registries
+// 26.1.2	2026-08-26T20:14:47.0256086	Registries
 80751452a92a6050e2d65828904bdfb838e67434 data/voidscape/damage_type/voidic.json
 3f50af22cd67ab1c5b3bb388c509f77040a453c8 data/voidscape/dimension/void.json
-b1fc37b606f437dbb063b373127c1a1d24ab3474 data/voidscape/dimension_type/void.json
+edecbaa496dae6f99050bce8fc16c7e6313c5dd1 data/voidscape/dimension_type/void.json
 acf100274658b6e90ed55aa6e4133ba1acd87777 data/voidscape/worldgen/biome/antispires.json
 9b6078aa5d7c01d0716de63af423a4e09e1fd622 data/voidscape/worldgen/biome/end.json
 71cfd1b66eb8469f2fabaec520312a3f45bae881 data/voidscape/worldgen/biome/nether.json
