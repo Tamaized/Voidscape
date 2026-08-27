@@ -2,17 +2,12 @@ package tamaized.voidscape.registry;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
@@ -20,16 +15,12 @@ import tamaized.regutil.RegUtil;
 import tamaized.voidscape.util.NamespaceUtils;
 
 import java.util.Locale;
-import java.util.Objects;
 
 @Component
 public class ModAttributes {
 
 	@Autowired
 	private NamespaceUtils namespaceUtils;
-
-	@Autowired
-	private ModDataAttachments dataAttachments;
 
 	public final Holder<Attribute> VOIDIC_VISIBILITY = RegUtil.register(Registries.ATTRIBUTE, "voidic_visibility",
 		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_visibility"), 0F, 0F, 1F).setSyncable(true));
