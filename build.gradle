@@ -225,7 +225,7 @@ repositories {
 dependencies {
 	jarJar implementation(project(":asm"))
 
-//	runtimeOnly "mezz.jei:jei-${project.base_minecraft_version}-neoforge:${project.jei_version}"
+	runtimeOnly "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 //    runtimeOnly fg.deobf("maven.modrinth:enderio:6.0.18-alpha")
 
 	/*def aether = "com.aetherteam.aether:aether:1.21.1-1.5.8-neoforge"
