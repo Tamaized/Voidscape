@@ -27,6 +27,10 @@ public class ASMUtil {
 		return list;
 	}
 
+	public static MethodInsnNode invokeClientAsmHook(String name, String descriptor) {
+		return new MethodInsnNode(Opcodes.INVOKESTATIC, "tamaized/voidscape/asm/ClientASMHooks", name, descriptor);
+	}
+
 	public static MethodInsnNode invokeAsmHook(String name, String descriptor) {
 		return new MethodInsnNode(Opcodes.INVOKESTATIC, "tamaized/voidscape/asm/ASMHooks", name, descriptor);
 	}

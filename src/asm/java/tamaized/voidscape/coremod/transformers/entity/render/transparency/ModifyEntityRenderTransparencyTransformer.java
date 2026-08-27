@@ -11,7 +11,7 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#modifyEntityTransparency}
+ * {@link tamaized.voidscape.asm.ClientASMHooks#modifyEntityTransparency}
  */
 public class ModifyEntityRenderTransparencyTransformer extends SimpleMethodProcessor {
 
@@ -22,11 +22,11 @@ public class ModifyEntityRenderTransparencyTransformer extends SimpleMethodProce
 
 	@Override
 	public void transform(MethodNode node, SimpleTransformationContext context) {
-		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderToBuffer", "(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V")
+		ASMUtil.findVarInstructions(node, Opcodes.ISTORE, 10)
 			.findFirst()
 			.ifPresent(instruction -> node.instructions.insertBefore(instruction, ASMUtil.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 1),
-				ASMUtil.invokeAsmHook("modifyEntityTransparency", "(ILnet/minecraft/world/entity/LivingEntity;)I")
+				ASMUtil.invokeClientAsmHook("modifyEntityTransparency", "(ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)I")
 			)));
 	}
 
@@ -34,8 +34,8 @@ public class ModifyEntityRenderTransparencyTransformer extends SimpleMethodProce
 	public Set<Target> targets() {
 		return Set.of(new Target(
 			"net.minecraft.client.renderer.entity.LivingEntityRenderer",
-			"render",
-			"(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
+			"submit",
+			"(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"
 		));
 	}
 

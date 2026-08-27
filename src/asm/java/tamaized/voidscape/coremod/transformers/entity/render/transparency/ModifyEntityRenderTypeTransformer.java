@@ -11,7 +11,7 @@ import tamaized.voidscape.coremod.ASMUtil;
 import java.util.Set;
 
 /**
- * {@link tamaized.voidscape.asm.ASMHooks#modifyEntityRenderType}
+ * {@link tamaized.voidscape.asm.ClientASMHooks#modifyEntityRenderType}
  */
 public class ModifyEntityRenderTypeTransformer extends SimpleMethodProcessor {
 
@@ -22,12 +22,11 @@ public class ModifyEntityRenderTypeTransformer extends SimpleMethodProcessor {
 
 	@Override
 	public void transform(MethodNode node, SimpleTransformationContext context) {
-		ASMUtil.findMethodInstructions(node, Opcodes.INVOKEVIRTUAL, "net/minecraft/client/model/EntityModel", "renderType", "(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/RenderType;")
+		ASMUtil.findVarInstructions(node, Opcodes.ILOAD, 3)
 			.findFirst()
 			.ifPresent(instruction -> node.instructions.insert(instruction, ASMUtil.listOf(
-				new VarInsnNode(Opcodes.ALOAD, 0),
 				new VarInsnNode(Opcodes.ALOAD, 1),
-				ASMUtil.invokeAsmHook("modifyEntityRenderType", "(Lnet/minecraft/client/renderer/RenderType;Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/client/renderer/RenderType;")
+				ASMUtil.invokeClientAsmHook("modifyEntityRenderType", "(ZLnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;)Z")
 			)));
 	}
 
@@ -36,7 +35,7 @@ public class ModifyEntityRenderTypeTransformer extends SimpleMethodProcessor {
 		return Set.of(new Target(
 			"net.minecraft.client.renderer.entity.LivingEntityRenderer",
 			"getRenderType",
-			"(Lnet/minecraft/world/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;"
+			"(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;ZZZ)Lnet/minecraft/client/renderer/rendertype/RenderType;"
 		));
 	}
 

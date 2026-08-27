@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Avatar;
 import net.neoforged.api.distmarker.Dist;
@@ -22,10 +24,12 @@ import org.jspecify.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.armor.ArmorOverlayLayer;
 import tamaized.voidscape.client.entity.render.layer.ShroudWingLayer;
 import tamaized.voidscape.client.entity.render.state.ChestEquipmentRenderStateExtension;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
+import tamaized.voidscape.registry.ModDataAttachments;
 
 @Component(dist = Dist.CLIENT)
 public class EntityLayerRendererRegistration {
@@ -35,6 +39,11 @@ public class EntityLayerRendererRegistration {
 
 	@Autowired(dist = Dist.CLIENT)
 	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
+
+	@Autowired
+	private ModDataAttachments dataAttachments;
+
+	public ContextKey<Float> CONTEXT_KEY_INFUSION = new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion"));
 
 	@PostConstruct
 	private void setup(IEventBus bus) {
@@ -75,9 +84,10 @@ public class EntityLayerRendererRegistration {
 				chestEquipmentRenderStateExtension.applyCape(renderState);
 			}
 		});
-		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, ?>>() {}, (_, state) -> {
+		event.registerEntityModifier(new TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, ?>>() {}, (entity, state) -> {
 			if (state instanceof HumanoidRenderState humanoid)
 				chestEquipmentRenderStateExtension.applyElytra(humanoid);
+			state.setRenderData(CONTEXT_KEY_INFUSION, entity.getData(dataAttachments.INSANITY).getInfusion());
 		});
 	}
 
