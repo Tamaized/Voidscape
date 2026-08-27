@@ -18,6 +18,7 @@ import tamaized.voidscape.item.SpellTomeItem;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.ModItemProperties;
+import tamaized.voidscape.registry.ModItemTags;
 
 @Component
 public class SpellTomeSet {
@@ -31,18 +32,17 @@ public class SpellTomeSet {
 	@Autowired
 	private ModDataAttachments dataAttachments;
 
-	// FIXME: repair material is most likely a tag now
+	@Autowired
+	private ModItemTags itemTags;
 
 	public final DeferredHolder<Item, SpellTomeItem> ICHOR_TOME = RegUtil.register(Registries.ITEM, "ichor_tome", (id) -> new SpellTomeItem(
-		itemProperties.LAVA_IMMUNE.apply(id).durability(100),
-//		materialItems.ICHOR_CRYSTAL,
+		itemProperties.LAVA_IMMUNE.apply(id).durability(100).repairable(itemTags.REPAIR_MATERIAL_ICHOR),
 		20 * 10,
 		context -> context.level().addFreshEntity(new IchorBoltEntity(context.parent()))
 	));
 
 	public final DeferredHolder<Item, SpellTomeItem> VOIDIC_TOME = RegUtil.register(Registries.ITEM, "voidic_tome", (id) -> new LingeringPotionAugmentableSpellTomeItem(
-		itemProperties.LAVA_IMMUNE.apply(id).durability(100),
-//		materialItems.VOIDIC_CRYSTAL,
+		itemProperties.LAVA_IMMUNE.apply(id).durability(100).repairable(itemTags.REPAIR_MATERIAL_VOIDIC_CRYSTAL),
 		20 * 45,
 		context -> {
 			if (context.stack().has(DataComponents.POTION_CONTENTS))
@@ -54,8 +54,7 @@ public class SpellTomeSet {
 	));
 
 	public final DeferredHolder<Item, SpellTomeItem> CORRUPT_TOME = RegUtil.register(Registries.ITEM, "corrupt_tome", (id) -> new SpellTomeItem(
-		itemProperties.LAVA_IMMUNE.apply(id).durability(100),
-//		materialItems.TENDRIL,
+		itemProperties.LAVA_IMMUNE.apply(id).durability(100).repairable(itemTags.REPAIR_MATERIAL_CORRUPT),
 		20 * 5,
 		context -> {
 			context.parent().addDeltaMovement(context.parent().getLookAngle().scale(2.5D));
@@ -66,8 +65,7 @@ public class SpellTomeSet {
 	));
 
 	public final DeferredHolder<Item, SpellTomeItem> TITANITE_TOME = RegUtil.register(Registries.ITEM, "titanite_tome", (id) -> new SpellTomeItem(
-		itemProperties.LAVA_IMMUNE.apply(id).durability(100),
-//		materialItems.TITANITE_SHARD,
+		itemProperties.LAVA_IMMUNE.apply(id).durability(100).repairable(itemTags.REPAIR_MATERIAL_TITANITE),
 		20 * 45,
 		context -> context.parent().addEffect(new MobEffectInstance(modEffects.FORTIFIED, 20 * 30))
 	));

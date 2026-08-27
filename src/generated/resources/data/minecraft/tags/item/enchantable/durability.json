@@ -1,6 +1,5 @@
 {
   "values": [
-    "voidscape:voidic_crystal_shield",
     "voidscape:voidic_crystal_xbow",
     "voidscape:corrupt_xbow",
     "voidscape:titanite_xbow",
@@ -10,6 +9,7 @@
     "voidscape:corrupt_tome",
     "voidscape:titanite_tome",
     "voidscape:ichor_tome",
+    "voidscape:voidic_crystal_shield",
     "voidscape:voidic_crystal_bow",
     "voidscape:corrupt_bow",
     "voidscape:titanite_bow",

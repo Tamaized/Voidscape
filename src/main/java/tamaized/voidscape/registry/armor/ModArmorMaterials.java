@@ -1,19 +1,18 @@
 package tamaized.voidscape.registry.armor;
 
 import com.google.common.base.Suppliers;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
+import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.registry.ModItemTags;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,9 +21,11 @@ import java.util.function.Supplier;
 @Component
 public class ModArmorMaterials {
 
+	@Autowired
+	private ModItemTags itemTags;
+
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_VOIDIC_CRYSTAL = assetKey("voidic_crystal");
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL = TagKey.create(Registries.ITEM, ASSET_KEY_VOIDIC_CRYSTAL.identifier());
-	public final ArmorMaterial VOIDIC_CRYSTAL = new ArmorMaterial(
+	public final Supplier<ArmorMaterial> VOIDIC_CRYSTAL = Suppliers.memoize(() -> new ArmorMaterial(
 		39,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
 			map.put(ArmorType.BOOTS, 3);
@@ -37,12 +38,11 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
 		4F,
 		0.10F,
-		TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL,
+		itemTags.REPAIR_MATERIAL_VOIDIC_CRYSTAL,
 		ASSET_KEY_VOIDIC_CRYSTAL
-	);
+	));
 
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_CORRUPT = assetKey("corrupt");
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_CORRUPT = TagKey.create(Registries.ITEM, ASSET_KEY_CORRUPT.identifier());
 	public final Supplier<ArmorMaterial> CORRUPT = Suppliers.memoize(() -> new ArmorMaterial(
 		41,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -56,13 +56,12 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		5F,
 		0.15F,
-		TAG_REPAIR_MATERIAL_CORRUPT,
+		itemTags.REPAIR_MATERIAL_CORRUPT,
 		ASSET_KEY_CORRUPT
 	));
 
 
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_TITANITE = assetKey("titanite");
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_TITANITE = TagKey.create(Registries.ITEM, ASSET_KEY_TITANITE.identifier());
 	public final Supplier<ArmorMaterial> TITANITE = Suppliers.memoize(() -> new ArmorMaterial(
 		43,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -76,12 +75,11 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		6F,
 		0.20F,
-		TAG_REPAIR_MATERIAL_TITANITE,
+		itemTags.REPAIR_MATERIAL_TITANITE,
 		ASSET_KEY_TITANITE
 	));
 
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_ICHOR = assetKey("ichor");
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_ICHOR = TagKey.create(Registries.ITEM, ASSET_KEY_ICHOR.identifier());
 	public final Supplier<ArmorMaterial> ICHOR = Suppliers.memoize(() -> new ArmorMaterial(
 		45,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -95,13 +93,12 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_NETHERITE,
 		7F,
 		0.25F,
-		TAG_REPAIR_MATERIAL_ICHOR,
+		itemTags.REPAIR_MATERIAL_ICHOR,
 		ASSET_KEY_ICHOR
 	));
 
 
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_ASTRAL = assetKey("astral");
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_ASTRAL = TagKey.create(Registries.ITEM, ASSET_KEY_ASTRAL.identifier());
 	public final Supplier<ArmorMaterial> ASTRAL = Suppliers.memoize(() -> new ArmorMaterial(
 		47,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -115,7 +112,7 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_DIAMOND,
 		8F,
 		0.30F,
-		TAG_REPAIR_MATERIAL_ASTRAL,
+		itemTags.REPAIR_MATERIAL_ASTRAL,
 		ASSET_KEY_ASTRAL
 	));
 

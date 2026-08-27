@@ -28,7 +28,7 @@ public class VoidicCrystalArmorSet {
 	) {
 		VOIDIC_CRYSTAL_HELMET = toolAndArmorHelper.helmet(
 			"voidic_crystal",
-			() -> armorMaterials.VOIDIC_CRYSTAL,
+			armorMaterials.VOIDIC_CRYSTAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.HEAD),
@@ -39,7 +39,7 @@ public class VoidicCrystalArmorSet {
 
 		VOIDIC_CRYSTAL_CHEST = toolAndArmorHelper.chest(
 			"voidic_crystal",
-			() -> armorMaterials.VOIDIC_CRYSTAL,
+			armorMaterials.VOIDIC_CRYSTAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.CHEST),
@@ -51,7 +51,7 @@ public class VoidicCrystalArmorSet {
 
 		VOIDIC_CRYSTAL_LEGS = toolAndArmorHelper.legs(
 			"voidic_crystal",
-			() -> armorMaterials.VOIDIC_CRYSTAL,
+			armorMaterials.VOIDIC_CRYSTAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.LEGS),
@@ -62,7 +62,7 @@ public class VoidicCrystalArmorSet {
 
 		VOIDIC_CRYSTAL_BOOTS = toolAndArmorHelper.boots(
 			"voidic_crystal",
-			() -> armorMaterials.VOIDIC_CRYSTAL,
+			armorMaterials.VOIDIC_CRYSTAL,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 1D, EquipmentSlotGroup.FEET),
