@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.block.RequiresVoidToolBlock;
+import tamaized.voidscape.block.VerySlowIncorrectToolHarvestBlock;
 import tamaized.voidscape.block.TransformOnBreakBlock;
 import tamaized.voidscape.registry.ModItemProperties;
 
@@ -44,7 +44,7 @@ public class OreBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> TITANITE_ORE = RegUtil.register(Registries.BLOCK, "titanite_ore",
-		(id) -> new RequiresVoidToolBlock(Block.Properties.of()
+		(id) -> new VerySlowIncorrectToolHarvestBlock(Block.Properties.of()
 			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.NETHER_GOLD_ORE)
 			.mapColor(MapColor.COLOR_LIGHT_GREEN)
@@ -60,7 +60,7 @@ public class OreBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> FLESH_ORE = RegUtil.register(Registries.BLOCK, "flesh_ore",
-		(id) -> new RequiresVoidToolBlock(Block.Properties.of()
+		(id) -> new VerySlowIncorrectToolHarvestBlock(Block.Properties.of()
 			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.HONEY_BLOCK)
 			.mapColor(MapColor.COLOR_ORANGE)
@@ -76,7 +76,7 @@ public class OreBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> STRANGE_ORE = RegUtil.register(Registries.BLOCK, "strange_ore",
-		(id) -> new RequiresVoidToolBlock(Block.Properties.of()
+		(id) -> new VerySlowIncorrectToolHarvestBlock(Block.Properties.of()
 			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_PINK)
@@ -92,7 +92,7 @@ public class OreBlocks {
 	);
 
 	public final DeferredHolder<Block, Block> CRACKED_ASTRALROCK = RegUtil.register(Registries.BLOCK, "cracked_astralrock",
-		(id) -> new RequiresVoidToolBlock(BlockBehaviour.Properties.of()
+		(id) -> new VerySlowIncorrectToolHarvestBlock(BlockBehaviour.Properties.of()
 			.setId(ResourceKey.create(Registries.BLOCK, id))
 			.sound(SoundType.AMETHYST)
 			.mapColor(MapColor.COLOR_BLACK)
