@@ -2,7 +2,6 @@ package tamaized.voidscape.asm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -25,18 +24,10 @@ import tamaized.regutil.ToolAndArmorHelper;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.event.QuiverHandler;
-import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModDataAttachments;
-import tamaized.voidscape.registry.ModItemComponents;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ASMHooks {
-
-	@Autowired
-	private static ModArmorSetComponentDirectory armor;
-
-	@Autowired
-	private static ModItemComponents components;
 
 	@Autowired
 	private static ModDataAttachments dataAttachments;
@@ -46,26 +37,6 @@ public class ASMHooks {
 
 	@Autowired
 	private static ToolAndArmorHelper toolAndArmorHelper;
-
-	/**
-	 * {@link tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer}<p>
-	 *
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.entity.layers.CapeLayer#render(PoseStack, MultiBufferSource, int, AbstractClientPlayer, float, float, float, float, float, float)}<br>
-	 */
-	public static boolean disableCapeRender(boolean o, ItemStack stack) {
-		return o || stack.is(armor.corruptArmorSet().CORRUPT_CHEST.get()) || stack.getOrDefault(components.ELYTRA, false);
-	}
-
-	/**
-	 * {@link tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer}<p>
-	 *
-	 * Injection Point:<br>
-	 * {@link net.minecraft.client.renderer.entity.layers.ElytraLayer#shouldRender(ItemStack, LivingEntity)}<br>
-	 */
-	public static boolean shouldRenderElytra(boolean o, ItemStack stack) {
-		return o || (!stack.is(armor.corruptArmorSet().CORRUPT_CHEST.get()) && stack.getOrDefault(components.ELYTRA, false));
-	}
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer}<p>

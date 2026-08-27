@@ -1,0 +1,25 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:titanite"
+      }
+    ],
+    "wings": [
+      {
+        "texture": "minecraft:elytra",
+        "use_player_texture": true
+      }
+    ]
+  }
+}

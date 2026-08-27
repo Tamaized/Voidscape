@@ -1,11 +1,11 @@
-// 26.1.2	2026-08-26T20:14:47.0001258	Tags for minecraft:item mod id voidscape
+// 26.1.2	2026-08-26T21:55:06.9715005	Tags for minecraft:item mod id voidscape
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/c/tags/item/tools/crossbow.json
 e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/c/tags/item/tools/ranged_weapon.json
 4a317bd506812d8418888e54089ea949ff735665 data/minecraft/tags/item/axes.json
 9dda9ecb1dccaaae060cfadbd04456a3ca4ac187 data/minecraft/tags/item/chest_armor.json
 de8bd45cdfcbdbd0ad2db8c9a9aabe32253a9712 data/minecraft/tags/item/enchantable/bow.json
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/minecraft/tags/item/enchantable/crossbow.json
-7444a2ec186c3c5d8284e5241ead27f25d420f2e data/minecraft/tags/item/enchantable/durability.json
+2ca1590c06c980d51d49a5050d05bcdfa3e6660c data/minecraft/tags/item/enchantable/durability.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/melee_weapon.json
 e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/minecraft/tags/item/enchantable/vanishing.json
 ed163ff68b359d0508693ccf44614289e689ec0f data/minecraft/tags/item/foot_armor.json

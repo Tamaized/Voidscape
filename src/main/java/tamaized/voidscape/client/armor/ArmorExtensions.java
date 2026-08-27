@@ -29,6 +29,8 @@ public class ArmorExtensions implements IClientItemExtensions {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public Model getHumanoidArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model original) {
+		if (layerType == EquipmentClientInfo.LayerType.WINGS)
+			return original;
 		Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
 		if (equippable == null || equippable.slot().getType() != EquipmentSlot.Type.HUMANOID_ARMOR)
 			return original;
@@ -37,7 +39,7 @@ public class ArmorExtensions implements IClientItemExtensions {
 
 	@Override
 	public Identifier getArmorTexture(ItemStack stack, EquipmentClientInfo.LayerType type, EquipmentClientInfo.Layer layer, Identifier _default) {
-		return texture != null ? texture : _default;
+		return texture != null && type != EquipmentClientInfo.LayerType.WINGS ? texture : _default;
 	}
 
 }

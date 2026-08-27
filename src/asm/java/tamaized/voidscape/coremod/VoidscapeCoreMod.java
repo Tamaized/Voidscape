@@ -1,8 +1,6 @@
 package tamaized.voidscape.coremod;
 
 import net.neoforged.neoforgespi.transformation.ClassProcessorProvider;
-import tamaized.voidscape.coremod.transformers.elytra.DisableCapeRenderTransformer;
-import tamaized.voidscape.coremod.transformers.elytra.ShouldRenderElytraTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTransparencyTransformer;
 import tamaized.voidscape.coremod.transformers.entity.render.transparency.ModifyEntityRenderTypeTransformer;
 import tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer;
@@ -12,10 +10,6 @@ import tamaized.voidscape.coremod.transformers.render.ItemInHandRendererIsBowTra
 public class VoidscapeCoreMod implements ClassProcessorProvider {
 	@Override
 	public void createProcessors(Context context, Collector collector) {
-		// Elytra
-		collector.add(new DisableCapeRenderTransformer());
-		collector.add(new ShouldRenderElytraTransformer());
-
 		// Entity Render Transparency
 		collector.add(new ModifyEntityRenderTransparencyTransformer());
 		collector.add(new ModifyEntityRenderTypeTransformer());

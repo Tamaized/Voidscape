@@ -10,20 +10,20 @@ import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Component
 public class ModArmorMaterials {
 
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL = TagKey.create(
-		Registries.ITEM,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "voidic_crystal")
-	);
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_VOIDIC_CRYSTAL = assetKey("voidic_crystal");
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL = TagKey.create(Registries.ITEM, ASSET_KEY_VOIDIC_CRYSTAL.identifier());
 	public final ArmorMaterial VOIDIC_CRYSTAL = new ArmorMaterial(
 		39,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -38,13 +38,11 @@ public class ModArmorMaterials {
 		4F,
 		0.10F,
 		TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL,
-		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_VOIDIC_CRYSTAL.location())
+		ASSET_KEY_VOIDIC_CRYSTAL
 	);
 
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_CORRUPT = TagKey.create(
-		Registries.ITEM,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "corrupt")
-	);
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_CORRUPT = assetKey("corrupt");
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_CORRUPT = TagKey.create(Registries.ITEM, ASSET_KEY_CORRUPT.identifier());
 	public final Supplier<ArmorMaterial> CORRUPT = Suppliers.memoize(() -> new ArmorMaterial(
 		41,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -59,13 +57,12 @@ public class ModArmorMaterials {
 		5F,
 		0.15F,
 		TAG_REPAIR_MATERIAL_CORRUPT,
-		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_CORRUPT.location())
+		ASSET_KEY_CORRUPT
 	));
 
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_TITANITE = TagKey.create(
-		Registries.ITEM,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "titanite")
-	);
+
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_TITANITE = assetKey("titanite");
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_TITANITE = TagKey.create(Registries.ITEM, ASSET_KEY_TITANITE.identifier());
 	public final Supplier<ArmorMaterial> TITANITE = Suppliers.memoize(() -> new ArmorMaterial(
 		43,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -80,13 +77,11 @@ public class ModArmorMaterials {
 		6F,
 		0.20F,
 		TAG_REPAIR_MATERIAL_TITANITE,
-		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_TITANITE.location())
+		ASSET_KEY_TITANITE
 	));
 
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_ICHOR = TagKey.create(
-		Registries.ITEM,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "ichor")
-	);
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_ICHOR = assetKey("ichor");
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_ICHOR = TagKey.create(Registries.ITEM, ASSET_KEY_ICHOR.identifier());
 	public final Supplier<ArmorMaterial> ICHOR = Suppliers.memoize(() -> new ArmorMaterial(
 		45,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -101,13 +96,12 @@ public class ModArmorMaterials {
 		7F,
 		0.25F,
 		TAG_REPAIR_MATERIAL_ICHOR,
-		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ICHOR.location())
+		ASSET_KEY_ICHOR
 	));
 
-	public final TagKey<Item> TAG_REPAIR_MATERIAL_ASTRAL = TagKey.create(
-		Registries.ITEM,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "astral")
-	);
+
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_ASTRAL = assetKey("astral");
+	public final TagKey<Item> TAG_REPAIR_MATERIAL_ASTRAL = TagKey.create(Registries.ITEM, ASSET_KEY_ASTRAL.identifier());
 	public final Supplier<ArmorMaterial> ASTRAL = Suppliers.memoize(() -> new ArmorMaterial(
 		47,
 		Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -122,7 +116,22 @@ public class ModArmorMaterials {
 		8F,
 		0.30F,
 		TAG_REPAIR_MATERIAL_ASTRAL,
-		ResourceKey.create(EquipmentAssets.ROOT_ID, TAG_REPAIR_MATERIAL_ASTRAL.location())
+		ASSET_KEY_ASTRAL
 	));
+
+	public final Map<ResourceKey<EquipmentAsset>, ResourceKey<EquipmentAsset>> ELYTRA_EQUIPMENT_ASSETS = Map.of(
+		ASSET_KEY_VOIDIC_CRYSTAL, elytraAssetKey(ASSET_KEY_VOIDIC_CRYSTAL),
+		ASSET_KEY_TITANITE, elytraAssetKey(ASSET_KEY_TITANITE),
+		ASSET_KEY_ICHOR, elytraAssetKey(ASSET_KEY_ICHOR),
+		ASSET_KEY_ASTRAL, elytraAssetKey(ASSET_KEY_ASTRAL)
+	);
+
+	private ResourceKey<EquipmentAsset> assetKey(String material) {
+		return ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(Voidscape.MODID, material));
+	}
+
+	private ResourceKey<EquipmentAsset> elytraAssetKey(ResourceKey<EquipmentAsset> parent) {
+		return ResourceKey.create(EquipmentAssets.ROOT_ID, parent.identifier().withSuffix("_elytra"));
+	}
 
 }

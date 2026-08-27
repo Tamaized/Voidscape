@@ -1,0 +1,25 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:ichor"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:ichor"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:ichor"
+      }
+    ],
+    "wings": [
+      {
+        "texture": "minecraft:elytra",
+        "use_player_texture": true
+      }
+    ]
+  }
+}
