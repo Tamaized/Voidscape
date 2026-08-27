@@ -38,7 +38,7 @@ public class GerminatorBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GerminatorBlockEntity(pos, state);
+        return new GerminatorBlockEntity(blockEntities, pos, state);
     }
 
 	@Nullable

@@ -69,7 +69,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new LiquifierBlockEntity(pos, state);
+		return new LiquifierBlockEntity(blockEntities, pos, state);
 	}
 
 	@Nullable

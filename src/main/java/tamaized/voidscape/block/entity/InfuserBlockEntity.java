@@ -37,9 +37,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class InfuserBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -60,7 +57,7 @@ public class InfuserBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.INFUSER.get(), (object, _) -> object.fluids);
 	}
 
@@ -68,7 +65,7 @@ public class InfuserBlockEntity extends TickableBlockEntity {
 
 	private int processTick;
 
-	public InfuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public InfuserBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.INFUSER.get(), pPos, pBlockState);
 	}
 

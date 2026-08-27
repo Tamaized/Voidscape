@@ -49,7 +49,7 @@ public class VeryDrippyDripstoneBlock extends Block implements EntityBlock, Fall
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new VeryDrippyDripstoneBlockEntity(pos, state);
+		return new VeryDrippyDripstoneBlockEntity(blockEntities, pos, state);
 	}
 
 	@Nullable

@@ -33,9 +33,6 @@ import tamaized.voidscape.util.TransactionUtil;
 public class CoopBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -47,7 +44,7 @@ public class CoopBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.COOP.get(), (object, _) -> object.items);
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.COOP.get(), (object, _) -> object.fluids);
 	}
@@ -59,7 +56,7 @@ public class CoopBlockEntity extends TickableBlockEntity {
 
 	private int processTick;
 
-	public CoopBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public CoopBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.COOP.get(), pPos, pBlockState);
 	}
 

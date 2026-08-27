@@ -32,9 +32,6 @@ import tamaized.voidscape.util.TransactionUtil;
 public class LiquifierBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -49,7 +46,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Item.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.items);
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.LIQUIFIER.get(), (object, _) -> object.fluids);
 	}
@@ -62,7 +59,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	private int tick;
 	private int processTick;
 
-	public LiquifierBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public LiquifierBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.LIQUIFIER.get(), pPos, pBlockState);
 	}
 

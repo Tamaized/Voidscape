@@ -32,9 +32,6 @@ import tamaized.voidscape.util.SingleResourceCapabilityUtil;
 public class HatcheryBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -43,13 +40,13 @@ public class HatcheryBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private SingleResourceCapabilityUtil singleResourceCapabilityUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.HATCHERY.get(), (object, _) -> object.fluids);
 	}
 
 	public final FluidStacksResourceHandler fluids = new FilteredFluidStacksResourceHandler(1, 100000, (_, resource) -> resource.is(modFluids.VOIDIC_SOURCE.get()));
 
-	public HatcheryBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public HatcheryBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.HATCHERY.get(), pPos, pBlockState);
 	}
 

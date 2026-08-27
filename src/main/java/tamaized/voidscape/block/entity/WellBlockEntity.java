@@ -26,9 +26,6 @@ import tamaized.voidscape.util.TransactionUtil;
 public class WellBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -37,7 +34,7 @@ public class WellBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.WELL.get(), (object, _) -> object.fluids);
 	}
 
@@ -45,7 +42,7 @@ public class WellBlockEntity extends TickableBlockEntity {
 
 	private final BlockPosDirectionCapabilityCacher<ResourceHandler<FluidResource>> capabilityCache = new BlockPosDirectionCapabilityCacher<>();
 
-	public WellBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public WellBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.WELL.get(), pPos, pBlockState);
 	}
 

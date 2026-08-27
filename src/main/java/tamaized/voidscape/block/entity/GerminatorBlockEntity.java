@@ -41,9 +41,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GerminatorBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -64,7 +61,7 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.GERMINATOR.get(), (object, _) -> object.fluids);
 	}
 
@@ -72,7 +69,7 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 
 	private int processTick;
 
-	public GerminatorBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public GerminatorBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.GERMINATOR.get(), pPos, pBlockState);
 	}
 

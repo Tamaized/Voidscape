@@ -38,7 +38,7 @@ public class CoopBlock extends Block implements EntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new CoopBlockEntity(pos, state);
+		return new CoopBlockEntity(blockEntities, pos, state);
 	}
 
 	@Nullable

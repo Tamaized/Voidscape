@@ -16,6 +16,7 @@ public class CustomVoxelShapeBlock extends Block {
 		this.shape = shape;
 	}
 
+	@Override
 	public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
 		return shape;
 	}

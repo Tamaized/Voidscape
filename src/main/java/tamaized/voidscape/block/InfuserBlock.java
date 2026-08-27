@@ -38,7 +38,7 @@ public class InfuserBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new InfuserBlockEntity(pos, state);
+        return new InfuserBlockEntity(blockEntities, pos, state);
     }
 
 	@Nullable

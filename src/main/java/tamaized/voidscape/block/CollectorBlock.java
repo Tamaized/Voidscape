@@ -37,7 +37,7 @@ public class CollectorBlock extends Block implements EntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new CollectorBlockEntity(pos, state);
+		return new CollectorBlockEntity(blockEntities, pos, state);
 	}
 
 	@Nullable

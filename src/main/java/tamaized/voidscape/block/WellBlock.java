@@ -47,7 +47,7 @@ public class WellBlock extends Block implements EntityBlock, BucketPickup {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new WellBlockEntity(pos, state);
+        return new WellBlockEntity(blockEntities, pos, state);
     }
 
 	@Nullable

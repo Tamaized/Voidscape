@@ -32,9 +32,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DefuserBlockEntity extends TickableBlockEntity {
 
 	@Autowired
-	private static ModBlockEntities blockEntities;
-
-	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
 	@Autowired
@@ -49,7 +46,7 @@ public class DefuserBlockEntity extends TickableBlockEntity {
 	@Autowired
 	private TransactionUtil transactionUtil;
 
-	public static void registerCaps(RegisterCapabilitiesEvent event) {
+	public static void registerCaps(ModBlockEntities blockEntities, RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.Fluid.BLOCK, blockEntities.DEFUSER.get(), (object, _) -> object.fluids);
 	}
 
@@ -57,7 +54,7 @@ public class DefuserBlockEntity extends TickableBlockEntity {
 
 	private int processTick;
 
-	public DefuserBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public DefuserBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.DEFUSER.get(), pPos, pBlockState);
 	}
 

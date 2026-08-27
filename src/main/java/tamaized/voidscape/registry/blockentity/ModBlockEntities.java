@@ -26,47 +26,47 @@ public class ModBlockEntities {
 	@Autowired
 	private MachineBlocks machineBlocks;
 
-	public final Supplier<BlockEntityType<LiquifierBlockEntity>> LIQUIFIER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "liquifier", () -> factory.create(
+	public final Supplier<BlockEntityType<LiquifierBlockEntity>> LIQUIFIER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "liquifier", () -> factory.create(this,
 		LiquifierBlockEntity::new,
 		machineBlocks.MACHINE_LIQUIFIER.get()
 	));
 
-	public final Supplier<BlockEntityType<DefuserBlockEntity>> DEFUSER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "defuser", () -> factory.create(
+	public final Supplier<BlockEntityType<DefuserBlockEntity>> DEFUSER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "defuser", () -> factory.create(this,
 		DefuserBlockEntity::new,
 		machineBlocks.MACHINE_DEFUSER.get()
 	));
 
-	public final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "germinator", () -> factory.create(
+	public final Supplier<BlockEntityType<GerminatorBlockEntity>> GERMINATOR = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "germinator", () -> factory.create(this,
 		GerminatorBlockEntity::new,
 		machineBlocks.MACHINE_GERMINATOR.get()
 	));
 
-	public final Supplier<BlockEntityType<WellBlockEntity>> WELL = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "well", () -> factory.create(
+	public final Supplier<BlockEntityType<WellBlockEntity>> WELL = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "well", () -> factory.create(this,
 		WellBlockEntity::new,
 		machineBlocks.MACHINE_WELL.get()
 	));
 
-	public final Supplier<BlockEntityType<CoopBlockEntity>> COOP = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "coop", () -> factory.create(
+	public final Supplier<BlockEntityType<CoopBlockEntity>> COOP = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "coop", () -> factory.create(this,
 		CoopBlockEntity::new,
 		machineBlocks.MACHINE_COOP.get()
 	));
 
-	public final Supplier<BlockEntityType<HatcheryBlockEntity>> HATCHERY = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "hatchery", () -> factory.create(
+	public final Supplier<BlockEntityType<HatcheryBlockEntity>> HATCHERY = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "hatchery", () -> factory.create(this,
 		HatcheryBlockEntity::new,
 		machineBlocks.MACHINE_HATCHERY.get()
 	));
 
-	public final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "infuser", () -> factory.create(
+	public final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "infuser", () -> factory.create(this,
 		InfuserBlockEntity::new,
 		machineBlocks.MACHINE_INFUSER.get()
 	));
 
-	public final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "collector", () -> factory.create(
+	public final Supplier<BlockEntityType<CollectorBlockEntity>> COLLECTOR = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "collector", () -> factory.create(this,
 		CollectorBlockEntity::new,
 		machineBlocks.MACHINE_COLLECTOR.get()
 	));
 
-	public final Supplier<BlockEntityType<VeryDrippyDripstoneBlockEntity>> VERY_DRIPPY_DRIPSTONE = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "very_drippy_dripstone", () -> factory.create(
+	public final Supplier<BlockEntityType<VeryDrippyDripstoneBlockEntity>> VERY_DRIPPY_DRIPSTONE = RegUtil.register(Registries.BLOCK_ENTITY_TYPE, "very_drippy_dripstone", () -> factory.create(this,
 		VeryDrippyDripstoneBlockEntity::new,
 		functionalBlocks.VERY_DRIPPY_DRIPSTONE.get()
 	));
@@ -74,21 +74,21 @@ public class ModBlockEntities {
 	@PostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
-			LiquifierBlockEntity.registerCaps(event);
+			LiquifierBlockEntity.registerCaps(this, event);
 
-			DefuserBlockEntity.registerCaps(event);
+			DefuserBlockEntity.registerCaps(this, event);
 
-			GerminatorBlockEntity.registerCaps(event);
+			GerminatorBlockEntity.registerCaps(this, event);
 
-			WellBlockEntity.registerCaps(event);
+			WellBlockEntity.registerCaps(this, event);
 
-			CoopBlockEntity.registerCaps(event);
+			CoopBlockEntity.registerCaps(this, event);
 
-			HatcheryBlockEntity.registerCaps(event);
+			HatcheryBlockEntity.registerCaps(this, event);
 
-			InfuserBlockEntity.registerCaps(event);
+			InfuserBlockEntity.registerCaps(this, event);
 
-			CollectorBlockEntity.registerCaps(event);
+			CollectorBlockEntity.registerCaps(this, event);
 		});
 	}
 

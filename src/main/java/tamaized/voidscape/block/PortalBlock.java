@@ -21,7 +21,6 @@ import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModSounds;
 import tamaized.voidscape.dimension.ConfigurablePortalShape;
-import tamaized.voidscape.util.LevelUtil;
 import tamaized.voidscape.util.PortalFramePredicates;
 
 @Configurable
@@ -36,9 +35,6 @@ public class PortalBlock extends HalfTransparentBlock {
 
 	@Autowired
 	private ModDataAttachments dataAttachments;
-
-	@Autowired
-	private LevelUtil levelUtil;
 
 	@Autowired
 	private ModSounds sounds;

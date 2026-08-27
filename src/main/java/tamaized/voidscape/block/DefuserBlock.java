@@ -38,7 +38,7 @@ public class DefuserBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DefuserBlockEntity(pos, state);
+        return new DefuserBlockEntity(blockEntities, pos, state);
     }
 
 	@Nullable

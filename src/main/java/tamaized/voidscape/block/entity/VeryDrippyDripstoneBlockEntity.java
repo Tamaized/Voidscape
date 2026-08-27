@@ -22,7 +22,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.registry.blockentity.ModBlockEntities;
@@ -49,12 +48,9 @@ public class VeryDrippyDripstoneBlockEntity extends BlockEntity {
 		handle_method_AbstractCauldronBlock_receiveStalactiteDrip = tmp_handle_method_AbstractCauldronBlock_receiveStalactiteDrip;
 	}
 
-	@Autowired
-	private static ModBlockEntities blockEntities;
-
 	private int tick;
 
-	public VeryDrippyDripstoneBlockEntity(BlockPos pPos, BlockState pBlockState) {
+	public VeryDrippyDripstoneBlockEntity(ModBlockEntities blockEntities, BlockPos pPos, BlockState pBlockState) {
 		super(blockEntities.VERY_DRIPPY_DRIPSTONE.get(), pPos, pBlockState);
 	}
 
