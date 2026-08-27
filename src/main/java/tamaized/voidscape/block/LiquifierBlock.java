@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -82,7 +83,7 @@ public class LiquifierBlock extends Block implements EntityBlock, BucketPickup {
 	public ItemStack pickupBlock(@Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state) {
 		BlockEntity be = level.getBlockEntity(pos);
 		if (be instanceof LiquifierBlockEntity entity && singleResourceCapabilityUtil.amount(entity.fluids) >= 1000) {
-			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(entity.fluids, 1000, transaction));
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(entity.fluids, FluidResource.of(fluids.VOIDIC_SOURCE.get()), 1000, transaction));
 			return new ItemStack(buckets.VOIDIC.get());
 		}
 		return ItemStack.EMPTY;

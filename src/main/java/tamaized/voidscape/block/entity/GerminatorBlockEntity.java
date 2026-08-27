@@ -21,6 +21,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -77,14 +78,14 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		processTick = input.getIntOr("processTick", 0);
-		fluids.deserialize(input);
+		fluids.deserialize(input.childOrEmpty("fluids"));
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		output.putInt("processTick", processTick);
-		fluids.serialize(output);
+		fluids.serialize(output.child("fluids"));
 	}
 
 	@Override
@@ -92,7 +93,7 @@ public class GerminatorBlockEntity extends TickableBlockEntity {
 		if (level.hasNeighborSignal(blockPos))
 			return;
 		if (processTick <= 0 && singleResourceCapabilityUtil.amount(fluids) > 0) {
-			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(fluids, 1, transaction));
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.extract(fluids, FluidResource.of(modFluids.VOIDIC_SOURCE.get()), 1, transaction));
 			processTick = 60;
 		} else if (processTick > 0) {
 			processTick--;

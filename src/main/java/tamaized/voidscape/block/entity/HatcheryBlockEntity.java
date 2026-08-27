@@ -53,13 +53,13 @@ public class HatcheryBlockEntity extends TickableBlockEntity {
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		fluids.deserialize(input);
+		fluids.deserialize(input.childOrEmpty("fluids"));
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
-		fluids.serialize(output);
+		fluids.serialize(output.child("fluids"));
 	}
 
 	@Override

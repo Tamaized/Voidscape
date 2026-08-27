@@ -15,6 +15,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
@@ -75,16 +76,16 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		processTick = input.getIntOr("processTick", 0);
-		items.deserialize(input);
-		fluids.deserialize(input);
+		items.deserialize(input.childOrEmpty("items"));
+		fluids.deserialize(input.childOrEmpty("fluids"));
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		output.putInt("processTick", processTick);
-		items.serialize(output);
-		fluids.serialize(output);
+		items.serialize(output.child("items"));
+		fluids.serialize(output.child("fluids"));
 	}
 
 	@Override
@@ -92,15 +93,15 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 		if (level.hasNeighborSignal(blockPos))
 			return;
 		tick++;
-		if (singleResourceCapabilityUtil.amount(fluids) <= singleResourceCapabilityUtil.capacity(fluids) - 250 &&
-			items.getResource(0).is(materialItems.VOIDIC_CRYSTAL.get())
+		if (singleResourceCapabilityUtil.amount(fluids) <= singleResourceCapabilityUtil.capacity(fluids, FluidResource.of(modFluids.VOIDIC_SOURCE.get())) - 250 &&
+			singleResourceCapabilityUtil.amount(items) > 0
 		) {
 			processTick++;
 			if (processTick >= 80) {
 				processTick = 0;
 				transactionUtil.run(transaction -> {
-					singleResourceCapabilityUtil.insert(fluids, 250, transaction);
-					singleResourceCapabilityUtil.extract(items, 1, transaction);
+					singleResourceCapabilityUtil.insert(fluids, FluidResource.of(modFluids.VOIDIC_SOURCE.get()), 250, transaction);
+					singleResourceCapabilityUtil.extract(items, ItemResource.of(materialItems.VOIDIC_CRYSTAL.get()), 1, transaction);
 				});
 				level.getEntities(null, new AABB(blockPos).inflate(8D)).stream()
 						.filter(e -> e instanceof ServerPlayer)
@@ -116,7 +117,7 @@ public class LiquifierBlockEntity extends TickableBlockEntity {
 				if (other != null) {
 					transactionUtil.run(transaction -> {
 						int amount = other.insert(fluids.getResource(0), Math.min(singleResourceCapabilityUtil.amount(fluids), 1000), transaction);
-						singleResourceCapabilityUtil.extract(fluids, amount, transaction);
+						singleResourceCapabilityUtil.extract(fluids, FluidResource.of(modFluids.VOIDIC_SOURCE.get()), amount, transaction);
 					});
 				}
 				if (singleResourceCapabilityUtil.amount(fluids) <= 0)

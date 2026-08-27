@@ -52,7 +52,7 @@ public class WellBlockEntity extends TickableBlockEntity {
 			return;
 
 		if (singleResourceCapabilityUtil.amount(fluids) < Integer.MAX_VALUE)
-			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.insert(fluids, Integer.MAX_VALUE, transaction));
+			transactionUtil.execute(transaction -> singleResourceCapabilityUtil.insert(fluids, FluidResource.of(Fluids.WATER), Integer.MAX_VALUE, transaction));
 
 		if (level instanceof ServerLevel serverLevel) {
 			boolean filled = false;

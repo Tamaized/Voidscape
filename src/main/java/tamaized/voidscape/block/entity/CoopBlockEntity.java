@@ -15,6 +15,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
@@ -72,16 +73,16 @@ public class CoopBlockEntity extends TickableBlockEntity {
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
 		processTick = input.getIntOr("processTick", 0);
-		items.deserialize(input);
-		fluids.deserialize(input);
+		items.deserialize(input.childOrEmpty("items"));
+		fluids.deserialize(input.childOrEmpty("fluids"));
 	}
 
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
 		output.putInt("processTick", processTick);
-		items.serialize(output);
-		fluids.serialize(output);
+		items.serialize(output.child("items"));
+		fluids.serialize(output.child("fluids"));
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class CoopBlockEntity extends TickableBlockEntity {
 		if (level.hasNeighborSignal(blockPos))
 			return;
 		if (processTick <= 0 && singleResourceCapabilityUtil.amount(fluids) > 0) {
-			if (transactionUtil.executeNegation(transaction -> singleResourceCapabilityUtil.extract(fluids, 1, transaction), 0))
+			if (transactionUtil.executeNegation(transaction -> singleResourceCapabilityUtil.extract(fluids, FluidResource.of(modFluids.VOIDIC_SOURCE.get()), 1, transaction), 0))
 				processTick = 60 + level.getRandom().nextInt(140);
 		} else if (processTick > 0) {
 			processTick--;
@@ -108,9 +109,10 @@ public class CoopBlockEntity extends TickableBlockEntity {
 				ResourceHandler<ItemResource> other = capabilityCache.get(Capabilities.Item.BLOCK, serverLevel, blockPos.relative(face), face.getOpposite());
 				if (other != null) {
 					int count = singleResourceCapabilityUtil.amount(items);
-					if (transactionUtil.executeNegation(transaction -> singleResourceCapabilityUtil.extract(
+					if (transactionUtil.executeComparing(transaction -> singleResourceCapabilityUtil.extract(
 						items,
-						other.insert(singleResourceCapabilityUtil.resource(items), count, transaction),
+						ItemResource.of(Items.EGG),
+						other.insert(ItemResource.of(Items.EGG), count, transaction),
 						transaction
 					), 0)) {
 						continue;
