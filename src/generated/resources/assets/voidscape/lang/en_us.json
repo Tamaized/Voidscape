@@ -209,7 +209,7 @@
   "voidscape.tooltip.elytra": "Elytra",
   "voidscape.tooltip.fruit_salad_why": "But why?",
   "voidscape.tooltip.fruit_salad_yummy": "Fruit Salad! Yummy, yummy!",
-  "voidscape.tooltip.quiver": "Right Click an Arrow stack onto the Quiver to store.\nOr Right Click the Quiver onto an Arrow stack to store.\n\nRight Click the Quiver onto an empty slot to remove an Arrow stack.\n",
+  "voidscape.tooltip.quiver": "Right Click an Arrow stack onto the Quiver to store.\nOr Right Click the Quiver onto an Arrow stack to store.\n\nRight Click the Quiver onto an empty slot to remove an Arrow stack.\n\nBows will always pull from the first quiver slot.\nUse your scroll wheel to shift the stacks around.\n",
   "voidscape.tooltip.textures": "Textures Subject to Change",
   "voidscape.voidic_arrow_dmg": "Voidic Arrow Damage",
   "voidscape.voidic_dmg": "Voidic Damage",

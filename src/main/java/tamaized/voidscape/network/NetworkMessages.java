@@ -13,6 +13,7 @@ import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.network.client.ClientPacketSendParticles;
 import tamaized.voidscape.network.client.ClientPacketInsanitySync;
 import tamaized.voidscape.network.server.ServerPacketDonatorSettings;
+import tamaized.voidscape.network.server.ServerPacketQuiverScroll;
 
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class NetworkMessages {
 				.optional();
 
 			network.playToServer(ServerPacketDonatorSettings.ID, ServerPacketDonatorSettings.CODEC, ServerPacketDonatorSettings::handle);
+			network.playToServer(ServerPacketQuiverScroll.ID, ServerPacketQuiverScroll.CODEC, ServerPacketQuiverScroll::handle);
 
 			network.playToClient(ClientPacketNoFlashOnSetHealth.ID, ClientPacketNoFlashOnSetHealth.CODEC, ClientPacketNoFlashOnSetHealth::handle);
 			network.playToClient(ClientPacketInsanitySync.ID, ClientPacketInsanitySync.CODEC, ClientPacketInsanitySync::handle);

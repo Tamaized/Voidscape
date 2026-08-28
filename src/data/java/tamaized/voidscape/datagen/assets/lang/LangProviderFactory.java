@@ -111,6 +111,9 @@ public class LangProviderFactory {
 					Or Right Click the Quiver onto an Arrow stack to store.
 
 					Right Click the Quiver onto an empty slot to remove an Arrow stack.
+
+					Bows will always pull from the first quiver slot.
+					Use your scroll wheel to shift the stacks around.
 					""");
 
 				addEntityType(entities.VOIDLING, "Voidling");

@@ -8,6 +8,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QuiverContents implements TooltipComponent {
@@ -101,6 +102,12 @@ public class QuiverContents implements TooltipComponent {
 				items.remove(slot);
 			else
 				items.set(slot, stack);
+		}
+
+		public void rotate(int direction) {
+			if (items.size() < 2)
+				return;
+			Collections.rotate(items, Integer.signum(direction));
 		}
 
 		public ItemStack tryInsert(ItemStack stack) {
