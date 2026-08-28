@@ -1,5 +1,6 @@
 package tamaized.voidscape.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import tamaized.beanification.Autowired;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.QuiverContents;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.tooltip.QuiverTooltip;
@@ -163,13 +165,16 @@ public class QuiverItem extends Item {
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
 		TooltipDisplay display = stack.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT);
 		return !display.shows(components.QUIVER_CONTENTS.get())
-			? Optional.ofNullable(stack.get(components.QUIVER_CONTENTS)).map(QuiverTooltip::new)
-			: Optional.empty();
+			? Optional.empty()
+			: Optional.ofNullable(stack.get(components.QUIVER_CONTENTS)).map(QuiverTooltip::new);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		builder.accept(Component.translatable(Voidscape.MODID + ".tooltip.quiver").withStyle(
+			ChatFormatting.DARK_GRAY
+		));
 		/*QuiverContents contents = stack.get(components.QUIVER_CONTENTS);
 		if (contents != null) {
 			int i = Mth.mulAndTruncate(contents.weight(), 64);

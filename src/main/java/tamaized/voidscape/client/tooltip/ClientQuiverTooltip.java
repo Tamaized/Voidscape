@@ -9,11 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import tamaized.voidscape.data.QuiverContents;
 
 public class ClientQuiverTooltip implements ClientTooltipComponent {
-	private static final Identifier BACKGROUND_SPRITE = Identifier.withDefaultNamespace("container/bundle/background");
+
+	private static final Identifier SLOT_BACKGROUND_SPRITE = Identifier.withDefaultNamespace("container/bundle/slot_background");
 	private static final Identifier SLOT_HIGHLIGHT_BACK_SPRITE = Identifier.withDefaultNamespace("container/bundle/slot_highlight_back");
 	private static final Identifier SLOT_HIGHLIGHT_FRONT_SPRITE = Identifier.withDefaultNamespace("container/bundle/slot_highlight_front");
-	private static final int SLOT_SIZE_X = 18;
-	private static final int SLOT_SIZE_Y = 20;
+	private static final int SLOT_SIZE = 24;
+	private static final int SLOT_MARGIN = 4;
+	private static final int GRID_SIZE_X = 5;
+	private static final int GRID_SIZE_Y = 1;
+
 	private final QuiverContents contents;
 
 	public ClientQuiverTooltip(QuiverContents contents) {
@@ -22,81 +26,42 @@ public class ClientQuiverTooltip implements ClientTooltipComponent {
 
 	@Override
 	public int getHeight(Font font) {
-		return this.backgroundHeight() + 4;
+		return GRID_SIZE_Y * SLOT_SIZE;
 	}
 
 	@Override
 	public int getWidth(Font font) {
-		return this.backgroundWidth();
-	}
-
-	private int backgroundWidth() {
-		return this.gridSizeX() * SLOT_SIZE_X + 2;
-	}
-
-	private int backgroundHeight() {
-		return this.gridSizeY() * SLOT_SIZE_Y + 2;
+		return GRID_SIZE_X * SLOT_SIZE;
 	}
 
 	@Override
 	public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
-		int i = this.gridSizeX();
-		int j = this.gridSizeY();
-		boolean flag = this.contents.fullPercentage() >= 1F;
-		int k = 0;
+		int slotIndex = 0;
 
-		for (int l = 0; l < j; l++) {
-			for (int i1 = 0; i1 < i; i1++) {
-				int j1 = x + i1 * SLOT_SIZE_X + 1;
-				int k1 = y + l * SLOT_SIZE_Y + 1;
-				this.renderSlot(j1, k1, k++, flag, graphics, font);
+		for (int row = 0; row < GRID_SIZE_Y; row++) {
+			for (int column = 0; column < GRID_SIZE_X; column++) {
+				this.extractSlot(x + column * SLOT_SIZE, y + row * SLOT_SIZE, slotIndex++, font, graphics);
 			}
 		}
 	}
 
-	private void renderSlot(int x, int y, int itemIndex, boolean isBundleFull, GuiGraphicsExtractor graphics, Font font) {
-		if (itemIndex == 0) {
-			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_HIGHLIGHT_BACK_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
-		} else {
-			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
+	private void extractSlot(int x, int y, int slotIndex, Font font, GuiGraphicsExtractor graphics) {
+		boolean hasHighlight = slotIndex == 0 && !this.contents.isEmpty();
+		graphics.blitSprite(
+			RenderPipelines.GUI_TEXTURED,
+			hasHighlight ? SLOT_HIGHLIGHT_BACK_SPRITE : SLOT_BACKGROUND_SPRITE,
+			x, y,
+			SLOT_SIZE, SLOT_SIZE
+		);
+
+		if (slotIndex < this.contents.view().size()) {
+			ItemStack stack = this.contents.view().get(slotIndex);
+			graphics.item(stack, x + SLOT_MARGIN, y + SLOT_MARGIN, slotIndex);
+			graphics.itemDecorations(font, stack, x + SLOT_MARGIN, y + SLOT_MARGIN);
 		}
-		if (itemIndex >= this.contents.view().size()) {
-			this.blit(graphics, x, y, isBundleFull ? Texture.BLOCKED_SLOT : Texture.SLOT);
-		} else {
-			ItemStack itemstack = this.contents.view().get(itemIndex);
-			this.blit(graphics, x, y, Texture.SLOT);
-			graphics.item(itemstack, x + 1, y + 1, itemIndex);
-			graphics.itemDecorations(font, itemstack, x + 1, y + 1);
-			if (itemIndex == 0) {
-				graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_HIGHLIGHT_FRONT_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
-			}
-		}
-	}
 
-	private void blit(GuiGraphicsExtractor graphics, int x, int y, Texture texture) {
-		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture.sprite, x, y, texture.w, texture.h);
-	}
-
-	private int gridSizeX() {
-		return 5;
-	}
-
-	private int gridSizeY() {
-		return 1;
-	}
-
-	enum Texture {
-		BLOCKED_SLOT(Identifier.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
-		SLOT(Identifier.withDefaultNamespace("container/bundle/slot"), 18, 20);
-
-		public final Identifier sprite;
-		public final int w;
-		public final int h;
-
-		Texture(Identifier sprite, int w, int h) {
-			this.sprite = sprite;
-			this.w = w;
-			this.h = h;
+		if (hasHighlight) {
+			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_HIGHLIGHT_FRONT_SPRITE, x, y, SLOT_SIZE, SLOT_SIZE);
 		}
 	}
 

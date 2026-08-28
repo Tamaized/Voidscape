@@ -106,6 +106,12 @@ public class LangProviderFactory {
 				addTooltip("draconic", "Draconic");
 				addTooltip("augment.lingering_potion", "Right click with a lingering potion or a snowball to change the effect.");
 				addTooltip("textures", "Textures Subject to Change");
+				addTooltip("quiver", """
+					Right Click an Arrow stack onto the Quiver to store.
+					Or Right Click the Quiver onto an Arrow stack to store.
+
+					Right Click the Quiver onto an empty slot to remove an Arrow stack.
+					""");
 
 				addEntityType(entities.VOIDLING, "Voidling");
 				addEntityType(entities.NULL_SERVANT, "Null Servant");
