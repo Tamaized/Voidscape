@@ -17,16 +17,16 @@ public class ModEffects {
 	private ModAttributes attributes;
 
 	public final DeferredHolder<MobEffect, MobEffect> ICHOR = RegUtil.register(Registries.MOB_EFFECT, "ichor",
-		() -> new StandardEffect("ichor", MobEffectCategory.HARMFUL, 0xFF7700));
+		() -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700));
 
 	public final DeferredHolder<MobEffect, MobEffect> AURA = RegUtil.register(Registries.MOB_EFFECT, "aura",
-		() -> new StandardEffect("aura", MobEffectCategory.BENEFICIAL, 0x7700FF));
+		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF));
 
 	public final DeferredHolder<MobEffect, MobEffect> FORTIFIED = RegUtil.register(Registries.MOB_EFFECT, "fortified",
-		() -> new StandardEffect("fortified", MobEffectCategory.BENEFICIAL, 0x00FFAA));
+		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA));
 
 	public final DeferredHolder<MobEffect, MobEffect> TRAUMATIZED = RegUtil.register(Registries.MOB_EFFECT, "traumatized",
-		(key) -> new StandardEffect("traumatized", MobEffectCategory.BENEFICIAL, 0x7700FF)
+		(key) -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF)
 			.addAttributeModifier(
 				attributes.VOIDIC_DMG, key.withPrefix("effect."), 5.0, AttributeModifier.Operation.ADD_VALUE
 			)
