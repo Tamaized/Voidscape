@@ -27,21 +27,30 @@ public class HexColorEditBoxFactory {
 		input.setValue(Integer.toHexString(configOption.getAsInt()));
 		input.setTextColor(resolveColor(input.getValue()));
 
-		input.setResponder(newValue -> {
-			if (newValue != null) {
-				int decValue;
-				try {
-					decValue = (int) Long.parseLong(input.getValue(), 16);
-				} catch (NumberFormatException ex) {
-					input.setTextColor(0xFFFFFF);
-					return;
-				}
-				if (decValue != configOption.getAsInt()) {
-					configOption.set(decValue);
-					configOption.save();
-				}
-				input.setTextColor(resolveColor(input.getValue()));
+		input.setFilter(newChars -> {
+			String combinedValue = input.getValue().concat(newChars);
+			if (combinedValue.length() > 6)
+				return false;
+			try {
+				Long.parseLong(combinedValue, 16);
+				return true;
+			} catch (NumberFormatException ex) {
+				return false;
 			}
+		});
+
+		input.setResponder(newValue -> {
+			int decValue;
+			try {
+				decValue = (int) Long.parseLong(newValue, 16);
+			} catch (NumberFormatException ex) {
+				return;
+			}
+			if (decValue != configOption.getAsInt()) {
+				configOption.set(decValue);
+				configOption.save();
+			}
+			input.setTextColor(resolveColor(newValue));
 		});
 
 		return input;
@@ -51,9 +60,9 @@ public class HexColorEditBoxFactory {
 		try {
 			int val = Integer.decode("0x" + hex);
 			ColorHelper.HSV hsv = colorHelper.rgbToHsv(val);
-			return hsv.value() > 0.25F ? val : Mth.hsvToRgb(hsv.hue(), hsv.saturation(), 0.25F);
+			return 0xFF000000 | (hsv.value() > 0.25F ? val : Mth.hsvToRgb(hsv.hue(), hsv.saturation(), 0.25F));
 		} catch (NumberFormatException ex) {
-			return 0xFFFFFF;
+			return 0xFFFFFFFF;
 		}
 	}
 
