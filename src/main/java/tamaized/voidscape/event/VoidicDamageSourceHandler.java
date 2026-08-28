@@ -36,50 +36,49 @@ public class VoidicDamageSourceHandler {
 	@PostConstruct(PostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(LivingDamageEvent.Pre.class, event -> {
-			DamageState damageState;
 			LivingEntity target = event.getEntity();
-			if (!event.getSource().is(damageSource.VOIDIC) && (damageState = getDamageState(event.getSource())) != DamageState.NONE) {
-				if (target.getHealth() <= event.getNewDamage())
-					return;
-				if (damageState == DamageState.MELEE && (event.getSource().isDirect() ? event.getSource().getDirectEntity() : event.getSource().getEntity()) instanceof LivingEntity attacker) {
-					final float voidicMeleeDamage = (float) (attacker.getAttributeValue(attributes.VOIDIC_DMG) * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F));
-					if (voidicMeleeDamage > 0) {
-						target.invulnerableTime = 0;
-						if (target.level() instanceof ServerLevel serverLevel)
-							target.hurtServer(serverLevel, damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
-					}
-					final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION))
-										   * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F)
-										   * Insanity.MAX_INFUSION;
-					if (infusion > 0)
-						target.getData(dataAttachments.INSANITY).addInfusion(infusion, target);
-				} else if (damageState == DamageState.ARROW && event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
-					float voidic = arrowEntity.getData(dataAttachments.VOIDIC_ARROW);
-					if (voidic > 0) {
-						if (target.getHealth() <= event.getNewDamage())
-							return;
-						target.invulnerableTime = 0;
-						if (target.level() instanceof ServerLevel serverLevel)
-							target.hurtServer(serverLevel, damageSource.getEntityDamageSource(arrowEntity.level(), damageSource.VOIDIC, arrowEntity.getOwner()), voidic);
-					}
-					float infusion = arrowEntity.getData(dataAttachments.INFUSION_ARROW);
-					if (infusion > 0) {
-						target.getData(dataAttachments.INSANITY).addInfusion(infusion, target);
-					}
+			if (!event.getSource().is(damageSource.VOIDIC))
+				return;
+			if (target.hasEffect(effects.ICHOR)) {
+				event.setNewDamage(event.getNewDamage() * 2F);
+			}
+			if (target.hasEffect(effects.FORTIFIED)) {
+				event.setNewDamage(event.getNewDamage() * 0.25F);
+				if (target.getRandom().nextInt(4) == 0) {
+					target.removeEffect(effects.FORTIFIED);
 				}
-			} else if (event.getSource().is(damageSource.VOIDIC)) {
-				if (target.hasEffect(effects.ICHOR)) {
-					event.setNewDamage(event.getNewDamage() * 2F);
+			}
+			AttributeInstance attributeInstance = target.getAttribute(attributes.VOIDIC_RES);
+			if (attributeInstance != null) {
+				event.setNewDamage(Math.max(0F, event.getNewDamage() - (float) attributeInstance.getValue()));
+			}
+		});
+
+		bus.addListener(LivingDamageEvent.Post.class, event -> {
+			LivingEntity target = event.getEntity();
+			if (event.getSource().is(damageSource.VOIDIC) || target.isDeadOrDying())
+				return;
+			DamageState damageState = getDamageState(event.getSource());
+			if (damageState == DamageState.MELEE && (event.getSource().isDirect() ? event.getSource().getDirectEntity() : event.getSource().getEntity()) instanceof LivingEntity attacker) {
+				final float voidicMeleeDamage = (float) (attacker.getAttributeValue(attributes.VOIDIC_DMG) * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F));
+				if (voidicMeleeDamage > 0) {
+					if (target.level() instanceof ServerLevel serverLevel)
+						target.hurtServer(serverLevel, damageSource.getEntityDamageSource(target.level(), damageSource.VOIDIC, attacker), voidicMeleeDamage);
 				}
-				if (target.hasEffect(effects.FORTIFIED)) {
-					event.setNewDamage(event.getNewDamage() * 0.25F);
-					if (target.getRandom().nextInt(4) == 0) {
-						target.removeEffect(effects.FORTIFIED);
-					}
+				final float infusion = (float) (attacker.getAttributeValue(attributes.VOIDIC_INFUSION))
+									   * (attacker instanceof Player p ? p.getAttackStrengthScale(0.5F) : 1F)
+									   * Insanity.MAX_INFUSION;
+				if (infusion > 0)
+					target.getData(dataAttachments.INSANITY).addInfusion(infusion, target);
+			} else if (damageState == DamageState.ARROW && event.getSource().getDirectEntity() instanceof AbstractArrow arrowEntity) {
+				float voidic = arrowEntity.getData(dataAttachments.VOIDIC_ARROW);
+				if (voidic > 0) {
+					if (target.level() instanceof ServerLevel serverLevel)
+						target.hurtServer(serverLevel, damageSource.getEntityDamageSource(arrowEntity.level(), damageSource.VOIDIC, arrowEntity.getOwner()), voidic);
 				}
-				AttributeInstance attributeInstance = target.getAttribute(attributes.VOIDIC_RES);
-				if (attributeInstance != null) {
-					event.setNewDamage(Math.max(0F, event.getNewDamage() - (float) attributeInstance.getValue()));
+				float infusion = arrowEntity.getData(dataAttachments.INFUSION_ARROW);
+				if (infusion > 0) {
+					target.getData(dataAttachments.INSANITY).addInfusion(infusion, target);
 				}
 			}
 		});
