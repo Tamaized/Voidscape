@@ -79,9 +79,7 @@ public class VoidicDamageSourceHandler {
 				}
 				AttributeInstance attributeInstance = target.getAttribute(attributes.VOIDIC_RES);
 				if (attributeInstance != null) {
-					float res = (float) attributeInstance.getValue();
-					if (res != 0)
-						event.setNewDamage(event.getNewDamage() - res);
+					event.setNewDamage(Math.max(0F, event.getNewDamage() - (float) attributeInstance.getValue()));
 				}
 			}
 		});
