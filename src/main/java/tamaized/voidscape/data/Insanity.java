@@ -212,7 +212,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 			paranoia = 0;
 			infusion = 0;
 		}
-		if (parent instanceof LivingEntity && !parent.level().isClientSide() && (parent.tickCount % 20 * 10 == 0 || dirty)) {
+		if (parent instanceof LivingEntity && !parent.level().isClientSide() && (parent.tickCount % (20 * 10) == 0 || dirty)) {
 			if (!infusionImmune)
 				refreshEquipmentAttributes((LivingEntity) parent);
 			sendToClients(parent);

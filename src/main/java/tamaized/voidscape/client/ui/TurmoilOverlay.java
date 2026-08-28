@@ -3,7 +3,6 @@ package tamaized.voidscape.client.ui;
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ConfigureMainRenderTargetEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import org.joml.Matrix4fStack;
 import org.joml.Vector4f;
@@ -101,24 +99,26 @@ public class TurmoilOverlay {
 	}
 
 	private void renderTeleport(GuiGraphicsExtractor graphics, float perc) {
-		GpuTexture depthTexture = Minecraft.getInstance().getMainRenderTarget().getDepthTexture();
-		if (depthTexture == null)
-			return;
 		final float w = graphics.guiWidth();
 		final float h = graphics.guiHeight();
-		RenderSystem.getDevice().createCommandEncoder().clearStencilTexture(depthTexture, 0);
-		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-		buffer.addVertex(0F, h, 0F).setUv(0F, 1F).setColor(-1);
-		buffer.addVertex(w, h, 0F).setUv(1F, 1F).setColor(-1);
-		buffer.addVertex(w, 0F, 0F).setUv(1F, 0F).setColor(-1);
-		buffer.addVertex(0F, 0F, 0F).setUv(0F, 0F).setColor(-1);
 		guiProjection.setupOrtho(1000F, 11000F, w, h, true);
 		RenderSystem.backupProjectionMatrix();
 		RenderSystem.setProjectionMatrix(guiProjectionBuffer.get().getBuffer(guiProjection), ProjectionType.ORTHOGRAPHIC);
 		Matrix4fStack modelView = RenderSystem.getModelViewStack();
 		modelView.pushMatrix();
 		modelView.translation(0F, 0F, -11000F);
-		shaderRenderer.drawOptimalAlpha(shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR, buffer.buildOrThrow(), noColorModulation,
+		BufferBuilder zeroBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		zeroBuffer.addVertex(0F, h, 0F).setColor(-1);
+		zeroBuffer.addVertex(w, h, 0F).setColor(-1);
+		zeroBuffer.addVertex(w, 0F, 0F).setColor(-1);
+		zeroBuffer.addVertex(0F, 0F, 0F).setColor(-1);
+		shaderRenderer.draw(shaders.STENCIL_ZERO_POS_COLOR, zeroBuffer.buildOrThrow());
+		BufferBuilder maskBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		maskBuffer.addVertex(0F, h, 0F).setUv(0F, 1F).setColor(-1);
+		maskBuffer.addVertex(w, h, 0F).setUv(1F, 1F).setColor(-1);
+		maskBuffer.addVertex(w, 0F, 0F).setUv(1F, 0F).setColor(-1);
+		maskBuffer.addVertex(0F, 0F, 0F).setUv(0F, 0F).setColor(-1);
+		shaderRenderer.drawOptimalAlpha(shaders.OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR, maskBuffer.buildOrThrow(), noColorModulation,
 			Map.of("Sampler0", TEXTURE_MASK), perc);
 		modelView.popMatrix();
 		RenderSystem.restoreProjectionMatrix();
