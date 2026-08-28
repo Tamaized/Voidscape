@@ -80,7 +80,6 @@ public class Shaders {
 		withLocation(id("pipeline/voidsky")).
 		withVertexShader(id("core/voidsky/sky")).
 		withFragmentShader(id("core/voidsky/sky")).
-		withSampler("Sampler0").
 		withSampler("Sampler1").
 		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
 		withVertexFormat(DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS).
@@ -90,7 +89,6 @@ public class Shaders {
 		withLocation(id("pipeline/voidsky_entity")).
 		withVertexShader(id("core/voidsky/entity")).
 		withFragmentShader(id("core/voidsky/entity")).
-		withSampler("Sampler0").
 		withSampler("Sampler1").
 		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
 		withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS).

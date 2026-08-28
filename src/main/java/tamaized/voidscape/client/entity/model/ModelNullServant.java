@@ -1,5 +1,6 @@
 package tamaized.voidscape.client.entity.model;
 
+import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.ArmedModel;
@@ -17,7 +18,6 @@ import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.neoforged.api.distmarker.Dist;
@@ -25,18 +25,20 @@ import tamaized.beanification.Autowired;
 import tamaized.voidscape.client.shader.Shaders;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel<S> implements ArmedModel<S> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private static Shaders shaders;
 
-	private static final Function<Identifier, RenderType> RENDERTYPE = Util.memoize(texture -> RenderType.
-			create("entity_solid_voidskyshader", RenderSetup.builder(shaders.VOIDSKY_ENTITY).
-					withTexture("Sampler0", texture).
-					withTexture("Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION).
-					setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE).
-					createRenderSetup()));
+	private static final Supplier<RenderType> RENDER_TYPE = Suppliers.memoize(() -> RenderType.create(
+		"entity_solid_voidskyshader",
+		RenderSetup.builder(shaders.VOIDSKY_ENTITY)
+			.withTexture("Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION)
+			.setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
+			.createRenderSetup()
+	));
 
 	public final ModelPart head;
 	public final ModelPart body;
@@ -44,7 +46,7 @@ public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel
 	public final ModelPart rightArm;
 
 	public ModelNullServant(ModelPart root) {
-		this(root, RENDERTYPE);
+		this(root, _ -> RENDER_TYPE.get());
 	}
 
 	public ModelNullServant(ModelPart root, Function<Identifier, RenderType> renderType) {

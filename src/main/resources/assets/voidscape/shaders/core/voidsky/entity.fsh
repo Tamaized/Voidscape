@@ -3,7 +3,6 @@
 #moj_import <minecraft:globals.glsl>
 #moj_import <minecraft:matrix.glsl>
 
-uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 
 in vec4 texProj0;
@@ -38,7 +37,7 @@ float mod(float a, float b) {
 out vec4 fragColor;
 
 void main() {
-    vec3 color = vec3(0);//textureProj(Sampler0, texProj0).rgb;
+    vec3 color = vec3(0);
     float colorMod = 0.15;
     float fade = 0.1;
 

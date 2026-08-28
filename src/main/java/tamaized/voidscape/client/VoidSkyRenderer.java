@@ -80,7 +80,6 @@ public class VoidSkyRenderer implements CustomSkyboxRenderer {
 		vertexbuffer.addVertex(x, y, z);
 
 		shaderRenderer.draw(shaders.VOIDSKY, vertexbuffer.buildOrThrow(), Map.of(
-			"Sampler0", AbstractEndPortalRenderer.END_SKY_LOCATION,
 			"Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION
 		));
 	}
