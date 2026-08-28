@@ -89,7 +89,7 @@ public class ThunderForestBiomeBlocks {
 
 	public final TagKey<Block> TAG_THUNDER_FUNGUS_SUPPORTS = TagKey.create(
 		Registries.BLOCK,
-		Identifier.fromNamespaceAndPath(Voidscape.MODID, "supports_thunder_roots")
+		Identifier.fromNamespaceAndPath(Voidscape.MODID, "supports_thunder_fungus")
 	);
 	public final DeferredHolder<Block, Block> THUNDER_FUNGUS = RegUtil.register(Registries.BLOCK, "thunder_fungus",
 		(id) -> new NetherFungusBlock(
