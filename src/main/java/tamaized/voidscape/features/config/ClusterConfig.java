@@ -8,13 +8,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class ClusterConfig implements FeatureConfiguration {
-	public static final Codec<ClusterConfig> CODEC = RecordCodecBuilder.create((config) -> config.
-			group(
-					BlockStateProvider.CODEC.fieldOf("to_place").forGetter(conf -> conf.provider),
-					BlockPredicate.CODEC.fieldOf("predicate").forGetter(conf -> conf.predicate),
-					PrimitiveCodec.FLOAT.fieldOf("chance").forGetter(conf -> conf.chance),
-					PrimitiveCodec.INT.fieldOf("max").forGetter(conf -> conf.max)
-			).apply(config, ClusterConfig::new));
+	public static final Codec<ClusterConfig> CODEC = RecordCodecBuilder.create((config) -> config.group(
+		BlockStateProvider.CODEC.fieldOf("to_place").forGetter(conf -> conf.provider),
+		BlockPredicate.CODEC.fieldOf("predicate").forGetter(conf -> conf.predicate),
+		PrimitiveCodec.FLOAT.fieldOf("chance").forGetter(conf -> conf.chance),
+		PrimitiveCodec.INT.fieldOf("max").forGetter(conf -> conf.max)
+	).apply(config, ClusterConfig::new));
 
 	public final BlockStateProvider provider;
 	public final BlockPredicate predicate;

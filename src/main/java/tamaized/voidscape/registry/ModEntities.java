@@ -118,11 +118,11 @@ public class ModEntities {
 	}
 
 	private <E extends Entity> EntityType.Builder<E> makeBuilder(EntityType.EntityFactory<E> factory, MobCategory classification) {
-		return EntityType.Builder.of(factory, classification).
-			sized(0.6F, 1.8F).
-			setTrackingRange(80).
-			setUpdateInterval(3).
-			setShouldReceiveVelocityUpdates(true);
+		return EntityType.Builder.of(factory, classification)
+			.sized(0.6F, 1.8F)
+			.setTrackingRange(80)
+			.setUpdateInterval(3)
+			.setShouldReceiveVelocityUpdates(true);
 	}
 
 	@PostConstruct

@@ -72,14 +72,14 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 	@Autowired
 	private LevelUtil levelUtil;
 
-	public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder.mapCodec((p_236091_0_) -> p_236091_0_.
-			group(BiomeSource.CODEC
-							.fieldOf("biome_source")
-							.forGetter(ChunkGenerator::getBiomeSource),
-					NoiseGeneratorSettings.CODEC
-							.fieldOf("settings")
-							.forGetter(VoidChunkGenerator::generatorSettings)).
-			apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
+	public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder.mapCodec((p_236091_0_) -> p_236091_0_.group(
+		BiomeSource.CODEC
+			.fieldOf("biome_source")
+			.forGetter(ChunkGenerator::getBiomeSource),
+		NoiseGeneratorSettings.CODEC
+			.fieldOf("settings")
+			.forGetter(VoidChunkGenerator::generatorSettings)
+	).apply(p_236091_0_, p_236091_0_.stable(VoidChunkGenerator::new)));
 
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 	private static final Object object_BeardifierMarker_INSTANCE;
@@ -296,17 +296,23 @@ public class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 						try {
 							worldGenRegion_.setCurrentlyGenerating(supplier1);
 							for (int y = worldGenRegion_.getMinY(); y < worldGenRegion_.getMaxY() - 15; y += 15) {
-								Holder<Biome> biome = biomeSource instanceof LayeredBiomeProvider voidscapeLayeredBiomeProvider ? voidscapeLayeredBiomeProvider.
-										getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) : this.biomeSource.
-										getNoiseBiome((centerX << 2) + 2, (y >> 2), (centerZ << 2) + 2,
-												worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?
-														serverChunkCache.randomState().sampler() :
-														RandomState.create(
-																worldGenRegion_.registryAccess(),
-																generatorSettings().unwrapKey().orElse(ResourceKey.create(
-																		Registries.NOISE_SETTINGS,
-																		Identifier.fromNamespaceAndPath(Voidscape.MODID, "void"))),
-																seed).sampler());
+								Holder<Biome> biome = biomeSource instanceof LayeredBiomeProvider voidscapeLayeredBiomeProvider ?
+									voidscapeLayeredBiomeProvider.getRealNoiseBiome((centerX << 2) + 2, y, (centerZ << 2) + 2) :
+									this.biomeSource.getNoiseBiome(
+										(centerX << 2) + 2,
+										(y >> 2),
+										(centerZ << 2) + 2,
+										worldGenRegion_.getChunkSource() instanceof ServerChunkCache serverChunkCache ?
+											serverChunkCache.randomState().sampler() :
+											RandomState.create(
+												worldGenRegion_.registryAccess(),
+												generatorSettings().unwrapKey().orElse(ResourceKey.create(
+													Registries.NOISE_SETTINGS,
+													Identifier.fromNamespaceAndPath(Voidscape.MODID, "void")
+												)),
+												seed
+											).sampler()
+									);
 								if (biome.value().getGenerationSettings().hasFeature(placedfeature)) {
 									BlockPos pos = new BlockPos(x, y, z);
 									placedfeature.placeWithBiomeCheck(worldGenRegion_, this, rand, pos);

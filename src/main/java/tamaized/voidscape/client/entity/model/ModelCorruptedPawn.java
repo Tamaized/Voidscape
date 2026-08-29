@@ -48,50 +48,59 @@ public class ModelCorruptedPawn<S extends LivingEntityRenderState> extends Entit
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition definition = mesh.getRoot();
 
-		definition.addOrReplaceChild("head",
-				CubeListBuilder.create().texOffs(0, 0).
-						addBox(-4F, -8F, -4F, 16, 16, 16).mirror(), PartPose.
-						offsetAndRotation(-4F, 0F, -2F, 0F, 0F, 0F));
+		definition.addOrReplaceChild(
+			"head",
+			CubeListBuilder.create().texOffs(0, 0).addBox(-4F, -8F, -4F, 16, 16, 16).mirror(),
+			PartPose.offsetAndRotation(-4F, 0F, -2F, 0F, 0F, 0F)
+		);
 
-		definition.addOrReplaceChild("topTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(0F, -9F, 2F, 0F, 0F, 3.141593F));
+		definition.addOrReplaceChild(
+			"topTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(0F, -9F, 2F, 0F, 0F, 3.141593F)
+		);
 
-		definition.addOrReplaceChild("topRightTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(-9F, -9F, 2F, 0F, 0F, 2.324799F));
+		definition.addOrReplaceChild(
+			"topRightTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(-9F, -9F, 2F, 0F, 0F, 2.324799F)
+		);
 
-		definition.addOrReplaceChild("rightTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(-9F, 0F, 2F, 0F, 0F, 1.570796F));
+		definition.addOrReplaceChild(
+			"rightTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(-9F, 0F, 2F, 0F, 0F, 1.570796F)
+		);
 
-		definition.addOrReplaceChild("bottomRightTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(-9F, 9F, 2F, 0F, 0F, 0.7435722F));
+		definition.addOrReplaceChild(
+			"bottomRightTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(-9F, 9F, 2F, 0F, 0F, 0.7435722F)
+		);
 
-		definition.addOrReplaceChild("bottomTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(0F, 9F, 2F, 0F, 0F, 0F));
+		definition.addOrReplaceChild(
+			"bottomTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(0F, 9F, 2F, 0F, 0F, 0F)
+		);
 
-		definition.addOrReplaceChild("bottomLeftTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(9F, 9F, 2F, 0F, 0F, -0.7435801F));
+		definition.addOrReplaceChild(
+			"bottomLeftTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(9F, 9F, 2F, 0F, 0F, -0.7435801F)
+		);
 
-		definition.addOrReplaceChild("leftTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(9F, 0F, 2F, 0F, 0F, -1.570796F));
+		definition.addOrReplaceChild(
+			"leftTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(9F, 0F, 2F, 0F, 0F, -1.570796F)
+		);
 
-		definition.addOrReplaceChild("topLeftTentacle",
-				CubeListBuilder.create().texOffs(0, 32).
-						addBox(-2F, 0F, -2F, 4, 12, 4).mirror(), PartPose.
-						offsetAndRotation(9F, -9F, 2F, 0F, 0F, -2.324796F));
+		definition.addOrReplaceChild(
+			"topLeftTentacle",
+			CubeListBuilder.create().texOffs(0, 32).addBox(-2F, 0F, -2F, 4, 12, 4).mirror(),
+			PartPose.offsetAndRotation(9F, -9F, 2F, 0F, 0F, -2.324796F)
+		);
 
 		return LayerDefinition.create(mesh, 64, 64);
 	}

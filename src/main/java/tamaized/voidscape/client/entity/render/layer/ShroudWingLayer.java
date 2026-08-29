@@ -81,17 +81,17 @@ public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<
 			final float y2 = y1 + 1.0F;
 			final float z2 = z1 - 0.75F;
 
-			Matrix4f left = new Matrix4f(pose.pose()).
-				rotate(Axis.ZN.rotationDegrees(-25)).
-				rotate(Axis.XN.rotationDegrees(15));
+			Matrix4f left = new Matrix4f(pose.pose())
+				.rotate(Axis.ZN.rotationDegrees(-25))
+				.rotate(Axis.XN.rotationDegrees(15));
 			buffer.addVertex(left, x2, y2, z1).setUv(0, 1).setColor(color);
 			buffer.addVertex(left, x2, y1, z1).setUv(0, 0).setColor(color);
 			buffer.addVertex(left, x1, y1, z2).setUv(1, 0).setColor(color);
 			buffer.addVertex(left, x1, y2, z2).setUv(1, 1).setColor(color);
 
-			Matrix4f right = new Matrix4f(pose.pose()).
-				rotate(Axis.ZN.rotationDegrees(25)).
-				rotate(Axis.XN.rotationDegrees(15));
+			Matrix4f right = new Matrix4f(pose.pose())
+				.rotate(Axis.ZN.rotationDegrees(25))
+				.rotate(Axis.XN.rotationDegrees(15));
 			float offset = -1.2F;
 			buffer.addVertex(right, x1 + offset, y2, z1).setUv(0, 1).setColor(color);
 			buffer.addVertex(right, x1 + offset, y1, z1).setUv(0, 0).setColor(color);

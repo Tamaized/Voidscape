@@ -61,26 +61,30 @@ public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel
 		MeshDefinition mesh = new MeshDefinition();
 		PartDefinition definition = mesh.getRoot();
 
-		definition.addOrReplaceChild("head",
-				CubeListBuilder.create().texOffs(0, 0).
-						addBox(-4F, -8F, -4F, 8, 8, 8), PartPose.
-						offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F));
+		definition.addOrReplaceChild(
+			"head",
+			CubeListBuilder.create().texOffs(0, 0).addBox(-4F, -8F, -4F, 8, 8, 8),
+			PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F)
+		);
 
-		definition.addOrReplaceChild("body",
-				CubeListBuilder.create().texOffs(32, 0).
-						addBox(-4F, 0F, -2F, 8, 12, 4), PartPose.
-						offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F));
+		definition.addOrReplaceChild(
+			"body",
+			CubeListBuilder.create().texOffs(32, 0).addBox(-4F, 0F, -2F, 8, 12, 4),
+			PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 0F, 0F)
+		);
 
 
-		definition.addOrReplaceChild("leftArm",
-				CubeListBuilder.create().texOffs(16, 16).
-						addBox(-1F, -2F, -2F, 4, 12, 4), PartPose.
-						offsetAndRotation(5F, 2F, 0F, 0F, 0F, -0.10000736613927509F));
+		definition.addOrReplaceChild(
+			"leftArm",
+			CubeListBuilder.create().texOffs(16, 16).addBox(-1F, -2F, -2F, 4, 12, 4),
+			PartPose.offsetAndRotation(5F, 2F, 0F, 0F, 0F, -0.10000736613927509F)
+		);
 
-		definition.addOrReplaceChild("rightArm",
-				CubeListBuilder.create().texOffs(0, 16).
-						addBox(-3F, -2F, -2F, 4, 12, 4), PartPose.
-						offsetAndRotation(-5F, 2F, 0F, 0F, 0F, 0.10000736613927509F));
+		definition.addOrReplaceChild(
+			"rightArm",
+			CubeListBuilder.create().texOffs(0, 16).addBox(-3F, -2F, -2F, 4, 12, 4),
+			PartPose.offsetAndRotation(-5F, 2F, 0F, 0F, 0F, 0.10000736613927509F)
+		);
 
 		return LayerDefinition.create(mesh, 64, 32);
 	}
@@ -165,7 +169,8 @@ public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel
 				this.rightArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (state.isCrouching ? 0.2617994F : 0.0F), -2.4F, 3.3F);
 				this.rightArm.yRot = this.head.yRot - 0.2617994F;
 			}
-			default -> {}
+			default -> {
+			}
 		}
 	}
 
@@ -196,7 +201,8 @@ public class ModelNullServant<S extends HumanoidRenderState> extends EntityModel
 				this.leftArm.xRot = Mth.clamp(this.head.xRot - 1.9198622F - (state.isCrouching ? 0.2617994F : 0.0F), -2.4F, 3.3F);
 				this.leftArm.yRot = this.head.yRot + 0.2617994F;
 			}
-			default -> {}
+			default -> {
+			}
 		}
 	}
 

@@ -80,8 +80,8 @@ public class ShaderRenderer {
 
 	private void draw(RenderPipeline pipeline, MeshData mesh, Vector4fc colorModulator, Map<String, Identifier> textures, @Nullable String uniformName, @Nullable GpuBufferSlice uniform) {
 		GpuDevice device = RenderSystem.getDevice();
-		GpuBufferSlice transforms = RenderSystem.getDynamicUniforms().
-			writeTransform(RenderSystem.getModelViewMatrix(), colorModulator, new Vector3f(), new Matrix4f());
+		GpuBufferSlice transforms = RenderSystem.getDynamicUniforms()
+			.writeTransform(RenderSystem.getModelViewMatrix(), colorModulator, new Vector3f(), new Matrix4f());
 		try (mesh) {
 			MeshData.DrawState drawState = mesh.drawState();
 			ByteBuffer indices = mesh.indexBuffer();
