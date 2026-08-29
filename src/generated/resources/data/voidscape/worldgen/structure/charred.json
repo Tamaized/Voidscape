@@ -14,5 +14,6 @@
       ]
     }
   },
-  "step": "raw_generation"
+  "step": "raw_generation",
+  "terrain_adaptation": "beard_box"
 }

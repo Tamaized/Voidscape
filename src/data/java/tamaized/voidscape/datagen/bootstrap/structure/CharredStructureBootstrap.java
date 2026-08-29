@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.registry.ModBiomes;
@@ -38,6 +39,7 @@ public class CharredStructureBootstrap extends StructureBootstrapHolder {
 			context.lookup(Registries.BIOME).getOrThrow(biomes.VOID)
 		))
 			.generationStep(GenerationStep.Decoration.RAW_GENERATION)
+			.terrainAdapation(TerrainAdjustment.BEARD_BOX)
 			.spawnOverrides(Map.of(
 				MobCategory.MONSTER,
 				new StructureSpawnOverride(
