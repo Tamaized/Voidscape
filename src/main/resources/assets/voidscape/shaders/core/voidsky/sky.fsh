@@ -5,7 +5,7 @@
 
 uniform sampler2D Sampler1;
 
-in vec4 texProj0;
+in vec3 direction;
 
 const mat4 SCALE_TRANSLATE = mat4(
 0.5, 0.0, 0.0, 0.25,
@@ -24,7 +24,7 @@ mat4 end_portal_layer(float layer) {
 
     mat2 rotate = mat2_rotate_z(radians((layer * layer * 4321.0 + layer * 9.0) * 2.0));
 
-    mat2 scale = mat2((4.5 - layer / 4.0) * 2.0);
+    mat2 scale = mat2(4.5 - layer / 4.0);
 
     return mat4(scale * rotate) * translate * SCALE_TRANSLATE;
 }
@@ -36,6 +36,16 @@ float mod(float a, float b) {
 out vec4 fragColor;
 
 void main() {
+    vec3 axis = abs(direction);
+    vec4 texProj0;
+    if (axis.x >= axis.y && axis.x >= axis.z) {
+        texProj0 = vec4(direction.z, direction.y, 0.0, axis.x);
+    } else if (axis.y >= axis.z) {
+        texProj0 = vec4(direction.x, direction.z, 0.0, axis.y);
+    } else {
+        texProj0 = vec4(direction.x, direction.y, 0.0, axis.z);
+    }
+
     vec3 color = vec3(0);
     float colorMod = 0.15;
     float fade = 0.1;
