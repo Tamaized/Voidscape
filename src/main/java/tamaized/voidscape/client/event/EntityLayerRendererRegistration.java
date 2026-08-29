@@ -5,6 +5,7 @@ import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Avatar;
 import net.neoforged.api.distmarker.Dist;
@@ -61,6 +63,9 @@ public class EntityLayerRendererRegistration {
 			addArmorOverlay(event.getMannequinRenderer(renderer));
 		});
 		event.getEntityTypes().forEach(type -> addArmorOverlay(event.getRenderer(type)));
+		ArmorStandRenderer armorStand = event.getRenderer(EntityType.ARMOR_STAND);
+		if (armorStand != null)
+			armorStand.addLayer(new ShroudWingLayer<>(armorStand));
 	}
 
 	private void addArmorOverlay(@Nullable EntityRenderer<?, ?> renderer) {

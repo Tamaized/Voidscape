@@ -7,7 +7,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.context.ContextKey;
@@ -18,9 +18,10 @@ import tamaized.beanification.Configurable;
 import tamaized.voidscape.client.DonatorLayerRenderTypes;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
+import tamaized.voidscape.registry.ModItemComponents;
 
 @Configurable
-public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private DonatorLayerRenderTypes donatorLayerRenderTypes;
@@ -30,6 +31,9 @@ public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<
 
 	@Autowired(dist = Dist.CLIENT)
 	private EntityLayerRendererRegistration entityLayerRendererRegistration;
+
+	@Autowired(dist = Dist.CLIENT)
+	private ModItemComponents itemComponents;
 
 	private static final int SUBMIT_ORDER_BACKING = 5;
 
@@ -42,7 +46,7 @@ public class ShroudWingLayer<T extends AvatarRenderState, M extends EntityModel<
 	@Override
 	public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, T state, float yRot, float xRot) {
 		boolean donatorEnabled = check(shroudWingLayerRenderStateExtension.isDonatorAndEnabled, state);
-		if (donatorEnabled || check(shroudWingLayerRenderStateExtension.hasDraconicAttribute, state)) {
+		if (donatorEnabled || state.chestEquipment.getOrDefault(itemComponents.DRACONIC, false)) {
 			Integer donatorColor = state.getRenderData(shroudWingLayerRenderStateExtension.donatorColor);
 			boolean itemTarget = isRedirectedToItemTarget(state);
 			if (!itemTarget)
