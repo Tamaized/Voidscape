@@ -35,7 +35,7 @@ public class BonemealHoe extends BreakableHoe {
 	public InteractionResult useOn(UseOnContext context) {
 		return breakableHelper.useOn(context, () -> {
 			InteractionResult result = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? InteractionResult.PASS : super.useOn(context);
-			if (result == InteractionResult.PASS) {
+			if (result instanceof InteractionResult.Pass) {
 				result = Items.BONE_MEAL.useOn(new UseOnContext(
 					context.getLevel(),
 					context.getPlayer(),
@@ -47,7 +47,7 @@ public class BonemealHoe extends BreakableHoe {
 						context.getClickedPos(),
 						context.isInside()
 					)));
-				if ((result == InteractionResult.SUCCESS || result == InteractionResult.CONSUME) && context.getPlayer() != null) {
+				if (result.consumesAction() && context.getPlayer() != null) {
 					context.getItemInHand().hurtAndBreak(20, context.getPlayer(), EquipmentSlot.MAINHAND);
 					if (context.getPlayer() instanceof ServerPlayer player)
 						advancementTriggers.HOE_BONEMEAL_TRIGGER.get().trigger(player);
