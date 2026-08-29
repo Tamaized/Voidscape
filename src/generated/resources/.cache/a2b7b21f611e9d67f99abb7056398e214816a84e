@@ -1,4 +1,4 @@
-// 26.1.2	2026-08-28T13:37:39.7410603	Tags for minecraft:block mod id voidscape
+// 26.1.2	2026-08-29T12:05:37.679806	Tags for minecraft:block mod id voidscape
 3f611ce11efe1a29ec5758cb2a3bf606a991c473 data/c/tags/block/ores_in_ground/bedrock.json
 a92ff84fbf3ac283cd6003dfa52ae5ab187f0db5 data/c/tags/block/ores_in_ground/end_stone.json
 51e1cba6f20d43210e9c1250f82295de4a664b47 data/c/tags/block/ores_in_ground/netherrack.json
@@ -16,9 +16,9 @@ a0f1f11cdb2b2187889c5c975a9adf27b6c1d584 data/minecraft/tags/block/incorrect_for
 dcb46ed80761cf9695df121a1f5091723abdd00d data/minecraft/tags/block/logs.json
 926b9496d731adec0e05bd6aa529a847359e0882 data/minecraft/tags/block/mineable/axe.json
 7a75828d53d8aea5d3f9ae59b3f0825bc66da872 data/minecraft/tags/block/mineable/hoe.json
-6aac6a2824a84dfc4b07a02575bd5094e3090a11 data/minecraft/tags/block/mineable/pickaxe.json
+0786476fecd69edcd35120cbca03663297520ee7 data/minecraft/tags/block/mineable/pickaxe.json
 18eb7bd28abd90a4064895cafaaeda50b7840643 data/minecraft/tags/block/needs_diamond_tool.json
-6332159db4f0eb30e192709f96237abd7d094abe data/minecraft/tags/block/needs_iron_tool.json
+9a25b9807de9bad29da0ab057cf64f8a78f3bc10 data/minecraft/tags/block/needs_iron_tool.json
 3834b85e9c127e5cc60951c23116db26f8d512cb data/minecraft/tags/block/nylium.json
 0603e38093539eb8aae23fadb83a82018e4908b8 data/minecraft/tags/block/planks.json
 586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/block/slabs.json

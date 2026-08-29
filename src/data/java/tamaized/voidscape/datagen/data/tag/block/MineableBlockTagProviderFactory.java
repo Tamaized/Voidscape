@@ -45,6 +45,7 @@ public class MineableBlockTagProviderFactory implements IBlockTagProviderFactory
 			blocks.machineBlocks().MACHINE_GERMINATOR.getKey(),
 			blocks.machineBlocks().MACHINE_WELL.getKey(),
 			blocks.machineBlocks().MACHINE_COOP.getKey(),
+			blocks.machineBlocks().MACHINE_HATCHERY.getKey(),
 			blocks.machineBlocks().MACHINE_INFUSER.getKey(),
 			blocks.machineBlocks().MACHINE_COLLECTOR.getKey()
 		));
