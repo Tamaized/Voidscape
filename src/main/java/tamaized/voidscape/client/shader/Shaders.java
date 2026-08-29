@@ -49,6 +49,17 @@ public class Shaders {
 		withDepthStencilState(DepthStencilState.DEFAULT).
 		build();
 
+	public final RenderPipeline POSITION_TEX_COLOR_NO_DEPTH_WRITE = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
+		withLocation(id("pipeline/position_tex_color_no_depth_write")).
+		withVertexShader("core/position_tex_color").
+		withFragmentShader("core/position_tex_color").
+		withSampler("Sampler0").
+		withCull(false).
+		withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT)).
+		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
+		withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false)).
+		build();
+
 	public final RenderPipeline STENCIL_ZERO_POS_COLOR = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).
 		withLocation(id("pipeline/stencil_zero_pos_color")).
 		withVertexShader("core/position_color").
@@ -104,7 +115,7 @@ public class Shaders {
 		withCull(false).
 		withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE)).
 		withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS).
-		withDepthStencilState(DepthStencilState.DEFAULT).
+		withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false)).
 		build();
 
 	public final RenderPipeline THUNDER_AURORA = RenderPipeline.
@@ -127,6 +138,7 @@ public class Shaders {
 		bus.addListener(RegisterRenderPipelinesEvent.class, event -> {
 			event.registerPipeline(POSITION_COLOR);
 			event.registerPipeline(POSITION_TEX_COLOR);
+			event.registerPipeline(POSITION_TEX_COLOR_NO_DEPTH_WRITE);
 			event.registerPipeline(STENCIL_ZERO_POS_COLOR);
 			event.registerPipeline(OPTIMAL_ALPHA_LESSTHAN_POS_TEX_COLOR);
 			event.registerPipeline(STENCIL_MASKED_GUI);
