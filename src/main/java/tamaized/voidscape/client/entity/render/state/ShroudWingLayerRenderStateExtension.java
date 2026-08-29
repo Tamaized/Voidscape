@@ -12,7 +12,7 @@ import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.DonatorData;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class ShroudWingLayerRenderStateExtension {
 
 	@Autowired(dist = Dist.CLIENT)

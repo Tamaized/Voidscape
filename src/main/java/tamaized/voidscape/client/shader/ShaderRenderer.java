@@ -38,7 +38,7 @@ import java.util.function.Supplier;
 @Component(dist = Dist.CLIENT)
 public class ShaderRenderer {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
 	private final Vector4fc noColorModulation = new Vector4f(1F, 1F, 1F, 1F);

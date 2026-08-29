@@ -1,6 +1,7 @@
 package tamaized.voidscape.client;
 
 import net.minecraft.client.color.block.BlockTintSources;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import tamaized.beanification.Autowired;
@@ -11,13 +12,13 @@ import tamaized.voidscape.registry.block.SpireBlocks;
 
 import java.util.List;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class TintHandler {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private SpireBlocks spireBlocks;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private OreBlocks oreBlocks;
 
 	@PostConstruct

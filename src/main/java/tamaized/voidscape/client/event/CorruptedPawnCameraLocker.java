@@ -2,6 +2,7 @@ package tamaized.voidscape.client.event;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import tamaized.beanification.Autowired;
@@ -10,10 +11,10 @@ import tamaized.beanification.PostConstruct;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class CorruptedPawnCameraLocker {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	@PostConstruct(PostConstruct.Bus.GAME)

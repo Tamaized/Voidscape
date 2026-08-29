@@ -4,6 +4,7 @@ import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -16,12 +17,12 @@ import tamaized.voidscape.item.QuiverItem;
 import tamaized.voidscape.network.server.ServerPacketQuiverScroll;
 import tamaized.voidscape.registry.ModItemComponents;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class QuiverScrollHandler {
 
 	private final ScrollWheelHandler scrollWheelHandler = new ScrollWheelHandler();
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModItemComponents components;
 
 	@PostConstruct(PostConstruct.Bus.GAME)

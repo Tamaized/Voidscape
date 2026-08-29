@@ -42,7 +42,7 @@ public class EntityLayerRendererRegistration {
 	@Autowired(dist = Dist.CLIENT)
 	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	public ContextKey<Float> CONTEXT_KEY_INFUSION = new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion"));

@@ -16,7 +16,7 @@ import tamaized.voidscape.registry.armor.ModArmorMaterials;
 
 import java.util.Optional;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class ChestEquipmentRenderStateExtension {
 
 	@Autowired(dist = Dist.CLIENT)

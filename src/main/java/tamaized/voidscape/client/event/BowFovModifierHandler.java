@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import tamaized.beanification.Autowired;
@@ -11,10 +12,10 @@ import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.regutil.ToolAndArmorHelper;
 
-@Component
+@Component(dist = Dist.CLIENT)
 public class BowFovModifierHandler {
 
-	@Autowired
+	@Autowired(dist = Dist.CLIENT)
 	private ToolAndArmorHelper toolAndArmorHelper;
 
 	@PostConstruct(PostConstruct.Bus.GAME)
