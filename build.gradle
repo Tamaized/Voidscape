@@ -48,8 +48,8 @@ shadowJar {
 	mustRunAfter jar
 	archiveClassifier.set('')
 	configurations = [project.configurations.shade]
-	relocate(new SimpleRelocator('tamaized', 'tamaized.beatdownstick')) {
-		exclude 'tamaized.beatdownstick.**'
+	relocate(new SimpleRelocator('tamaized', 'tamaized.voidscape')) {
+		exclude 'tamaized.voidscape.**'
 	}
 }
 
