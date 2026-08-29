@@ -18,7 +18,7 @@
     }
   },
   "display": {
-    "background": "minecraft:textures/block/bedrock.png",
+    "background": "minecraft:block/bedrock",
     "description": {
       "translate": "advancement.voidscape.root.desc"
     },

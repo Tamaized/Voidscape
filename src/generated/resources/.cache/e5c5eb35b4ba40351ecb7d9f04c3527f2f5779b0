@@ -1,4 +1,4 @@
-// 26.1.2	2026-08-26T20:14:47.030211	Advancements
+// 26.1.2	2026-08-29T12:00:04.0423557	Advancements
 0f173e82cf605674a537c427311b4ab90222552f data/voidscape/advancement/astral.json
 8cb06c138d512bd9803e797652e9a5e3403434a5 data/voidscape/advancement/astral_crystal.json
 c6fbd65759798b2caf39e2ec6ae2d3e4ce528497 data/voidscape/advancement/bucket.json
@@ -19,7 +19,7 @@ e7bd5c4c2a45b13f7b68c2c8167eb12ea611b48b data/voidscape/advancement/liquid.json
 b767efc90adf91a079bfb143ebfff2d7132b640c data/voidscape/advancement/portal.json
 d6c83f918463bd1f0f5839ccd2e4fef84ca526b1 data/voidscape/advancement/psychosis.json
 c6c7b16dba4b1bd1505c08ba7fa5be9a079fb4c4 data/voidscape/advancement/purified.json
-7020a7dc087fca0ad3f231d0a1108c0301473d09 data/voidscape/advancement/root.json
+a0493998b90cb5b30bd6cb5b1736964e3df871c4 data/voidscape/advancement/root.json
 e30a8037a86b7662b96daefa654d94f7dbbb1a5b data/voidscape/advancement/spidereggs.json
 e6014d02c6152379ae7aab4abb01d2738d402f14 data/voidscape/advancement/terraform.json
 806a328343a72fbb39c0a17f1666f3a42557444a data/voidscape/advancement/voidmancer.json

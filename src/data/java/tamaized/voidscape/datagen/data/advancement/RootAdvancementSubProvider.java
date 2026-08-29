@@ -36,7 +36,7 @@ public class RootAdvancementSubProvider extends AbstractAdvancementSubProvider {
 				items.materialItems().VOIDIC_CRYSTAL.get(),
 				title(),
 				description(),
-				Identifier.withDefaultNamespace("textures/block/bedrock.png"),
+				Identifier.withDefaultNamespace("block/bedrock"),
 				AdvancementType.TASK,
 				true,
 				true,
