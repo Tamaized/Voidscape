@@ -271,7 +271,7 @@ dependencies {
 }
 
 configurations.testImplementation {
-	exclude module: 'asm'
+	exclude group: 'voidscape', module: 'asm'
 }
 
 test {
