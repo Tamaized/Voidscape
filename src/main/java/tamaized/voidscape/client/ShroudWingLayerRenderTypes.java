@@ -16,12 +16,12 @@ import tamaized.voidscape.client.shader.Shaders;
 import java.util.function.Supplier;
 
 @Component(dist = Dist.CLIENT)
-public class DonatorLayerRenderTypes {
+public class ShroudWingLayerRenderTypes {
 
 	@Autowired(dist = Dist.CLIENT)
 	private Shaders shaders;
 
-	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/donator.png");
+	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/mask/shroud-wing.png");
 
 	public final Supplier<RenderType> WRAPPED_POS_TEX_COLOR = Suppliers.memoize(() -> RenderType.create(
 		"voidscape_wings_wrapped",

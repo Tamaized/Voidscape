@@ -15,7 +15,7 @@ import net.neoforged.api.distmarker.Dist;
 import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
-import tamaized.voidscape.client.DonatorLayerRenderTypes;
+import tamaized.voidscape.client.ShroudWingLayerRenderTypes;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
 import tamaized.voidscape.registry.ModItemComponents;
@@ -24,7 +24,7 @@ import tamaized.voidscape.registry.ModItemComponents;
 public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	@Autowired(dist = Dist.CLIENT)
-	private DonatorLayerRenderTypes donatorLayerRenderTypes;
+	private ShroudWingLayerRenderTypes shroudWingLayerRenderTypes;
 
 	@Autowired(dist = Dist.CLIENT)
 	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
@@ -54,14 +54,14 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 					poseStack,
 					submitNodeCollector,
 					SUBMIT_ORDER_BACKING,
-					donatorLayerRenderTypes.WRAPPED_POS_TEX_COLOR.get(),
+					shroudWingLayerRenderTypes.WRAPPED_POS_TEX_COLOR.get(),
 					ARGB.colorFromFloat(0.25F, 0F, 0F, 0F)
 				);
 			submitWings(
 				poseStack,
 				submitNodeCollector,
 				SUBMIT_ORDER_WINGS,
-				(itemTarget ? donatorLayerRenderTypes.WINGS_ITEM_TARGET : donatorLayerRenderTypes.WINGS).get(),
+				(itemTarget ? shroudWingLayerRenderTypes.WINGS_ITEM_TARGET : shroudWingLayerRenderTypes.WINGS).get(),
 				ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
 			);
 		}
