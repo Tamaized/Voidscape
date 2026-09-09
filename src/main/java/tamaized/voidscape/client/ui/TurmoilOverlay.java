@@ -47,7 +47,7 @@ public class TurmoilOverlay {
 	@Autowired(dist = Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
-	private final Identifier TEXTURE_MASK = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/mask.png");
+	private final Identifier TEXTURE_MASK = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/mask/turmoil.png");
 	private final Identifier TEXTURE_VOIDICINFUSION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
 	private final Identifier TEXTURE_WATCHINGYOU = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watchingyou.png");
 
