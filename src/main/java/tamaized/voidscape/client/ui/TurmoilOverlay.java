@@ -48,8 +48,8 @@ public class TurmoilOverlay {
 	private ModDataAttachments dataAttachments;
 
 	private final Identifier TEXTURE_MASK = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/mask/turmoil.png");
-	private final Identifier TEXTURE_VOIDICINFUSION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidicinfusion.png");
-	private final Identifier TEXTURE_WATCHINGYOU = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watchingyou.png");
+	private final Identifier TEXTURE_VOIDIC_INFUSION = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/voidic-infusion.png");
+	private final Identifier TEXTURE_WATCHING_YOU = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/ui/watching-you.png");
 
 	private final Vector4fc noColorModulation = new Vector4f(1F, 1F, 1F, 1F);
 	private final Projection guiProjection = new Projection();
@@ -135,7 +135,7 @@ public class TurmoilOverlay {
 		endPerc = Mth.clamp(endPerc, 0, 1);
 		endPerc *= 0.15F;
 		perc += endPerc;
-		blitFullscreen(graphics, TEXTURE_WATCHINGYOU, ARGB.colorFromFloat(perc, 1F, 1F, 1F));
+		blitFullscreen(graphics, TEXTURE_WATCHING_YOU, ARGB.colorFromFloat(perc, 1F, 1F, 1F));
 	}
 
 	private void renderInfusion(GuiGraphicsExtractor graphics, Insanity insanity) {
@@ -143,7 +143,7 @@ public class TurmoilOverlay {
 			return;
 		float perc = insanity.getInfusion() / 600F;
 		perc = Mth.clamp(perc, 0, 1);
-		blitFullscreen(graphics, TEXTURE_VOIDICINFUSION, ARGB.colorFromFloat(perc, 0.4F, 0F, 1F));
+		blitFullscreen(graphics, TEXTURE_VOIDIC_INFUSION, ARGB.colorFromFloat(perc, 0.4F, 0F, 1F));
 	}
 
 	private void blitFullscreen(GuiGraphicsExtractor graphics, Identifier texture, int color) {
