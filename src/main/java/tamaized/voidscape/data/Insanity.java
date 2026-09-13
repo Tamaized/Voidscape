@@ -103,6 +103,20 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 	private boolean aura;
 	private int leapParticles;
 
+	private WingType wingType = WingType.NORMAL;
+
+	public enum WingType {
+		NORMAL, ARTI, TOXIC
+	}
+
+	public WingType getWingType() {
+		return wingType;
+	}
+
+	public void setWingType(WingType wingType) {
+		this.wingType = wingType;
+	}
+
 	@Nullable
 	private CorruptedPawnEntity hunt;
 
@@ -437,6 +451,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 		output.putBoolean("inPortal", inPortal);
 		output.putBoolean("pleaseLeavePortal", pleaseLeavePortal);
 		output.putInt("teleportTick", teleportTick);
+		output.putString("wingType", wingType.name());
 	}
 
 	@Override
@@ -446,6 +461,11 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 		inPortal = input.getBooleanOr("inPortal", false);
 		pleaseLeavePortal = input.getBooleanOr("pleaseLeavePortal", false);
 		teleportTick = input.getIntOr("teleportTick", 0);
+		try {
+			wingType = WingType.valueOf(input.getStringOr("wingType", WingType.NORMAL.name()));
+		} catch (IllegalArgumentException _) {
+			wingType = WingType.NORMAL;
+		}
 	}
 
 	@Override
@@ -456,6 +476,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 		buffer.writeBoolean(aura);
 		buffer.writeInt(leapParticles);
 		buffer.writeInt(hunt == null ? -1 : hunt.getId());
+		buffer.writeInt(wingType.ordinal());
 	}
 
 	@Override
@@ -470,6 +491,7 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 			hunt = pawn;
 		else if (huntId < 0)
 			hunt = null;
+		wingType = WingType.values()[buffer.readInt()];
 	}
 
 	private void sendToClient(ServerPlayer parent) {

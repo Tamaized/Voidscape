@@ -18,6 +18,7 @@ import tamaized.beanification.Configurable;
 import tamaized.voidscape.client.ShroudWingLayerRenderTypes;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModItemComponents;
 
 @Configurable
@@ -57,13 +58,20 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 					shroudWingLayerRenderTypes.WRAPPED_POS_TEX_COLOR.get(),
 					ARGB.colorFromFloat(0.25F, 0F, 0F, 0F)
 				);
+			Insanity.WingType wingType = state.getRenderData(shroudWingLayerRenderStateExtension.wingType);
+			if (wingType == null)
+				wingType = Insanity.WingType.NORMAL;
 			submitWings(
 				poseStack,
 				submitNodeCollector,
 				SUBMIT_ORDER_WINGS,
-				(itemTarget ? shroudWingLayerRenderTypes.WINGS_ITEM_TARGET : shroudWingLayerRenderTypes.WINGS).get(),
-				ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
-			);
+				(itemTarget ? shroudWingLayerRenderTypes.WINGS_ITEM_TARGET : shroudWingLayerRenderTypes.WINGS).apply(switch (wingType) {
+						case NORMAL -> ShroudWingLayerRenderTypes.WingVisualType.SKY;
+						case ARTI -> ShroudWingLayerRenderTypes.WingVisualType.ARTI;
+						case TOXIC -> ShroudWingLayerRenderTypes.WingVisualType.TOXIC;
+				}),
+					ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
+				);
 		}
 	}
 

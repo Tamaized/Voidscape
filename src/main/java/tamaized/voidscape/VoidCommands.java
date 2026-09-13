@@ -14,10 +14,12 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.server.command.EnumArgument;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import tamaized.beanification.Autowired;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.armor.set.AstralArmorSet;
@@ -129,7 +131,16 @@ public class VoidCommands {
 								Player me = context.getSource().getPlayerOrException();
 								me.getData(dataAttachments.INSANITY).setParanoia(getArgAsInt(context, "amount"));
 								return 0;
-							})))));
+							}))))
+				.then(Commands.literal("wing")
+					.then(Commands.argument("type", EnumArgument.enumArgument(Insanity.WingType.class))
+						.executes(context -> {
+							Player me = context.getSource().getPlayerOrException();
+							me.getData(dataAttachments.INSANITY).setWingType(context.getArgument("type", Insanity.WingType.class));
+							return 0;
+						}))
+				)
+			);
 	}
 
 }

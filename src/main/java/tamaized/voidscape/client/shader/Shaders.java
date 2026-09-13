@@ -121,16 +121,12 @@ public class Shaders {
 		.withDepthStencilState(DepthStencilState.DEFAULT)
 		.build();
 
-	public final RenderPipeline VOIDSKY_WINGS = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
-		.withLocation(id("pipeline/voidsky_wings"))
-		.withVertexShader(id("core/voidsky/wings"))
-		.withFragmentShader(id("core/voidsky/wings"))
-		.withSampler("Sampler0")
-		.withSampler("Sampler1")
-		.withCull(false)
-		.withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
-		.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
-		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+	public final RenderPipeline VOIDSKY_WINGS = beginWingPipeline()
+		.withShaderDefine("WingSpeed", 1.5F)
+		.build();
+
+	public final RenderPipeline VOIDSKY_WINGS_FAST = beginWingPipeline()
+		.withShaderDefine("WingSpeed", 32.0F)
 		.build();
 
 	public final RenderPipeline THUNDER_AURORA = RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
@@ -142,10 +138,6 @@ public class Shaders {
 		.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
 		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
 		.build();
-
-	private Identifier id(String path) {
-		return Identifier.fromNamespaceAndPath(Voidscape.MODID, path);
-	}
 
 	@PostConstruct
 	private void init(IEventBus bus) {
@@ -161,6 +153,23 @@ public class Shaders {
 			event.registerPipeline(VOIDSKY_WINGS);
 			event.registerPipeline(THUNDER_AURORA);
 		});
+	}
+
+	private RenderPipeline.Builder beginWingPipeline() {
+		return RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
+			.withLocation(id("pipeline/voidsky_wings"))
+			.withVertexShader(id("core/voidsky/wings"))
+			.withFragmentShader(id("core/voidsky/wings"))
+			.withSampler("Sampler0")
+			.withSampler("Sampler1")
+			.withCull(false)
+			.withColorTargetState(new ColorTargetState(BlendFunction.ADDITIVE))
+			.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+			.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false));
+	}
+
+	private Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(Voidscape.MODID, path);
 	}
 
 }

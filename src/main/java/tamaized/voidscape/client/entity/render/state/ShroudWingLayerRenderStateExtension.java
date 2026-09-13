@@ -10,6 +10,7 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.DonatorData;
+import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModDataAttachments;
 
 @Component(dist = Dist.CLIENT)
@@ -22,6 +23,8 @@ public class ShroudWingLayerRenderStateExtension {
 
 	public ContextKey<Integer> donatorColor = createKey("donator_color");
 
+	public ContextKey<Insanity.WingType> wingType = createKey("wing_type");
+
 	private <T> ContextKey<T> createKey(String name) {
 		return new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "shroud_wing_layer_").withSuffix(name));
 	}
@@ -30,6 +33,8 @@ public class ShroudWingLayerRenderStateExtension {
 		DonatorData data = avatar.getData(dataAttachments.DONATOR);
 		state.setRenderData(isDonatorAndEnabled, data.enabled);
 		state.setRenderData(donatorColor, data.color);
+		Insanity insanityData = avatar.getData(dataAttachments.INSANITY);
+		state.setRenderData(wingType, insanityData.getWingType());
 	}
 
 }
