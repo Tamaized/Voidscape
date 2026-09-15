@@ -1,11 +1,15 @@
 package tamaized.voidscape.client.entity.render;
 
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.blockentity.AbstractEndPortalRenderer;
+import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -26,8 +30,9 @@ public class RenderNullServant<T extends NullServantEntity> extends MobRenderer<
 
 	public RenderNullServant(EntityRendererProvider.Context context) {
 		super(context, new ModelNullServant<>(context.bakeLayer(modelLayerLocations.NULL_SERVANT)), 0F);
-		this.addLayer(new ItemInHandLayer<>(this));
-		this.addLayer(new EyeLayer(this));
+		addLayer(new ItemInHandLayer<>(this));
+		addLayer(new EyeLayer(this));
+		addLayer(new HumanoidArmorLayer<>(this, ArmorModelSet.bake(ModelLayers.ZOMBIE_ARMOR, context.getModelSet(), HumanoidModel::new), context.getEquipmentRenderer()));
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class RenderNullServant<T extends NullServantEntity> extends MobRenderer<
 	@Override
 	public void extractRenderState(T entity, NullServantRenderState state, float partialTicks) {
 		super.extractRenderState(entity, state, partialTicks);
-		HumanoidMobRenderer.extractHumanoidRenderState(entity, state, partialTicks, this.itemModelResolver);
+		HumanoidMobRenderer.extractHumanoidRenderState(entity, state, partialTicks, itemModelResolver);
 		state.augmentColor = switch (entity.getAugment()) {
 			case NullServantEntity.AUGMENT_TITANITE -> 0x00FF00;
 			case NullServantEntity.AUGMENT_ICHOR -> 0xFF7F00;
