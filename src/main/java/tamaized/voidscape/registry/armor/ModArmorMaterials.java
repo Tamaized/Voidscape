@@ -60,7 +60,6 @@ public class ModArmorMaterials {
 		ASSET_KEY_CORRUPT
 	));
 
-
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_TITANITE = assetKey("titanite");
 	public final Supplier<ArmorMaterial> TITANITE = Suppliers.memoize(() -> new ArmorMaterial(
 		43,
@@ -97,7 +96,6 @@ public class ModArmorMaterials {
 		ASSET_KEY_ICHOR
 	));
 
-
 	private final ResourceKey<EquipmentAsset> ASSET_KEY_ASTRAL = assetKey("astral");
 	public final Supplier<ArmorMaterial> ASTRAL = Suppliers.memoize(() -> new ArmorMaterial(
 		47,
@@ -116,11 +114,30 @@ public class ModArmorMaterials {
 		ASSET_KEY_ASTRAL
 	));
 
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_SHROUD = assetKey("shroud");
+	public final Supplier<ArmorMaterial> SHROUD = Suppliers.memoize(() -> new ArmorMaterial(
+		39,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 3);
+			map.put(ArmorType.LEGGINGS, 6);
+			map.put(ArmorType.CHESTPLATE, 8);
+			map.put(ArmorType.HELMET, 3);
+			map.put(ArmorType.BODY, 15);
+		}),
+		27,
+		SoundEvents.ARMOR_EQUIP_LEATHER,
+		6F,
+		0.20F,
+		itemTags.REPAIR_MATERIAL_ASTRAL,
+		ASSET_KEY_SHROUD
+	));
+
 	public final Map<ResourceKey<EquipmentAsset>, ResourceKey<EquipmentAsset>> ELYTRA_EQUIPMENT_ASSETS = Map.of(
 		ASSET_KEY_VOIDIC_CRYSTAL, elytraAssetKey(ASSET_KEY_VOIDIC_CRYSTAL),
 		ASSET_KEY_TITANITE, elytraAssetKey(ASSET_KEY_TITANITE),
 		ASSET_KEY_ICHOR, elytraAssetKey(ASSET_KEY_ICHOR),
-		ASSET_KEY_ASTRAL, elytraAssetKey(ASSET_KEY_ASTRAL)
+		ASSET_KEY_ASTRAL, elytraAssetKey(ASSET_KEY_ASTRAL),
+		ASSET_KEY_SHROUD, elytraAssetKey(ASSET_KEY_SHROUD)
 	);
 
 	private ResourceKey<EquipmentAsset> assetKey(String material) {

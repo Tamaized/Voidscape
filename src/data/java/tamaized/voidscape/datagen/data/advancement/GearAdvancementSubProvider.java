@@ -101,6 +101,15 @@ public class GearAdvancementSubProvider extends AbstractAdvancementSubProvider {
 			.addCriterion("astral_boots", InventoryChangeTrigger.TriggerInstance.hasItems(
 				items.modArmorSetComponentDirectory().astralArmorSet().ASTRAL_BOOTS.get()
 			))
+			.addCriterion("shroud_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET.get()
+			))
+			.addCriterion("shroud_chest", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST.get()
+			))
+			.addCriterion("shroud_legs", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_LEGS.get()
+			))
 			.sendsTelemetryEvent()
 			.save(saver, location());
 	}

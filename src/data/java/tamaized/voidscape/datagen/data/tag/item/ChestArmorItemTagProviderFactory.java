@@ -23,7 +23,8 @@ public class ChestArmorItemTagProviderFactory implements IItemTagProviderFactory
 			armor.corruptArmorSet().CORRUPT_CHEST.getKey(),
 			armor.titaniteArmorSet().TITANITE_CHEST.getKey(),
 			armor.ichorArmorSet().ICHOR_CHEST.getKey(),
-			armor.astralArmorSet().ASTRAL_CHEST.getKey()
+			armor.astralArmorSet().ASTRAL_CHEST.getKey(),
+			armor.shroudArmorSet().SHROUD_CHEST.getKey()
 		));
 	}
 }

@@ -35,6 +35,7 @@ public class ModModelLayerLocations {
 	public final ModelLayerLocation MODEL_ARMOR_TITANITE = make("titanite");
 	public final ModelLayerLocation MODEL_ARMOR_ICHOR = make("ichor");
 	public final ModelLayerLocation MODEL_ARMOR_ASTRAL = make("astral");
+	public final ModelLayerLocation MODEL_ARMOR_SHROUD = make("shroud");
 
 	private ModelLayerLocation make(String name) {
 		return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Voidscape.MODID, "main"), name);
@@ -58,6 +59,7 @@ public class ModModelLayerLocations {
 		event.registerLayerDefinition(MODEL_ARMOR_TITANITE, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 		event.registerLayerDefinition(MODEL_ARMOR_ICHOR, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 		event.registerLayerDefinition(MODEL_ARMOR_ASTRAL, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(MODEL_ARMOR_SHROUD, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 
 	}
 

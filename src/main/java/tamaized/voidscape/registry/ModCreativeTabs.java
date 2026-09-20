@@ -157,6 +157,10 @@ public class ModCreativeTabs {
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_CHEST.get());
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_LEGS.get());
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_BOOTS.get());
+				// Gear - Shroud
+				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_HELMET.get());
+				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_CHEST.get());
+				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_LEGS.get());
 			})
 			.build());
 

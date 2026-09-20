@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:shroud"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:shroud"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:shroud"
+      }
+    ]
+  }
+}

@@ -23,7 +23,8 @@ public class HeadArmorItemTagProviderFactory implements IItemTagProviderFactory 
 			armor.corruptArmorSet().CORRUPT_HELMET.getKey(),
 			armor.titaniteArmorSet().TITANITE_HELMET.getKey(),
 			armor.ichorArmorSet().ICHOR_HELMET.getKey(),
-			armor.astralArmorSet().ASTRAL_HELMET.getKey()
+			armor.astralArmorSet().ASTRAL_HELMET.getKey(),
+			armor.shroudArmorSet().SHROUD_HELMET.getKey()
 		));
 	}
 }

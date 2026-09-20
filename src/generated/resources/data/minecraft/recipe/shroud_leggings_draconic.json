@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:dragon_egg",
+  "base": "voidscape:shroud_legs",
+  "result": {
+    "components": {
+      "voidscape:draconic": true
+    },
+    "id": "voidscape:shroud_legs"
+  },
+  "template": "voidscape:voidic_template"
+}

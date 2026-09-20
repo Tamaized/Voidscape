@@ -1,4 +1,4 @@
-// 26.1.2	2026-08-26T20:14:47.0129475	Model Definitions - voidscape
+// 26.1.2	2026-09-16T10:55:24.2033427	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -115,6 +115,9 @@ a155d3b7e69755f37efa1ce7fbfecc24c2644ba4 assets/voidscape/items/machine_infuser.
 a1ffb1a09929c84ad9ce58d08b1cec7c800f8a1d assets/voidscape/items/machine_well.json
 12fe282ba5d15efb8ccb402f48802524c3458167 assets/voidscape/items/null_black.json
 d6652971c9394afb8450c1d086f5e04eb9eeed5d assets/voidscape/items/null_white.json
+6ae587ea733da6917d49d4cc0a10952ba8b6f0bc assets/voidscape/items/shroud_chest.json
+4c78ad7ef56365670db869282324bf12a2d47b9e assets/voidscape/items/shroud_helmet.json
+cee9d77cfb46c919845aac3e621ce08b04b760df assets/voidscape/items/shroud_legs.json
 a36ca642ddab23a25fa902cab3ef5524d5adbfe8 assets/voidscape/items/strange_ore.json
 bd41eaf31388d8b9ee50d8b70d44380424dff4a8 assets/voidscape/items/strange_pearl.json
 3b6bedc41130ba6ce96ccc865ea3baeda91dbb83 assets/voidscape/items/tendril.json
@@ -328,6 +331,12 @@ c2efbffb93c71b3465a0a272aa9e8e14e5d803b0 assets/voidscape/models/item/ichor_xbow
 393f1acff65c5784e388ddc600100f8156aa7098 assets/voidscape/models/item/ichor_xbow_pulling_0.json
 4dc2189b11440ab4d2a16cf0c5711f6d2bec6f46 assets/voidscape/models/item/ichor_xbow_pulling_1.json
 c167d91797cf2d3b498bd9893838f515fe841a07 assets/voidscape/models/item/ichor_xbow_pulling_2.json
+0197ba45cf35a595fdf96c2a87132344601bf720 assets/voidscape/models/item/shroud_chest.json
+92a3fd5116b26d91817ff79d5cdf681a7c505b86 assets/voidscape/models/item/shroud_chest_broken.json
+e4f5b290b0050445e6d07769c945370b2613c526 assets/voidscape/models/item/shroud_helmet.json
+2d82bf8ad3e1336d13104cb48b9fa1b50f6ff618 assets/voidscape/models/item/shroud_helmet_broken.json
+0a58aa8bcc0e1704b1bf0e39236f0384f5b47a38 assets/voidscape/models/item/shroud_legs.json
+33940dd4f2539e5dad601f187e165f1d70cae3eb assets/voidscape/models/item/shroud_legs_broken.json
 532ae8c02fd5d8a704279b9c1a4aee2a47cd0b71 assets/voidscape/models/item/strange_pearl.json
 7800cec4e0784cb69c123f733ce305cc08924343 assets/voidscape/models/item/tendril.json
 f2e38ee050e74b504ae571349768cb20fddd2453 assets/voidscape/models/item/thunder_fungus.json

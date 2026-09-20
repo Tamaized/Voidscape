@@ -121,6 +121,36 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "shroud_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:shroud_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shroud_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:shroud_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shroud_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:shroud_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "titanite_boots": {
       "conditions": {
         "items": [
@@ -234,7 +264,10 @@
       "astral_helmet",
       "astral_chest",
       "astral_legs",
-      "astral_boots"
+      "astral_boots",
+      "shroud_helmet",
+      "shroud_chest",
+      "shroud_legs"
     ]
   ],
   "sends_telemetry_event": true

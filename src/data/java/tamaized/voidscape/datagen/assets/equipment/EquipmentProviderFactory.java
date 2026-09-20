@@ -31,6 +31,7 @@ public class EquipmentProviderFactory {
 				humanoid(output, "titanite");
 				humanoid(output, "ichor");
 				humanoid(output, "astral");
+				humanoid(output, "shroud");
 				armorMaterials.ELYTRA_EQUIPMENT_ASSETS.forEach((base, elytra) -> humanoidWithElytra(output, base, elytra));
 			}
 

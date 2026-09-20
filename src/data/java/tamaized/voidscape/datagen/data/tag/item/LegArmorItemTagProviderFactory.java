@@ -23,7 +23,8 @@ public class LegArmorItemTagProviderFactory implements IItemTagProviderFactory {
 			armor.corruptArmorSet().CORRUPT_LEGS.getKey(),
 			armor.titaniteArmorSet().TITANITE_LEGS.getKey(),
 			armor.ichorArmorSet().ICHOR_LEGS.getKey(),
-			armor.astralArmorSet().ASTRAL_LEGS.getKey()
+			armor.astralArmorSet().ASTRAL_LEGS.getKey(),
+			armor.shroudArmorSet().SHROUD_LEGS.getKey()
 		));
 	}
 }

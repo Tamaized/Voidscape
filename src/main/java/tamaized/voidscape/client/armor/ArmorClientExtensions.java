@@ -21,11 +21,7 @@ import tamaized.voidscape.client.armor.model.ModelArmorFullbright;
 import tamaized.voidscape.client.armor.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.armor.model.ModelArmorCrystalline;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
-import tamaized.voidscape.registry.armor.set.AstralArmorSet;
-import tamaized.voidscape.registry.armor.set.CorruptArmorSet;
-import tamaized.voidscape.registry.armor.set.IchorArmorSet;
-import tamaized.voidscape.registry.armor.set.TitaniteArmorSet;
-import tamaized.voidscape.registry.armor.set.VoidicCrystalArmorSet;
+import tamaized.voidscape.registry.armor.set.*;
 
 import java.util.function.Function;
 
@@ -101,6 +97,15 @@ public class ArmorClientExtensions {
 			astral.ASTRAL_CHEST,
 			astral.ASTRAL_LEGS,
 			astral.ASTRAL_BOOTS
+		);
+
+		ShroudArmorSet shroud = armorSets.shroudArmorSet();
+		register(
+			event,
+			crystalline("shroud", locations -> locations.MODEL_ARMOR_SHROUD, null, true),
+			shroud.SHROUD_HELMET,
+			shroud.SHROUD_CHEST,
+			shroud.SHROUD_LEGS
 		);
 	}
 
