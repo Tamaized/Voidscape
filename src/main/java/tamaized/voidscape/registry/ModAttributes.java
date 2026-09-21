@@ -43,6 +43,9 @@ public class ModAttributes {
 	public final Holder<Attribute> VOIDIC_ARROW_DMG = RegUtil.register(Registries.ATTRIBUTE, "voidic_arrow_dmg",
 		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
 
+	public final Holder<Attribute> SHROUDED = RegUtil.register(Registries.ATTRIBUTE, "shrouded",
+		() -> new PercentageAttribute(namespaceUtils.prefixId("shrouded"), 0F, 0F, 1F).setSyncable(true));
+
 	@PostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
@@ -53,6 +56,7 @@ public class ModAttributes {
 			event.add(e, VOIDIC_RES);
 			event.add(e, VOIDIC_DMG);
 			event.add(e, VOIDIC_ARROW_DMG);
+			event.add(e, SHROUDED);
 		}));
 	}
 

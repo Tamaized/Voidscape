@@ -29,8 +29,8 @@ public class ModCreativeTabs {
 		() -> CreativeModeTab.builder()
 			.title(Component.translatable(Voidscape.MODID + ".item_group"))
 			.icon(() -> new ItemStack(itemComponentDirectory.materialItems().VOIDIC_CRYSTAL.get()))
-			.displayItems((parameters, output) -> {
-				//// Blocks
+			.displayItems((_, output) -> {
+				// ### Blocks
 				output.accept(blockComponentDirectory.oreBlocks().VOIDIC_CRYSTAL_ORE_ITEM.get());
 				output.accept(blockComponentDirectory.materialBlocks().VOIDIC_CRYSTAL_BLOCK_ITEM.get());
 				output.accept(blockComponentDirectory.functionalBlocks().VERY_DRIPPY_DRIPSTONE_ITEM.get());
@@ -74,13 +74,13 @@ public class ModCreativeTabs {
 				output.accept(blockComponentDirectory.etherealFruitBlocks().OVERWORLD.get());
 				output.accept(blockComponentDirectory.etherealFruitBlocks().NETHER.get());
 				output.accept(blockComponentDirectory.etherealFruitBlocks().END.get());
+				// ### Items
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_VOID.get());
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NULL.get());
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_OVERWORLD.get());
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_NETHER.get());
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_END.get());
 				output.accept(itemComponentDirectory.etherealFruitItems().ETHEREAL_FRUIT_SALAD.get());
-				//// Items
 				output.accept(itemComponentDirectory.miscItems().ETHEREAL_SPIDER_EGGS.get());
 				output.accept(itemComponentDirectory.augmentItems().ETHEREAL_SPIDER_FANG.get());
 				output.accept(itemComponentDirectory.miscItems().ETHEREAL_ESSENCE.get());
@@ -158,6 +158,7 @@ public class ModCreativeTabs {
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_LEGS.get());
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_BOOTS.get());
 				// Gear - Shroud
+				output.accept(itemComponentDirectory.materialItems().SHROUD_THREAD.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_HELMET.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_CHEST.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_LEGS.get());

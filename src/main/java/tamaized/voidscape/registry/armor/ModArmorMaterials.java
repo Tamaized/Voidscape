@@ -128,7 +128,7 @@ public class ModArmorMaterials {
 		SoundEvents.ARMOR_EQUIP_LEATHER,
 		6F,
 		0.20F,
-		itemTags.REPAIR_MATERIAL_ASTRAL,
+		itemTags.REPAIR_MATERIAL_SHROUD,
 		ASSET_KEY_SHROUD
 	));
 

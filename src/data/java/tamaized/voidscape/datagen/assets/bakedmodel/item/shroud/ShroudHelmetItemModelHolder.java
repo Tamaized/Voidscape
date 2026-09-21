@@ -27,6 +27,6 @@ public class ShroudHelmetItemModelHolder extends BreakableFullbrightItemModelHol
 
 	@Override
 	public Optional<String> lang() {
-		return Optional.of("Shroud Helmet");
+		return Optional.of("Shroud Cowl");
 	}
 }

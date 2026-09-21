@@ -42,5 +42,9 @@ public class RepairMaterialItemTagProviderFactory implements IItemTagProviderFac
 		accessor.tag(itemTags.REPAIR_MATERIAL_ASTRAL).add(
 			materialItems.ASTRAL_CRYSTAL.getKey()
 		);
+
+		accessor.tag(itemTags.REPAIR_MATERIAL_SHROUD).add(
+			materialItems.SHROUD_THREAD.getKey()
+		);
 	}
 }

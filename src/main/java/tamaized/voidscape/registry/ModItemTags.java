@@ -25,6 +25,7 @@ public class ModItemTags {
 	public final TagKey<Item> REPAIR_MATERIAL_TITANITE = make("titanite");
 	public final TagKey<Item> REPAIR_MATERIAL_ICHOR = make("ichor");
 	public final TagKey<Item> REPAIR_MATERIAL_ASTRAL = make("astral");
+	public final TagKey<Item> REPAIR_MATERIAL_SHROUD = make("shroud");
 
 	private TagKey<Item> make(String key) {
 		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Voidscape.MODID, key));

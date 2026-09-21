@@ -1,14 +1,14 @@
-// 26.1.2	2026-09-16T11:11:01.0481817	Tags for minecraft:item mod id voidscape
+// 26.1.2	2026-09-20T23:37:39.2336616	Tags for minecraft:item mod id voidscape
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/c/tags/item/tools/crossbow.json
-e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/c/tags/item/tools/ranged_weapon.json
+b07569e4b7bad76780858bc468257088a0761d91 data/c/tags/item/tools/ranged_weapon.json
 4a317bd506812d8418888e54089ea949ff735665 data/minecraft/tags/item/axes.json
 168c0101d3012c38e4f047fc1eb61cbdc1c022d1 data/minecraft/tags/item/chest_armor.json
 de8bd45cdfcbdbd0ad2db8c9a9aabe32253a9712 data/minecraft/tags/item/enchantable/bow.json
 8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/minecraft/tags/item/enchantable/crossbow.json
-bc245d61be8dc9cdf517ef3d0381b1bd7837aed6 data/minecraft/tags/item/enchantable/durability.json
+3a357fd440951ecebac4b1f06ce4f92ff31bb94c data/minecraft/tags/item/enchantable/durability.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/melee_weapon.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/sweeping.json
-e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/minecraft/tags/item/enchantable/vanishing.json
+b07569e4b7bad76780858bc468257088a0761d91 data/minecraft/tags/item/enchantable/vanishing.json
 ed163ff68b359d0508693ccf44614289e689ec0f data/minecraft/tags/item/foot_armor.json
 46965082e3d3600045338761d9ee8198d92c2ca3 data/minecraft/tags/item/head_armor.json
 fcc66acdcf606d2ac9367043d1bc31d2cc311d83 data/minecraft/tags/item/hoes.json
@@ -26,6 +26,7 @@ cf8b878e26c46bd53d717c85fb56085c19f06aca data/minecraft/tags/item/pickaxes.json
 5b09ff09c6e265ce0b0d9dc3c71921a4f7e7c104 data/voidscape/tags/item/charred.json
 d61504ab6b656f43e2cdfd069a645e4c4383a619 data/voidscape/tags/item/corrupt.json
 5003aacec6004ec131326a70a4557fdf47004828 data/voidscape/tags/item/ichor.json
+1adcb8fdc80184892ff67305d2e87e67f1c75a6c data/voidscape/tags/item/shroud.json
 e01d6f8df941e67346069d1038c48f92275c9efb data/voidscape/tags/item/thunder_stems.json
 c6ddff8407cb5943f6b937da48564445387cba50 data/voidscape/tags/item/titanite.json
 126b73b770002412e7d2a3dc4a3517077369f62d data/voidscape/tags/item/tools/astral.json

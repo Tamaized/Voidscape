@@ -1,16 +1,23 @@
 package tamaized.voidscape.registry.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.item.BlockTransformerItem;
 import tamaized.voidscape.item.StrangePearlThrowableItem;
 import tamaized.voidscape.item.VoidPortalActivatorItem;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.block.SpireBlocks;
+
+import java.util.function.Consumer;
 
 @Component
 public class MaterialItems {
@@ -69,5 +76,20 @@ public class MaterialItems {
 	public final DeferredHolder<Item, Item> ASTRAL_CRYSTAL = RegUtil.register(Registries.ITEM, "astral_crystal", (id) -> new Item(
 		itemProperties.LAVA_IMMUNE.apply(id)
 	));
+
+	public final DeferredHolder<Item, Item> SHROUD_THREAD = RegUtil.register(Registries.ITEM, "shroud_thread", (id) -> new Item(
+		itemProperties.LAVA_IMMUNE.apply(id)
+	) {
+		@Override
+		@SuppressWarnings("deprecation")
+		public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> builder, TooltipFlag tooltipFlag) {
+			super.appendHoverText(stack, context, display, builder, tooltipFlag);
+			builder.accept(net.minecraft.network.chat.Component.empty());
+			builder.accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.shroud_thread_squirm").withStyle(
+				ChatFormatting.LIGHT_PURPLE,
+				ChatFormatting.ITALIC
+			));
+		}
+	});
 
 }

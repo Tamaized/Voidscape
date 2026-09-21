@@ -50,11 +50,12 @@ public class ShroudArmorSet {
 			armorMaterials.SHROUD,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
+				() -> AttributeData.make(attributes.SHROUDED, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.HEAD),
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.HEAD),
 				() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.225D, EquipmentSlotGroup.HEAD),
 				() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.HEAD),
-				() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_VALUE, 0.30D, EquipmentSlotGroup.HEAD),
-				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.HEAD), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.HEAD)
+				() -> AttributeData.make(attributes.VOIDIC_VISIBILITY, AttributeModifier.Operation.ADD_VALUE, 0.35D, EquipmentSlotGroup.HEAD),
+				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.HEAD), AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.HEAD)
 			),
 			TOOLTIP
 		);
@@ -64,10 +65,11 @@ public class ShroudArmorSet {
 			armorMaterials.SHROUD,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
+				() -> AttributeData.make(attributes.SHROUDED, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.CHEST),
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.CHEST),
 				() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.225D, EquipmentSlotGroup.CHEST),
 				() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.CHEST),
-				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.CHEST), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.CHEST)
+				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.CHEST), AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.CHEST)
 			),
 			(stack, tick) -> stack.getOrDefault(itemComponents.ELYTRA, false),
 			TOOLTIP
@@ -78,10 +80,11 @@ public class ShroudArmorSet {
 			armorMaterials.SHROUD,
 			itemProperties.LAVA_IMMUNE,
 			attributeFactoryProvider.make(
+				() -> AttributeData.make(attributes.SHROUDED, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.LEGS),
 				() -> AttributeData.make(attributes.VOIDIC_RES, AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.LEGS),
 				() -> AttributeData.make(attributes.VOIDIC_INFUSION_RES, AttributeModifier.Operation.ADD_VALUE, 0.225D, EquipmentSlotGroup.LEGS),
 				() -> AttributeData.make(attributes.VOIDIC_PARANOIA_RES, AttributeModifier.Operation.ADD_VALUE, 0.25D, EquipmentSlotGroup.LEGS),
-				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.LEGS), AttributeModifier.Operation.ADD_VALUE, 5D, EquipmentSlotGroup.LEGS)
+				() -> AttributeData.make(stack -> stack.getOrDefault(itemComponents.DRACONIC, false), Attributes.MAX_HEALTH, attributes.getDraconicHealthId(EquipmentSlot.LEGS), AttributeModifier.Operation.ADD_VALUE, 7D, EquipmentSlotGroup.LEGS)
 			),
 			TOOLTIP
 		);

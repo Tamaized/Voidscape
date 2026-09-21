@@ -101,6 +101,7 @@ public class LangProviderFactory {
 				// TODO: these should be referenced from somewhere
 				addTooltip("fruit_salad_why", "But why?");
 				addTooltip("fruit_salad_yummy", "Fruit Salad! Yummy, yummy!");
+				addTooltip("shroud_thread_squirm", "Why does it... squirm?");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
@@ -138,6 +139,7 @@ public class LangProviderFactory {
 				addAttribute(attributes.VOIDIC_ARROW_DMG, "Voidic Arrow Damage");
 				addAttribute(attributes.VOIDIC_VISIBILITY, "Voidic Visibility");
 				addAttribute(attributes.VOIDIC_INFUSION, "Voidic Infusion");
+				addAttribute(attributes.SHROUDED, "Shrouded");
 
 				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");

@@ -27,6 +27,6 @@ public class ShroudChestplateItemModelHolder extends BreakableFullbrightItemMode
 
 	@Override
 	public Optional<String> lang() {
-		return Optional.of("Shroud Chestplate");
+		return Optional.of("Shroud Robe");
 	}
 }
