@@ -1,4 +1,4 @@
-// 26.1.2	2026-09-19T23:45:51.0813216	Model Definitions - voidscape
+// 26.1.2	2026-09-23T11:28:10.4199699	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -23,6 +23,7 @@ df9d8e27a80103ea2ffd643b2bc0095b8e9cc931 assets/voidscape/blockstates/machine_in
 2dcba0f88139741c0d47429100f3220420ea2bff assets/voidscape/blockstates/null_black.json
 024ffd6d26acb748c3a39403581799f8e6f1ed28 assets/voidscape/blockstates/null_white.json
 faa94ef6dad3c7b3cd471759ff736416bc2fc249 assets/voidscape/blockstates/portal.json
+46785f16471188c99ed42ae8d8847016b7cfa639 assets/voidscape/blockstates/shroud_brick.json
 051e5b1b7cc516510d27a231403e01feb1ed96b0 assets/voidscape/blockstates/strange_ore.json
 516360b5270a49675729d4fd9131ab6d49b3e8fd assets/voidscape/blockstates/thunderrock.json
 e9a21c6ef2aa92b0f3cfe5fd75ae6a4187d00224 assets/voidscape/blockstates/thunder_fungus.json
@@ -115,6 +116,7 @@ a155d3b7e69755f37efa1ce7fbfecc24c2644ba4 assets/voidscape/items/machine_infuser.
 a1ffb1a09929c84ad9ce58d08b1cec7c800f8a1d assets/voidscape/items/machine_well.json
 12fe282ba5d15efb8ccb402f48802524c3458167 assets/voidscape/items/null_black.json
 d6652971c9394afb8450c1d086f5e04eb9eeed5d assets/voidscape/items/null_white.json
+5d863d6ce13d119dbf277d7f4c5b9648d4cdc513 assets/voidscape/items/shroud_brick.json
 6ae587ea733da6917d49d4cc0a10952ba8b6f0bc assets/voidscape/items/shroud_chest.json
 4c78ad7ef56365670db869282324bf12a2d47b9e assets/voidscape/items/shroud_helmet.json
 cee9d77cfb46c919845aac3e621ce08b04b760df assets/voidscape/items/shroud_legs.json
@@ -206,6 +208,7 @@ adc3d90971c6172bc1790afbc433e9ec1c4457a0 assets/voidscape/models/block/overlay/f
 e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/side_top_fullbright_overlay.json
 a03bc435174785144b6637189de237454ab9be8d assets/voidscape/models/block/portal_ew.json
 90acbe4e09677c3710ef8be2e738154f0dab4aeb assets/voidscape/models/block/portal_ns.json
+d0bb83098c1cffda27b088195288f30756f638d3 assets/voidscape/models/block/shroud_brick.json
 9210d227f09ea277bdbd4ea98a339cfbc28d5409 assets/voidscape/models/block/strange_ore.json
 4a697ac11281e27343dba50d32718632e52e08a6 assets/voidscape/models/block/thunderrock.json
 710ae219ff47416b36a0dbda0d67346de5261dd7 assets/voidscape/models/block/thunder_fungus.json

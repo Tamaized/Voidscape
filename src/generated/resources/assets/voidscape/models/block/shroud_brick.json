@@ -1,0 +1,8 @@
+{
+  "parent": "voidscape:block/overlay/full_fullbright_overlay",
+  "textures": {
+    "base": "voidscape:block/shroud_brick",
+    "overlay": "voidscape:block/shroud_brick_overlay",
+    "particle": "#base"
+  }
+}

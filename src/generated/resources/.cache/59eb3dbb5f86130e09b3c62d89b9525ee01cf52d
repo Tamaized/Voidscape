@@ -1,4 +1,4 @@
-// 26.1.2	2026-08-26T20:14:47.0104328	Loot Tables
+// 26.1.2	2026-09-23T11:28:10.4189681	Loot Tables
 4ab59776f54cd2fae5dea7799c3ff1b13d7b4448 data/voidscape/loot_table/blocks/charred_brick.json
 37a6ce6eff619c3c757214faf7b1c432dcdef209 data/voidscape/loot_table/blocks/cracked_astralrock.json
 7b8214d0fddf31bfca082a4d4b93e0c84b8267ff data/voidscape/loot_table/blocks/ethereal_fruit_end.json
@@ -17,6 +17,7 @@ e9e09a034d22ad96a3fc12bfd2622cd3272ff523 data/voidscape/loot_table/blocks/machin
 40460307464d57e84d608dd7da8e26936da5be87 data/voidscape/loot_table/blocks/machine_infuser.json
 e610afe88cad951d71034fd9bdcf1457d5d5381f data/voidscape/loot_table/blocks/machine_liquifier.json
 dc2c5797f74131701869d9444fc59801c08b8e9a data/voidscape/loot_table/blocks/machine_well.json
+6237343a83573edb0a98b7042befe9ba55957dfd data/voidscape/loot_table/blocks/shroud_brick.json
 6d850dbaeabdbb0457ce2679eb3ff0ccc5d1a051 data/voidscape/loot_table/blocks/strange_ore.json
 c6b9b37ae22880e4e6907ffdf83e0791c47c24b9 data/voidscape/loot_table/blocks/thunder_fungus.json
 cc5c3bfb70022fa15d764a2abfbff3d13e2f91d5 data/voidscape/loot_table/blocks/thunder_fungus_pot.json

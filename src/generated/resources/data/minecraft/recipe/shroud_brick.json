@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": "voidscape:charred_brick",
+    "S": "voidscape:shroud_thread"
+  },
+  "pattern": [
+    "BBB",
+    "BSB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "id": "voidscape:shroud_brick"
+  }
+}

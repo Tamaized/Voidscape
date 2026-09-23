@@ -36,6 +36,7 @@ public class MineableBlockTagProviderFactory implements IBlockTagProviderFactory
 			blocks.oreBlocks().VOIDIC_CRYSTAL_ORE.getKey(),
 			blocks.materialBlocks().VOIDIC_CRYSTAL_BLOCK.getKey(),
 			blocks.materialBlocks().CHARRED_BRICK.getKey(),
+			blocks.materialBlocks().SHROUD_BRICK.getKey(),
 			blocks.oreBlocks().TITANITE_ORE.getKey(),
 			blocks.oreBlocks().FLESH_ORE.getKey(),
 			blocks.oreBlocks().STRANGE_ORE.getKey(),

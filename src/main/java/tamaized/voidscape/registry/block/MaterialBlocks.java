@@ -68,4 +68,20 @@ public class MaterialBlocks {
 		)
 	);
 
+	public final DeferredHolder<Block, Block> SHROUD_BRICK = RegUtil.register(Registries.BLOCK, "shroud_brick",
+		(id) -> new Block(Block.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
+			.sound(SoundType.NETHER_BRICKS)
+			.mapColor(MapColor.COLOR_PINK)
+			.strength(3F, 1200.0F)
+			.requiresCorrectToolForDrops()
+		)
+	);
+	public final Supplier<Item> SHROUD_BRICK_ITEM = RegUtil.register(Registries.ITEM, SHROUD_BRICK.getId().getPath(),
+		(id) -> new BlockItem(
+			SHROUD_BRICK.get(),
+			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
+		)
+	);
+
 }
