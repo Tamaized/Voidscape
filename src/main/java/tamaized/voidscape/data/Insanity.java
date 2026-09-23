@@ -35,7 +35,7 @@ import tamaized.voidscape.config.common.CommonConfig;
 import tamaized.voidscape.dimension.DirectTeleporter;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.entity.IEthereal;
-import tamaized.voidscape.network.client.ClientPacketInsanitySync;
+import tamaized.voidscape.network.client.ClientPacketNetworkedAttachmentSync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
 import tamaized.voidscape.particle.ParticleTypeSpellCloud;
 import tamaized.voidscape.registry.*;
@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Configurable
-public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO: split up this class into multiple components
+public class Insanity extends NetworkedDataAttachment implements ValueIOSerializable { // TODO: split up this class into multiple components
 
 	@Autowired
 	private LevelUtil levelUtil;
@@ -104,6 +104,10 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 	private int leapParticles;
 
 	private WingType wingType = WingType.NORMAL;
+
+	public Insanity(String id) {
+		super(id);
+	}
 
 	public enum WingType {
 		NORMAL, ARTI, TOXIC
@@ -495,11 +499,11 @@ public class Insanity implements INetworkHandler, ValueIOSerializable { // TODO:
 	}
 
 	private void sendToClient(ServerPlayer parent) {
-		PacketDistributor.sendToPlayer(parent, new ClientPacketInsanitySync(this));
+		PacketDistributor.sendToPlayer(parent, new ClientPacketNetworkedAttachmentSync(this));
 	}
 
 	private void sendToClients(Entity parent) {
-		PacketDistributor.sendToPlayersTrackingEntityAndSelf(parent, new ClientPacketInsanitySync(this, parent));
+		PacketDistributor.sendToPlayersTrackingEntityAndSelf(parent, new ClientPacketNetworkedAttachmentSync(this, parent));
 	}
 
 }

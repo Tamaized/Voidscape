@@ -13,13 +13,17 @@ import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 
 import java.util.Optional;
 
-public class DonatorData implements INetworkHandler, ValueIOSerializable {
+public class DonatorData extends NetworkedDataAttachment implements ValueIOSerializable {
 
 	@Autowired
 	private static DonatorHandler donatorHandler;
 
 	public boolean enabled;
 	public int color;
+
+	public DonatorData(String id) {
+		super(id);
+	}
 
 	@Override
 	public void write(FriendlyByteBuf buffer) {
