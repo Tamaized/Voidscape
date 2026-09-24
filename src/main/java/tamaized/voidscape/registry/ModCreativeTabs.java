@@ -45,6 +45,8 @@ public class ModCreativeTabs {
 				output.accept(blockComponentDirectory.oreBlocks().CRACKED_ASTRALROCK_ITEM.get());
 				output.accept(blockComponentDirectory.nullBiomeBlocks().NULL_BLACK_ITEM.get());
 				output.accept(blockComponentDirectory.nullBiomeBlocks().NULL_WHITE_ITEM.get());
+				output.accept(blockComponentDirectory.materialBlocks().SHROUD_BRICK_ITEM.get());
+				output.accept(blockComponentDirectory.materialBlocks().SHROUD_BRICK_STAIRS_ITEM.get());
 				// Machine
 				output.accept(blockComponentDirectory.machineBlocks().MACHINE_CORE_ITEM.get());
 				output.accept(blockComponentDirectory.machineBlocks().MACHINE_LIQUIFIER_ITEM.get());

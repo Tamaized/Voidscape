@@ -1,4 +1,4 @@
-// 26.1.2	2026-09-23T11:28:10.4199699	Model Definitions - voidscape
+// 26.1.2	2026-09-23T22:14:51.9403465	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -24,6 +24,7 @@ df9d8e27a80103ea2ffd643b2bc0095b8e9cc931 assets/voidscape/blockstates/machine_in
 024ffd6d26acb748c3a39403581799f8e6f1ed28 assets/voidscape/blockstates/null_white.json
 faa94ef6dad3c7b3cd471759ff736416bc2fc249 assets/voidscape/blockstates/portal.json
 46785f16471188c99ed42ae8d8847016b7cfa639 assets/voidscape/blockstates/shroud_brick.json
+38ae0f507f5e27314d647e8fc6ac2d088c45a908 assets/voidscape/blockstates/shroud_brick_stairs.json
 051e5b1b7cc516510d27a231403e01feb1ed96b0 assets/voidscape/blockstates/strange_ore.json
 516360b5270a49675729d4fd9131ab6d49b3e8fd assets/voidscape/blockstates/thunderrock.json
 e9a21c6ef2aa92b0f3cfe5fd75ae6a4187d00224 assets/voidscape/blockstates/thunder_fungus.json
@@ -117,6 +118,7 @@ a1ffb1a09929c84ad9ce58d08b1cec7c800f8a1d assets/voidscape/items/machine_well.jso
 12fe282ba5d15efb8ccb402f48802524c3458167 assets/voidscape/items/null_black.json
 d6652971c9394afb8450c1d086f5e04eb9eeed5d assets/voidscape/items/null_white.json
 5d863d6ce13d119dbf277d7f4c5b9648d4cdc513 assets/voidscape/items/shroud_brick.json
+3f885b7dee5f2d5988fa19a138b29c6979f88dd9 assets/voidscape/items/shroud_brick_stairs.json
 6ae587ea733da6917d49d4cc0a10952ba8b6f0bc assets/voidscape/items/shroud_chest.json
 4c78ad7ef56365670db869282324bf12a2d47b9e assets/voidscape/items/shroud_helmet.json
 cee9d77cfb46c919845aac3e621ce08b04b760df assets/voidscape/items/shroud_legs.json
@@ -203,12 +205,18 @@ fe62042bb84310a1ffdd7b9682948ca5183f547c assets/voidscape/models/block/overlay/b
 5820b6347327726fd4b99eef1e022504c8a18a16 assets/voidscape/models/block/overlay/base_fullbright_overlay.json
 63500a67bf1ed85876d0abe39a73e329187306dd assets/voidscape/models/block/overlay/full.json
 adc3d90971c6172bc1790afbc433e9ec1c4457a0 assets/voidscape/models/block/overlay/full_fullbright_overlay.json
+b4a859ce1697f0eac35d4854a81988b0777ae7dd assets/voidscape/models/block/overlay/inner_stairs_fullbright_overlay.json
+2a2286fa5bd824d67088ccf45027ddca41b37107 assets/voidscape/models/block/overlay/outer_stairs_fullbright_overlay.json
 848df712b534098021e8630e435231d8c111f8b4 assets/voidscape/models/block/overlay/side.json
 0afe179bb654f02f5ce37171d5c245128f3f5192 assets/voidscape/models/block/overlay/side_top.json
 e59c016bc1740474e4a98f68a3b431af48140295 assets/voidscape/models/block/overlay/side_top_fullbright_overlay.json
+982e7ddd845e2bcd54c3b892def150813e67c65f assets/voidscape/models/block/overlay/stairs_fullbright_overlay.json
 a03bc435174785144b6637189de237454ab9be8d assets/voidscape/models/block/portal_ew.json
 90acbe4e09677c3710ef8be2e738154f0dab4aeb assets/voidscape/models/block/portal_ns.json
 d0bb83098c1cffda27b088195288f30756f638d3 assets/voidscape/models/block/shroud_brick.json
+f718b785924a4e8849ab1dd9b9e76ccfebf85509 assets/voidscape/models/block/shroud_brick_stairs.json
+992f0c392dc711e7480141150f662dda7b9505e0 assets/voidscape/models/block/shroud_brick_stairs_inner.json
+191b151da7b0b8718c1ffdb5c239692b11a6895f assets/voidscape/models/block/shroud_brick_stairs_outer.json
 9210d227f09ea277bdbd4ea98a339cfbc28d5409 assets/voidscape/models/block/strange_ore.json
 4a697ac11281e27343dba50d32718632e52e08a6 assets/voidscape/models/block/thunderrock.json
 710ae219ff47416b36a0dbda0d67346de5261dd7 assets/voidscape/models/block/thunder_fungus.json

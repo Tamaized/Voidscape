@@ -31,6 +31,7 @@ public class BasicSurvivesExplosionBlockLootTablesFactory implements IBlockLootT
 		add(provider, add, blocks.materialBlocks().CHARRED_BRICK, blocks.materialBlocks().CHARRED_BRICK_ITEM);
 		add(provider, add, blocks.materialBlocks().FLESH_BLOCK, blocks.materialBlocks().FLESH_BLOCK_ITEM);
 		add(provider, add, blocks.materialBlocks().SHROUD_BRICK, blocks.materialBlocks().SHROUD_BRICK_ITEM);
+		add(provider, add, blocks.materialBlocks().SHROUD_BRICK_STAIRS, blocks.materialBlocks().SHROUD_BRICK_STAIRS_ITEM);
 
 		add(provider, add, blocks.machineBlocks().MACHINE_COLLECTOR, blocks.machineBlocks().MACHINE_COLLECTOR_ITEM);
 		add(provider, add, blocks.machineBlocks().MACHINE_COOP, blocks.machineBlocks().MACHINE_COOP_ITEM);

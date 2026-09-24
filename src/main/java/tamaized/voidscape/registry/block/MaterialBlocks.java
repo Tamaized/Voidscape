@@ -6,6 +6,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
@@ -82,6 +84,19 @@ public class MaterialBlocks {
 			SHROUD_BRICK.get(),
 			itemProperties.BLOCK_LAVA_IMMUNE.apply(id)
 		)
+	);
+
+	public final DeferredHolder<Block, StairBlock> SHROUD_BRICK_STAIRS = RegUtil.register(Registries.BLOCK, SHROUD_BRICK.getId().getPath().concat("_stairs"),
+		(id) -> new StairBlock(SHROUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.of()
+			.setId(ResourceKey.create(Registries.BLOCK, id))
+			.sound(SoundType.NETHER_BRICKS)
+			.mapColor(MapColor.COLOR_PINK)
+			.strength(3F, 1200.0F)
+			.requiresCorrectToolForDrops()
+		)
+	);
+	public final DeferredHolder<Item, Item> SHROUD_BRICK_STAIRS_ITEM = RegUtil.register(Registries.ITEM, SHROUD_BRICK_STAIRS.getId().getPath(),
+		(id) -> new BlockItem(SHROUD_BRICK_STAIRS.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
 }

@@ -8,6 +8,8 @@ import tamaized.beanification.Component;
 import tamaized.datagenutil.data.tag.ExposedKeyTagProvider;
 import tamaized.voidscape.registry.ModBlockComponentDirectory;
 
+import java.util.List;
+
 @Component
 public class StairsBlockTagProviderFactory implements IBlockTagProviderFactory {
 
@@ -16,8 +18,9 @@ public class StairsBlockTagProviderFactory implements IBlockTagProviderFactory {
 
 	@Override
 	public void make(ExposedKeyTagProvider<Block> accessor, HolderLookup.Provider provider) {
-		accessor.tag(BlockTags.STAIRS).add(
-			blocks.thunderForestBiomeBlocks().THUNDER_STAIRS.getKey()
-		);
+		accessor.tag(BlockTags.STAIRS).addAll(List.of(
+			blocks.thunderForestBiomeBlocks().THUNDER_STAIRS.getKey(),
+			blocks.materialBlocks().SHROUD_BRICK_STAIRS.getKey()
+		));
 	}
 }

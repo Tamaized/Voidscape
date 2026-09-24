@@ -1,0 +1,11 @@
+{
+  "parent": "voidscape:block/overlay/stairs_fullbright_overlay",
+  "textures": {
+    "bottom": "voidscape:block/shroud_brick",
+    "overlay-bottom": "voidscape:block/shroud_brick_overlay",
+    "overlay-side": "voidscape:block/shroud_brick_overlay",
+    "overlay-top": "voidscape:block/shroud_brick_overlay",
+    "side": "voidscape:block/shroud_brick",
+    "top": "voidscape:block/shroud_brick"
+  }
+}
