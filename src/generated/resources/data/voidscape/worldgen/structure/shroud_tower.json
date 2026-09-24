@@ -1,0 +1,19 @@
+{
+  "type": "voidscape:shroud_tower",
+  "biomes": "voidscape:void",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "voidscape:voids_wrath",
+          "maxCount": 3,
+          "minCount": 1,
+          "weight": 100
+        }
+      ]
+    }
+  },
+  "step": "raw_generation",
+  "terrain_adaptation": "beard_box"
+}
