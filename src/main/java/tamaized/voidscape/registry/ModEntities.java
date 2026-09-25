@@ -18,88 +18,129 @@ import java.util.function.Supplier;
 @Component
 public class ModEntities {
 
-	public final Supplier<EntityType<VoidlingEntity>> VOIDLING = RegUtil.register(Registries.ENTITY_TYPE, "voidling",
+	public final Supplier<EntityType<VoidlingEntity>> VOIDLING = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"voidling",
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER)
 				.sized(0.7F, 0.5F)
 				.setTrackingRange(256)
 				.fireImmune()
-		));
+		)
+	);
 
-	public final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = RegUtil.register(Registries.ENTITY_TYPE, "corrupted_pawn",
+	public final Supplier<EntityType<CorruptedPawnEntity>> CORRUPTED_PAWN = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"corrupted_pawn",
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(CorruptedPawnEntity.class, CorruptedPawnEntity::new, MobCategory.MONSTER)
 				.sized(2.5F, 2.5F)
 				.setTrackingRange(256)
 				.fireImmune()
-		));
+		)
+	);
 
-	public final Supplier<EntityType<AntiBoltEntity>> ANTI_BOLT = RegUtil.register(Registries.ENTITY_TYPE, "anti_bolt",
+	public final Supplier<EntityType<AntiBoltEntity>> ANTI_BOLT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"anti_bolt",
 		(key) -> make(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			AntiBoltEntity::new,
 			MobCategory.MISC,
 			0.5F, 0.5F
-		));
+		)
+	);
 
-	public final Supplier<EntityType<IchorBoltEntity>> ICHOR_BOLT = RegUtil.register(Registries.ENTITY_TYPE, "ichor_bolt",
+	public final Supplier<EntityType<IchorBoltEntity>> ICHOR_BOLT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"ichor_bolt",
 		(key) -> make(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			IchorBoltEntity::new,
 			MobCategory.MISC,
 			0.5F, 0.5F
-		));
+		)
+	);
 
-	public final Supplier<EntityType<NullServantIchorBoltEntity>> NULL_SERVANT_ICHOR_BOLT = RegUtil.register(Registries.ENTITY_TYPE, "null_servant_ichor_bolt",
+	public final Supplier<EntityType<NullServantIchorBoltEntity>> NULL_SERVANT_ICHOR_BOLT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"null_servant_ichor_bolt",
 		(key) -> make(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			NullServantIchorBoltEntity::new,
 			MobCategory.MISC,
 			0.5F, 0.5F
-		));
+		)
+	);
 
-	public final Supplier<EntityType<NullServantEntity>> NULL_SERVANT = RegUtil.register(Registries.ENTITY_TYPE, "null_servant",
+	public final Supplier<EntityType<NullServantEntity>> NULL_SERVANT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"null_servant",
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(NullServantEntity.class, NullServantEntity::new, MobCategory.MONSTER)
 				.sized(0.6F, 1.95F)
 				.setTrackingRange(256)
 				.fireImmune()
-		));
+		)
+	);
 
-	public final Supplier<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = RegUtil.register(Registries.ENTITY_TYPE, "null_servant_augment_block",
+	public final Supplier<EntityType<NullServantAugmentBlockEntity>> NULL_SERVANT_AUGMENT_BLOCK = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"null_servant_augment_block",
 		(key) -> make(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			NullServantAugmentBlockEntity::new,
 			MobCategory.MISC, 1F, 1F
-		));
+		)
+	);
 
-	public final Supplier<EntityType<PhantomNullServantEntity>> NULL_SERVANT_PHANTOM = RegUtil.register(Registries.ENTITY_TYPE, "null_servant_phantom",
+	public final Supplier<EntityType<PhantomNullServantEntity>> NULL_SERVANT_PHANTOM = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"null_servant_phantom",
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(PhantomNullServantEntity.class, PhantomNullServantEntity::new, MobCategory.MISC)
 				.sized(0.6F, 1.95F)
 				.fireImmune()
-		));
+		)
+	);
 
-	public final Supplier<EntityType<VoidsWrathEntity>> VOIDS_WRATH = RegUtil.register(Registries.ENTITY_TYPE, "voids_wrath",
+	public final Supplier<EntityType<VoidsWrathEntity>> VOIDS_WRATH = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"voids_wrath",
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(VoidsWrathEntity.class, VoidsWrathEntity::new, MobCategory.MONSTER)
 				.sized(0.9F, 2.0F)
 				.setTrackingRange(256)
 				.fireImmune()
-		));
+		)
+	);
 
-	public final Supplier<EntityType<StrangePearlEntity>> STRANGE_PEARL = RegUtil.register(Registries.ENTITY_TYPE, "strange_pearl",
+	public final Supplier<EntityType<StrangePearlEntity>> STRANGE_PEARL = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"strange_pearl",
 		(key) -> make(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			StrangePearlEntity::new,
 			MobCategory.MISC,
 			0.25F, 0.25F
-		));
+		)
+	);
+
+	public final Supplier<EntityType<ShroudRiftEntity>> SHROUD_RIFT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"shroud_rift",
+		(key) -> make(
+			ResourceKey.create(Registries.ENTITY_TYPE, key),
+			ShroudRiftEntity::new,
+			MobCategory.MISC,
+			1.5F, 3F
+		)
+	);
 
 	private <E extends Entity> EntityType<E> make(ResourceKey<EntityType<?>> id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
 		return build(id, makeBuilder(factory, classification).sized(width, height));

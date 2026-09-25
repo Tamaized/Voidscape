@@ -45,7 +45,7 @@ public class ShroudTowerStructureBootstrap extends StructureBootstrapHolder {
 				new StructureSpawnOverride(
 					StructureSpawnOverride.BoundingBoxType.STRUCTURE,
 					WeightedList.<MobSpawnSettings.SpawnerData>of(new Weighted<>(new MobSpawnSettings.SpawnerData(
-						entities.VOIDS_WRATH.get(), 1, 3
+						entities.NULL_SERVANT.get(), 1, 3
 					), 100))
 				)
 			))

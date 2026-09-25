@@ -74,6 +74,7 @@ public class ModModelLayerLocations {
 		event.registerEntityRenderer(entities.ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF7700));
 		event.registerEntityRenderer(entities.NULL_SERVANT_ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF0000));
 		event.registerEntityRenderer(entities.STRANGE_PEARL.get(), context -> new ThrownItemRenderer<>(context, 1F, true));
+		event.registerEntityRenderer(entities.SHROUD_RIFT.get(), RenderShroudRift::new);
 	}
 
 }

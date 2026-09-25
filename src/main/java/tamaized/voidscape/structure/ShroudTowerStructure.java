@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.entity.NullServantEntity;
+import tamaized.voidscape.entity.ShroudRiftEntity;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
 import tamaized.voidscape.registry.structure.ModStructurePieces;
@@ -97,7 +97,7 @@ public class ShroudTowerStructure extends AnchoredStructure {
 			protected void handleDataMarker(String dataName, BlockPos blockPos, ServerLevelAccessor serverLevelAccessor, RandomSource randomSource, BoundingBox boundingBox) {
 				switch (dataName) {
 					case "rift_bottom" -> {
-						NullServantEntity servant = entities.NULL_SERVANT.get().create(serverLevelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
+						/*NullServantEntity servant = entities.NULL_SERVANT.get().create(serverLevelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
 						if (servant == null)
 							return;
 						servant.setPersistenceRequired();
@@ -105,20 +105,21 @@ public class ShroudTowerStructure extends AnchoredStructure {
 						servant.setItemSlot(EquipmentSlot.HEAD, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET));
 						servant.setItemSlot(EquipmentSlot.CHEST, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST));
 						servant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_AXE));
-						serverLevelAccessor.addFreshEntityWithPassengers(servant);
+						serverLevelAccessor.addFreshEntityWithPassengers(servant);*/
+						createRift(serverLevelAccessor, blockPos);
 					}
 					case "rift_top" -> {
-						NullServantEntity servant = entities.NULL_SERVANT.get().create(serverLevelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
-						if (servant == null)
-							return;
-						servant.setPersistenceRequired();
-						servant.snapTo(blockPos, 0F, 0F);
-						servant.setItemSlot(EquipmentSlot.HEAD, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET));
-						servant.setItemSlot(EquipmentSlot.CHEST, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST));
-						servant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_SWORD));
-						serverLevelAccessor.addFreshEntityWithPassengers(servant);
+						createRift(serverLevelAccessor, blockPos);
 					}
 				}
+			}
+
+			private void createRift(ServerLevelAccessor serverLevelAccessor, BlockPos blockPos) {
+				ShroudRiftEntity rift = entities.SHROUD_RIFT.get().create(serverLevelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
+				if (rift == null)
+					return;
+				rift.snapTo(blockPos.below(), 0F, 0F);
+				serverLevelAccessor.addFreshEntityWithPassengers(rift);
 			}
 
 			@Override

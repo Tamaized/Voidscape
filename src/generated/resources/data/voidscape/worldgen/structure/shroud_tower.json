@@ -6,7 +6,7 @@
       "bounding_box": "full",
       "spawns": [
         {
-          "type": "voidscape:voids_wrath",
+          "type": "voidscape:null_servant",
           "maxCount": 3,
           "minCount": 1,
           "weight": 100

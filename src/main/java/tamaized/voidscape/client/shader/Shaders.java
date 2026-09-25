@@ -139,6 +139,16 @@ public class Shaders {
 		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
 		.build();
 
+	public final RenderPipeline SHROUD_RIFT = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
+		.withLocation(id("pipeline/shroud_rift"))
+		.withVertexShader(id("core/shroud_rift/rift"))
+		.withFragmentShader(id("core/shroud_rift/rift"))
+		.withCull(false)
+		.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+		.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+		.build();
+
 	@PostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterRenderPipelinesEvent.class, event -> {
@@ -152,6 +162,7 @@ public class Shaders {
 			event.registerPipeline(VOIDSKY_ENTITY);
 			event.registerPipeline(VOIDSKY_WINGS);
 			event.registerPipeline(THUNDER_AURORA);
+			event.registerPipeline(SHROUD_RIFT);
 		});
 	}
 
