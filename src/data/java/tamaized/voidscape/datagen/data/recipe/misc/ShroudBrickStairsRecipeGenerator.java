@@ -26,7 +26,7 @@ public class ShroudBrickStairsRecipeGenerator extends RecipeHolder {
 		ShapedRecipeBuilder.shaped(
 				itemProvider,
 				RecipeCategory.BUILDING_BLOCKS,
-				blocks.thunderForestBiomeBlocks().THUNDER_STAIRS.get(),
+				blocks.materialBlocks().SHROUD_BRICK_STAIRS.get(),
 				4
 			)
 			.pattern("P  ")

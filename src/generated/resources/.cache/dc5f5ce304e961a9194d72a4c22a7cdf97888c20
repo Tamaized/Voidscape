@@ -1,4 +1,4 @@
-// 26.1.2	2026-09-23T21:56:55.2163236	Voidscape recipes
+// 26.1.2	2026-09-26T11:58:25.9466097	Voidscape recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -186,7 +186,7 @@ e285169b97a072037cbee046a64613ff9ef07463 data/minecraft/recipe/machine_infuser.j
 9324fee803610387edb1e10a71fdd89fb440e587 data/minecraft/recipe/machine_liquifier.json
 80ab95435f62704b6eb06e1d1b47d86471dbb374 data/minecraft/recipe/machine_well.json
 315bf001c49b0cfbb9b06ff0601a33b1788b78e4 data/minecraft/recipe/shroud_brick.json
-d9f570a84148b83d8a7dbaf82a9462172ca7fbb7 data/minecraft/recipe/shroud_brick_stairs.json
+7b77c1d25d7ea0fccf87af44a9f259ee9220a3cf data/minecraft/recipe/shroud_brick_stairs.json
 f879aa4eb45e61051032c750b14c4dfad434869f data/minecraft/recipe/shroud_chestplate.json
 32449a1d6e17cc3faf30b518a22b7acf9b84132c data/minecraft/recipe/shroud_chestplate_draconic.json
 254f0fe937d172e4bd51c0e76bdc354ab835dc90 data/minecraft/recipe/shroud_chestplate_elytra.json
