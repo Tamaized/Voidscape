@@ -55,6 +55,7 @@ public class ShroudHeartOverlay {
 		});
 	}
 
+	@SuppressWarnings("IntegerMultiplicationImplicitCastToLong") // Vanilla is also using an int, causing an overflow...
 	private void render(GuiGraphicsExtractor graphics, Gui gui, Player player, int shroudHearts) {
 		int ticks = gui.getGuiTicks();
 		int currentHealth = Mth.ceil(player.getHealth());
@@ -67,7 +68,7 @@ public class ShroudHeartOverlay {
 		int absorptionContainerCount = Mth.ceil(totalAbsorption / 2.0);
 		int heartOffsetIndex = player.hasEffect(MobEffects.REGENERATION) ? ticks % Mth.ceil(maxHealth + 5.0F) : -1;
 		boolean lowHealth = currentHealth + totalAbsorption <= 4;
-		random.setSeed(ticks * 312871L);
+		random.setSeed(ticks * 312871);
 		for (int containerIndex = healthContainerCount + absorptionContainerCount - 1; containerIndex >= 0; containerIndex--) {
 			int xo = xLeft + (containerIndex % 10) * 8;
 			int yo = heartsLineBase - (containerIndex / 10) * healthRowHeight;
