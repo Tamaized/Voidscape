@@ -97,6 +97,7 @@ public class LangProviderFactory {
 				addAdvancement("hammer", "Hammer Time", "Mine blocks with a Charred War Hammer");
 				addAdvancement("voidmancer", "Voidmancer", "Collect every Spell Tome");
 				addAdvancement("terraform", "Terraformer", "Dig blocks with an Astral Shovel");
+				addAdvancement("shroud_rift_close", "Divine Blessing", "Throw an Astral Crystal into a Shroud Rift");
 
 				// TODO: these should be referenced from somewhere
 				addTooltip("fruit_salad_why", "But why?");
@@ -125,6 +126,7 @@ public class LangProviderFactory {
 				addEntityType(entities.NULL_SERVANT_AUGMENT_BLOCK, "Block");
 				addEntityType(entities.VOIDS_WRATH, "Void's Wrath");
 				addEntityType(entities.CORRUPTED_PAWN, "The Corrupted Pawn");
+				addEntityType(entities.SHROUD_RIFT, "Shroud Rift");
 
 				addFluid(fluids.VOIDIC, "Liquid Voidic Crystal");
 				addItem(buckets.VOIDIC, "Liquid Voidic Crystal Bucket");

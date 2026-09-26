@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,8 +18,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
-import tamaized.voidscape.registry.ModEntities;
-import tamaized.voidscape.registry.ModItemComponentDirectory;
+import tamaized.voidscape.registry.*;
 
 import java.util.List;
 
@@ -37,6 +37,12 @@ public class ShroudRiftEntity extends Entity {
 
 	@Autowired
 	private ModItemComponentDirectory items;
+
+	@Autowired
+	private ModAdvancementTriggers advancementTriggers;
+
+	@Autowired
+	private ModItemComponents itemComponents;
 
 	private int spawnDelay = 20;
 
@@ -90,6 +96,8 @@ public class ShroudRiftEntity extends Entity {
 		thread.setDefaultPickUpDelay();
 		serverLevel.addFreshEntity(thread);
 		discard();
+		serverLevel.getPlayers(player -> !player.isSpectator() && player.position().closerThan(position(), 16.0) && player.isAlive())
+			.forEach(advancementTriggers.SHROUD_RIFT_CLOSE_TRIGGER.get()::trigger);
 		return true;
 	}
 
@@ -110,16 +118,28 @@ public class ShroudRiftEntity extends Entity {
 		);
 		if (!serverLevel.noCollision(type.getSpawnAABB(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D)))
 			return;
-		NullServantEntity servant = type.spawn(serverLevel, spawnPos, EntitySpawnReason.SPAWNER);
+		NullServantEntity servant = type.spawn(
+			serverLevel,
+			this::equipServant,
+			spawnPos,
+			EntitySpawnReason.SPAWNER,
+			false,
+			false
+		);
 		if (servant == null)
 			return;
+		servant.spawnAnim();
+		serverLevel.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, blockPosition(), 0);
+	}
+
+	private void equipServant(NullServantEntity servant) {
 		servant.setItemSlot(EquipmentSlot.HEAD, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET));
-		servant.setItemSlot(EquipmentSlot.CHEST, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST));
+		ItemStack chestStack = new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST);
+		chestStack.set(itemComponents.DRACONIC, true);
+		servant.setItemSlot(EquipmentSlot.CHEST, chestStack);
 		servant.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
 		servant.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
 		servant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_AXE));
-		servant.spawnAnim();
-		serverLevel.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, blockPosition(), 0);
 	}
 
 	@Override

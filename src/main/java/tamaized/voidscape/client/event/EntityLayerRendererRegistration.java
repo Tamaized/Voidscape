@@ -4,17 +4,13 @@ import com.google.common.reflect.TypeToken;
 import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Avatar;
 import net.neoforged.api.distmarker.Dist;
@@ -55,29 +51,23 @@ public class EntityLayerRendererRegistration {
 
 	private void addLayers(EntityRenderersEvent.AddLayers event) {
 		event.getSkins().forEach(renderer -> {
-			AvatarRenderer<AbstractClientPlayer> skin = event.getPlayerRenderer(renderer);
-			if (skin != null) {
-				skin.addLayer(new ShroudWingLayer<>(skin));
-				addArmorOverlay(skin);
-			}
-			addArmorOverlay(event.getMannequinRenderer(renderer));
+			addHumanoidLayers(event.getPlayerRenderer(renderer));
+			addHumanoidLayers(event.getMannequinRenderer(renderer));
 		});
-		event.getEntityTypes().forEach(type -> addArmorOverlay(event.getRenderer(type)));
-		ArmorStandRenderer armorStand = event.getRenderer(EntityType.ARMOR_STAND);
-		if (armorStand != null)
-			armorStand.addLayer(new ShroudWingLayer<>(armorStand));
+		event.getEntityTypes().forEach(type -> addHumanoidLayers(event.getRenderer(type)));
 	}
 
-	private void addArmorOverlay(@Nullable EntityRenderer<?, ?> renderer) {
+	private void addHumanoidLayers(@Nullable EntityRenderer<?, ?> renderer) {
 		if (renderer instanceof LivingEntityRenderer<?, ?, ?> living && living.getModel() instanceof HumanoidModel)
-			addArmorOverlayLayer(living);
+			addHumanoidLayersUnchecked(living);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <S extends HumanoidRenderState, M extends EntityModel<? super S>> void addArmorOverlayLayer(LivingEntityRenderer<?, ?, ?> renderer) {
+	private <S extends HumanoidRenderState, M extends EntityModel<? super S>> void addHumanoidLayersUnchecked(LivingEntityRenderer<?, ?, ?> renderer) {
 		// Yucky
 		LivingEntityRenderer<?, S, M> humanoid = (LivingEntityRenderer<?, S, M>) renderer;
 		humanoid.addLayer(new ArmorOverlayLayer<>(humanoid));
+		humanoid.addLayer(new ShroudWingLayer<>(humanoid));
 	}
 
 	private void modifyState(RegisterRenderStateModifiersEvent event) {

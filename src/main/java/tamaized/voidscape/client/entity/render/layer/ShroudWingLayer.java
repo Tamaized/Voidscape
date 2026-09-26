@@ -19,10 +19,11 @@ import tamaized.voidscape.client.ShroudWingLayerRenderTypes;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
 import tamaized.voidscape.data.Insanity;
+import tamaized.voidscape.registry.ModItemComponentDirectory;
 import tamaized.voidscape.registry.ModItemComponents;
 
 @Configurable
-public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityModel<? super T>> extends RenderLayer<T, M> {
 
 	@Autowired(dist = Dist.CLIENT)
 	private ShroudWingLayerRenderTypes shroudWingLayerRenderTypes;
@@ -35,6 +36,9 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 
 	@Autowired(dist = Dist.CLIENT)
 	private ModItemComponents itemComponents;
+
+	@Autowired(dist = Dist.CLIENT)
+	private ModItemComponentDirectory items;
 
 	private static final int SUBMIT_ORDER_BACKING = 5;
 
@@ -61,6 +65,8 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 			Insanity.WingType wingType = state.getRenderData(shroudWingLayerRenderStateExtension.wingType);
 			if (wingType == null)
 				wingType = Insanity.WingType.NORMAL;
+			if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST))
+				wingType = Insanity.WingType.TOXIC;
 			submitWings(
 				poseStack,
 				submitNodeCollector,

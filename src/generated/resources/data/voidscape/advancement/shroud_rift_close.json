@@ -1,0 +1,26 @@
+{
+  "parent": "voidscape:astral_crystal",
+  "criteria": {
+    "shroud_rift_close": {
+      "trigger": "voidscape:shroud_rift_close"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.shroud_rift_close.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:shroud_thread"
+    },
+    "title": {
+      "translate": "advancement.voidscape.shroud_rift_close"
+    }
+  },
+  "requirements": [
+    [
+      "shroud_rift_close"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
