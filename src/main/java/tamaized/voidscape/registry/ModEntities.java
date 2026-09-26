@@ -24,6 +24,7 @@ public class ModEntities {
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(VoidlingEntity.class, VoidlingEntity::new, MobCategory.MONSTER)
+				.notInPeaceful()
 				.sized(0.7F, 0.5F)
 				.setTrackingRange(256)
 				.fireImmune()
@@ -81,6 +82,7 @@ public class ModEntities {
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(NullServantEntity.class, NullServantEntity::new, MobCategory.MONSTER)
+				.notInPeaceful()
 				.sized(0.6F, 1.95F)
 				.setTrackingRange(256)
 				.fireImmune()
@@ -103,6 +105,7 @@ public class ModEntities {
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(PhantomNullServantEntity.class, PhantomNullServantEntity::new, MobCategory.MISC)
+				.notInPeaceful()
 				.sized(0.6F, 1.95F)
 				.fireImmune()
 		)
@@ -114,6 +117,7 @@ public class ModEntities {
 		(key) -> build(
 			ResourceKey.create(Registries.ENTITY_TYPE, key),
 			makeCastedBuilder(VoidsWrathEntity.class, VoidsWrathEntity::new, MobCategory.MONSTER)
+				.notInPeaceful()
 				.sized(0.9F, 2.0F)
 				.setTrackingRange(256)
 				.fireImmune()
