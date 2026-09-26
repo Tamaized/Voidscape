@@ -1,11 +1,15 @@
 package tamaized.voidscape.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
@@ -15,6 +19,8 @@ import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
 import tamaized.voidscape.registry.ModEntities;
 import tamaized.voidscape.registry.ModItemComponentDirectory;
+
+import java.util.List;
 
 @Configurable
 public class ShroudRiftEntity extends Entity {
@@ -48,6 +54,8 @@ public class ShroudRiftEntity extends Entity {
 		super.tick();
 		if (!(level() instanceof ServerLevel serverLevel))
 			return;
+		if (tryCloseRift(serverLevel))
+			return;
 		if (serverLevel.getDifficulty() == Difficulty.PEACEFUL || !serverLevel.hasNearbyAlivePlayer(getX(), getY(), getZ(), REQUIRED_PLAYER_RANGE))
 			return;
 		if (spawnDelay > 0) {
@@ -56,6 +64,33 @@ public class ShroudRiftEntity extends Entity {
 		}
 		spawnDelay = MIN_SPAWN_DELAY + random.nextInt(MAX_SPAWN_DELAY - MIN_SPAWN_DELAY);
 		trySpawnServant(serverLevel);
+	}
+
+	private boolean tryCloseRift(ServerLevel serverLevel) {
+		List<ItemEntity> crystals = serverLevel.getEntitiesOfClass(
+			ItemEntity.class,
+			getBoundingBox(),
+			e -> e.isAlive() && e.getItem().is(items.materialItems().ASTRAL_CRYSTAL.get())
+		);
+		if (crystals.isEmpty())
+			return false;
+		ItemEntity crystal = crystals.getFirst();
+		ItemStack stack = crystal.getItem().copy();
+		stack.shrink(1);
+		if (stack.isEmpty())
+			crystal.discard();
+		else
+			crystal.setItem(stack);
+		double y = getY(0.5D);
+		serverLevel.sendParticles(ParticleTypes.REVERSE_PORTAL, getX(), y, getZ(), 160, getBbWidth() / 2D, getBbHeight() / 3D, getBbWidth() / 2D, 0.2D);
+		serverLevel.sendParticles(ParticleTypes.EXPLOSION, getX(), y, getZ(), 4, 0D, 0D, 0D, 0D);
+		serverLevel.playSound(null, getX(), y, getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.NEUTRAL, 2F, 0.3F + getRandom().nextFloat() * 0.4F);
+		serverLevel.playSound(null, getX(), y, getZ(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.NEUTRAL, 1F, 0.6F + getRandom().nextFloat() * 0.3F);
+		ItemEntity thread = new ItemEntity(serverLevel, getX(), y, getZ(), new ItemStack(items.materialItems().SHROUD_THREAD.get()));
+		thread.setDefaultPickUpDelay();
+		serverLevel.addFreshEntity(thread);
+		discard();
+		return true;
 	}
 
 	private void trySpawnServant(ServerLevel serverLevel) {
@@ -80,6 +115,8 @@ public class ShroudRiftEntity extends Entity {
 			return;
 		servant.setItemSlot(EquipmentSlot.HEAD, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET));
 		servant.setItemSlot(EquipmentSlot.CHEST, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST));
+		servant.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
+		servant.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
 		servant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_AXE));
 		servant.spawnAnim();
 		serverLevel.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, blockPosition(), 0);
