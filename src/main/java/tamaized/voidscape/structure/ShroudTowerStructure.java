@@ -96,21 +96,7 @@ public class ShroudTowerStructure extends AnchoredStructure {
 			@Override
 			protected void handleDataMarker(String dataName, BlockPos blockPos, ServerLevelAccessor serverLevelAccessor, RandomSource randomSource, BoundingBox boundingBox) {
 				switch (dataName) {
-					case "rift_bottom" -> {
-						/*NullServantEntity servant = entities.NULL_SERVANT.get().create(serverLevelAccessor.getLevel(), EntitySpawnReason.STRUCTURE);
-						if (servant == null)
-							return;
-						servant.setPersistenceRequired();
-						servant.snapTo(blockPos, 0F, 0F);
-						servant.setItemSlot(EquipmentSlot.HEAD, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_HELMET));
-						servant.setItemSlot(EquipmentSlot.CHEST, new ItemStack(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST));
-						servant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(items.toolSetComponentDirectory().astralToolSet().ASTRAL_AXE));
-						serverLevelAccessor.addFreshEntityWithPassengers(servant);*/
-						createRift(serverLevelAccessor, blockPos);
-					}
-					case "rift_top" -> {
-						createRift(serverLevelAccessor, blockPos);
-					}
+					case "rift_bottom", "rift_top" -> createRift(serverLevelAccessor, blockPos);
 				}
 			}
 
