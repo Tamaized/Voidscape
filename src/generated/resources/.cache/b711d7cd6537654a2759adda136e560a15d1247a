@@ -1,4 +1,4 @@
-// 26.1.2	2026-09-23T22:14:51.9403465	Model Definitions - voidscape
+// 26.1.2	2026-09-28T10:49:32.5021812	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -60,6 +60,7 @@ bd2ddfc0d4dbbf4f893091628266011c751728cf assets/voidscape/items/astral_pickaxe.j
 cf1076c7ecc5904758ba8cf8d5ce2c4e2d0f0f86 assets/voidscape/items/astral_shards.json
 f5061e244c76b099056055d44a585a166a1d95bd assets/voidscape/items/astral_shovel.json
 cde814494e76e5e972d6410b26f13d97fc8229ac assets/voidscape/items/astral_sword.json
+8fe13b79da2fa2649587d7cd6c39ff83f38828c5 assets/voidscape/items/astral_tome.json
 8c74cac07c9d62e120013377177abe419f2f4afc assets/voidscape/items/astral_xbow.json
 1340280459330feb0a45edbdd41d691a1c014156 assets/voidscape/items/charred_bone.json
 a9d2cc06073fca0f18fb8e20f3acadd3eee4b252 assets/voidscape/items/charred_brick.json
@@ -123,6 +124,7 @@ d6652971c9394afb8450c1d086f5e04eb9eeed5d assets/voidscape/items/null_white.json
 4c78ad7ef56365670db869282324bf12a2d47b9e assets/voidscape/items/shroud_helmet.json
 cee9d77cfb46c919845aac3e621ce08b04b760df assets/voidscape/items/shroud_legs.json
 2f724cff8e4f911c6f099676b13800c54661ea46 assets/voidscape/items/shroud_thread.json
+8d346afd5a679ad60ae6bb6f8b88b1dce0b476ed assets/voidscape/items/shroud_tome.json
 a36ca642ddab23a25fa902cab3ef5524d5adbfe8 assets/voidscape/items/strange_ore.json
 bd41eaf31388d8b9ee50d8b70d44380424dff4a8 assets/voidscape/items/strange_pearl.json
 3b6bedc41130ba6ce96ccc865ea3baeda91dbb83 assets/voidscape/items/tendril.json
@@ -265,6 +267,7 @@ b7a8ec2d7ffcd0f8c85cd9034e235778dcebe55f assets/voidscape/models/item/astral_pic
 378f4b4e01fca70d1b480a537e90f2b5b9a44e67 assets/voidscape/models/item/astral_shovel_broken.json
 46372698389cf8433c1fe17dceed2373eafe6cce assets/voidscape/models/item/astral_sword.json
 c972a13357954dbf19faa8069ed5a86dde59de63 assets/voidscape/models/item/astral_sword_broken.json
+e507a4e8e37c8fa4ec58a64307ef8e185ed33d82 assets/voidscape/models/item/astral_tome.json
 faf1bd3aae4059aa1ada0111e00a7db301b5ed16 assets/voidscape/models/item/astral_xbow.json
 71a67cfa85a283d5403100d53b2e161b96dce6bd assets/voidscape/models/item/astral_xbow_arrow.json
 175eda1032c019f11e25d41326159f07b973329f assets/voidscape/models/item/astral_xbow_broken.json
@@ -350,6 +353,7 @@ e4f5b290b0050445e6d07769c945370b2613c526 assets/voidscape/models/item/shroud_hel
 0a58aa8bcc0e1704b1bf0e39236f0384f5b47a38 assets/voidscape/models/item/shroud_legs.json
 33940dd4f2539e5dad601f187e165f1d70cae3eb assets/voidscape/models/item/shroud_legs_broken.json
 27fe0aa0a5f9886e88a792c65d402944f6ad62fb assets/voidscape/models/item/shroud_thread.json
+3dd1d31262be7a0903f4c62fbb2e940f6b991f19 assets/voidscape/models/item/shroud_tome.json
 532ae8c02fd5d8a704279b9c1a4aee2a47cd0b71 assets/voidscape/models/item/strange_pearl.json
 7800cec4e0784cb69c123f733ce305cc08924343 assets/voidscape/models/item/tendril.json
 f2e38ee050e74b504ae571349768cb20fddd2453 assets/voidscape/models/item/thunder_fungus.json

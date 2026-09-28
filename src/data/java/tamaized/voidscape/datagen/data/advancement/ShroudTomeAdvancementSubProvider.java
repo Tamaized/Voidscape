@@ -13,17 +13,17 @@ import tamaized.voidscape.registry.ModItemComponentDirectory;
 import java.util.function.Consumer;
 
 @Component
-public class VoidmancerAdvancementSubProvider extends AbstractAdvancementSubProvider {
+public class ShroudTomeAdvancementSubProvider extends AbstractAdvancementSubProvider {
 
 	@Autowired
-	private IchorAdvancementSubProvider parent;
+	private ShroudRiftCloseAdvancementSubProvider parent;
 
 	@Autowired
 	private ModItemComponentDirectory items;
 
 	@Override
 	protected String name() {
-		return "voidmancer";
+		return "shroud_tome";
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class VoidmancerAdvancementSubProvider extends AbstractAdvancementSubProv
 		return Advancement.Builder.advancement()
 			.parent(parent.getOrMake(registries, saver))
 			.display(
-				items.toolSetComponentDirectory().spellTomeSet().VOIDIC_TOME.get(),
+				items.toolSetComponentDirectory().spellTomeSet().SHROUD_TOME.get(),
 				title(),
 				description(),
 				null,
@@ -41,21 +41,6 @@ public class VoidmancerAdvancementSubProvider extends AbstractAdvancementSubProv
 				false
 			)
 			.requirements(AdvancementRequirements.Strategy.AND)
-			.addCriterion("voidic_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
-				items.toolSetComponentDirectory().spellTomeSet().VOIDIC_TOME.get()
-			))
-			.addCriterion("corrupt_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
-				items.toolSetComponentDirectory().spellTomeSet().CORRUPT_TOME.get()
-			))
-			.addCriterion("titanite_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
-				items.toolSetComponentDirectory().spellTomeSet().TITANITE_TOME.get()
-			))
-			.addCriterion("ichor_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
-				items.toolSetComponentDirectory().spellTomeSet().ICHOR_TOME.get()
-			))
-			.addCriterion("astral_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
-				items.toolSetComponentDirectory().spellTomeSet().ASTRAL_TOME.get()
-			))
 			.addCriterion("shroud_tome", InventoryChangeTrigger.TriggerInstance.hasItems(
 				items.toolSetComponentDirectory().spellTomeSet().SHROUD_TOME.get()
 			))

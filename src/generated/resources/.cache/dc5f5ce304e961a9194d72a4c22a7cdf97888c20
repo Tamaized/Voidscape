@@ -1,4 +1,4 @@
-// 26.1.2	2026-09-26T11:58:25.9466097	Voidscape recipes
+// 26.1.2	2026-09-28T10:49:32.4961618	Voidscape recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -72,6 +72,7 @@ b78c2c52ec14f5d6c082c8f908d9b87d2939a605 data/minecraft/advancement/recipes/comb
 f1efecafd7049d9c4283b05edcb4afaa37316a1b data/minecraft/advancement/recipes/combat/shroud_helmet_draconic.json
 39122b344ff79579866815cb7fbc9a58cd499f37 data/minecraft/advancement/recipes/combat/shroud_leggings.json
 1bd26a09cbaf9dd6eb4c700a143131a54f16cf8b data/minecraft/advancement/recipes/combat/shroud_leggings_draconic.json
+d6c37d5593c06752af7438960275ad62cdbd3965 data/minecraft/advancement/recipes/combat/spell_tome_astral.json
 b4f8563861438a1fef5d7d34e23b8751b21fe815 data/minecraft/advancement/recipes/combat/spell_tome_corrupt.json
 12d7ff391e9f99a95e12db31d6ee271ec6721308 data/minecraft/advancement/recipes/combat/spell_tome_ichor.json
 ecf79efc2ed0f337fd2be3437b66034184cc84b7 data/minecraft/advancement/recipes/combat/spell_tome_titanite.json
@@ -197,6 +198,7 @@ a0a421887dbd188e93e23409b1443442f70c1c86 data/minecraft/recipe/shroud_leggings_d
 b8fc9cc2ea8cfbec6b2b37908850084e2cfe34ab data/minecraft/recipe/smelt_flesh_ore.json
 640d09a6f34ab2dbb3d4a08f1ad0e35a2cd1f2be data/minecraft/recipe/smelt_strange_ore.json
 34b5514a0f8d90f92487b9f73e0594bf1c422037 data/minecraft/recipe/smelt_titanite_ore.json
+019efddf1cf9a84610c960ffafd27d679c92bdbe data/minecraft/recipe/spell_tome_astral.json
 9fe673d57393240aadeceefbc458a29c62151d5b data/minecraft/recipe/spell_tome_corrupt.json
 97e1a2ccdd08d35986503eb6c8a8bf7918162a0f data/minecraft/recipe/spell_tome_ichor.json
 ca3975fa6feecab5ebe23f59a2abeedfa6e1d1d9 data/minecraft/recipe/spell_tome_titanite.json

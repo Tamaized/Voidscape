@@ -135,6 +135,8 @@ public class ModCreativeTabs {
 				output.accept(toolSetComponentDirectory.spellTomeSet().VOIDIC_TOME.get());
 				output.accept(toolSetComponentDirectory.spellTomeSet().CORRUPT_TOME.get());
 				output.accept(toolSetComponentDirectory.spellTomeSet().TITANITE_TOME.get());
+				output.accept(toolSetComponentDirectory.spellTomeSet().ASTRAL_TOME.get());
+				output.accept(toolSetComponentDirectory.spellTomeSet().SHROUD_TOME.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_SWORD.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_AXE.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_PICKAXE.get());

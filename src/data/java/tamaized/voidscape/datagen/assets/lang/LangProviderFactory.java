@@ -98,11 +98,13 @@ public class LangProviderFactory {
 				addAdvancement("voidmancer", "Voidmancer", "Collect every Spell Tome");
 				addAdvancement("terraform", "Terraformer", "Dig blocks with an Astral Shovel");
 				addAdvancement("shroud_rift_close", "Divine Blessing", "Throw an Astral Crystal into a Shroud Rift");
+				addAdvancement("shroud_tome", "They will understand us", "Throw an Inert Astral Tome into a Shroud Rift");
 
 				// TODO: these should be referenced from somewhere
 				addTooltip("fruit_salad_why", "But why?");
 				addTooltip("fruit_salad_yummy", "Fruit Salad! Yummy, yummy!");
 				addTooltip("shroud_thread_squirm", "Why does it... squirm?");
+				addTooltip("shroud_tome", "They will see our ways... by force.");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");

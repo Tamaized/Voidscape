@@ -1,6 +1,16 @@
 {
   "parent": "voidscape:ichor",
   "criteria": {
+    "astral_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:astral_tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "corrupt_tome": {
       "conditions": {
         "items": [
@@ -16,6 +26,16 @@
         "items": [
           {
             "items": "voidscape:ichor_tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shroud_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:shroud_tome"
           }
         ]
       },
@@ -66,6 +86,12 @@
     ],
     [
       "ichor_tome"
+    ],
+    [
+      "astral_tome"
+    ],
+    [
+      "shroud_tome"
     ]
   ],
   "sends_telemetry_event": true

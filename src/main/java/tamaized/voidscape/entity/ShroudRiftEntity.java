@@ -9,8 +9,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
@@ -60,7 +60,17 @@ public class ShroudRiftEntity extends Entity {
 		super.tick();
 		if (!(level() instanceof ServerLevel serverLevel))
 			return;
-		if (tryCloseRift(serverLevel))
+		if (tryCloseRift(
+			serverLevel,
+			items.materialItems().ASTRAL_CRYSTAL.get(),
+			items.materialItems().SHROUD_THREAD.get()
+		))
+			return;
+		if (tryCloseRift(
+			serverLevel,
+			items.toolSetComponentDirectory().spellTomeSet().ASTRAL_TOME.get(),
+			items.toolSetComponentDirectory().spellTomeSet().SHROUD_TOME.get()
+		))
 			return;
 		if (serverLevel.getDifficulty() == Difficulty.PEACEFUL || !serverLevel.hasNearbyAlivePlayer(getX(), getY(), getZ(), REQUIRED_PLAYER_RANGE))
 			return;
@@ -72,11 +82,11 @@ public class ShroudRiftEntity extends Entity {
 		trySpawnServant(serverLevel);
 	}
 
-	private boolean tryCloseRift(ServerLevel serverLevel) {
+	private boolean tryCloseRift(ServerLevel serverLevel, Item input, Item output) {
 		List<ItemEntity> crystals = serverLevel.getEntitiesOfClass(
 			ItemEntity.class,
 			getBoundingBox(),
-			e -> e.isAlive() && e.getItem().is(items.materialItems().ASTRAL_CRYSTAL.get())
+			e -> e.isAlive() && e.getItem().is(input)
 		);
 		if (crystals.isEmpty())
 			return false;
@@ -92,7 +102,7 @@ public class ShroudRiftEntity extends Entity {
 		serverLevel.sendParticles(ParticleTypes.EXPLOSION, getX(), y, getZ(), 4, 0D, 0D, 0D, 0D);
 		serverLevel.playSound(null, getX(), y, getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.NEUTRAL, 2F, 0.3F + getRandom().nextFloat() * 0.4F);
 		serverLevel.playSound(null, getX(), y, getZ(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.NEUTRAL, 1F, 0.6F + getRandom().nextFloat() * 0.3F);
-		ItemEntity thread = new ItemEntity(serverLevel, getX(), y, getZ(), new ItemStack(items.materialItems().SHROUD_THREAD.get()));
+		ItemEntity thread = new ItemEntity(serverLevel, getX(), y, getZ(), new ItemStack(output));
 		thread.setDefaultPickUpDelay();
 		serverLevel.addFreshEntity(thread);
 		discard();
@@ -112,9 +122,9 @@ public class ShroudRiftEntity extends Entity {
 			return;
 		EntityType<NullServantEntity> type = entities.NULL_SERVANT.get();
 		BlockPos spawnPos = BlockPos.containing(
-				getX() + (random.nextDouble() - random.nextDouble()) * SPAWN_RANGE,
-				getY(),
-				getZ() + (random.nextDouble() - random.nextDouble()) * SPAWN_RANGE
+			getX() + (random.nextDouble() - random.nextDouble()) * SPAWN_RANGE,
+			getY(),
+			getZ() + (random.nextDouble() - random.nextDouble()) * SPAWN_RANGE
 		);
 		if (!serverLevel.noCollision(type.getSpawnAABB(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D)))
 			return;

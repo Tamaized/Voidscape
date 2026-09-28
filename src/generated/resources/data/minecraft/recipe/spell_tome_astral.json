@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:astral_crystal",
+  "base": "voidscape:ichor_tome",
+  "result": {
+    "id": "voidscape:astral_tome"
+  },
+  "template": "voidscape:voidic_template"
+}

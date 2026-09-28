@@ -22,7 +22,8 @@ public class ToolsItemTagProviderFactory implements IItemTagProviderFactory {
 			tools.spellTomeSet().VOIDIC_TOME.getKey(),
 			tools.spellTomeSet().CORRUPT_TOME.getKey(),
 			tools.spellTomeSet().TITANITE_TOME.getKey(),
-			tools.spellTomeSet().ICHOR_TOME.getKey()
+			tools.spellTomeSet().ICHOR_TOME.getKey(),
+			tools.spellTomeSet().SHROUD_TOME.getKey()
 		));
 	}
 }

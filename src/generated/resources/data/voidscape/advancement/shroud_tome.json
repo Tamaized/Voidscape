@@ -1,0 +1,33 @@
+{
+  "parent": "voidscape:shroud_rift_close",
+  "criteria": {
+    "shroud_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:shroud_tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.shroud_tome.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:shroud_tome"
+    },
+    "title": {
+      "translate": "advancement.voidscape.shroud_tome"
+    }
+  },
+  "requirements": [
+    [
+      "shroud_tome"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

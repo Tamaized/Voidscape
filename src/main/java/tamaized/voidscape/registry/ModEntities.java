@@ -146,6 +146,17 @@ public class ModEntities {
 		)
 	);
 
+	public final Supplier<EntityType<ShroudBoltEntity>> SHROUD_BOLT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"shroud_bolt",
+		(key) -> build(
+			ResourceKey.create(Registries.ENTITY_TYPE, key),
+			makeCastedBuilder(ShroudBoltEntity.class, ShroudBoltEntity::new, MobCategory.MISC)
+				.sized(0.5F, 0.5F)
+				.noSave()
+		)
+	);
+
 	private <E extends Entity> EntityType<E> make(ResourceKey<EntityType<?>> id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
 		return build(id, makeBuilder(factory, classification).sized(width, height));
 	}
