@@ -104,6 +104,29 @@ public class VoidCommands {
 						me.getInventory().add(eyes());
 						return 0;
 					}))
+				.then(Commands.literal("no-eyes")
+					.executes(context -> {
+						Player me = context.getSource().getPlayerOrException();
+						ItemStack helmet = me.getItemBySlot(EquipmentSlot.HEAD);
+						double visibility = helmet.getAttributeModifiers().compute(attributes.VOIDIC_VISIBILITY, 0, EquipmentSlot.HEAD);
+						if (visibility == 0)
+							return 0;
+						helmet.set(DataComponents.ATTRIBUTE_MODIFIERS, helmet.getAttributeModifiers().withModifierAdded(
+							attributes.VOIDIC_VISIBILITY,
+							new AttributeModifier(Identifier.fromNamespaceAndPath(Voidscape.MODID, "debug_no_visibility"), -visibility, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.HEAD
+						));
+						return 0;
+					}))
+				.then(Commands.literal("break")
+					.executes(context -> {
+						Player me = context.getSource().getPlayerOrException();
+						ItemStack stack = me.getItemBySlot(EquipmentSlot.MAINHAND);
+						if (stack.isDamageableItem() && !me.level().isClientSide()) {
+							stack.setDamageValue(stack.getMaxDamage() - 1);
+						}
+						return 0;
+					}))
 				.then(Commands.literal("get")
 					.then(Commands.literal("infusion")
 						.executes(context -> {

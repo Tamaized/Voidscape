@@ -208,6 +208,7 @@ def gprUser = hasProperty("GPRUser") ? GPRUser : secrets.getProperty("gpr.user")
 def gprKey = hasProperty("GPRKey") ? GPRKey : secrets.getProperty("gpr.key")
 
 repositories {
+	mavenLocal()
 	maven {
 		name 'Jared\'s Maven' // JEI
 		url 'https://maven.blamejared.com/'

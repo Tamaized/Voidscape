@@ -51,4 +51,10 @@ public class ModToolMaterials {
 		itemTags.REPAIR_MATERIAL_ASTRAL
 	));
 
+	public final Lazy<ToolMaterial> ENTROPIC = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.INCORRECT_FOR_ASTRAL,
+		5556, 12.5F, 11F, 29,
+		itemTags.REPAIR_MATERIAL_ENTROPIC
+	));
+
 }

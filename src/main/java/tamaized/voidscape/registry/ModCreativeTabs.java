@@ -166,6 +166,14 @@ public class ModCreativeTabs {
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_HELMET.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_CHEST.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_LEGS.get());
+				// Gear - Entropic
+				output.accept(itemComponentDirectory.materialItems().ENTROPIC_CHAIN.get());
+				output.accept(toolSetComponentDirectory.entropicToolSet().ENTROPIC_AXE.get());
+				output.accept(toolSetComponentDirectory.entropicToolSet().ENTROPIC_SHIELD.get());
+				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_HELMET.get());
+				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_CHEST.get());
+				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_LEGS.get());
+				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_BOOTS.get());
 			})
 			.build());
 

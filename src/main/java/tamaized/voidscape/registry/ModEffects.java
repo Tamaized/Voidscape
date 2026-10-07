@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.effect.MaddeningEffect;
 import tamaized.voidscape.effect.StandardEffect;
 
 @Component
@@ -17,13 +18,16 @@ public class ModEffects {
 	private ModAttributes attributes;
 
 	public final DeferredHolder<MobEffect, MobEffect> ICHOR = RegUtil.register(Registries.MOB_EFFECT, "ichor",
-		() -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700));
+		() -> new StandardEffect(MobEffectCategory.HARMFUL, 0xFF7700)
+	);
 
 	public final DeferredHolder<MobEffect, MobEffect> AURA = RegUtil.register(Registries.MOB_EFFECT, "aura",
-		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF));
+		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF)
+	);
 
 	public final DeferredHolder<MobEffect, MobEffect> FORTIFIED = RegUtil.register(Registries.MOB_EFFECT, "fortified",
-		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA));
+		() -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x00FFAA)
+	);
 
 	public final DeferredHolder<MobEffect, MobEffect> TRAUMATIZED = RegUtil.register(Registries.MOB_EFFECT, "traumatized",
 		(key) -> new StandardEffect(MobEffectCategory.BENEFICIAL, 0x7700FF)
@@ -40,5 +44,8 @@ public class ModEffects {
 				attributes.VOIDIC_INFUSION, key.withPrefix("effect."), 0.15D, AttributeModifier.Operation.ADD_VALUE
 			)
 	);
+
+	public final DeferredHolder<MobEffect, MobEffect> MADDENED = RegUtil.register(Registries.MOB_EFFECT, "maddened",
+		() -> new MaddeningEffect(MobEffectCategory.HARMFUL, 0x9D3A40));
 
 }

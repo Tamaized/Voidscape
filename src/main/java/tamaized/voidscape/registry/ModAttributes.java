@@ -8,43 +8,41 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
 import tamaized.regutil.RegUtil;
-import tamaized.voidscape.util.NamespaceUtils;
 
 import java.util.Locale;
 
 @Component
 public class ModAttributes {
 
-	@Autowired
-	private NamespaceUtils namespaceUtils;
-
 	public final Holder<Attribute> VOIDIC_VISIBILITY = RegUtil.register(Registries.ATTRIBUTE, "voidic_visibility",
-		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_visibility"), 0F, 0F, 1F).setSyncable(true));
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
 	public final Holder<Attribute> VOIDIC_INFUSION = RegUtil.register(Registries.ATTRIBUTE, "voidic_infusion",
-		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion"), 0F, 0F, 1F));
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F));
 
 	public final Holder<Attribute> VOIDIC_INFUSION_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_infusion_res",
-		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_infusion_res"), 0F, 0F, 1F).setSyncable(true));
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
 	public final Holder<Attribute> VOIDIC_PARANOIA_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_paranoia_res",
-		() -> new PercentageAttribute(namespaceUtils.prefixId("voidic_paranoia_res"), 0F, 0F, 1F).setSyncable(true));
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
 	public final Holder<Attribute> VOIDIC_RES = RegUtil.register(Registries.ATTRIBUTE, "voidic_res",
-		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_res"), 0F, 0F, 2048F));
+		(id) -> new RangedAttribute(id.toLanguageKey(), 0F, 0F, 2048F));
 
 	public final Holder<Attribute> VOIDIC_DMG = RegUtil.register(Registries.ATTRIBUTE, "voidic_dmg",
-		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_dmg"), 0F, 0F, 2048F));
+		(id) -> new RangedAttribute(id.toLanguageKey(), 0F, 0F, 2048F));
 
 	public final Holder<Attribute> VOIDIC_ARROW_DMG = RegUtil.register(Registries.ATTRIBUTE, "voidic_arrow_dmg",
-		() -> new RangedAttribute(namespaceUtils.prefixId("voidic_arrow_dmg"), 0F, 0F, 2048F));
+		(id) -> new RangedAttribute(id.toLanguageKey(), 0F, 0F, 2048F));
 
 	public final Holder<Attribute> SHROUDED = RegUtil.register(Registries.ATTRIBUTE, "shrouded",
-		() -> new PercentageAttribute(namespaceUtils.prefixId("shrouded"), 0F, 0F, 1F).setSyncable(true));
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
+
+	public final Holder<Attribute> MADDENING = RegUtil.register(Registries.ATTRIBUTE, "maddening",
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
 	@PostConstruct
 	private void setup(IEventBus bus) {
@@ -57,6 +55,7 @@ public class ModAttributes {
 			event.add(e, VOIDIC_DMG);
 			event.add(e, VOIDIC_ARROW_DMG);
 			event.add(e, SHROUDED);
+			event.add(e, MADDENING);
 		}));
 	}
 

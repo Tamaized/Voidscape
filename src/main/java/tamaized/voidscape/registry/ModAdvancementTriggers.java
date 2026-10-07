@@ -26,5 +26,6 @@ public class ModAdvancementTriggers {
 	public final Supplier<GenericAdvancementTrigger> COLLECTOR_TRIGGER = RegUtil.register(Registries.TRIGGER_TYPE, "collector", GenericAdvancementTrigger::new);
 	public final Supplier<ItemMatchesAdvancementTrigger> THREE_BY_THREE = RegUtil.register(Registries.TRIGGER_TYPE, "three_by_three", ItemMatchesAdvancementTrigger::new);
 	public final Supplier<GenericAdvancementTrigger> SHROUD_RIFT_CLOSE_TRIGGER = RegUtil.register(Registries.TRIGGER_TYPE, "shroud_rift_close", GenericAdvancementTrigger::new);
+	public final Supplier<GenericAdvancementTrigger> ENTROPIC_RIFT_CLOSE_TRIGGER = RegUtil.register(Registries.TRIGGER_TYPE, "entropic_rift_close", GenericAdvancementTrigger::new);
 
 }

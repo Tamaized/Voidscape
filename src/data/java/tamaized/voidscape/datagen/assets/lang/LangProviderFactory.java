@@ -99,15 +99,21 @@ public class LangProviderFactory {
 				addAdvancement("terraform", "Terraformer", "Dig blocks with an Astral Shovel");
 				addAdvancement("shroud_rift_close", "Divine Blessing", "Throw an Astral Crystal into a Shroud Rift");
 				addAdvancement("shroud_tome", "They will understand us", "Throw an Inert Astral Tome into a Shroud Rift");
+				addAdvancement("entropic_rift_close", "Path of Madness", "Throw an Astral Crystal into an Entropic Rift");
+				addAdvancement("entropic_gear", "They will bow to us", "Craft a full set of Entropic Gear");
 
 				// TODO: these should be referenced from somewhere
 				addTooltip("fruit_salad_why", "But why?");
 				addTooltip("fruit_salad_yummy", "Fruit Salad! Yummy, yummy!");
 				addTooltip("shroud_thread_squirm", "Why does it... squirm?");
 				addTooltip("shroud_tome", "They will see our ways... by force.");
+				addTooltip("entropic_chain", "The voices.");
+				addTooltip("entropic_axe", "They will follow our ways... or be crushed.");
+				addTooltip("entropic_axe_effects", "Attacks apply Ichor and Slowness");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
+				addTooltip("maddening", "Causes attackers to become confused and attack random targets.");
 				addTooltip("augment.lingering_potion", "Right click with a lingering potion or a snowball to change the effect.");
 				addTooltip("textures", "Textures Subject to Change");
 				addTooltip("quiver", """
@@ -129,6 +135,7 @@ public class LangProviderFactory {
 				addEntityType(entities.VOIDS_WRATH, "Void's Wrath");
 				addEntityType(entities.CORRUPTED_PAWN, "The Corrupted Pawn");
 				addEntityType(entities.SHROUD_RIFT, "Shroud Rift");
+				addEntityType(entities.ENTROPIC_RIFT, "Entropic Rift");
 
 				addFluid(fluids.VOIDIC, "Liquid Voidic Crystal");
 				addItem(buckets.VOIDIC, "Liquid Voidic Crystal Bucket");
@@ -144,11 +151,13 @@ public class LangProviderFactory {
 				addAttribute(attributes.VOIDIC_VISIBILITY, "Voidic Visibility");
 				addAttribute(attributes.VOIDIC_INFUSION, "Voidic Infusion");
 				addAttribute(attributes.SHROUDED, "Shrouded");
+				addAttribute(attributes.MADDENING, "Maddening");
 
 				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");
 				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
 				addEffectWithDescription(effects.TRAUMATIZED, "Traumatized", "Greatly Increases Voidic Damage and Defense.");
+				addEffectWithDescription(effects.MADDENED, "Maddened", "Causes mobs to attack random nearby targets.");
 
 				// addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration"); TODO
 

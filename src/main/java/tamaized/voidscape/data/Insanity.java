@@ -110,7 +110,7 @@ public class Insanity extends NetworkedDataAttachment implements ValueIOSerializ
 	}
 
 	public enum WingType {
-		NORMAL, ARTI, TOXIC
+		NORMAL, ARTI, TOXIC, EYES
 	}
 
 	public WingType getWingType() {

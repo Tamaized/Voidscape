@@ -1,0 +1,98 @@
+{
+  "parent": "voidscape:entropic_rift_close",
+  "criteria": {
+    "entropic_axe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_axe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_shield": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_shield"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.entropic_gear.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:entropic_axe"
+    },
+    "title": {
+      "translate": "advancement.voidscape.entropic_gear"
+    }
+  },
+  "requirements": [
+    [
+      "entropic_axe"
+    ],
+    [
+      "entropic_shield"
+    ],
+    [
+      "entropic_helmet"
+    ],
+    [
+      "entropic_chest"
+    ],
+    [
+      "entropic_legs"
+    ],
+    [
+      "entropic_boots"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

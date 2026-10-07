@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "voidscape:item/entropic_chain",
+    "layer1": {
+      "neoforge_data": {
+        "light_emission": 15
+      },
+      "sprite": "voidscape:item/entropic_chain_overlay"
+    }
+  }
+}

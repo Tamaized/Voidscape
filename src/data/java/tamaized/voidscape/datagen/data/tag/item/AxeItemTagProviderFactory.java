@@ -23,7 +23,8 @@ public class AxeItemTagProviderFactory implements IItemTagProviderFactory {
 			tools.corruptToolSet().CORRUPT_AXE.getKey(),
 			tools.titaniteToolSet().TITANITE_AXE.getKey(),
 			tools.ichorToolSet().ICHOR_AXE.getKey(),
-			tools.astralToolSet().ASTRAL_AXE.getKey()
+			tools.astralToolSet().ASTRAL_AXE.getKey(),
+			tools.entropicToolSet().ENTROPIC_AXE.getKey()
 		));
 	}
 }

@@ -107,6 +107,16 @@ public class ArmorClientExtensions {
 			shroud.SHROUD_CHEST,
 			shroud.SHROUD_LEGS
 		);
+
+		EntropicArmorSet entropic = armorSets.entropicArmorSet();
+		register(
+			event,
+			crystallineWithOverlayFullbright("entropic", locations -> locations.MODEL_ARMOR_ENTROPIC),
+			entropic.ENTROPIC_HELMET,
+			entropic.ENTROPIC_CHEST,
+			entropic.ENTROPIC_LEGS,
+			entropic.ENTROPIC_BOOTS
+		);
 	}
 
 	private ArmorExtensions crystallineWithOverlayFullbright(String textureName, Function<ModModelLayerLocations, ModelLayerLocation> layerLocation) {

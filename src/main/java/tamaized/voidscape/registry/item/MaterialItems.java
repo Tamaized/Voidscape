@@ -92,4 +92,19 @@ public class MaterialItems {
 		}
 	});
 
+	public final DeferredHolder<Item, Item> ENTROPIC_CHAIN = RegUtil.register(Registries.ITEM, "entropic_chain", (id) -> new Item(
+		itemProperties.LAVA_IMMUNE.apply(id)
+	) {
+		@Override
+		@SuppressWarnings("deprecation")
+		public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> builder, TooltipFlag tooltipFlag) {
+			super.appendHoverText(stack, context, display, builder, tooltipFlag);
+			builder.accept(net.minecraft.network.chat.Component.empty());
+			builder.accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.entropic_chain").withStyle(
+				ChatFormatting.DARK_RED,
+				ChatFormatting.ITALIC
+			));
+		}
+	});
+
 }

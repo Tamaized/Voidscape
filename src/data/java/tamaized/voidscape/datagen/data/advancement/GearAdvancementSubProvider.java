@@ -110,6 +110,18 @@ public class GearAdvancementSubProvider extends AbstractAdvancementSubProvider {
 			.addCriterion("shroud_legs", InventoryChangeTrigger.TriggerInstance.hasItems(
 				items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_LEGS.get()
 			))
+			.addCriterion("entropic_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_BOOTS.get()
+			))
+			.addCriterion("entropic_chest", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_HELMET.get()
+			))
+			.addCriterion("entropic_legs", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_CHEST.get()
+			))
+			.addCriterion("entropic_boots", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_LEGS.get()
+			))
 			.sendsTelemetryEvent()
 			.save(saver, location());
 	}

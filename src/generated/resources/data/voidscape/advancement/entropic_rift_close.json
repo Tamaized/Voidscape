@@ -1,0 +1,26 @@
+{
+  "parent": "voidscape:astral_crystal",
+  "criteria": {
+    "entropic_rift_close": {
+      "trigger": "voidscape:entropic_rift_close"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.entropic_rift_close.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:entropic_chain"
+    },
+    "title": {
+      "translate": "advancement.voidscape.entropic_rift_close"
+    }
+  },
+  "requirements": [
+    [
+      "entropic_rift_close"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

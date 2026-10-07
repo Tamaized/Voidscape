@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:elytra",
+  "base": "voidscape:entropic_chest",
+  "result": {
+    "components": {
+      "voidscape:elytra": true
+    },
+    "id": "voidscape:entropic_chest"
+  },
+  "template": "voidscape:voidic_template"
+}

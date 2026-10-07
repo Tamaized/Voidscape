@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "voidscape:item/entropic/axe_broken",
+    "layer1": {
+      "neoforge_data": {
+        "light_emission": 15
+      },
+      "sprite": "voidscape:item/entropic/axe_broken_overlay"
+    }
+  }
+}

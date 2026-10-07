@@ -56,8 +56,9 @@ public class ShroudWingLayerRenderTypes {
 
 	public enum WingVisualType {
 		SKY((shaders) -> shaders.VOIDSKY_WINGS, AbstractEndPortalRenderer.END_PORTAL_LOCATION),
-		ARTI((shaders) -> shaders.VOIDSKY_WINGS, projection("arti")),
-		TOXIC((shaders) -> shaders.VOIDSKY_WINGS_FAST, projection("toxic"));
+		ARTI((shaders) -> shaders.VOIDSKY_WINGS_ZOOM_FAR, projection("arti")),
+		TOXIC((shaders) -> shaders.VOIDSKY_WINGS_FAST, projection("toxic")),
+		EYES((shaders) -> shaders.VOIDSKY_WINGS_FAST_ZOOM_VERY_FAR, projection("eyes"));
 
 		private final Function<Shaders, RenderPipeline> pipeline;
 		private final Identifier texture;

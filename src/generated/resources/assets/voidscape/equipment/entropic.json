@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:entropic"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:entropic"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:entropic"
+      }
+    ]
+  }
+}

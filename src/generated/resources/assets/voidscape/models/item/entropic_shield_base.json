@@ -1,0 +1,7 @@
+{
+  "parent": "voidscape:item/voidic_crystal_shield_base",
+  "textures": {
+    "0": "voidscape:item/shield/entropic",
+    "particle": "#0"
+  }
+}

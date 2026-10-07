@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:entropic_chain",
+  "base": "voidscape:astral_axe",
+  "result": {
+    "id": "voidscape:entropic_axe"
+  },
+  "template": "voidscape:voidic_template"
+}

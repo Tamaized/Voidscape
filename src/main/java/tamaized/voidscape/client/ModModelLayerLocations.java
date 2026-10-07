@@ -16,6 +16,7 @@ import tamaized.voidscape.client.armor.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.armor.model.ModelArmorCrystalline;
 import tamaized.voidscape.client.entity.model.*;
 import tamaized.voidscape.client.entity.render.*;
+import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.registry.ModEntities;
 
 @Component(dist = Dist.CLIENT)
@@ -23,6 +24,9 @@ public class ModModelLayerLocations {
 
 	@Autowired(dist = Dist.CLIENT)
 	private ModEntities entities;
+
+	@Autowired(dist = Dist.CLIENT)
+	private Shaders shaders;
 
 	public final ModelLayerLocation VOIDLING = make("voidling");
 	public final ModelLayerLocation CORRUPTED_PAWN = make("corruptedpawn");
@@ -36,6 +40,7 @@ public class ModModelLayerLocations {
 	public final ModelLayerLocation MODEL_ARMOR_ICHOR = make("ichor");
 	public final ModelLayerLocation MODEL_ARMOR_ASTRAL = make("astral");
 	public final ModelLayerLocation MODEL_ARMOR_SHROUD = make("shroud");
+	public final ModelLayerLocation MODEL_ARMOR_ENTROPIC = make("entropic");
 
 	private ModelLayerLocation make(String name) {
 		return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Voidscape.MODID, "main"), name);
@@ -60,6 +65,7 @@ public class ModModelLayerLocations {
 		event.registerLayerDefinition(MODEL_ARMOR_ICHOR, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 		event.registerLayerDefinition(MODEL_ARMOR_ASTRAL, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 		event.registerLayerDefinition(MODEL_ARMOR_SHROUD, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
+		event.registerLayerDefinition(MODEL_ARMOR_ENTROPIC, () -> ModelArmorCrystalline.makeMesh(CubeDeformation.NONE, 0F));
 
 	}
 
@@ -74,8 +80,9 @@ public class ModModelLayerLocations {
 		event.registerEntityRenderer(entities.ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF7700));
 		event.registerEntityRenderer(entities.NULL_SERVANT_ICHOR_BOLT.get(), context -> new RenderSpellBolt<>(context, 0xFF0000));
 		event.registerEntityRenderer(entities.STRANGE_PEARL.get(), context -> new ThrownItemRenderer<>(context, 1F, true));
-		event.registerEntityRenderer(entities.SHROUD_RIFT.get(), RenderShroudRift::new);
+		event.registerEntityRenderer(entities.SHROUD_RIFT.get(), context -> new RenderRiftEntity(context, shaders.SHROUD_RIFT));
 		event.registerEntityRenderer(entities.SHROUD_BOLT.get(), RenderShroudBolt::new);
+		event.registerEntityRenderer(entities.ENTROPIC_RIFT.get(), context -> new RenderRiftEntity(context, shaders.ENTROPIC_RIFT));
 	}
 
 }

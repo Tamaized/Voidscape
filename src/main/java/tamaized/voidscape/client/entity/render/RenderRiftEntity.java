@@ -1,55 +1,53 @@
 package tamaized.voidscape.client.entity.render;
 
 import com.google.common.base.Suppliers;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.neoforged.api.distmarker.Dist;
 import org.joml.Matrix4f;
-import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
-import tamaized.voidscape.client.entity.render.state.ShroudRiftRenderState;
-import tamaized.voidscape.client.shader.Shaders;
-import tamaized.voidscape.entity.ShroudRiftEntity;
+import tamaized.voidscape.client.entity.render.state.RiftEntityRenderState;
+import tamaized.voidscape.entity.AbstractRiftEntity;
 
 import java.util.function.Supplier;
 
-public class RenderShroudRift extends EntityRenderer<ShroudRiftEntity, ShroudRiftRenderState> {
+public class RenderRiftEntity extends EntityRenderer<AbstractRiftEntity, RiftEntityRenderState> {
 
-	@Autowired(dist = Dist.CLIENT)
-	private static Shaders shaders;
+	private final Supplier<RenderType> renderType;
 
-	private final Supplier<RenderType> renderType = Suppliers.memoize(() -> RenderType.create(
-		Voidscape.MODID + "_shroud_rift",
-		RenderSetup.builder(shaders.SHROUD_RIFT)
-			.bufferSize(256)
-			.sortOnUpload()
-			.createRenderSetup()
-	));
-
-	public RenderShroudRift(EntityRendererProvider.Context context) {
+	public RenderRiftEntity(EntityRendererProvider.Context context, RenderPipeline pipeline) {
 		super(context);
+		renderType = Suppliers.memoize(() -> RenderType.create(
+			Voidscape.MODID + "_shroud_rift",
+			RenderSetup.builder(pipeline)
+				.bufferSize(256)
+				.sortOnUpload()
+				.createRenderSetup()
+		));
 	}
 
 	@Override
-	public ShroudRiftRenderState createRenderState() {
-		return new ShroudRiftRenderState();
+	public RiftEntityRenderState createRenderState() {
+		return new RiftEntityRenderState();
 	}
 
 	@Override
-	public void extractRenderState(ShroudRiftEntity entity, ShroudRiftRenderState state, float partialTicks) {
+	public void extractRenderState(AbstractRiftEntity entity, RiftEntityRenderState state, float partialTicks) {
 		super.extractRenderState(entity, state, partialTicks);
 		state.seed = entity.getUUID().hashCode(); // UUID hashcode very cheap and also consistent on all clients
+		state.shouldRender = entity.shouldRender(Minecraft.getInstance().player);
 	}
 
 	@Override
-	protected boolean affectedByCulling(ShroudRiftEntity entity) {
+	protected boolean affectedByCulling(AbstractRiftEntity entity) {
 		return false;
 	}
 
@@ -60,7 +58,9 @@ public class RenderShroudRift extends EntityRenderer<ShroudRiftEntity, ShroudRif
 	}
 
 	@Override
-	public void submit(ShroudRiftRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+	public void submit(RiftEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+		if (!state.shouldRender)
+			return;
 		final float quadScale = 1.2F;
 		final float halfWidth = 0.75F * quadScale;
 		final float bottom = 1.5F * (1F - quadScale);

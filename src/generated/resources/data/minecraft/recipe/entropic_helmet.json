@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:entropic_chain",
+  "base": "voidscape:astral_helmet",
+  "result": {
+    "id": "voidscape:entropic_helmet"
+  },
+  "template": "voidscape:voidic_template"
+}

@@ -81,6 +81,46 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "entropic_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "entropic_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:entropic_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "ichor_boots": {
       "conditions": {
         "items": [
@@ -267,7 +307,11 @@
       "astral_boots",
       "shroud_helmet",
       "shroud_chest",
-      "shroud_legs"
+      "shroud_legs",
+      "entropic_helmet",
+      "entropic_chest",
+      "entropic_legs",
+      "entropic_boots"
     ]
   ],
   "sends_telemetry_event": true

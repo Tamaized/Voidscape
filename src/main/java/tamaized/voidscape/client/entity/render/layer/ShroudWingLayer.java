@@ -62,11 +62,18 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 					shroudWingLayerRenderTypes.WRAPPED_POS_TEX_COLOR.get(),
 					ARGB.colorFromFloat(0.25F, 0F, 0F, 0F)
 				);
+
 			Insanity.WingType wingType = state.getRenderData(shroudWingLayerRenderStateExtension.wingType);
-			if (wingType == null)
+			int defaultColor = 0xFFA4EA;
+			if (wingType == null) {
 				wingType = Insanity.WingType.NORMAL;
-			if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST))
+			} else if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().shroudArmorSet().SHROUD_CHEST)) {
 				wingType = Insanity.WingType.TOXIC;
+			} else if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_CHEST)) {
+				wingType = Insanity.WingType.EYES;
+				defaultColor = 0x9D3A40;
+			}
+
 			submitWings(
 				poseStack,
 				submitNodeCollector,
@@ -75,8 +82,9 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 						case NORMAL -> ShroudWingLayerRenderTypes.WingVisualType.SKY;
 						case ARTI -> ShroudWingLayerRenderTypes.WingVisualType.ARTI;
 						case TOXIC -> ShroudWingLayerRenderTypes.WingVisualType.TOXIC;
+						case EYES -> ShroudWingLayerRenderTypes.WingVisualType.EYES;
 				}),
-					ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : 0xFFA4EA)
+					ARGB.color((int) (0.25F * 255), donatorEnabled && donatorColor != null ? donatorColor : defaultColor)
 				);
 		}
 	}

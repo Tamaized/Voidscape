@@ -1,10 +1,5 @@
 {
   "values": [
-    "voidscape:voidic_crystal_bow",
-    "voidscape:corrupt_bow",
-    "voidscape:titanite_bow",
-    "voidscape:ichor_bow",
-    "voidscape:astral_bow",
     "voidscape:voidic_crystal_xbow",
     "voidscape:corrupt_xbow",
     "voidscape:titanite_xbow",
@@ -15,6 +10,12 @@
     "voidscape:titanite_tome",
     "voidscape:ichor_tome",
     "voidscape:shroud_tome",
-    "voidscape:voidic_crystal_shield"
+    "voidscape:voidic_crystal_bow",
+    "voidscape:corrupt_bow",
+    "voidscape:titanite_bow",
+    "voidscape:ichor_bow",
+    "voidscape:astral_bow",
+    "voidscape:voidic_crystal_shield",
+    "voidscape:entropic_shield"
   ]
 }

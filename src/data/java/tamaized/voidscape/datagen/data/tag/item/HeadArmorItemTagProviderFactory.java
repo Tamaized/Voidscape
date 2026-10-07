@@ -24,7 +24,8 @@ public class HeadArmorItemTagProviderFactory implements IItemTagProviderFactory 
 			armor.titaniteArmorSet().TITANITE_HELMET.getKey(),
 			armor.ichorArmorSet().ICHOR_HELMET.getKey(),
 			armor.astralArmorSet().ASTRAL_HELMET.getKey(),
-			armor.shroudArmorSet().SHROUD_HELMET.getKey()
+			armor.shroudArmorSet().SHROUD_HELMET.getKey(),
+			armor.entropicArmorSet().ENTROPIC_HELMET.getKey()
 		));
 	}
 }

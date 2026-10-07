@@ -6,6 +6,7 @@ import tamaized.voidscape.registry.armor.set.*;
 
 @Component
 public record ModArmorSetComponentDirectory(
+	@Autowired EntropicArmorSet entropicArmorSet,
 	@Autowired ShroudArmorSet shroudArmorSet,
 	@Autowired AstralArmorSet astralArmorSet,
 	@Autowired CorruptArmorSet corruptArmorSet,

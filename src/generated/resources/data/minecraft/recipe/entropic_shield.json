@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:entropic_chain",
+  "base": "voidscape:voidic_crystal_shield",
+  "result": {
+    "id": "voidscape:entropic_shield"
+  },
+  "template": "voidscape:voidic_template"
+}

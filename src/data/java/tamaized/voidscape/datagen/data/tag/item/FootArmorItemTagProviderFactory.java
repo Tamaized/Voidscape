@@ -23,7 +23,8 @@ public class FootArmorItemTagProviderFactory implements IItemTagProviderFactory 
 			armor.corruptArmorSet().CORRUPT_BOOTS.getKey(),
 			armor.titaniteArmorSet().TITANITE_BOOTS.getKey(),
 			armor.ichorArmorSet().ICHOR_BOOTS.getKey(),
-			armor.astralArmorSet().ASTRAL_BOOTS.getKey()
+			armor.astralArmorSet().ASTRAL_BOOTS.getKey(),
+			armor.entropicArmorSet().ENTROPIC_BOOTS.getKey()
 		));
 	}
 }

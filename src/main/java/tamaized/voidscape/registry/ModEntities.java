@@ -157,6 +157,17 @@ public class ModEntities {
 		)
 	);
 
+	public final Supplier<EntityType<EntropicRiftEntity>> ENTROPIC_RIFT = RegUtil.register(
+		Registries.ENTITY_TYPE,
+		"entropic_rift",
+		(key) -> make(
+			ResourceKey.create(Registries.ENTITY_TYPE, key),
+			EntropicRiftEntity::new,
+			MobCategory.MISC,
+			1.5F, 3F
+		)
+	);
+
 	private <E extends Entity> EntityType<E> make(ResourceKey<EntityType<?>> id, EntityType.EntityFactory<E> factory, MobCategory classification, float width, float height) {
 		return build(id, makeBuilder(factory, classification).sized(width, height));
 	}

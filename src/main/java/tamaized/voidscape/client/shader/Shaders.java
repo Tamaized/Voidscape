@@ -123,10 +123,21 @@ public class Shaders {
 
 	public final RenderPipeline VOIDSKY_WINGS = beginWingPipeline()
 		.withShaderDefine("WingSpeed", 1.5F)
+		.withShaderDefine("WingEffectScale", 1F)
+		.build();
+
+	public final RenderPipeline VOIDSKY_WINGS_ZOOM_FAR = beginWingPipeline()
+		.withShaderDefine("WingSpeed", 1.5F)
+		.withShaderDefine("WingEffectScale", 2F)
 		.build();
 
 	public final RenderPipeline VOIDSKY_WINGS_FAST = beginWingPipeline()
 		.withShaderDefine("WingSpeed", 32.0F)
+		.withShaderDefine("WingEffectScale", 1F)
+		.build();
+	public final RenderPipeline VOIDSKY_WINGS_FAST_ZOOM_VERY_FAR = beginWingPipeline()
+		.withShaderDefine("WingSpeed", 32.0F)
+		.withShaderDefine("WingEffectScale", 12F)
 		.build();
 
 	public final RenderPipeline THUNDER_AURORA = RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
@@ -143,6 +154,16 @@ public class Shaders {
 		.withLocation(id("pipeline/shroud_rift"))
 		.withVertexShader(id("core/shroud_rift/rift"))
 		.withFragmentShader(id("core/shroud_rift/rift"))
+		.withCull(false)
+		.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+		.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+		.build();
+
+	public final RenderPipeline ENTROPIC_RIFT = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
+		.withLocation(id("pipeline/shroud_rift"))
+		.withVertexShader(id("core/shroud_rift/rift"))
+		.withFragmentShader(id("core/shroud_rift/rift_red"))
 		.withCull(false)
 		.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
 		.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
