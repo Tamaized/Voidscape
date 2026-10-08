@@ -53,28 +53,37 @@ public abstract class FullbrightItemModelHolder extends ItemModelHolder {
 	}
 
 	protected final Identifier makeModel(ItemModelGenerators provider, Identifier parent, String path, String texture, UnaryOperator<ExtendedModelTemplateBuilder> config) {
+		return makeModel(provider, parent, path, putLayers(new TextureMapping(), texture), config);
+	}
+
+	private Identifier makeModel(ItemModelGenerators provider, Identifier parent, String path, TextureMapping textures, UnaryOperator<ExtendedModelTemplateBuilder> config) {
 		ExtendedModelTemplateBuilder builder = ExtendedModelTemplateBuilder.builder()
 			.parent(parent)
 			.requiredTextureSlot(TextureSlot.LAYER0);
-		TextureMapping mapping = new TextureMapping().put(TextureSlot.LAYER0, new Material(modLoc(texture)));
-		if (hasOverlay()) {
+		if (hasOverlay())
 			builder.requiredTextureSlot(TextureSlot.LAYER1);
-			mapping.put(TextureSlot.LAYER1, new Material(modLoc(texture + "_overlay")));
-		}
 		return config
 			.apply(builder.itemLayerFaceData(fullbrightLayer(), fullbright))
 			.build()
-			.create(modLoc(path), mapping, provider.modelOutput);
+			.create(modLoc(path), textures, provider.modelOutput);
+	}
+
+	private TextureMapping putLayers(TextureMapping mapping, String texture) {
+		mapping.put(TextureSlot.LAYER0, new Material(modLoc(texture)));
+		if (hasOverlay())
+			mapping.put(TextureSlot.LAYER1, new Material(modLoc(texture + "_overlay")));
+		return mapping;
 	}
 
 	@Override
 	public Identifier finalize(ItemModelGenerators provider, FurtherExtendedModelTemplateBuilder model) {
-		Identifier id = makeModel(provider, name(), texturePath());
+		Identifier id = makeModel(provider, modelParent(), name(), textures(), UnaryOperator.identity());
 		provider.itemModelOutput.accept(Objects.requireNonNull(itemForName()).value(), ItemModelUtils.plainModel(id));
 		return id;
 	}
 
 	@Override
 	protected void defineTextureSlots(ExtendedTextureMapping mapping) {
+		putLayers(mapping, texturePath());
 	}
 }

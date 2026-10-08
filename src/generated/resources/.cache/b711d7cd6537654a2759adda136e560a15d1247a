@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-06T18:21:18.2996814	Model Definitions - voidscape
+// 26.1.2	2026-10-07T23:13:46.9606925	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -62,6 +62,9 @@ f5061e244c76b099056055d44a585a166a1d95bd assets/voidscape/items/astral_shovel.js
 cde814494e76e5e972d6410b26f13d97fc8229ac assets/voidscape/items/astral_sword.json
 8fe13b79da2fa2649587d7cd6c39ff83f38828c5 assets/voidscape/items/astral_tome.json
 8c74cac07c9d62e120013377177abe419f2f4afc assets/voidscape/items/astral_xbow.json
+608a260b65d8253801dac566b6ee49b99025dcf3 assets/voidscape/items/axiomatic_gear.json
+f520a2b6e4e5d5d939da6944bbb0f56d5ad74d21 assets/voidscape/items/axiomatic_gear_left.json
+cd4001d0ca0ddfb10b9afc3ffb04c34ff03c64b1 assets/voidscape/items/axiomatic_gear_right.json
 1340280459330feb0a45edbdd41d691a1c014156 assets/voidscape/items/charred_bone.json
 a9d2cc06073fca0f18fb8e20f3acadd3eee4b252 assets/voidscape/items/charred_brick.json
 fbe61026840ee9e36618a6b2fd61c5c78499c9e9 assets/voidscape/items/charred_quiver.json
@@ -282,6 +285,9 @@ faf1bd3aae4059aa1ada0111e00a7db301b5ed16 assets/voidscape/models/item/astral_xbo
 6cd2ba4187107865d440ae96424c242b4240105d assets/voidscape/models/item/astral_xbow_pulling_0.json
 b7916f23dab25c59c2c252ccec6b363735d670ce assets/voidscape/models/item/astral_xbow_pulling_1.json
 90ed38e0b6b4019cf0a9d936319d93d15bffa56f assets/voidscape/models/item/astral_xbow_pulling_2.json
+508e995a8cf873790a36bd3b34ad172f99bc7f82 assets/voidscape/models/item/axiomatic_gear.json
+1d9761c10a5777042402fd1bdf846c6944d96ead assets/voidscape/models/item/axiomatic_gear_left.json
+da0fdb21ca1807660261eb8a5b1317c551b0797c assets/voidscape/models/item/axiomatic_gear_right.json
 e21b92d3e62f1e714955cf4d93f6d42ee42490d6 assets/voidscape/models/item/charred_bone.json
 a55adac4dcb1e7b83407ce022196b754de7a06c1 assets/voidscape/models/item/charred_quiver.json
 cdce77fcd24086bab5f8da5958e4547c553c1a4a assets/voidscape/models/item/charred_warhammer_head.json

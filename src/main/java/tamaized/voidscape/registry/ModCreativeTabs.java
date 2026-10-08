@@ -174,6 +174,10 @@ public class ModCreativeTabs {
 				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_CHEST.get());
 				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_LEGS.get());
 				output.accept(armorSetComponentDirectory.entropicArmorSet().ENTROPIC_BOOTS.get());
+				// Gear - Axiom
+				output.accept(itemComponentDirectory.materialItems().AXIOMATIC_GEAR_LEFT.get());
+				output.accept(itemComponentDirectory.materialItems().AXIOMATIC_GEAR_RIGHT.get());
+				output.accept(itemComponentDirectory.materialItems().AXIOMATIC_GEAR.get());
 			})
 			.build());
 

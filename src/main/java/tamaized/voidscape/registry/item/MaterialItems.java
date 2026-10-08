@@ -107,4 +107,27 @@ public class MaterialItems {
 		}
 	});
 
+	public final DeferredHolder<Item, Item> AXIOMATIC_GEAR_LEFT = RegUtil.register(Registries.ITEM, "axiomatic_gear_left", (id) -> new Item(
+		itemProperties.LAVA_IMMUNE.apply(id)
+	));
+
+	public final DeferredHolder<Item, Item> AXIOMATIC_GEAR_RIGHT = RegUtil.register(Registries.ITEM, "axiomatic_gear_right", (id) -> new Item(
+		itemProperties.LAVA_IMMUNE.apply(id)
+	));
+
+	public final DeferredHolder<Item, Item> AXIOMATIC_GEAR = RegUtil.register(Registries.ITEM, "axiomatic_gear", (id) -> new Item(
+		itemProperties.LAVA_IMMUNE.apply(id)
+	) {
+		@Override
+		@SuppressWarnings("deprecation")
+		public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> builder, TooltipFlag tooltipFlag) {
+			super.appendHoverText(stack, context, display, builder, tooltipFlag);
+			builder.accept(net.minecraft.network.chat.Component.empty());
+			builder.accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.axiomatic_gear").withStyle(
+				ChatFormatting.AQUA,
+				ChatFormatting.ITALIC
+			));
+		}
+	});
+
 }

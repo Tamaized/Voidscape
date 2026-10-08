@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-06T18:06:52.9934228	Voidscape recipes
+// 26.1.2	2026-10-07T23:21:19.2953761	Voidscape recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -120,6 +120,7 @@ e524dfd87fb371f9ff6f93a34f8a3177432e6cd2 data/minecraft/advancement/recipes/comb
 9532382fc063e8f4206a4bf21941b799ac7ca1fd data/minecraft/advancement/recipes/combat/voidic_crystal_sword.json
 d1ded14c5cf991f209c65fbc21086ba6b7e67b53 data/minecraft/advancement/recipes/combat/voidic_crystal_sword_fang.json
 100aa92fc5beec6dc505534a1d310d854d7257a1 data/minecraft/advancement/recipes/food/ethereal_fruit_salad.json
+2c067a4399abb158d95cd81d762eab780bf6b55f data/minecraft/advancement/recipes/misc/axiomatic_gear.json
 c4a6404b131f554982b46e6b8e20f258ed02e541 data/minecraft/advancement/recipes/misc/blast_flesh_ore.json
 c57134dcba2aabfd7ee638aee6ce8da1b532d145 data/minecraft/advancement/recipes/misc/blast_strange_ore.json
 878efdd5699f860fa555ed236fec161f49c853c8 data/minecraft/advancement/recipes/misc/blast_titanite_ore.json
@@ -152,6 +153,7 @@ bc2cf1539184d2d15412cd045bb07ac3e6642039 data/minecraft/recipe/astral_helmet_dra
 89b0b98100a1ba4d381e200f3f4193b803b0c069 data/minecraft/recipe/astral_shovel.json
 a5031e02990694a3a4e2814f7a1b8dcaf232684e data/minecraft/recipe/astral_sword.json
 d95399471d63be5e87d5e9a31ec2a20b14f56de7 data/minecraft/recipe/astral_sword_fang.json
+16802f1f15f2f6d934f606d3fe9880ea2c729a08 data/minecraft/recipe/axiomatic_gear.json
 b1eb719adee7fcdf1d758866ce8d1135ebb30730 data/minecraft/recipe/blast_flesh_ore.json
 6ffe539d0045a35d41be0fe2e08cbd4ce6b84446 data/minecraft/recipe/blast_strange_ore.json
 f6473dcb972e1c2e2ea9aeaa7782d93beab95c62 data/minecraft/recipe/blast_titanite_ore.json

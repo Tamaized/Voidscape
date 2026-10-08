@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:axiomatic_gear_right",
+  "base": "voidscape:astral_essence",
+  "result": {
+    "id": "voidscape:axiomatic_gear"
+  },
+  "template": "voidscape:axiomatic_gear_left"
+}

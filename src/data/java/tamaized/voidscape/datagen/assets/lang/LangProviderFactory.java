@@ -101,6 +101,10 @@ public class LangProviderFactory {
 				addAdvancement("shroud_tome", "They will understand us", "Throw an Inert Astral Tome into a Shroud Rift");
 				addAdvancement("entropic_rift_close", "Path of Madness", "Throw an Astral Crystal into an Entropic Rift");
 				addAdvancement("entropic_gear", "They will bow to us", "Craft a full set of Entropic Gear");
+				addAdvancement("axiom_rift_close_one", "The First Principle", "Throw a Shroud Thread into an Entropic Rift");
+				addAdvancement("axiom_rift_close_two", "The Second Principle", "Throw an Entropic Chain into a Shroud Rift");
+				addAdvancement("axiom_gear_item", "The Third Principle", "Combine both halves of a Broken Axiomatic Gear");
+				addAdvancement("axiom_gear", "They will heed us.", "Craft a full set of Axiomatic Gear");
 
 				// TODO: these should be referenced from somewhere
 				addTooltip("fruit_salad_why", "But why?");
@@ -110,6 +114,8 @@ public class LangProviderFactory {
 				addTooltip("entropic_chain", "The voices.");
 				addTooltip("entropic_axe", "They will follow our ways... or be crushed.");
 				addTooltip("entropic_axe_effects", "Attacks apply Ichor and Slowness");
+				addTooltip("axiomatic_gear", "Everything has a purpose.");
+				addTooltip("axiomatic_crossbow", "They will join us... or be corrected.");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");

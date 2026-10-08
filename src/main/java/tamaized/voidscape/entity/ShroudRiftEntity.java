@@ -62,6 +62,13 @@ public class ShroudRiftEntity extends AbstractRiftEntity {
 			onClose
 		))
 			return;
+		if (tryCloseRift(
+			serverLevel,
+			items.materialItems().ENTROPIC_CHAIN.get(),
+			items.materialItems().AXIOMATIC_GEAR_LEFT.get(),
+			() -> {}
+		))
+			return;
 		if (serverLevel.getDifficulty() == Difficulty.PEACEFUL || !serverLevel.hasNearbyAlivePlayer(getX(), getY(), getZ(), REQUIRED_PLAYER_RANGE))
 			return;
 		if (spawnDelay > 0) {

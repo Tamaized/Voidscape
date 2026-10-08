@@ -62,7 +62,7 @@ public class EntropicRiftEntity extends AbstractRiftEntity implements IEntityWit
 		if (!(level() instanceof ServerLevel serverLevel))
 			return;
 
-		tryCloseRift(
+		if (tryCloseRift(
 			serverLevel,
 			items.materialItems().ASTRAL_CRYSTAL.get(),
 			items.materialItems().ENTROPIC_CHAIN.get(),
@@ -71,7 +71,17 @@ public class EntropicRiftEntity extends AbstractRiftEntity implements IEntityWit
 					advancementTriggers.ENTROPIC_RIFT_CLOSE_TRIGGER.get().trigger(player);
 					player.getData(dataAttachments.INSANITY).setParanoia(0);
 				})
+		))
+			return;
+
+		tryCloseRift(
+			serverLevel,
+			items.materialItems().SHROUD_THREAD.get(),
+			items.materialItems().AXIOMATIC_GEAR_RIGHT.get(),
+			() -> serverLevel.getPlayers(player -> !player.isSpectator() && player.position().closerThan(position(), 16.0) && player.isAlive())
+				.forEach(player -> player.getData(dataAttachments.INSANITY).setParanoia(0))
 		);
+
 	}
 
 	@Override
