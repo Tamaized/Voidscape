@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-07T23:13:46.9606925	Model Definitions - voidscape
+// 26.1.2	2026-10-14T08:30:12.6875875	Model Definitions - voidscape
 107298a0c124c020254dd11e6fbd39291b041ed3 assets/voidscape/blockstates/antirock.json
 6a4544c91a8c760cb0208cd2305cd961f65eba53 assets/voidscape/blockstates/astralrock.json
 8493c191bde93dc50fd15effdb52911815234118 assets/voidscape/blockstates/charred_brick.json
@@ -65,6 +65,7 @@ cde814494e76e5e972d6410b26f13d97fc8229ac assets/voidscape/items/astral_sword.jso
 608a260b65d8253801dac566b6ee49b99025dcf3 assets/voidscape/items/axiomatic_gear.json
 f520a2b6e4e5d5d939da6944bbb0f56d5ad74d21 assets/voidscape/items/axiomatic_gear_left.json
 cd4001d0ca0ddfb10b9afc3ffb04c34ff03c64b1 assets/voidscape/items/axiomatic_gear_right.json
+c3f623ebf1426c6a0c264a69ce37b0cb95d5eac1 assets/voidscape/items/axiom_xbow.json
 1340280459330feb0a45edbdd41d691a1c014156 assets/voidscape/items/charred_bone.json
 a9d2cc06073fca0f18fb8e20f3acadd3eee4b252 assets/voidscape/items/charred_brick.json
 fbe61026840ee9e36618a6b2fd61c5c78499c9e9 assets/voidscape/items/charred_quiver.json
@@ -288,6 +289,13 @@ b7916f23dab25c59c2c252ccec6b363735d670ce assets/voidscape/models/item/astral_xbo
 508e995a8cf873790a36bd3b34ad172f99bc7f82 assets/voidscape/models/item/axiomatic_gear.json
 1d9761c10a5777042402fd1bdf846c6944d96ead assets/voidscape/models/item/axiomatic_gear_left.json
 da0fdb21ca1807660261eb8a5b1317c551b0797c assets/voidscape/models/item/axiomatic_gear_right.json
+0b696b3803c05b3ee79e63935b2bc8033c5b1996 assets/voidscape/models/item/axiom_xbow.json
+3a3e8965537c2f6e0a75c5fd75a3abf0994c8da9 assets/voidscape/models/item/axiom_xbow_arrow.json
+060d555961bc587553f3c89f85d53046e0bcfb37 assets/voidscape/models/item/axiom_xbow_broken.json
+25fde37afe8b3872e02bcdda635327a809f29a9e assets/voidscape/models/item/axiom_xbow_firework.json
+b84629eac06e0b61298ef4b48a490c76a12616c1 assets/voidscape/models/item/axiom_xbow_pulling_0.json
+8c7f1bd583b2b1f8b9023d9bc1d18d04bffe1fb3 assets/voidscape/models/item/axiom_xbow_pulling_1.json
+09ad908f6f2aa3c9cbd9dd03548ed51c422d8cc6 assets/voidscape/models/item/axiom_xbow_pulling_2.json
 e21b92d3e62f1e714955cf4d93f6d42ee42490d6 assets/voidscape/models/item/charred_bone.json
 a55adac4dcb1e7b83407ce022196b754de7a06c1 assets/voidscape/models/item/charred_quiver.json
 cdce77fcd24086bab5f8da5958e4547c553c1a4a assets/voidscape/models/item/charred_warhammer_head.json

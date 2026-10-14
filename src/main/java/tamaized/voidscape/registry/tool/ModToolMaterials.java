@@ -57,4 +57,10 @@ public class ModToolMaterials {
 		itemTags.REPAIR_MATERIAL_ENTROPIC
 	));
 
+	public final Lazy<ToolMaterial> AXIOM = Lazy.of(() -> new ToolMaterial(
+		incorrectBlocksForToolTags.INCORRECT_FOR_ASTRAL,
+		5053, 12.0F, 10F, 27,
+		itemTags.REPAIR_MATERIAL_ASTRAL
+	));
+
 }

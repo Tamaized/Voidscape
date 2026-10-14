@@ -46,5 +46,13 @@ public class RepairMaterialItemTagProviderFactory implements IItemTagProviderFac
 		accessor.tag(itemTags.REPAIR_MATERIAL_SHROUD).add(
 			materialItems.SHROUD_THREAD.getKey()
 		);
+
+		accessor.tag(itemTags.REPAIR_MATERIAL_ENTROPIC).add(
+			materialItems.ENTROPIC_CHAIN.getKey()
+		);
+
+		accessor.tag(itemTags.REPAIR_MATERIAL_AXIOM).add(
+			materialItems.AXIOMATIC_GEAR.getKey()
+		);
 	}
 }

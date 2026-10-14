@@ -8,6 +8,7 @@ import tamaized.voidscape.registry.tool.set.*;
 public record ModToolSetComponentDirectory(
 	@Autowired EntropicToolSet entropicToolSet,
 	@Autowired AstralToolSet astralToolSet,
+	@Autowired AxiomToolSet axiomToolSet,
 	@Autowired CharredToolSet charredToolSet,
 	@Autowired CorruptToolSet corruptToolSet,
 	@Autowired IchorToolSet ichorToolSet,

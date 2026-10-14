@@ -1,14 +1,14 @@
-// 26.1.2	2026-10-07T23:21:19.294376	Tags for minecraft:item mod id voidscape
-8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/c/tags/item/tools/crossbow.json
-e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/c/tags/item/tools/ranged_weapon.json
+// 26.1.2	2026-10-14T08:30:12.6812872	Tags for minecraft:item mod id voidscape
+249039c568fc225cd2c17b1a264e5adc6873954f data/c/tags/item/tools/crossbow.json
+fa7747b1a4a9e36b91b3f85616326ed370a89c41 data/c/tags/item/tools/ranged_weapon.json
 41a78c93a375bdcfc9cbb11859fac346b0815093 data/minecraft/tags/item/axes.json
 0595cd3d5e86cbc0b3fb38bbb06c0ca3c727ce27 data/minecraft/tags/item/chest_armor.json
 de8bd45cdfcbdbd0ad2db8c9a9aabe32253a9712 data/minecraft/tags/item/enchantable/bow.json
-8c3c6be2a0e4e062fe4a938b8e1d608467b5c7db data/minecraft/tags/item/enchantable/crossbow.json
-b4ed6656bdf941901bf365a9da125b86a45657ee data/minecraft/tags/item/enchantable/durability.json
+249039c568fc225cd2c17b1a264e5adc6873954f data/minecraft/tags/item/enchantable/crossbow.json
+899cc236d8b2d5efd6117d5542d4bc6b13210c43 data/minecraft/tags/item/enchantable/durability.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/melee_weapon.json
 e5030e5b60469359a0e476eb3a1ad6d704912251 data/minecraft/tags/item/enchantable/sweeping.json
-e60ab7c41811fd1ad3bc677eb5c31ee4ec1ea38f data/minecraft/tags/item/enchantable/vanishing.json
+fa7747b1a4a9e36b91b3f85616326ed370a89c41 data/minecraft/tags/item/enchantable/vanishing.json
 49ffa8e5cd4036d49aaaa13cc6bc16964f00f024 data/minecraft/tags/item/foot_armor.json
 a75d0c1478360dd9ab44d111414f7c4829763c84 data/minecraft/tags/item/head_armor.json
 fcc66acdcf606d2ac9367043d1bc31d2cc311d83 data/minecraft/tags/item/hoes.json
@@ -23,13 +23,15 @@ cf8b878e26c46bd53d717c85fb56085c19f06aca data/minecraft/tags/item/pickaxes.json
 388ba846f391a25b42243e6e6b7cccfcfc0be25d data/minecraft/tags/item/swords.json
 586c1bed9cbb55b2964861add353337a469f52de data/minecraft/tags/item/wooden_slabs.json
 204d930004ad57b1fc9b5738a84dc45288adedbd data/voidscape/tags/item/astral.json
+bd35a5eb60ceecf9294cdfb7e424f7bd34577d65 data/voidscape/tags/item/axiom.json
 5b09ff09c6e265ce0b0d9dc3c71921a4f7e7c104 data/voidscape/tags/item/charred.json
 d61504ab6b656f43e2cdfd069a645e4c4383a619 data/voidscape/tags/item/corrupt.json
+4327235113fb54a97e56756120fc90e7dc069d63 data/voidscape/tags/item/entropic.json
 5003aacec6004ec131326a70a4557fdf47004828 data/voidscape/tags/item/ichor.json
 1adcb8fdc80184892ff67305d2e87e67f1c75a6c data/voidscape/tags/item/shroud.json
 e01d6f8df941e67346069d1038c48f92275c9efb data/voidscape/tags/item/thunder_stems.json
 c6ddff8407cb5943f6b937da48564445387cba50 data/voidscape/tags/item/titanite.json
-61dd995bc2c604efb12629b6724d53395ca7188a data/voidscape/tags/item/tools/astral.json
+776e88f4d9c9d577bc2f9522686a1a702cbaacc6 data/voidscape/tags/item/tools/astral.json
 4fd4b036415ac041d0e206fe7dd03d12a436d953 data/voidscape/tags/item/tools/charred.json
 5a49c5870112ef93deb92bf16dd8a1afc26ef3e8 data/voidscape/tags/item/tools/corrupt.json
 53530115e9ac74ff867592148ac3f836f7aaea50 data/voidscape/tags/item/tools/ichor.json

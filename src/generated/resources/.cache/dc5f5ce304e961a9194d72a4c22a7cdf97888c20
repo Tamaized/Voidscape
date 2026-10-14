@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-07T23:21:19.2953761	Voidscape recipes
+// 26.1.2	2026-10-14T08:30:12.6833652	Voidscape recipes
 049746318272b98ca18370584205ae0674c927e2 data/minecraft/advancement/recipes/building_blocks/charred_brick.json
 6894a10cbd415842f283154e949438101e9709bf data/minecraft/advancement/recipes/building_blocks/flesh_block.json
 f4530f69be9747392e37fec4afce4e3ac38294b4 data/minecraft/advancement/recipes/building_blocks/machine_collector.json
@@ -38,6 +38,8 @@ ad276e85ac4c601b6a9b1e2c51611b622df4f2a6 data/minecraft/advancement/recipes/comb
 dc852a082bedaa9e5073dcbf50960414ee4c2f43 data/minecraft/advancement/recipes/combat/astral_shovel.json
 9eb6895d6ccb72ed506f054e69f6a5793e58f4ea data/minecraft/advancement/recipes/combat/astral_sword.json
 d828ce106de636245fb42e5bff86d6e810f787d5 data/minecraft/advancement/recipes/combat/astral_sword_fang.json
+f6121365a80e2d741b07ad9eee4fbc648b2eab4f data/minecraft/advancement/recipes/combat/axiom_crossbow.json
+2ab45f82f01eeb99faa49e2ec3fc02a43370f57d data/minecraft/advancement/recipes/combat/axiom_crossbow_fang.json
 3e981ad802d7ff75ee6a9581dff1d990e5aaf1e9 data/minecraft/advancement/recipes/combat/corrupt_axe.json
 75981a7ed71a0fd3ff7193d6e68f4715ac9dd6b2 data/minecraft/advancement/recipes/combat/corrupt_axe_fang.json
 9a4852e7efa62c9805e530ec73423236efa5469c data/minecraft/advancement/recipes/combat/corrupt_boots.json
@@ -154,6 +156,8 @@ bc2cf1539184d2d15412cd045bb07ac3e6642039 data/minecraft/recipe/astral_helmet_dra
 a5031e02990694a3a4e2814f7a1b8dcaf232684e data/minecraft/recipe/astral_sword.json
 d95399471d63be5e87d5e9a31ec2a20b14f56de7 data/minecraft/recipe/astral_sword_fang.json
 16802f1f15f2f6d934f606d3fe9880ea2c729a08 data/minecraft/recipe/axiomatic_gear.json
+f7d51d599517a3935efea045fdd01ff18b8fff13 data/minecraft/recipe/axiom_crossbow.json
+2e0371daa3deeb051a04b85df3b03b0e63e41aae data/minecraft/recipe/axiom_crossbow_fang.json
 b1eb719adee7fcdf1d758866ce8d1135ebb30730 data/minecraft/recipe/blast_flesh_ore.json
 6ffe539d0045a35d41be0fe2e08cbd4ce6b84446 data/minecraft/recipe/blast_strange_ore.json
 f6473dcb972e1c2e2ea9aeaa7782d93beab95c62 data/minecraft/recipe/blast_titanite_ore.json

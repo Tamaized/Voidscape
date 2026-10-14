@@ -30,7 +30,8 @@ public class CrossbowItemTagProviderFactory implements IItemTagProviderFactory {
 				tools.corruptToolSet().CORRUPT_XBOW.getKey(),
 				tools.titaniteToolSet().TITANITE_XBOW.getKey(),
 				tools.ichorToolSet().ICHOR_XBOW.getKey(),
-				tools.astralToolSet().ASTRAL_XBOW.getKey()
+				tools.astralToolSet().ASTRAL_XBOW.getKey(),
+				tools.axiomToolSet().AXIOM_XBOW.getKey()
 			)),
 			Tags.Items.TOOLS_CROSSBOW,
 			Tags.Items.RANGED_WEAPON_TOOLS,

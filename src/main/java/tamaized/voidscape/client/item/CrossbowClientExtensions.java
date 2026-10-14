@@ -26,6 +26,7 @@ public class CrossbowClientExtensions {
 		register(
 			event,
 			new CrossbowExtensions(),
+			toolSets.axiomToolSet().AXIOM_XBOW,
 			toolSets.astralToolSet().ASTRAL_XBOW,
 			toolSets.corruptToolSet().CORRUPT_XBOW,
 			toolSets.ichorToolSet().ICHOR_XBOW,

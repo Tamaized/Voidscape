@@ -66,7 +66,8 @@ public class VoidToolLadderItemTagProviderFactory implements IItemTagProviderFac
 			tools.astralToolSet().ASTRAL_BOW.getKey(),
 			tools.astralToolSet().ASTRAL_XBOW.getKey(),
 			tools.entropicToolSet().ENTROPIC_AXE.getKey(),
-			tools.entropicToolSet().ENTROPIC_SHIELD.getKey()
+			tools.entropicToolSet().ENTROPIC_SHIELD.getKey(),
+			tools.axiomToolSet().AXIOM_XBOW.getKey()
 		));
 	}
 }
