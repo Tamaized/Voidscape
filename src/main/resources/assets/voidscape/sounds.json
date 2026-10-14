@@ -53,5 +53,10 @@
         "name": "music.nether.warped_forest"
       }
     ]
+  },
+  "axiom_spark": {
+    "sounds": [
+      "voidscape:zap"
+    ]
   }
 }

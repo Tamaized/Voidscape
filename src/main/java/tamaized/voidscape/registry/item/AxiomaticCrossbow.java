@@ -27,9 +27,8 @@ import java.util.function.Consumer;
 
 public class AxiomaticCrossbow extends BreakableCrossbow {
 
-	public static final int BURST_TICKS = SharedConstants.TICKS_PER_SECOND * 5;
-	public static final int COOLDOWN_TICKS = SharedConstants.TICKS_PER_SECOND * 10;
-	private static final int SHOT_INTERVAL_TICKS = 8;
+	public static final int BURST_TICKS = SharedConstants.TICKS_PER_SECOND * 10;
+	public static final int COOLDOWN_TICKS = SharedConstants.TICKS_PER_SECOND * 30;
 
 	@Autowired
 	private BreakableHelper breakableHelper;
@@ -77,7 +76,9 @@ public class AxiomaticCrossbow extends BreakableCrossbow {
 		if (isCharged(weapon) || breakableHelper.isBroken(weapon) || !isBurstActive(weapon, player, serverLevel.getGameTime()))
 			return;
 		if (reload(weapon, player))
-			player.getCooldowns().addCooldown(weapon, SHOT_INTERVAL_TICKS);
+			player.getCooldowns().addCooldown(weapon, 8);
+		else
+			enterCooldown(weapon, weapon.getOrDefault(itemComponents.AXIOM_BURST.get(), AxiomBurst.EMPTY), serverLevel.getGameTime());
 	}
 
 	@Override
@@ -89,13 +90,18 @@ public class AxiomaticCrossbow extends BreakableCrossbow {
 		long gameTime = level.getGameTime();
 		if (owner instanceof LivingEntity living && isBurstActive(itemStack, living, gameTime))
 			return;
-		itemStack.set(itemComponents.AXIOM_BURST.get(), new AxiomBurst(0L, Math.min(gameTime, current.activeUntil()) + COOLDOWN_TICKS));
+		enterCooldown(itemStack, current, gameTime);
+	}
+
+	private void enterCooldown(ItemStack stack, AxiomBurst current, long gameTime) {
+		stack.set(itemComponents.AXIOM_BURST.get(), new AxiomBurst(0L, Math.min(gameTime, current.activeUntil()) + COOLDOWN_TICKS));
 	}
 
 	private boolean canActivate(ItemStack stack, LivingEntity holder, long gameTime) {
 		AxiomBurst current = stack.getOrDefault(itemComponents.AXIOM_BURST.get(), AxiomBurst.EMPTY);
 		return holder.getOffhandItem().is(activator) &&
 			!breakableHelper.isBroken(stack) &&
+			(isCharged(stack) || !holder.getProjectile(stack).isEmpty()) &&
 			!current.isActive(gameTime) &&
 			!current.isCoolingDown(gameTime);
 	}

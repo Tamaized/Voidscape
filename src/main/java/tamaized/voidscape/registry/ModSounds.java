@@ -22,4 +22,7 @@ public class ModSounds {
 	public final Holder<SoundEvent> MUSIC = RegUtil.register(Registries.SOUND_EVENT, "music",
 		() -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Voidscape.MODID, "music")));
 
+	public final Holder<SoundEvent> AXIOM_SPARK = RegUtil.register(Registries.SOUND_EVENT, "axiom_spark",
+		() -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Voidscape.MODID, "axiom_spark")));
+
 }

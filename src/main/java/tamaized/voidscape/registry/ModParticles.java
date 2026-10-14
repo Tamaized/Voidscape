@@ -1,6 +1,7 @@
 package tamaized.voidscape.registry;
 
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -16,6 +17,8 @@ import java.util.function.Supplier;
 public class ModParticles {
 
 	public final Supplier<ParticleType<ParticleTypeSpellCloud.Options>> SPELL_CLOUD = RegUtil.register(Registries.PARTICLE_TYPE, "spell_cloud", ParticleTypeSpellCloud::new);
+
+	public final Supplier<SimpleParticleType> AXIOM_SPARK = RegUtil.register(Registries.PARTICLE_TYPE, "axiom_spark", () -> new SimpleParticleType(false));
 
 	@PostConstruct
 	private void setup(IEventBus bus) {
