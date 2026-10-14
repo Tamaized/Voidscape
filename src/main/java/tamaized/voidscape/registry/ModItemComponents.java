@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import tamaized.beanification.Component;
 import tamaized.regutil.RegUtil;
+import tamaized.voidscape.data.AxiomBurst;
 import tamaized.voidscape.data.QuiverContents;
 
 import java.util.function.Supplier;
@@ -39,6 +40,13 @@ public class ModItemComponents {
 			.persistent(QuiverContents.CODEC)
 			.cacheEncoding()
 			.networkSynchronized(QuiverContents.STREAM_CODEC)
+			.build());
+
+	public final Supplier<DataComponentType<AxiomBurst>> AXIOM_BURST = RegUtil.register(Registries.DATA_COMPONENT_TYPE, "axiom_burst",
+		() -> DataComponentType.<AxiomBurst>builder()
+			.persistent(AxiomBurst.CODEC)
+			.cacheEncoding()
+			.networkSynchronized(AxiomBurst.STREAM_CODEC)
 			.build());
 
 }

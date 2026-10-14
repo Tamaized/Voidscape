@@ -16,6 +16,7 @@ import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModItemProperties;
 import tamaized.voidscape.registry.item.AxiomaticCrossbow;
+import tamaized.voidscape.registry.item.MaterialItems;
 import tamaized.voidscape.registry.tool.ModToolMaterials;
 
 @Component
@@ -29,7 +30,8 @@ public class AxiomToolSet {
 		@Autowired ModToolMaterials toolTiers,
 		@Autowired ModItemProperties itemProperties,
 		@Autowired ModAttributes attributes,
-		@Autowired ModItemComponents itemComponents
+		@Autowired ModItemComponents itemComponents,
+		@Autowired MaterialItems materialItems
 	) {
 		final String MATERIAL_NAME = "axiom";
 
@@ -50,7 +52,8 @@ public class AxiomToolSet {
 						ChatFormatting.AQUA,
 						ChatFormatting.ITALIC
 					));
-				}
+				},
+				materialItems.AXIOMATIC_GEAR
 			)
 		));
 
