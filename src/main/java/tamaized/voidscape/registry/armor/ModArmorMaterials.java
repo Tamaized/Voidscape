@@ -150,13 +150,32 @@ public class ModArmorMaterials {
 		ASSET_KEY_ENTROPIC
 	));
 
+	private final ResourceKey<EquipmentAsset> ASSET_KEY_AXIOM = assetKey("axiom");
+	public final Supplier<ArmorMaterial> AXIOM = Suppliers.memoize(() -> new ArmorMaterial(
+		39,
+		Util.make(new EnumMap<>(ArmorType.class), map -> {
+			map.put(ArmorType.BOOTS, 8);
+			map.put(ArmorType.LEGGINGS, 11);
+			map.put(ArmorType.CHESTPLATE, 13);
+			map.put(ArmorType.HELMET, 8);
+			map.put(ArmorType.BODY, 16);
+		}),
+		27,
+		SoundEvents.ARMOR_EQUIP_NETHERITE,
+		9F,
+		0.25F,
+		itemTags.REPAIR_MATERIAL_AXIOM,
+		ASSET_KEY_AXIOM
+	));
+
 	public final Map<ResourceKey<EquipmentAsset>, ResourceKey<EquipmentAsset>> ELYTRA_EQUIPMENT_ASSETS = Map.of(
 		ASSET_KEY_VOIDIC_CRYSTAL, elytraAssetKey(ASSET_KEY_VOIDIC_CRYSTAL),
 		ASSET_KEY_TITANITE, elytraAssetKey(ASSET_KEY_TITANITE),
 		ASSET_KEY_ICHOR, elytraAssetKey(ASSET_KEY_ICHOR),
 		ASSET_KEY_ASTRAL, elytraAssetKey(ASSET_KEY_ASTRAL),
 		ASSET_KEY_SHROUD, elytraAssetKey(ASSET_KEY_SHROUD),
-		ASSET_KEY_ENTROPIC, elytraAssetKey(ASSET_KEY_ENTROPIC)
+		ASSET_KEY_ENTROPIC, elytraAssetKey(ASSET_KEY_ENTROPIC),
+		ASSET_KEY_AXIOM, elytraAssetKey(ASSET_KEY_AXIOM)
 	);
 
 	private ResourceKey<EquipmentAsset> assetKey(String material) {

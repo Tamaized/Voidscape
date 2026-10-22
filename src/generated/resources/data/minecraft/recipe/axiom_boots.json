@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "voidscape:axiomatic_gear",
+  "base": "voidscape:astral_boots",
+  "result": {
+    "id": "voidscape:axiom_boots"
+  },
+  "template": "voidscape:voidic_template"
+}

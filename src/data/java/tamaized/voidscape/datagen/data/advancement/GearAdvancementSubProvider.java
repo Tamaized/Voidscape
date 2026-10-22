@@ -122,6 +122,15 @@ public class GearAdvancementSubProvider extends AbstractAdvancementSubProvider {
 			.addCriterion("entropic_boots", InventoryChangeTrigger.TriggerInstance.hasItems(
 				items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_LEGS.get()
 			))
+			.addCriterion("axiom_chest", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().axiomArmorSet().AXIOM_CHEST.get()
+			))
+			.addCriterion("axiom_legs", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().axiomArmorSet().AXIOM_LEGS.get()
+			))
+			.addCriterion("axiom_boots", InventoryChangeTrigger.TriggerInstance.hasItems(
+				items.modArmorSetComponentDirectory().axiomArmorSet().AXIOM_BOOTS.get()
+			))
 			.sendsTelemetryEvent()
 			.save(saver, location());
 	}

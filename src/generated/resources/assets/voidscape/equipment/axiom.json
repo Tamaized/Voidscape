@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "voidscape:axiom"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "voidscape:axiom"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "voidscape:axiom"
+      }
+    ]
+  }
+}

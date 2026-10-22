@@ -74,6 +74,9 @@ public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityMode
 			} else if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().entropicArmorSet().ENTROPIC_CHEST)) {
 				wingType = Insanity.WingType.EYES;
 				defaultColor = 0x9D3A40;
+			} else if (wingType == Insanity.WingType.NORMAL && state.chestEquipment.is(items.modArmorSetComponentDirectory().axiomArmorSet().AXIOM_CHEST)) {
+				wingType = Insanity.WingType.ARTI;
+				defaultColor = 0x65B3C0;
 			}
 
 			submitWings(

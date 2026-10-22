@@ -1,0 +1,72 @@
+{
+  "parent": "voidscape:axiom_gear_item",
+  "criteria": {
+    "axiom_axe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_xbow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "axiom_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "axiom_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "axiom_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.axiom_gear.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:axiom_xbow"
+    },
+    "title": {
+      "translate": "advancement.voidscape.axiom_gear"
+    }
+  },
+  "requirements": [
+    [
+      "axiom_axe"
+    ],
+    [
+      "axiom_chest"
+    ],
+    [
+      "axiom_legs"
+    ],
+    [
+      "axiom_boots"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

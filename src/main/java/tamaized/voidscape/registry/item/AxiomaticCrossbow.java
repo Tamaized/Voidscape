@@ -4,6 +4,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -56,6 +58,7 @@ public class AxiomaticCrossbow extends BreakableCrossbow {
 			stack.set(itemComponents.AXIOM_BURST.get(), new AxiomBurst(serverLevel.getGameTime() + BURST_TICKS, 0L));
 			if (!isCharged(stack))
 				reload(stack, player);
+			level.playSound(null, player, SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.PLAYERS, 1F, 2F);
 		}
 		return InteractionResult.SUCCESS;
 	}

@@ -22,6 +22,19 @@ public class ProjectileWeaponItemUseAmmoTransformer extends SimpleMethodProcesso
 
 	@Override
 	public void transform(MethodNode node, SimpleTransformationContext context) {
+		ASMUtil.findMethodInstructions(
+			node,
+			Opcodes.INVOKESTATIC,
+			"net/minecraft/world/item/enchantment/EnchantmentHelper",
+			"processAmmoUse",
+			"(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;I)I"
+		).findFirst().ifPresent(instruction -> {
+			node.instructions.insert(instruction, ASMUtil.listOf(
+				new VarInsnNode(Opcodes.ALOAD, 0),
+				new VarInsnNode(Opcodes.ALOAD, 2),
+				ASMUtil.invokeAsmHook("processAmmoUse", "(ILnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)I")
+			));
+		});
 		ASMUtil.findInstructions(node, Opcodes.ARETURN)
 			.forEach(instruction -> node.instructions.insertBefore(instruction, ASMUtil.listOf(
 				new VarInsnNode(Opcodes.ALOAD, 0),

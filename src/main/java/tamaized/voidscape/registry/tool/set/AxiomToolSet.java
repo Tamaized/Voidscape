@@ -52,6 +52,10 @@ public class AxiomToolSet {
 						ChatFormatting.AQUA,
 						ChatFormatting.ITALIC
 					));
+					context.tooltip().accept(net.minecraft.network.chat.Component.empty());
+					context.tooltip().accept(net.minecraft.network.chat.Component.translatable(Voidscape.MODID + ".tooltip.axiomatic_crossbow_effects").withStyle(
+						ChatFormatting.GRAY
+					));
 				},
 				materialItems.AXIOMATIC_GEAR
 			)

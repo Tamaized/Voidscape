@@ -1,0 +1,33 @@
+{
+  "parent": "voidscape:astral_crystal",
+  "criteria": {
+    "gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiomatic_gear"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.axiom_gear_item.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:axiomatic_gear"
+    },
+    "title": {
+      "translate": "advancement.voidscape.axiom_gear_item"
+    }
+  },
+  "requirements": [
+    [
+      "gear"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

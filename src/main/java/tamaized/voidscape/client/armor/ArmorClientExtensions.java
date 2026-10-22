@@ -117,6 +117,15 @@ public class ArmorClientExtensions {
 			entropic.ENTROPIC_LEGS,
 			entropic.ENTROPIC_BOOTS
 		);
+
+		AxiomArmorSet axiom = armorSets.axiomArmorSet();
+		register(
+			event,
+			crystalline("axiom", locations -> locations.MODEL_ARMOR_AXIOM, null, true),
+			axiom.AXIOM_CHEST,
+			axiom.AXIOM_LEGS,
+			axiom.AXIOM_BOOTS
+		);
 	}
 
 	private ArmorExtensions crystallineWithOverlayFullbright(String textureName, Function<ModModelLayerLocations, ModelLayerLocation> layerLocation) {

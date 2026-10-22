@@ -11,6 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import tamaized.beanification.Autowired;
 import tamaized.voidscape.Voidscape;
+import tamaized.voidscape.event.AxiomaticAmmoHandler;
 import tamaized.voidscape.event.QuiverHandler;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
@@ -18,6 +19,9 @@ public class ASMHooks {
 
 	@Autowired
 	private static QuiverHandler quiverHandler;
+
+	@Autowired
+	private static AxiomaticAmmoHandler axiomaticAmmoHandler;
 
 	/**
 	 * {@link tamaized.voidscape.coremod.transformers.biome.BiomeSnowAndFreezeTransformer}<p>
@@ -43,6 +47,10 @@ public class ASMHooks {
 	 */
 	public static ItemStack useAmmo(ItemStack result, ItemStack bow, ItemStack ammo, LivingEntity shooter) {
 		return quiverHandler.useAmmo(result, bow, ammo, shooter);
+	}
+
+	public static int processAmmoUse(int ammoToUse, ItemStack weapon, LivingEntity holder) {
+		return axiomaticAmmoHandler.processAmmoUse(ammoToUse, weapon, holder);
 	}
 
 }

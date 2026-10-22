@@ -44,6 +44,9 @@ public class ModAttributes {
 	public final Holder<Attribute> MADDENING = RegUtil.register(Registries.ATTRIBUTE, "maddening",
 		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
+	public final Holder<Attribute> AXIOMATIC = RegUtil.register(Registries.ATTRIBUTE, "axiomatic",
+		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
+
 	@PostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
@@ -56,6 +59,7 @@ public class ModAttributes {
 			event.add(e, VOIDIC_ARROW_DMG);
 			event.add(e, SHROUDED);
 			event.add(e, MADDENING);
+			event.add(e, AXIOMATIC);
 		}));
 	}
 

@@ -25,7 +25,8 @@ public class LegArmorItemTagProviderFactory implements IItemTagProviderFactory {
 			armor.ichorArmorSet().ICHOR_LEGS.getKey(),
 			armor.astralArmorSet().ASTRAL_LEGS.getKey(),
 			armor.shroudArmorSet().SHROUD_LEGS.getKey(),
-			armor.entropicArmorSet().ENTROPIC_LEGS.getKey()
+			armor.entropicArmorSet().ENTROPIC_LEGS.getKey(),
+			armor.axiomArmorSet().AXIOM_LEGS.getKey()
 		));
 	}
 }

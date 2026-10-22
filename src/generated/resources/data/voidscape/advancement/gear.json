@@ -41,6 +41,36 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "axiom_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "axiom_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "axiom_legs": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiom_legs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "corrupt_boots": {
       "conditions": {
         "items": [
@@ -311,7 +341,10 @@
       "entropic_helmet",
       "entropic_chest",
       "entropic_legs",
-      "entropic_boots"
+      "entropic_boots",
+      "axiom_chest",
+      "axiom_legs",
+      "axiom_boots"
     ]
   ],
   "sends_telemetry_event": true

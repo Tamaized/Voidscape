@@ -25,7 +25,8 @@ public class ChestArmorItemTagProviderFactory implements IItemTagProviderFactory
 			armor.ichorArmorSet().ICHOR_CHEST.getKey(),
 			armor.astralArmorSet().ASTRAL_CHEST.getKey(),
 			armor.shroudArmorSet().SHROUD_CHEST.getKey(),
-			armor.entropicArmorSet().ENTROPIC_CHEST.getKey()
+			armor.entropicArmorSet().ENTROPIC_CHEST.getKey(),
+			armor.axiomArmorSet().AXIOM_CHEST.getKey()
 		));
 	}
 }

@@ -1,0 +1,33 @@
+{
+  "parent": "voidscape:shroud_rift_close",
+  "criteria": {
+    "gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiomatic_gear_right"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.axiom_rift_close_two.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:axiomatic_gear_right"
+    },
+    "title": {
+      "translate": "advancement.voidscape.axiom_rift_close_two"
+    }
+  },
+  "requirements": [
+    [
+      "gear"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

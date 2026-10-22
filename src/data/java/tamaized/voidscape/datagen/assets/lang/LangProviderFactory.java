@@ -115,11 +115,13 @@ public class LangProviderFactory {
 				addTooltip("entropic_axe", "They will follow our ways... or be crushed.");
 				addTooltip("entropic_axe_effects", "Attacks apply Ichor and Slowness");
 				addTooltip("axiomatic_gear", "Everything has a purpose.");
-				addTooltip("axiomatic_crossbow", "They will join us... or be corrected.");
+				addTooltip("axiomatic_crossbow", "We reject their ways... they must be corrected.");
+				addTooltip("axiomatic_crossbow_effects", "Right Click while sneaking with an Axiomatic Gear in the offhand to activate a rapid fire mode.");
 				addTooltip("broken", "Broken");
 				addTooltip("elytra", "Elytra");
 				addTooltip("draconic", "Draconic");
 				addTooltip("maddening", "Causes attackers to become confused and attack random targets.");
+				addTooltip("axiomatic", "Crossbows have a chance to not consume arrows.");
 				addTooltip("augment.lingering_potion", "Right click with a lingering potion or a snowball to change the effect.");
 				addTooltip("textures", "Textures Subject to Change");
 				addTooltip("quiver", """
@@ -158,6 +160,7 @@ public class LangProviderFactory {
 				addAttribute(attributes.VOIDIC_INFUSION, "Voidic Infusion");
 				addAttribute(attributes.SHROUDED, "Shrouded");
 				addAttribute(attributes.MADDENING, "Maddening");
+				addAttribute(attributes.AXIOMATIC, "Axiomatic");
 
 				addEffectWithDescription(effects.AURA, "Voidic Aura", "Deals 2 Voidic damage every second to nearby entities.");
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");

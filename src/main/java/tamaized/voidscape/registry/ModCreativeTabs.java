@@ -179,6 +179,9 @@ public class ModCreativeTabs {
 				output.accept(itemComponentDirectory.materialItems().AXIOMATIC_GEAR_RIGHT.get());
 				output.accept(itemComponentDirectory.materialItems().AXIOMATIC_GEAR.get());
 				output.accept(toolSetComponentDirectory.axiomToolSet().AXIOM_XBOW.get());
+				output.accept(armorSetComponentDirectory.axiomArmorSet().AXIOM_CHEST.get());
+				output.accept(armorSetComponentDirectory.axiomArmorSet().AXIOM_LEGS.get());
+				output.accept(armorSetComponentDirectory.axiomArmorSet().AXIOM_BOOTS.get());
 			})
 			.build());
 

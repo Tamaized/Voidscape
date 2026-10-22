@@ -1,6 +1,10 @@
-// 26.1.2	2026-10-06T18:06:53.0764002	Advancements
+// 26.1.2	2026-10-22T12:23:24.6878272	Advancements
 0f173e82cf605674a537c427311b4ab90222552f data/voidscape/advancement/astral.json
 8cb06c138d512bd9803e797652e9a5e3403434a5 data/voidscape/advancement/astral_crystal.json
+2a831a42d7b7cd521240edf4680fc56ba023d78d data/voidscape/advancement/axiom_gear.json
+44d5ccbd8dfc8c15cb7736849b4bf117dfff0ecd data/voidscape/advancement/axiom_gear_item.json
+35ec407fe9ee11e3ecc658e3f79a26db94e41a9c data/voidscape/advancement/axiom_rift_close_one.json
+66e8cc11f8c5baf1952ece93668bee857900d130 data/voidscape/advancement/axiom_rift_close_two.json
 c6fbd65759798b2caf39e2ec6ae2d3e4ce528497 data/voidscape/advancement/bucket.json
 5bd4a3056ae52c7f08e35808ef9c3bdbefe68516 data/voidscape/advancement/collector.json
 839eff831540454f41abbe754116ba48e1654671 data/voidscape/advancement/coop.json
@@ -9,7 +13,7 @@ c4229003f7499a851b0110a31c03daea0ab710b8 data/voidscape/advancement/defused.json
 13b0ed2dfd06c2e63564e693190dee26a3103b2f data/voidscape/advancement/entropic_gear.json
 f3bfa49cce9f517e49c795d059395ea9b7da3997 data/voidscape/advancement/entropic_rift_close.json
 a501139511c2727e125e0119912bddd4d64e9134 data/voidscape/advancement/essence.json
-e5cd395f0f69065565fa58440f85906a09450e38 data/voidscape/advancement/gear.json
+a74fc7a6c89d149be3f9a1aa0418b378a84fd1b6 data/voidscape/advancement/gear.json
 5d9e2ff05059f97bc2c9769acddae750d7f5d7cc data/voidscape/advancement/germinated.json
 f25ecccc325e086cf1da10affe7466889c569407 data/voidscape/advancement/hammer.json
 f6013427b5ce52a1b2eb0809546a312c86ba84f2 data/voidscape/advancement/hatchery.json

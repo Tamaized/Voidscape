@@ -1,0 +1,33 @@
+{
+  "parent": "voidscape:entropic_rift_close",
+  "criteria": {
+    "gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "voidscape:axiomatic_gear_left"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.voidscape.axiom_rift_close_one.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "voidscape:axiomatic_gear_left"
+    },
+    "title": {
+      "translate": "advancement.voidscape.axiom_rift_close_one"
+    }
+  },
+  "requirements": [
+    [
+      "gear"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
