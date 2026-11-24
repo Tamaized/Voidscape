@@ -4,8 +4,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import tamaized.beanification.Component;
@@ -61,6 +63,16 @@ public class ModAttributes {
 			event.add(e, MADDENING);
 			event.add(e, AXIOMATIC);
 		}));
+
+		bus.addListener(FMLCommonSetupEvent.class, event -> event.enqueueWork(() -> {
+			raiseCap(Attributes.ARMOR);
+			raiseCap(Attributes.ARMOR_TOUGHNESS);
+		}));
+	}
+
+	private void raiseCap(Holder<Attribute> attribute) {
+		if (attribute.value() instanceof RangedAttribute ranged)
+			ranged.maxValue = Math.max(ranged.maxValue, 100D);
 	}
 
 	public String getDraconicHealthId(EquipmentSlot slot) {
