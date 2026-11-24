@@ -128,7 +128,7 @@
   "effect.voidscape.ichor": "Ichor",
   "effect.voidscape.ichor.description": "Doubles incoming Voidic Damage.",
   "effect.voidscape.maddened": "Maddened",
-  "effect.voidscape.maddened.description": "Causes mobs to attack random nearby targets.",
+  "effect.voidscape.maddened.description": "Causes mobs to attack random nearby targets, and players to sometimes strike themselves or others.",
   "effect.voidscape.traumatized": "Traumatized",
   "effect.voidscape.traumatized.description": "Greatly Increases Voidic Damage and Defense.",
   "entity.voidscape.corrupted_pawn": "The Corrupted Pawn",

@@ -166,7 +166,7 @@ public class LangProviderFactory {
 				addEffectWithDescription(effects.FORTIFIED, "Voidic Fortification", "Reduces incoming Voidic Damage to 25% with a 25% chance to expire on each reduction.");
 				addEffectWithDescription(effects.ICHOR, "Ichor", "Doubles incoming Voidic Damage.");
 				addEffectWithDescription(effects.TRAUMATIZED, "Traumatized", "Greatly Increases Voidic Damage and Defense.");
-				addEffectWithDescription(effects.MADDENED, "Maddened", "Causes mobs to attack random nearby targets.");
+				addEffectWithDescription(effects.MADDENED, "Maddened", "Causes mobs to attack random nearby targets, and players to sometimes strike themselves or others.");
 
 				// addDatapack(datapacks.AETHER_INTEGRATION, "Enables Aether integration"); TODO
 
