@@ -128,7 +128,7 @@ public class Shaders {
 
 	public final RenderPipeline VOIDSKY_WINGS_ZOOM_FAR = beginWingPipeline()
 		.withShaderDefine("WingSpeed", 1.5F)
-		.withShaderDefine("WingEffectScale", 2F)
+		.withShaderDefine("WingEffectScale", 1.5F)
 		.build();
 
 	public final RenderPipeline VOIDSKY_WINGS_FAST = beginWingPipeline()
@@ -137,7 +137,7 @@ public class Shaders {
 		.build();
 	public final RenderPipeline VOIDSKY_WINGS_FAST_ZOOM_VERY_FAR = beginWingPipeline()
 		.withShaderDefine("WingSpeed", 32.0F)
-		.withShaderDefine("WingEffectScale", 12F)
+		.withShaderDefine("WingEffectScale", 6F)
 		.build();
 
 	public final RenderPipeline THUNDER_AURORA = RenderPipeline.builder(RenderPipelines.MATRICES_FOG_SNIPPET, RenderPipelines.GLOBALS_SNIPPET)
