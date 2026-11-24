@@ -136,7 +136,6 @@ public class ModCreativeTabs {
 				output.accept(toolSetComponentDirectory.spellTomeSet().CORRUPT_TOME.get());
 				output.accept(toolSetComponentDirectory.spellTomeSet().TITANITE_TOME.get());
 				output.accept(toolSetComponentDirectory.spellTomeSet().ASTRAL_TOME.get());
-				output.accept(toolSetComponentDirectory.spellTomeSet().SHROUD_TOME.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_SWORD.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_AXE.get());
 				output.accept(toolSetComponentDirectory.ichorToolSet().ICHOR_PICKAXE.get());
@@ -163,6 +162,7 @@ public class ModCreativeTabs {
 				output.accept(armorSetComponentDirectory.astralArmorSet().ASTRAL_BOOTS.get());
 				// Gear - Shroud
 				output.accept(itemComponentDirectory.materialItems().SHROUD_THREAD.get());
+				output.accept(toolSetComponentDirectory.spellTomeSet().SHROUD_TOME.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_HELMET.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_CHEST.get());
 				output.accept(armorSetComponentDirectory.shroudArmorSet().SHROUD_LEGS.get());
