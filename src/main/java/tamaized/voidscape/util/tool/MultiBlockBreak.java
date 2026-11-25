@@ -2,7 +2,6 @@ package tamaized.voidscape.util.tool;
 
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,15 +14,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.voidscape.event.LastHitBlockFaceTracker;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 
 import java.util.*;
@@ -36,21 +32,13 @@ public class MultiBlockBreak {
 	@Autowired
 	private ModAdvancementTriggers advancementTriggers;
 
+	@Autowired
+	private LastHitBlockFaceTracker lastHitBlockFaceTracker;
+
 	public final int THREE_BY_THREE_RADIUS = 1;
 	public final int FIVE_BY_FIVE_RADIUS = 2;
 
-	private final Map<UUID, Direction> LAST_HIT_BLOCK_FACE = new HashMap<>();
 	private static boolean running = false;
-
-	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
-	private void postConstruct(IEventBus bus) {
-		bus.addListener(PlayerInteractEvent.LeftClickBlock.class, event -> {
-			if (event.getFace() == null)
-				return;
-			LAST_HIT_BLOCK_FACE.put(event.getEntity().getUUID(), event.getFace());
-		});
-		bus.addListener(PlayerEvent.PlayerLoggedOutEvent.class, event -> LAST_HIT_BLOCK_FACE.remove(event.getEntity().getUUID()));
-	}
 
 	public boolean doBreak(int radius, ItemStack stack, BlockPos pos, Player pl, BooleanSupplier delegate) {
 		return doBreak(radius, stack, pos, pl, s -> false, delegate);
@@ -66,7 +54,7 @@ public class MultiBlockBreak {
 			return false;
 		final float hardness = oState.getDestroySpeed(level, pos);
 		List<BlockPos> area = new ArrayList<>();
-		switch (LAST_HIT_BLOCK_FACE.get(player.getUUID())) {
+		switch (lastHitBlockFaceTracker.get(player).orElse(null)) {
 			case DOWN, UP -> {
 				for (int x = -radius; x <= radius; x++)
 					for (int z = -radius; z <= radius; z++)
@@ -82,7 +70,7 @@ public class MultiBlockBreak {
 					for (int x = -radius; x <= radius; x++)
 						area.add(pos.offset(x, y, 0));
 			}
-			default -> area.add(pos);
+			case null, default -> area.add(pos);
 		}
 		if (area.size() > 1) // TODO: This should not be here
 			advancementTriggers.THREE_BY_THREE.get().trigger(player, stack);
