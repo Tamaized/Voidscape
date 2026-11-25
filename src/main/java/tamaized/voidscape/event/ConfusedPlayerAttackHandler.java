@@ -13,7 +13,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -32,7 +32,7 @@ public class ConfusedPlayerAttackHandler {
 
 	private boolean redirecting;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(EventPriority.LOWEST, AttackEntityEvent.class, event -> {
 			Player player = event.getEntity();

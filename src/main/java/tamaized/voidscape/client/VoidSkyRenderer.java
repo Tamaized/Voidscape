@@ -14,26 +14,31 @@ import net.neoforged.neoforge.client.event.RegisterCustomEnvironmentEffectRender
 import org.joml.Matrix4fc;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.client.shader.ShaderRenderer;
 import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.registry.ModDimensions;
 
 import java.util.Map;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class VoidSkyRenderer implements CustomSkyboxRenderer {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private Shaders shaders;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ShaderRenderer shaderRenderer;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDimensions dimensions;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterCustomEnvironmentEffectRendererEvent.class, event -> event.registerSkyboxRenderer(dimensions.VOID.identifier(), this));
 	}

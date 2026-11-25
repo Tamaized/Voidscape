@@ -11,6 +11,7 @@ import net.minecraft.util.LightCoordsUtil;
 import net.neoforged.api.distmarker.Dist;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidling;
@@ -18,7 +19,8 @@ import tamaized.voidscape.entity.VoidlingEntity;
 
 public class RenderVoidling<T extends VoidlingEntity> extends MobRenderer<T, LivingEntityRenderState, ModelVoidling> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidling.png");

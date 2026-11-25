@@ -7,7 +7,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.config.ConfigUtil;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CommonConfig {
 	@Nullable
 	public ModConfigSpec.BooleanValue bedrockTeleportationDimensionWhitelist;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void postConstruct(IEventBus modBus) {
 		ModConfigSpec spec = new ModConfigSpec.Builder().configure(this::setup).getRight();
 		ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, spec);

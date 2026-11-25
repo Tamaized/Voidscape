@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelCorruptedPawn;
@@ -20,7 +21,8 @@ import tamaized.voidscape.entity.CorruptedPawnEntity;
 
 public class RenderCorruptedPawn<T extends CorruptedPawnEntity> extends MobRenderer<T, CorruptedPawnRenderState, ModelCorruptedPawn<CorruptedPawnRenderState>> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/corruptedpawn.png");

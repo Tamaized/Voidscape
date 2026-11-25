@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.data.DonatorData;
 import tamaized.voidscape.data.Insanity;
@@ -84,7 +84,7 @@ public class ModDataAttachments {
 		return networkedAttachments.get(name);
 	}
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		NeoForge.EVENT_BUS.addListener(EntityTickEvent.Post.class, event -> {
 			event.getEntity().getData(INSANITY).tick(event.getEntity());

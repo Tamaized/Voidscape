@@ -14,14 +14,17 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.LightningBoltRenderer;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class AxiomSparkRenderer {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private LightningBoltRenderer lightningBoltRenderer;
 
 	private final RenderType renderType = RenderType.create(
@@ -41,7 +44,7 @@ public class AxiomSparkRenderer {
 		.layerThickness(0.005F)
 		.build();
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::registerRenderBuffers);
 	}

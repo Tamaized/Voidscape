@@ -6,7 +6,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import tamaized.beanification.Bean;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.network.client.ClientPacketDonatorSync;
 import tamaized.voidscape.network.client.ClientPacketNoFlashOnSetHealth;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Component
 public class NetworkMessages {
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterPayloadHandlersEvent.class, event -> {
 			PayloadRegistrar network = event.registrar(Voidscape.MODID)

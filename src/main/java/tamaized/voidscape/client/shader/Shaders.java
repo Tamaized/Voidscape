@@ -17,12 +17,14 @@ import net.neoforged.neoforge.client.stencil.StencilOperation;
 import net.neoforged.neoforge.client.stencil.StencilPerFaceTest;
 import net.neoforged.neoforge.client.stencil.StencilTest;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Optional;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class Shaders {
 
 	public final String ALPHA_UNIFORM = "VoidscapeAlpha";
@@ -170,7 +172,7 @@ public class Shaders {
 		.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
 		.build();
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterRenderPipelinesEvent.class, event -> {
 			event.registerPipeline(POSITION_COLOR);

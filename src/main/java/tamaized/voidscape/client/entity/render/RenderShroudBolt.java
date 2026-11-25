@@ -9,6 +9,7 @@ import net.minecraft.util.ARGB;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.client.LightningBoltRenderer;
 import tamaized.voidscape.client.entity.render.state.ShroudBoltRenderState;
 import tamaized.voidscape.entity.ShroudBoltEntity;
@@ -20,7 +21,8 @@ public class RenderShroudBolt extends EntityRenderer<ShroudBoltEntity, ShroudBol
 		ARGB.colorFromFloat(0.3F, 1.0F, 0.6F, 0.8F)
 	).build();
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private LightningBoltRenderer lightningBoltRenderer;
 
 	public RenderShroudBolt(EntityRendererProvider.Context context) {

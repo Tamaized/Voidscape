@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.LightCoordsUtil;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelVoidsWrath;
@@ -24,7 +25,8 @@ import tamaized.voidscape.entity.VoidsWrathEntity;
 
 public class RenderVoidsWrath<T extends VoidsWrathEntity> extends MobRenderer<T, VoidsWrathRenderState, ModelVoidsWrath<VoidsWrathRenderState>> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/entity/voidswrath.png");

@@ -23,7 +23,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.registry.ModAdvancementTriggers;
 
 import java.util.*;
@@ -42,7 +42,7 @@ public class MultiBlockBreak {
 	private final Map<UUID, Direction> LAST_HIT_BLOCK_FACE = new HashMap<>();
 	private static boolean running = false;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void postConstruct(IEventBus bus) {
 		bus.addListener(PlayerInteractEvent.LeftClickBlock.class, event -> {
 			if (event.getFace() == null)

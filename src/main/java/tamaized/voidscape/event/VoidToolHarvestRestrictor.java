@@ -4,7 +4,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.registry.tool.VoidToolLadder;
 
 @Component
@@ -13,7 +13,7 @@ public class VoidToolHarvestRestrictor {
 	@Autowired
 	private VoidToolLadder ladder;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(PlayerEvent.HarvestCheck.class, event -> {
 			if (!event.canHarvest())

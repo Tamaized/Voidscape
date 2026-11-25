@@ -9,12 +9,14 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression"})
 public class ClientASMHooks {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static EntityLayerRendererRegistration entityLayerRendererRegistration;
 
 	/**

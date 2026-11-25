@@ -11,21 +11,24 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.joml.Vector2i;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.data.QuiverContents;
 import tamaized.voidscape.item.QuiverItem;
 import tamaized.voidscape.network.server.ServerPacketQuiverScroll;
 import tamaized.voidscape.registry.ModItemComponents;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class QuiverScrollHandler {
 
 	private final ScrollWheelHandler scrollWheelHandler = new ScrollWheelHandler();
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponents components;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(ScreenEvent.MouseScrolled.Pre.class, event -> {
 			if (!(event.getScreen() instanceof AbstractContainerScreen<?> screen))

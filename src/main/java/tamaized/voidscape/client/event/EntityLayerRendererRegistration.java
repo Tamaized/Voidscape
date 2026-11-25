@@ -21,7 +21,8 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 import org.jspecify.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.armor.ArmorOverlayLayer;
 import tamaized.voidscape.client.entity.render.layer.ShroudWingLayer;
@@ -29,21 +30,25 @@ import tamaized.voidscape.client.entity.render.state.ChestEquipmentRenderStateEx
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class EntityLayerRendererRegistration {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ChestEquipmentRenderStateExtension chestEquipmentRenderStateExtension;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	public ContextKey<Float> CONTEXT_KEY_INFUSION = new ContextKey<>(Identifier.fromNamespaceAndPath(Voidscape.MODID, "infusion"));
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::addLayers);
 		bus.addListener(this::modifyState);

@@ -8,12 +8,15 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.util.ColorHelper;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class HexColorEditBoxFactory {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ColorHelper colorHelper;
 
 	public EditBox make(ModConfigSpec.IntValue configOption) {

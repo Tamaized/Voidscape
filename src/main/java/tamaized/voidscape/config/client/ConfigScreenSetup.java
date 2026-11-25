@@ -7,16 +7,20 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
 import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 
 import java.util.Objects;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ConfigScreenSetup {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private DonatorSettings donatorSettings;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private HexColorEditBoxFactory hexColorEditBoxFactory;
 
 	@PostConstruct

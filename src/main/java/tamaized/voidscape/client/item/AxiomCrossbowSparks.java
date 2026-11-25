@@ -23,7 +23,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.particle.AxiomSparkRenderer;
 import tamaized.voidscape.client.particle.ParticleAxiomSpark;
@@ -37,28 +38,34 @@ import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class AxiomCrossbowSparks {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModToolSetComponentDirectory toolSets;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModParticles particles;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModSounds sounds;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private AxiomSparkRenderer sparkRenderer;
 
 	private final ParticleRenderType renderType = new ParticleRenderType(Identifier.fromNamespaceAndPath(Voidscape.MODID, "axiom_spark").toString());
 	private final List<ViewSpark> viewSparks = new ArrayList<>();
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus modBus, IEventBus gameBus) {
 		modBus.addListener(this::registerParticleProviders);
 		modBus.addListener(this::registerParticleGroups);

@@ -9,7 +9,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.ArrowLooseEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.data.Insanity;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -29,7 +29,7 @@ public class ArrowVoidicDamageApplicator {
 
 	private final Map<UUID, AttributeStates> OWNER_STATES = new ConcurrentHashMap<>();
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(ArrowLooseEvent.class, event -> {
 			Player player = event.getEntity();

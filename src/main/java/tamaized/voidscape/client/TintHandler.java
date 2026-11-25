@@ -6,22 +6,26 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.registry.block.OreBlocks;
 import tamaized.voidscape.registry.block.SpireBlocks;
 
 import java.util.List;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class TintHandler {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private SpireBlocks spireBlocks;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private OreBlocks oreBlocks;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::handleBlocks);
 	}

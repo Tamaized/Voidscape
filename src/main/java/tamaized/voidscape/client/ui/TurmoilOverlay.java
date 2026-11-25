@@ -25,7 +25,8 @@ import org.joml.Vector4f;
 import org.joml.Vector4fc;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.shader.ShaderRenderer;
 import tamaized.voidscape.client.shader.Shaders;
@@ -35,16 +36,20 @@ import tamaized.voidscape.registry.ModDataAttachments;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class TurmoilOverlay {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private Shaders shaders;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ShaderRenderer shaderRenderer;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	private final Identifier TEXTURE_MASK = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/mask/turmoil.png");
@@ -59,7 +64,7 @@ public class TurmoilOverlay {
 	private float lastDeltaTick;
 	private float lastTeleportTick;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus modBus, IEventBus bus) {
 		bus.addListener(this::tick);
 		modBus.addListener(this::renderOverlay);

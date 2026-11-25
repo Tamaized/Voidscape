@@ -12,11 +12,13 @@ import org.joml.Matrix4fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import tamaized.beanification.Component;
+import tamaized.beanification.connector.fml.RequiresDist;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class LightningBoltRenderer {
 
 	public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Vector3fc offset, long seed, Style style) {

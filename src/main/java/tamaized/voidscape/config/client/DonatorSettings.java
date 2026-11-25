@@ -10,7 +10,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.config.ConfigUtil;
 import tamaized.voidscape.network.DonatorHandler;
@@ -32,7 +32,7 @@ public class DonatorSettings {
 
 	private boolean dirty;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void postConstruct(IEventBus modBus, IEventBus forgeBus) {
 		modBus.addListener(ModConfigEvent.Reloading.class, event -> {
 			if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getModId().equals(Voidscape.MODID)) {

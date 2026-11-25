@@ -11,6 +11,7 @@ import net.minecraft.util.Util;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.shader.Shaders;
 
@@ -18,10 +19,12 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ShroudWingLayerRenderTypes {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private Shaders shaders;
 
 	private final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Voidscape.MODID, "textures/mask/shroud-wing.png");

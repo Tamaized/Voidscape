@@ -9,7 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.registry.block.EtherealFruitBlocks;
 import tamaized.voidscape.util.LevelUtil;
 
@@ -22,7 +22,7 @@ public class EtherealPlantGenerator {
 	@Autowired
 	private EtherealFruitBlocks etherealFruitBlocks;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(PlayerTickEvent.Post.class, event -> {
 			Player player = event.getEntity();

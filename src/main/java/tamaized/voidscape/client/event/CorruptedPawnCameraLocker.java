@@ -7,17 +7,20 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.entity.CorruptedPawnEntity;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class CorruptedPawnCameraLocker {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(ViewportEvent.ComputeCameraAngles.class, event -> {
 			Entity camera = event.getCamera().entity();

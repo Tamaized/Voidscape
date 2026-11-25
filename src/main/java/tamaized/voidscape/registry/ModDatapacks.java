@@ -13,7 +13,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.Voidscape;
 
 import java.util.Optional;
@@ -52,7 +52,7 @@ public class ModDatapacks {
 		return pack;
 	});
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(AddPackFindersEvent.class, event -> {
 			if (event.getPackType() == PackType.SERVER_DATA && ModList.get().isLoaded("aether")) {

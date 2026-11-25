@@ -17,6 +17,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.ModModelLayerLocations;
 import tamaized.voidscape.client.entity.model.ModelNullServant;
@@ -25,7 +26,8 @@ import tamaized.voidscape.entity.NullServantEntity;
 
 public class RenderNullServant<T extends NullServantEntity> extends MobRenderer<T, NullServantRenderState, ModelNullServant<NullServantRenderState>> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static ModModelLayerLocations modelLayerLocations;
 
 	public RenderNullServant(EntityRendererProvider.Context context) {

@@ -13,7 +13,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.entity.EntropicRiftEntity;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.registry.ModEntities;
@@ -31,7 +31,7 @@ public class EntropicRiftGenerator {
 	@Autowired
 	private ModEntities entities;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(PlayerTickEvent.Post.class, event -> {
 			Player player = event.getEntity();

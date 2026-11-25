@@ -7,20 +7,24 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.registry.ModDataAttachments;
 import tamaized.voidscape.util.LevelUtil;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class FogColorHandler {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private LevelUtil levelUtil;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(ViewportEvent.ComputeFogColor.class, event -> {
 			if (Minecraft.getInstance().level != null && levelUtil.isInVoidDimension(Minecraft.getInstance().level)) {

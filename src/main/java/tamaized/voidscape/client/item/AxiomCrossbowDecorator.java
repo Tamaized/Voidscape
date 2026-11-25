@@ -14,13 +14,15 @@ import net.neoforged.neoforge.client.IItemDecorator;
 import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.data.AxiomBurst;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.ModToolSetComponentDirectory;
 import tamaized.voidscape.registry.item.AxiomaticCrossbow;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class AxiomCrossbowDecorator implements IItemDecorator {
 
 	private static final int BAR_WIDTH = 13;
@@ -28,13 +30,15 @@ public class AxiomCrossbowDecorator implements IItemDecorator {
 	private static final int ACTIVE_COLOR = ARGB.color(85, 255, 255);
 	private static final int COOLDOWN_COLOR = ARGB.color(170, 0, 170);
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModToolSetComponentDirectory toolSets;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::registerItemDecorations);
 	}

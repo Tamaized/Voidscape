@@ -9,13 +9,15 @@ import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.beanification.connector.fml.RequiresDist;
 
 import java.util.List;
 
 @Configurable
 public class ParticleGroupAxiomSpark extends ParticleGroup<ParticleAxiomSpark> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private AxiomSparkRenderer sparkRenderer;
 
 	public ParticleGroupAxiomSpark(ParticleEngine engine) {

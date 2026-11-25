@@ -8,7 +8,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.living.LivingGetProjectileEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.data.QuiverContents;
 import tamaized.voidscape.item.QuiverItem;
 import tamaized.voidscape.model.QuiverData;
@@ -26,7 +26,7 @@ public class QuiverHandler {
 	@Autowired
 	private ModItemComponents components;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(LivingGetProjectileEvent.class, event -> {
 			if (event.getEntity() instanceof Player player) {

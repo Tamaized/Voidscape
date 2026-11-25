@@ -10,22 +10,27 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.registry.ModArmorSetComponentDirectory;
 import tamaized.voidscape.registry.ModItemComponents;
 import tamaized.voidscape.registry.armor.ModArmorMaterials;
 
 import java.util.Optional;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ChestEquipmentRenderStateExtension {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModArmorMaterials armorMaterials;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModArmorSetComponentDirectory armorSets;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
 	public void applyElytra(HumanoidRenderState state) {

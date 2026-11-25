@@ -16,15 +16,18 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.data.Shroud;
 import tamaized.voidscape.registry.ModDataAttachments;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ShroudHeartOverlay {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModDataAttachments dataAttachments;
 
 	private final Identifier SPRITE_SHROUD_HEART = Identifier.fromNamespaceAndPath(Voidscape.MODID, "hud/shroud_heart");
@@ -33,7 +36,7 @@ public class ShroudHeartOverlay {
 
 	private int heartsLineBase;
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus modBus) {
 		modBus.addListener(this::registerLayer);
 	}

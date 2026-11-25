@@ -10,7 +10,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.registry.ModAttributes;
 import tamaized.voidscape.registry.ModEffects;
 import tamaized.voidscape.registry.tool.set.EntropicToolSet;
@@ -27,7 +27,7 @@ public class MaddeningDamageSourceHandler {
 	@Autowired
 	private EntropicToolSet entropicToolSet;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(LivingDamageEvent.Post.class, event -> {
 			Entity attacker = event.getSource().getEntity();

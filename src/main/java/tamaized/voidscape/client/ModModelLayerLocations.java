@@ -10,7 +10,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.client.armor.model.ModelArmorCorrupt;
 import tamaized.voidscape.client.armor.model.ModelArmorCrystalline;
@@ -19,13 +20,16 @@ import tamaized.voidscape.client.entity.render.*;
 import tamaized.voidscape.client.shader.Shaders;
 import tamaized.voidscape.registry.ModEntities;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ModModelLayerLocations {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModEntities entities;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private Shaders shaders;
 
 	public final ModelLayerLocation VOIDLING = make("voidling");
@@ -47,7 +51,7 @@ public class ModModelLayerLocations {
 		return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Voidscape.MODID, "main"), name);
 	}
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::registerLayerDefinitions);
 		bus.addListener(this::registerEntityRenderers);

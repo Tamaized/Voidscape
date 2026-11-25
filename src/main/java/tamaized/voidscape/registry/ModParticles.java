@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.client.particle.ParticleSpellCloud;
 import tamaized.voidscape.particle.ParticleTypeSpellCloud;
@@ -20,7 +20,7 @@ public class ModParticles {
 
 	public final Supplier<SimpleParticleType> AXIOM_SPARK = RegUtil.register(Registries.PARTICLE_TYPE, "axiom_spark", () -> new SimpleParticleType(false));
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(RegisterParticleProvidersEvent.class, event -> {
 			event.registerSpriteSet(SPELL_CLOUD.get(), ParticleSpellCloud.Factory::new);

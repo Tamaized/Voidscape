@@ -11,7 +11,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.util.LevelUtil;
 
@@ -21,7 +21,7 @@ public class VoidDimensionValidSpawnHandler {
 	@Autowired
 	private LevelUtil levelUtil;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(MobSpawnEvent.SpawnPlacementCheck.class, event -> {
 			if (event.getSpawnType() == EntitySpawnReason.NATURAL && levelUtil.isInVoidDimension(event.getLevel().getLevel()) && event.getLevel().getLightEmission(event.getPos()) <= 7) {

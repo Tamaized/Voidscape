@@ -9,7 +9,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "tamaized:beanification:${beanification_gradle_plugin_version}:gradle"
+		classpath "tamaized:beanification-fml-connector:${beanification_gradle_plugin_version}:gradle"
 	}
 }
 
@@ -250,7 +250,7 @@ dependencies {
 	implementation regUtil
 	shade regUtil
 
-	def beanification = "tamaized:beanification:"
+	def beanification = "tamaized:beanification-fml-connector:"
 	testImplementation "${beanification}:tests"
 	testCompileOnly "${beanification}:test-sources"
 

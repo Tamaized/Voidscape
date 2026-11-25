@@ -11,7 +11,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.voidscape.dimension.SpawnPointTeleporter;
 import tamaized.voidscape.entity.IEthereal;
 import tamaized.voidscape.registry.ModDataAttachments;
@@ -33,7 +33,7 @@ public class VoidDimensionDeathHandler {
 	@Autowired
 	private ModItemComponentDirectory items;
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void setup(IEventBus bus) {
 		bus.addListener(EventPriority.HIGHEST, LivingDeathEvent.class, this::handlePlayerDeath);
 		bus.addListener(EventPriority.LOWEST, LivingDeathEvent.class, this::handleMobDeath);

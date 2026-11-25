@@ -9,7 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.entity.*;
 
@@ -192,7 +192,7 @@ public class ModEntities {
 			.setShouldReceiveVelocityUpdates(true);
 	}
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(this::registerSpawnPlacements);
 		bus.addListener(this::registerAttributes);

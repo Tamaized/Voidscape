@@ -24,7 +24,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.Nullable;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.Voidscape;
 import tamaized.voidscape.block.ThunderNyliumBlock;
@@ -294,7 +294,7 @@ public class ThunderForestBiomeBlocks {
 		(id) -> new BlockItem(THUNDER_SLAB.get(), itemProperties.BLOCK_LAVA_IMMUNE.apply(id))
 	);
 
-	@PostConstruct
+	@EventBusPostConstruct
 	public void init(IEventBus bus) {
 		bus.addListener(FMLCommonSetupEvent.class, event -> {
 			((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(THUNDER_ROOTS.getId(), THUNDER_ROOTS_POT);

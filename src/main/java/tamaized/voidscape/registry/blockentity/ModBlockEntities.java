@@ -6,7 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 import tamaized.voidscape.block.entity.*;
 import tamaized.voidscape.registry.block.FunctionalBlocks;
@@ -71,7 +71,7 @@ public class ModBlockEntities {
 		functionalBlocks.VERY_DRIPPY_DRIPSTONE.get()
 	));
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void init(IEventBus bus) {
 		bus.addListener(RegisterCapabilitiesEvent.class, event -> {
 			LiquifierBlockEntity.registerCaps(this, event);

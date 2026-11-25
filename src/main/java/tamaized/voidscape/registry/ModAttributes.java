@@ -11,7 +11,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.PercentageAttribute;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
 import tamaized.regutil.RegUtil;
 
 import java.util.Locale;
@@ -49,7 +49,7 @@ public class ModAttributes {
 	public final Holder<Attribute> AXIOMATIC = RegUtil.register(Registries.ATTRIBUTE, "axiomatic",
 		(id) -> new PercentageAttribute(id.toLanguageKey(), 0F, 0F, 1F).setSyncable(true));
 
-	@PostConstruct
+	@EventBusPostConstruct
 	private void setup(IEventBus bus) {
 		bus.addListener(EntityAttributeModificationEvent.class, event -> event.getTypes().forEach(e -> {
 			event.add(e, VOIDIC_VISIBILITY);

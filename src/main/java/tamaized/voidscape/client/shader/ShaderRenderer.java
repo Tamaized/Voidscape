@@ -25,7 +25,8 @@ import org.joml.Vector4f;
 import org.joml.Vector4fc;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Component;
-import tamaized.beanification.PostConstruct;
+import tamaized.beanification.connector.fml.EventBusPostConstruct;
+import tamaized.beanification.connector.fml.RequiresDist;
 
 import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
@@ -35,10 +36,12 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
-@Component(dist = Dist.CLIENT)
+@Component
+@RequiresDist(Dist.CLIENT)
 public class ShaderRenderer {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private Shaders shaders;
 
 	private final Vector4fc noColorModulation = new Vector4f(1F, 1F, 1F, 1F);
@@ -49,7 +52,7 @@ public class ShaderRenderer {
 	private final Supplier<DynamicUniformStorage<AuroraUniform>> auroraStorage = Suppliers.memoize(() ->
 		new DynamicUniformStorage<>("Voidscape Aurora UBO", AuroraUniform.SIZE, 2));
 
-	@PostConstruct(PostConstruct.Bus.GAME)
+	@EventBusPostConstruct(EventBusPostConstruct.Bus.GAME)
 	private void init(IEventBus gameBus) {
 		gameBus.addListener(RenderFrameEvent.Post.class, _ -> {
 			alphaStorage.get().endFrame();

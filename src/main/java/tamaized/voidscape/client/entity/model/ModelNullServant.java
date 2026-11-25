@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import tamaized.beanification.Autowired;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.client.shader.Shaders;
 
 import java.util.function.Function;
@@ -22,7 +23,8 @@ import java.util.function.Supplier;
 
 public class ModelNullServant<S extends HumanoidRenderState> extends HumanoidModel<S> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private static Shaders shaders;
 
 	private static final Supplier<RenderType> RENDER_TYPE = Suppliers.memoize(() -> RenderType.create(

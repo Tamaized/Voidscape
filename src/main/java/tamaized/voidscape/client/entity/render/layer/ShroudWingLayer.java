@@ -15,6 +15,7 @@ import net.neoforged.api.distmarker.Dist;
 import org.joml.Matrix4f;
 import tamaized.beanification.Autowired;
 import tamaized.beanification.Configurable;
+import tamaized.beanification.connector.fml.RequiresDist;
 import tamaized.voidscape.client.ShroudWingLayerRenderTypes;
 import tamaized.voidscape.client.entity.render.state.ShroudWingLayerRenderStateExtension;
 import tamaized.voidscape.client.event.EntityLayerRendererRegistration;
@@ -25,19 +26,24 @@ import tamaized.voidscape.registry.ModItemComponents;
 @Configurable
 public class ShroudWingLayer<T extends HumanoidRenderState, M extends EntityModel<? super T>> extends RenderLayer<T, M> {
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ShroudWingLayerRenderTypes shroudWingLayerRenderTypes;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ShroudWingLayerRenderStateExtension shroudWingLayerRenderStateExtension;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private EntityLayerRendererRegistration entityLayerRendererRegistration;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponents itemComponents;
 
-	@Autowired(dist = Dist.CLIENT)
+	@Autowired
+	@RequiresDist(Dist.CLIENT)
 	private ModItemComponentDirectory items;
 
 	private static final int SUBMIT_ORDER_BACKING = 5;
